@@ -16,12 +16,20 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 
+
 gem 'devise'
+gem 'cancancan', '~> 2.0'
+gem 'bootstrap-sass'
+gem 'awesome_rails_console'
+gem 'jquery-rails'
+gem 'simple_form'
+
+
 
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'pry'
 end
 
 group :development do
