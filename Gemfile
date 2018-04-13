@@ -23,7 +23,7 @@ gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'jquery-rails'
 gem 'simple_form'
-
+gem 'roo'
 
 
 group :development, :test do
