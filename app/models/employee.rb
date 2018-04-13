@@ -33,7 +33,7 @@ class Employee < ApplicationRecord
                      "人员来源" => "people_source",
                      "人员分类" => "people_category",
                      "文化程度" => "education_background",
-                     "毕业时间" => "graduation_date",
+                     "毕业时间" => "graduation_time",
                      "毕业院校" => "graduation_school",
                      "学校类别" => "school_sort",
                      "所学专业" => "major",
@@ -71,7 +71,7 @@ class Employee < ApplicationRecord
                      "CJBZPX" => "CJBZPX",
                      "家属"   => "family",
                      "J01BF" => "J01BF",
-                     "职务化" => "duting"
+                     "职务化" => "duting",
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
