@@ -24,6 +24,8 @@ gem 'awesome_rails_console'
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'roo'
+gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
+gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
 
 
 group :development, :test do
