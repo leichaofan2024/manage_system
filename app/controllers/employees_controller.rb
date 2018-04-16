@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
 
 
   def index
-    @employees = Employee.all
+    @employees = Employee.page(params[:page]).per(20)
   end
 
   def import

@@ -147,3 +147,25 @@ hr {
 }
 
 /*--------------end--------------*/
+
+
+/*--- 表格样式---*/
+table th{
+    white-space: nowrap; // 表头全部显示，不落字
+    font-weight: 320;
+}
+
+table td{
+    white-space: nowrap; //表格元素不撑开，不落字
+}
+body,table{
+    font-size: 12px;
+}
+
+table{
+   empty-cells:show;
+   border-collapse: collapse;
+   margin:0 auto;
+}
+
+/*--- 结束 ---*/
