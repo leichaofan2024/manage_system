@@ -1,5 +1,8 @@
-class Employee < ApplicationRecord
+require 'elasticsearch/model'
+class Employee < ActiveRecord::Base
 
+  include Elasticsearch::Model
+  include Searchable
   def self.import(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",
