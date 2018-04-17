@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180412054956) do
+ActiveRecord::Schema.define(version: 20180413045649) do
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "sal_number", default: "", null: false, comment: "工资号"
+    t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
     t.string "job_number", null: false, comment: "工号"
     t.string "record_number", comment: "档案号"
     t.string "workshop", null: false, comment: "车间"
@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(version: 20180412054956) do
     t.string "people_source", comment: "人员来源"
     t.string "people_category", comment: "人员分类"
     t.string "education_background", comment: "文化程度"
-    t.string "graduation_date", comment: "毕业时间"
     t.string "graduation_school", comment: "毕业院校"
     t.string "school_sort", comment: "学校类别"
     t.string "major"
@@ -58,7 +57,7 @@ ActiveRecord::Schema.define(version: 20180412054956) do
     t.float "seniority_saler", limit: 24, comment: "工龄工资"
     t.string "skilledness_authenticate", comment: "技能鉴定"
     t.string "treatment", comment: "待遇"
-    t.integer "sation_rank", comment: "岗位排序"
+    t.integer "station_rank", comment: "岗位排序"
     t.integer "skilledness_rank", comment: "技能排序"
     t.string "station_now", comment: "现岗位"
     t.string "station_now_time", comment: "现岗时间"
@@ -85,7 +84,43 @@ ActiveRecord::Schema.define(version: 20180412054956) do
     t.string "duting", comment: "职务化"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sal_number"], name: "index_employees_on_sal_number", unique: true
+    t.string "graduation_time"
+  end
+
+  create_table "test_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "sal_number", default: "", comment: "工资号"
+    t.string "job_number", null: false, comment: "工号"
+    t.string "record_number", comment: "档案号"
+    t.string "workshop", null: false, comment: "车间"
+    t.string "group", null: false, comment: "班组"
+    t.string "name", null: false
+    t.string "sex", null: false
+    t.string "birth_date", null: false
+    t.integer "birth_year", null: false
+    t.integer "age", null: false
+    t.string "nation", null: false, comment: "民族"
+    t.string "native_place", comment: "籍贯"
+    t.string "political_role", comment: "政治面貌"
+    t.string "political_party_date", comment: "党团时间"
+    t.string "working_time", comment: "工作时间"
+    t.string "railway_time", comment: "入路时间"
+    t.string "entry_time", comment: "本单位日期"
+    t.string "duty", comment: "职务"
+    t.string "employment_period", comment: "任职时间"
+    t.string "part_time", comment: "兼职时间"
+    t.string "grade", comment: "级别"
+    t.string "promotion_leader_time", comment: "转干时间"
+    t.string "technique_duty", comment: "技术职务"
+    t.string "hold_technique_time", comment: "任技时间"
+    t.string "work_type", comment: "工种分类"
+    t.string "job_foreman", comment: "任班组长"
+    t.string "contract_station", comment: "合同岗位"
+    t.string "three_one", comment: "三员一长"
+    t.string "people_source", comment: "人员来源"
+    t.string "people_category", comment: "人员分类"
+    t.string "education_background", comment: "文化程度"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

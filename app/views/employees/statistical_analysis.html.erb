@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="/assets/javascripts/echarts.min.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 1500px;height:600px"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+                title: {
+                    text: '年龄分析',
+                    left: 'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    // orient: 'vertical',
+                    // top: 'middle',
+                    bottom: 10,
+                    left: 'center',
+                    data: ['25岁以下', '25-30岁', '30-35岁', '35-40岁', '40-45岁', '45-50岁', '50-55岁', '55-60岁']
+                },
+                series : [
+                    {
+                        type: 'pie',
+                        radius : '65%',
+                        center: ['50%', '50%'],
+                        selectedMode: 'single',
+                        data:[gon.twenty_five_below, gon.twenty_five, gon.thirty, gon.thirty_five, gon.forty, gon.forty_five, gon.fifty, gon.fifty_five],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+};
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <% @age_25_below %>
+    <% @age_25 %>
+    <% @age_30 %>
+    <% @age_35 %>
+    <% @age_40 %>
+    <% @age_45 %>
+    <% @age_50 %>
+    <% @age_55 %>
+
+</body>
+</html>

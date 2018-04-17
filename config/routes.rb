@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :employees do
     collection do
       post :import
+      get :organization_structure
+      get :statistical_analysis
     end 
   end
 end

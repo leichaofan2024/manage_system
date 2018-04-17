@@ -27,6 +27,7 @@ gem 'roo'
 gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
 gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
 gem 'kaminari'
+gem 'gon'
 
 group :development, :test do
   gem 'capybara', '~> 2.13'
