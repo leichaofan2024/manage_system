@@ -1,12 +1,17 @@
 class EmployeesController < ApplicationController
 
-
   def index
-    @employees = Employee.page(params[:page]).per(20)
+    @employees = Employee.all
   end
 
-  def import
-    Employee.import(params[:file])
+  def import_table
+    Employee.import_table(params[:file])
     redirect_to employees_path
   end
+
+  def search
+    @employees = Employee.search(params[:q]).records
+    render action: "index"
+  end
+
 end

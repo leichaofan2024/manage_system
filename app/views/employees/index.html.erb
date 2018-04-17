@@ -1,3 +1,11 @@
+<%= form_tag search_employees_path, method: 'get' do %>
+  <%= label_tag :query %>
+  <%= text_field_tag :q, params[:q] %>
+  <%= submit_tag :search %>
+<% end %>
+
+<hr>
+
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
     <thead>
@@ -80,7 +88,7 @@
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
-              <td><%= employee.workshop %></td>
+              <td><%= employee.workshop%></td>
               <td><%= employee.group %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>
@@ -154,13 +162,10 @@
   </table>
 </div>
 
-  <div class="text-center">
-     <%= paginate @employees%>
-  </div>
 
 <h2>上传现员表</h2>
 
-<%= form_tag import_employees_path, multipart: true do %>
+<%= form_tag import_table_employees_path, multipart: true do %>
   <%= file_field_tag :file%>
   <%= submit_tag "上传"%>
 <% end %>

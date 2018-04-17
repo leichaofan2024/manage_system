@@ -1,9 +1,9 @@
-require 'elasticsearch/model'
 class Employee < ActiveRecord::Base
 
   include Elasticsearch::Model
-  include Searchable
-  def self.import(file)
+  include Elasticsearch::Model::Callbacks
+
+  def self.import_table(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",
                      "工号" => "job_number",
@@ -84,4 +84,5 @@ class Employee < ActiveRecord::Base
       employee.save!
     end
   end
+
 end
