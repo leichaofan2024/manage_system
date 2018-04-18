@@ -6,7 +6,9 @@
         </head>
        
         <body>
+            <!-- 给饼图准备一个合适大小的dom  -->
             <div id="container" style="min-width:800px;height:600px"></div>
+            <!-- 引入在线的highcharts库  -->
             <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
             <script>
                 $(function () {
@@ -17,12 +19,10 @@
                             plotShadow: false,
                             type: 'pie'
                         },
-                        credits: {
-                            
-                        },
                         title: {
                             text: '年龄分析'
                         },
+                        // 数据提示框设置
                         tooltip: {
                             headerFormat: '',
                             pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
@@ -32,6 +32,12 @@
                             pie: {
                                 allowPointSelect: true,
                                 cursor: 'pointer',
+                                // 设置点击饼图的事件
+                                events: {
+                                    click: function(e) {
+                                        location.href = e.point.url
+                                    }
+                                },
                                 dataLabels: {
                                     enabled: true,
                                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -39,32 +45,27 @@
                                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                                     }
                                 },
+                                // 设置是否显示图例
                                 showInLegend: true
                             }
                         },
+                        // 饼图的数据来源
                         series: [{
-                            name: '25岁以下',
                             colorByPoint: true,
+                            // 设置饼图各个扇区的数据，注意需要数组类型的数据
                             data: [
-                                {name: '25岁以下', y: gon.twenty_five_below}, 
-                                {name: '25-30岁',y: gon.twenty_five}, 
-                                {name: '30-35岁',y: gon.thirty}, 
-                                {name: '35-40岁',y: gon.thirty_five}, 
-                                {name: '40-45岁',y: gon.forty}, 
-                                {name: '45-50岁',y: gon.forty_five},
-                                {name: '50-55岁',y: gon.fifty}
+                                {name: '25岁以下', y: gon.twenty_five_below, url: '/employees/age_analysis_data?age=25岁以下'}, 
+                                {name: '25-30岁',y: gon.twenty_five, url: '/employees/age_analysis_data?age=25'}, 
+                                {name: '30-35岁',y: gon.thirty, url: '/employees/age_analysis_data?age=30'}, 
+                                {name: '35-40岁',y: gon.thirty_five, url: '/employees/age_analysis_data?age=35'}, 
+                                {name: '40-45岁',y: gon.forty, url: '/employees/age_analysis_data?age=40'}, 
+                                {name: '45-50岁',y: gon.forty_five, url: '/employees/age_analysis_data?age=45'},
+                                {name: '50-55岁',y: gon.fifty, url: '/employees/age_analysis_data?age=50'}
                             ]
                         }],
                     });
                 });
             </script>
-            <% @age_25_below %>
-            <% @age_25 %>
-            <% @age_30 %>
-            <% @age_35 %>
-            <% @age_40 %>
-            <% @age_45 %>
-            <% @age_50 %>
-            <% @age_55 %>
+
         </body>
     </html>

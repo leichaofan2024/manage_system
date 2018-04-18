@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       post :import
       get :organization_structure
       get :statistical_analysis
+      get :age_analysis_data
     end 
   end
 end

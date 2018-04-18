@@ -16,6 +16,11 @@ class EmployeesController < ApplicationController
   	
   end
 
+  def import
+    Employee.import(params[:file])
+    redirect_to employees_path
+  end
+
   def organization_structure
   	
   end
@@ -45,13 +50,31 @@ class EmployeesController < ApplicationController
     gon.fifty_five = @age_55
    
     ## 年龄分析-饼图数据配置---结束
-  
   end
   ### 统计分析页面的图表数据配置---结束
 
-  def import
-    Employee.import(params[:file])
-    redirect_to employees_path
+ ### 点击饼图进入的数据详情页面数据配置---开始
+  def age_analysis_data
+    ## 通过饼图每个扇形url里附带的参数来判断给出的数据
+    case params[:age]
+    when "25岁以下"
+      @age_employees = Employee.where(age: 0..25)
+    when "25"
+      @age_employees = Employee.where(age: 25..30)
+    when "30"
+      @age_employees = Employee.where(age: 30..35)
+    when "35"
+      @age_employees = Employee.where(age: 35..40)
+    when "40"
+      @age_employees = Employee.where(age: 40..45)
+    when "45"
+      @age_employees = Employee.where(age: 45..50)
+    when "50"
+      @age_employees = Employee.where(age: 50..55)
+    when "55"
+      @age_employees = Employee.where(age: 55..60)
+    end
   end
+  ### 点击饼图进入的数据详情页面数据配置---结束
 
 end
