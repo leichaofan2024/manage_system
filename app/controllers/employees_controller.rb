@@ -2,6 +2,12 @@ class EmployeesController < ApplicationController
   layout 'home'
   def index
     @employees = Employee.page(params[:page])
+    @export_employees = Employee.order("id ASC")
+    respond_to do |format|
+      format.html
+      format.csv { send_data @employees.to_csv }
+      format.xls
+    end
   end
 
   def import_table

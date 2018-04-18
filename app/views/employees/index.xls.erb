@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">工资号</Data></Cell>
+        <Cell><Data ss:Type="String">工号</Data></Cell>
+        <Cell><Data ss:Type="String">档案号</Data></Cell>
+        <Cell><Data ss:Type="String">车间</Data></Cell>
+        <Cell><Data ss:Type="String">班组</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">性别</Data></Cell>
+        <Cell><Data ss:Type="String">出生日期</Data></Cell>
+        <Cell><Data ss:Type="String">出生年份</Data></Cell>
+        <Cell><Data ss:Type="String">年龄</Data></Cell>
+        <Cell><Data ss:Type="String">民族</Data></Cell>
+        <Cell><Data ss:Type="String">籍贯</Data></Cell>
+        <Cell><Data ss:Type="String">政治面目</Data></Cell>
+        <Cell><Data ss:Type="String">党团时间</Data></Cell>
+        <Cell><Data ss:Type="String">工作时间</Data></Cell>
+        <Cell><Data ss:Type="String">入路时间</Data></Cell>
+        <Cell><Data ss:Type="String">本单位日期</Data></Cell>
+        <Cell><Data ss:Type="String">职务</Data></Cell>
+        <Cell><Data ss:Type="String">任职时间</Data></Cell>
+        <Cell><Data ss:Type="String">兼职</Data></Cell>
+        <Cell><Data ss:Type="String">级别</Data></Cell>
+        <Cell><Data ss:Type="String">转干时间</Data></Cell>
+        <Cell><Data ss:Type="String">技术职务</Data></Cell>
+        <Cell><Data ss:Type="String">任技时间</Data></Cell>
+        <Cell><Data ss:Type="String">工种分类</Data></Cell>
+        <Cell><Data ss:Type="String">任班组长</Data></Cell>
+        <Cell><Data ss:Type="String">合同岗位</Data></Cell>
+        <Cell><Data ss:Type="String">三员一长</Data></Cell>
+        <Cell><Data ss:Type="String">人员来源</Data></Cell>
+        <Cell><Data ss:Type="String">人员分类</Data></Cell>
+        <Cell><Data ss:Type="String">文化程度</Data></Cell>
+        <Cell><Data ss:Type="String">毕业时间</Data></Cell>
+        <Cell><Data ss:Type="String">毕业学校</Data></Cell>
+        <Cell><Data ss:Type="String">学校类别</Data></Cell>
+        <Cell><Data ss:Type="String">所学专业</Data></Cell>
+        <Cell><Data ss:Type="String">现在何处</Data></Cell>
+        <Cell><Data ss:Type="String">用工形式</Data></Cell>
+        <Cell><Data ss:Type="String">合同期限</Data></Cell>
+        <Cell><Data ss:Type="String">签订时间</Data></Cell>
+        <Cell><Data ss:Type="String">档案工资</Data></Cell>
+        <Cell><Data ss:Type="String">技能工资</Data></Cell>
+        <Cell><Data ss:Type="String">岗位工资</Data></Cell>
+        <Cell><Data ss:Type="String">工龄工资</Data></Cell>
+        <Cell><Data ss:Type="String">技能鉴定</Data></Cell>
+        <Cell><Data ss:Type="String">待遇</Data></Cell>
+        <Cell><Data ss:Type="String">岗位档序</Data></Cell>
+        <Cell><Data ss:Type="String">技能档序</Data></Cell>
+        <Cell><Data ss:Type="String">现岗位</Data></Cell>
+        <Cell><Data ss:Type="String">现岗时间</Data></Cell>
+        <Cell><Data ss:Type="String">退休条件</Data></Cell>
+        <Cell><Data ss:Type="String">婚况</Data></Cell>
+        <Cell><Data ss:Type="String">分居情况</Data></Cell>
+        <Cell><Data ss:Type="String">享受探亲</Data></Cell>
+        <Cell><Data ss:Type="String">户口所在</Data></Cell>
+        <Cell><Data ss:Type="String">家庭住址</Data></Cell>
+        <Cell><Data ss:Type="String">备注</Data></Cell>
+        <Cell><Data ss:Type="String">身份证号</Data></Cell>
+        <Cell><Data ss:Type="String">工作证号</Data></Cell>
+        <Cell><Data ss:Type="String">行业代码</Data></Cell>
+        <Cell><Data ss:Type="String">生产组</Data></Cell>
+        <Cell><Data ss:Type="String">工资项目</Data></Cell>
+        <Cell><Data ss:Type="String">其他工资</Data></Cell>
+        <Cell><Data ss:Type="String">备用数据</Data></Cell>
+        <Cell><Data ss:Type="String">TBZ</Data></Cell>
+        <Cell><Data ss:Type="String">PY</Data></Cell>
+        <Cell><Data ss:Type="String">单位名称</Data></Cell>
+        <Cell><Data ss:Type="String">CJBZPX</Data></Cell>
+        <Cell><Data ss:Type="String">家属</Data></Cell>
+        <Cell><Data ss:Type="String">J01BF</Data></Cell>
+        <Cell><Data ss:Type="String">职务化</Data></Cell>
+      </Row>
+    <% @export_employees.each do |employee| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.workshop%></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.group %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.birth_date %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.birth_year %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.age %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.nation %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.native_place %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.political_role %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.political_party_date %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.working_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.railway_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.entry_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.employment_period %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.part_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.grade %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.promotion_leader_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.technique_duty %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.hold_technique_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.work_type %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.job_foreman %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.contract_station %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.three_one %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.people_source %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.people_category %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.education_background %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.graduation_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.graduation_school %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.school_sort %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.major %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.where_place %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.employment_form %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.contract_period %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.conclude_contract_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.record_saler %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.skilledness_saler %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.station_saler %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.seniority_saler %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.skilledness_authenticate %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.treatment %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.station_rank %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.skilledness_rank %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.station_now %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.station_now_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.retire_condition %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.marriage_status %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.separate_status %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.visit_family %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.registered_residence %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.family_address %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.comment %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.identity_card_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.employee_card_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.trade_code %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.produce_group %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.saler_item %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.other_saler %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.comment_data %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.TBZ %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.PY %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.company_name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.CJBZPX %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.family %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.J01BF %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.duting %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
