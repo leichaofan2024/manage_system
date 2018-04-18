@@ -3,6 +3,28 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+
+  def self.search(query)
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: ['job_number^10', 'name']
+          }
+        },
+        highlight: {
+          pre_tags: ['<em class="label label-highlight">'],
+          post_tags: ['</em>'],
+          fields: {
+            job_number:   { number_of_fragments: 0 },
+            name: { fragment_size: 25 }
+          }
+        }
+      }
+    )
+  end
+
   def self.import_table(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",

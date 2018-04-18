@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
 
   def index
-    @employees = Employee.all
+    @employees = Employee.page(params[:page])
   end
 
   def import_table
@@ -10,7 +10,7 @@ class EmployeesController < ApplicationController
   end
 
   def search
-    @employees = Employee.search(params[:q]).records
+    @employees = Employee.search(params[:q]).page(params[:page]).records
     render action: "index"
   end
 

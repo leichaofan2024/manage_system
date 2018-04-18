@@ -83,14 +83,14 @@
       </tr>
     </thead>
         <tbody>
-          <% @employees.each do |employee| %>
+          <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :each do |employee, hit| %>
             <tr>
               <td><%= employee.sal_number %></td>
-              <td><%= employee.job_number %></td>
+              <td><%= hit.try(:highlight).try(:job_number)   ? hit.highlight.job_number.join.html_safe : employee.job_number %></td>
               <td><%= employee.record_number %></td>
               <td><%= employee.workshop%></td>
               <td><%= employee.group %></td>
-              <td><%= employee.name %></td>
+              <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
               <td><%= employee.sex %></td>
               <td><%= employee.birth_date %></td>
               <td><%= employee.birth_year %></td>
@@ -161,7 +161,9 @@
 
   </table>
 </div>
-
+<div class="text-center">
+  <%= paginate @employees %>
+</div>
 
 <h2>上传现员表</h2>
 
