@@ -1,10 +1,10 @@
 <%= form_tag search_employees_path, method: 'get' do %>
-  <%= label_tag :query %>
+  <%= label_tag :查询%>
   <%= text_field_tag :q, params[:q] %>
   <%= submit_tag :search %>
 <% end %>
 
-<hr>
+<%= link_to "一键更新工资号", update_sal_number_employees_path, method: :post %>
 
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
@@ -85,8 +85,8 @@
         <tbody>
           <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :each do |employee, hit| %>
             <tr>
-              <td><%= employee.sal_number %></td>
-              <td><%= hit.try(:highlight).try(:job_number)   ? hit.highlight.job_number.join.html_safe : employee.job_number %></td>
+              <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
+              <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
               <td><%= employee.workshop%></td>
               <td><%= employee.group %></td>

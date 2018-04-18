@@ -10,14 +10,14 @@ class Employee < ActiveRecord::Base
         query: {
           multi_match: {
             query: query,
-            fields: ['job_number^10', 'name']
+            fields: ['sal_number^10', 'name']
           }
         },
         highlight: {
           pre_tags: ['<em class="label label-highlight">'],
           post_tags: ['</em>'],
           fields: {
-            job_number:   { number_of_fragments: 0 },
+            sal_number:   { number_of_fragments: 0 },
             name: { fragment_size: 25 }
           }
         }

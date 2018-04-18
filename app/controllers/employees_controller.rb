@@ -14,4 +14,13 @@ class EmployeesController < ApplicationController
     render action: "index"
   end
 
+  def update_sal_number
+    @employees = Employee.all
+    @employees.each do |employee|
+      employee.sal_number = '41' + employee.job_number
+      employee.save!
+    end
+    redirect_to employees_path
+  end
+
 end
