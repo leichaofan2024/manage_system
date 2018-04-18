@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        </head>
+       
+        <body>
+        <!-- 年龄分析饼图-开始  -->    
+            <!-- 给饼图准备一个合适大小的dom  -->
+            <div id="container1" style="min-width:800px;height:600px"></div>
+            <!-- 引入在线的highcharts库  -->
+            <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+            <script>
+                $(function () {
+                    var chart1 = $('#container1').highcharts({
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: '年龄分析'
+                        },
+                        // 数据提示框设置
+                        tooltip: {
+                            headerFormat: '',
+                            pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+                        },
+
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                // 设置点击饼图的事件
+                                events: {
+                                    click: function(e) {
+                                        location.href = e.point.url
+                                    }
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                },
+                                // 设置是否显示图例
+                                showInLegend: true
+                            }
+                        },
+                        // 饼图的数据来源
+                        series: [{
+                            colorByPoint: true,
+                            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+                            data: [
+                                {name: '50-55岁',y: gon.fifty, url: '/employees/age_analysis_data?age=50'},
+                                {name: '45-50岁',y: gon.forty_five, url: '/employees/age_analysis_data?age=45'},
+                                {name: '40-45岁',y: gon.forty, url: '/employees/age_analysis_data?age=40'}, 
+                                {name: '25-30岁',y: gon.twenty_five, url: '/employees/age_analysis_data?age=25'}, 
+                                {name: '30-35岁',y: gon.thirty, url: '/employees/age_analysis_data?age=30'}, 
+                                {name: '35-40岁',y: gon.thirty_five, url: '/employees/age_analysis_data?age=35'}, 
+                                {name: '25岁以下', y: gon.twenty_five_below, url: '/employees/age_analysis_data?age=25岁以下'}
+                            ]
+                        }],
+                    });
+                });
+            </script>
+        <!-- 年龄分析饼图-结束  --> 
+
+        <!-- 学历分析饼图-开始  -->    
+            <!-- 给饼图准备一个合适大小的dom  -->
+            <div id="container2" style="min-width:800px;height:600px"></div>
+            <!-- 引入在线的highcharts库  -->
+            <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+            <script>
+                $(function () {
+                    var chart2 = $('#container2').highcharts({
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: '学历分析'
+                        },
+                        // 数据提示框设置
+                        tooltip: {
+                            headerFormat: '',
+                            pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+                        },
+
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                // 设置点击饼图的事件
+                                events: {
+                                    click: function(e) {
+                                        location.href = e.point.url
+                                    }
+                                },
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                },
+                                // 设置是否显示图例
+                                showInLegend: true
+                            }
+                        },
+                        // 饼图的数据来源
+                        series: [{
+                            colorByPoint: true,
+                            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+                            data: [
+                                {name: '中专',y: gon.secondary_school, url: '/employees/education_background_analysis_data?education=中专'}, 
+                                {name: '大学专科',y: gon.university_specialties, url: '/employees/education_background_analysis_data?education=大学本科'}, 
+                                {name: '高中',y: gon.senior_high_school, url: '/employees/education_background_analysis_data?education=高中'},
+                                {name: '大学本科',y: gon.undergraduate, url: '/employees/education_background_analysis_data?education=大学本科'}, 
+                                {name: '初中及以下',y: gon.junior_high_school_below, url: '/employees/education_background_analysis_data?education=初中及以下'},  
+                                {name: '技校',y: gon.technical_school, url: '/employees/education_background_analysis_data?education=技校'}, 
+                                {name: '研究生', y: gon.postgraduate, url: '/employees/education_background_analysis_data?education=研究生'}
+                            ]
+                        }],
+                    });
+                });
+            </script>
+        <!-- 学历分析饼图-结束  --> 
+
+
+        </body>
+    </html>

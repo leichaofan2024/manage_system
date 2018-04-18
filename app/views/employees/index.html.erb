@@ -6,6 +6,7 @@
 
 <%= link_to "一键更新工资号", update_sal_number_employees_path, method: :post %>
 <%= link_to "导出表格", employees_path(format: "xls")%>
+<%= link_to "组织架构", organization_structure_employees_path, method: :get %>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
     <thead>
