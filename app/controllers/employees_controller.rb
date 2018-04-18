@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-
+  layout 'home'
   def index
     @employees = Employee.page(params[:page])
   end
