@@ -83,7 +83,7 @@
         <th>职务化</th>
       </tr>
     </thead>
-        <tbody>
+        <tbody data-behavior='sortable'>
           <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :each do |employee, hit| %>
             <tr>
               <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>

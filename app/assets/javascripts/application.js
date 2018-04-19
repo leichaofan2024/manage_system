@@ -13,5 +13,10 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
+//= require jquery-ui/widgets/sortable
 //= require bootstrap
 //= require_tree .
+
+document.addEventListener("turbolinks:load", function() {
+  $( "[data-behavior='sortable']" ).sortable();
+})
