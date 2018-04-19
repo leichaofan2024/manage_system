@@ -16,6 +16,11 @@ class EmployeesController < ApplicationController
   	
   end
 
+  def search
+    @employees = Employee.search(params[:q]).page(params[:page]).records
+    render action: "index"
+  end
+
   def import
     Employee.import(params[:file])
     redirect_to employees_path
@@ -68,22 +73,9 @@ class EmployeesController < ApplicationController
   ## 学历分析-饼图数据配置---结束
 
   ## 年龄分析-柱状图数据配置---开始
-    # 把车间各个学历的人数捞出，赋值给对应的实例变量
-    @junior_high_school_below = Employee.where(education_background: ["小学", "初中"]).count
-    @senior_high_school = Employee.where(education_background: "高中").count
-    @technical_school = Employee.where(education_background: "技校").count
-    @secondary_school = Employee.where(education_background: "中专").count
-    @university_specialties = Employee.where(education_background: "大学专科").count
-    @undergraduate = Employee.where(education_background: "大学本科").count
-    @postgraduate = Employee.where(education_background: "研究生").count
-    # 使用'gon'这个gem的方法，将数据赋值给对应的变量
-    gon.junior_high_school_below = @junior_high_school_below
-    gon.senior_high_school = @senior_high_school
-    gon.technical_school =  @technical_school
-    gon.secondary_school =  @secondary_school
-    gon.university_specialties =  @university_specialties
-    gon.undergraduate = @undergraduate
-    gon.postgraduate = @postgraduate
+    
+    @all_workshop = Employee.pluck("workshop").uniq
+     
   ## 年龄分析-柱状图数据配置---结束
 
   end
