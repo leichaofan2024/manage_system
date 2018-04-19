@@ -74,8 +74,75 @@ class EmployeesController < ApplicationController
 
   ## 年龄分析-柱状图数据配置---开始
     
-    @all_workshop = Employee.pluck("workshop").uniq
-     
+    #捞出所有的车间，赋值给实例变量
+    @workshops = Employee.pluck("workshop").uniq
+    #生成每个年龄段的【车间-人数】hash---开始
+    #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
+    loop_hash_25_below = {}
+    hash_25_below = {}
+    loop_hash_25 = {}
+    hash_25 = {}
+    loop_hash_30 = {}
+    hash_30 = {}
+    loop_hash_35 = {}
+    hash_35 = {}
+    loop_hash_40 = {}
+    hash_40 = {}
+    loop_hash_45 = {}
+    hash_45 = {}
+    loop_hash_50 = {}
+    hash_50 = {}
+    loop_hash_55 = {}
+    hash_55 = {}
+    #使用循环把车间和人数存成hash
+    @workshops.each do |i|
+      a = Employee.where(workshop: i, age: 0..25).count
+      loop_hash_25_below = {i => a}
+      hash_25_below[i] = loop_hash_25_below[i]
+
+      b = Employee.where(workshop: i, age: 25..30).count
+      loop_hash_25 = {i => b}
+      hash_25[i] = loop_hash_25_below[i]
+
+      c = Employee.where(workshop: i, age: 30..35).count
+      loop_hash_30 = {i => c}
+      hash_30[i] = loop_hash_30[i]
+
+      d = Employee.where(workshop: i, age: 35..40).count
+      loop_hash_35 = {i => d}
+      hash_35[i] = loop_hash_35[i]
+
+      e = Employee.where(workshop: i, age: 40..45).count
+      loop_hash_40 = {i => e}
+      hash_40[i] = loop_hash_40[i]
+
+      f = Employee.where(workshop: i, age: 45..50).count
+      loop_hash_45 = {i => f}
+      hash_45[i] = loop_hash_45[i]
+
+      g = Employee.where(workshop: i, age: 50..55).count
+      loop_hash_50 = {i => g}
+      hash_50[i] = loop_hash_50[i]
+
+      h = Employee.where(workshop: i, age: 55..60).count
+      loop_hash_55 = {i => h}
+      hash_55[i] = loop_hash_55[i]
+
+    end
+    #生成每个年龄段的【车间-人数】hash---结束
+
+    # 使用'gon'这个gem的方法，将数据赋值给对应的变量
+    gon.bar_twenty_five_below_k = hash_25_below.keys
+    gon.bar_twenty_five_below_v = hash_25_below.values
+    gon.bar_twenty_five_v = hash_25.values
+    gon.bar_thirty_v = hash_30.values
+    gon.bar_thirty_five_v = hash_35.values
+    gon.bar_forty_v = hash_40.values
+    gon.bar_forty_five_v = hash_45.values
+    gon.bar_fifty_v = hash_50.values
+    gon.bar_fifty_five_v = hash_55.values
+
+
   ## 年龄分析-柱状图数据配置---结束
 
   end
