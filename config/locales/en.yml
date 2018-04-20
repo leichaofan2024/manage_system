@@ -31,3 +31,19 @@
 
 en:
   hello: "Hello world"
+
+  views:
+    pagination:
+      first: "首页"
+      last: "尾页"
+      previous: "上页"
+      next: "下页"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "No %{entry_name} found"
+          one: "页码 <b>1</b> %{entry_name}"
+          other: "总记录 <b>all %{count}</b> "
+      more_pages:
+        display_entries: "总记录 <b>%{total}</b> &nbsp&nbsp 每页: 10 &nbsp&nbsp"
