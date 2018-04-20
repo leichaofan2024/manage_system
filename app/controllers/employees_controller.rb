@@ -154,19 +154,19 @@ class EmployeesController < ApplicationController
     case params[:age]
     when "25岁以下"
       @age_employees = Employee.where(age: 0..25)
-    when "25"
+    when "25-30岁"
       @age_employees = Employee.where(age: 25..30)
-    when "30"
+    when "30-35岁"
       @age_employees = Employee.where(age: 30..35)
-    when "35"
+    when "35-40岁"
       @age_employees = Employee.where(age: 35..40)
-    when "40"
+    when "40-45岁"
       @age_employees = Employee.where(age: 40..45)
-    when "45"
+    when "45-50岁"
       @age_employees = Employee.where(age: 45..50)
-    when "50"
+    when "50-55岁"
       @age_employees = Employee.where(age: 50..55)
-    when "55"
+    when "55-60岁"
       @age_employees = Employee.where(age: 55..60)
     end
   end
@@ -193,5 +193,25 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def age_analysis_data_bar
+    case params[:age]
+    when "25岁以下"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 0..25)
+    when "25-30岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 25..30)
+    when "30-35岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 30..35)
+    when "35-40岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 35..40)
+    when "40-45岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 40..45)
+    when "45-50岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 45..50)
+    when "50-55岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 50..55)
+    when "55-60岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 55..60)
+    end
+  end
 
 end
