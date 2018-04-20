@@ -42,7 +42,7 @@ class EmployeesController < ApplicationController
     @age_45 = Employee.where(age: 45..50).count
     @age_50 = Employee.where(age: 50..55).count
     @age_55 = Employee.where(age: 55..60).count    
-    # 使用'gon'这个gem的方法，将数据赋值给对应的变量
+    # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.twenty_five_below = @age_25_below
     gon.twenty_five = @age_25
     gon.thirty =  @age_30
@@ -62,7 +62,7 @@ class EmployeesController < ApplicationController
     @university_specialties = Employee.where(education_background: "大学专科").count
     @undergraduate = Employee.where(education_background: "大学本科").count
     @postgraduate = Employee.where(education_background: "研究生").count
-    # 使用'gon'这个gem的方法，将数据赋值给对应的变量
+    # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.junior_high_school_below = @junior_high_school_below
     gon.senior_high_school = @senior_high_school
     gon.technical_school =  @technical_school
@@ -72,8 +72,7 @@ class EmployeesController < ApplicationController
     gon.postgraduate = @postgraduate
   ## 学历分析-饼图数据配置---结束
 
-  ## 年龄分析-柱状图数据配置---开始
-    
+  ## 年龄分析-柱状图数据配置---开始  
     #捞出所有的车间，赋值给实例变量
     @workshops = Employee.pluck("workshop").uniq
     #生成每个年龄段的【车间-人数】hash---开始
@@ -131,7 +130,7 @@ class EmployeesController < ApplicationController
     end
     #生成每个年龄段的【车间-人数】hash---结束
 
-    # 使用'gon'这个gem的方法，将数据赋值给对应的变量
+    # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.bar_workshop = hash_25_below.keys
     gon.bar_twenty_five_below = hash_25_below.values
     gon.bar_twenty_five = hash_25.values
@@ -141,16 +140,14 @@ class EmployeesController < ApplicationController
     gon.bar_forty_five = hash_45.values
     gon.bar_fifty = hash_50.values
     gon.bar_fifty_five = hash_55.values
-
-
   ## 年龄分析-柱状图数据配置---结束
-
   end
 ### 统计分析页面的图表数据配置---结束
 
+
 ### 年龄分析饼图-表格详细数据配置
   def age_analysis_data
-  ## 通过饼图每个扇形url里附带的参数来判断给出的数据
+  ## 通过饼图url里附带的参数来判断给出的数据
     case params[:age]
     when "25岁以下"
       @age_employees = Employee.where(age: 0..25)
@@ -172,9 +169,9 @@ class EmployeesController < ApplicationController
   end
 
 
-### 年龄分析饼图-表格详细数据配置
+### 学历分析饼图-表格详细数据配置
   def education_background_analysis_data
-  ## 通过饼图每个扇形url里附带的参数来判断给出的数据
+  ## 通过饼图url里附带的参数来判断给出的数据
     case params[:education]
     when "初中及以下"
       @education_employees = Employee.where(education_background: ["小学", "初中"])
@@ -193,9 +190,12 @@ class EmployeesController < ApplicationController
     end
   end
 
+### 年龄分析条形图-表格详细数据配置
   def age_analysis_data_bar
+    ## 通过条形图url里附带的参数来判断给出的数据
     case params[:age]
     when "25岁以下"
+      ## 参数workshop和数据库存储的一致，可直接用来搜索，而年龄需使用区间搜索，因此使用条件判断
       @age_employees = Employee.where(workshop: params[:workshop], age: 0..25)
     when "25-30岁"
       @age_employees = Employee.where(workshop: params[:workshop], age: 25..30)
@@ -213,5 +213,6 @@ class EmployeesController < ApplicationController
       @age_employees = Employee.where(workshop: params[:workshop], age: 55..60)
     end
   end
+
 
 end
