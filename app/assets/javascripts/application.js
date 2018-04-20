@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require rails-ujs
-//= require turbolinks
 //= require jquery
 //= require jquery-ui/widgets/sortable
 //= require bootstrap
@@ -21,7 +20,7 @@
 /*行点击事件*/
 $(document).ready(function($) {
     $(".row-click-able").click(function() {
-        window.document.location = $(this).attr("data-url");
+        window.document.location = $(this).data("url");
     });
 });
 /*结束*/
