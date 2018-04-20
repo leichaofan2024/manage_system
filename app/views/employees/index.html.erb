@@ -4,7 +4,7 @@
   <%= submit_tag :search %>
 <% end %>
 
-<%= link_to "一键更新工资号", update_sal_number_employees_path, method: :post %>
+<%= link_to "一键更新现员表", update_employee_info_employees_path, method: :post %>
 <%= link_to "导出表格", employees_path(format: "xls")%>
 <%= link_to "组织架构", organization_structure_employees_path, method: :get %>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
@@ -27,6 +27,8 @@
         <th>党团时间</th>
         <th>工作时间</th>
         <th>入路时间</th>
+        <th>工龄</th>
+        <th>路龄</th>
         <th>本单位日期</th>
         <th>职务</th>
         <th>任职时间</th>
@@ -102,6 +104,8 @@
               <td><%= employee.political_party_date %></td>
               <td><%= employee.working_time %></td>
               <td><%= employee.railway_time %></td>
+              <td><%= employee.working_years %></td>
+              <td><%= employee.rali_years %></td>
               <td><%= employee.entry_time %></td>
               <td><%= employee.duty %></td>
               <td><%= employee.employment_period %></td>

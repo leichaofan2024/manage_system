@@ -20,10 +20,15 @@ class EmployeesController < ApplicationController
     render action: "index"
   end
 
-  def update_sal_number
+  def update_employee_info
     @employees = Employee.all
     @employees.each do |employee|
       employee.sal_number = '41' + employee.job_number
+      employee.age = Time.now.year - employee.birth_year.to_i
+      working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
+      rali_years_transfer = (Time.now - employee.railway_time.to_datetime)/60/60/24/365
+      employee.working_years = working_years_transfer.to_i
+      employee.rali_years = rali_years_transfer.to_i
       employee.save!
     end
     redirect_to employees_path

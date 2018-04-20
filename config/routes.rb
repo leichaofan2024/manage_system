@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get  :search
-      post :update_sal_number
+      post :update_employee_info
       get  :organization_structure
       get  :statistical_analysis
       get  :age_analysis_data
