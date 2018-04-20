@@ -149,7 +149,13 @@ hr {
 /*--------------end--------------*/
 
 
-/*--- 表格样式---*/
+/*------------ 表格样式-----------*/
+
+body,table{
+    font-size: 12px;
+    background-color: #fff;
+}
+
 table th{
     white-space: nowrap; // 表头全部显示，不落字
     font-weight: 320;
@@ -168,6 +174,42 @@ table{
    margin:0 auto;
 }
 
+.table-bordered a:link{
+  color: white; //未点击的链接链接
+}
+
+.table-bordered a:visited{
+  color: white; //点击过链接的颜色
+}
+
+.table > thead > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td {
+  // padding: 8px;
+  line-height: 1.2;
+  vertical-align: middle;
+  border-top: 1px solid #fff;
+}
+
+td{
+  vertical-align: middle;
+  height: 10px;
+}
+
+thead {
+  background-color: #3877c8;
+  color: white;
+}
+
+.table>tbody>tr:hover {
+    background-color: rgba(56, 119, 200, 0.1);
+    color: black;
+    font-weight: bold;
+}
+
 /*--- 结束 ---*/
 
 
@@ -181,7 +223,7 @@ table{
 }
 /*--- 结束---*/
 
-/*--- 分页 ---*/
+/*----------------- 分页 ---------------*/
 div.pagination {
   text-align: center;
   display: block;
@@ -190,4 +232,25 @@ div.pagination {
 div.pagination ul {
   display: inline-block;
 }
-/*--- 结束 ---*/
+/*---------------- 结束 ----------------*/
+
+/*----------------整体背景--------------*/
+body {
+  // min-height: 100%; display: flex; flex-direction: column;  //footer 置底代码
+  background-color: rgb(235,236,241);
+}
+/*-----------------结束---------------*/
+
+
+/*-----------------表格外部卡片-------*/
+.card {
+    border: 0;
+    border-radius: 5px;
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+    -webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);
+    box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);
+    background-color: #fff;
+}
