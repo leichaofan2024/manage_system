@@ -55,7 +55,8 @@ class EmployeesController < ApplicationController
 
   ## 学历分析-饼图数据配置---开始
     # 把各个学历的人数捞出，赋值给对应的实例变量
-    @junior_high_school_below = Employee.where(education_background: ["小学", "初中"]).count
+    @junior_high_school = Employee.where(education_background: ["初中"]).count
+    @primary_school = Employee.where(education_background: ["小学"]).count
     @senior_high_school = Employee.where(education_background: "高中").count
     @technical_school = Employee.where(education_background: "技校").count
     @secondary_school = Employee.where(education_background: "中专").count
@@ -63,13 +64,14 @@ class EmployeesController < ApplicationController
     @undergraduate = Employee.where(education_background: "大学本科").count
     @postgraduate = Employee.where(education_background: "研究生").count
     # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
-    gon.junior_high_school_below = @junior_high_school_below
+    gon.junior_high_school = @junior_high_school_below
     gon.senior_high_school = @senior_high_school
     gon.technical_school =  @technical_school
     gon.secondary_school =  @secondary_school
     gon.university_specialties =  @university_specialties
     gon.undergraduate = @undergraduate
     gon.postgraduate = @postgraduate
+    gon.primary_school = @primary_school
   ## 学历分析-饼图数据配置---结束
 
   ## 年龄分析-柱状图数据配置---开始  

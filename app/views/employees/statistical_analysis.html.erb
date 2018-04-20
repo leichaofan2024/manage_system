@@ -84,7 +84,7 @@
 
                 <!-- 年龄分析条形图-开始  -->
             <!-- 给条形图准备一个合适大小的dom  -->
-            <div id="container2" style="min-width:800px;height:900px"></div>
+            <div id="container2" style="min-width:800px;height:800px"></div>
             <!-- 引入highcharts库  -->
             <script src="/assets/javascripts/highcharts.js"></script>
             <script>
@@ -109,7 +109,7 @@
                                 step: 1
                             },
                             title: {
-                                text: '水果消费总量'
+                                text: '员工数量'
                             }
                         },
                         tolltip: {
@@ -120,7 +120,7 @@
                         },
                         plotOptions: {
                             bar: {
-                                pointWidth: 30,
+                                pointWidth: 15,
                                 pointPadding: 0
                             },
                             // 设置条形图的点击事件
@@ -224,9 +224,10 @@
                                 {name: '大学专科',y: gon.university_specialties}, 
                                 {name: '高中',y: gon.senior_high_school},
                                 {name: '大学本科',y: gon.undergraduate}, 
-                                {name: '初中及以下',y: gon.junior_high_school_below},  
+                                {name: '初中',y: gon.junior_high_school},  
                                 {name: '技校',y: gon.technical_school}, 
-                                {name: '研究生', y: gon.postgraduate}
+                                {name: '研究生', y: gon.postgraduate},
+                                {name: '小学', y: gon.primary_school}
                             ]
                         }],
                     });
@@ -236,7 +237,7 @@
 
         <!-- 年龄分析条形图-开始  -->
             <!-- 给条形图准备一个合适大小的dom  -->
-            <div id="container4" style="min-width:800px;height:900px"></div>
+            <div id="container4" style="min-width:800px;height:800px"></div>
             <!-- 引入highcharts库  -->
             <script src="/assets/javascripts/highcharts.js"></script>
             <script>
@@ -247,7 +248,7 @@
                             
                         },
                         title: {
-                            text: '年龄分析'
+                            text: '学历分析'
                         },
                         xAxis: {
                             lables: {
@@ -261,7 +262,7 @@
                                 step: 1
                             },
                             title: {
-                                text: '水果消费总量'
+                                text: '员工数量'
                             }
                         },
                         tolltip: {
@@ -272,7 +273,7 @@
                         },
                         plotOptions: {
                             bar: {
-                                pointWidth: 30,
+                                pointWidth: 15,
                                 pointPadding: 0
                             },
                             // 设置条形图的点击事件
@@ -292,22 +293,22 @@
                             }
                         },
                         series: [
-                            {name: '25岁以下',
+                            {name: '中专',
                              data: gon.bar_twenty_five_below,},
-                            {name: '25-30岁',
+                            {name: '大学专科',
                              data: gon.bar_twenty_five},
-                            {name: '30-35岁',
+                            {name: '高中',
                              data: gon.bar_thirty},
-                            {name: '35-40岁',
+                            {name: '大学本科',
                              data: gon.bar_thirty_five},
-                            {name: '40-45岁',
+                            {name: '初中',
                              data: gon.bar_forty},
-                            {name: '45-50岁',
+                            {name: '技校',
                              data: gon.bar_forty_five},
-                            {name: '50-55岁',
+                            {name: '研究生',
                              data: gon.bar_fifty},
-                            {name: '55-60岁',
-                             data: gon.bar_fifty_five}  
+                             {name: '小学',
+                             data: gon.bar_fifty}
                         ]
                     });
                 })
