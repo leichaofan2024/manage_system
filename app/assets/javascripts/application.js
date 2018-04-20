@@ -18,6 +18,14 @@
 //= require_tree .
 
 
+/*行点击事件*/
+$(document).ready(function($) {
+    $(".row-click-able").click(function() {
+        window.document.location = $(this).attr("data-url");
+    });
+});
+/*结束*/
+
 $(document).ready(function() {
     $('#example').DataTable();
 } );
