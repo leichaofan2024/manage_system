@@ -134,60 +134,111 @@
 
         <!-- 年龄分析柱状图-开始  -->
             <!-- 给饼图准备一个合适大小的dom  -->
-            <div id="container3" style="min-width:800px;height:600px"></div>
+            <div id="container3" style="min-width:800px;height:900px"></div>
             <!-- 引入highcharts库  -->
             <script src="/assets/javascripts/highcharts.js"></script>
             <script>
                 var chart3 = $(function () {
                     $('#container3').highcharts({
                         chart: {
-                            type: 'column'
+                            type: 'bar'
+                            
                         },
                         title: {
                             text: '年龄分析'
-                        },    
-                        xAxis: {
-                            categories: 
-                                gon.bar_twenty_five_below_k,
-                            crosshair: true
                         },
-
+                        xAxis: {
+                            lables: {
+                                step: 1
+                            },
+                            categories: gon.bar_workshop
+                        },
                         yAxis: {
                             min: 0,
+                            lables: {
+                                step: 1
+                            },
                             title: {
-                                text: '员工数量'
+                                text: '水果消费总量'
                             }
                         },
-                        tooltip: {
-                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y:1f} 人</b></td></tr>',
-                            footerFormat: '</table>',
-                            shared: true,
-                            useHTML: true
+                        tolltip: {
+                            enabled: false
+                        },
+                        legend: {
+                            reversed: true
                         },
                         plotOptions: {
-                            column: {
-                                borderWidth: 0
+                            bar: {
+                                pointWidth: 30,
+                                pointPadding: 0
+                            },
+                            series: {
+                                stacking: 'normal',
+                                point: {
+                                    events: {
+                                        click: function() {
+                                            if (this.category == "机关"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=机关' ;
+                                            }
+                                            else if (this.category == "大修车间"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=大修车间' ;
+                                            }
+                                            else if (this.category == "动力设备车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=动力设备车' ;
+                                            }
+                                            else if (this.category == "北京供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=北京供电车' ;
+                                            }
+                                            else if (this.category == "北京西供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=北京西供电车' ;
+                                            }
+                                            else if (this.category == "丰台供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=丰台供电车' ;
+                                            }
+                                            else if (this.category == "三家店供电"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=三家店供电' ;
+                                            }
+                                            else if (this.category == "沙城供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=沙城供电车' ;
+                                            }
+                                            else if (this.category == "承德电力车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=承德电力车' ;
+                                            }
+                                            else if (this.category == "沙城供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=沙城供电车' ;
+                                            }
+                                            else if (this.category == "沙城供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=沙城供电车' ;
+                                            }
+                                            else if (this.category == "沙城供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=沙城供电车' ;
+                                            }
+                                            else if (this.category == "沙城供电车"){
+                                                location.href = '/employees/age_analysis_data_bar?workshop=沙城供电车' ;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         },
                         series: [
-                        {name: '25岁以下',
-                         data: gon.bar_twenty_five_below_v},
-                        {name: '25-30岁',
-                         data: gon.bar_twenty_five_v},
-                        {name: '30-35岁',
-                         data: gon.bar_thirty_v}, 
-                        {name: '35-40岁',
-                         data: gon.bar_thirty_five_v},
-                        {name: '40-45岁',
-                         data: gon.bar_forty_v},
-                        {name: '45-50岁',
-                         data: gon.bar_forty_five_v},
-                        {name: '50-55岁',
-                         data: gon.bar_fifty_v},
-                        {name: '55-60岁',
-                         data: gon.bar_fifty_five_v}
+                            {name: '25岁以下',
+                             data: gon.bar_twenty_five_below,},
+                            {name: '25-30岁',
+                             data: gon.bar_twenty_five},
+                            {name: '30-35岁',
+                             data: gon.bar_thirty},
+                            {name: '35-40岁',
+                             data: gon.bar_thirty_five},
+                            {name: '40-45岁',
+                             data: gon.bar_forty},
+                            {name: '45-50岁',
+                             data: gon.bar_forty_five},
+                            {name: '50-55岁',
+                             data: gon.bar_fifty},
+                            {name: '55-60岁',
+                             data: gon.bar_fifty_five}  
                         ]
                     });
                 })

@@ -3,7 +3,7 @@ class EmployeesController < ApplicationController
   def index
     @employees = Employee.page(params[:page]).per(20)
   end
-
+ 
   def new
   	
   end
@@ -132,15 +132,15 @@ class EmployeesController < ApplicationController
     #生成每个年龄段的【车间-人数】hash---结束
 
     # 使用'gon'这个gem的方法，将数据赋值给对应的变量
-    gon.bar_twenty_five_below_k = hash_25_below.keys
-    gon.bar_twenty_five_below_v = hash_25_below.values
-    gon.bar_twenty_five_v = hash_25.values
-    gon.bar_thirty_v = hash_30.values
-    gon.bar_thirty_five_v = hash_35.values
-    gon.bar_forty_v = hash_40.values
-    gon.bar_forty_five_v = hash_45.values
-    gon.bar_fifty_v = hash_50.values
-    gon.bar_fifty_five_v = hash_55.values
+    gon.bar_workshop = hash_25_below.keys
+    gon.bar_twenty_five_below = hash_25_below.values
+    gon.bar_twenty_five = hash_25.values
+    gon.bar_thirty = hash_30.values
+    gon.bar_thirty_five = hash_35.values
+    gon.bar_forty = hash_40.values
+    gon.bar_forty_five = hash_45.values
+    gon.bar_fifty = hash_50.values
+    gon.bar_fifty_five = hash_55.values
 
 
   ## 年龄分析-柱状图数据配置---结束

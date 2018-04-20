@@ -1,1 +1,58 @@
-<h2>这是组织架构页面</h2>
+<!DOCTYPE HTML>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        </head>
+       
+        <body>
+        <!-- 年龄分析饼图-开始  -->    
+            <!-- 给饼图准备一个合适大小的dom  -->
+            <div id="container" style="min-width:800px;height:600px"></div>
+            <!-- 引入highcharts库  -->
+            <script src="/assets/javascripts/highcharts.js"></script>
+            <script>
+                $(function () {
+                    $('#container').highcharts({
+                        chart: {
+                            type: 'bar'
+                        },
+                        title: {
+                            text: '年龄分析'
+                        },
+                        xAxis: {
+                            categories: ['苹果', '橘子', '梨', '葡萄', '香蕉']
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '水果消费总量'
+                            }
+                        },
+                        legend: {
+                            reversed: true
+                        },
+                        plotOptions: {
+                            bar: {
+                                pointWidth: 40
+                            },
+                            series: {
+                                stacking: 'normal'
+                            }
+                        },
+                        series: [{
+                            name: '小张',
+                            data: [5, 3, 4, 7, 2]
+                        }, {
+                            name: '小彭',
+                            data: [2, 2, 3, 2, 1]
+                        }, {
+                            name: '小潘',
+                            data: [3, 4, 4, 2, 5]
+                        }]
+                    });
+                });
+            </script>
+        <!-- 年龄分析饼图-结束  --> 
+        </body>
+    </html>
