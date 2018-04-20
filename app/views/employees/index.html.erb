@@ -88,7 +88,7 @@
       </thead>
           <tbody data-behavior='sortable'>
             <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
-              <tr class="row-click-able" data-method="GET" data-url="/employees/<%= employee.id%>">
+              <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
                 <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
                 <td><%= employee.job_number %></td>
                 <td><%= employee.record_number %></td>
