@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
   layout 'home'
   def index
-    @employees = Employee.page(params[:page])
+    @employees = Employee.page(params[:page]).per(100)
     @export_employees = Employee.order("id ASC")
     respond_to do |format|
       format.html

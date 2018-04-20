@@ -9,7 +9,7 @@
 <%= link_to "组织架构", organization_structure_employees_path, method: :get %>
 <div class="card">
   <div class="col-md-12" style="overflow: auto; width: 100%;">
-    <table class="table table-bordered">
+    <table id="example" class="table table-bordered">
       <thead>
         <tr>
           <th>工资号</th>
@@ -87,7 +87,7 @@
         </tr>
       </thead>
           <tbody data-behavior='sortable'>
-            <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :each do |employee, hit| %>
+            <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
               <tr>
                 <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
                 <td><%= employee.job_number %></td>
@@ -168,9 +168,7 @@
     </table>
   </div>
 </div>
-<div class="text-center">
-  <%= paginate @employees %>
-</div>
+
 
 <h2>上传现员表</h2>
 

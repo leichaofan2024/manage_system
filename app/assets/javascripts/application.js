@@ -15,7 +15,13 @@
 //= require jquery
 //= require jquery-ui/widgets/sortable
 //= require bootstrap
+//= require employees
 //= require_tree .
+
+
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
 
 document.addEventListener("turbolinks:load", function() {
   $( "[data-behavior='sortable']" ).sortable();
