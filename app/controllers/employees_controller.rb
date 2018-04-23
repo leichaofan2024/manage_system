@@ -74,9 +74,10 @@ class EmployeesController < ApplicationController
     gon.primary_school = @primary_school
   ## 学历分析-饼图数据配置---结束
 
-  ## 年龄分析-柱状图数据配置---开始  
+  ## 年龄分析-条形图数据配置---开始  
     #捞出所有的车间，赋值给实例变量
     @workshops = Employee.pluck("workshop").uniq
+    @educations = Employee.pluck("education_background").uniq
     #生成每个年龄段的【车间-人数】hash---开始
     #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_25_below = {}
@@ -95,6 +96,23 @@ class EmployeesController < ApplicationController
     hash_50 = {}
     loop_hash_55 = {}
     hash_55 = {}
+
+    loop_hash_junior_high_school = {}
+    hash_junior_high_school = {}
+    loop_hash_primary_school = {}
+    hash_primary_school = {}
+    loop_hash_senior_high_school = {}
+    hash_senior_high_school = {}
+    loop_hash_technical_school = {}
+    hash_technical_school = {}
+    loop_hash_secondary_school = {}
+    hash_secondary_school = {}
+    loop_hash_university_specialties = {}
+    hash_university_specialties = {}
+    loop_hash_undergraduate = {}
+    hash_undergraduate = {}
+    loop_hash_postgraduate = {}
+    hash_postgraduate = {}
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
       a1 = Employee.where(workshop: i, age: 0...25).count
@@ -139,7 +157,7 @@ class EmployeesController < ApplicationController
       loop_hash_50 = {i => g}
       hash_50[i] = loop_hash_50[i]
 
-      h1 = Employee.where(workshop: i, age: 55..60).count
+      h1 = Employee.where(workshop: i, age: 55..70).count
       h2 = Employee.where(workshop: i).count
       h = (h1.to_f)/(h2.to_f)
       loop_hash_55 = {i => h}
@@ -157,7 +175,16 @@ class EmployeesController < ApplicationController
     gon.bar_forty_five = hash_45.values
     gon.bar_fifty = hash_50.values
     gon.bar_fifty_five = hash_55.values
-  ## 年龄分析-柱状图数据配置---结束
+  ## 年龄分析-条形图数据配置---结束
+    gon.junior_high_school = hash_junior_high_school.values
+    gon.primary_school = hash_primary_school
+    gon.senior_high_school = hash_senior_high_school
+    gon.technical_school = hash_technical_school
+    gon.secondary_school = hash_secondary_school
+    gon.university_specialties = hash_university_specialties
+    gon.undergraduate = hash_undergraduate
+    gon.postgraduate = hash_postgraduate
+
   end
 ### 统计分析页面的图表数据配置---结束
 
@@ -167,20 +194,20 @@ class EmployeesController < ApplicationController
   ## 通过饼图url里附带的参数来判断给出的数据
     case params[:age]
     when "25岁以下"
-      @age_employees = Employee.where(age: 0..25)
+      @age_employees = Employee.where(age: 0...25)
     when "25-30岁"
-      @age_employees = Employee.where(age: 25..30)
+      @age_employees = Employee.where(age: 25...30)
     when "30-35岁"
-      @age_employees = Employee.where(age: 30..35)
+      @age_employees = Employee.where(age: 30...35)
     when "35-40岁"
-      @age_employees = Employee.where(age: 35..40)
+      @age_employees = Employee.where(age: 35...40)
     when "40-45岁"
-      @age_employees = Employee.where(age: 40..45)
+      @age_employees = Employee.where(age: 40...45)
     when "45-50岁"
-      @age_employees = Employee.where(age: 45..50)
+      @age_employees = Employee.where(age: 45...50)
     when "50-55岁"
-      @age_employees = Employee.where(age: 50..55)
-    when "55-60岁"
+      @age_employees = Employee.where(age: 50...55)
+    when "55岁以上"
       @age_employees = Employee.where(age: 55..60)
     end
   end
@@ -213,20 +240,20 @@ class EmployeesController < ApplicationController
     case params[:age]
     when "25岁以下"
       ## 参数workshop和数据库存储的一致，可直接用来搜索，而年龄需使用区间搜索，因此使用条件判断
-      @age_employees = Employee.where(workshop: params[:workshop], age: 0..25)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 0...25)
     when "25-30岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 25..30)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 25...30)
     when "30-35岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 30..35)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 30...35)
     when "35-40岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 35..40)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 35...40)
     when "40-45岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 40..45)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 40...45)
     when "45-50岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 45..50)
+      @age_employees = Employee.where(workshop: params[:workshop], age: 45...50)
     when "50-55岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 50..55)
-    when "55-60岁"
+      @age_employees = Employee.where(workshop: params[:workshop], age: 50...55)
+    when "55岁以上"
       @age_employees = Employee.where(workshop: params[:workshop], age: 55..60)
     end
   end
