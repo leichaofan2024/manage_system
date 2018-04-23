@@ -1,5 +1,4 @@
 class EmployeesController < ApplicationController
-
   def index
     @employees = Employee.page(params[:page]).per(20)
     @export_employees = Employee.order("id ASC")

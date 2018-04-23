@@ -24,11 +24,3 @@ $(document).ready(function($) {
     });
 });
 /*结束*/
-
-$(document).ready(function() {
-    $('#example').DataTable();
-} );
-
-document.addEventListener("turbolinks:load", function() {
-  $( "[data-behavior='sortable']" ).sortable();
-})
