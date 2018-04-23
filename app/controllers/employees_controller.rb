@@ -290,5 +290,9 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def education_background_analysis_data_bar
+    @education_employees = Employee.where(workshop: params[:workshop], education_background: params[:education])
+  end
+
 
 end
