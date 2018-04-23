@@ -97,38 +97,53 @@ class EmployeesController < ApplicationController
     hash_55 = {}
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
-      a = Employee.where(workshop: i, age: 0..25).count
+      a1 = Employee.where(workshop: i, age: 0...25).count
+      a2 = Employee.where(workshop: i).count
+      a = (a1.to_f)/(a2.to_f)
       loop_hash_25_below = {i => a}
       hash_25_below[i] = loop_hash_25_below[i]
 
-      b = Employee.where(workshop: i, age: 25..30).count
+      b1 = Employee.where(workshop: i, age: 25...30).count
+      b2 = Employee.where(workshop: i).count
+      b = (b1.to_f)/(b2.to_f)
       loop_hash_25 = {i => b}
-      hash_25[i] = loop_hash_25_below[i]
+      hash_25[i] = loop_hash_25[i]
 
-      c = Employee.where(workshop: i, age: 30..35).count
+      c1 = Employee.where(workshop: i, age: 30...35).count
+      c2 = Employee.where(workshop: i).count
+      c = (c1.to_f)/(c2.to_f)
       loop_hash_30 = {i => c}
       hash_30[i] = loop_hash_30[i]
 
-      d = Employee.where(workshop: i, age: 35..40).count
+      d1 = Employee.where(workshop: i, age: 35...40).count
+      d2 = Employee.where(workshop: i).count
+      d = (d1.to_f)/(d2.to_f)
       loop_hash_35 = {i => d}
       hash_35[i] = loop_hash_35[i]
 
-      e = Employee.where(workshop: i, age: 40..45).count
+      e1 = Employee.where(workshop: i, age: 40...45).count
+      e2 = Employee.where(workshop: i).count
+      e = (e1.to_f)/(e2.to_f)
       loop_hash_40 = {i => e}
       hash_40[i] = loop_hash_40[i]
 
-      f = Employee.where(workshop: i, age: 45..50).count
+      f1 = Employee.where(workshop: i, age: 45...50).count
+      f2 = Employee.where(workshop: i).count
+      f = (f1.to_f)/(f2.to_f)
       loop_hash_45 = {i => f}
       hash_45[i] = loop_hash_45[i]
 
-      g = Employee.where(workshop: i, age: 50..55).count
+      g1 = Employee.where(workshop: i, age: 50...55).count
+      g2 = Employee.where(workshop: i).count
+      g = (g1.to_f)/(g2.to_f)
       loop_hash_50 = {i => g}
       hash_50[i] = loop_hash_50[i]
 
-      h = Employee.where(workshop: i, age: 55..60).count
+      h1 = Employee.where(workshop: i, age: 55..60).count
+      h2 = Employee.where(workshop: i).count
+      h = (h1.to_f)/(h2.to_f)
       loop_hash_55 = {i => h}
       hash_55[i] = loop_hash_55[i]
-
     end
     #生成每个年龄段的【车间-人数】hash---结束
 
