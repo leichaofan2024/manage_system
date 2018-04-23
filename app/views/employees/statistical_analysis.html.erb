@@ -321,5 +321,77 @@
 
         <!-- 年龄分析条形图-结束  -->
 
+        <!-- 工龄分析饼图-开始  -->    
+            <!-- 给饼图准备一个合适大小的dom  -->
+            <div id="container5" style="min-width:800px;height:600px"></div>
+            <!-- 引入highcharts库  -->
+            <script src="/assets/javascripts/highcharts.js"></script>
+            <script>
+                $(function () {
+                    var chart5 = $('#container5').highcharts({
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: '工龄分析'
+                        },
+                        // 数据提示框设置
+                        tooltip: {
+                            headerFormat: '',
+                            pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+                        },
+
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                },
+                                // 设置是否显示图例
+                                showInLegend: true
+                            },
+                            //设置饼图的点击事件
+                            series: {
+                                point: {
+                                    events: {
+                                        click: function(){
+                                             // 先将需要放入url的参数赋值给一个变量
+                                            var education = this.name
+                                             // 把此变量放入url中
+                                            location.href = '/employees/education_background_analysis_data?education='+education;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // 饼图的数据来源
+                        series: [{
+                            colorByPoint: true,
+                            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+                            data: [
+                                {name: '中专',y: gon.secondary_school}, 
+                                {name: '大学专科',y: gon.university_specialties}, 
+                                {name: '高中',y: gon.senior_high_school},
+                                {name: '大学本科',y: gon.undergraduate}, 
+                                {name: '初中',y: gon.junior_high_school},  
+                                {name: '技校',y: gon.technical_school}, 
+                                {name: '研究生', y: gon.postgraduate},
+                                {name: '小学', y: gon.primary_school}
+                            ]
+                        }],
+                    });
+                });
+            </script>
+        <!-- 学历分析饼图-结束  --> 
+
+
         </body>
     </html>
