@@ -116,52 +116,84 @@ class EmployeesController < ApplicationController
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
       a1 = Employee.where(workshop: i, age: 0...25).count
+      aa1 = Employee.where(workshop: i, education_background: "初中").count
       a2 = Employee.where(workshop: i).count
       a = (a1.to_f)/(a2.to_f)
+      aa = (aa1.to_f)/(a2.to_f)
       loop_hash_25_below = {i => a}
+      loop_hash_junior_high_school = {i => aa}
       hash_25_below[i] = loop_hash_25_below[i]
+      hash_junior_high_school[i] = loop_hash_junior_high_school[i]
 
       b1 = Employee.where(workshop: i, age: 25...30).count
+      ab1 = Employee.where(workshop: i, education_background: "小学").count
       b2 = Employee.where(workshop: i).count
       b = (b1.to_f)/(b2.to_f)
+      ab = (ab1.to_f)/(b2.to_f)
       loop_hash_25 = {i => b}
+      loop_hash_primary_school = {i => ab}
       hash_25[i] = loop_hash_25[i]
+      hash_primary_school[i] = loop_hash_primary_school[i]
 
       c1 = Employee.where(workshop: i, age: 30...35).count
+      ac1 = Employee.where(workshop: i, education_background: "高中").count
       c2 = Employee.where(workshop: i).count
       c = (c1.to_f)/(c2.to_f)
+      ac = (ac1.to_f)/(c2.to_f)
       loop_hash_30 = {i => c}
+      loop_hash_senior_high_school = {i => ac}
       hash_30[i] = loop_hash_30[i]
+      hash_senior_high_school[i] = loop_hash_senior_high_school[i]
 
       d1 = Employee.where(workshop: i, age: 35...40).count
+      ad1 = Employee.where(workshop: i, education_background: "技校").count
       d2 = Employee.where(workshop: i).count
       d = (d1.to_f)/(d2.to_f)
+      ad = (ad1.to_f)/(d2.to_f)
       loop_hash_35 = {i => d}
+      loop_hash_technical_school = {i => ad}
       hash_35[i] = loop_hash_35[i]
+      hash_technical_school[i] = loop_hash_technical_school[i]
 
       e1 = Employee.where(workshop: i, age: 40...45).count
+      ae1 = Employee.where(workshop: i, education_background: "中专").count
       e2 = Employee.where(workshop: i).count
       e = (e1.to_f)/(e2.to_f)
+      ae = (ae1.to_f)/(e2.to_f)
       loop_hash_40 = {i => e}
+      loop_hash_secondary_school = {i => ae}
       hash_40[i] = loop_hash_40[i]
+      hash_secondary_school[i] = loop_hash_secondary_school[i]
 
       f1 = Employee.where(workshop: i, age: 45...50).count
+      af1 = Employee.where(workshop: i, education_background: "大学专科").count
       f2 = Employee.where(workshop: i).count
       f = (f1.to_f)/(f2.to_f)
+      af = (af1.to_f)/(f2.to_f)
       loop_hash_45 = {i => f}
+      loop_hash_university_specialties = {i => af}
       hash_45[i] = loop_hash_45[i]
+      hash_university_specialties[i] = loop_hash_university_specialties[i]
 
       g1 = Employee.where(workshop: i, age: 50...55).count
+      ag1 = Employee.where(workshop: i, education_background: "大学本科").count
       g2 = Employee.where(workshop: i).count
       g = (g1.to_f)/(g2.to_f)
+      ag = (ag1.to_f)/(g2.to_f)
       loop_hash_50 = {i => g}
+      loop_hash_undergraduate = {i => ag}
       hash_50[i] = loop_hash_50[i]
+      hash_undergraduate[i] = loop_hash_undergraduate[i]
 
       h1 = Employee.where(workshop: i, age: 55..70).count
+      ah1 = Employee.where(workshop: i, education_background: "研究生").count
       h2 = Employee.where(workshop: i).count
       h = (h1.to_f)/(h2.to_f)
+      ah = (ah1.to_f)/(h2.to_f)
       loop_hash_55 = {i => h}
+      loop_hash_postgraduate = {i => ah}
       hash_55[i] = loop_hash_55[i]
+      hash_postgraduate[i] = loop_hash_postgraduate[i]
     end
     #生成每个年龄段的【车间-人数】hash---结束
 
@@ -176,14 +208,14 @@ class EmployeesController < ApplicationController
     gon.bar_fifty = hash_50.values
     gon.bar_fifty_five = hash_55.values
   ## 年龄分析-条形图数据配置---结束
-    gon.junior_high_school = hash_junior_high_school.values
-    gon.primary_school = hash_primary_school
-    gon.senior_high_school = hash_senior_high_school
-    gon.technical_school = hash_technical_school
-    gon.secondary_school = hash_secondary_school
-    gon.university_specialties = hash_university_specialties
-    gon.undergraduate = hash_undergraduate
-    gon.postgraduate = hash_postgraduate
+    gon.bar_junior_high_school = hash_junior_high_school.values
+    gon.bar_primary_school = hash_primary_school.values
+    gon.bar_senior_high_school = hash_senior_high_school.values
+    gon.bar_technical_school = hash_technical_school.values
+    gon.bar_secondary_school = hash_secondary_school.values
+    gon.bar_university_specialties = hash_university_specialties.values
+    gon.bar_undergraduate = hash_undergraduate.values
+    gon.bar_postgraduate = hash_postgraduate.values
 
   end
 ### 统计分析页面的图表数据配置---结束
