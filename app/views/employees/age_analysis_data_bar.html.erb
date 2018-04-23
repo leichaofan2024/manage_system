@@ -1,4 +1,4 @@
-<h4>文化程度：<%= params[:education] %> &nbsp; &nbsp; &nbsp; 人数： <%= @education_employees.count %>人</h4>
+<h4>车间：<%= params[:workshop] %> &nbsp; &nbsp; &nbsp; 年龄段：<%= params[:age] %>&nbsp; &nbsp; &nbsp; 人数：<%= @age_employees.count %>人</h4>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
     <thead>
@@ -11,7 +11,6 @@
         <th>姓名</th>
         <th>性别</th>
         <th>年龄</th>
-        <th>文化程度</th>
         <th>民族</th>
         <th>籍贯</th>
         <th>政治面目</th>
@@ -21,7 +20,7 @@
       </tr>
     </thead>
         <tbody>
-          <% @education_employees.each do |employee| %>
+          <% @age_employees.each do |employee| %>
             <tr>
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
@@ -31,7 +30,6 @@
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>
               <td><%= employee.age %></td>
-              <td><%= employee.education_background %></td>
               <td><%= employee.nation %></td>
               <td><%= employee.native_place %></td>
               <td><%= employee.political_role %></td>
