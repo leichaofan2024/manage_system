@@ -313,5 +313,9 @@ class EmployeesController < ApplicationController
     @education_employees = Employee.where(workshop: params[:workshop], education_background: params[:education])
   end
 
+  def organization_structure
+    @workshops = Employee.pluck("workshop").uniq
+  end
+
 
 end

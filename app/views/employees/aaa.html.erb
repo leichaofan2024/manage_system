@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <title>无限级折叠菜单 1.01 JS版</title>
+      <meta name="keywords" content="hj1227 原创无限级折叠菜单 1.01js版">
+      <meta name="description" content="hj1227 原创无限级折叠菜单 1.01js版">
+
+      <style>
+<!--
+        body,ul,h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
+li {
+  list-style-type: none;
+}
+
+body {
+  font-size: 12px;
+  color: #333;
+  font-family: Simsun;
+  line-height: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #004285;
+  border: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #C33;
+}
+
+#menu {
+  width: 260px;
+  margin: 50px auto;
+  padding: 10px;
+  border: #EEE 1px solid;
+}
+
+#menu h3 {
+  font-size: 12px;
+}
+
+#menu ul {
+  background: url("http://demo.jb51.net/js/2011/caidan/ul-bg.gif") repeat-y 5px 0px;
+  overflow: hidden;
+}
+
+#menu ul li {
+  padding: 5px 0 2px 15px;
+  background: url("http://demo.jb51.net/js/2011/caidan/tree-ul-li.gif") no-repeat 5px -32px;
+}
+
+#menu ul li ul {
+  display: none;
+}
+
+#menu ul li em {
+  cursor: pointer;
+  display: inline-block;
+  width: 15px;
+  float: left;
+  height: 15px;
+  margin-left: -14px;
+  background: url("http://demo.jb51.net/js/2011/caidan/tree-ul-li.gif") no-repeat -32px 2px;
+}
+
+#menu ul li em.off {
+  background-position: -17px -18px;
+}
+
+#menu ul li#end {
+  background-color: #FFF;
+}
+
+#menu ul.off {
+  display: block;
+}
+
+-->
+</style>
+</head>
+<body>
+<div id="menu">
+<h3>无限级折叠菜单 1.0.1 JS版</h3>
+
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_1_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_2_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_3_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_3_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_2_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_3_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_3_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_1_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_2_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_3_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_3_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_2_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_3_1</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_3_2</a>
+<ul>
+<li><em></em><a href='javascript:void(0);'>菜单_4_1</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+<li id='end'><em></em><a href='javascript:void(0);'>菜单_4_2</a>
+<ul>
+<li><a href='javascript:void(0);'>菜单_5_1</a></li>
+<li id='end'><a href='javascript:void(0);'>菜单_5_2</a></li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+</div>
+<script type="text/javascript">
+(function(e) {
+  for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+em.onclick = function(){ //onmouseover
+var ul = this.nextSibling;
+if(!ul){return false;
+}
+
+ul = ul.nextSibling; if(!ul) {
+  return false;
+}
+
+if(e.tag != 'a') {
+  ul = ul.nextSibling; if(!ul){return false;
+} } //a 标签控制 隐藏或删除该行
+for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+  if(li.tagName=="LI"){
+for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+switch($ul.tagName){
+case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+  break;
+case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+  break;
+}
+}
+}
+}
+}
+}
+})({id:'menu',tag:'em'
+});
+</script>
+</body>
+</html>

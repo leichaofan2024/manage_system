@@ -261,3 +261,82 @@ body {
   cursor: pointer;
 }
 /*---------------end----------------*/
+
+/*--------------组织架构页面样式---------*/
+
+ body,ul,h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
+li {
+  list-style-type: none;
+}
+
+body {
+  font-size: 12px;
+  color: #333;
+  font-family: Simsun;
+  line-height: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #004285;
+  border: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #C33;
+}
+
+#menu {
+  width: 260px;
+  margin: 50px auto;
+  padding: 10px;
+  border: #EEE 1px solid;
+}
+
+#menu h3 {
+  font-size: 12px;
+}
+
+#menu ul {
+  background: url("http://demo.jb51.net/js/2011/caidan/ul-bg.gif") repeat-y 5px 0px;
+  overflow: hidden;
+}
+
+#menu ul li {
+  padding: 5px 0 2px 15px;
+  background: url("http://demo.jb51.net/js/2011/caidan/tree-ul-li.gif") no-repeat 5px -32px;
+}
+
+#menu ul li ul {
+  display: none;
+}
+
+#menu ul li em {
+  cursor: pointer;
+  display: inline-block;
+  width: 15px;
+  float: left;
+  height: 15px;
+  margin-left: -14px;
+  background: url("http://demo.jb51.net/js/2011/caidan/tree-ul-li.gif") no-repeat -32px 2px;
+}
+
+#menu ul li em.off {
+  background-position: -17px -18px;
+}
+
+#menu ul li#end {
+  background-color: #FFF;
+}
+
+#menu ul.off {
+  display: block;
+}
+
+
+/*---------------end----------------*/
