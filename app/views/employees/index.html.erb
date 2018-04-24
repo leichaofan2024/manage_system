@@ -15,8 +15,9 @@
           <th>工资号</th>
           <th>工号</th>
           <th>档案号</th>
-          <th>车间</th>
-          <th>班组</th>
+          <th>部门</th>
+          <th>班组名称</th>
+          <th>班组类别</th>
           <th>姓名</th>
           <th>性别</th>
           <th>出生日期</th>
@@ -39,6 +40,8 @@
           <th>技术职务</th>
           <th>任技时间</th>
           <th>工种分类</th>
+          <th>班组长类别</th>
+          <th>班组长职务</th>
           <th>任班组长</th>
           <th>合同岗位</th>
           <th>三员一长</th>
@@ -94,6 +97,7 @@
                 <td><%= employee.record_number %></td>
                 <td><%= employee.workshop%></td>
                 <td><%= employee.group %></td>
+                <td><%= employee.group_category %></td>
                 <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
                 <td><%= employee.sex %></td>
                 <td><%= employee.birth_date %></td>
@@ -116,6 +120,8 @@
                 <td><%= employee.technique_duty %></td>
                 <td><%= employee.hold_technique_time %></td>
                 <td><%= employee.work_type %></td>
+                <td><%= employee.job_foreman_category%></td>
+                <td><%= employee.job_foreman_duty %></td>
                 <td><%= employee.job_foreman %></td>
                 <td><%= employee.contract_station %></td>
                 <td><%= employee.three_one %></td>

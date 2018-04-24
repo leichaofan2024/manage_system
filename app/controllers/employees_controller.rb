@@ -14,11 +14,10 @@ class EmployeesController < ApplicationController
   end
 
   def edit
-
   end
 
   def show
-
+    @employee = Employee.find(params[:id])
   end
 
   def import_table
