@@ -14,11 +14,11 @@
           <ul>            
             <% @workshops.each do |workshop| %>
               <li>
-                <em></em><a href='javascript:void(0);'><%= workshop %></a>
+                <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
                 <ul>
                   <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
                   <% @groups.each do |group| %>
-                    <li><a href='javascript:void(0);'><%= group %></a></li>
+                    <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
                   <% end %>
                 </ul>
               </li>
@@ -27,6 +27,53 @@
         </li>
       </ul>
     </div>
+
+    <div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>工资号</th>
+            <th>工号</th>
+            <th>档案号</th>
+            <th>车间</th>
+            <th>班组</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>文化程度</th>
+            <th>民族</th>
+            <th>籍贯</th>
+            <th>政治面目</th>
+            <th>党团时间</th>
+            <th>工作时间</th>
+            <th>入路时间</th>
+          </tr>
+        </thead>
+        <tbody>
+         
+          <% @employees.each do |employee| %>
+            <tr>
+              <td><%= employee.sal_number %></td>
+              <td><%= employee.job_number %></td>
+              <td><%= employee.record_number %></td>
+              <td><%= employee.workshop %></td>
+              <td><%= employee.group %></td>
+              <td><%= employee.name %></td>
+              <td><%= employee.sex %></td>
+              <td><%= employee.age %></td>
+              <td><%= employee.education_background %></td>
+              <td><%= employee.nation %></td>
+              <td><%= employee.native_place %></td>
+              <td><%= employee.political_role %></td>
+              <td><%= employee.political_party_date %></td>
+              <td><%= employee.working_time %></td>
+              <td><%= employee.railway_time %></td>
+            </tr>
+          <% end %>
+       </tbody>
+  </table>
+    </div>
+
     <script type="text/javascript">
       (function(e) {
         for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){

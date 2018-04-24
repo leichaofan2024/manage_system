@@ -315,6 +315,11 @@ class EmployeesController < ApplicationController
 
   def organization_structure
     @workshops = Employee.pluck("workshop").uniq
+    if params[:workshop].present?
+      @employees = Employee.where(workshop: params[:workshop])
+    elsif params[:group].present?
+      @employees = Employee.where(group: params[:group])
+    end
   end
 
 
