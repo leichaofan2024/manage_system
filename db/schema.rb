@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420011510) do
+ActiveRecord::Schema.define(version: 20180424012948) do
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
@@ -88,42 +88,9 @@ ActiveRecord::Schema.define(version: 20180420011510) do
     t.integer "position"
     t.integer "working_years", comment: "工作时长"
     t.integer "rali_years", comment: "入路时长"
-  end
-
-  create_table "test_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "sal_number", default: "", comment: "工资号"
-    t.string "job_number", null: false, comment: "工号"
-    t.string "record_number", comment: "档案号"
-    t.string "workshop", null: false, comment: "车间"
-    t.string "group", null: false, comment: "班组"
-    t.string "name", null: false
-    t.string "sex", null: false
-    t.string "birth_date", null: false
-    t.integer "birth_year", null: false
-    t.integer "age", null: false
-    t.string "nation", null: false, comment: "民族"
-    t.string "native_place", comment: "籍贯"
-    t.string "political_role", comment: "政治面貌"
-    t.string "political_party_date", comment: "党团时间"
-    t.string "working_time", comment: "工作时间"
-    t.string "railway_time", comment: "入路时间"
-    t.string "entry_time", comment: "本单位日期"
-    t.string "duty", comment: "职务"
-    t.string "employment_period", comment: "任职时间"
-    t.string "part_time", comment: "兼职时间"
-    t.string "grade", comment: "级别"
-    t.string "promotion_leader_time", comment: "转干时间"
-    t.string "technique_duty", comment: "技术职务"
-    t.string "hold_technique_time", comment: "任技时间"
-    t.string "work_type", comment: "工种分类"
-    t.string "job_foreman", comment: "任班组长"
-    t.string "contract_station", comment: "合同岗位"
-    t.string "three_one", comment: "三员一长"
-    t.string "people_source", comment: "人员来源"
-    t.string "people_category", comment: "人员分类"
-    t.string "education_background", comment: "文化程度"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "group_category", comment: "班组类别"
+    t.string "job_foreman_category", comment: "班组长类别"
+    t.string "job_foreman_duty", comment: "班组长职务"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

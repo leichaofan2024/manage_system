@@ -21,6 +21,11 @@ class EmployeesController < ApplicationController
 
   end
 
+  def import_table
+    Employee.import_table(params[:file])
+    redirect_to employees_path
+  end
+
   def search
     @employees = Employee.search(params[:q]).page(params[:page]).records
     render action: "index"
@@ -31,6 +36,7 @@ class EmployeesController < ApplicationController
     @employees = Employee.all
     @employees.each do |employee|
       employee.sal_number = '41' + employee.job_number
+      employee.birth_year = employee.birth_date[0..3]
       employee.age = Time.now.year - employee.birth_year.to_i
       working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
       rali_years_transfer = (Time.now - employee.railway_time.to_datetime)/60/60/24/365

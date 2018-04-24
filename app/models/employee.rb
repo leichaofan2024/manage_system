@@ -30,8 +30,9 @@ class Employee < ActiveRecord::Base
     head_transfer = {"工资号" => "sal_number",
                      "工号" => "job_number",
                      "档案号" => "record_number",
-                     "车间" => "workshop",
-                     "班组" => "group",
+                     "部门" => "workshop",
+                     "班组名称" => "group",
+                     "班组类别" => "group_category",
                      "姓名" => "name",
                      "性别" => "sex",
                      "出生日期" => "birth_date",
@@ -52,6 +53,8 @@ class Employee < ActiveRecord::Base
                      "技术职务" => "technique_duty",
                      "任技时间" => "hold_technique_time",
                      "工种分类" => "work_type",
+                     "班组长类别" => "job_foreman_category",
+                     "班组长职务" => "job_foreman_duty",
                      "任班组长" => "job_foreman",
                      "合同岗位" => "contract_station",
                      "三员一长" => "three_one",
@@ -96,7 +99,7 @@ class Employee < ActiveRecord::Base
                      "CJBZPX" => "CJBZPX",
                      "家属"   => "family",
                      "J01BF" => "J01BF",
-                     "职务化" => "duting",
+                     "职务化" => "duting"
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
