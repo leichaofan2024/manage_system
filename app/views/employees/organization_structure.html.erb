@@ -5,12 +5,12 @@
     </head>
     
   <body>
-    <div id="menu">
+    <div class="col-md-2" id="menu">
       <h3>组织架构</h3>
 
       <ul>
         <li>
-          <em></em><a href='javascript:void(0);'>北京供电段</a>
+          <em></em><a href='/employees/organization_structure?duan=北京供电段'>北京供电段</a>
           <ul>            
             <% @workshops.each do |workshop| %>
               <li>
@@ -28,7 +28,7 @@
       </ul>
     </div>
 
-    <div>
+    <div class="col-md-8">
       <table class="table table-bordered">
         <thead>
           <tr>

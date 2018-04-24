@@ -319,6 +319,8 @@ class EmployeesController < ApplicationController
       @employees = Employee.where(workshop: params[:workshop])
     elsif params[:group].present?
       @employees = Employee.where(group: params[:group])
+    else
+      @employees = Employee.all
     end
   end
 
