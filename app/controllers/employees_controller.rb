@@ -1,4 +1,5 @@
 class EmployeesController < ApplicationController
+  layout 'home'
   def index
     @employees = Employee.page(params[:page]).per(20)
     @export_employees = Employee.order("id ASC")
@@ -244,7 +245,7 @@ class EmployeesController < ApplicationController
   ## 通过饼图url里附带的参数来判断给出的数据
     case params[:age]
     when "25岁以下"
-      @age_employees = Employee.where(age: 0...25)
+      @age_employees = Employee.where(age: 0...25).page(params[:page]).per(20)
     when "25-30岁"
       @age_employees = Employee.where(age: 25...30)
     when "30-35岁"
