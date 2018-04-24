@@ -10,104 +10,240 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require font-awesome
  *= require_tree .
  *= require_self
  */
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
+@import "font-awesome";
 
 
 /*------------------sidebar------------*/
 .sidebar {
- width: 260px;
- position: fixed; // 相对与屏幕指定位置
- left: 0;
- top: 0;
- height: 100%;
- background: #fff;
- padding: 7em 0 0 0;
- border-right: 1px solid #d6dce0;
- overflow-x: hidden;
- z-index: 1;
- background: rgb(54,170,252);
- .logo {
-   width: 100%;
-   position: absolute;
-   right: 3em;
-   top: 3em;
-   margin-left: 500px;
- }
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    width: 260px;
+    background: #fff;
+    box-shadow: 0 16px 38px -12px rgba(0,0,0,.56), 0 4px 25px 0 rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
 }
 
-.sidebar .sidebarnav .table_sidebar{
-    a{
-      padding: 16px 6px 16px 45px;
-      text-decoration: none;
-      font-size: 14px;
-      color: #fff;
-      font-weight: 320;
-      display: block;
-     }
-
-     li {
-       padding: 6px 6px 6px 0px;
-       text-decoration: none;
-       color: #818181;
-       font-weight: 320;
-       display: inline;
-      }
-
-    a:hover {
-      color: #fff;
-      background-color: rgb(75,179,252);
-      display: block;
-      border-radius: 5px;
-      width: 120px;
-      margin-left: 20px;
-      padding-left: 25px;
-    }
-
-    li.active > a{
-      background-color: #fff;
-      color: #2ca8ff;
-      border-radius: 5px;
-      text-decoration: none;
-      text-transform: uppercase;
-      position: relative;
-      display: list-item;
-      width: 120px;
-      margin-left: 20px;
-      padding-left: 25px;
-    }
+.sidebar .logo {
+    padding: 15px 0;
+    margin: 0;
+    display: block;
+    position: relative;
+    z-index: 4;
 }
 
-.sidebar .sidebarnav .log-in{
-  ul li{
-    display: inline;
+.sidebar .logo:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    height: 1px;
+    width: calc(100% - 30px);
+    background-color: rgba(180,180,180,.3);
+}
+
+.sidebar .logo .simple-text {
+    text-transform: uppercase;
+    padding: 5px 0;
+    font-size: 18px;
+    color: #3C4858;
+    white-space: nowrap;
+    font-weight: 400;
+    line-height: 30px;
+    overflow: hidden;
+    text-align: center;
+    display: block;
+}
+
+
+.sidebar .sidebar-wrapper {
+    position: relative;
+    height: calc(100vh - 75px);
+    overflow: auto;
+    width: 260px;
+    z-index: 4;
+    padding-bottom: 30px;
+}
+
+.sidebar .nav {
+    margin-top: 20px;
+    display: block;
+}
+
+.sidebar .nav li:first-child>a {
+    margin: 0 15px;
+}
+
+.sidebar .nav li a {
+    margin: 10px 15px 0;
+    border-radius: 3px;
+    color: #3C4858;
+    text-transform: capitalize;
+    font-size: 13px;
+    padding: 10px 15px;
+}
+
+.sidebar .nav i {
+    font-size: 24px;
     float: left;
-    list-style-type: none;  //退出与修改密码在一行显示
-    }
-
-    a{
-      padding: 6px 6px 16px 45px;
-      text-decoration: none;
-      font-size: 14px;
-      color: #fff;
-      font-weight: 320;
-      display: block;
-     }
-
-     li {
-       padding: 6px 6px 6px 6px;
-       text-decoration: none;
-       color: #818181;
-       font-weight: 320;
-      }
-
-      a:hover{
-        color: black;
-      }
+    margin-right: 15px;
+    line-height: 30px;
+    width: 30px;
+    text-align: center;
+    color: #a9afbb;
 }
+
+a .material-icons {
+    vertical-align: middle;
+}
+
+.material-icons {
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sidebar .nav p {
+    margin: 0;
+    line-height: 30px;
+    font-size: 14px;
+    position: relative;
+    display: block;
+    height: auto;
+    white-space: nowrap;
+}
+
+.nav {
+    flex-wrap: wrap;
+    padding-left: 0;
+}
+
+ul {
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.nav .nav-item {
+    position: relative;
+}
+
+.nav-link{
+  display: block;
+}
+
+
+
+
+
+
+
+
+// .sidebar {
+//  width: 260px;
+//  position: fixed; // 相对与屏幕指定位置
+//  left: 0;
+//  top: 0;
+//  height: 100%;
+//  background: #fff;
+//  padding: 7em 0 0 0;
+//  border-right: 1px solid #d6dce0;
+//  overflow-x: hidden;
+//  z-index: 1;
+//  background: rgb(54,170,252);
+//  .logo {
+//    width: 100%;
+//    position: absolute;
+//    right: 3em;
+//    top: 3em;
+//    margin-left: 500px;
+//  }
+// }
+//
+// .sidebar .sidebarnav .table_sidebar{
+//     a{
+//       padding: 16px 6px 16px 45px;
+//       text-decoration: none;
+//       font-size: 14px;
+//       color: #fff;
+//       font-weight: 320;
+//       display: block;
+//      }
+//
+//      li {
+//        padding: 6px 6px 6px 0px;
+//        text-decoration: none;
+//        color: #818181;
+//        font-weight: 320;
+//        display: inline;
+//       }
+//
+//     a:hover {
+//       color: #fff;
+//       background-color: rgb(75,179,252);
+//       display: block;
+//       border-radius: 5px;
+//       width: 120px;
+//       margin-left: 20px;
+//       padding-left: 25px;
+//     }
+//
+//     li.active > a{
+//       background-color: #fff;
+//       color: #2ca8ff;
+//       border-radius: 5px;
+//       text-decoration: none;
+//       text-transform: uppercase;
+//       position: relative;
+//       display: list-item;
+//       width: 120px;
+//       margin-left: 20px;
+//       padding-left: 25px;
+//     }
+// }
+//
+// .sidebar .sidebarnav .log-in{
+//   ul li{
+//     display: inline;
+//     float: left;
+//     list-style-type: none;  //退出与修改密码在一行显示
+//     }
+//
+//     a{
+//       padding: 6px 6px 16px 45px;
+//       text-decoration: none;
+//       font-size: 14px;
+//       color: #fff;
+//       font-weight: 320;
+//       display: block;
+//      }
+//
+//      li {
+//        padding: 6px 6px 6px 6px;
+//        text-decoration: none;
+//        color: #818181;
+//        font-weight: 320;
+//       }
+//
+//       a:hover{
+//         color: black;
+//       }
+// }
 .main_content {
  margin-left: 280px;
  margin-right: 30px;

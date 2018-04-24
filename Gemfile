@@ -23,7 +23,6 @@ gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'acts_as_list'
 gem 'simple_form'
 gem 'roo'
 gem 'roo-xls'
@@ -32,6 +31,7 @@ gem 'elasticsearch', git: 'git://github.com/elasticsearch/elasticsearch-ruby.git
 gem 'elasticsearch-model', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
 gem 'elasticsearch-rails', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
 gem 'gon'
+gem 'font-awesome-rails'
 
 group :development, :test do
   gem 'capybara', '~> 2.13'
