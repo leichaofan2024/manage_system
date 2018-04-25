@@ -1,7 +1,4 @@
-<div style="height: 50px; weight:100%; margin-top:-60px ;margin-left: -18px; background-color: #fff;">
-   <%= link_to "员工信息", employees_path %>
-   <%= link_to "组织架构", organization_structure_employees_path, method: :get %>
-</div>
+<%= render 'employee_navbar' %>
 <%= form_tag search_employees_path, method: 'get' do %>
   <%= label_tag :查询%>
   <%= text_field_tag :q, params[:q] %>

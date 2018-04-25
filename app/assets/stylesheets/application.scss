@@ -169,8 +169,62 @@ ul {
     background-color: rgba(180,180,180,.3);
 }
 
+// 现员表导航栏
+.header_info {
+  font-size: 14px !important;
+  display: block;
+  z-index: 1;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  height: 50px;
+  weight: 100%;
+  margin-top: -60px;
+  margin-left: -18px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
 
+.d-flex {
+  display: flex !important;
+}
 
+.list-style-none {
+  list-style: none !important;
+}
+
+.text_bold {
+  font-weight: 600 !important;
+}
+
+.pl-2 {
+  padding-left: 8px !important;
+}
+
+.flex-items-center {
+  align-items: center !important;
+}
+
+.header_info ul{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.HeaderNavlink {
+    display: block;
+    color: rgba(255,255,255,0.75);
+}
+
+.px-2 {
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+}
+
+.header_info ul li>a {
+    color: #0366d6;
+    text-decoration: none;
+    margin-top: 8px;
+    background-color: transparent;
+}
 
 
 
