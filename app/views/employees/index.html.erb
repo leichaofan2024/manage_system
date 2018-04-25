@@ -1,5 +1,6 @@
 <div style="height: 50px; weight:100%; margin-top:-60px ;margin-left: -18px; background-color: #fff;">
-
+   <%= link_to "员工信息", employees_path %>
+   <%= link_to "组织架构", organization_structure_employees_path, method: :get %>
 </div>
 <%= form_tag search_employees_path, method: 'get' do %>
   <%= label_tag :查询%>
@@ -9,7 +10,6 @@
 
 <%= link_to "一键更新现员表", update_employee_info_employees_path, method: :post %>
 <%= link_to "导出表格", employees_path(format: "xls")%>
-<%= link_to "组织架构", organization_structure_employees_path, method: :get %>
 <div class="card">
   <div class="col-md-12" style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
