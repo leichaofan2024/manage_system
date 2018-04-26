@@ -227,6 +227,41 @@ ul {
 }
 
 
+/*--内容主体--*/
+.main-panel {
+    position: relative;
+    float: right;
+    width: calc(100% - 260px);
+    transition-timing-function: linear,linear,ease;
+    transition: .33s,cubic-bezier(.685,.0473,.346,1);
+}
+
+.main-panel>.content {
+    margin-top: 70px;
+    padding: 30px 15px;
+    min-height: calc(100vh - 123px);
+}
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+}
+
+.row {
+    display: -webkit-box;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+/*--结束--*/
+
+
+
+
 
 // .sidebar {
 //  width: 260px;
