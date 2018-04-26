@@ -10,7 +10,54 @@
 
   <body>
   	<%= Gon::Base.render_data({}) %>
-    <div class="container">
+    <%= render "common/navbar"%>
+    <div class="sidebar data-background-color="white" data-active-color="danger" " >
+      <div class="logo">
+        <a class="simple-text logo-normal" href="/">北京供电段管理系统</a>
+      </div>
+
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/employees">
+              <i  class="fa fa-address-card  material-icons"></i>
+              <p>现员管理</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i  class="fa fa-tasks  material-icons"></i>
+              <p>考勤管理</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/employees">
+              <i  class="fa fa-balance-scale  material-icons"></i>
+              <p>定额管理</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/employees">
+              <i  class="fa fa-check-square  material-icons"></i>
+              <p>奖惩管理</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/employees">
+              <i  class="fa fa-credit-card  material-icons"></i>
+              <p>工资管理</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/employees">
+              <i  class="fa fa-cog  material-icons"></i>
+              <p>权限设置</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" style="margin-top:80px;">
       <%= yield %>
     </div>
   </body>

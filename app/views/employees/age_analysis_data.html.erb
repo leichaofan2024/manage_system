@@ -1,3 +1,4 @@
+<%= render "employee_navbar"%>
 <h4>年龄段：<%= params[:age]%> &nbsp; &nbsp; &nbsp;人数：<%= @age_employees.count %>人 </h4>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
@@ -40,8 +41,4 @@
           <% end %>
        </tbody>
   </table>
-</div>
-
-<div class="text-center">
-  <%= paginate @age_employees%>
 </div>

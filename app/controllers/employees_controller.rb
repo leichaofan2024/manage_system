@@ -240,7 +240,7 @@ class EmployeesController < ApplicationController
     gon.bar_university_specialties = hash_university_specialties.values
     gon.bar_undergraduate = hash_undergraduate.values
     gon.bar_postgraduate = hash_postgraduate.values
-
+    render layout: 'application'
   end
 ### 统计分析页面的图表数据配置---结束
 
@@ -250,7 +250,7 @@ class EmployeesController < ApplicationController
   ## 通过饼图url里附带的参数来判断给出的数据
     case params[:age]
     when "25岁以下"
-      @age_employees = Employee.where(age: 0...25).page(params[:page]).per(20)
+      @age_employees = Employee.where(age: 0...25)
     when "25-30岁"
       @age_employees = Employee.where(age: 25...30)
     when "30-35岁"
