@@ -159,6 +159,7 @@ ul {
   // box-shadow: 0 2px 5px -30px rgba(0,0,0,.56), 0 4px 25px 0 rgba(0,0,0,.12), 0 0px 0px -1px rgba(0,0,0,.2);
 }
 
+
 .navbar:after {
     content: '';
     position: absolute;
@@ -168,6 +169,150 @@ ul {
     width: calc(100% - 30px);
     background-color: rgba(180,180,180,.3);
 }
+
+/*--导航栏--*/
+.main_content>.navbar {
+  margin-bottom:0;
+}
+
+.navbar.navbar-transparent {
+    padding-top: 10px;
+    // background-color: transparent!important;
+    box-shadow: none;
+}
+
+.navbar.navbar-absolute {
+    position: absolute;
+    width: 100%;
+    z-index: 1029;
+}
+
+.navbar.fixed-top {
+    border-radius: 0;
+}
+
+.fixed-top {
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.navbar-expand-lg {
+    flex-flow: row nowrap;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+}
+
+.navbar-expand-lg>.container-fluid {
+    flex-wrap: nowrap;
+}
+
+
+.navbar>.container-fluid {
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    height: 50px;
+}
+
+.navbar .navbar-wrapper {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 50px;
+}
+
+.nav-wrapper {
+  font-size: 16px;
+  font-weight: 300px;
+  text-align: left;
+  min-width: auto;
+  min-height: auto;
+  height: 50px;
+}
+
+.navbar .navbar-brand {
+    position: relative;
+    color: inherit;
+    height: 50px;
+    font-size: 1.125rem;
+    line-height: 30px;
+    padding: .625rem 0;
+    font-weight: 300;
+    margin-left: 1rem;
+}
+
+.navbar-brand {
+  display: inline-block;
+  margin-right: 1rem;
+  white-space: nowrap;
+}
+
+
+
+
+
+
+
+
+.navbar-collapse {
+    display: -webkit-box!important;
+    display: -ms-flexbox!important;
+    display: flex!important;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+    flex-grow: 1;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.justify-content-end {
+    -webkit-box-pack: end!important;
+    justify-content: flex-end!important;
+}
+
+.navbar .navbar-nav {
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.navbar .collapse .navbar-nav .nav-item .nav-link:not(.btn) .material-icons {
+    margin-top: -3px;
+    top: 0;
+    position: relative;
+    margin-right: 3px;
+}
+
+.navbar-nav .nav-item .nav-link .material-icons {
+    font-size: 1.25rem;
+    max-width: 24px;
+}
+
+.navbar-nav {
+  flex-direction: row;
+  padding-left: 0;
+  margin-bottom: 0;
+  display: flex;
+  list-style: none;
+}
+/*--结束--*/
+
+
 
 // 现员表导航栏
 .header_info {
