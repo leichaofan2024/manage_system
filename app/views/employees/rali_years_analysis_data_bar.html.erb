@@ -1,4 +1,4 @@
-<h4>车间：<%= params[:workshop] %> &nbsp; &nbsp; &nbsp; 工龄段：<%= params[:working_years] %>&nbsp; &nbsp; &nbsp; 人数：<%= @working_years_employees.count %>人</h4>
+<h4>车间：<%= params[:workshop] %> &nbsp; &nbsp; &nbsp; 路龄段：<%= params[:rali_years] %>&nbsp; &nbsp; &nbsp; 人数：<%= @rali_years_employees.count %>人</h4>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
     <thead>
@@ -16,12 +16,12 @@
         <th>政治面目</th>
         <th>党团时间</th>
         <th>工作时间</th>
-        <th>工龄</th> 
         <th>入路时间</th>
+        <th>路龄</th>
       </tr>
     </thead>
         <tbody>
-          <% @working_years_employees.each do |employee| %>
+          <% @rali_years_employees.each do |employee| %>
             <tr>
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
@@ -36,8 +36,8 @@
               <td><%= employee.political_role %></td>
               <td><%= employee.political_party_date %></td>
               <td><%= employee.working_time %></td>
-              <td><%= employee.working_years %></td> 
               <td><%= employee.railway_time %></td>
+              <td><%= employee.rali_years %></td>
             </tr>
           <% end %>
        </tbody>

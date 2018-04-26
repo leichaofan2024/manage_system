@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       get :working_years_analysis_data
       get :working_years_analysis_data_bar
       get :rali_years_analysis_data
-
+      get :rali_years_analysis_data_bar
     end
   end
 end
