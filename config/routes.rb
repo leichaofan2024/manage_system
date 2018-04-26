@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get :age_analysis_data_bar
       get :education_background_analysis_data_bar
       get :working_years_analysis_data
+      get :rali_years_analysis_data
     end
   end
 end

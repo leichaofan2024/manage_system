@@ -121,6 +121,27 @@ class EmployeesController < ApplicationController
     gon.working_years_40_up = @working_years_40_up
   ## 工龄分析-饼图数据配置---结束
 
+  ## 路龄分析-饼图数据配置---开始
+    # 把各个路龄段的人数捞出，赋值给对应的实例变量
+    @rali_years_5_below = Employee.where(rali_years: 0...5).count
+    @rali_years_5 = Employee.where(rali_years: 5...10).count
+    @rali_years_10 = Employee.where(rali_years: 10...15).count
+    @rali_years_15 = Employee.where(rali_years: 15...20).count
+    @rali_years_20 = Employee.where(rali_years: 20...25).count
+    @rali_years_25 = Employee.where(rali_years: 25...30).count
+    @rali_years_30 = Employee.where(rali_years: 30...35).count
+    @rali_years_35_up = Employee.where(rali_years: 35..100).count
+    # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
+    gon.rali_years_5_below = @rali_years_5_below
+    gon.rali_years_5 = @rali_years_5
+    gon.rali_years_10 = @rali_years_10
+    gon.rali_years_15 = @rali_years_15
+    gon.rali_years_20 = @rali_years_20
+    gon.rali_years_25 = @rali_years_25
+    gon.rali_years_30 = @rali_years_30
+    gon.rali_years_35_up = @rali_years_35_up
+  ## 路龄分析-饼图数据配置---结束
+
   ## 年龄分析-条形图数据配置---开始
     #捞出所有的车间，赋值给实例变量
     @workshops = Employee.pluck("workshop").uniq
@@ -373,6 +394,27 @@ class EmployeesController < ApplicationController
       when "40年以上"
         @working_years_employees = Employee.where(working_years: 40..100)
     end
+  end
+
+  def rali_years_analysis_data
+    case params[:rali_years]
+    when "5年以下"
+      @rali_years_employees = Employee.where(rali_years: 0...5)
+    when "5-10年"
+      @rali_years_employees = Employee.where(rali_years: 5...10)
+    when "10-15年"
+      @rali_years_employees = Employee.where(rali_years: 10...15)
+    when "15-20年"
+      @rali_years_employees = Employee.where(rali_years: 15...20)
+    when "20-25年"
+      @rali_years_employees = Employee.where(rali_years: 20...25)
+    when "25-30年"
+      @rali_years_employees = Employee.where(rali_years: 25...30)
+    when "30-35年"
+      @rali_years_employees = Employee.where(rali_years: 30...35)
+    when "35年以上"
+      @rali_years_employees = Employee.where(rali_years: 35..100)
+    end    
   end
 
 end

@@ -477,4 +477,95 @@
     });
   });
 </script>
-<!-- 学历分析饼图-结束  -->
+<!-- 工龄分析饼图-结束  -->
+
+
+<!-- 路龄分析饼图-开始  -->
+<!-- 给饼图准备一个合适大小的dom  -->
+<div id="container6" style="min-width:800px;height:600px"></div>
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  $(function () {
+    var chart6 = $('#container6').highcharts({
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: '路龄分析'
+      },
+      // 数据提示框设置
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+      },
+
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          },
+          // 设置是否显示图例
+          showInLegend: true
+        },
+        //设置饼图的点击事件
+        series: {
+          point: {
+            events: {
+              click: function () {
+                // 先将需要放入url的参数赋值给一个变量
+                var rali_years = this.name
+                // 把此变量放入url中
+                location.href = '/employees/rali_years_analysis_data?rali_years=' + rali_years;
+              }
+            }
+          }
+        }
+      },
+      // 饼图的数据来源
+      series: [
+        {
+          colorByPoint: true,
+          // 设置饼图各个扇区的数据，注意需要数组类型的数据
+          data: [
+            {
+              name: '5年以下',
+              y: gon.rali_years_5_below
+            }, {
+              name: '5-10年',
+              y: gon.rali_years_5
+            }, {
+              name: '10-15年',
+              y: gon.rali_years_10
+            }, {
+              name: '15-20年',
+              y: gon.rali_years_15
+            }, {
+              name: '20-25年',
+              y: gon.rali_years_20
+            }, {
+              name: '25-30年',
+              y: gon.rali_years_25
+            }, {
+              name: '30-35年',
+              y: gon.rali_years_30
+            }, {
+              name: '35年以上',
+              y: gon.rali_years_35_up
+            }
+          ]
+        }
+      ]
+    });
+  });
+</script>
+<!-- 路龄分析饼图-结束  -->
