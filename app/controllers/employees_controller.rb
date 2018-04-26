@@ -145,7 +145,6 @@ class EmployeesController < ApplicationController
   ## 年龄分析-条形图数据配置---开始
     #捞出所有的车间，赋值给实例变量
     @workshops = Employee.pluck("workshop").uniq
-    @educations = Employee.pluck("education_background").uniq
     #生成每个年龄段的【车间-人数】hash---开始
     #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_25_below = {}
@@ -181,87 +180,144 @@ class EmployeesController < ApplicationController
     hash_undergraduate = {}
     loop_hash_postgraduate = {}
     hash_postgraduate = {}
+
+    loop_hash_working_5_below = {}
+    hash_working_5_below = {}
+    loop_hash_working_5 = {}
+    hash_working_5 = {}
+    loop_hash_working_10 = {}
+    hash_working_10 = {}
+    loop_hash_working_15 = {}
+    hash_working_15 = {}
+    loop_hash_working_20 = {}
+    hash_working_20 = {}
+    loop_hash_working_25 = {}
+    hash_working_25 = {}
+    loop_hash_working_30 = {}
+    hash_working_30 = {}
+    loop_hash_working_35 = {}
+    hash_working_35 = {}
+    loop_hash_working_40_up = {}
+    hash_working_40_up = {}
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
       a1 = Employee.where(workshop: i, age: 0...25).count
       aa1 = Employee.where(workshop: i, education_background: "初中").count
+      ba1 = Employee.where(workshop: i, working_years: 0...5).count
       a2 = Employee.where(workshop: i).count
       a = (a1.to_f)/(a2.to_f)
       aa = (aa1.to_f)/(a2.to_f)
+      ba = (ba1.to_f)/(a2.to_f) 
       loop_hash_25_below = {i => a}
       loop_hash_junior_high_school = {i => aa}
+      loop_hash_working_5_below = {i => ba}
       hash_25_below[i] = loop_hash_25_below[i]
       hash_junior_high_school[i] = loop_hash_junior_high_school[i]
+      hash_working_5_below[i] = loop_hash_working_5_below[i]
 
       b1 = Employee.where(workshop: i, age: 25...30).count
       ab1 = Employee.where(workshop: i, education_background: "小学").count
+      bb1 = Employee.where(workshop: i, working_years: 5...10).count
       b2 = Employee.where(workshop: i).count
       b = (b1.to_f)/(b2.to_f)
       ab = (ab1.to_f)/(b2.to_f)
+      bb = (bb1.to_f)/(a2.to_f)
       loop_hash_25 = {i => b}
       loop_hash_primary_school = {i => ab}
+      loop_hash_working_5 = {i => bb}
       hash_25[i] = loop_hash_25[i]
       hash_primary_school[i] = loop_hash_primary_school[i]
+      hash_working_5[i] = loop_hash_working_5[i]
 
       c1 = Employee.where(workshop: i, age: 30...35).count
       ac1 = Employee.where(workshop: i, education_background: "高中").count
+      bc1 = Employee.where(workshop: i, working_years: 10...15).count
       c2 = Employee.where(workshop: i).count
       c = (c1.to_f)/(c2.to_f)
       ac = (ac1.to_f)/(c2.to_f)
+      bc = (bc1.to_f)/(a2.to_f)
       loop_hash_30 = {i => c}
       loop_hash_senior_high_school = {i => ac}
+      loop_hash_working_10 = {i => bc}
       hash_30[i] = loop_hash_30[i]
       hash_senior_high_school[i] = loop_hash_senior_high_school[i]
+      hash_working_10[i] = loop_hash_working_10[i]
 
       d1 = Employee.where(workshop: i, age: 35...40).count
       ad1 = Employee.where(workshop: i, education_background: "技校").count
+      bd1 = Employee.where(workshop: i, working_years: 15...20).count
       d2 = Employee.where(workshop: i).count
       d = (d1.to_f)/(d2.to_f)
       ad = (ad1.to_f)/(d2.to_f)
+      bd = (bd1.to_f)/(a2.to_f)
       loop_hash_35 = {i => d}
       loop_hash_technical_school = {i => ad}
+      loop_hash_working_15 = {i => bd}
       hash_35[i] = loop_hash_35[i]
       hash_technical_school[i] = loop_hash_technical_school[i]
+      hash_working_15[i] = loop_hash_working_15[i]
 
       e1 = Employee.where(workshop: i, age: 40...45).count
       ae1 = Employee.where(workshop: i, education_background: "中专").count
+      be1 = Employee.where(workshop: i, working_years: 20...25).count
       e2 = Employee.where(workshop: i).count
       e = (e1.to_f)/(e2.to_f)
       ae = (ae1.to_f)/(e2.to_f)
+      be = (be1.to_f)/(a2.to_f)
       loop_hash_40 = {i => e}
       loop_hash_secondary_school = {i => ae}
+      loop_hash_working_20 = {i => be}
       hash_40[i] = loop_hash_40[i]
       hash_secondary_school[i] = loop_hash_secondary_school[i]
+      hash_working_20[i] = loop_hash_working_20[i]
 
       f1 = Employee.where(workshop: i, age: 45...50).count
       af1 = Employee.where(workshop: i, education_background: "大学专科").count
+      bf1 = Employee.where(workshop: i, working_years: 25...30).count
       f2 = Employee.where(workshop: i).count
       f = (f1.to_f)/(f2.to_f)
       af = (af1.to_f)/(f2.to_f)
+      bf = (bf1.to_f)/(a2.to_f)
       loop_hash_45 = {i => f}
       loop_hash_university_specialties = {i => af}
+      loop_hash_working_25 = {i => bf}
       hash_45[i] = loop_hash_45[i]
       hash_university_specialties[i] = loop_hash_university_specialties[i]
+      hash_working_25[i] = loop_hash_working_25[i]
 
       g1 = Employee.where(workshop: i, age: 50...55).count
       ag1 = Employee.where(workshop: i, education_background: "大学本科").count
+      bg1 = Employee.where(workshop: i, working_years: 30...35).count
       g2 = Employee.where(workshop: i).count
       g = (g1.to_f)/(g2.to_f)
       ag = (ag1.to_f)/(g2.to_f)
+      bg = (bg1.to_f)/(a2.to_f)
       loop_hash_50 = {i => g}
       loop_hash_undergraduate = {i => ag}
+      loop_hash_working_30 = {i => bg}
       hash_50[i] = loop_hash_50[i]
       hash_undergraduate[i] = loop_hash_undergraduate[i]
+      hash_working_30[i] = loop_hash_working_30[i]
 
       h1 = Employee.where(workshop: i, age: 55..70).count
       ah1 = Employee.where(workshop: i, education_background: "研究生").count
+      bh1 = Employee.where(workshop: i, working_years: 35...40).count
       h2 = Employee.where(workshop: i).count
       h = (h1.to_f)/(h2.to_f)
       ah = (ah1.to_f)/(h2.to_f)
+      bh = (bh1.to_f)/(a2.to_f)
       loop_hash_55 = {i => h}
       loop_hash_postgraduate = {i => ah}
+      loop_hash_working_35 = {i => bh}
       hash_55[i] = loop_hash_55[i]
       hash_postgraduate[i] = loop_hash_postgraduate[i]
+      hash_working_35[i] = loop_hash_working_35[i]
+
+      bj1 = Employee.where(workshop: i, working_years: 40..100).count
+      bj = (bj1.to_f)/(a2.to_f)
+      loop_hash_working_40_up = {i => bj}
+      hash_working_40_up[i] = loop_hash_working_40_up[i]
+
     end
     #生成每个年龄段的【车间-人数】hash---结束
 
@@ -284,6 +340,17 @@ class EmployeesController < ApplicationController
     gon.bar_university_specialties = hash_university_specialties.values
     gon.bar_undergraduate = hash_undergraduate.values
     gon.bar_postgraduate = hash_postgraduate.values
+    
+    
+    gon.bar_working_5_below = hash_working_5_below.values
+    gon.bar_working_5 = hash_working_5.values
+    gon.bar_working_10 = hash_working_10.values
+    gon.bar_working_15 = hash_working_15.values
+    gon.bar_working_20 = hash_working_20.values
+    gon.bar_working_25 = hash_working_25.values
+    gon.bar_working_30 = hash_working_30.values
+    gon.bar_working_35 = hash_working_35.values
+    gon.bar_working_40_up = hash_working_40_up.values
     render layout: 'application'
   end
 ### 统计分析页面的图表数据配置---结束
@@ -415,6 +482,29 @@ class EmployeesController < ApplicationController
     when "35年以上"
       @rali_years_employees = Employee.where(rali_years: 35..100)
     end    
+  end
+
+  def working_years_analysis_data_bar
+    case params[:working_years]
+      when "5年以下"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 0...5)
+      when "5-10年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 5...10)
+      when "10-15年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 10...15)
+      when "15-20年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 15...20)
+      when "20-25年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 20...25)
+      when "25-30年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 25...30)
+      when "30-35年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 30...35)
+      when "35-40年"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 35...40)
+      when "40年以上"
+        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 40..100)
+    end
   end
 
 end
