@@ -128,7 +128,6 @@ a .material-icons {
     white-space: nowrap;
 }
 
-
 .nav {
     flex-wrap: wrap;
     padding-left: 0;
@@ -141,7 +140,7 @@ ul {
     -webkit-margin-end: 0px;
     -webkit-padding-start: 40px;
 }
-
+/*-----------------------结束------------------*/
 .nav .nav-item {
     position: relative;
 }
@@ -372,145 +371,7 @@ ul {
 }
 
 
-/*--内容主体--*/
-.main-panel {
-    margin-top: 10070px;
-    border-color: #fff;
-    z-index: 100;
-    margin-left:262px;
-    // position: relative;
-    // float: right;
-    // width: calc(100% - 260px);
-    // transition-timing-function: linear,linear,ease;
-    // transition: .33s,cubic-bezier(.685,.0473,.346,1);
-}
-
-.main-panel>.content {
-    margin-top: 70px;
-    padding: 30px 15px;
-    min-height: calc(100vh - 123px);
-}
-
-.container-fluid {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-    width: 100%;
-}
-
-.row {
-    display: -webkit-box;
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-}
-
-
-.col-md-12 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
-}
-
-/*--结束--*/
-
-
-
-
-
-// .sidebar {
-//  width: 260px;
-//  position: fixed; // 相对与屏幕指定位置
-//  left: 0;
-//  top: 0;
-//  height: 100%;
-//  background: #fff;
-//  padding: 7em 0 0 0;
-//  border-right: 1px solid #d6dce0;
-//  overflow-x: hidden;
-//  z-index: 1;
-//  background: rgb(54,170,252);
-//  .logo {
-//    width: 100%;
-//    position: absolute;
-//    right: 3em;
-//    top: 3em;
-//    margin-left: 500px;
-//  }
-// }
-//
-// .sidebar .sidebarnav .table_sidebar{
-//     a{
-//       padding: 16px 6px 16px 45px;
-//       text-decoration: none;
-//       font-size: 14px;
-//       color: #fff;
-//       font-weight: 320;
-//       display: block;
-//      }
-//
-//      li {
-//        padding: 6px 6px 6px 0px;
-//        text-decoration: none;
-//        color: #818181;
-//        font-weight: 320;
-//        display: inline;
-//       }
-//
-//     a:hover {
-//       color: #fff;
-//       background-color: rgb(75,179,252);
-//       display: block;
-//       border-radius: 5px;
-//       width: 120px;
-//       margin-left: 20px;
-//       padding-left: 25px;
-//     }
-//
-//     li.active > a{
-//       background-color: #fff;
-//       color: #2ca8ff;
-//       border-radius: 5px;
-//       text-decoration: none;
-//       text-transform: uppercase;
-//       position: relative;
-//       display: list-item;
-//       width: 120px;
-//       margin-left: 20px;
-//       padding-left: 25px;
-//     }
-// }
-//
-// .sidebar .sidebarnav .log-in{
-//   ul li{
-//     display: inline;
-//     float: left;
-//     list-style-type: none;  //退出与修改密码在一行显示
-//     }
-//
-//     a{
-//       padding: 6px 6px 16px 45px;
-//       text-decoration: none;
-//       font-size: 14px;
-//       color: #fff;
-//       font-weight: 320;
-//       display: block;
-//      }
-//
-//      li {
-//        padding: 6px 6px 6px 6px;
-//        text-decoration: none;
-//        color: #818181;
-//        font-weight: 320;
-//       }
-//
-//       a:hover{
-//         color: black;
-//       }
-// }
+/*-------------------内容主体----------------------*/
 .main_content {
  margin-left: 280px;
  margin-right: 30px;
@@ -542,7 +403,7 @@ hr {
   }
 }
 
-/*--------------end--------------*/
+/*--------------结束--------------*/
 
 
 /*------------ 表格样式-----------*/
