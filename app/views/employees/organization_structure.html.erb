@@ -6,9 +6,9 @@
 
   <body>
     <%= render 'employee_navbar'%>
+    <div class="col-md-12">
     <div class="col-md-2" id="menu">
       <h3>组织架构</h3>
-
       <ul>
         <li>
           <em></em><a href='/employees/organization_structure?duan=北京供电段'>北京供电段</a>
@@ -29,7 +29,7 @@
       </ul>
     </div>
 
-    <div class="col-md-10 col-sm-8">
+    <div class="col-md-10" style="overflow: auto;">
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -73,6 +73,7 @@
           <% end %>
        </tbody>
   </table>
+    </div>
     </div>
 
     <script type="text/javascript">
