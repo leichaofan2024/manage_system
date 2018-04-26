@@ -229,11 +229,15 @@ ul {
 
 /*--内容主体--*/
 .main-panel {
-    position: relative;
-    float: right;
-    width: calc(100% - 260px);
-    transition-timing-function: linear,linear,ease;
-    transition: .33s,cubic-bezier(.685,.0473,.346,1);
+    margin-top: 10070px;
+    border-color: #fff;
+    z-index: 100;
+    margin-left:262px;
+    // position: relative;
+    // float: right;
+    // width: calc(100% - 260px);
+    // transition-timing-function: linear,linear,ease;
+    // transition: .33s,cubic-bezier(.685,.0473,.346,1);
 }
 
 .main-panel>.content {
@@ -256,6 +260,24 @@ ul {
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
+}
+
+
+.col-md-12 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.header_info1 {
+  font-size: 14px !important;
+  display: block;
+  z-index: 1;
+  height: 50px;
+  weight: 100%;
+  margin-bottom: 10px;
+  background-color: #fff;
 }
 /*--结束--*/
 

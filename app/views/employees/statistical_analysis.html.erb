@@ -1,22 +1,4 @@
-<div class="header_info" style="margin-top:-10px;margin-left:-128px;">
-  <ul class="d-flex pl-2 flex-items-center text-bold list-style-none" role="navigation">
-    <li>
-      <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 20px;" href="/employees">
-        员工信息
-      </a>
-    </li>
-    <li>
-      <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 80px;" href="/employees/organization_structure">
-        组织架构
-      </a>
-    </li>
-    <li>
-      <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 80px;" href="/employees/statistical_analysis">
-        统计分析
-      </a>
-    </li>
-  </ul>
-</div>
+<%= render 'employee_navbar'%>
 <!-- 年龄分析饼图-开始  -->
 <!-- 给饼图准备一个合适大小的dom  -->
 <div id="container1" style="min-width:800px;height:600px;"></div>

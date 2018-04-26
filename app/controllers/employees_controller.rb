@@ -240,7 +240,6 @@ class EmployeesController < ApplicationController
     gon.bar_university_specialties = hash_university_specialties.values
     gon.bar_undergraduate = hash_undergraduate.values
     gon.bar_postgraduate = hash_postgraduate.values
-    render layout: 'application'
   end
 ### 统计分析页面的图表数据配置---结束
 
