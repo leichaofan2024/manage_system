@@ -1,6 +1,6 @@
 <%= render 'employee_navbar' %>
 
-<div class="col-md-10">
+<div class="col-md-12">
   <%= form_tag search_employees_path, method: 'get' do %>
     <%= label_tag :查询%>
     <%= text_field_tag :q, params[:q] %>
