@@ -142,10 +142,10 @@ class EmployeesController < ApplicationController
     gon.rali_years_35_up = @rali_years_35_up
   ## 路龄分析-饼图数据配置---结束
 
-  ## 年龄分析-条形图数据配置---开始
+  ## 条形图数据配置---开始
     #捞出所有的车间，赋值给实例变量
     @workshops = Employee.pluck("workshop").uniq
-    #生成每个年龄段的【车间-人数】hash---开始
+    #生成【车间-人数】hash---开始
     #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_25_below = {}
     hash_25_below = {}
@@ -163,7 +163,7 @@ class EmployeesController < ApplicationController
     hash_50 = {}
     loop_hash_55 = {}
     hash_55 = {}
-
+    #定义每种学历各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_junior_high_school = {}
     hash_junior_high_school = {}
     loop_hash_primary_school = {}
@@ -180,7 +180,7 @@ class EmployeesController < ApplicationController
     hash_undergraduate = {}
     loop_hash_postgraduate = {}
     hash_postgraduate = {}
-
+    #定义每个工龄段各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_working_5_below = {}
     hash_working_5_below = {}
     loop_hash_working_5 = {}
@@ -199,7 +199,7 @@ class EmployeesController < ApplicationController
     hash_working_35 = {}
     loop_hash_working_40_up = {}
     hash_working_40_up = {}
-
+    #定义每个路龄段各个车间的hash（包括在循环里使用的和最后存入的）
     loop_hash_rali_5_below = {}
     hash_rali_5_below = {}
     loop_hash_rali_5 = {}
@@ -216,21 +216,28 @@ class EmployeesController < ApplicationController
     hash_rali_30 = {}
     loop_hash_rali_35_up = {}
     hash_rali_35_up = {}
+    #生成【车间-人数】hash---结束
+
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
+      #把每个车间的总人数存成变量
       emp = Employee.where(workshop: i).count
+      #年龄、学历、工龄、路龄在各车间的人数
       a1 = Employee.where(workshop: i, age: 0...25).count
       aa1 = Employee.where(workshop: i, education_background: "初中").count
       ba1 = Employee.where(workshop: i, working_years: 0...5).count
       ca1 = Employee.where(workshop: i, rali_years: 0...5).count
+      #算出各维度人数占总人数的比重
       a = (a1.to_f)/(emp.to_f)
       aa = (aa1.to_f)/(emp.to_f)
       ba = (ba1.to_f)/(emp.to_f) 
       ca = (ca1.to_f)/(emp.to_f) 
+      #将每一次的计算结果存成"车间 => 百分比"的hash
       loop_hash_25_below = {i => a}
       loop_hash_junior_high_school = {i => aa}
       loop_hash_working_5_below = {i => ba}
       loop_hash_rali_5_below = {i => ca}
+      #将每一次的hash结果存到最终的结果里，供之后使用
       hash_25_below[i] = loop_hash_25_below[i]
       hash_junior_high_school[i] = loop_hash_junior_high_school[i]
       hash_working_5_below[i] = loop_hash_working_5_below[i]
@@ -364,8 +371,11 @@ class EmployeesController < ApplicationController
     end
     #生成每个年龄段的【车间-人数】hash---结束
 
-    # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
+    # 使用'gon'这个gem的方法来赋值变量，在js中使用
+    # 将以上算出最终hash的keys赋值给变量，作为条形图的坐标轴
     gon.bar_workshop = hash_25_below.keys
+    #将以上算出最终hash的values赋值给对应的变量，作为条形图的数据
+    #年龄分析条形图
     gon.bar_twenty_five_below = hash_25_below.values
     gon.bar_twenty_five = hash_25.values
     gon.bar_thirty = hash_30.values
@@ -374,7 +384,7 @@ class EmployeesController < ApplicationController
     gon.bar_forty_five = hash_45.values
     gon.bar_fifty = hash_50.values
     gon.bar_fifty_five = hash_55.values
-  ## 年龄分析-条形图数据配置---结束
+    #学历分析条形图
     gon.bar_junior_high_school = hash_junior_high_school.values
     gon.bar_primary_school = hash_primary_school.values
     gon.bar_senior_high_school = hash_senior_high_school.values
@@ -383,8 +393,7 @@ class EmployeesController < ApplicationController
     gon.bar_university_specialties = hash_university_specialties.values
     gon.bar_undergraduate = hash_undergraduate.values
     gon.bar_postgraduate = hash_postgraduate.values
-    
-    
+    #工龄分析条形图
     gon.bar_working_5_below = hash_working_5_below.values
     gon.bar_working_5 = hash_working_5.values
     gon.bar_working_10 = hash_working_10.values
@@ -394,7 +403,7 @@ class EmployeesController < ApplicationController
     gon.bar_working_30 = hash_working_30.values
     gon.bar_working_35 = hash_working_35.values
     gon.bar_working_40_up = hash_working_40_up.values
-
+    #路龄分析条形图
     gon.bar_rali_5_below = hash_rali_5_below.values
     gon.bar_rali_5 = hash_rali_5.values
     gon.bar_rali_10 = hash_rali_10.values
@@ -404,6 +413,7 @@ class EmployeesController < ApplicationController
     gon.bar_rali_30 = hash_rali_30.values
     gon.bar_rali_35 = hash_rali_35_up.values
     render layout: 'application'
+    ## 条形图数据配置---结束
   end
 ### 统计分析页面的图表数据配置---结束
 
@@ -477,21 +487,12 @@ class EmployeesController < ApplicationController
     end
   end
 
+### 学历分析条形图-表格详细数据配置
   def education_background_analysis_data_bar
     @education_employees = Employee.where(workshop: params[:workshop], education_background: params[:education])
   end
 
-  def organization_structure
-    @workshops = Employee.pluck("workshop").uniq
-    if params[:workshop].present?
-      @employees = Employee.where(workshop: params[:workshop])
-    elsif params[:group].present?
-      @employees = Employee.where(group: params[:group])
-    else
-      @employees = Employee.all
-    end
-  end
-
+### 工龄分析饼图-表格详细数据配置
   def working_years_analysis_data
     case params[:working_years]
       when "5年以下"
@@ -515,27 +516,7 @@ class EmployeesController < ApplicationController
     end
   end
 
-  def rali_years_analysis_data
-    case params[:rali_years]
-    when "5年以下"
-      @rali_years_employees = Employee.where(rali_years: 0...5)
-    when "5-10年"
-      @rali_years_employees = Employee.where(rali_years: 5...10)
-    when "10-15年"
-      @rali_years_employees = Employee.where(rali_years: 10...15)
-    when "15-20年"
-      @rali_years_employees = Employee.where(rali_years: 15...20)
-    when "20-25年"
-      @rali_years_employees = Employee.where(rali_years: 20...25)
-    when "25-30年"
-      @rali_years_employees = Employee.where(rali_years: 25...30)
-    when "30-35年"
-      @rali_years_employees = Employee.where(rali_years: 30...35)
-    when "35年以上"
-      @rali_years_employees = Employee.where(rali_years: 35..100)
-    end    
-  end
-
+  ### 工龄分析条形图-表格详细数据配置
   def working_years_analysis_data_bar
     case params[:working_years]
       when "5年以下"
@@ -559,6 +540,29 @@ class EmployeesController < ApplicationController
     end
   end
 
+### 路龄分析饼图-表格详细数据配置
+  def rali_years_analysis_data
+    case params[:rali_years]
+    when "5年以下"
+      @rali_years_employees = Employee.where(rali_years: 0...5)
+    when "5-10年"
+      @rali_years_employees = Employee.where(rali_years: 5...10)
+    when "10-15年"
+      @rali_years_employees = Employee.where(rali_years: 10...15)
+    when "15-20年"
+      @rali_years_employees = Employee.where(rali_years: 15...20)
+    when "20-25年"
+      @rali_years_employees = Employee.where(rali_years: 20...25)
+    when "25-30年"
+      @rali_years_employees = Employee.where(rali_years: 25...30)
+    when "30-35年"
+      @rali_years_employees = Employee.where(rali_years: 30...35)
+    when "35年以上"
+      @rali_years_employees = Employee.where(rali_years: 35..100)
+    end    
+  end
+
+### 路龄分析条形图-表格详细数据配置
   def rali_years_analysis_data_bar
     case params[:rali_years]
     when "5年以下"
@@ -577,6 +581,18 @@ class EmployeesController < ApplicationController
       @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 30...35)
     when "35年以上"
       @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 35..100)
+    end
+  end
+
+###组织架构页面数据配置
+  def organization_structure
+    @workshops = Employee.pluck("workshop").uniq
+    if params[:workshop].present?
+      @employees = Employee.where(workshop: params[:workshop])
+    elsif params[:group].present?
+      @employees = Employee.where(group: params[:group])
+    else
+      @employees = Employee.all
     end
   end
 
