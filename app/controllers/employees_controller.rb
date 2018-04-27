@@ -531,6 +531,7 @@ class EmployeesController < ApplicationController
           @employees = Employee.where(age: 45...50)
         when "50-55岁"
           @employees = Employee.where(age: 50...55)
+
         when "55岁以上"
           @employees = Employee.where(age: 55..60)
         end

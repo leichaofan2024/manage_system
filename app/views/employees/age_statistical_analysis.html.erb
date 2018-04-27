@@ -4,17 +4,44 @@
   <div class="col-md-12">
   <div id="container1" class="col-md-6" style="height: 400px"></div>
   <div class="col-md-6 " style="background-color: white; height: 400px;overflow: auto">
-    <table class="table table-bordered" >
+    <table class="table table-bordered" style="margin-top:40px;width:70%" >
       <thead>
-        <tr><th>年龄段</th><td>人数</td></tr>
-        <tr><th>25岁以下</th><td><%= @age_25_below %></td></tr>
-        <tr><th>25-30岁</th><td><%= @age_25 %></td></tr>
-        <tr><th>30-35岁</th><td><%= @age_30 %></td></tr>
-        <tr><th>35-40岁</th><td><%= @age_35 %></td></tr>
-        <tr><th>40-45岁</th><td><%= @age_40 %></td></tr>
-        <tr><th>45-50岁</th><td><%= @age_45 %></td></tr>
-        <tr><th>50-55岁</th><td><%= @age_50 %></td></tr>
-        <tr><th>55岁以上</th><td><%= @age_55 %></td></tr>
+        <tr>
+          <th style="color: blue; font-size:17px;">年龄段</th>
+          <td style="color: blue; font-size:17px;">人数</td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
+          <th>25岁以下</th>
+          <td><%= @age_25_below %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25-30岁">
+          <th>25-30岁</th>
+          <td><%= @age_25 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=30-35岁">
+          <th>30-35岁</th>
+          <td><%= @age_30 %></td>
+        </tr> 
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=35-40岁">
+          <th>35-40岁</th>
+          <td><%= @age_35 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=40-45岁">
+          <th>40-45岁</th>
+          <td><%= @age_40 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=45-50岁">
+          <th>45-50岁</th>
+          <td><%= @age_45 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=50-55岁">
+          <th>50-55岁</th>
+          <td><%= @age_50 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=55岁以上">
+          <th>55岁以上</th>
+          <td><%= @age_55 %></td>
+        </tr>
       </thead>
     </table>
   </div>
