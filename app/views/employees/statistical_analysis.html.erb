@@ -1,734 +1,785 @@
 <%= render 'employee_navbar'%>
-<!-- 年龄分析饼图-开始  -->
-<!-- 给饼图准备一个合适大小的dom  -->
-<div id="container1" style="min-width:800px;height:600px;"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  $(function () {
-    var chart1 = $('#container1').highcharts({
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: '年龄分析'
-      },
-      // 数据提示框设置
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          // 设置点击饼图的事件
-          events: {
-            click: function (e) {
-              location.href = e.point.url
-            }
-          },
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
-          },
-          // 设置是否显示图例
-          showInLegend: true
-        },
-        // 设置饼图的点击事件
-        series: {
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var age = this.name
-                // 把此变量放入url中
-                location.href = '/employees/statistical_analysis_data?age=' + age;
-              }
-            }
-          }
-        }
-      },
-      // 饼图的数据来源
-      series: [
-        {
-          colorByPoint: true,
-          // 设置饼图各个扇区的数据，注意需要数组类型的数据
-          data: [
-            {
-              name: '55岁以上',
-              y: gon.fifty
-            }, {
-              name: '45-50岁',
-              y: gon.forty_five
-            }, {
-              name: '40-45岁',
-              y: gon.forty
-            }, {
-              name: '25-30岁',
-              y: gon.twenty_five
-            }, {
-              name: '30-35岁',
-              y: gon.thirty
-            }, {
-              name: '35-40岁',
-              y: gon.thirty_five
-            }, {
-              name: '25岁以下',
-              y: gon.twenty_five_below
-            }
-          ]
-        }
-      ]
-    });
-  });
-</script>
-<!-- 年龄分析饼图-结束  -->
-
-<!-- 年龄分析条形图-开始  -->
-<!-- 给条形图准备一个合适大小的dom  -->
-<div id="container2" style="min-width:400px;height:600px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  var chart2 = $(function () {
-    $('#container2').highcharts({
-      chart: {
-        type: 'bar'
-      },
-      title: {
-        text: '年龄分析'
-      },
-      xAxis: {
-        lables: {
-          step: 1
-        },
-        categories: gon.bar_workshop
-      },
-      yAxis: {
-        min: 0,
-        lables: {
-          step: 1
+<% if params[:type] = "年龄分析" %>
+  <!-- 年龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+  <div class="col-md-12">
+  <div id="container1" class="col-md-6" style="height: 400px"></div>
+  <div class="col-md-6 " style="background-color: white; height: 400px;overflow: auto">
+    <table class="table table-bordered" >
+      <thead>
+        <tr>
+          <th>25岁以下</th>
+          <th>25-30岁</th>
+          <th>30-35岁</th>
+          <th>35-40岁</th>
+          <th>40-45岁</th>
+          <th>45-50岁</th>
+          <th>50-55岁</th>
+          <th>55岁以上</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= @age_25_below %></td>
+          <td><%= @age_25 %></td>
+          <td><%= @age_30 %></td>
+          <td><%= @age_35 %></td>
+          <td><%= @age_40 %></td>
+          <td><%= @age_45 %></td>
+          <td><%= @age_50 %></td>
+          <td><%= @age_55 %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    $(function () {
+      var chart1 = $('#container1').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
         },
         title: {
-          text: '员工数量'
-        }
-      },
-      tooltip: {
-        formatter: function () {
-          var age_percentage = this.y * 100
-          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-        }
-      },
-      legend: {
-        reversed: true
-      },
-      plotOptions: {
-        bar: {
-          pointWidth: 15,
-          pointPadding: 0
+          text: '年龄分析'
         },
-        // 设置条形图的点击事件
-        series: {
-          stacking: 'normal',
-          point: {
+        // 数据提示框设置
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            // 设置点击饼图的事件
             events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var workshop = this.category
-                var age = this.series.name;
-                // 将变量放入url中
-                location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&age=' + age;
+              click: function (e) {
+                location.href = e.point.url
               }
-            }
-          }
-        }
-      },
-      series: [
-        {
-          name: '25岁以下',
-          data: gon.bar_twenty_five_below
-        }, {
-          name: '25-30岁',
-          data: gon.bar_twenty_five
-        }, {
-          name: '30-35岁',
-          data: gon.bar_thirty
-        }, {
-          name: '35-40岁',
-          data: gon.bar_thirty_five
-        }, {
-          name: '40-45岁',
-          data: gon.bar_forty
-        }, {
-          name: '45-50岁',
-          data: gon.bar_forty_five
-        }, {
-          name: '50-55岁',
-          data: gon.bar_fifty
-        }, {
-          name: '55岁以上',
-          data: gon.bar_fifty_five
-        }
-      ]
-    });
-  })
-</script>
-
-<!-- 年龄分析条形图-结束  -->
-
-<!-- 学历分析饼图-开始  -->
-<!-- 给饼图准备一个合适大小的dom  -->
-<div id="container3" style="min-width:800px;height:600px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  $(function () {
-    var chart3 = $('#container3').highcharts({
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: '学历分析'
-      },
-      // 数据提示框设置
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
+            },
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+              style: {
+                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+              }
+            },
+            // 设置是否显示图例
+            showInLegend: true
           },
-          // 设置是否显示图例
-          showInLegend: true
-        },
-        //设置饼图的点击事件
-        series: {
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var education = this.name
-                // 把此变量放入url中
-                location.href = '/employees/statistical_analysis_data?education=' + education;
+          // 设置饼图的点击事件
+          series: {
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var age = this.name
+                  // 把此变量放入url中
+                  location.href = '/employees/statistical_analysis_data?age=' + age;
+                }
               }
             }
           }
-        }
-      },
-      // 饼图的数据来源
-      series: [
-        {
-          colorByPoint: true,
-          // 设置饼图各个扇区的数据，注意需要数组类型的数据
-          data: [
-            {
-              name: '中专',
-              y: gon.secondary_school
-            }, {
-              name: '大学专科',
-              y: gon.university_specialties
-            }, {
-              name: '高中',
-              y: gon.senior_high_school
-            }, {
-              name: '大学本科',
-              y: gon.undergraduate
-            }, {
-              name: '初中',
-              y: gon.junior_high_school
-            }, {
-              name: '技校',
-              y: gon.technical_school
-            }, {
-              name: '研究生',
-              y: gon.postgraduate
-            }, {
-              name: '小学',
-              y: gon.primary_school
-            }
-          ]
-        }
-      ]
-    });
-  });
-</script>
-<!-- 学历分析饼图-结束  -->
-
-<!-- 学历分析条形图-开始  -->
-<!-- 给条形图准备一个合适大小的dom  -->
-<div id="container4" style="min-width:800px;height:800px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  var chart4 = $(function () {
-    $('#container4').highcharts({
-      chart: {
-        type: 'bar'
-      },
-      title: {
-        text: '学历分析'
-      },
-      xAxis: {
-        lables: {
-          step: 1
         },
-        categories: gon.bar_workshop
-      },
-      yAxis: {
-        min: 0,
-        lables: {
-          step: 1
+        // 饼图的数据来源
+        series: [
+          {
+            colorByPoint: true,
+            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+            data: [
+              {
+                name: '55岁以上',
+                y: gon.fifty_five
+              },{
+                name: '50-55岁',
+                y: gon.fifty
+              }, {
+                name: '45-50岁',
+                y: gon.forty_five
+              }, {
+                name: '40-45岁',
+                y: gon.forty
+              }, {
+                name: '25-30岁',
+                y: gon.twenty_five
+              }, {
+                name: '30-35岁',
+                y: gon.thirty
+              }, {
+                name: '35-40岁',
+                y: gon.thirty_five
+              }, {
+                name: '25岁以下',
+                y: gon.twenty_five_below
+              }
+            ]
+          }
+        ]
+      });
+    });
+  </script>
+  <!-- 年龄分析饼图-结束  -->
+
+  <!-- 年龄分析条形图-开始  -->
+  <!-- 给条形图准备一个合适大小的dom  -->
+  <div id="container2" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    var chart2 = $(function () {
+      $('#container2').highcharts({
+        chart: {
+          type: 'bar'
         },
         title: {
-          text: '员工数量'
-        }
-      },
-      tooltip: {
-        formatter: function () {
-          var age_percentage = this.y * 100
-          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-        }
-      },
-      legend: {
-        reversed: true
-      },
-      plotOptions: {
-        bar: {
-          pointWidth: 15,
-          pointPadding: 0
+          text: '年龄分析'
         },
-        // 设置条形图的点击事件
-        series: {
-          stacking: 'normal',
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var workshop = this.category
-                var education = this.series.name;
-                // 将变量放入url中
-                location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&education=' + education;
-              }
-            }
-          }
-        }
-      },
-      series: [
-        {
-          name: '中专',
-          data: gon.bar_secondary_school
-        }, {
-          name: '大学专科',
-          data: gon.bar_university_specialties
-        }, {
-          name: '高中',
-          data: gon.bar_senior_high_school
-        }, {
-          name: '大学本科',
-          data: gon.bar_undergraduate
-        }, {
-          name: '初中',
-          data: gon.bar_junior_high_school
-        }, {
-          name: '技校',
-          data: gon.bar_technical_school
-        }, {
-          name: '研究生',
-          data: gon.bar_postgraduate
-        }, {
-          name: '小学',
-          data: gon.bar_primary_school
-        }
-      ]
-    });
-  })
-</script>
-
-<!-- 学历分析条形图-结束  -->
-
-<!-- 工龄分析饼图-开始  -->
-<!-- 给饼图准备一个合适大小的dom  -->
-<div id="container5" style="min-width:800px;height:600px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  $(function () {
-    var chart5 = $('#container5').highcharts({
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: '工龄分析'
-      },
-      // 数据提示框设置
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
+        xAxis: {
+          lables: {
+            step: 1
           },
-          // 设置是否显示图例
-          showInLegend: true
+          categories: gon.bar_workshop
         },
-        //设置饼图的点击事件
-        series: {
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var working_years = this.name
-                // 把此变量放入url中
-                location.href = '/employees/statistical_analysis_data?working_years=' + working_years;
+        yAxis: {
+          min: 0,
+          lables: {
+            step: 1
+          },
+          title: {
+            text: '员工数量'
+          }
+        },
+        tooltip: {
+          formatter: function () {
+            var age_percentage = this.y * 100
+            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+          }
+        },
+        legend: {
+          reversed: true
+        },
+        plotOptions: {
+          bar: {
+            pointWidth: 10,
+            pointPadding: 0
+          },
+          // 设置条形图的点击事件
+          series: {
+            stacking: 'normal',
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var workshop = this.category
+                  var age = this.series.name;
+                  // 将变量放入url中
+                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&age=' + age;
+                }
               }
             }
           }
-        }
-      },
-      // 饼图的数据来源
-      series: [
-        {
-          colorByPoint: true,
-          // 设置饼图各个扇区的数据，注意需要数组类型的数据
-          data: [
-            {
-              name: '5年以下',
-              y: gon.working_years_5_below
-            }, {
-              name: '5-10年',
-              y: gon.working_years_5
-            }, {
-              name: '10-15年',
-              y: gon.working_years_10
-            }, {
-              name: '15-20年',
-              y: gon.working_years_15
-            }, {
-              name: '20-25年',
-              y: gon.working_years_20
-            }, {
-              name: '25-30年',
-              y: gon.working_years_25
-            }, {
-              name: '30-35年',
-              y: gon.working_years_30
-            }, {
-              name: '35-40年',
-              y: gon.working_years_35
-            },{
-              name: '40年以上',
-              y: gon.working_years_40_up
-            }
-          ]
-        }
-      ]
-    });
-  });
-</script>
-<!-- 工龄分析饼图-结束  -->
-
-<!-- 工龄分析条形图-开始  -->
-<!-- 给条形图准备一个合适大小的dom  -->
-<div id="container6" style="min-width:800px;height:800px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  var chart6 = $(function () {
-    $('#container6').highcharts({
-      chart: {
-        type: 'bar'
-      },
-      title: {
-        text: '工龄分析'
-      },
-      xAxis: {
-        lables: {
-          step: 1
         },
-        categories: gon.bar_workshop
-      },
-      yAxis: {
-        min: 0,
-        lables: {
-          step: 1
+        series: [
+          {
+            name: '25岁以下',
+            data: gon.bar_twenty_five_below
+          }, {
+            name: '25-30岁',
+            data: gon.bar_twenty_five
+          }, {
+            name: '30-35岁',
+            data: gon.bar_thirty
+          }, {
+            name: '35-40岁',
+            data: gon.bar_thirty_five
+          }, {
+            name: '40-45岁',
+            data: gon.bar_forty
+          }, {
+            name: '45-50岁',
+            data: gon.bar_forty_five
+          }, {
+            name: '50-55岁',
+            data: gon.bar_fifty
+          }, {
+            name: '55岁以上',
+            data: gon.bar_fifty_five
+          }
+        ]
+      });
+    })
+  </script>
+
+  <!-- 年龄分析条形图-结束  -->
+
+<% elsif params[:type] = "学历分析" %>
+  <!-- 学历分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+  <div class="col-md-12" style="margin-top:10px">
+  <div id="container3" class="col-md-6" style="height:400px"></div>
+  <div class="col-md-6" style="height: 400px;background-color:white"></div>
+  </div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    $(function () {
+      var chart3 = $('#container3').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
         },
         title: {
-          text: '员工数量'
-        }
-      },
-      tooltip: {
-        formatter: function () {
-          var age_percentage = this.y * 100
-          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-        }
-      },
-      legend: {
-        reversed: true
-      },
-      plotOptions: {
-        bar: {
-          pointWidth: 15,
-          pointPadding: 0
+          text: '学历分析'
         },
-        // 设置条形图的点击事件
-        series: {
-          stacking: 'normal',
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var workshop = this.category
-                var working_years = this.series.name;
-                // 将变量放入url中
-                location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&working_years=' + working_years;
+        // 数据提示框设置
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+              style: {
+                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
               }
-            }
-          }
-        }
-      },
-      series: [
-        {
-          name: '5年以下',
-          data: gon.bar_working_5_below
-        }, {
-          name: '5-10年',
-          data: gon.bar_working_5
-        }, {
-          name: '10-15年',
-          data: gon.bar_working_10
-        }, {
-          name: '15-20年',
-          data: gon.bar_working_15
-        }, {
-          name: '20-25年',
-          data: gon.bar_working_20
-        }, {
-          name: '25-30年',
-          data: gon.bar_working_25
-        }, {
-          name: '30-35年',
-          data: gon.bar_working_30
-        }, {
-          name: '35-40年',
-          data: gon.bar_working_35
-        },{
-          name: '40年以上',
-          data: gon.bar_working_40_up
-        }
-      ]
-    });
-  })
-</script>
-
-<!-- 工龄分析条形图-结束  -->
-
-
-<!-- 路龄分析饼图-开始  -->
-<!-- 给饼图准备一个合适大小的dom  -->
-<div id="container7" style="min-width:800px;height:600px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  $(function () {
-    var chart7 = $('#container7').highcharts({
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: '路龄分析'
-      },
-      // 数据提示框设置
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
+            },
+            // 设置是否显示图例
+            showInLegend: true
           },
-          // 设置是否显示图例
-          showInLegend: true
-        },
-        //设置饼图的点击事件
-        series: {
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var rali_years = this.name
-                // 把此变量放入url中
-                location.href = '/employees/statistical_analysis_data?rali_years=' + rali_years;
+          //设置饼图的点击事件
+          series: {
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var education = this.name
+                  // 把此变量放入url中
+                  location.href = '/employees/statistical_analysis_data?education=' + education;
+                }
               }
             }
           }
-        }
-      },
-      // 饼图的数据来源
-      series: [
-        {
-          colorByPoint: true,
-          // 设置饼图各个扇区的数据，注意需要数组类型的数据
-          data: [
-            {
-              name: '5年以下',
-              y: gon.rali_years_5_below
-            }, {
-              name: '5-10年',
-              y: gon.rali_years_5
-            }, {
-              name: '10-15年',
-              y: gon.rali_years_10
-            }, {
-              name: '15-20年',
-              y: gon.rali_years_15
-            }, {
-              name: '20-25年',
-              y: gon.rali_years_20
-            }, {
-              name: '25-30年',
-              y: gon.rali_years_25
-            }, {
-              name: '30-35年',
-              y: gon.rali_years_30
-            }, {
-              name: '35年以上',
-              y: gon.rali_years_35_up
-            }
-          ]
-        }
-      ]
-    });
-  });
-</script>
-<!-- 路龄分析饼图-结束  -->
-
-<!-- 路龄分析条形图-开始  -->
-<!-- 给条形图准备一个合适大小的dom  -->
-<div id="container8" style="min-width:800px;height:800px"></div>
-<!-- 引入highcharts库  -->
-<script src="/assets/javascripts/highcharts.js"></script>
-<script>
-  var chart8 = $(function () {
-    $('#container8').highcharts({
-      chart: {
-        type: 'bar'
-      },
-      title: {
-        text: '路龄分析'
-      },
-      xAxis: {
-        lables: {
-          step: 1
         },
-        categories: gon.bar_workshop
-      },
-      yAxis: {
-        min: 0,
-        lables: {
-          step: 1
+        // 饼图的数据来源
+        series: [
+          {
+            colorByPoint: true,
+            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+            data: [
+              {
+                name: '中专',
+                y: gon.secondary_school
+              }, {
+                name: '大学专科',
+                y: gon.university_specialties
+              }, {
+                name: '高中',
+                y: gon.senior_high_school
+              }, {
+                name: '大学本科',
+                y: gon.undergraduate
+              }, {
+                name: '初中',
+                y: gon.junior_high_school
+              }, {
+                name: '技校',
+                y: gon.technical_school
+              }, {
+                name: '研究生',
+                y: gon.postgraduate
+              }, {
+                name: '小学',
+                y: gon.primary_school
+              }
+            ]
+          }
+        ]
+      });
+    });
+  </script>
+  <!-- 学历分析饼图-结束  -->
+
+  <!-- 学历分析条形图-开始  -->
+  <!-- 给条形图准备一个合适大小的dom  -->
+  <div id="container4" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    var chart4 = $(function () {
+      $('#container4').highcharts({
+        chart: {
+          type: 'bar'
         },
         title: {
-          text: '员工数量'
-        }
-      },
-      tooltip: {
-        formatter: function () {
-          var age_percentage = this.y * 100
-          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-        }
-      },
-      legend: {
-        reversed: true
-      },
-      plotOptions: {
-        bar: {
-          pointWidth: 15,
-          pointPadding: 0
+          text: '学历分析'
         },
-        // 设置条形图的点击事件
-        series: {
-          stacking: 'normal',
-          point: {
-            events: {
-              click: function () {
-                // 先将需要放入url的参数赋值给一个变量
-                var workshop = this.category
-                var rali_years = this.series.name;
-                // 将变量放入url中
-                location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&rali_years=' + rali_years;
+        xAxis: {
+          lables: {
+            step: 1
+          },
+          categories: gon.bar_workshop
+        },
+        yAxis: {
+          min: 0,
+          lables: {
+            step: 1
+          },
+          title: {
+            text: '员工数量'
+          }
+        },
+        tooltip: {
+          formatter: function () {
+            var age_percentage = this.y * 100
+            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+          }
+        },
+        legend: {
+          reversed: true
+        },
+        plotOptions: {
+          bar: {
+            pointWidth: 10,
+            pointPadding: 0
+          },
+          // 设置条形图的点击事件
+          series: {
+            stacking: 'normal',
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var workshop = this.category
+                  var education = this.series.name;
+                  // 将变量放入url中
+                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&education=' + education;
+                }
               }
             }
           }
-        }
-      },
-      series: [
-        {
-          name: '5年以下',
-          data: gon.bar_rali_5_below
-        }, {
-          name: '5-10年',
-          data: gon.bar_rali_5
-        }, {
-          name: '10-15年',
-          data: gon.bar_rali_10
-        }, {
-          name: '15-20年',
-          data: gon.bar_rali_15
-        }, {
-          name: '20-25年',
-          data: gon.bar_rali_20
-        }, {
-          name: '25-30年',
-          data: gon.bar_rali_25
-        }, {
-          name: '30-35年',
-          data: gon.bar_rali_30
-        }, {
-          name: '35年以上',
-          data: gon.bar_rali_35
-        }
-      ]
-    });
-  })
-</script>
+        },
+        series: [
+          {
+            name: '中专',
+            data: gon.bar_secondary_school
+          }, {
+            name: '大学专科',
+            data: gon.bar_university_specialties
+          }, {
+            name: '高中',
+            data: gon.bar_senior_high_school
+          }, {
+            name: '大学本科',
+            data: gon.bar_undergraduate
+          }, {
+            name: '初中',
+            data: gon.bar_junior_high_school
+          }, {
+            name: '技校',
+            data: gon.bar_technical_school
+          }, {
+            name: '研究生',
+            data: gon.bar_postgraduate
+          }, {
+            name: '小学',
+            data: gon.bar_primary_school
+          }
+        ]
+      });
+    })
+  </script>
 
-<!-- 路龄分析条形图-结束  -->
+  <!-- 学历分析条形图-结束  -->
+
+<% elsif params[:type] = "工龄分析" %>
+
+  <!-- 工龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+  <div class="col-md-12" style="margin-top:10px">
+  <div id="container5" class="col-md-6" style="height:400px"></div>
+  <div class="col-md-6" style="height:400px;background-color:white"></div>
+  </div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    $(function () {
+      var chart5 = $('#container5').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: '工龄分析'
+        },
+        // 数据提示框设置
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+              style: {
+                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+              }
+            },
+            // 设置是否显示图例
+            showInLegend: true
+          },
+          //设置饼图的点击事件
+          series: {
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var working_years = this.name
+                  // 把此变量放入url中
+                  location.href = '/employees/statistical_analysis_data?working_years=' + working_years;
+                }
+              }
+            }
+          }
+        },
+        // 饼图的数据来源
+        series: [
+          {
+            colorByPoint: true,
+            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+            data: [
+              {
+                name: '5年以下',
+                y: gon.working_years_5_below
+              }, {
+                name: '5-10年',
+                y: gon.working_years_5
+              }, {
+                name: '10-15年',
+                y: gon.working_years_10
+              }, {
+                name: '15-20年',
+                y: gon.working_years_15
+              }, {
+                name: '20-25年',
+                y: gon.working_years_20
+              }, {
+                name: '25-30年',
+                y: gon.working_years_25
+              }, {
+                name: '30-35年',
+                y: gon.working_years_30
+              }, {
+                name: '35-40年',
+                y: gon.working_years_35
+              },{
+                name: '40年以上',
+                y: gon.working_years_40_up
+              }
+            ]
+          }
+        ]
+      });
+    });
+  </script>
+  <!-- 工龄分析饼图-结束  -->
+
+  <!-- 工龄分析条形图-开始  -->
+  <!-- 给条形图准备一个合适大小的dom  -->
+  <div id="container6" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    var chart6 = $(function () {
+      $('#container6').highcharts({
+        chart: {
+          type: 'bar'
+        },
+        title: {
+          text: '工龄分析'
+        },
+        xAxis: {
+          lables: {
+            step: 1
+          },
+          categories: gon.bar_workshop
+        },
+        yAxis: {
+          min: 0,
+          lables: {
+            step: 1
+          },
+          title: {
+            text: '员工数量'
+          }
+        },
+        tooltip: {
+          formatter: function () {
+            var age_percentage = this.y * 100
+            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+          }
+        },
+        legend: {
+          reversed: true
+        },
+        plotOptions: {
+          bar: {
+            pointWidth: 10,
+            pointPadding: 0
+          },
+          // 设置条形图的点击事件
+          series: {
+            stacking: 'normal',
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var workshop = this.category
+                  var working_years = this.series.name;
+                  // 将变量放入url中
+                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&working_years=' + working_years;
+                }
+              }
+            }
+          }
+        },
+        series: [
+          {
+            name: '5年以下',
+            data: gon.bar_working_5_below
+          }, {
+            name: '5-10年',
+            data: gon.bar_working_5
+          }, {
+            name: '10-15年',
+            data: gon.bar_working_10
+          }, {
+            name: '15-20年',
+            data: gon.bar_working_15
+          }, {
+            name: '20-25年',
+            data: gon.bar_working_20
+          }, {
+            name: '25-30年',
+            data: gon.bar_working_25
+          }, {
+            name: '30-35年',
+            data: gon.bar_working_30
+          }, {
+            name: '35-40年',
+            data: gon.bar_working_35
+          },{
+            name: '40年以上',
+            data: gon.bar_working_40_up
+          }
+        ]
+      });
+    })
+  </script>
+
+  <!-- 工龄分析条形图-结束  -->
+
+<% elsif params[:type] = "路龄分析" %>
+
+  <!-- 路龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+  <div class="col-md-12" style="margin-top:10px"></div>
+  <div id="container7" class="col-md-6" style="height:400px"></div>
+  <div class="col-md-6" style="height:400px;background-color:white"></div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    $(function () {
+      var chart7 = $('#container7').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: '路龄分析'
+        },
+        // 数据提示框设置
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+              style: {
+                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+              }
+            },
+            // 设置是否显示图例
+            showInLegend: true
+          },
+          //设置饼图的点击事件
+          series: {
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var rali_years = this.name
+                  // 把此变量放入url中
+                  location.href = '/employees/statistical_analysis_data?rali_years=' + rali_years;
+                }
+              }
+            }
+          }
+        },
+        // 饼图的数据来源
+        series: [
+          {
+            colorByPoint: true,
+            // 设置饼图各个扇区的数据，注意需要数组类型的数据
+            data: [
+              {
+                name: '5年以下',
+                y: gon.rali_years_5_below
+              }, {
+                name: '5-10年',
+                y: gon.rali_years_5
+              }, {
+                name: '10-15年',
+                y: gon.rali_years_10
+              }, {
+                name: '15-20年',
+                y: gon.rali_years_15
+              }, {
+                name: '20-25年',
+                y: gon.rali_years_20
+              }, {
+                name: '25-30年',
+                y: gon.rali_years_25
+              }, {
+                name: '30-35年',
+                y: gon.rali_years_30
+              }, {
+                name: '35年以上',
+                y: gon.rali_years_35_up
+              }
+            ]
+          }
+        ]
+      });
+    });
+  </script>
+  <!-- 路龄分析饼图-结束  -->
+
+  <!-- 路龄分析条形图-开始  -->
+  <!-- 给条形图准备一个合适大小的dom  -->
+  <div id="container8" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <!-- 引入highcharts库  -->
+  <script src="/assets/javascripts/highcharts.js"></script>
+  <script>
+    var chart8 = $(function () {
+      $('#container8').highcharts({
+        chart: {
+          type: 'bar'
+        },
+        title: {
+          text: '路龄分析'
+        },
+        xAxis: {
+          lables: {
+            step: 1
+          },
+          categories: gon.bar_workshop
+        },
+        yAxis: {
+          min: 0,
+          lables: {
+            step: 1
+          },
+          title: {
+            text: '员工数量'
+          }
+        },
+        tooltip: {
+          formatter: function () {
+            var age_percentage = this.y * 100
+            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+          }
+        },
+        legend: {
+          reversed: true
+        },
+        plotOptions: {
+          bar: {
+            pointWidth: 10,
+            pointPadding: 0
+          },
+          // 设置条形图的点击事件
+          series: {
+            stacking: 'normal',
+            point: {
+              events: {
+                click: function () {
+                  // 先将需要放入url的参数赋值给一个变量
+                  var workshop = this.category
+                  var rali_years = this.series.name;
+                  // 将变量放入url中
+                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&rali_years=' + rali_years;
+                }
+              }
+            }
+          }
+        },
+        series: [
+          {
+            name: '5年以下',
+            data: gon.bar_rali_5_below
+          }, {
+            name: '5-10年',
+            data: gon.bar_rali_5
+          }, {
+            name: '10-15年',
+            data: gon.bar_rali_10
+          }, {
+            name: '15-20年',
+            data: gon.bar_rali_15
+          }, {
+            name: '20-25年',
+            data: gon.bar_rali_20
+          }, {
+            name: '25-30年',
+            data: gon.bar_rali_25
+          }, {
+            name: '30-35年',
+            data: gon.bar_rali_30
+          }, {
+            name: '35年以上',
+            data: gon.bar_rali_35
+          }
+        ]
+      });
+    })
+  </script>
+
+  <!-- 路龄分析条形图-结束  -->
+<% end %>
