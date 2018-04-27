@@ -415,174 +415,149 @@ class EmployeesController < ApplicationController
     render layout: 'application'
     ## 条形图数据配置---结束
   end
-### 统计分析页面的图表数据配置---结束
+### 统计分析页面的图表数据配置---结束 
 
-
-### 年龄分析饼图-表格详细数据配置
-  def age_analysis_data
-  ## 通过饼图url里附带的参数来判断给出的数据
-    case params[:age]
-    when "25岁以下"
-      @age_employees = Employee.where(age: 0...25)
-    when "25-30岁"
-      @age_employees = Employee.where(age: 25...30)
-    when "30-35岁"
-      @age_employees = Employee.where(age: 30...35)
-    when "35-40岁"
-      @age_employees = Employee.where(age: 35...40)
-    when "40-45岁"
-      @age_employees = Employee.where(age: 40...45)
-    when "45-50岁"
-      @age_employees = Employee.where(age: 45...50)
-    when "50-55岁"
-      @age_employees = Employee.where(age: 50...55)
-    when "55岁以上"
-      @age_employees = Employee.where(age: 55..60)
+###点击图表详情页面数据配置---开始
+  def statistical_analysis_data
+    ##含有workshop参数的都为条形图，以下为条形图数据配置
+    if params[:workshop].present?
+      #年龄分析条形图
+      if params[:age].present?
+        case params[:age]
+        when "25岁以下"
+          @employees = Employee.where(workshop: params[:workshop], age: 0...25)
+        when "25-30岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 25...30)
+        when "30-35岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 30...35)
+        when "35-40岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 35...40)
+        when "40-45岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 40...45)
+        when "45-50岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 45...50)
+        when "50-55岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 50...55)
+        when "55岁以上"
+          @employees = Employee.where(workshop: params[:workshop], age: 55..60)
+        end
+      #学历分析条形图
+      elsif params[:education].present?
+        @employees = Employee.where(workshop: params[:workshop], education_background: params[:education])
+      #工龄分析条形图
+      elsif params[:working_years].present?
+        case params[:working_years]
+        when "5年以下"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 0...5)
+        when "5-10年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 5...10)
+        when "10-15年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 10...15)
+        when "15-20年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 15...20)
+        when "20-25年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 20...25)
+        when "25-30年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 25...30)
+        when "30-35年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 30...35)
+        when "35-40年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 35...40)
+        when "40年以上"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 40..100)
+        end
+      #路龄分析条形图
+      elsif params[:rali_years].present?
+        case params[:rali_years]
+        when "5年以下"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 0...5)
+        when "5-10年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 5...10)
+        when "10-15年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 10...15)
+        when "15-20年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 15...20)
+        when "20-25年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 20...25)
+        when "25-30年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 25...30)
+        when "30-35年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 30...35)
+        when "35年以上"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 35..100)
+        end
+      end
+    ##没有workshop参数则为饼图，以下为饼图数据配置
+    else
+      #年龄分析饼图
+      if params[:age].present?
+        case params[:age]
+        when "25岁以下"
+          @employees = Employee.where(age: 0...25)
+        when "25-30岁"
+          @employees = Employee.where(age: 25...30)
+        when "30-35岁"
+          @employees = Employee.where(age: 30...35)
+        when "35-40岁"
+          @employees = Employee.where(age: 35...40)
+        when "40-45岁"
+          @employees = Employee.where(age: 40...45)
+        when "45-50岁"
+          @employees = Employee.where(age: 45...50)
+        when "50-55岁"
+          @employees = Employee.where(age: 50...55)
+        when "55岁以上"
+          @employees = Employee.where(age: 55..60)
+        end
+      #学历分析饼图
+      elsif params[:education].present?
+        @employees = Employee.where(education_background: params[:education])
+      #工龄分析饼图
+      elsif params[:working_years].present?
+        case params[:working_years]
+        when "5年以下"
+          @employees = Employee.where(working_years: 0...5)
+        when "5-10年"
+          @employees = Employee.where(working_years: 5...10)
+        when "10-15年"
+          @employees = Employee.where(working_years: 10...15)
+        when "15-20年"
+          @employees = Employee.where(working_years: 15...20)
+        when "20-25年"
+          @employees = Employee.where(working_years: 20...25)
+        when "25-30年"
+          @employees = Employee.where(working_years: 25...30)
+        when "30-35年"
+          @employees = Employee.where(working_years: 30...35)
+        when "35-40年"
+          @employees = Employee.where(working_years: 35...40)
+        when "40年以上"
+          @employees = Employee.where(working_years: 40..100)
+        end
+      #路龄分析饼图
+      elsif params[:rali_years].present?
+        case params[:rali_years]
+        when "5年以下"
+          @employees = Employee.where(rali_years: 0...5)
+        when "5-10年"
+          @employees = Employee.where(rali_years: 5...10)
+        when "10-15年"
+          @employees = Employee.where(rali_years: 10...15)
+        when "15-20年"
+          @employees = Employee.where(rali_years: 15...20)
+        when "20-25年"
+          @employees = Employee.where(rali_years: 20...25)
+        when "25-30年"
+          @employees = Employee.where(rali_years: 25...30)
+        when "30-35年"
+          @employees = Employee.where(rali_years: 30...35)
+        when "35年以上"
+          @employees = Employee.where(rali_years: 35..100)
+        end    
+      end
     end
   end
-
-
-### 学历分析饼图-表格详细数据配置
-  def education_background_analysis_data
-  ## 通过饼图url里附带的参数来判断给出的数据
-    case params[:education]
-    when "初中及以下"
-      @education_employees = Employee.where(education_background: ["小学", "初中"])
-    when "高中"
-      @education_employees = Employee.where(education_background: "高中")
-    when "技校"
-      @education_employees = Employee.where(education_background: "技校")
-    when "中专"
-      @education_employees = Employee.where(education_background: "中专")
-    when "大学专科"
-      @education_employees = Employee.where(education_background: "大学专科")
-    when "大学本科"
-      @education_employees = Employee.where(education_background: "大学本科")
-    when "研究称"
-      @education_employees = Employee.where(education_background: "研究生")
-    end
-  end
-
-### 年龄分析条形图-表格详细数据配置
-  def age_analysis_data_bar
-    ## 通过条形图url里附带的参数来判断给出的数据
-    case params[:age]
-    when "25岁以下"
-      ## 参数workshop和数据库存储的一致，可直接用来搜索，而年龄需使用区间搜索，因此使用条件判断
-      @age_employees = Employee.where(workshop: params[:workshop], age: 0...25)
-    when "25-30岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 25...30)
-    when "30-35岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 30...35)
-    when "35-40岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 35...40)
-    when "40-45岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 40...45)
-    when "45-50岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 45...50)
-    when "50-55岁"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 50...55)
-    when "55岁以上"
-      @age_employees = Employee.where(workshop: params[:workshop], age: 55..60)
-    end
-  end
-
-### 学历分析条形图-表格详细数据配置
-  def education_background_analysis_data_bar
-    @education_employees = Employee.where(workshop: params[:workshop], education_background: params[:education])
-  end
-
-### 工龄分析饼图-表格详细数据配置
-  def working_years_analysis_data
-    case params[:working_years]
-      when "5年以下"
-        @working_years_employees = Employee.where(working_years: 0...5)
-      when "5-10年"
-        @working_years_employees = Employee.where(working_years: 5...10)
-      when "10-15年"
-        @working_years_employees = Employee.where(working_years: 10...15)
-      when "15-20年"
-        @working_years_employees = Employee.where(working_years: 15...20)
-      when "20-25年"
-        @working_years_employees = Employee.where(working_years: 20...25)
-      when "25-30年"
-        @working_years_employees = Employee.where(working_years: 25...30)
-      when "30-35年"
-        @working_years_employees = Employee.where(working_years: 30...35)
-      when "35-40年"
-        @working_years_employees = Employee.where(working_years: 35...40)
-      when "40年以上"
-        @working_years_employees = Employee.where(working_years: 40..100)
-    end
-  end
-
-  ### 工龄分析条形图-表格详细数据配置
-  def working_years_analysis_data_bar
-    case params[:working_years]
-      when "5年以下"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 0...5)
-      when "5-10年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 5...10)
-      when "10-15年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 10...15)
-      when "15-20年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 15...20)
-      when "20-25年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 20...25)
-      when "25-30年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 25...30)
-      when "30-35年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 30...35)
-      when "35-40年"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 35...40)
-      when "40年以上"
-        @working_years_employees = Employee.where(workshop: params[:workshop], working_years: 40..100)
-    end
-  end
-
-### 路龄分析饼图-表格详细数据配置
-  def rali_years_analysis_data
-    case params[:rali_years]
-    when "5年以下"
-      @rali_years_employees = Employee.where(rali_years: 0...5)
-    when "5-10年"
-      @rali_years_employees = Employee.where(rali_years: 5...10)
-    when "10-15年"
-      @rali_years_employees = Employee.where(rali_years: 10...15)
-    when "15-20年"
-      @rali_years_employees = Employee.where(rali_years: 15...20)
-    when "20-25年"
-      @rali_years_employees = Employee.where(rali_years: 20...25)
-    when "25-30年"
-      @rali_years_employees = Employee.where(rali_years: 25...30)
-    when "30-35年"
-      @rali_years_employees = Employee.where(rali_years: 30...35)
-    when "35年以上"
-      @rali_years_employees = Employee.where(rali_years: 35..100)
-    end    
-  end
-
-### 路龄分析条形图-表格详细数据配置
-  def rali_years_analysis_data_bar
-    case params[:rali_years]
-    when "5年以下"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 0...5)
-    when "5-10年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 5...10)
-    when "10-15年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 10...15)
-    when "15-20年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 15...20)
-    when "20-25年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 20...25)
-    when "25-30年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 25...30)
-    when "30-35年"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 30...35)
-    when "35年以上"
-      @rali_years_employees = Employee.where(workshop: params[:workshop], rali_years: 35..100)
-    end
-  end
+###点击图表详情页面数据配置---结束
 
 ###组织架构页面数据配置
   def organization_structure

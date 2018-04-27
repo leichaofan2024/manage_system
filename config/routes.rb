@@ -8,14 +8,7 @@ Rails.application.routes.draw do
       post :update_employee_info
       get  :organization_structure
       get  :statistical_analysis
-      get  :age_analysis_data
-      get  :education_background_analysis_data
-      get :age_analysis_data_bar
-      get :education_background_analysis_data_bar
-      get :working_years_analysis_data
-      get :working_years_analysis_data_bar
-      get :rali_years_analysis_data
-      get :rali_years_analysis_data_bar
+      get :statistical_analysis_data
     end
   end
 end
