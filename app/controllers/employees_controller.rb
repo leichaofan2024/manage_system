@@ -218,15 +218,15 @@ class EmployeesController < ApplicationController
     hash_rali_35_up = {}
     #使用循环把车间和人数存成hash
     @workshops.each do |i|
+      emp = Employee.where(workshop: i).count
       a1 = Employee.where(workshop: i, age: 0...25).count
       aa1 = Employee.where(workshop: i, education_background: "初中").count
       ba1 = Employee.where(workshop: i, working_years: 0...5).count
       ca1 = Employee.where(workshop: i, rali_years: 0...5).count
-      a2 = Employee.where(workshop: i).count
-      a = (a1.to_f)/(a2.to_f)
-      aa = (aa1.to_f)/(a2.to_f)
-      ba = (ba1.to_f)/(a2.to_f) 
-      ca = (ca1.to_f)/(a2.to_f) 
+      a = (a1.to_f)/(emp.to_f)
+      aa = (aa1.to_f)/(emp.to_f)
+      ba = (ba1.to_f)/(emp.to_f) 
+      ca = (ca1.to_f)/(emp.to_f) 
       loop_hash_25_below = {i => a}
       loop_hash_junior_high_school = {i => aa}
       loop_hash_working_5_below = {i => ba}
@@ -241,11 +241,10 @@ class EmployeesController < ApplicationController
       ab1 = Employee.where(workshop: i, education_background: "小学").count
       bb1 = Employee.where(workshop: i, working_years: 5...10).count
       cb1 = Employee.where(workshop: i, rali_years: 5...10).count
-      b2 = Employee.where(workshop: i).count
-      b = (b1.to_f)/(b2.to_f)
-      ab = (ab1.to_f)/(b2.to_f)
-      bb = (bb1.to_f)/(a2.to_f)
-      cb = (cb1.to_f)/(b2.to_f)
+      b = (b1.to_f)/(emp.to_f)
+      ab = (ab1.to_f)/(emp.to_f)
+      bb = (bb1.to_f)/(emp.to_f)
+      cb = (cb1.to_f)/(emp.to_f)
       loop_hash_25 = {i => b}
       loop_hash_primary_school = {i => ab}
       loop_hash_working_5 = {i => bb}
@@ -259,11 +258,10 @@ class EmployeesController < ApplicationController
       ac1 = Employee.where(workshop: i, education_background: "高中").count
       bc1 = Employee.where(workshop: i, working_years: 10...15).count
       cc1 = Employee.where(workshop: i, rali_years: 10...15).count
-      c2 = Employee.where(workshop: i).count
-      c = (c1.to_f)/(c2.to_f)
-      ac = (ac1.to_f)/(c2.to_f)
-      bc = (bc1.to_f)/(c2.to_f)
-      cc = (cc1.to_f)/(c2.to_f)
+      c = (c1.to_f)/(emp.to_f)
+      ac = (ac1.to_f)/(emp.to_f)
+      bc = (bc1.to_f)/(emp.to_f)
+      cc = (cc1.to_f)/(emp.to_f)
       loop_hash_30 = {i => c}
       loop_hash_senior_high_school = {i => ac}
       loop_hash_working_10 = {i => bc}
@@ -277,11 +275,10 @@ class EmployeesController < ApplicationController
       ad1 = Employee.where(workshop: i, education_background: "技校").count
       bd1 = Employee.where(workshop: i, working_years: 15...20).count
       cd1 = Employee.where(workshop: i, rali_years: 15...20).count
-      d2 = Employee.where(workshop: i).count
-      d = (d1.to_f)/(d2.to_f)
-      ad = (ad1.to_f)/(d2.to_f)
-      bd = (bd1.to_f)/(a2.to_f)
-      cd = (cd1.to_f)/(d2.to_f)
+      d = (d1.to_f)/(emp.to_f)
+      ad = (ad1.to_f)/(emp.to_f)
+      bd = (bd1.to_f)/(emp.to_f)
+      cd = (cd1.to_f)/(emp.to_f)
       loop_hash_35 = {i => d}
       loop_hash_technical_school = {i => ad}
       loop_hash_working_15 = {i => bd}
@@ -295,11 +292,10 @@ class EmployeesController < ApplicationController
       ae1 = Employee.where(workshop: i, education_background: "中专").count
       be1 = Employee.where(workshop: i, working_years: 20...25).count
       ce1 = Employee.where(workshop: i, rali_years: 20...25).count
-      e2 = Employee.where(workshop: i).count
-      e = (e1.to_f)/(e2.to_f)
-      ae = (ae1.to_f)/(e2.to_f)
-      be = (be1.to_f)/(a2.to_f)
-      ce = (ce1.to_f)/(e2.to_f)
+      e = (e1.to_f)/(emp.to_f)
+      ae = (ae1.to_f)/(emp.to_f)
+      be = (be1.to_f)/(emp.to_f)
+      ce = (ce1.to_f)/(emp.to_f)
       loop_hash_40 = {i => e}
       loop_hash_secondary_school = {i => ae}
       loop_hash_working_20 = {i => be}
@@ -313,11 +309,10 @@ class EmployeesController < ApplicationController
       af1 = Employee.where(workshop: i, education_background: "大学专科").count
       bf1 = Employee.where(workshop: i, working_years: 25...30).count
       cf1 = Employee.where(workshop: i, rali_years: 25...30).count
-      f2 = Employee.where(workshop: i).count
-      f = (f1.to_f)/(f2.to_f)
-      af = (af1.to_f)/(f2.to_f)
-      bf = (bf1.to_f)/(a2.to_f)
-      cf = (cf1.to_f)/(e2.to_f)
+      f = (f1.to_f)/(emp.to_f)
+      af = (af1.to_f)/(emp.to_f)
+      bf = (bf1.to_f)/(emp.to_f)
+      cf = (cf1.to_f)/(emp.to_f)
       loop_hash_45 = {i => f}
       loop_hash_university_specialties = {i => af}
       loop_hash_working_25 = {i => bf}
@@ -331,11 +326,10 @@ class EmployeesController < ApplicationController
       ag1 = Employee.where(workshop: i, education_background: "大学本科").count
       bg1 = Employee.where(workshop: i, working_years: 30...35).count
       cg1 = Employee.where(workshop: i, rali_years: 30...35).count
-      g2 = Employee.where(workshop: i).count
-      g = (g1.to_f)/(g2.to_f)
-      ag = (ag1.to_f)/(g2.to_f)
-      bg = (bg1.to_f)/(a2.to_f)
-      cg = (cg1.to_f)/(e2.to_f)
+      g = (g1.to_f)/(emp.to_f)
+      ag = (ag1.to_f)/(emp.to_f)
+      bg = (bg1.to_f)/(emp.to_f)
+      cg = (cg1.to_f)/(emp.to_f)
       loop_hash_50 = {i => g}
       loop_hash_undergraduate = {i => ag}
       loop_hash_working_30 = {i => bg}
@@ -349,11 +343,10 @@ class EmployeesController < ApplicationController
       ah1 = Employee.where(workshop: i, education_background: "研究生").count
       bh1 = Employee.where(workshop: i, working_years: 35...40).count
       ch1 = Employee.where(workshop: i, rali_years: 35..100).count
-      h2 = Employee.where(workshop: i).count
-      h = (h1.to_f)/(h2.to_f)
-      ah = (ah1.to_f)/(h2.to_f)
-      bh = (bh1.to_f)/(a2.to_f)
-      ch = (ch1.to_f)/(e2.to_f)
+      h = (h1.to_f)/(emp.to_f)
+      ah = (ah1.to_f)/(emp.to_f)
+      bh = (bh1.to_f)/(emp.to_f)
+      ch = (ch1.to_f)/(emp.to_f)
       loop_hash_55 = {i => h}
       loop_hash_postgraduate = {i => ah}
       loop_hash_working_35 = {i => bh}
@@ -364,7 +357,7 @@ class EmployeesController < ApplicationController
       hash_rali_35_up[i] = loop_hash_rali_35_up[i]
 
       bj1 = Employee.where(workshop: i, working_years: 40..100).count
-      bj = (bj1.to_f)/(a2.to_f)
+      bj = (bj1.to_f)/(emp.to_f)
       loop_hash_working_40_up = {i => bj}
       hash_working_40_up[i] = loop_hash_working_40_up[i]
 
