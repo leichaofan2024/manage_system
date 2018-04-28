@@ -285,122 +285,122 @@ class EmployeesController < ApplicationController
   end
 
   def working_years_statistical_analysis
-    @working_years_5_below = Employee.where(working_years: 0...5).count
-    @working_years_5 = Employee.where(working_years: 5...10).count
-    @working_years_10 = Employee.where(working_years: 10...15).count
-    @working_years_15 = Employee.where(working_years: 15...20).count
-    @working_years_20 = Employee.where(working_years: 20...25).count
-    @working_years_25 = Employee.where(working_years: 25...30).count
-    @working_years_30 = Employee.where(working_years: 30...35).count
-    @working_years_35 = Employee.where(working_years: 35...40).count
-    @working_years_40_up = Employee.where(working_years: 40..100).count
+    @working_years_5_below = Employee.where(working_years: 0..5).count
+    @working_years_6 = Employee.where(working_years: 6..10).count
+    @working_years_11 = Employee.where(working_years: 11..15).count
+    @working_years_16 = Employee.where(working_years: 16..20).count
+    @working_years_21 = Employee.where(working_years: 21..25).count
+    @working_years_26 = Employee.where(working_years: 26..30).count
+    @working_years_31 = Employee.where(working_years: 31..35).count
+    @working_years_36 = Employee.where(working_years: 36..40).count
+    @working_years_41_up = Employee.where(working_years: 41..100).count
 
     gon.working_years_5_below = @working_years_5_below
-    gon.working_years_5 = @working_years_5
-    gon.working_years_10 = @working_years_10
-    gon.working_years_15 = @working_years_15
-    gon.working_years_20 = @working_years_20
-    gon.working_years_25 = @working_years_25
-    gon.working_years_30 = @working_years_30
-    gon.working_years_35 = @working_years_35
-    gon.working_years_40_up = @working_years_40_up
+    gon.working_years_6 = @working_years_6
+    gon.working_years_11 = @working_years_11
+    gon.working_years_16 = @working_years_16
+    gon.working_years_21 = @working_years_21
+    gon.working_years_26 = @working_years_26
+    gon.working_years_31 = @working_years_31
+    gon.working_years_36 = @working_years_36
+    gon.working_years_41_up = @working_years_41_up
     
     @workshops = Employee.pluck("workshop").uniq
     loop_hash_working_5_below = {}
     hash_working_5_below = {}
-    loop_hash_working_5 = {}
-    hash_working_5 = {}
-    loop_hash_working_10 = {}
-    hash_working_10 = {}
-    loop_hash_working_15 = {}
-    hash_working_15 = {}
-    loop_hash_working_20 = {}
-    hash_working_20 = {}
-    loop_hash_working_25 = {}
-    hash_working_25 = {}
-    loop_hash_working_30 = {}
-    hash_working_30 = {}
-    loop_hash_working_35 = {}
-    hash_working_35 = {}
-    loop_hash_working_40_up = {}
-    hash_working_40_up = {}
+    loop_hash_working_6 = {}
+    hash_working_6 = {}
+    loop_hash_working_11 = {}
+    hash_working_11 = {}
+    loop_hash_working_16 = {}
+    hash_working_16 = {}
+    loop_hash_working_21 = {}
+    hash_working_21 = {}
+    loop_hash_working_26 = {}
+    hash_working_26 = {}
+    loop_hash_working_31 = {}
+    hash_working_31 = {}
+    loop_hash_working_36 = {}
+    hash_working_36 = {}
+    loop_hash_working_41_up = {}
+    hash_working_41_up = {}
 
     @working_5_below_bar = []
-    @working_5_bar = []
-    @working_10_bar = []
-    @working_15_bar = []
-    @working_20_bar = []
-    @working_25_bar = []
-    @working_30_bar = []
-    @working_35_bar = []
-    @working_40_up_bar = []
+    @working_6_bar = []
+    @working_11_bar = []
+    @working_16_bar = []
+    @working_21_bar = []
+    @working_26_bar = []
+    @working_31_bar = []
+    @working_36_bar = []
+    @working_41_up_bar = []
 
     @workshops.each do |i|
       emp = Employee.where(workshop: i).count
-      a1 = Employee.where(workshop: i, working_years: 0...5).count
+      a1 = Employee.where(workshop: i, working_years: 0..5).count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_working_5_below = {i => a}
       hash_working_5_below[i] = loop_hash_working_5_below[i]
       @working_5_below_bar << a1
 
-      b1 = Employee.where(workshop: i, working_years: 5...10).count
+      b1 = Employee.where(workshop: i, working_years: 6..10).count
       b = (b1.to_f)/(emp.to_f)
-      loop_hash_working_5 = {i => b}
-      hash_working_5[i] = loop_hash_working_5[i]
-      @working_5_bar << b1
+      loop_hash_working_6 = {i => b}
+      hash_working_6[i] = loop_hash_working_6[i]
+      @working_6_bar << b1
 
-      c1 = Employee.where(workshop: i, working_years: 10...15).count
+      c1 = Employee.where(workshop: i, working_years: 11..15).count
       c = (c1.to_f)/(emp.to_f)
-      loop_hash_working_10 = {i => c}
-      hash_working_10[i] = loop_hash_working_10[i]
-      @working_10_bar << c1
+      loop_hash_working_11 = {i => c}
+      hash_working_11[i] = loop_hash_working_11[i]
+      @working_11_bar << c1
 
-      d1 = Employee.where(workshop: i, working_years: 15...20).count
+      d1 = Employee.where(workshop: i, working_years: 16..20).count
       d = (d1.to_f)/(emp.to_f)
-      loop_hash_working_15 = {i => d}
-      hash_working_15[i] = loop_hash_working_15[i]
-      @working_15_bar << d1
+      loop_hash_working_16 = {i => d}
+      hash_working_16[i] = loop_hash_working_16[i]
+      @working_16_bar << d1
 
-      e1 = Employee.where(workshop: i, working_years: 20...25).count
+      e1 = Employee.where(workshop: i, working_years: 21..25).count
       e = (e1.to_f)/(emp.to_f)
-      loop_hash_working_20 = {i => e}
-      hash_working_20[i] = loop_hash_working_20[i]
-      @working_20_bar << e1
+      loop_hash_working_21 = {i => e}
+      hash_working_21[i] = loop_hash_working_21[i]
+      @working_21_bar << e1
 
-      f1 = Employee.where(workshop: i, working_years: 25...30).count
+      f1 = Employee.where(workshop: i, working_years: 26..30).count
       f = (f1.to_f)/(emp.to_f)
-      loop_hash_working_25 = {i => f}
-      hash_working_25[i] = loop_hash_working_25[i]
-      @working_25_bar << f1
+      loop_hash_working_26 = {i => f}
+      hash_working_26[i] = loop_hash_working_26[i]
+      @working_26_bar << f1
 
-      g1 = Employee.where(workshop: i, working_years: 30...35).count
+      g1 = Employee.where(workshop: i, working_years: 31..35).count
       g = (g1.to_f)/(emp.to_f)
-      loop_hash_working_30 = {i => g}
-      hash_working_30[i] = loop_hash_working_30[i]
-      @working_30_bar << g1
+      loop_hash_working_31 = {i => g}
+      hash_working_31[i] = loop_hash_working_31[i]
+      @working_31_bar << g1
 
-      h1 = Employee.where(workshop: i, working_years: 35...40).count
+      h1 = Employee.where(workshop: i, working_years: 36..40).count
       h = (h1.to_f)/(emp.to_f)
-      loop_hash_working_35 = {i => h}
-      hash_working_35[i] = loop_hash_working_35[i]
-      @working_35_bar << h1
+      loop_hash_working_36 = {i => h}
+      hash_working_36[i] = loop_hash_working_36[i]
+      @working_36_bar << h1
 
-      j1 = Employee.where(workshop: i, working_years: 40..100).count
+      j1 = Employee.where(workshop: i, working_years: 41..100).count
       j = (j1.to_f)/(emp.to_f)
-      loop_hash_working_40_up = {i => j}
-      hash_working_40_up[i] = loop_hash_working_40_up[i]
-      @working_40_up_bar << j1
+      loop_hash_working_41_up = {i => j}
+      hash_working_41_up[i] = loop_hash_working_41_up[i]
+      @working_41_up_bar << j1
 
       gon.bar_workshop = hash_working_5_below.keys
       gon.bar_working_5_below = hash_working_5_below.values
-      gon.bar_working_5 = hash_working_5.values
-      gon.bar_working_10 = hash_working_10.values
-      gon.bar_working_15 = hash_working_15.values
-      gon.bar_working_20 = hash_working_20.values
-      gon.bar_working_25 = hash_working_25.values
-      gon.bar_working_30 = hash_working_30.values
-      gon.bar_working_35 = hash_working_35.values
-      gon.bar_working_40_up = hash_working_40_up.values
+      gon.bar_working_6 = hash_working_6.values
+      gon.bar_working_11 = hash_working_11.values
+      gon.bar_working_16 = hash_working_16.values
+      gon.bar_working_21 = hash_working_21.values
+      gon.bar_working_26 = hash_working_26.values
+      gon.bar_working_31 = hash_working_31.values
+      gon.bar_working_36 = hash_working_36.values
+      gon.bar_working_41_up = hash_working_41_up.values
     end
   end
 
@@ -544,43 +544,43 @@ class EmployeesController < ApplicationController
       elsif params[:working_years].present?
         case params[:working_years]
         when "5年以下"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 0...5)
-        when "5-10年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 5...10)
-        when "10-15年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 10...15)
-        when "15-20年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 15...20)
-        when "20-25年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 20...25)
-        when "25-30年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 25...30)
-        when "30-35年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 30...35)
-        when "35-40年"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 35...40)
-        when "40年以上"
-          @employees = Employee.where(workshop: params[:workshop], working_years: 40..100)
+          @employees = Employee.where(workshop: params[:workshop], working_years: 0..5)
+        when "6-10年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 6..10)
+        when "11-15年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 11..15)
+        when "16-20年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 16..20)
+        when "21-25年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 21..25)
+        when "26-30年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 26..30)
+        when "31-35年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 31..35)
+        when "36-40年"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 36..40)
+        when "41年以上"
+          @employees = Employee.where(workshop: params[:workshop], working_years: 41..100)
         end
       #路龄分析条形图
       elsif params[:rali_years].present?
         case params[:rali_years]
         when "5年以下"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 0...5)
-        when "5-10年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 5...10)
-        when "10-15年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 10...15)
-        when "15-20年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 15...20)
-        when "20-25年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 20...25)
-        when "25-30年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 25...30)
-        when "30-35年"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 30...35)
-        when "35年以上"
-          @employees = Employee.where(workshop: params[:workshop], rali_years: 35..100)
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 0..5)
+        when "6-10年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 6..10)
+        when "11-15年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 11..15)
+        when "16-20年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 16..20)
+        when "21-25年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 21..25)
+        when "26-30年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 26..30)
+        when "31-35年"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 31..35)
+        when "36年以上"
+          @employees = Employee.where(workshop: params[:workshop], rali_years: 36..100)
         end
       end
     ##没有workshop参数则为饼图，以下为饼图数据配置
@@ -613,23 +613,23 @@ class EmployeesController < ApplicationController
       elsif params[:working_years].present?
         case params[:working_years]
         when "5年以下"
-          @employees = Employee.where(working_years: 0...5)
-        when "5-10年"
-          @employees = Employee.where(working_years: 5...10)
-        when "10-15年"
-          @employees = Employee.where(working_years: 10...15)
-        when "15-20年"
-          @employees = Employee.where(working_years: 15...20)
-        when "20-25年"
-          @employees = Employee.where(working_years: 20...25)
-        when "25-30年"
-          @employees = Employee.where(working_years: 25...30)
-        when "30-35年"
-          @employees = Employee.where(working_years: 30...35)
-        when "35-40年"
-          @employees = Employee.where(working_years: 35...40)
-        when "40年以上"
-          @employees = Employee.where(working_years: 40..100)
+          @employees = Employee.where(working_years: 0..5)
+        when "6-10年"
+          @employees = Employee.where(working_years: 6..10)
+        when "11-15年"
+          @employees = Employee.where(working_years: 11..15)
+        when "16-20年"
+          @employees = Employee.where(working_years: 16..20)
+        when "21-25年"
+          @employees = Employee.where(working_years: 21..25)
+        when "26-30年"
+          @employees = Employee.where(working_years: 26..30)
+        when "31-35年"
+          @employees = Employee.where(working_years: 31..35)
+        when "36-40年"
+          @employees = Employee.where(working_years: 36..40)
+        when "41年以上"
+          @employees = Employee.where(working_years: 41.100)
         end
       #路龄分析饼图
       elsif params[:rali_years].present?

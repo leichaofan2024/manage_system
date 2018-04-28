@@ -16,37 +16,37 @@
           <th>5年以下</th>
           <td><%= @working_years_5_below %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=5-10年">
-          <th>5-10年</th>
-          <td><%= @working_years_5 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=6-10年">
+          <th>6-10年</th>
+          <td><%= @working_years_6 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=10-15年">
-          <th>10-15年</th>
-          <td><%= @working_years_10 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=11-15年">
+          <th>11-15年</th>
+          <td><%= @working_years_11 %></td>
         </tr> 
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=15-20年">
-          <th>15-20年</th>
-          <td><%= @working_years_15 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=16-20年">
+          <th>16-20年</th>
+          <td><%= @working_years_16 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=20-25年">
-          <th>20-25年</th>
-          <td><%= @working_years_20 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=21-25年">
+          <th>21-25年</th>
+          <td><%= @working_years_21 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=25-30年">
-          <th>25-30年</th>
-          <td><%= @working_years_25 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=26-30年">
+          <th>26-30年</th>
+          <td><%= @working_years_26 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=30-35年">
-          <th>30-35年</th>
-          <td><%= @working_years_30 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=31-35年">
+          <th>31-35年</th>
+          <td><%= @working_years_31 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=35-40年">
-          <th>35-40年</th>
-          <td><%= @working_years_35 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=36-40年">
+          <th>36-40年</th>
+          <td><%= @working_years_36 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=40年以上">
-          <th>40年以上</th>
-          <td><%= @working_years_40_up %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=41年以上">
+          <th>41年以上</th>
+          <td><%= @working_years_41_up %></td>
         </tr>
       </tbody>
     </table>
@@ -109,29 +109,29 @@
                 name: '5年以下',
                 y: gon.working_years_5_below
               }, {
-                name: '5-10年',
-                y: gon.working_years_5
+                name: '6-10年',
+                y: gon.working_years_6
               }, {
-                name: '10-15年',
-                y: gon.working_years_10
+                name: '11-15年',
+                y: gon.working_years_11
               }, {
-                name: '15-20年',
-                y: gon.working_years_15
+                name: '16-20年',
+                y: gon.working_years_16
               }, {
-                name: '20-25年',
-                y: gon.working_years_20
+                name: '21-25年',
+                y: gon.working_years_21
               }, {
-                name: '25-30年',
-                y: gon.working_years_25
+                name: '26-30年',
+                y: gon.working_years_26
               }, {
-                name: '30-35年',
-                y: gon.working_years_30
+                name: '31-35年',
+                y: gon.working_years_31
               }, {
-                name: '35-40年',
-                y: gon.working_years_35
+                name: '36-40年',
+                y: gon.working_years_36
               },{
-                name: '40年以上',
-                y: gon.working_years_40_up
+                name: '41年以上',
+                y: gon.working_years_41_up
               }
             ]
           }
@@ -164,66 +164,66 @@
           <% end %>
         </tr>
         <tr>
-          <td>5-10年</td>
+          <td>6-10年</td>
           <% n = 0 %>
-          <% @working_5_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "5-10年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_6_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "6-10年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>10-15年</td>
+          <td>11-15年</td>
           <% n = 0 %>
-          <% @working_10_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "10-15年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_11_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "11-15年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>15-20年</td>
+          <td>16-20年</td>
           <% n = 0 %>
-          <% @working_15_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "15-20年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_16_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "16-20年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>20-25年</td>
+          <td>21-25年</td>
           <% n = 0 %>
-          <% @working_20_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "20-25年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_21_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "21-25年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>25-30年</td>
+          <td>26-30年</td>
           <% n = 0 %>
-          <% @working_25_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "25-30年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_26_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "26-30年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>30-35年</td>
+          <td>31-35年</td>
           <% n = 0 %>
-          <% @working_30_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "30-35年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_31_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "31-35年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>35-40年</td>
+          <td>36-40年</td>
           <% n = 0 %>
-          <% @working_35_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "35-40年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_36_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "36-40年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>40年以上</td>
+          <td>41年以上</td>
           <% n = 0 %>
-          <% @working_40_up_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "40年以上", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @working_41_up_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "41年以上", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
@@ -291,29 +291,29 @@
             name: '5年以下',
             data: gon.bar_working_5_below
           }, {
-            name: '5-10年',
-            data: gon.bar_working_5
+            name: '6-10年',
+            data: gon.bar_working_6
           }, {
-            name: '10-15年',
-            data: gon.bar_working_10
+            name: '11-15年',
+            data: gon.bar_working_11
           }, {
-            name: '15-20年',
-            data: gon.bar_working_15
+            name: '16-20年',
+            data: gon.bar_working_16
           }, {
-            name: '20-25年',
-            data: gon.bar_working_20
+            name: '21-25年',
+            data: gon.bar_working_21
           }, {
-            name: '25-30年',
-            data: gon.bar_working_25
+            name: '26-30年',
+            data: gon.bar_working_26
           }, {
-            name: '30-35年',
-            data: gon.bar_working_30
+            name: '31-35年',
+            data: gon.bar_working_31
           }, {
-            name: '35-40年',
-            data: gon.bar_working_35
+            name: '36-40年',
+            data: gon.bar_working_36
           },{
-            name: '40年以上',
-            data: gon.bar_working_40_up
+            name: '41年以上',
+            data: gon.bar_working_41_up
           }
         ]
       });
