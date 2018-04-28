@@ -16,33 +16,33 @@
           <th>5年以下</th>
           <td><%= @rali_years_5_below %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=5-10年">
-          <th>5-10年</th>
-          <td><%= @rali_years_5 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=6-10年">
+          <th>6-10年</th>
+          <td><%= @rali_years_6 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=10-15年">
-          <th>10-15年</th>
-          <td><%= @rali_years_10 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=11-15年">
+          <th>11-15年</th>
+          <td><%= @rali_years_11 %></td>
         </tr> 
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=15-20年">
-          <th>15-20年</th>
-          <td><%= @rali_years_15 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=16-20年">
+          <th>16-20年</th>
+          <td><%= @rali_years_16 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=20-25年">
-          <th>20-25年</th>
-          <td><%= @rali_years_20 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=21-25年">
+          <th>21-25年</th>
+          <td><%= @rali_years_21 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=25-30年">
-          <th>25-30年</th>
-          <td><%= @rali_years_25 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=26-30年">
+          <th>26-30年</th>
+          <td><%= @rali_years_26 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=30-35年">
-          <th>30-35年</th>
-          <td><%= @rali_years_30 %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=31-35年">
+          <th>31-35年</th>
+          <td><%= @rali_years_31 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=35年以上">
-          <th>35年以上</th>
-          <td><%= @rali_years_35_up %></td>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=36年以上">
+          <th>36年以上</th>
+          <td><%= @rali_years_36_up %></td>
         </tr>
       </tbody>
     </table>
@@ -105,26 +105,26 @@
                 name: '5年以下',
                 y: gon.rali_years_5_below
               }, {
-                name: '5-10年',
-                y: gon.rali_years_5
+                name: '6-10年',
+                y: gon.rali_years_6
               }, {
-                name: '10-15年',
-                y: gon.rali_years_10
+                name: '11-15年',
+                y: gon.rali_years_11
               }, {
-                name: '15-20年',
-                y: gon.rali_years_15
+                name: '16-20年',
+                y: gon.rali_years_16
               }, {
-                name: '20-25年',
-                y: gon.rali_years_20
+                name: '21-25年',
+                y: gon.rali_years_21
               }, {
-                name: '25-30年',
-                y: gon.rali_years_25
+                name: '26-30年',
+                y: gon.rali_years_26
               }, {
-                name: '30-35年',
-                y: gon.rali_years_30
+                name: '31-35年',
+                y: gon.rali_years_31
               }, {
-                name: '35年以上',
-                y: gon.rali_years_35_up
+                name: '36年以上',
+                y: gon.rali_years_36_up
               }
             ]
           }
@@ -157,58 +157,58 @@
           <% end %>
         </tr>
         <tr>
-          <td>5-10年</td>
+          <td>6-10年</td>
           <% n = 0 %>
-          <% @rali_5_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "5-10年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_6_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "6-10年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>10-15年</td>
+          <td>11-15年</td>
           <% n = 0 %>
-          <% @rali_10_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "10-15年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_11_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "11-15年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>15-20年</td>
+          <td>16-20年</td>
           <% n = 0 %>
-          <% @rali_15_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "15-20年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_16_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "16-20年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>20-25年</td>
+          <td>21-25年</td>
           <% n = 0 %>
-          <% @rali_20_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "20-25年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_21_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "21-25年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>25-30年</td>
+          <td>26-30年</td>
           <% n = 0 %>
-          <% @rali_25_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "25-30年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_26_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "26-30年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>30-35年</td>
+          <td>31-35年</td>
           <% n = 0 %>
-          <% @rali_30_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "30-35年", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_31_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "31-35年", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>35年以上</td>
+          <td>36年以上</td>
           <% n = 0 %>
-          <% @rali_35_up_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "35年以上", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @rali_36_up_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "36年以上", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
@@ -276,26 +276,26 @@
             name: '5年以下',
             data: gon.bar_rali_5_below
           }, {
-            name: '5-10年',
-            data: gon.bar_rali_5
+            name: '6-10年',
+            data: gon.bar_rali_6
           }, {
-            name: '10-15年',
-            data: gon.bar_rali_10
+            name: '11-15年',
+            data: gon.bar_rali_11
           }, {
-            name: '15-20年',
-            data: gon.bar_rali_15
+            name: '16-20年',
+            data: gon.bar_rali_16
           }, {
-            name: '20-25年',
-            data: gon.bar_rali_20
+            name: '21-25年',
+            data: gon.bar_rali_21
           }, {
-            name: '25-30年',
-            data: gon.bar_rali_25
+            name: '26-30年',
+            data: gon.bar_rali_26
           }, {
-            name: '30-35年',
-            data: gon.bar_rali_30
+            name: '31-35年',
+            data: gon.bar_rali_31
           }, {
-            name: '35年以上',
-            data: gon.bar_rali_35
+            name: '36年以上',
+            data: gon.bar_rali_36
           }
         ]
       });

@@ -405,111 +405,111 @@ class EmployeesController < ApplicationController
   end
 
   def rali_years_statistical_analysis
-    @rali_years_5_below = Employee.where(rali_years: 0...5).count
-    @rali_years_5 = Employee.where(rali_years: 5...10).count
-    @rali_years_10 = Employee.where(rali_years: 10...15).count
-    @rali_years_15 = Employee.where(rali_years: 15...20).count
-    @rali_years_20 = Employee.where(rali_years: 20...25).count
-    @rali_years_25 = Employee.where(rali_years: 25...30).count
-    @rali_years_30 = Employee.where(rali_years: 30...35).count
-    @rali_years_35_up = Employee.where(rali_years: 35..100).count
+    @rali_years_5_below = Employee.where(rali_years: 0..5).count
+    @rali_years_6 = Employee.where(rali_years: 6..10).count
+    @rali_years_11 = Employee.where(rali_years: 11..15).count
+    @rali_years_16 = Employee.where(rali_years: 16..20).count
+    @rali_years_21 = Employee.where(rali_years: 21..25).count
+    @rali_years_26 = Employee.where(rali_years: 26..30).count
+    @rali_years_31 = Employee.where(rali_years: 31..35).count
+    @rali_years_36_up = Employee.where(rali_years: 36..100).count
 
     gon.rali_years_5_below = @rali_years_5_below
-    gon.rali_years_5 = @rali_years_5
-    gon.rali_years_10 = @rali_years_10
-    gon.rali_years_15 = @rali_years_15
-    gon.rali_years_20 = @rali_years_20
-    gon.rali_years_25 = @rali_years_25
-    gon.rali_years_30 = @rali_years_30
-    gon.rali_years_35_up = @rali_years_35_up
+    gon.rali_years_6 = @rali_years_6
+    gon.rali_years_11 = @rali_years_11
+    gon.rali_years_16 = @rali_years_16
+    gon.rali_years_21 = @rali_years_21
+    gon.rali_years_26 = @rali_years_26
+    gon.rali_years_31 = @rali_years_31
+    gon.rali_years_36_up = @rali_years_36_up
 
   @workshops = Employee.pluck("workshop").uniq
     loop_hash_rali_5_below = {}
     hash_rali_5_below = {}
-    loop_hash_rali_5 = {}
-    hash_rali_5 = {}
-    loop_hash_rali_10 = {}
-    hash_rali_10 = {}
-    loop_hash_rali_15 = {}
-    hash_rali_15 = {}
-    loop_hash_rali_20 = {}
-    hash_rali_20 = {}
-    loop_hash_rali_25 = {}
-    hash_rali_25 = {}
-    loop_hash_rali_30 = {}
-    hash_rali_30 = {}
-    loop_hash_rali_35_up = {}
-    hash_rali_35_up = {}
+    loop_hash_rali_6 = {}
+    hash_rali_6 = {}
+    loop_hash_rali_11 = {}
+    hash_rali_11 = {}
+    loop_hash_rali_16 = {}
+    hash_rali_16 = {}
+    loop_hash_rali_21 = {}
+    hash_rali_21 = {}
+    loop_hash_rali_26 = {}
+    hash_rali_26 = {}
+    loop_hash_rali_31 = {}
+    hash_rali_31 = {}
+    loop_hash_rali_36_up = {}
+    hash_rali_36_up = {}
 
     @rali_5_below_bar = []
-    @rali_5_bar = []
-    @rali_10_bar = []
-    @rali_15_bar = []
-    @rali_20_bar = []
-    @rali_25_bar = []
-    @rali_30_bar = []
-    @rali_35_up_bar = []
+    @rali_6_bar = []
+    @rali_11_bar = []
+    @rali_16_bar = []
+    @rali_21_bar = []
+    @rali_26_bar = []
+    @rali_31_bar = []
+    @rali_36_up_bar = []
 
     @workshops.each do |i|
       emp = Employee.where(workshop: i).count
-      a1 = Employee.where(workshop: i, rali_years: 0...5).count
+      a1 = Employee.where(workshop: i, rali_years: 0..5).count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_rali_5_below = {i => a}
       hash_rali_5_below[i] = loop_hash_rali_5_below[i]
       @rali_5_below_bar << a1
 
-      b1 = Employee.where(workshop: i, rali_years: 5...10).count
+      b1 = Employee.where(workshop: i, rali_years: 6..10).count
       b = (b1.to_f)/(emp.to_f)
-      loop_hash_rali_5 = {i => b}
-      hash_rali_5[i] = loop_hash_rali_5[i]
-      @rali_5_bar << b1
+      loop_hash_rali_6 = {i => b}
+      hash_rali_6[i] = loop_hash_rali_6[i]
+      @rali_6_bar << b1
 
-      c1 = Employee.where(workshop: i, rali_years: 10...15).count
+      c1 = Employee.where(workshop: i, rali_years: 11..15).count
       c = (c1.to_f)/(emp.to_f)
-      loop_hash_rali_10 = {i => c}
-      hash_rali_10[i] = loop_hash_rali_10[i]
-      @rali_10_bar << c1
+      loop_hash_rali_11 = {i => c}
+      hash_rali_11[i] = loop_hash_rali_11[i]
+      @rali_11_bar << c1
 
-      d1 = Employee.where(workshop: i, rali_years: 15...20).count
+      d1 = Employee.where(workshop: i, rali_years: 16..20).count
       d = (d1.to_f)/(emp.to_f)
-      loop_hash_rali_15 = {i => d}
-      hash_rali_15[i] = loop_hash_rali_15[i]
-      @rali_15_bar << d1
+      loop_hash_rali_16 = {i => d}
+      hash_rali_16[i] = loop_hash_rali_16[i]
+      @rali_16_bar << d1
 
-      e1 = Employee.where(workshop: i, rali_years: 20...25).count
+      e1 = Employee.where(workshop: i, rali_years: 21..25).count
       e = (e1.to_f)/(emp.to_f)
-      loop_hash_rali_20 = {i => e}
-      hash_rali_20[i] = loop_hash_rali_20[i]
-      @rali_20_bar << e1
+      loop_hash_rali_21 = {i => e}
+      hash_rali_21[i] = loop_hash_rali_21[i]
+      @rali_21_bar << e1
 
-      f1 = Employee.where(workshop: i, rali_years: 25...30).count
+      f1 = Employee.where(workshop: i, rali_years: 26..30).count
       f = (f1.to_f)/(emp.to_f)
-      loop_hash_rali_25 = {i => f}
-      hash_rali_25[i] = loop_hash_rali_25[i]
-      @rali_25_bar << f1
+      loop_hash_rali_26 = {i => f}
+      hash_rali_26[i] = loop_hash_rali_26[i]
+      @rali_26_bar << f1
 
-      g1 = Employee.where(workshop: i, rali_years: 30...35).count
+      g1 = Employee.where(workshop: i, rali_years: 31..35).count
       g = (g1.to_f)/(emp.to_f)
-      loop_hash_rali_30 = {i => g}
-      hash_rali_30[i] = loop_hash_rali_30[i]
-      @rali_30_bar << g1
+      loop_hash_rali_31 = {i => g}
+      hash_rali_31[i] = loop_hash_rali_31[i]
+      @rali_31_bar << g1
 
-      h1 = Employee.where(workshop: i, rali_years: 35..100).count
+      h1 = Employee.where(workshop: i, rali_years: 36..100).count
       h = (h1.to_f)/(emp.to_f)
-      loop_hash_rali_35_up = {i => h}
-      hash_rali_35_up[i] = loop_hash_rali_35_up[i]
-      @rali_35_up_bar << h1
+      loop_hash_rali_36_up = {i => h}
+      hash_rali_36_up[i] = loop_hash_rali_36_up[i]
+      @rali_36_up_bar << h1
     end
 
     gon.bar_workshop = hash_rali_5_below.keys
     gon.bar_rali_5_below = hash_rali_5_below.values
-    gon.bar_rali_5 = hash_rali_5.values
-    gon.bar_rali_10 = hash_rali_10.values
-    gon.bar_rali_15 = hash_rali_15.values
-    gon.bar_rali_20 = hash_rali_20.values
-    gon.bar_rali_25 = hash_rali_25.values
-    gon.bar_rali_30 = hash_rali_30.values
-    gon.bar_rali_35 = hash_rali_35_up.values
+    gon.bar_rali_6 = hash_rali_6.values
+    gon.bar_rali_11 = hash_rali_11.values
+    gon.bar_rali_16 = hash_rali_16.values
+    gon.bar_rali_21 = hash_rali_21.values
+    gon.bar_rali_26 = hash_rali_26.values
+    gon.bar_rali_31 = hash_rali_31.values
+    gon.bar_rali_36 = hash_rali_36_up.values
   end
 ###年龄、工龄、路龄、学历图表分析页面数据配置---结束
 
@@ -635,21 +635,21 @@ class EmployeesController < ApplicationController
       elsif params[:rali_years].present?
         case params[:rali_years]
         when "5年以下"
-          @employees = Employee.where(rali_years: 0...5)
-        when "5-10年"
-          @employees = Employee.where(rali_years: 5...10)
-        when "10-15年"
-          @employees = Employee.where(rali_years: 10...15)
-        when "15-20年"
-          @employees = Employee.where(rali_years: 15...20)
-        when "20-25年"
-          @employees = Employee.where(rali_years: 20...25)
-        when "25-30年"
-          @employees = Employee.where(rali_years: 25...30)
-        when "30-35年"
-          @employees = Employee.where(rali_years: 30...35)
-        when "35年以上"
-          @employees = Employee.where(rali_years: 35..100)
+          @employees = Employee.where(rali_years: 0..5)
+        when "6-10年"
+          @employees = Employee.where(rali_years: 6..10)
+        when "11-15年"
+          @employees = Employee.where(rali_years: 11..15)
+        when "16-20年"
+          @employees = Employee.where(rali_years: 16..20)
+        when "21-25年"
+          @employees = Employee.where(rali_years: 21..25)
+        when "26-30年"
+          @employees = Employee.where(rali_years: 26..30)
+        when "31-35年"
+          @employees = Employee.where(rali_years: 31..35)
+        when "36年以上"
+          @employees = Employee.where(rali_years: 36..100)
         end
       end
     end
