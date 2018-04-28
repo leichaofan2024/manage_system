@@ -595,3 +595,21 @@ a:hover {
 
 
 /*---------------end----------------*/
+
+
+/*-----------点击颜色改变---------*/
+li.active > a {
+    background-color: #2ca8ff;
+    -webkit-box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
+}
+
+.sidebar .nav li.active>a, .sidebar .nav li.active > a i {
+    color: #fff;
+}
+
+li.active > a:hover{
+    background-color: #2ca8ff;
+}
+
+/*-------------end----------------*/
