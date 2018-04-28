@@ -1,11 +1,26 @@
 <%= render 'employee_navbar' %>
-
 <div class="col-md-12">
+  <!--- 按工种分类筛选-开始  -->
+  <li class="dropdown">
+      <a class="js-selected-navigation-item HeaderNavlink px-2 dropdown-toggle" data-toggle="dropdown" style="margin-left: 80px; href="/" ">
+        按职务筛选
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <% @work_types.each do |work_type| %>
+          <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
+        <% end %>
+      </ul>
+  </li>
+  <!--- 按工种分类筛选-结束  -->
+  <!--- 搜索-开始  -->
   <%= form_tag search_employees_path, method: 'get' do %>
     <%= label_tag :查询%>
     <%= text_field_tag :q, params[:q] %>
     <%= submit_tag :search %>
   <% end %>
+  <!--- 搜索-结束  -->
+  <!--- 搜索-开始  -->
   <%= link_to "一键更新现员表", update_employee_info_employees_path, method: :post %>
   <%= link_to "导出表格", employees_path(format: "xls")%>
   <div class="card">
@@ -176,9 +191,7 @@
     </div>
   </div>
 
-  <div class="text-center">
-    <%= paginate @employees %>
-  </div>
+
 
 
   <h4>上传现员表</h4>

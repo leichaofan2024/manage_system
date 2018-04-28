@@ -1,7 +1,13 @@
 class EmployeesController < ApplicationController
   layout 'home'
   def index
-    @employees = Employee.page(params[:page]).per(50)
+    @work_types = Employee.pluck("work_type").uniq
+    if params[:work_type].present?
+      @employees = Employee.where(work_type: params[:work_type])
+    else
+      @employees = Employee.all
+    end
+    
     @export_employees = Employee.order("id ASC")
     respond_to do |format|
       format.html
