@@ -1,3 +1,14 @@
+<%= render 'employee_navbar'%>
+<% if params[:age].present? %>
+  <%= link_to "返回", age_statistical_analysis_employees_path %>
+<% elsif params[:education].present? %>
+  <%= link_to "返回", education_statistical_analysis_employees_path %>
+<% elsif params[:working_years].present? %>
+  <%= link_to "返回", working_years_statistical_analysis_employees_path %>
+<% elsif params[:rali_years].present? %>
+  <%= link_to "返回", rali_years_statistical_analysis_employees_path %>
+<% end %>
+<br><br>
 <h4>
   <% if params[:workshop].present? %>
     车间：<%= params[:workshop] %> &nbsp &nbsp &nbsp
