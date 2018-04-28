@@ -17,32 +17,32 @@
           <td><%= @age_25_below %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25-30岁">
-          <th>25-30岁</th>
-          <td><%= @age_25 %></td>
+          <th>26-30岁</th>
+          <td><%= @age_26 %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=30-35岁">
-          <th>30-35岁</th>
-          <td><%= @age_30 %></td>
+          <th>31-35岁</th>
+          <td><%= @age_31 %></td>
         </tr> 
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=35-40岁">
-          <th>35-40岁</th>
-          <td><%= @age_35 %></td>
+          <th>36-40岁</th>
+          <td><%= @age_36 %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=40-45岁">
-          <th>40-45岁</th>
-          <td><%= @age_40 %></td>
+          <th>41-45岁</th>
+          <td><%= @age_41 %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=45-50岁">
-          <th>45-50岁</th>
-          <td><%= @age_45 %></td>
+          <th>46-50岁</th>
+          <td><%= @age_46 %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=50-55岁">
-          <th>50-55岁</th>
-          <td><%= @age_50 %></td>
+          <th>51-55岁</th>
+          <td><%= @age_51 %></td>
         </tr>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=55岁以上">
-          <th>55岁以上</th>
-          <td><%= @age_55 %></td>
+          <th>56岁以上</th>
+          <td><%= @age_56_up %></td>
         </tr>
       </tbody>
     </table>
@@ -86,19 +86,6 @@
             },
             // 设置是否显示图例
             showInLegend: true
-          },
-          // 设置饼图的点击事件
-          series: {
-            point: {
-              events: {
-                click: function () {
-                  // 先将需要放入url的参数赋值给一个变量
-                  var age = this.name
-                  // 把此变量放入url中
-                  location.href = '/employees/statistical_analysis_data?age=' + age;
-                }
-              }
-            }
           }
         },
         // 饼图的数据来源
@@ -108,26 +95,26 @@
             // 设置饼图各个扇区的数据，注意需要数组类型的数据
             data: [
               {
-                name: '55岁以上',
-                y: gon.fifty_five
+                name: '56岁以上',
+                y: gon.fifty_six_up
               },{
-                name: '50-55岁',
-                y: gon.fifty
+                name: '51-55岁',
+                y: gon.fifty_one
               }, {
-                name: '45-50岁',
-                y: gon.forty_five
+                name: '46-50岁',
+                y: gon.forty_six
               }, {
-                name: '40-45岁',
-                y: gon.forty
+                name: '41-45岁',
+                y: gon.forty_one
               }, {
-                name: '25-30岁',
-                y: gon.twenty_five
+                name: '26-30岁',
+                y: gon.twenty_six
               }, {
-                name: '30-35岁',
-                y: gon.thirty
+                name: '31-35岁',
+                y: gon.thirty_one
               }, {
-                name: '35-40岁',
-                y: gon.thirty_five
+                name: '36-40岁',
+                y: gon.thirty_six
               }, {
                 name: '25岁以下',
                 y: gon.twenty_five_below

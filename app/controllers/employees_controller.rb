@@ -59,23 +59,23 @@ class EmployeesController < ApplicationController
   def age_statistical_analysis
     #年龄分析---饼图数据设置---开始
     # 把各个年龄段的人数捞出，赋值给对应的实例变量
-    @age_25_below = Employee.where(age: 0...25).count
-    @age_25 = Employee.where(age: 25...30).count
-    @age_30 = Employee.where(age: 30...35).count
-    @age_35 = Employee.where(age: 35...40).count
-    @age_40 = Employee.where(age: 40...45).count
-    @age_45 = Employee.where(age: 45...50).count
-    @age_50 = Employee.where(age: 50...55).count
-    @age_55 = Employee.where(age: 55..60).count
+    @age_25_below = Employee.where(age: 0..25).count
+    @age_26 = Employee.where(age: 26..30).count
+    @age_31 = Employee.where(age: 31..35).count
+    @age_36 = Employee.where(age: 36..40).count
+    @age_41 = Employee.where(age: 41..45).count
+    @age_46 = Employee.where(age: 46..50).count
+    @age_51 = Employee.where(age: 51..55).count
+    @age_56_up = Employee.where(age: 56..100).count
     # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.twenty_five_below = @age_25_below
-    gon.twenty_five = @age_25
-    gon.thirty =  @age_30
-    gon.thirty_five =  @age_35
-    gon.forty =  @age_40
-    gon.forty_five = @age_45
-    gon.fifty = @age_50
-    gon.fifty_five = @age_55
+    gon.twenty_six = @age_26
+    gon.thirty_one =  @age_31
+    gon.thirty_six =  @age_36
+    gon.forty_one =  @age_41
+    gon.forty_six = @age_46
+    gon.fifty_one = @age_51
+    gon.fifty_six_up = @age_56_up
     #年龄分析---饼图数据设置---结束
     #年龄分析---条形图数据设置---开始
     @workshops = Employee.pluck("workshop").uniq
