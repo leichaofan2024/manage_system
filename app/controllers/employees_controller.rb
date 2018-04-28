@@ -441,47 +441,64 @@ class EmployeesController < ApplicationController
     loop_hash_rali_35_up = {}
     hash_rali_35_up = {}
 
+    @rali_5_below_bar = []
+    @rali_5_bar = []
+    @rali_10_bar = []
+    @rali_15_bar = []
+    @rali_20_bar = []
+    @rali_25_bar = []
+    @rali_30_bar = []
+    @rali_35_up_bar = []
+
     @workshops.each do |i|
       emp = Employee.where(workshop: i).count
-      ca1 = Employee.where(workshop: i, rali_years: 0...5).count
-      ca = (ca1.to_f)/(emp.to_f)
-      loop_hash_rali_5_below = {i => ca}
+      a1 = Employee.where(workshop: i, rali_years: 0...5).count
+      a = (a1.to_f)/(emp.to_f)
+      loop_hash_rali_5_below = {i => a}
       hash_rali_5_below[i] = loop_hash_rali_5_below[i]
+      @rali_5_below_bar << a1
 
-      cb1 = Employee.where(workshop: i, rali_years: 5...10).count
-      cb = (cb1.to_f)/(emp.to_f)
-      loop_hash_rali_5 = {i => cb}
+      b1 = Employee.where(workshop: i, rali_years: 5...10).count
+      b = (b1.to_f)/(emp.to_f)
+      loop_hash_rali_5 = {i => b}
       hash_rali_5[i] = loop_hash_rali_5[i]
+      @rali_5_bar << b1
 
-      cc1 = Employee.where(workshop: i, rali_years: 10...15).count
-      cc = (cc1.to_f)/(emp.to_f)
-      loop_hash_rali_10 = {i => cc}
+      c1 = Employee.where(workshop: i, rali_years: 10...15).count
+      c = (c1.to_f)/(emp.to_f)
+      loop_hash_rali_10 = {i => c}
       hash_rali_10[i] = loop_hash_rali_10[i]
+      @rali_10_bar << c1
 
-      cd1 = Employee.where(workshop: i, rali_years: 15...20).count
-      cd = (cd1.to_f)/(emp.to_f)
-      loop_hash_rali_15 = {i => cd}
+      d1 = Employee.where(workshop: i, rali_years: 15...20).count
+      d = (d1.to_f)/(emp.to_f)
+      loop_hash_rali_15 = {i => d}
       hash_rali_15[i] = loop_hash_rali_15[i]
+      @rali_15_bar << d1
 
-      ce1 = Employee.where(workshop: i, rali_years: 20...25).count
-      ce = (ce1.to_f)/(emp.to_f)
-      loop_hash_rali_20 = {i => ce}
+      e1 = Employee.where(workshop: i, rali_years: 20...25).count
+      e = (e1.to_f)/(emp.to_f)
+      loop_hash_rali_20 = {i => e}
       hash_rali_20[i] = loop_hash_rali_20[i]
+      @rali_20_bar << e1
 
-      cf1 = Employee.where(workshop: i, rali_years: 25...30).count
-      cf = (cf1.to_f)/(emp.to_f)
-      loop_hash_rali_25 = {i => cf}
+      f1 = Employee.where(workshop: i, rali_years: 25...30).count
+      f = (f1.to_f)/(emp.to_f)
+      loop_hash_rali_25 = {i => f}
       hash_rali_25[i] = loop_hash_rali_25[i]
+      @rali_25_bar << f1
 
-      cg1 = Employee.where(workshop: i, rali_years: 30...35).count
-      cg = (cg1.to_f)/(emp.to_f)
-      loop_hash_rali_30 = {i => cg}
+      g1 = Employee.where(workshop: i, rali_years: 30...35).count
+      g = (g1.to_f)/(emp.to_f)
+      loop_hash_rali_30 = {i => g}
       hash_rali_30[i] = loop_hash_rali_30[i]
+      @rali_30_bar << g1
 
-      ch1 = Employee.where(workshop: i, rali_years: 35..100).count
-      ch = (ch1.to_f)/(emp.to_f)
-      loop_hash_rali_35_up = {i => ch}
+      h1 = Employee.where(workshop: i, rali_years: 35..100).count
+      h = (h1.to_f)/(emp.to_f)
+      loop_hash_rali_35_up = {i => h}
       hash_rali_35_up[i] = loop_hash_rali_35_up[i]
+      @rali_35_up_bar << h1
     end
 
     gon.bar_workshop = hash_rali_5_below.keys
