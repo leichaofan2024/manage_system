@@ -82,35 +82,35 @@ class EmployeesController < ApplicationController
       #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
       loop_hash_25_below = {}
       hash_25_below = {}
-      loop_hash_25 = {}
-      hash_25 = {}
-      loop_hash_30 = {}
-      hash_30 = {}
-      loop_hash_35 = {}
-      hash_35 = {}
-      loop_hash_40 = {}
-      hash_40 = {}
-      loop_hash_45 = {}
-      hash_45 = {}
-      loop_hash_50 = {}
-      hash_50 = {}
-      loop_hash_55 = {}
-      hash_55 = {}
+      loop_hash_26 = {}
+      hash_26 = {}
+      loop_hash_31 = {}
+      hash_31 = {}
+      loop_hash_36 = {}
+      hash_36 = {}
+      loop_hash_41 = {}
+      hash_41 = {}
+      loop_hash_46 = {}
+      hash_46 = {}
+      loop_hash_51 = {}
+      hash_51 = {}
+      loop_hash_56_up = {}
+      hash_56_up = {}
 
       @age_25_below_bar = []
-      @age_25_bar = []
-      @age_30_bar = []
-      @age_35_bar = []
-      @age_40_bar = []
-      @age_45_bar = []
-      @age_50_bar = []
-      @age_55_bar = []
+      @age_26_bar = []
+      @age_31_bar = []
+      @age_36_bar = []
+      @age_41_bar = []
+      @age_46_bar = []
+      @age_51_bar = []
+      @age_56_up_bar = []
       #使用循环把车间和人数存成hash
       @workshops.each do |i|
         #把每个车间的总人数存成变量
         emp = Employee.where(workshop: i).count
         #把各年龄段在各车间的人数存成变量
-        a1 = Employee.where(workshop: i, age: 0...25).count      
+        a1 = Employee.where(workshop: i, age: 0..25).count      
         #算出各年龄段人数占车间总人数的比重
         a = (a1.to_f)/(emp.to_f)      
         #将每一次的计算结果存成"车间 => 百分比"的hash
@@ -119,47 +119,47 @@ class EmployeesController < ApplicationController
         hash_25_below[i] = loop_hash_25_below[i]
         @age_25_below_bar << a1
 
-        b1 = Employee.where(workshop: i, age: 25...30).count      
+        b1 = Employee.where(workshop: i, age: 26..30).count      
         b = (b1.to_f)/(emp.to_f)     
-        loop_hash_25 = {i => b}      
-        hash_25[i] = loop_hash_25[i]
-        @age_25_bar << b1
+        loop_hash_26 = {i => b}      
+        hash_26[i] = loop_hash_26[i]
+        @age_26_bar << b1
         
-        c1 = Employee.where(workshop: i, age: 30...35).count      
+        c1 = Employee.where(workshop: i, age: 31..35).count      
         c = (c1.to_f)/(emp.to_f)     
-        loop_hash_30 = {i => c}      
-        hash_30[i] = loop_hash_30[i]
-        @age_30_bar << c1
+        loop_hash_31 = {i => c}      
+        hash_31[i] = loop_hash_31[i]
+        @age_31_bar << c1
       
-        d1 = Employee.where(workshop: i, age: 35...40).count     
+        d1 = Employee.where(workshop: i, age: 36..40).count     
         d = (d1.to_f)/(emp.to_f)    
-        loop_hash_35 = {i => d}     
-        hash_35[i] = loop_hash_35[i]  
-        @age_35_bar << d1  
+        loop_hash_36 = {i => d}     
+        hash_36[i] = loop_hash_36[i]  
+        @age_36_bar << d1  
 
-        e1 = Employee.where(workshop: i, age: 40...45).count     
+        e1 = Employee.where(workshop: i, age: 41..45).count     
         e = (e1.to_f)/(emp.to_f)    
-        loop_hash_40 = {i => e}     
-        hash_40[i] = loop_hash_40[i]
-        @age_40_bar << e1
+        loop_hash_41 = {i => e}     
+        hash_41[i] = loop_hash_41[i]
+        @age_41_bar << e1
        
-        f1 = Employee.where(workshop: i, age: 45...50).count      
+        f1 = Employee.where(workshop: i, age: 46..50).count      
         f = (f1.to_f)/(emp.to_f)     
-        loop_hash_45 = {i => f}      
-        hash_45[i] = loop_hash_45[i]
-        @age_45_bar << f1
+        loop_hash_46 = {i => f}      
+        hash_46[i] = loop_hash_46[i]
+        @age_46_bar << f1
 
-        g1 = Employee.where(workshop: i, age: 50...55).count     
+        g1 = Employee.where(workshop: i, age: 51..55).count     
         g = (g1.to_f)/(emp.to_f)    
-        loop_hash_50 = {i => g}    
-        hash_50[i] = loop_hash_50[i]
-        @age_50_bar << g1
+        loop_hash_51 = {i => g}    
+        hash_51[i] = loop_hash_51[i]
+        @age_51_bar << g1
 
-        h1 = Employee.where(workshop: i, age: 55..70).count     
+        h1 = Employee.where(workshop: i, age: 56..70).count     
         h = (h1.to_f)/(emp.to_f)    
-        loop_hash_55 = {i => h}     
-        hash_55[i] = loop_hash_55[i]
-        @age_55_bar << h1
+        loop_hash_56_up = {i => h}     
+        hash_56_up[i] = loop_hash_56_up[i]
+        @age_56_up_bar << h1
       end
       #生成每个年龄段的【车间-人数】hash---结束
 
@@ -167,13 +167,13 @@ class EmployeesController < ApplicationController
     gon.bar_workshop = hash_25_below.keys
     #将以上算出最终hash的values赋值给对应的变量，作为条形图的数据
     gon.bar_twenty_five_below = hash_25_below.values
-    gon.bar_twenty_five = hash_25.values
-    gon.bar_thirty = hash_30.values
-    gon.bar_thirty_five = hash_35.values
-    gon.bar_forty = hash_40.values
-    gon.bar_forty_five = hash_45.values
-    gon.bar_fifty = hash_50.values
-    gon.bar_fifty_five = hash_55.values
+    gon.bar_twenty_six = hash_26.values
+    gon.bar_thirty_one = hash_31.values
+    gon.bar_thirty_six = hash_36.values
+    gon.bar_forty_one = hash_41.values
+    gon.bar_forty_six = hash_46.values
+    gon.bar_fifty_one = hash_51.values
+    gon.bar_fifty_six_up = hash_56_up.values
     
     #年龄分析---条形图数据设置---结束
   end
@@ -521,21 +521,21 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          @employees = Employee.where(workshop: params[:workshop], age: 0...25)
-        when "25-30岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 25...30)
-        when "30-35岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 30...35)
-        when "35-40岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 35...40)
-        when "40-45岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 40...45)
-        when "45-50岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 45...50)
-        when "50-55岁"
-          @employees = Employee.where(workshop: params[:workshop], age: 50...55)
-        when "55岁以上"
-          @employees = Employee.where(workshop: params[:workshop], age: 55..60)
+          @employees = Employee.where(workshop: params[:workshop], age: 0..25)
+        when "26-30岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 26..30)
+        when "31-35岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 31..35)
+        when "36-40岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 36..40)
+        when "41-45岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 41..45)
+        when "46-50岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 46..50)
+        when "51-55岁"
+          @employees = Employee.where(workshop: params[:workshop], age: 51..55)
+        when "56岁以上"
+          @employees = Employee.where(workshop: params[:workshop], age: 56..60)
         end
       #学历分析条形图
       elsif params[:education].present?
@@ -589,22 +589,22 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          @employees = Employee.where(age: 0...25)
-        when "25-30岁"
-          @employees = Employee.where(age: 25...30)
-        when "30-35岁"
-          @employees = Employee.where(age: 30...35)
-        when "35-40岁"
-          @employees = Employee.where(age: 35...40)
-        when "40-45岁"
-          @employees = Employee.where(age: 40...45)
-        when "45-50岁"
-          @employees = Employee.where(age: 45...50)
-        when "50-55岁"
-          @employees = Employee.where(age: 50...55)
+          @employees = Employee.where(age: 0..25)
+        when "26-30岁"
+          @employees = Employee.where(age: 26..30)
+        when "31-35岁"
+          @employees = Employee.where(age: 31..35)
+        when "36-40岁"
+          @employees = Employee.where(age: 36..40)
+        when "41-45岁"
+          @employees = Employee.where(age: 41..45)
+        when "46-50岁"
+          @employees = Employee.where(age: 46..50)
+        when "51-55岁"
+          @employees = Employee.where(age: 51..55)
 
-        when "55岁以上"
-          @employees = Employee.where(age: 55..60)
+        when "56岁以上"
+          @employees = Employee.where(age: 56..100)
         end
       #学历分析饼图
       elsif params[:education].present?

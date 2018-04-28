@@ -16,31 +16,31 @@
           <th>25岁以下</th>
           <td><%= @age_25_below %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25-30岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁">
           <th>26-30岁</th>
           <td><%= @age_26 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=30-35岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁">
           <th>31-35岁</th>
           <td><%= @age_31 %></td>
         </tr> 
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=35-40岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁">
           <th>36-40岁</th>
           <td><%= @age_36 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=40-45岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁">
           <th>41-45岁</th>
           <td><%= @age_41 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=45-50岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁">
           <th>46-50岁</th>
           <td><%= @age_46 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=50-55岁">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁">
           <th>51-55岁</th>
           <td><%= @age_51 %></td>
         </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=55岁以上">
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上">
           <th>56岁以上</th>
           <td><%= @age_56_up %></td>
         </tr>
@@ -151,58 +151,58 @@
           <% end %>
         </tr>
         <tr>
-          <td>25-30岁</td>
+          <td>26-30岁</td>
           <% n = 0 %>
-          <% @age_25_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "25-30岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_26_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "26-30岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>30-35岁</td>
+          <td>31-35岁</td>
           <% n = 0 %>
-          <% @age_30_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "30-35岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_31_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "31-35岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>35-40岁</td>
+          <td>36-40岁</td>
           <% n = 0 %>
-          <% @age_35_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "35-40岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_36_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "36-40岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>40-45岁</td>
+          <td>41-45岁</td>
           <% n = 0 %>
-          <% @age_40_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "35-40岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_41_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "41-45岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>45-50岁</td>
+          <td>46-50岁</td>
           <% n = 0 %>
-          <% @age_45_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "45-50岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_46_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "46-50岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>50-55岁</td>
+          <td>51-55岁</td>
           <% n = 0 %>
-          <% @age_50_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "50-55岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_51_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "51-55岁", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
         <tr>
-          <td>55岁以上</td>
+          <td>56岁以上</td>
           <% n = 0 %>
-          <% @age_55_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "55-60岁", workshop: @workshops[n]), style: "color: black" %></td>
+          <% @age_56_up_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "56岁以上", workshop: @workshops[n]), style: "color: black" %></td>
             <% n = n+1 %>
           <% end %>
         </tr>
@@ -270,26 +270,26 @@
             name: '25岁以下',
             data: gon.bar_twenty_five_below
           }, {
-            name: '25-30岁',
-            data: gon.bar_twenty_five
+            name: '26-30岁',
+            data: gon.bar_twenty_six
           }, {
-            name: '30-35岁',
-            data: gon.bar_thirty
+            name: '31-35岁',
+            data: gon.bar_thirty_one
           }, {
-            name: '35-40岁',
-            data: gon.bar_thirty_five
+            name: '36-40岁',
+            data: gon.bar_thirty_six
           }, {
-            name: '40-45岁',
-            data: gon.bar_forty
+            name: '41-45岁',
+            data: gon.bar_forty_one
           }, {
-            name: '45-50岁',
-            data: gon.bar_forty_five
+            name: '46-50岁',
+            data: gon.bar_forty_six
           }, {
-            name: '50-55岁',
-            data: gon.bar_fifty
+            name: '51-55岁',
+            data: gon.bar_fifty_one
           }, {
-            name: '55岁以上',
-            data: gon.bar_fifty_five
+            name: '56岁以上',
+            data: gon.bar_fifty_six_up
           }
         ]
       });
