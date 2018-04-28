@@ -59,13 +59,13 @@ class EmployeesController < ApplicationController
   def age_statistical_analysis
     #年龄分析---饼图数据设置---开始
     # 把各个年龄段的人数捞出，赋值给对应的实例变量
-    @age_25_below = Employee.where(age: 0..25).count
-    @age_25 = Employee.where(age: 25..30).count
-    @age_30 = Employee.where(age: 30..35).count
-    @age_35 = Employee.where(age: 35..40).count
-    @age_40 = Employee.where(age: 40..45).count
-    @age_45 = Employee.where(age: 45..50).count
-    @age_50 = Employee.where(age: 50..55).count
+    @age_25_below = Employee.where(age: 0...25).count
+    @age_25 = Employee.where(age: 25...30).count
+    @age_30 = Employee.where(age: 30...35).count
+    @age_35 = Employee.where(age: 35...40).count
+    @age_40 = Employee.where(age: 40...45).count
+    @age_45 = Employee.where(age: 45...50).count
+    @age_50 = Employee.where(age: 50...55).count
     @age_55 = Employee.where(age: 55..60).count
     # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.twenty_five_below = @age_25_below
@@ -96,6 +96,15 @@ class EmployeesController < ApplicationController
       hash_50 = {}
       loop_hash_55 = {}
       hash_55 = {}
+
+      @age_25_below_bar = []
+      @age_25_bar = []
+      @age_30_bar = []
+      @age_35_bar = []
+      @age_40_bar = []
+      @age_45_bar = []
+      @age_50_bar = []
+      @age_55_bar = []
       #使用循环把车间和人数存成hash
       @workshops.each do |i|
         #把每个车间的总人数存成变量
@@ -108,41 +117,49 @@ class EmployeesController < ApplicationController
         loop_hash_25_below = {i => a}     
         #将每一次的hash结果存到最终的hash里，供之后使用
         hash_25_below[i] = loop_hash_25_below[i]
+        @age_25_below_bar << a1
 
         b1 = Employee.where(workshop: i, age: 25...30).count      
         b = (b1.to_f)/(emp.to_f)     
         loop_hash_25 = {i => b}      
         hash_25[i] = loop_hash_25[i]
+        @age_25_bar << b1
         
         c1 = Employee.where(workshop: i, age: 30...35).count      
         c = (c1.to_f)/(emp.to_f)     
         loop_hash_30 = {i => c}      
         hash_30[i] = loop_hash_30[i]
+        @age_30_bar << c1
       
         d1 = Employee.where(workshop: i, age: 35...40).count     
         d = (d1.to_f)/(emp.to_f)    
         loop_hash_35 = {i => d}     
-        hash_35[i] = loop_hash_35[i]    
+        hash_35[i] = loop_hash_35[i]  
+        @age_35_bar << d1  
 
         e1 = Employee.where(workshop: i, age: 40...45).count     
         e = (e1.to_f)/(emp.to_f)    
         loop_hash_40 = {i => e}     
         hash_40[i] = loop_hash_40[i]
+        @age_40_bar << e1
        
         f1 = Employee.where(workshop: i, age: 45...50).count      
         f = (f1.to_f)/(emp.to_f)     
         loop_hash_45 = {i => f}      
         hash_45[i] = loop_hash_45[i]
-        
+        @age_45_bar << f1
+
         g1 = Employee.where(workshop: i, age: 50...55).count     
         g = (g1.to_f)/(emp.to_f)    
         loop_hash_50 = {i => g}    
         hash_50[i] = loop_hash_50[i]
-        
+        @age_50_bar << g1
+
         h1 = Employee.where(workshop: i, age: 55..70).count     
         h = (h1.to_f)/(emp.to_f)    
         loop_hash_55 = {i => h}     
         hash_55[i] = loop_hash_55[i]
+        @age_55_bar << h1
       end
       #生成每个年龄段的【车间-人数】hash---结束
 
@@ -157,6 +174,7 @@ class EmployeesController < ApplicationController
     gon.bar_forty_five = hash_45.values
     gon.bar_fifty = hash_50.values
     gon.bar_fifty_five = hash_55.values
+    
     #年龄分析---条形图数据设置---结束
   end
 

@@ -10,6 +10,8 @@
           <th style="color: blue; font-size:17px;">年龄段</th>
           <td style="color: blue; font-size:17px;">人数</td>
         </tr>
+      </thead>
+      <tbody>
         <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
           <th>25岁以下</th>
           <td><%= @age_25_below %></td>
@@ -42,7 +44,7 @@
           <th>55岁以上</th>
           <td><%= @age_55 %></td>
         </tr>
-      </thead>
+      </tbody>
     </table>
   </div>
   </div>
@@ -141,7 +143,86 @@
   <!-- 年龄分析条形图-开始  -->
   <!-- 给条形图准备一个合适大小的dom  -->
   <div id="container2" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
-  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:400px;margin-top:10px;margin-left:10px;background-color:white;overflow: auto">
+    <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
+
+    <table id="chart_table" class="table table-bordered" style="margin-top:50px;" >
+      <thead>
+        <tr>
+          <th></th>
+          <% @workshops.each do |workshop| %>
+              <th><%= workshop %></th> 
+          <% end %>  
+        </tr>      
+      </thead>
+      <tbody>
+        <tr>
+          <td>25岁以下</td>
+          <% n = 0 %>
+          <% @age_25_below_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "25岁以下", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+ 1%>
+          <% end %>
+        </tr>
+        <tr>
+          <td>25-30岁</td>
+          <% n = 0 %>
+          <% @age_25_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "25-30岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>30-35岁</td>
+          <% n = 0 %>
+          <% @age_30_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "30-35岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>35-40岁</td>
+          <% n = 0 %>
+          <% @age_35_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "35-40岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>40-45岁</td>
+          <% n = 0 %>
+          <% @age_40_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "35-40岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>45-50岁</td>
+          <% n = 0 %>
+          <% @age_45_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "45-50岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>50-55岁</td>
+          <% n = 0 %>
+          <% @age_50_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "50-55岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>55岁以上</td>
+          <% n = 0 %>
+          <% @age_55_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:age => "55-60岁", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
   <script>
