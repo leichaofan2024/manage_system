@@ -325,52 +325,71 @@ class EmployeesController < ApplicationController
     loop_hash_working_40_up = {}
     hash_working_40_up = {}
 
+    @working_5_below_bar = []
+    @working_5_bar = []
+    @working_10_bar = []
+    @working_15_bar = []
+    @working_20_bar = []
+    @working_25_bar = []
+    @working_30_bar = []
+    @working_35_bar = []
+    @working_40_up_bar = []
+
     @workshops.each do |i|
       emp = Employee.where(workshop: i).count
       a1 = Employee.where(workshop: i, working_years: 0...5).count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_working_5_below = {i => a}
       hash_working_5_below[i] = loop_hash_working_5_below[i]
+      @working_5_below_bar << a1
 
       b1 = Employee.where(workshop: i, working_years: 5...10).count
       b = (b1.to_f)/(emp.to_f)
       loop_hash_working_5 = {i => b}
       hash_working_5[i] = loop_hash_working_5[i]
+      @working_5_bar << b1
 
       c1 = Employee.where(workshop: i, working_years: 10...15).count
       c = (c1.to_f)/(emp.to_f)
       loop_hash_working_10 = {i => c}
       hash_working_10[i] = loop_hash_working_10[i]
+      @working_10_bar << c1
 
       d1 = Employee.where(workshop: i, working_years: 15...20).count
       d = (d1.to_f)/(emp.to_f)
       loop_hash_working_15 = {i => d}
       hash_working_15[i] = loop_hash_working_15[i]
+      @working_15_bar << d1
 
       e1 = Employee.where(workshop: i, working_years: 20...25).count
       e = (e1.to_f)/(emp.to_f)
       loop_hash_working_20 = {i => e}
       hash_working_20[i] = loop_hash_working_20[i]
+      @working_20_bar << e1
 
       f1 = Employee.where(workshop: i, working_years: 25...30).count
       f = (f1.to_f)/(emp.to_f)
       loop_hash_working_25 = {i => f}
       hash_working_25[i] = loop_hash_working_25[i]
+      @working_25_bar << f1
 
       g1 = Employee.where(workshop: i, working_years: 30...35).count
       g = (g1.to_f)/(emp.to_f)
       loop_hash_working_30 = {i => g}
       hash_working_30[i] = loop_hash_working_30[i]
+      @working_30_bar << g1
 
       h1 = Employee.where(workshop: i, working_years: 35...40).count
       h = (h1.to_f)/(emp.to_f)
       loop_hash_working_35 = {i => h}
       hash_working_35[i] = loop_hash_working_35[i]
+      @working_35_bar << h1
 
       j1 = Employee.where(workshop: i, working_years: 40..100).count
       j = (j1.to_f)/(emp.to_f)
       loop_hash_working_40_up = {i => j}
       hash_working_40_up[i] = loop_hash_working_40_up[i]
+      @working_40_up_bar << j1
 
       gon.bar_workshop = hash_working_5_below.keys
       gon.bar_working_5_below = hash_working_5_below.values

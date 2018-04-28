@@ -3,7 +3,54 @@
   <!-- 给饼图准备一个合适大小的dom  -->
   <div class="col-md-12" style="margin-top:10px">
   <div id="container5" class="col-md-6" style="height:400px"></div>
-  <div class="col-md-6" style="height:400px;background-color:white"></div>
+  <div class="col-md-6" style="height:400px;background-color:white">
+    <table class="table table-bordered" style="margin-top:40px;width:70%" >
+      <thead>
+        <tr>
+          <th style="color: blue; font-size:17px;">年龄段</th>
+          <td style="color: blue; font-size:17px;">人数</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=5年以下">
+          <th>5年以下</th>
+          <td><%= @working_years_5_below %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=5-10年">
+          <th>5-10年</th>
+          <td><%= @working_years_5 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=10-15年">
+          <th>10-15年</th>
+          <td><%= @working_years_10 %></td>
+        </tr> 
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=15-20年">
+          <th>15-20年</th>
+          <td><%= @working_years_15 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=20-25年">
+          <th>20-25年</th>
+          <td><%= @working_years_20 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=25-30年">
+          <th>25-30年</th>
+          <td><%= @working_years_25 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=30-35年">
+          <th>30-35年</th>
+          <td><%= @working_years_30 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=35-40年">
+          <th>35-40年</th>
+          <td><%= @working_years_35 %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?working_years=40年以上">
+          <th>40年以上</th>
+          <td><%= @working_years_40_up %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
@@ -97,7 +144,92 @@
   <!-- 工龄分析条形图-开始  -->
   <!-- 给条形图准备一个合适大小的dom  -->
   <div id="container6" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
-  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white;overflow: auto">
+    <table id="chart_table" class="table table-bordered" style="margin-top:50px;" >
+      <thead>
+        <tr>
+          <th></th>
+          <% @workshops.each do |workshop| %>
+              <th><%= workshop %></th> 
+          <% end %>  
+        </tr>      
+      </thead>
+      <tbody>
+        <tr>
+          <td>5年以下</td>
+          <% n = 0 %>
+          <% @working_5_below_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "5年以下", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+ 1%>
+          <% end %>
+        </tr>
+        <tr>
+          <td>5-10年</td>
+          <% n = 0 %>
+          <% @working_5_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "5-10年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>10-15年</td>
+          <% n = 0 %>
+          <% @working_10_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "10-15年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>15-20年</td>
+          <% n = 0 %>
+          <% @working_15_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "15-20年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>20-25年</td>
+          <% n = 0 %>
+          <% @working_20_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "20-25年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>25-30年</td>
+          <% n = 0 %>
+          <% @working_25_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "25-30年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>30-35年</td>
+          <% n = 0 %>
+          <% @working_30_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "30-35年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>35-40年</td>
+          <% n = 0 %>
+          <% @working_35_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "35-40年", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>40年以上</td>
+          <% n = 0 %>
+          <% @working_40_up_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:working_years => "40年以上", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
   <script>
