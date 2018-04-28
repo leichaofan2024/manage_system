@@ -71,12 +71,6 @@
           pie: {
             allowPointSelect: true,
             cursor: 'pointer',
-            // 设置点击饼图的事件
-            events: {
-              click: function (e) {
-                location.href = e.point.url
-              }
-            },
             dataLabels: {
               enabled: true,
               format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -251,18 +245,7 @@
           },
           // 设置条形图的点击事件
           series: {
-            stacking: 'normal',
-            point: {
-              events: {
-                click: function () {
-                  // 先将需要放入url的参数赋值给一个变量
-                  var workshop = this.category
-                  var age = this.series.name;
-                  // 将变量放入url中
-                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&age=' + age;
-                }
-              }
-            }
+            stacking: 'normal'
           }
         },
         series: [

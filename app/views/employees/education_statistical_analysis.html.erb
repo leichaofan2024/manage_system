@@ -80,19 +80,6 @@
             },
             // 设置是否显示图例
             showInLegend: true
-          },
-          //设置饼图的点击事件
-          series: {
-            point: {
-              events: {
-                click: function () {
-                  // 先将需要放入url的参数赋值给一个变量
-                  var education = this.name
-                  // 把此变量放入url中
-                  location.href = '/employees/statistical_analysis_data?education=' + education;
-                }
-              }
-            }
           }
         },
         // 饼图的数据来源
@@ -257,18 +244,7 @@
           },
           // 设置条形图的点击事件
           series: {
-            stacking: 'normal',
-            point: {
-              events: {
-                click: function () {
-                  // 先将需要放入url的参数赋值给一个变量
-                  var workshop = this.category
-                  var education = this.series.name;
-                  // 将变量放入url中
-                  location.href = '/employees/statistical_analysis_data?workshop=' + workshop + '&education=' + education;
-                }
-              }
-            }
+            stacking: 'normal'
           }
         },
         series: [
