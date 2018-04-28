@@ -3,7 +3,50 @@
   <!-- 给饼图准备一个合适大小的dom  -->
   <div class="col-md-12" style="margin-top:10px">
   <div id="container3" class="col-md-6" style="height:400px"></div>
-  <div class="col-md-6" style="height: 400px;background-color:white"></div>
+  <div class="col-md-6" style="height: 400px;background-color:white">
+    <table class="table table-bordered" style="margin-top:40px;width:70%" >
+      <thead>
+        <tr>
+          <th style="color: blue; font-size:17px;">文化程度</th>
+          <td style="color: blue; font-size:17px;">人数</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=小学">
+          <th>小学</th>
+          <td><%= @primary_school %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=初中">
+          <th>初中</th>
+          <td><%= @junior_high_school %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=高中">
+          <th>高中</th>
+          <td><%= @senior_high_school %></td>
+        </tr> 
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=技校">
+          <th>技校</th>
+          <td><%= @technical_school %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=中专">
+          <th>中专</th>
+          <td><%= @secondary_school %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学专科">
+          <th>大学专科</th>
+          <td><%= @university_specialties %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学本科">
+          <th>大学本科</th>
+          <td><%= @undergraduate %></td>
+        </tr>
+        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=研究生">
+          <th>研究生</th>
+          <td><%= @postgraduate %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
@@ -94,7 +137,84 @@
   <!-- 学历分析条形图-开始  -->
   <!-- 给条形图准备一个合适大小的dom  -->
   <div id="container4" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
-  <div class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div class="col-md-12" style="height:400px;margin-top:10px;margin-left:10px;background-color:white;overflow: auto"">
+    <table id="chart_table" class="table table-bordered" style="margin-top:50px;" >
+      <thead>
+        <tr>
+          <th></th>
+          <% @workshops.each do |workshop| %>
+              <th><%= workshop %></th> 
+          <% end %>  
+        </tr>      
+      </thead>
+      <tbody>
+        <tr>
+          <td>小学</td>
+          <% n = 0 %>
+          <% @primary_school_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "小学", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+ 1%>
+          <% end %>
+        </tr>
+        <tr>
+          <td>初中</td>
+          <% n = 0 %>
+          <% @junior_high_school_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "初中", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>高中</td>
+          <% n = 0 %>
+          <% @senior_high_school_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "高中", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>技校</td>
+          <% n = 0 %>
+          <% @technical_school_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "技校", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>中专</td>
+          <% n = 0 %>
+          <% @secondary_school_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "中专", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>大学专科</td>
+          <% n = 0 %>
+          <% @university_specialties_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学专科", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>大学本科</td>
+          <% n = 0 %>
+          <% @undergraduate_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学本科", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+        <tr>
+          <td>研究生</td>
+          <% n = 0 %>
+          <% @postgraduate_bar.each do |i| %>
+            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "研究生", workshop: @workshops[n]), style: "color: black" %></td>
+            <% n = n+1 %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
   <script>

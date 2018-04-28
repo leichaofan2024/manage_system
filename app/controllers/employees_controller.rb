@@ -214,47 +214,64 @@ class EmployeesController < ApplicationController
     hash_undergraduate = {}
     loop_hash_postgraduate = {}
     hash_postgraduate = {}
+
+    @junior_high_school_bar = []
+    @primary_school_bar = []
+    @senior_high_school_bar = []
+    @technical_school_bar = []
+    @secondary_school_bar = []
+    @university_specialties_bar = []
+    @undergraduate_bar = []
+    @postgraduate_bar = []
     @workshops.each do |i|
       emp = Employee.where(workshop: i).count     
       a1 = Employee.where(workshop: i, education_background: "初中").count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_junior_high_school = {i => a}
       hash_junior_high_school[i] = loop_hash_junior_high_school[i]
+      @junior_high_school_bar << a1
 
       b1 = Employee.where(workshop: i, education_background: "小学").count
       b = (b1.to_f)/(emp.to_f)
       loop_hash_primary_school = {i => b}
       hash_primary_school[i] = loop_hash_primary_school[i]
+      @primary_school_bar << b1
 
       c1 = Employee.where(workshop: i, education_background: "高中").count
       c = (c1.to_f)/(emp.to_f)
       loop_hash_senior_high_school = {i => c}
       hash_senior_high_school[i] = loop_hash_senior_high_school[i]
+      @senior_high_school_bar << c1
 
       d1 = Employee.where(workshop: i, education_background: "技校").count
       d = (d1.to_f)/(emp.to_f)
       loop_hash_technical_school = {i => d}
       hash_technical_school[i] = loop_hash_technical_school[i]
+      @technical_school_bar << d1
 
       e1 = Employee.where(workshop: i, education_background: "中专").count
       e = (e1.to_f)/(emp.to_f)
       loop_hash_secondary_school = {i => e}
       hash_secondary_school[i] = loop_hash_secondary_school[i]
+      @secondary_school_bar << e1
 
       f1 = Employee.where(workshop: i, education_background: "大学专科").count
       f = (f1.to_f)/(emp.to_f)
       loop_hash_university_specialties = {i => f}
       hash_university_specialties[i] = loop_hash_university_specialties[i]
+      @university_specialties_bar << f1
 
       g1 = Employee.where(workshop: i, education_background: "大学本科").count
       g = (g1.to_f)/(emp.to_f)
       loop_hash_undergraduate = {i => g}
       hash_undergraduate[i] = loop_hash_undergraduate[i]
+      @undergraduate_bar << g1
 
       h1 = Employee.where(workshop: i, education_background: "研究生").count
       h = (h1.to_f)/(emp.to_f)
       loop_hash_postgraduate = {i => h}
       hash_postgraduate[i] = loop_hash_postgraduate[i]
+      @postgraduate_bar << h1
     end
     gon.bar_workshop = hash_junior_high_school.keys
     gon.bar_junior_high_school = hash_junior_high_school.values
