@@ -40,6 +40,15 @@ class EmployeesController < ApplicationController
     render action: "index"
   end
 
+  def working_years_filter
+    @employees = Employee.where(working_years: params[:working_years_start]..params[:working_years_end])
+    render action: "index"
+  end
+
+  def rali_years_filter
+    @employees = Employee.where(rali_years: params[:rali_years_start]..params[:rali_years_end])
+    render action: "index"
+  end
 
   def update_employee_info
     @employees = Employee.all
