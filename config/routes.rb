@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get  :search
+      get :age_filter
       post :update_employee_info
       get  :organization_structure
       get :age_statistical_analysis

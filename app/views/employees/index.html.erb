@@ -7,12 +7,19 @@
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
+        <% @work_types = Employee.pluck("work_type").uniq %>
         <% @work_types.each do |work_type| %>
           <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
         <% end %>
-      </ul>
+      </ul> 
   </li>
   <!--- 按工种分类筛选-结束  -->
+  <%= form_tag age_filter_employees_path, method: 'get' do %>
+    <%= label_tag :请输入年龄段：%>
+    <%= text_field_tag :age_start %> ~
+    <%= text_field_tag :age_end %>
+    <%= submit_tag :筛选 %>
+  <% end %> 
   <!--- 搜索-开始  -->
   <%= form_tag search_employees_path, method: 'get' do %>
     <%= label_tag :查询%>

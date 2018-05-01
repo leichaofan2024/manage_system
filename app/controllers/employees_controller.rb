@@ -1,7 +1,6 @@
 class EmployeesController < ApplicationController
   layout 'home'
   def index
-    @work_types = Employee.pluck("work_type").uniq
     if params[:work_type].present?
       @employees = Employee.where(work_type: params[:work_type])
     else
@@ -13,7 +12,7 @@ class EmployeesController < ApplicationController
       format.html
       format.csv { send_data @employees.to_csv }
       format.xls
-    end
+    end 
   end
 
   def new
@@ -33,6 +32,11 @@ class EmployeesController < ApplicationController
 
   def search
     @employees = Employee.search(params[:q]).page(params[:page]).records
+    render action: "index"
+  end
+
+  def age_filter
+    @employees = Employee.where(age: params[:age_start]..params[:age_end])
     render action: "index"
   end
 
