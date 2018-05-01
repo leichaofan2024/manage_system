@@ -814,4 +814,182 @@ h4 {
     box-sizing: border-box;
 }
 
+
+//基本信息及其他信息
+.main-1XSRW_0 {
+    width: 80%;
+    margin: 0 auto;
+    background: #fff;
+}
+
+.tructure-2zHdB_0 {
+    margin: 0 auto;
+}
+
+.head-3fDND_0 {
+    position: relative;
+    font-size: 16px;
+    line-height: 30px;
+    max-width: 1100px;
+    margin: 32px auto;
+}
+
+.head-3fDND_0::before {
+    position: absolute;
+    display: block;
+    content: '';
+    width: 100%;
+    top: 50%;
+    border-top: 1px solid #ebebeb;
+}
+
+.head-3fDND_0::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+
+.info-2zzSp_0 {
+    float: left;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    padding-right: 20px;
+    color: #1c2438;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.info-2zzSp_0::before {
+    content: '';
+    margin-right: 8px;
+    padding-left: 3px;
+    width: 1px;
+    top: 2px;
+    height: 16px;
+    background: #269EFF;
+    font-size: 12px;
+}
+
+
+.right-Qtwf2_0 {
+    float: right;
+    background: #fff;
+}
+
+.edit-2kYy__0 {
+    position: relative;
+    font-size: 14px;
+    background-color: #fff;
+    z-index: 2;
+    color: #269EFF;
+    cursor: pointer;
+}
+
+.icon-nUnTL_0 {
+    position: relative;
+    z-index: 1;
+    top: 2px;
+    cursor: pointer;
+    padding-left: 20px;
+    margin-right: 5px;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.ivu-icon {
+    display: inline-block;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+//具体信息内容
+.ivu-row-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ivu-col-span-12 {
+  display: block;
+  width: 50%;
+}
+
+.ivu-col {
+  position: relative;
+}
+
+.customField-2KxGL_0 {
+    position: relative;
+}
+
+.formGroup-313Le_0 {
+    margin-bottom: 8px;
+}
+
+.formGroup-13Y4w_0 {
+    margin-bottom: 8px;
+}
+
+.controlLabel-3ZJIZ_0 {
+    width: 150px;
+    display: inline-block;
+    text-align: right;
+    vertical-align: middle;
+    position: relative;
+    color: #80848f;
+    font-size: 14px;
+    line-height: 32px;
+    padding: 0 24px 0 0;
+    box-sizing: border-box;
+}
+
+.controlLabel-sXzD__0 {
+    width: 150px;
+    display: inline-block;
+    text-align: right;
+    vertical-align: middle;
+    position: relative;
+    color: #80848f;
+    font-size: 14px;
+    line-height: 32px;
+    padding: 0 24px 0 0;
+    box-sizing: border-box;
+}
+
+.ellipsis-15d1E_0 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.controlInput-28_ow_0 {
+    display: inline-block;
+    width: 300px;
+    line-height: 32px;
+    color: #495060;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.ellipsis-1pRQ__0 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.controlInput-2NNa3_0 {
+    display: inline-block;
+    width: 300px;
+    line-height: 32px;
+    color: #495060;
+    font-size: 14px;
+    vertical-align: top;
+}
 /*--------------end---------------*/
