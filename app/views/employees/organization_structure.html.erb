@@ -8,24 +8,19 @@
     <%= render 'employee_navbar'%>
     <div class="col-md-12">
     <div class="col-md-2" id="menu">
-      <h3>组织架构</h3>
+      <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
       <ul>
+        <% @workshops.each do |workshop| %>
         <li>
-          <em></em><a href='/employees/organization_structure?duan=北京供电段'>北京供电段</a>
+          <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
           <ul>
-            <% @workshops.each do |workshop| %>
-              <li>
-                <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
-                <ul>
-                  <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
-                  <% @groups.each do |group| %>
-                    <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
-                  <% end %>
-                </ul>
-              </li>
+            <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
+            <% @groups.each do |group| %>
+              <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
             <% end %>
           </ul>
         </li>
+        <% end %>
       </ul>
     </div>
 
