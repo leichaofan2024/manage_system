@@ -14,24 +14,30 @@
       </ul> 
   </li>
   <!--- 按工种分类筛选-结束  -->
+  <!--- 按年龄段筛选-开始  -->
   <%= form_tag age_filter_employees_path, method: 'get' do %>
     <%= label_tag :请输入年龄段：%>
     <%= text_field_tag :age_start %> ~
     <%= text_field_tag :age_end %>
     <%= submit_tag :筛选 %>
   <% end %>
+  <!--- 按年龄段筛选-结束  -->
+  <!--- 按工龄段筛选-开始  -->
   <%= form_tag working_years_filter_employees_path, method: 'get' do %>
     <%= label_tag :请输入工龄段：%>
     <%= text_field_tag :working_years_start %> ~
     <%= text_field_tag :working_years_end %>
     <%= submit_tag :筛选 %>
   <% end %>  
+  <!--- 按工龄段筛选-结束  -->
+  <!--- 按路龄段筛选-开始  -->
   <%= form_tag rali_years_filter_employees_path, method: 'get' do %>
     <%= label_tag :请输入路龄段：%>
     <%= text_field_tag :rali_years_start %> ~
     <%= text_field_tag :rali_years_end %>
     <%= submit_tag :筛选 %>
   <% end %> 
+  <!--- 按路龄段筛选-结束  -->
   <!--- 搜索-开始  -->
   <%= form_tag search_employees_path, method: 'get' do %>
     <%= label_tag :查询%>

@@ -1,12 +1,13 @@
 class EmployeesController < ApplicationController
   layout 'home'
   def index
+    #按工种筛选和默认显示的情况
     if params[:work_type].present?
       @employees = Employee.where(work_type: params[:work_type])
     else
       @employees = Employee.all
     end
-    
+    #下载表格配置
     @export_employees = Employee.order("id ASC")
     respond_to do |format|
       format.html
@@ -25,11 +26,13 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
   end
 
+ #上传表格
   def import_table
     Employee.import_table(params[:file])
     redirect_to employees_path
   end
 
+  #搜索和筛选--开始
   def search
     @employees = Employee.search(params[:q]).page(params[:page]).records
     render action: "index"
@@ -49,7 +52,9 @@ class EmployeesController < ApplicationController
     @employees = Employee.where(rali_years: params[:rali_years_start]..params[:rali_years_end])
     render action: "index"
   end
+  #搜索和筛选--结束
 
+  #一键更新
   def update_employee_info
     @employees = Employee.all
     @employees.each do |employee|
@@ -64,6 +69,7 @@ class EmployeesController < ApplicationController
     end
   end
 
+  
   def import
     Employee.import(params[:file])
     redirect_to employees_path
