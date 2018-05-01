@@ -613,3 +613,205 @@ li.active > a:hover{
 }
 
 /*-------------end----------------*/
+
+
+/*-----------个人详情页面-----------*/
+.wraper-3HSto_0 {
+    width: 80%;
+    margin: 48px auto 0;
+    background: #fff;
+}
+
+.wraper-k3Z8K_0 {
+    position: relative;
+    width: 100%;
+    min-height: 216px;
+    padding: 52px 32px 48px 207px;
+    border-radius: 4px;
+    border: 1px solid #f0f4f8;
+    box-shadow: 0 4px 15px rgba(73, 80, 96, 0.1);
+}
+
+//返回按钮
+.backMain-19P3__0 {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+}
+
+
+.ivu-btn-cancel {
+    background-color: #fff;
+    color: #495060;
+}
+
+.ivu-btn, .ivu-btn:hover {
+    border-color: #269EFF;
+    color: #269EFF;
+}
+
+.ivu-btn {
+    background-color: #fff;
+}
+
+
+.ivu-btn-small {
+    padding: 2px 7px;
+    font-size: 12px;
+    border-radius: 3px;
+    border-color: #e1e6eb;
+}
+
+.ivu-btn, .ivu-btn:active, .ivu-btn:focus {
+    outline: 0;
+}
+
+.ivu-btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    // border: 1px solid transparent;  //没有边框效果
+    white-space: nowrap;
+    line-height: 1.5;
+    user-select: none;
+    transition: color .2s linear,background-color .2s linear,border .2s linear;
+}
+
+
+button, select {
+    text-transform: none;
+}
+
+button, input{
+    overflow: visible;
+}
+
+button {
+  align-items: flex-start;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  font: 400 11px system-ui;
+}
+
+button {
+    -webkit-writing-mode: horizontal-tb !important;
+}
+
+span {
+    vertical-align: middle;
+    color: black;
+}
+
+.ivu-btn>.ivu-icon+span:hover {
+  color: #269EFF;
+}
+
+//头像
+.wraper-3Rhbr_0 {
+    position: absolute;
+    left: 55px;
+    top: 48px;
+}
+
+.wraper-3Rhbr_0 .detail-2tgTZ_0 {
+    position: relative;
+    line-height: 120px;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #bad9ff;
+    overflow: hidden;
+}
+
+.name-36EkS_0 {
+    color: #fff;
+    font-size: 36px;
+}
+
+//名字
+.des-1Gi_M_0 {
+    display: inline-block;
+    margin: 5px 8px 12px 0;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+h4 {
+    -webkit-margin-before: 1.33em;
+    -webkit-margin-after: 1.33em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+//部门信息
+.depJop-2kBwS_0 {
+    margin-top: 5px;
+    margin-bottom: 12px;
+    color: #495060;
+    font-size: 14px;
+}
+
+.depJop-2kBwS_0 > p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+//个人基本信息
+.tag-3NYmT_0 {
+    position: relative;
+    display: inline-block;
+    height: 20px;
+    margin-top: 5px;
+    margin-right: 16px;
+    padding: 0 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #80848f;
+    border: 1px solid #e1e6eb;
+    border-right-color: transparent;
+}
+
+.tag-3NYmT_0::before {
+    width: 15px;
+    height: 15px;
+    right: -8px;
+    top: 1px;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    content: '';
+    display: inline-block;
+    border: 1px solid #e1e6eb;
+}
+
+.tag-3NYmT_0::after {
+    width: 5px;
+    height: 5px;
+    right: -5px;
+    top: 7px;
+    border-radius: 50%;
+    position: absolute;
+    content: '';
+    display: inline-block;
+    border: 1px solid #e1e6eb;
+}
+
+:after, :before {
+    box-sizing: border-box;
+}
+
+/*--------------end---------------*/

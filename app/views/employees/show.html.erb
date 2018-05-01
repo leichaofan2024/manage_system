@@ -1,4 +1,52 @@
 <%= render "employee_navbar"%>
+
+<div class="detail-3D1aE_0">
+  <div class="wraper-3HSto_0">
+    <div class="wraper-k3Z8K_0">
+      <!--按钮-->
+      <div class="backMain-19P3__0">
+        <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
+          <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
+          <span>返回</span>
+      </div>
+
+      <!--头像-->
+      <div class="wraper-3Rhbr_0">
+        <div class="detail-2tgTZ_0">
+          <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
+        </div>
+      </div>
+
+      <!--姓名-->
+      <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
+
+      <!--部门信息-->
+      <p class="depJop-2kBwS_0"><%= @employee.workshop%></p>
+
+      <!--基本信息-->
+      <p>
+        <span class="tag-3NYmT_0"><%= @employee.sex%></span>
+        <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.year%>年<%= @employee.birth_date.to_datetime.month%>月<%= @employee.birth_date.to_datetime.day%>日</span>
+        <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
+
+      </p>
+
+    </div>
+  </div>
+
+
+
+
+  <!--下边-->
+  <div class="main-1XSRW_0">
+
+  </div>
+</div>
+
+
+
+
+
 <p><%= @employee.sal_number %></p>
 <p><%= @employee.job_number %></p>
 <p><%= @employee.record_number %></p>
