@@ -154,7 +154,9 @@ ul {
   background-color: #fff;
   border-color: #fff;
   z-index: 100;
-  margin-left:262px;
+  margin-left: 262px;
+  display: flex;
+  position: fixed;
   // box-shadow: 0 2px 5px -30px rgba(0,0,0,.56), 0 4px 25px 0 rgba(0,0,0,.12), 0 0px 0px -1px rgba(0,0,0,.2);
 }
 
