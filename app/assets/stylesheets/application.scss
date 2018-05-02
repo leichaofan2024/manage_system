@@ -629,20 +629,24 @@ li.active > a:hover{
 
 
 /*-----------个人详情页面-----------*/
+.detail-3D1aE_0 {
+    padding-bottom: 96px;
+}
+
 .wraper-3HSto_0 {
-    width: 80%;
+    width: 1000px;
     margin: 48px auto 0;
     background: #fff;
 }
 
 .wraper-k3Z8K_0 {
-    position: relative;
-    width: 100%;
-    min-height: 216px;
-    padding: 52px 32px 48px 207px;
-    border-radius: 4px;
-    border: 1px solid #f0f4f8;
-    box-shadow: 0 4px 15px rgba(73, 80, 96, 0.1);
+  position: relative;
+  width: 100%;
+  min-height: 216px;
+  padding: 52px 32px 48px 207px;
+  border-radius: 4px;
+  border: 1px solid #f0f4f8;
+  box-shadow: 0 4px 15px rgba(73, 80, 96, 0.1);
 }
 
 //返回按钮
@@ -830,7 +834,7 @@ h4 {
 
 //基本信息及其他信息
 .main-1XSRW_0 {
-    width: 80%;
+    width: 1000px;
     margin: 0 auto;
     background: #fff;
 }
@@ -876,6 +880,7 @@ h4 {
 .info-2zzSp_0::before {
     content: '';
     margin-right: 8px;
+    margin-left: 12px;
     padding-left: 3px;
     width: 1px;
     top: 2px;
@@ -897,6 +902,7 @@ h4 {
     z-index: 2;
     color: #269EFF;
     cursor: pointer;
+    margin-right: 12px;
 }
 
 .icon-nUnTL_0 {
