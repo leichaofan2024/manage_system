@@ -7,9 +7,7 @@ Rails.application.routes.draw do
       post :import_table
       #搜索和筛选
       get  :search
-      get :age_filter
-      get :working_years_filter
-      get :rali_years_filter
+      get :filter
       #一键更新路径
       post :update_employee_info
       #组织架构

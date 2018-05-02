@@ -38,18 +38,15 @@ class EmployeesController < ApplicationController
     render action: "index"
   end
 
-  def age_filter
-    @employees = Employee.where(age: params[:age_start]..params[:age_end])
-    render action: "index"
-  end
-
-  def working_years_filter
-    @employees = Employee.where(working_years: params[:working_years_start]..params[:working_years_end])
-    render action: "index"
-  end
-
-  def rali_years_filter
-    @employees = Employee.where(rali_years: params[:rali_years_start]..params[:rali_years_end])
+  def filter
+    case params[:filter_type]
+    when "年龄"
+      @employees = Employee.where(age: params[:age_start]..params[:age_end])
+    when "工龄"
+      @employees = Employee.where(working_years: params[:age_start]..params[:age_end])
+    when "路龄"
+      @employees = Employee.where(rali_years: params[:age_start]..params[:age_end])
+    end
     render action: "index"
   end
   #搜索和筛选--结束
