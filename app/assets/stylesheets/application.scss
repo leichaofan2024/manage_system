@@ -373,10 +373,19 @@ ul {
 
 
 /*-------------------内容主体----------------------*/
+.main_content.has-content {
+  margin-top: 70px;
+}
+
+.main_content.fold-main {
+  transition: margin 0.5s;
+  margin-left: 280px;
+}
+
 .main_content {
- margin-left: 280px;
- margin-right: 30px;
- margin-top: 60px;
+ flex: 1 0 auto;
+ -webkit-box-flex: 1;
+ position: relative;
  .links {
    margin: 2em 0;
  }
@@ -385,7 +394,7 @@ ul {
 hr {
   border-color: rgb(155,213,254);
   width: 90%;
-  margin-top: -20px;
+  margin-top: -15px;
 }
 
 .bonus_button{
