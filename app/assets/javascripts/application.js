@@ -12,8 +12,10 @@
 //
 //= require rails-ujs
 //= require jquery
+//= requie jquery_ujs
+//= require bootstrap/dropdown
 //= require jquery-ui/widgets/sortable
-//= require bootstrap
+//= require bootstrap-sprockets
 //= require_tree .
 
 

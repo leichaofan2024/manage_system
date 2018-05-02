@@ -1,106 +1,110 @@
-<%= render 'employee_navbar'%>
-<div class="col-md-12">
-  <div class="col-md-2" id="menu">
-    <h3>组织架构</h3>
-    <ul>
-      <li>
-        <em></em><a href='/employees/organization_structure?duan=北京供电段'>北京供电段</a>
-        <ul>
-          <% @workshops.each do |workshop| %>
-            <li>
-              <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
-              <ul>
-                <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
-                <% @groups.each do |group| %>
-                  <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-        </ul>
-      </li>
-    </ul>
-  </div>
 
-  <div class="col-md-10" style="overflow: auto;">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>工资号</th>
-          <th>工号</th>
-          <th>档案号</th>
-          <th>车间</th>
-          <th>班组</th>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>年龄</th>
-          <th>文化程度</th>
-          <th>民族</th>
-          <th>籍贯</th>
-          <th>政治面目</th>
-          <th>党团时间</th>
-          <th>工作时间</th>
-          <th>入路时间</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @employees.each do |employee| %>
-          <tr>
-            <td><%= employee.sal_number %></td>
-            <td><%= employee.job_number %></td>
-            <td><%= employee.record_number %></td>
-            <td><%= employee.workshop %></td>
-            <td><%= employee.group %></td>
-            <td><%= employee.name %></td>
-            <td><%= employee.sex %></td>
-            <td><%= employee.age %></td>
-            <td><%= employee.education_background %></td>
-            <td><%= employee.nation %></td>
-            <td><%= employee.native_place %></td>
-            <td><%= employee.political_role %></td>
-            <td><%= employee.political_party_date %></td>
-            <td><%= employee.working_time %></td>
-            <td><%= employee.railway_time %></td>
-          </tr>
+<!DOCTYPE html>
+  <html style="height: 100%">
+    <head>
+      <meta charset="utf-8" />
+    </head>
+
+  <body style="height: 100%">
+    <%= render 'employee_navbar'%>
+    <div class="col-md-12" style="height: 100%">
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
+      <ul>
+        <% @workshops.each do |workshop| %>
+        <li>
+          <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
+          <ul>
+            <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
+            <% @groups.each do |group| %>
+              <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
+            <% end %>
+          </ul>
+        </li>
         <% end %>
-     </tbody>
-   </table>
-  </div>
-</div>
+      </ul>
+    </div>
 
-<script type="text/javascript">
-  (function(e) {
-    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
-      em.onclick = function(){ //onmouseover
-        var ul = this.nextSibling;
-        if(!ul){
-          return false;
-        }
-        ul = ul.nextSibling;
-        if(!ul) {
-          return false;
-        }
+    <div class="col-md-10" style="overflow: auto;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>工资号</th>
+            <th>工号</th>
+            <th>档案号</th>
+            <th>车间</th>
+            <th>班组</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>文化程度</th>
+            <th>民族</th>
+            <th>籍贯</th>
+            <th>工作时间</th>
+            <th>工龄</th>
+            <th>入路时间</th>
+            <th>路龄</th>
+          </tr>
+        </thead>
+        <tbody>
 
-        if(e.tag != 'a') {
-          ul = ul.nextSibling;
-          if(!ul){
-            return false;
-          }
-        } //a 标签控制 隐藏或删除该行
+          <% @employees.each do |employee| %>
+            <tr>
+              <td><%= employee.sal_number %></td>
+              <td><%= employee.job_number %></td>
+              <td><%= employee.record_number %></td>
+              <td><%= employee.workshop %></td>
+              <td><%= employee.group %></td>
+              <td><%= employee.name %></td>
+              <td><%= employee.sex %></td>
+              <td><%= employee.age %></td>
+              <td><%= employee.education_background %></td>
+              <td><%= employee.nation %></td>
+              <td><%= employee.native_place %></td>
+              <td><%= employee.working_time %></td>
+              <td><%= employee.working_years %></td>
+              <td><%= employee.railway_time %></td>
+              <td><%= employee.rali_years %></td>
+            </tr>
+          <% end %>
+       </tbody>
+  </table>
+    </div>
+    </div>
 
-        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
-          if(li.tagName=="LI"){
-            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
-              switch($ul.tagName){
-                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
-                break;
-                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
-                break;
+    <script type="text/javascript">
+      (function(e) {
+        for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+          em.onclick = function(){ //onmouseover
+            var ul = this.nextSibling;
+            if(!ul){
+              return false;
+            }
+            ul = ul.nextSibling;
+            if(!ul) {
+              return false;
+            }
+            if(e.tag != 'a') {
+              ul = ul.nextSibling;
+              if(!ul){
+                return false;
+              }
+            } //a 标签控制 隐藏或删除该行
+            for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+              if(li.tagName=="LI"){
+                for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+                  switch($ul.tagName){
+                    case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                    break;
+                    case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                    break;
+                  }
+                }
               }
             }
           }
         }
-      }
-    }
-  })({id:'menu',tag:'em'});
-</script>
+      })({id:'menu',tag:'em'});
+    </script>
+  </body>
+</html>
