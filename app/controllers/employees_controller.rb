@@ -17,6 +17,9 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
   end
 
+  def update
+  end
+
   def show
     @employee = Employee.find(params[:id])
   end
@@ -570,5 +573,6 @@ class EmployeesController < ApplicationController
       @employees = Employee.all
     end
   end
+
 
 end

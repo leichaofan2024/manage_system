@@ -1111,62 +1111,6 @@ h4 {
 }
 
 
-//simpleform  的样式 。。。。。。。。。。。
-// .form-group {
-//   margin-bottom: 32px;
-//   vertical-align: top;
-//   zoom: 1;
-// }
-//
-// .simple_form.control-label{
-//     padding: 10px 24px 10px 0;
-// }
-//
-// .simple_form .control-label{
-//     text-align: right;
-//     vertical-align: middle;
-//     float: left;
-//     font-size: 12px;
-//     color: #495060;
-//     line-height: 1;
-//     box-sizing: border-box;
-// }
-//
-// .form-group:before {
-//     content: "";
-//     display: table;
-// }
-//
-//
-// .form-group:after {
-//     clear: both;
-//     visibility: hidden;
-//     font-size: 0;
-//     height: 0;
-//     content: "";
-//     display: table;
-// }
-//
-// .form-control {
-//     display: inline-block;
-//     position: relative;
-//     vertical-align: middle;
-//     width: 143px;
-// }
-//
-
-
-
-// label .control-label{
-//   text-align: right;
-//   vertical-align: middle;
-//   float: left;
-//   font-size: 12px;
-//   color: #495060;
-//   line-height: 1;
-//   box-sizing: border-box;
-// }
-
 input {
   display: inline-block;
   width: 300px;
@@ -1183,4 +1127,9 @@ input {
   cursor: text;
   transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
 }
+
+.center-uRe1b_0 {
+    text-align: center;
+}
+
 /*-------------end--------------*/
