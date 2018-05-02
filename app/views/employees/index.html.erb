@@ -2,7 +2,7 @@
 <div class="col-md-12">
   <!--- 按工种分类筛选-开始  -->
   <li class="dropdown">
-      <a class="js-selected-navigation-item HeaderNavlink px-2 dropdown-toggle" data-toggle="dropdown" style="margin-left: 80px; href="/" ">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="/" >
         按职务筛选
         <b class="caret"></b>
       </a>
@@ -18,8 +18,8 @@
   <%= form_tag filter_employees_path, method: 'get' do %>
     <%= label_tag :请选择筛选类别，并输入时间段：%>
     <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择", :required => "true"})%>
-    <%= text_field_tag :age_start %> ~
-    <%= text_field_tag :age_end %>
+    <%= text_field_tag :start_time %> ~
+    <%= text_field_tag :end_time %>
     <%= submit_tag :筛选 %>
   <% end %>
   <!--- 筛选-结束  -->

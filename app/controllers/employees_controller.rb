@@ -41,11 +41,11 @@ class EmployeesController < ApplicationController
   def filter
     case params[:filter_type]
     when "年龄"
-      @employees = Employee.where(age: params[:age_start]..params[:age_end])
+      @employees = Employee.where(age: params[:start_time]..params[:end_time])
     when "工龄"
-      @employees = Employee.where(working_years: params[:age_start]..params[:age_end])
+      @employees = Employee.where(working_years: params[:start_time]..params[:end_time])
     when "路龄"
-      @employees = Employee.where(rali_years: params[:age_start]..params[:age_end])
+      @employees = Employee.where(rali_years: params[:start_time]..params[:end_time])
     end
     render action: "index"
   end
