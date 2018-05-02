@@ -53,6 +53,9 @@
   <script>
     $(function () {
       var chart3 = $('#container3').highcharts({
+        credits:{
+          enabled: false
+        },
         chart: {
           plotBackgroundColor: null,
           plotBorderWidth: null,
@@ -123,7 +126,7 @@
 
   <!-- 学历分析条形图-开始  -->
   <!-- 给条形图准备一个合适大小的dom  -->
-  <div id="container4" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white"></div>
+  <div id="container4" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white;padding-left: -15px"></div>
   <div class="col-md-12" style="height:400px;margin-top:10px;margin-left:10px;background-color:white;overflow: auto"">
     <table id="chart_table" class="table table-bordered" style="margin-top:50px;" >
       <thead>
@@ -207,6 +210,9 @@
   <script>
     var chart4 = $(function () {
       $('#container4').highcharts({
+        credits:{
+          enabled: false
+        },
         chart: {
           type: 'bar'
         },
