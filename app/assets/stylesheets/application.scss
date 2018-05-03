@@ -1142,6 +1142,25 @@ input {
 /*----------------end---------------*/
 
 /*-------------年龄分析页面----------*/
+.dashboard-toolbar {
+    position: relative;
+    z-index: 10;
+    padding: 20px 23px 10px;
+}
+
+.dashboard-toolbar .dashboard-name {
+    color: #475669;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 36px;
+    padding: 0 6px;
+    outline: 0;
+    float: left;
+    max-width: 300px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 .dashboard-name {
     color: #475669;
     font-size: 20px;
@@ -1149,22 +1168,63 @@ input {
     white-space: nowrap;
 }
 
-.bd {
+
+
+
+.sa-main>div:nth-child(2) {
+    height: 100%;
+}
+
+.dashboard-toolbar .dashboard-name+.icon-edit {
+    line-height: 38px;
+}
+
+.dashboard-toolbar .icon-edit {
+    color: #99A9BF;
+    cursor: pointer;
+}
+
+.dashboard-toolbar::after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#dashboard .bd {
     padding: 0 10px;
     background-color: #F7F9FA;
 }
 
-//
-// [data-size=normal] {
-//     float: left;
-//     position: relative;
-//     min-height: 1px;
-//     padding-left: 10px;
-//     padding-right: 10px;
-//     height: 364px;
-// }
 
+.widget-container {
+    padding: 10px;
+}
 
+[data-size=normal] {
+    float: left;
+    width: 50%;
+    position: relative;
+    min-height: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 364px;
+}
+
+.widget-container .widget-content-container {
+    background: #FFF;
+    box-shadow: 0 2px 11px 0 rgba(190,202,218,.17);
+    border: 2px #FFF solid;
+    border-radius: 3px;
+}
+
+.widget-container .widget-content-container:hover {
+    background: #FFF;
+    box-shadow: 0 2px 11px 0 rgba(190,202,218,.17);
+    border: 2px #269EFF solid;
+    border-radius: 3px;
+}
 
 .widget-container .mark-contend {
     display: none;
@@ -1177,5 +1237,46 @@ input {
     padding: 10px;
     background: #E3EAF1;
     background-clip: content-box;
+}
+
+
+.widget-container .widget-content-container .widget-topbar {
+    width: 100%;
+}
+
+.widget-container .widget-content-container .widget-title {
+    max-width: calc(100% - 80px);
+}
+
+.widget-container .widget-content-container .widget-title div.title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #5F6E82;
+    font-weight: 400;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+.widget-container .widget-content-container .widget-title .range {
+    font-size: 12px;
+    color: #8492A6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 10px;
+}
+
+// .widget-container .widget-content-container .widget-topbar>div {
+//     display: inline-block;
+// }
+
+.pull-right {
+    float: right!important;
+}
+
+.widget-container .customer-menu {
+    display: inline-block;
 }
 /*---------------end--------------*/
