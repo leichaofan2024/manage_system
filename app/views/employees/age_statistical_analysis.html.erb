@@ -103,7 +103,7 @@
       </div>
 
 
-      <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px;">
+      <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px; width:100%;">
         <div class="widget-content-container">
           <div class="mark-contend"></div>
              <div class="widget-topbar" style="cursor: auto;">
@@ -129,82 +129,8 @@
 
 
 
-  </div>
 
-  <!-- 引入highcharts库  -->
-  <script src="/assets/javascripts/highcharts.js"></script>
-  <script>
-    $(function () {
-      var chart1 = $('#container1').highcharts({
-        credits:{
-          enabled: false
-        },
-        chart: {
-          plotBackgroundColor: null,
-          plotBorderWidth: null,
-          plotShadow: false,
-          type: 'pie'
-        },
-        title: {
-          text: ''
-        },
-        // 数据提示框设置
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              enabled: true,
-              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-              style: {
-                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-              }
-            },
-            // 设置是否显示图例
-            showInLegend: true
-          }
-        },
-        // 饼图的数据来源
-        series: [
-          {
-            colorByPoint: true,
-            // 设置饼图各个扇区的数据，注意需要数组类型的数据
-            data: [
-              {
-                name: '56岁以上',
-                y: gon.fifty_six_up
-              },{
-                name: '51-55岁',
-                y: gon.fifty_one
-              }, {
-                name: '46-50岁',
-                y: gon.forty_six
-              }, {
-                name: '41-45岁',
-                y: gon.forty_one
-              }, {
-                name: '26-30岁',
-                y: gon.twenty_six
-              }, {
-                name: '31-35岁',
-                y: gon.thirty_one
-              }, {
-                name: '36-40岁',
-                y: gon.thirty_six
-              }, {
-                name: '25岁以下',
-                y: gon.twenty_five_below
-              }
-            ]
-          }
-        ]
-      });
-    });
-  </script>
+
   <!-- 年龄分析饼图-结束  -->
 
   <!-- 年龄分析条形图-开始  -->
@@ -287,90 +213,166 @@
           <% end %>
         </tr>
       </tbody>
-    </table>
+     </table>
+    </div>
+
+   </div>
   </div>
-  <!-- 引入highcharts库  -->
-  <script src="/assets/javascripts/highcharts.js"></script>
-  <script>
-    var chart2 = $(function () {
-      $('#container2').highcharts({
-        credits:{
-          enabled: false
+</div>
+
+
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  $(function () {
+    var chart1 = $('#container1').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: ''
+      },
+      // 数据提示框设置
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          },
+          // 设置是否显示图例
+          showInLegend: true
+        }
+      },
+      // 饼图的数据来源
+      series: [
+        {
+          colorByPoint: true,
+          // 设置饼图各个扇区的数据，注意需要数组类型的数据
+          data: [
+            {
+              name: '56岁以上',
+              y: gon.fifty_six_up
+            },{
+              name: '51-55岁',
+              y: gon.fifty_one
+            }, {
+              name: '46-50岁',
+              y: gon.forty_six
+            }, {
+              name: '41-45岁',
+              y: gon.forty_one
+            }, {
+              name: '26-30岁',
+              y: gon.twenty_six
+            }, {
+              name: '31-35岁',
+              y: gon.thirty_one
+            }, {
+              name: '36-40岁',
+              y: gon.thirty_six
+            }, {
+              name: '25岁以下',
+              y: gon.twenty_five_below
+            }
+          ]
+        }
+      ]
+    });
+  });
+</script>
+
+
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  var chart2 = $(function () {
+    $('#container2').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: '年龄分析条形图'
+      },
+      xAxis: {
+        lables: {
+          step: 1
         },
-        chart: {
-          type: 'bar'
+        categories: gon.bar_workshop
+      },
+      yAxis: {
+        min: 0,
+        lables: {
+          step: 1
         },
         title: {
-          text: '年龄分析条形图'
+          text: '员工数量'
+        }
+      },
+      tooltip: {
+        formatter: function () {
+          var age_percentage = this.y * 100
+          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+        }
+      },
+      legend: {
+        reversed: true
+      },
+      plotOptions: {
+        bar: {
+          pointWidth: 10,
+          pointPadding: 0
         },
-        xAxis: {
-          lables: {
-            step: 1
-          },
-          categories: gon.bar_workshop
-        },
-        yAxis: {
-          min: 0,
-          lables: {
-            step: 1
-          },
-          title: {
-            text: '员工数量'
-          }
-        },
-        tooltip: {
-          formatter: function () {
-            var age_percentage = this.y * 100
-            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-          }
-        },
-        legend: {
-          reversed: true
-        },
-        plotOptions: {
-          bar: {
-            pointWidth: 10,
-            pointPadding: 0
-          },
-          // 设置条形图的点击事件
-          series: {
-            stacking: 'normal'
-          }
-        },
-        series: [
-          {
-            name: '25岁以下',
-            data: gon.bar_twenty_five_below
-          }, {
-            name: '26-30岁',
-            data: gon.bar_twenty_six
-          }, {
-            name: '31-35岁',
-            data: gon.bar_thirty_one
-          }, {
-            name: '36-40岁',
-            data: gon.bar_thirty_six
-          }, {
-            name: '41-45岁',
-            data: gon.bar_forty_one
-          }, {
-            name: '46-50岁',
-            data: gon.bar_forty_six
-          }, {
-            name: '51-55岁',
-            data: gon.bar_fifty_one
-          }, {
-            name: '56岁以上',
-            data: gon.bar_fifty_six_up
-          }
-        ]
-      });
-    })
-  </script>
-
-
-  </div>
-
-  </div>
-
+        // 设置条形图的点击事件
+        series: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: '25岁以下',
+          data: gon.bar_twenty_five_below
+        }, {
+          name: '26-30岁',
+          data: gon.bar_twenty_six
+        }, {
+          name: '31-35岁',
+          data: gon.bar_thirty_one
+        }, {
+          name: '36-40岁',
+          data: gon.bar_thirty_six
+        }, {
+          name: '41-45岁',
+          data: gon.bar_forty_one
+        }, {
+          name: '46-50岁',
+          data: gon.bar_forty_six
+        }, {
+          name: '51-55岁',
+          data: gon.bar_fifty_one
+        }, {
+          name: '56岁以上',
+          data: gon.bar_fifty_six_up
+        }
+      ]
+    });
+  })
+</script>
   <!-- 年龄分析条形图-结束  -->
