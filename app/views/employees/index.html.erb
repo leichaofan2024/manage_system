@@ -8,14 +8,14 @@
             <div class="ivu-tooltip-rel">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to employees_path(format: "xls") do %>
-                   <span style="color: #269Eff; font-weight: bold;">导出表格</span>
+                   <span style="color: #269Eff;">导出表格</span>
                 <% end %>
               </button>
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to  update_employee_info_employees_path do  %>
-                   <span style="color: #269Eff; font-weight: bold;">更新人员信息</span>
+                   <span style="color: #269Eff;">更新人员信息</span>
                 <% end %>
               </button>
             </div>
@@ -23,7 +23,28 @@
         </div>
       </div>
     </div>
+
+    <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
+      <div class="queryTop-26iSU_0">
+        <div class="condition-19RSN_0">
+          <li class="grow8">
+            <div class="condition-19RSN_0 active-2SUrt_0">
+              <div class="panel_main pannel-two change-type">
+                <div class="title">
+                  <span>合计</span>
+                  <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees.count%></span>
+                  <span>人</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
   </div>
+
+
+
 
  <div>
     <!--- 按工种分类筛选-开始  -->
