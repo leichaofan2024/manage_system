@@ -1,4 +1,35 @@
 <%= render 'employee_navbar' %>
+<div class="main-18rau_0">
+  <div>
+    <div class="btn_group_top-1sKKU_0">
+      <div>
+        <div class="btn_group-2MSRh_0">
+          <div class="ivu-tooltip">
+            <div class="ivu-tooltip-rel">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to employees_path(format: "xls") do %>
+                   <span style="color: #269Eff; font-weight: bold;">导出表格</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to  update_employee_info_employees_path do  %>
+                   <span style="color: #269Eff; font-weight: bold;">更新人员信息</span>
+                <% end %>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 <div class="col-md-12">
   <!--- 按工种分类筛选-开始  -->
   <li class="dropdown">
@@ -11,7 +42,7 @@
         <% @work_types.each do |work_type| %>
           <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
         <% end %>
-      </ul> 
+      </ul>
   </li>
   <!--- 按工种分类筛选-结束  -->
   <!--- 筛选-开始  -->
@@ -30,9 +61,9 @@
     <%= submit_tag :search %>
   <% end %>
   <!--- 搜索-结束  -->
+
+
   <!--- 搜索-开始  -->
-  <%= link_to "一键更新现员表", update_employee_info_employees_path, method: :post %>
-  <%= link_to "导出表格", employees_path(format: "xls")%>
   <div class="card">
     <div class="col-md-12" style="overflow: auto; width: 100%;">
       <table id="example" class="table table-bordered">
