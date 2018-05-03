@@ -1,53 +1,55 @@
 <%= render 'employee_navbar'%>
   <!-- 年龄分析饼图-开始  -->
   <!-- 给饼图准备一个合适大小的dom  -->
-  <div class="col-md-12">
-  <div id="container1" class="col-md-6" style="height: 400px"></div>
-  <div class="col-md-6 " style="background-color: white; height: 400px;overflow: auto">
-    <table class="table table-bordered" style="margin-top:40px;width:70%" >
-      <thead>
-        <tr>
-          <th style="color: blue; font-size:17px;">年龄段</th>
-          <td style="color: blue; font-size:17px;">人数</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
-          <th>25岁以下</th>
-          <td><%= @age_25_below %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁">
-          <th>26-30岁</th>
-          <td><%= @age_26 %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁">
-          <th>31-35岁</th>
-          <td><%= @age_31 %></td>
-        </tr> 
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁">
-          <th>36-40岁</th>
-          <td><%= @age_36 %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁">
-          <th>41-45岁</th>
-          <td><%= @age_41 %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁">
-          <th>46-50岁</th>
-          <td><%= @age_46 %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁">
-          <th>51-55岁</th>
-          <td><%= @age_51 %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上">
-          <th>56岁以上</th>
-          <td><%= @age_56_up %></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  </div>
+<h4  class="dashboard-name" style="margin-left: 18px">年龄分析</h4>
+
+
+    <div id="container1" class="col-md-6" style="height: 400px"></div>
+      <div class="col-md-6 " style="background-color: white; height: 400px;overflow: auto">
+        <table class="table table-bordered" style="margin-top:40px;width:70%" >
+          <thead>
+            <tr>
+              <th style="color: blue; font-size:17px;">年龄段</th>
+              <td style="color: blue; font-size:17px;">人数</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
+              <th>25岁以下</th>
+              <td><%= @age_25_below %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁">
+              <th>26-30岁</th>
+              <td><%= @age_26 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁">
+              <th>31-35岁</th>
+              <td><%= @age_31 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁">
+              <th>36-40岁</th>
+              <td><%= @age_36 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁">
+              <th>41-45岁</th>
+              <td><%= @age_41 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁">
+              <th>46-50岁</th>
+              <td><%= @age_46 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁">
+              <th>51-55岁</th>
+              <td><%= @age_51 %></td>
+            </tr>
+            <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上">
+              <th>56岁以上</th>
+              <td><%= @age_56_up %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
   <!-- 引入highcharts库  -->
   <script src="/assets/javascripts/highcharts.js"></script>
   <script>
@@ -134,9 +136,9 @@
         <tr>
           <th></th>
           <% @workshops.each do |workshop| %>
-              <th><%= workshop %></th> 
-          <% end %>  
-        </tr>      
+              <th><%= workshop %></th>
+          <% end %>
+        </tr>
       </thead>
       <tbody>
         <tr>
