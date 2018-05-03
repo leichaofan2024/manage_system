@@ -1148,4 +1148,34 @@ input {
     font-weight: 700;
     white-space: nowrap;
 }
+
+.bd {
+    padding: 0 10px;
+    background-color: #F7F9FA;
+}
+
+//
+// [data-size=normal] {
+//     float: left;
+//     position: relative;
+//     min-height: 1px;
+//     padding-left: 10px;
+//     padding-right: 10px;
+//     height: 364px;
+// }
+
+
+
+.widget-container .mark-contend {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    padding: 10px;
+    background: #E3EAF1;
+    background-clip: content-box;
+}
 /*---------------end--------------*/
