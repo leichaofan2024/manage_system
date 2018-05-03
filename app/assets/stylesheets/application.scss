@@ -1279,4 +1279,17 @@ input {
 .widget-container .customer-menu {
     display: inline-block;
 }
+
+.widget-container .widget-content-container .container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.widget-container .widget-content-container .widget-chart-container {
+    width: 100%;
+}
+
+.widget-chart-container:after{
+  clear:both;
+}
 /*---------------end--------------*/
