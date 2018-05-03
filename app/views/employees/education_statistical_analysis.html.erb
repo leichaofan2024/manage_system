@@ -1,287 +1,391 @@
  <%= render 'employee_navbar'%>
  <!-- 学历分析饼图-开始  -->
-  <!-- 给饼图准备一个合适大小的dom  -->
-  <div class="col-md-12" style="margin-top:10px">
-  <div id="container3" class="col-md-6" style="height:400px"></div>
-  <div class="col-md-6" style="height: 400px;background-color:white">
-    <table class="table table-bordered" style="margin-top:40px;width:70%" >
-      <thead>
-        <tr>
-          <th style="color: blue; font-size:17px;">文化程度</th>
-          <td style="color: blue; font-size:17px;">人数</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=小学">
-          <th>小学</th>
-          <td><%= @primary_school %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=初中">
-          <th>初中</th>
-          <td><%= @junior_high_school %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=高中">
-          <th>高中</th>
-          <td><%= @senior_high_school %></td>
-        </tr> 
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=技校">
-          <th>技校</th>
-          <td><%= @technical_school %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=中专">
-          <th>中专</th>
-          <td><%= @secondary_school %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学专科">
-          <th>大学专科</th>
-          <td><%= @university_specialties %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学本科">
-          <th>大学本科</th>
-          <td><%= @undergraduate %></td>
-        </tr>
-        <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=研究生">
-          <th>研究生</th>
-          <td><%= @postgraduate %></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  </div>
-  <!-- 引入highcharts库  -->
-  <script src="/assets/javascripts/highcharts.js"></script>
-  <script>
-    $(function () {
-      var chart3 = $('#container3').highcharts({
-        credits:{
-          enabled: false
-        },
-        chart: {
-          plotBackgroundColor: null,
-          plotBorderWidth: null,
-          plotShadow: false,
-          type: 'pie'
-        },
-        title: {
-          text: '学历分析'
-        },
-        // 数据提示框设置
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              enabled: true,
-              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-              style: {
-                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-              }
-            },
-            // 设置是否显示图例
-            showInLegend: true
-          }
-        },
-        // 饼图的数据来源
-        series: [
-          {
-            colorByPoint: true,
-            // 设置饼图各个扇区的数据，注意需要数组类型的数据
-            data: [
-              {
-                name: '中专',
-                y: gon.secondary_school
-              }, {
-                name: '大学专科',
-                y: gon.university_specialties
-              }, {
-                name: '高中',
-                y: gon.senior_high_school
-              }, {
-                name: '大学本科',
-                y: gon.undergraduate
-              }, {
-                name: '初中',
-                y: gon.junior_high_school
-              }, {
-                name: '技校',
-                y: gon.technical_school
-              }, {
-                name: '研究生',
-                y: gon.postgraduate
-              }, {
-                name: '小学',
-                y: gon.primary_school
-              }
-            ]
-          }
-        ]
-      });
+
+ <div id="sa-main">
+  <div id="dashboard">
+   <div class="dashboard-toolbar">
+     <span contenteditable="false" class="dashboard-name" data-originname="年龄分析">学历分析</span>
+     <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
+   </div>
+
+
+  <div class="bd" style="width: 98%;">
+     <div class="widget-container" data-widgetid="1" data-size="normal">
+       <div class="widget-content-container">
+         <div class="mark-contend"></div>
+            <div class="widget-topbar" style="cursor: auto;">
+              <div class="widget-title">
+                <div class="title" data-method="nav" style="padding-top: 10px;">
+                   学历分析饼图
+                </div>
+                <div class="range">
+                  <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                </div>
+              </div>
+              <div class="pull-right widget-setting">
+                <div class="customer-menu"></div>
+              </div>
+            </div>
+
+            <div class="widget-chart-container container">
+              <div class="col-md-12" data-container="side"></div>
+              <div id="container3" style="height: 354px"></div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="widget-container" data-widgetid="1" data-size="normal">
+        <div class="widget-content-container">
+          <div class="mark-contend"></div>
+             <div class="widget-topbar" style="cursor: auto;">
+               <div class="widget-title">
+                 <div class="title" data-method="nav" style="margin-top: 10px;">
+                    全段学历分析表格
+                 </div>
+                 <div class="range">
+                   <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                 </div>
+               </div>
+               <div class="pull-right widget-setting">
+                 <div class="customer-menu"></div>
+               </div>
+             </div>
+
+             <div class="widget-chart-container container">
+               <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:15px ;overflow: auto">
+                 <table class="table table-bordered" >
+                   <thead>
+                     <tr>
+                       <th style="color: blue; font-size:17px;">文化程度</th>
+                       <td style="color: blue; font-size:17px;">人数</td>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=小学">
+                       <th>小学</th>
+                       <td><%= @primary_school %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=初中">
+                       <th>初中</th>
+                       <td><%= @junior_high_school %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=高中">
+                       <th>高中</th>
+                       <td><%= @senior_high_school %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=技校">
+                       <th>技校</th>
+                       <td><%= @technical_school %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=中专">
+                       <th>中专</th>
+                       <td><%= @secondary_school %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学专科">
+                       <th>大学专科</th>
+                       <td><%= @university_specialties %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学本科">
+                       <th>大学本科</th>
+                       <td><%= @undergraduate %></td>
+                     </tr>
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=研究生">
+                       <th>研究生</th>
+                       <td><%= @postgraduate %></td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+             </div>
+         </div>
+       </div>
+
+
+       <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px; width:100%; height: 600px;">
+         <div class="widget-content-container">
+           <div class="mark-contend"></div>
+              <div class="widget-topbar" style="cursor: auto;">
+                <div class="widget-title">
+                  <div class="title" data-method="nav" style="padding-top:10px">
+                     学历分析条形图
+                  </div>
+                  <div class="range">
+                    <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                  </div>
+                </div>
+                <div class="pull-right widget-setting">
+                  <div class="customer-menu"></div>
+                </div>
+              </div>
+
+              <div class="widget-chart-container container">
+                <div class="col-md-12" data-container="side"></div>
+                <!-- 年龄分析条形图-开始  -->
+                <!-- 给条形图准备一个合适大小的dom  -->
+                <div id="container4" style="height: 600px"></div>
+              </div>
+          </div>
+        </div>
+
+
+        <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 10px; margin-bottom: 50px; width:100%; height: 400px;">
+          <div class="widget-content-container">
+            <div class="mark-contend"></div>
+               <div class="widget-topbar" style="cursor: auto;">
+                 <div class="widget-title">
+                   <div class="title" data-method="nav" style="margin-top: 10px;">
+                      各车间学历分析表格
+                   </div>
+                   <div class="range" style="margin-bottom: 0px;">
+                     <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                   </div>
+                 </div>
+                 <div class="pull-right widget-setting">
+                   <div class="customer-menu"></div>
+                 </div>
+               </div>
+
+               <div class="widget-chart-container container">
+                 <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
+                   <table id="chart_table" class="table table-bordered" >
+                     <thead>
+                       <tr>
+                         <th></th>
+                         <% @workshops.each do |workshop| %>
+                             <th><%= workshop %></th>
+                         <% end %>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>小学</td>
+                         <% n = 0 %>
+                         <% @primary_school_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "小学", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+ 1%>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>初中</td>
+                         <% n = 0 %>
+                         <% @junior_high_school_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "初中", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>高中</td>
+                         <% n = 0 %>
+                         <% @senior_high_school_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "高中", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>技校</td>
+                         <% n = 0 %>
+                         <% @technical_school_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "技校", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>中专</td>
+                         <% n = 0 %>
+                         <% @secondary_school_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "中专", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>大学专科</td>
+                         <% n = 0 %>
+                         <% @university_specialties_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学专科", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>大学本科</td>
+                         <% n = 0 %>
+                         <% @undergraduate_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学本科", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                       <tr>
+                         <td>研究生</td>
+                         <% n = 0 %>
+                         <% @postgraduate_bar.each do |i| %>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "研究生", workshop: @workshops[n]), style: "color: black" %></td>
+                           <% n = n+1 %>
+                         <% end %>
+                       </tr>
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+           </div>
+         </div>
+
+
+    </div>
+   </div>
+ </div>
+
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  $(function () {
+    var chart3 = $('#container3').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: '学历分析'
+      },
+      // 数据提示框设置
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          },
+          // 设置是否显示图例
+          showInLegend: true
+        }
+      },
+      // 饼图的数据来源
+      series: [
+        {
+          colorByPoint: true,
+          // 设置饼图各个扇区的数据，注意需要数组类型的数据
+          data: [
+            {
+              name: '中专',
+              y: gon.secondary_school
+            }, {
+              name: '大学专科',
+              y: gon.university_specialties
+            }, {
+              name: '高中',
+              y: gon.senior_high_school
+            }, {
+              name: '大学本科',
+              y: gon.undergraduate
+            }, {
+              name: '初中',
+              y: gon.junior_high_school
+            }, {
+              name: '技校',
+              y: gon.technical_school
+            }, {
+              name: '研究生',
+              y: gon.postgraduate
+            }, {
+              name: '小学',
+              y: gon.primary_school
+            }
+          ]
+        }
+      ]
     });
-  </script>
-  <!-- 学历分析饼图-结束  -->
-
-  <!-- 学历分析条形图-开始  -->
-  <!-- 给条形图准备一个合适大小的dom  -->
-  <div id="container4" class="col-md-12" style="height:600px;margin-top:10px;margin-left:10px;background-color:white;padding-left: -15px"></div>
-  <div class="col-md-12" style="height:400px;margin-top:10px;margin-left:10px;background-color:white;overflow: auto"">
-    <table id="chart_table" class="table table-bordered" style="margin-top:50px;" >
-      <thead>
-        <tr>
-          <th></th>
-          <% @workshops.each do |workshop| %>
-              <th><%= workshop %></th> 
-          <% end %>  
-        </tr>      
-      </thead>
-      <tbody>
-        <tr>
-          <td>小学</td>
-          <% n = 0 %>
-          <% @primary_school_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "小学", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+ 1%>
-          <% end %>
-        </tr>
-        <tr>
-          <td>初中</td>
-          <% n = 0 %>
-          <% @junior_high_school_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "初中", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>高中</td>
-          <% n = 0 %>
-          <% @senior_high_school_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "高中", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>技校</td>
-          <% n = 0 %>
-          <% @technical_school_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "技校", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>中专</td>
-          <% n = 0 %>
-          <% @secondary_school_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "中专", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>大学专科</td>
-          <% n = 0 %>
-          <% @university_specialties_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学专科", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>大学本科</td>
-          <% n = 0 %>
-          <% @undergraduate_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学本科", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-        <tr>
-          <td>研究生</td>
-          <% n = 0 %>
-          <% @postgraduate_bar.each do |i| %>
-            <td><%= link_to i, statistical_analysis_data_employees_path(:education => "研究生", workshop: @workshops[n]), style: "color: black" %></td>
-            <% n = n+1 %>
-          <% end %>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!-- 引入highcharts库  -->
-  <script src="/assets/javascripts/highcharts.js"></script>
-  <script>
-    var chart4 = $(function () {
-      $('#container4').highcharts({
-        credits:{
-          enabled: false
+  });
+</script>
+<!-- 学历分析饼图-结束  -->
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  var chart4 = $(function () {
+    $('#container4').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: '学历分析'
+      },
+      xAxis: {
+        lables: {
+          step: 1
         },
-        chart: {
-          type: 'bar'
+        categories: gon.bar_workshop
+      },
+      yAxis: {
+        min: 0,
+        lables: {
+          step: 1
         },
         title: {
-          text: '学历分析'
+          text: '员工数量'
+        }
+      },
+      tooltip: {
+        formatter: function () {
+          var age_percentage = this.y * 100
+          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+        }
+      },
+      legend: {
+        reversed: true
+      },
+      plotOptions: {
+        bar: {
+          pointWidth: 10,
+          pointPadding: 0
         },
-        xAxis: {
-          lables: {
-            step: 1
-          },
-          categories: gon.bar_workshop
-        },
-        yAxis: {
-          min: 0,
-          lables: {
-            step: 1
-          },
-          title: {
-            text: '员工数量'
-          }
-        },
-        tooltip: {
-          formatter: function () {
-            var age_percentage = this.y * 100
-            return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
-          }
-        },
-        legend: {
-          reversed: true
-        },
-        plotOptions: {
-          bar: {
-            pointWidth: 10,
-            pointPadding: 0
-          },
-          // 设置条形图的点击事件
-          series: {
-            stacking: 'normal'
-          }
-        },
-        series: [
-          {
-            name: '中专',
-            data: gon.bar_secondary_school
-          }, {
-            name: '大学专科',
-            data: gon.bar_university_specialties
-          }, {
-            name: '高中',
-            data: gon.bar_senior_high_school
-          }, {
-            name: '大学本科',
-            data: gon.bar_undergraduate
-          }, {
-            name: '初中',
-            data: gon.bar_junior_high_school
-          }, {
-            name: '技校',
-            data: gon.bar_technical_school
-          }, {
-            name: '研究生',
-            data: gon.bar_postgraduate
-          }, {
-            name: '小学',
-            data: gon.bar_primary_school
-          }
-        ]
-      });
-    })
-  </script>
+        // 设置条形图的点击事件
+        series: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: '中专',
+          data: gon.bar_secondary_school
+        }, {
+          name: '大学专科',
+          data: gon.bar_university_specialties
+        }, {
+          name: '高中',
+          data: gon.bar_senior_high_school
+        }, {
+          name: '大学本科',
+          data: gon.bar_undergraduate
+        }, {
+          name: '初中',
+          data: gon.bar_junior_high_school
+        }, {
+          name: '技校',
+          data: gon.bar_technical_school
+        }, {
+          name: '研究生',
+          data: gon.bar_postgraduate
+        }, {
+          name: '小学',
+          data: gon.bar_primary_school
+        }
+      ]
+    });
+  })
+</script>
 
-  <!-- 学历分析条形图-结束  -->
+<!-- 学历分析条形图-结束  -->
