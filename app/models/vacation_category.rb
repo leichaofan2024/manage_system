@@ -1,0 +1,2 @@
+class VacationCategory < ApplicationRecord
+end

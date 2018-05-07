@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180507060833) do
+ActiveRecord::Schema.define(version: 20180507111821) do
 
-  create_table "emp_basic_infos", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
-    t.integer "emp_id", comment: "唯一标识"
+  create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "month_attendances", limit: 62
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "emp_basic_infos", primary_key: "emp_id", id: :integer, comment: "唯一标识", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
     t.string "sal_number", comment: "工资号"
     t.string "workshop", comment: "车间"
     t.string "group", comment: "班组"
@@ -123,6 +128,12 @@ ActiveRecord::Schema.define(version: 20180507060833) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "vacation_categories"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
