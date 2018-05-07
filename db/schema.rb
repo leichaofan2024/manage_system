@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424012948) do
+ActiveRecord::Schema.define(version: 20180507060833) do
+
+  create_table "emp_basic_infos", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
+    t.integer "emp_id", comment: "唯一标识"
+    t.string "sal_number", comment: "工资号"
+    t.string "workshop", comment: "车间"
+    t.string "group", comment: "班组"
+    t.string "name", comment: "姓名"
+    t.string "job_number", comment: "工号"
+    t.integer "sex", limit: 1, default: 1, comment: "性别: 1-男， 2-女"
+    t.string "identity_card_number", comment: "身份证号"
+    t.integer "age", comment: "年龄"
+    t.string "duty", comment: "职务"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
@@ -21,8 +36,8 @@ ActiveRecord::Schema.define(version: 20180424012948) do
     t.string "name", null: false
     t.string "sex", null: false
     t.string "birth_date", null: false
-    t.integer "birth_year", null: false
-    t.integer "age", null: false
+    t.integer "birth_year"
+    t.integer "age"
     t.string "nation", null: false, comment: "民族"
     t.string "native_place", comment: "籍贯"
     t.string "political_role", comment: "政治面貌"
