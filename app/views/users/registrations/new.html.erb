@@ -1,0 +1,19 @@
+<h2>注册</h2>
+
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <div style="margin-bottom: 25px" > <!-- class="input-group" -->
+      <%= f.input :name, :label => false, :error => false, placeholder: "用户名", required: true, autofocus: true %>
+      <%= f.input :password, :label => false, placeholder: "输入密码", required: true %>
+      <%= f.input :password_confirmation, :label => false, placeholder: "请再次输入", required: true %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "注册" %>
+  </div>
+<% end %>
+
+<%= render "users/shared/links" %>
