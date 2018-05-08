@@ -18,7 +18,67 @@
 @import 'bootstrap';
 @import "font-awesome";
 
+/*------------------ 登录页面 ---------------------*/
+.user_setup{
+    height: 850px;
+ }
 
+@media (min-width: 768px) {
+   .user_setup_content {
+     border-radius: 0; //圆角
+   }
+ }
+.user_setup_content{
+    background: #fff;
+    margin-top: 135px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 1px 2px 3px #111;
+    border: 1px solid #333;
+    border-radius: 25px;
+
+    opacity:0.95;
+    filter:alpha(opacity=95);
+
+    h2{
+      text-align: center;
+    }
+
+    .psw{
+      float: right;
+      margin-top: -33px;
+      position: relative;
+    }
+
+    .account{
+      text-align: center;
+    }
+
+    .form-inputs{
+      margin-top: 25px;
+    }
+
+    .form-actions{
+      text-align: center;
+      margin-top: 35px;
+      margin-bottom: 25px;
+
+      .button{
+        color: #fff;
+        background-color: #376ad3;
+        border-color: #376ad3;
+        font-size: 20px;
+        letter-spacing: 1px;
+        width: 100%;
+      }
+      .button:hover{
+          background-color: #3877c8;
+          border-color: #3877c8;
+          color: #fff;
+      }
+    }
+}
+/*-----------------end--------------------*/
 /*------------------sidebar------------*/
 .sidebar {
     position: fixed;
