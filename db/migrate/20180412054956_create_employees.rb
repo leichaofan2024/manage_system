@@ -1,17 +1,17 @@
 class CreateEmployees < ActiveRecord::Migration[5.1]
   def change
     create_table :employees do |t|
-      t.string  :sal_number,       null: false,  default: "", comment: "工资号"
-      t.string  :job_number,       null: false,  comment: "工号"
-      t.string  :record_number,                  comment: "档案号"
-      t.string  :workshop,         null: false,  comment: "车间"
-      t.string  :group,            null: false,  comment: "班组"
-      t.string  :name,             null: false
-      t.string  :sex,              null: false
-      t.string  :birth_date,       null: false
-      t.integer :birth_year,       null: false
-      t.integer :age,              null: false
-      t.string  :nation,           null: false,  comment: "民族"
+      t.string  :sal_number,                    default: "", comment: "工资号"
+      t.string  :job_number,                    comment: "工号"
+      t.string  :record_number,                 comment: "档案号"
+      t.string  :workshop,                      comment: "车间"
+      t.string  :group,                         comment: "班组"
+      t.string  :name
+      t.string  :sex
+      t.string  :birth_date
+      t.integer :birth_year
+      t.integer :age
+      t.string  :nation,                         comment: "民族"
       t.string  :native_place,                   comment: "籍贯"
       t.string  :political_role,                 comment: "政治面貌"
       t.string  :political_party_date,           comment: "党团时间"
@@ -46,7 +46,7 @@ class CreateEmployees < ActiveRecord::Migration[5.1]
       t.float   :seniority_saler,                comment: "工龄工资"
       t.string  :skilledness_authenticate,       comment: "技能鉴定"
       t.string  :treatment,                      comment: "待遇"
-      t.integer :sation_rank,                    comment: "岗位排序"
+      t.integer :station_rank,                    comment: "岗位排序"
       t.integer :skilledness_rank,               comment: "技能排序"
       t.string  :station_now,                    comment: "现岗位"
       t.string  :station_now_time,               comment: "现岗时间"
@@ -66,7 +66,7 @@ class CreateEmployees < ActiveRecord::Migration[5.1]
       t.float   :comment_data,                   comment: "备用数据"
       t.string  :TBZ
       t.string  :PY
-      t.string  :company_name,    null: false,   comment: "单位名称", default: "北京供电段"
+      t.string  :company_name,                   comment: "单位名称", default: "北京供电段"
       t.string  :CJBZPX
       t.string  :family
       t.integer :J01BF
