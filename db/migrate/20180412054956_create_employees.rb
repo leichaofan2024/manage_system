@@ -32,7 +32,7 @@ class CreateEmployees < ActiveRecord::Migration[5.1]
       t.string  :people_source,                  comment: "人员来源"
       t.string  :people_category,                comment: "人员分类"
       t.string  :education_background,           comment: "文化程度"
-      t.string  :graduation_date,                comment: "毕业时间"
+      t.string  :graduation_time,                comment: "毕业时间"
       t.string  :graduation_school,              comment: "毕业院校"
       t.string  :school_sort,                    comment: "学校类别"
       t.string  :major
