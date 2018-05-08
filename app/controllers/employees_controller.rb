@@ -13,7 +13,7 @@ class EmployeesController < ApplicationController
       format.html
       format.csv { send_data @employees.to_csv }
       format.xls
-    end 
+    end
   end
 
   def new
@@ -70,7 +70,7 @@ class EmployeesController < ApplicationController
     end
   end
 
-  
+
   def import
     Employee.import(params[:file])
     redirect_to employees_path
@@ -136,54 +136,54 @@ class EmployeesController < ApplicationController
         #把每个车间的总人数存成变量
         emp = Employee.where(workshop: i).count
         #把各年龄段在各车间的人数存成变量
-        a1 = Employee.where(workshop: i, age: 0..25).count      
+        a1 = Employee.where(workshop: i, age: 0..25).count
         #算出各年龄段人数占车间总人数的比重
-        a = (a1.to_f)/(emp.to_f)      
+        a = (a1.to_f)/(emp.to_f)
         #将每一次的计算结果存成"车间 => 百分比"的hash
-        loop_hash_25_below = {i => a}     
+        loop_hash_25_below = {i => a}
         #将每一次的hash结果存到最终的hash里，供之后使用
         hash_25_below[i] = loop_hash_25_below[i]
         @age_25_below_bar << a1
 
-        b1 = Employee.where(workshop: i, age: 26..30).count      
-        b = (b1.to_f)/(emp.to_f)     
-        loop_hash_26 = {i => b}      
+        b1 = Employee.where(workshop: i, age: 26..30).count
+        b = (b1.to_f)/(emp.to_f)
+        loop_hash_26 = {i => b}
         hash_26[i] = loop_hash_26[i]
         @age_26_bar << b1
-        
-        c1 = Employee.where(workshop: i, age: 31..35).count      
-        c = (c1.to_f)/(emp.to_f)     
-        loop_hash_31 = {i => c}      
+
+        c1 = Employee.where(workshop: i, age: 31..35).count
+        c = (c1.to_f)/(emp.to_f)
+        loop_hash_31 = {i => c}
         hash_31[i] = loop_hash_31[i]
         @age_31_bar << c1
-      
-        d1 = Employee.where(workshop: i, age: 36..40).count     
-        d = (d1.to_f)/(emp.to_f)    
-        loop_hash_36 = {i => d}     
-        hash_36[i] = loop_hash_36[i]  
-        @age_36_bar << d1  
 
-        e1 = Employee.where(workshop: i, age: 41..45).count     
-        e = (e1.to_f)/(emp.to_f)    
-        loop_hash_41 = {i => e}     
+        d1 = Employee.where(workshop: i, age: 36..40).count
+        d = (d1.to_f)/(emp.to_f)
+        loop_hash_36 = {i => d}
+        hash_36[i] = loop_hash_36[i]
+        @age_36_bar << d1
+
+        e1 = Employee.where(workshop: i, age: 41..45).count
+        e = (e1.to_f)/(emp.to_f)
+        loop_hash_41 = {i => e}
         hash_41[i] = loop_hash_41[i]
         @age_41_bar << e1
-       
-        f1 = Employee.where(workshop: i, age: 46..50).count      
-        f = (f1.to_f)/(emp.to_f)     
-        loop_hash_46 = {i => f}      
+
+        f1 = Employee.where(workshop: i, age: 46..50).count
+        f = (f1.to_f)/(emp.to_f)
+        loop_hash_46 = {i => f}
         hash_46[i] = loop_hash_46[i]
         @age_46_bar << f1
 
-        g1 = Employee.where(workshop: i, age: 51..55).count     
-        g = (g1.to_f)/(emp.to_f)    
-        loop_hash_51 = {i => g}    
+        g1 = Employee.where(workshop: i, age: 51..55).count
+        g = (g1.to_f)/(emp.to_f)
+        loop_hash_51 = {i => g}
         hash_51[i] = loop_hash_51[i]
         @age_51_bar << g1
 
-        h1 = Employee.where(workshop: i, age: 56..70).count     
-        h = (h1.to_f)/(emp.to_f)    
-        loop_hash_56_up = {i => h}     
+        h1 = Employee.where(workshop: i, age: 56..70).count
+        h = (h1.to_f)/(emp.to_f)
+        loop_hash_56_up = {i => h}
         hash_56_up[i] = loop_hash_56_up[i]
         @age_56_up_bar << h1
       end
@@ -200,7 +200,7 @@ class EmployeesController < ApplicationController
     gon.bar_forty_six = hash_46.values
     gon.bar_fifty_one = hash_51.values
     gon.bar_fifty_six_up = hash_56_up.values
-    
+
     #年龄分析---条形图数据设置---结束
   end
 
@@ -250,7 +250,7 @@ class EmployeesController < ApplicationController
     @undergraduate_bar = []
     @postgraduate_bar = []
     @workshops.each do |i|
-      emp = Employee.where(workshop: i).count     
+      emp = Employee.where(workshop: i).count
       a1 = Employee.where(workshop: i, education_background: "初中").count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_junior_high_school = {i => a}
@@ -330,7 +330,7 @@ class EmployeesController < ApplicationController
     gon.working_years_31 = @working_years_31
     gon.working_years_36 = @working_years_36
     gon.working_years_41_up = @working_years_41_up
-    
+
     @workshops = Employee.pluck("workshop").uniq
     loop_hash_working_5_below = {}
     hash_working_5_below = {}
