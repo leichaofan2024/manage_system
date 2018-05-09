@@ -22,7 +22,7 @@ gem 'devise'
 # 角色库
 gem 'rolify'
 # 用户权限
-# gem 'pundit'
+gem 'cancancan'
 
 gem 'bootstrap-sass'
 gem 'awesome_rails_console'
