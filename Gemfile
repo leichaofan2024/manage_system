@@ -17,9 +17,13 @@ gem 'jbuilder', '~> 2.5'
 
 
 
-
+# 登录
 gem 'devise'
-gem 'cancancan', '~> 2.0'
+# 角色库
+gem 'rolify'
+# 用户权限
+# gem 'pundit'
+
 gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'jquery-rails'
