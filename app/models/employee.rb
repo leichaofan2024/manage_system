@@ -1,5 +1,5 @@
 class Employee < ActiveRecord::Base
-  # 增加用户角色时需要用到，gem 'rolity'
+  # 不同的角色可以对Employee的资源进行不同的操作
   resourcify
 
   #全局搜索：引入elasticsearch
