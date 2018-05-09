@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   rolify :before_add => :before_add_method
-  after_create :assign_default_role
+  after_create :assign_default_role #创建用户后分配默认角色
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   end
 
+  #分配默认角色
   def assign_default_role
     self.add_role(:newuser) if self.roles.blank?
   end
