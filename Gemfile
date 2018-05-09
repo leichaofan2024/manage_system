@@ -24,6 +24,10 @@ gem 'rolify'
 # 用户权限
 gem 'cancancan'
 
+# 通知系统
+gem "notifications"
+gem "ruby-push-notifications"
+
 gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'jquery-rails'
