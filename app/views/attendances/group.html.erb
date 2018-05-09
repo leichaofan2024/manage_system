@@ -6,10 +6,12 @@
               <th>顺号</th>
               <th>姓名</th>
               <th>职名</th>
+              <!-- 生成每月1-31号的数字-开始 -->
               <% day_number = 1..31 %>
               <% day_number.each do |i| %>
                 <th><%= i %></th>
               <% end %>
+              <!-- 生成每月1-31号的数字-结束 -->
               <th>日勤夜班</th>
               <th>轮流夜班</th>
               <th>节日加班</th>
@@ -28,24 +30,41 @@
               <th>入学培训</th>
             </tr>
           </thead>
-            <tbody data-behavior='sortable'>     
-              <tr class="row-click-able">
-                <td><%= %></td>
-                <td><%= %></td> 
-                <td><%= %></td>
-                <td><%= %></td>
-                <td><%=  %></td>
-                <td><%= %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-                <td><%= %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-                <td><%=  %></td>
-              </tr>
+            <tbody data-behavior='sortable'>
+            <!-- 配置表格数据-开始 -->
+              <% @employees.each do |employee| %>
+                <!-- 声明后面需要用到的hash -->
+                <% attendance_hash = {} %>
+                <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
+                <% attendance_codes = ("a".."p") %>
+                <tr>
+                  <td><%=  %></td>
+                  <td><%= employee.name %></td> 
+                  <td><%= employee.duty %></td> 
+                  <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
+                  <% attendance = employee.attendances %>
+                  <% attendance.each do |i| %>
+                    <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
+                    <% attendance_ary = i.month_attendances.split('') %>
+                    <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                    <% attendance_ary.each do |day_attendance| %>
+                      <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                      <td><%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %></td>
+                      <!-- 配置统计数据-开始 -->
+                      <% attendance_codes.each do |code| %>
+                        <!-- 将每组考勤中的attendance_code和出现次数存成hash -->
+                        <% attendance_hash[code] = attendance_ary.map{|m| m if m==code}.compact.count %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                  <!-- 捞出所有的键，就是表右侧对各个假期的统计 -->
+                  <% attendance_codes.each do |code| %>  
+                    <td><%= attendance_hash[code] %></td>
+                  <% end %>
+                  <!-- 配置统计数据-结束 -->
+                </tr>
+              <% end %> 
+              <!-- 配置表格数据-开始 --> 
            </tbody>
         </table>
       </div>
