@@ -42,7 +42,8 @@
                   <td><%= employee.name %></td> 
                   <td><%= employee.duty %></td> 
                   <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-                  <% attendance = employee.attendances %>
+                  <% current_time = Time.now %>
+                  <% attendance = Attendance.where(employee_id: employee.id, month: current_time.month) %>
                   <% attendance.each do |i| %>
                     <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
                     <% attendance_ary = i.month_attendances.split('') %>
