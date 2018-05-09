@@ -1,5 +1,8 @@
 class Employee < ActiveRecord::Base
+  # 增加用户角色时需要用到，gem 'rolity'
+  resourcify
 
+  #全局搜索：引入elasticsearch
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
