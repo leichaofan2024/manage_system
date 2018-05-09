@@ -10,15 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180508025325) do
+ActiveRecord::Schema.define(version: 20180508063433) do
 
-  create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "month_attendances", limit: 62
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "employee_id"
   end
 
-  create_table "emp_basic_infos", primary_key: "emp_id", id: :integer, comment: "唯一标识", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
+  create_table "emp_basic_infos", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", comment: "员工基本信息表" do |t|
+    t.integer "emp_id", comment: "唯一标识"
     t.string "sal_number", comment: "工资号"
     t.string "workshop", comment: "车间"
     t.string "group", comment: "班组"
@@ -32,18 +34,18 @@ ActiveRecord::Schema.define(version: 20180508025325) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
-    t.string "job_number", null: false, comment: "工号"
+  create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "sal_number", default: "", comment: "工资号"
+    t.string "job_number", comment: "工号"
     t.string "record_number", comment: "档案号"
-    t.string "workshop", null: false, comment: "车间"
-    t.string "group", null: false, comment: "班组"
-    t.string "name", null: false
-    t.string "sex", null: false
-    t.string "birth_date", null: false
+    t.string "workshop", comment: "车间"
+    t.string "group", comment: "班组"
+    t.string "name"
+    t.string "sex"
+    t.string "birth_date"
     t.integer "birth_year"
     t.integer "age"
-    t.string "nation", null: false, comment: "民族"
+    t.string "nation", comment: "民族"
     t.string "native_place", comment: "籍贯"
     t.string "political_role", comment: "政治面貌"
     t.string "political_party_date", comment: "党团时间"
@@ -64,6 +66,7 @@ ActiveRecord::Schema.define(version: 20180508025325) do
     t.string "people_source", comment: "人员来源"
     t.string "people_category", comment: "人员分类"
     t.string "education_background", comment: "文化程度"
+    t.string "graduation_time", comment: "毕业时间"
     t.string "graduation_school", comment: "毕业院校"
     t.string "school_sort", comment: "学校类别"
     t.string "major"
@@ -97,15 +100,13 @@ ActiveRecord::Schema.define(version: 20180508025325) do
     t.float "comment_data", limit: 24, comment: "备用数据"
     t.string "TBZ"
     t.string "PY"
-    t.string "company_name", default: "北京供电段", null: false, comment: "单位名称"
+    t.string "company_name", default: "北京供电段", comment: "单位名称"
     t.string "CJBZPX"
     t.string "family"
     t.integer "J01BF"
     t.string "duting", comment: "职务化"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "graduation_time"
-    t.integer "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer "working_years", comment: "工作时长"
     t.integer "rali_years", comment: "入路时长"
     t.string "group_category", comment: "班组类别"
@@ -113,7 +114,7 @@ ActiveRecord::Schema.define(version: 20180508025325) do
     t.string "job_foreman_duty", comment: "班组长职务"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "email", default: "1", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -131,10 +132,12 @@ ActiveRecord::Schema.define(version: 20180508025325) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "vacation_categories"
+  create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "vacation_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "vacation_shortening", comment: "假期简称"
+    t.string "vacation_code", comment: "假期代码"
   end
 
 end

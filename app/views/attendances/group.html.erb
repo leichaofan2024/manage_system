@@ -1,1 +1,54 @@
-<h2>这是班组考勤页面</h2>
+    <div class="card">
+      <div style="overflow: auto; width: 100%;">
+        <table id="example" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>顺号</th>
+              <th>姓名</th>
+              <th>职名</th>
+              <% day_number = 1..31 %>
+              <% day_number.each do |i| %>
+                <th><%= i %></th>
+              <% end %>
+              <th>日勤夜班</th>
+              <th>轮流夜班</th>
+              <th>节日加班</th>
+              <th>病假</th>
+              <th>事假</th>
+              <th>年休假</th>
+              <th>年休假(健康修养)</th>
+              <th>婚假</th>
+              <th>产假</th>
+              <th>育儿假</th>
+              <th>陪产假</th>
+              <th>出差</th>
+              <th>丧假</th>
+              <th>探亲假</th>
+              <th>搬家假</th>
+              <th>入学培训</th>
+            </tr>
+          </thead>
+            <tbody data-behavior='sortable'>     
+              <tr class="row-click-able">
+                <td><%= %></td>
+                <td><%= %></td> 
+                <td><%= %></td>
+                <td><%= %></td>
+                <td><%=  %></td>
+                <td><%= %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+                <td><%= %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+                <td><%=  %></td>
+              </tr>
+           </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
