@@ -29,6 +29,8 @@ Rails.application.routes.draw do
       get :duan
       get :year_statistics
       get :setting
+      get :show_modal
+      post :create_attendance
     end
   end
 end

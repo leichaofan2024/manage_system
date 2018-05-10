@@ -1,0 +1,22 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">选择考勤</h4>
+      </div>
+      <div class="modal-body"> 
+        <%= @attendances %>
+        <%= form_tag create_attendance_attendances_path, method: 'post' do %>
+          <%= radio_button_tag(:lala, "a" ) %>
+          <%= label_tag :日夜 %><br><br>
+          <%= radio_button_tag(:vacation, "b") %>
+          <%= label_tag :轮夜 %><br><br>
+          <%= radio_button_tag(:vacation, "c") %>
+          <%= label_tag :加班 %><br><br>
+          <%= submit_tag :点击确定 %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -50,7 +50,7 @@
                     <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
                     <% attendance_ary.each do |day_attendance| %>
                       <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                      <td><%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %></td>
+                      <td><%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path, remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" %></td>
                       <!-- 配置统计数据-开始 -->
                       <% attendance_codes.each do |code| %>
                         <!-- 将每组考勤中的attendance_code和出现次数存成hash -->
@@ -63,6 +63,10 @@
                     <td><%= attendance_hash[code] %></td>
                   <% end %>
                   <!-- 配置统计数据-结束 -->
+                
+                  <div id="showModal">
+                    <%= render 'show_modal' %>
+                  </div>
                 </tr>
               <% end %> 
               <!-- 配置表格数据-开始 --> 
@@ -72,3 +76,5 @@
     </div>
   </div>
 </div>
+
+
