@@ -28,6 +28,7 @@ class EmployeesController < ApplicationController
 
   def show
     @employee = Employee.find(params[:id])
+    authorize! :show, @employee
   end
 
  #上传表格
