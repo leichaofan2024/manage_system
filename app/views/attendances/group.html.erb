@@ -49,20 +49,24 @@
                     <% day_number = 1%>
                     <% attendance_ary.each do |day_attendance| %>
                       <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                      <% if day_attendance == "x" %>
-                        <td><%= link_to "未考勤", show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" %></td>
-                      <% else %>
-                        <td><%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" %></td>
-                      <% end %>
+                      <td>
+                        <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                          <% if day_attendance == "x" %>
+                            <%= "未考勤" %>
+                          <% else %>
+                            <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                          <% end %>
+                        <% end %>   
+                      </td>
                       <!-- 配置统计数据-开始 -->
-                      <% attendance_codes.each do |code| %>
+                      <% @vacation.values.each do |code| %>
                         <!-- 将每组考勤中的attendance_code和出现次数存成hash -->
                         <% attendance_hash[code] = attendance_ary.map{|m| m if m==code}.compact.count %>
                       <% end %>
                       <% day_number += 1%>
                     <% end %>
                   <!-- 捞出所有的键，就是表右侧对各个假期的统计 -->
-                  <% attendance_codes.each do |code| %>  
+                  <% @vacation.values.each do |code| %>  
                     <td><%= attendance_hash[code] %></td>
                   <% end %>
                   <!-- 配置统计数据-结束 -->
