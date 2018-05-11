@@ -1,0 +1,10 @@
+<tr>
+  <td></td>
+  <td><%= employee.group %></td>
+  <td><%= employee.name %></td>
+  <td><%= employee.sal_number %></td>
+  <td><%= employee.age %></td>
+  <% a = Attendance.find_by(:employee_id => employee.id, :month => Time.now.month) %>
+  <% b = a.month_attendances.split('') %>
+  b.each do 
+</tr>

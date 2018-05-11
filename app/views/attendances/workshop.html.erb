@@ -8,32 +8,29 @@
           <th>姓名</th>
           <th>工资号</th>
           <th>年龄</th>
-          <th>日勤夜班</th>
-          <th>轮流夜班</th>
-          <th>节日加班</th>
-          <th>病假</th>
-          <th>事假</th>
-          <th>年休假</th>
-          <th>年休假(健康修养)</th>
-          <th>婚假</th>
-          <th>产假</th>
-          <th>育儿假</th>
-          <th>陪产假</th>
-          <th>出差</th>
-          <th>丧假</th>
-          <th>探亲假</th>
-          <th>搬家假</th>
-          <th>入学培训</th>
+          <% @vacation_names.each do |name| %>
+            <th><%= name %></th>
+          <% end %>
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
           <% @employees.each do |employee| %>
+            <% attendance_hash= {} %>
             <tr>
               <td></td>
               <td><%= employee.group %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.age %></td>
+              <% a = Attendance.find_by(:employee_id => employee.id, :month => Time.now.month) %>
+
+              <% attendance_ary = a.month_attendances.split('') %> 
+              <% @vacation.values.each do |code| %>
+                <% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
+              <% end %>
+              <% @vacation.values.each do |m| %>
+                <td><%= attendance_hash[m] %></td>
+              <% end %>
               
             </tr>
           <% end %> 

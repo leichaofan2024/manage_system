@@ -35,6 +35,12 @@ layout 'home'
 
 	def workshop
 		@employees = Employee.where(:id => 1..12)
+		@vacation_names = VacationCategory.pluck("vacation_name").uniq
+		@categories = VacationCategory.all
+		@vacation = {}
+		@categories.each do |category|
+			@vacation[category.vacation_shortening] = category.vacation_code
+		end
 	end
 
 end
