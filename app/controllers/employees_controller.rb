@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   layout 'home'
 
   def index
-    #按工种筛选和默认显示的情况
+    #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
     if params[:work_type].present?
       @employees = Employee.where(work_type: params[:work_type])
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)

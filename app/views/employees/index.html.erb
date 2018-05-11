@@ -29,23 +29,43 @@
       </div>
     </div>
 
-    <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
-      <div class="queryTop-26iSU_0">
-        <div class="condition-19RSN_0">
-          <li class="grow8">
-            <div class="condition-19RSN_0 active-2SUrt_0">
-              <div class="panel_main pannel-two change-type">
-                <div class="title">
-                  <span>合计</span>
-                  <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees.count%></span>
-                  <span>人</span>
+    <% if can? :manage, Employee %>
+      <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
+        <div class="queryTop-26iSU_0">
+          <div class="condition-19RSN_0">
+            <li class="grow8">
+              <div class="condition-19RSN_0 active-2SUrt_0">
+                <div class="panel_main pannel-two change-type">
+                  <div class="title">
+                    <span>合计</span>
+                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees.count%></span>
+                    <span>人</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+          </div>
         </div>
       </div>
-    </div>
+    <% else %>
+      <div class="switchTab-3pFw5_0" style="margin-top: -60px;">
+        <div class="queryTop-26iSU_0">
+          <div class="condition-19RSN_0">
+            <li class="grow8">
+              <div class="condition-19RSN_0 active-2SUrt_0">
+                <div class="panel_main pannel-two change-type">
+                  <div class="title">
+                    <span>合计</span>
+                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees.count%></span>
+                    <span>人</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
     <div class="toolbar-26gsx_0">
       <div>
