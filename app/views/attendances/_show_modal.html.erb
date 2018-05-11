@@ -6,11 +6,12 @@
         <h4 class="modal-title" id="myModalLabel">选择考勤</h4>
       </div>
       <div class="modal-body">
-        <%= @day_number %>
+        <% @day_number %>
         <%= form_tag create_attendance_attendances_path, method: 'post' do %>
             <% @vacation.each do |vacation| %>
               <%= radio_button_tag(:code, vacation[1]) %> 
               <%= hidden_field_tag :employee_id , @employee_id %>
+              <%= hidden_field_tag :day , @day_number.to_i - 1 %>
               <%= label_tag :"#{vacation[0]}" %><br><br>
             <% end %>
           <%= submit_tag :点击确定 %>

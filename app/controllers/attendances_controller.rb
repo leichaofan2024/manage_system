@@ -8,7 +8,7 @@ layout 'home'
 	def create_attendance
 		@attendance = Attendance.find_by(:employee_id => params[:employee_id])
 		a = @attendance.month_attendances.split('')
-		a[params[:day_number].to_i] = params[:code]
+		a[params[:day].to_i] = params[:code]
 		b = a.join('')
 		@attendance.update(:month_attendances => b)
 		@attendance.save
