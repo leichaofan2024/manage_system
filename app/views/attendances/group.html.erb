@@ -18,7 +18,7 @@
           </thead>
             <tbody data-behavior='sortable'>
             <!-- 配置表格数据-开始 -->
-              <% @employees.each do |employee| %>
+              <% @employees.each do |employee| %> 
                 <!-- 声明后面需要用到的hash -->
                 <% attendance_hash = {} %>
                 <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
@@ -44,6 +44,7 @@
                       <% end %>   
                     </td>
                     <div id="showModal">
+                      <%= render 'show_modal' %>
                     </div>
                   <% end %>
                   <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>

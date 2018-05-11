@@ -101,12 +101,13 @@ class Employee < ActiveRecord::Base
                      "家属"   => "family",
                      "J01BF" => "J01BF",
                      "职务化" => "duting"
+
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
       row = Hash[[header, spreadsheet.row(j)].transpose]
-      employee = find_by(id: row["id"]) || new
-      employee.attributes = row.to_hash
+      employee = find_by(job_number: row["job_number"]) || new
+      employee.attributes = row
       employee.save!
     end
   end

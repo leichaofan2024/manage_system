@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20180509061926) do
     t.string "political_party_date", comment: "党团时间"
     t.string "working_time", comment: "工作时间"
     t.string "railway_time", comment: "入路时间"
-    t.string "entry_time", comment: "本单位日期"
+    t.string "entry_time", comment: "本单位日期" 
     t.string "duty", comment: "职务"
     t.string "employment_period", comment: "任职时间"
     t.string "part_time", comment: "兼职时间"

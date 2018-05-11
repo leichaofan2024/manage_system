@@ -3,7 +3,7 @@ layout 'home'
 
 	def group
 	    @days = 1..31
-		@employees = Employee.where(:id => 1..12)
+		@employees = Employee.where(:id => 8513..8524)
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -36,7 +36,7 @@ layout 'home'
 	end
 
 	def workshop
-		@employees = Employee.where(:id => 1..12)
+		@employees = Employee.where(:id => 8513..8524)
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -46,7 +46,7 @@ layout 'home'
 	end
 
 	def duan
-		@employees = Employee.where(:id => 1..12)
+		@employees = Employee.where(:id => 8513..8524)
 	end
 
 end
