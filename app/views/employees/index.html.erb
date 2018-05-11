@@ -133,79 +133,9 @@
     <div class="card">
       <div style="overflow: auto; width: 100%;">
         <% if can? :manage, @employees %>
-            <table id="example" class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>工资号</th>
-                  <th>工号</th>
-                  <th>档案号</th>
-                  <th>车间</th>
-                  <th>班组</th>
-                  <th>姓名</th>
-                  <th>性别</th>
-                  <th>年龄</th>
-                  <th>文化程度</th>
-                  <th>民族</th>
-                  <th>籍贯</th>
-                  <th>工作时间</th>
-                  <th>工龄</th>
-                  <th>入路时间</th>
-                  <th>路龄</th>
-                </tr>
-              </thead>
-                  <tbody data-behavior='sortable'>
-                    <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
-                      <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-                        <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
-                        <td><%= employee.job_number %></td>
-                        <td><%= employee.record_number %></td>
-                        <td><%= employee.workshop %></td>
-                        <td><%= employee.group %></td>
-                        <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
-                        <td><%= employee.sex %></td>
-                        <td><%= employee.age %></td>
-                        <td><%= employee.education_background %></td>
-                        <td><%= employee.nation %></td>
-                        <td><%= employee.native_place %></td>
-                        <td><%= employee.working_time %></td>
-                        <td><%= employee.working_years %></td>
-                        <td><%= employee.railway_time %></td>
-                        <td><%= employee.rali_years %></td>
-                      </tr>
-                    <% end %>
-                 </tbody>
-            </table>
-         <% else %>
-         <table id="example" class="table table-bordered">
-           <thead>
-             <tr>
-               <th>车间</th>
-               <th>班组</th>
-               <th>姓名</th>
-               <th>性别</th>
-               <th>年龄</th>
-               <th>文化程度</th>
-               <th>民族</th>
-               <th>籍贯</th>
-             </tr>
-           </thead>
-               <tbody data-behavior='sortable'>
-                 <% if @employees.present? %>
-                   <% @employees.__send__ controller.action_name == 'search' ? :each_with_index : :find_each do |employee, hit| %>
-                     <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-                       <td><%= employee.workshop %></td>
-                       <td><%= employee.group %></td>
-                       <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
-                       <td><%= employee.sex %></td>
-                       <td><%= employee.age %></td>
-                       <td><%= employee.education_background %></td>
-                       <td><%= employee.nation %></td>
-                       <td><%= employee.native_place %></td>
-                     </tr>
-                   <% end %>
-                 <% end %>
-              </tbody>
-         </table>
+          <%= render 'empshared/emp_table'%>
+        <% else %>
+          <%= render 'empshared/emp_table_not_empadmin'%>
          <% end %>
       </div>
     </div>
