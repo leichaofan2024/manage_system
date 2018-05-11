@@ -122,4 +122,8 @@ class Employee < ActiveRecord::Base
     end
   end
 
+  scope :search_records, -> (params){self.search(params).records }
+
+
+
 end

@@ -190,6 +190,7 @@
              </tr>
            </thead>
                <tbody data-behavior='sortable'>
+                 <% if @employees.present? %>
                  <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
                    <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
                      <td><%= employee.workshop %></td>
@@ -201,6 +202,7 @@
                      <td><%= employee.nation %></td>
                      <td><%= employee.native_place %></td>
                    </tr>
+                 <% end %>
                  <% end %>
               </tbody>
          </table>
