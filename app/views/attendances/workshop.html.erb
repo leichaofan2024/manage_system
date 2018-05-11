@@ -16,21 +16,15 @@
         <tbody data-behavior='sortable'>
           <% @employees.each do |employee| %>
             <% attendance_hash= {} %>
+            <% day_number = 1%>
             <tr>
               <td></td>
               <td><%= employee.group %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.age %></td>
-              <% a = Attendance.find_by(:employee_id => employee.id, :month => Time.now.month) %>
 
-              <% attendance_ary = a.month_attendances.split('') %> 
-              <% @vacation.values.each do |code| %>
-                <% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
-              <% end %>
-              <% @vacation.values.each do |m| %>
-                <td><%= attendance_hash[m] %></td>
-              <% end %>
+              <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
               
             </tr>
           <% end %> 

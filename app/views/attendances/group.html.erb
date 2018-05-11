@@ -7,27 +7,13 @@
               <th>姓名</th>
               <th>职名</th>
               <!-- 生成每月1-31号的数字-开始 -->
-              <% day_number = 1..31 %>
-              <% day_number.each do |i| %>
+              <% @days.each do |i| %>
                 <th><%= i %></th>
               <% end %>
               <!-- 生成每月1-31号的数字-结束 -->
-              <th>日勤夜班</th>
-              <th>轮流夜班</th>
-              <th>节日加班</th>
-              <th>病假</th>
-              <th>事假</th>
-              <th>年休假</th>
-              <th>年休假(健康修养)</th>
-              <th>婚假</th>
-              <th>产假</th>
-              <th>育儿假</th>
-              <th>陪产假</th>
-              <th>出差</th>
-              <th>丧假</th>
-              <th>探亲假</th>
-              <th>搬家假</th>
-              <th>入学培训</th>
+              <% @vacation_names.each do |name| %>
+                <th><%= name %></th>
+              <% end %>
             </tr>
           </thead>
             <tbody data-behavior='sortable'>
@@ -42,35 +28,25 @@
                   <td><%= employee.duty %></td> 
                   <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
                   <% attendance = Attendance.find_by(employee_id: employee.id, month: Time.now.month) %>
-                    <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-                    <% attendance_ary = attendance.month_attendances.split('') %>
-                    <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                    <% day_number = 1%>
-                    <% attendance_ary.each do |day_attendance| %>
-                      <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                      <td>
-                        <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                          <% if day_attendance == "x" %>
-                            <%= "未考勤" %>
-                          <% else %>
-                            <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                          <% end %>
-                        <% end %>   
-                      </td>
-                      <!-- 配置统计数据-开始 -->
-                      <% @vacation.values.each do |code| %>
-                        <!-- 将每组考勤中的attendance_code和出现次数存成hash -->
-                        <% attendance_hash[code] = attendance_ary.map{|m| m if m==code}.compact.count %>
-                      <% end %>
-                      <% day_number += 1%>
-                    <% end %>
-                  <!-- 捞出所有的键，就是表右侧对各个假期的统计 -->
-                  <% @vacation.values.each do |code| %>  
-                    <td><%= attendance_hash[code] %></td>
+                  <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
+                  <% attendance_ary = attendance.month_attendances.split('') %>
+                  <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                  <% day_number = 1%>
+                  <% attendance_ary.each do |day_attendance| %>
+                    <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                    <td>
+                      <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                        <% if day_attendance == "x" %>
+                          <%= "未考勤" %>
+                        <% else %>
+                          <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                        <% end %>
+                      <% end %>   
+                    </td>
+                    <div id="showModal">
+                    </div>
                   <% end %>
-                  <!-- 配置统计数据-结束 -->
-                  <div id="showModal">
-                  </div>
+                  <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
                 </tr>
               <% end %> 
               <!-- 配置表格数据-开始 --> 

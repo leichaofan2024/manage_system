@@ -2,7 +2,9 @@ class AttendancesController < ApplicationController
 layout 'home'
 
 	def group
+		@days = 1..31
 		@employees = Employee.where(:id => 1..12)
+		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
