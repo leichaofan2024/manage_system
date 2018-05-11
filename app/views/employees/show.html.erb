@@ -46,12 +46,14 @@
             <div class="info-2zzSp_0">
               <%= "基本信息"%>
             </div>
-            <div class="right-Qtwf2_0">
-              <div class="edit-2kYy__0">
-                <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+            <% if can? :edit, @employee %>
+              <div class="right-Qtwf2_0">
+                <div class="edit-2kYy__0">
+                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
+                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                </div>
               </div>
-            </div>
+            <% end %>
           </div>
 
           <div class>
@@ -237,13 +239,14 @@
             <div class="info-2zzSp_0">
               <%= "岗位信息"%>
             </div>
-            <div class="right-Qtwf2_0">
-              <div class="edit-2kYy__0">
-                <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
-
+            <% if can? :edit, @employee %>
+              <div class="right-Qtwf2_0">
+                <div class="edit-2kYy__0">
+                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
+                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                </div>
               </div>
-            </div>
+            <% end %>
           </div>
 
           <div class>
@@ -636,12 +639,14 @@
             <div class="info-2zzSp_0">
               <%= "工资信息"%>
             </div>
-            <div class="right-Qtwf2_0">
-              <div class="edit-2kYy__0">
-                <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+            <% if can? :edit, @employee %>
+              <div class="right-Qtwf2_0">
+                <div class="edit-2kYy__0">
+                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
+                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                </div>
               </div>
-            </div>
+            <% end %>
           </div>
 
           <div class>

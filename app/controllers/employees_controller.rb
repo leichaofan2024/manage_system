@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   layout 'home'
+
   def index
     #按工种筛选和默认显示的情况
     if params[:work_type].present?
@@ -28,7 +29,6 @@ class EmployeesController < ApplicationController
 
   def show
     @employee = Employee.find(params[:id])
-    authorize! :read, @employee
   end
 
  #上传表格
