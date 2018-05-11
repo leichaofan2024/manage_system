@@ -32,16 +32,19 @@ class Ability
 
   # 财务管理员权限
   def role_for_saleradmin
+    can :read, Employee
   end
 
 
   #奖惩管理员权限
   def role_for_awardadmin
+    can :read, Employee
   end
 
 
   # 定额管理员权限
   def role_for_limitadmin
+    can :read, Employee
   end
 
 

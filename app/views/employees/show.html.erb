@@ -83,6 +83,7 @@
                   </span>
                 </div>
 
+                <% if can? :manage, Employee %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -93,6 +94,7 @@
                     </div>
                   </span>
                 </div>
+                <% end %>
 
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
@@ -171,6 +173,7 @@
                   </span>
                 </div>
 
+                <% if can? :manage, Employee %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -225,6 +228,7 @@
                     </div>
                   </span>
                 </div>
+                <% end %>
 
               </div>
             </div>
@@ -233,6 +237,7 @@
         <!-- 结束 -->
 
         <!--其他信息-->
+        <% if can? :manage, Employee %>
         <div class="tructure-2zHdB_0">
           <!--基本信息的头部字-->
           <div class="head-3fDND_0">
@@ -702,6 +707,7 @@
             </div>
           </div>
         </div>
+        <% end %>
         <!-- 结束 -->
 
         </div>

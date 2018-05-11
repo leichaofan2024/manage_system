@@ -51,23 +51,25 @@
       <div>
 
       <!--- 按工种分类筛选-开始  -->
-        <div class="s.default_down ivu-dropdown">
-          <div class="ivu-dropdown-rel">
-            <span>
-              <a class="dropdown-toggle" data-toggle="dropdown" href="/" >
-                按职务筛选
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <% @work_types = Employee.pluck("work_type").uniq %>
-                <% @work_types.each do |work_type| %>
-                  <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
-                <% end %>
-              </ul>
-              <i class="ivu-icon ivu-icon-arrow-down-b"></i>
-            </span>
+      <% if can? :manage, Employee %>
+          <div class="s.default_down ivu-dropdown">
+            <div class="ivu-dropdown-rel">
+              <span>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="/" >
+                  按职务筛选
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <% @work_types = Employee.pluck("work_type").uniq %>
+                  <% @work_types.each do |work_type| %>
+                    <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
+                  <% end %>
+                </ul>
+                <i class="ivu-icon ivu-icon-arrow-down-b"></i>
+              </span>
+            </div>
           </div>
-        </div>
+        <% end %>
       <!--- 按工种分类筛选-结束  -->
 
 
@@ -88,12 +90,14 @@
 
  <div>
     <!--- 筛选-开始  -->
-    <%= form_tag filter_employees_path, method: 'get' do %>
-      <%= label_tag :请选择筛选类别，并输入时间段：%>
-      <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择", :required => "true"})%>
-      <%= text_field_tag :start_time %> ~
-      <%= text_field_tag :end_time %>
-      <%= submit_tag :筛选 %>
+    <% if can? :manage, Employee %>
+      <%= form_tag filter_employees_path, method: 'get' do %>
+        <%= label_tag :请选择筛选类别，并输入时间段：%>
+        <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择", :required => "true"})%>
+        <%= text_field_tag :start_time %> ~
+        <%= text_field_tag :end_time %>
+        <%= submit_tag :筛选 %>
+      <% end %>
     <% end %>
     <!--- 筛选-结束  -->
     <!--- 搜索-开始  -->
@@ -108,62 +112,92 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="overflow: auto; width: 100%;">
-        <table id="example" class="table table-bordered">
-          <thead>
-            <tr>
-              <th>工资号</th>
-              <th>工号</th>
-              <th>档案号</th>
-              <th>车间</th>
-              <th>班组</th>
-              <th>姓名</th>
-              <th>性别</th>
-              <th>年龄</th>
-              <th>文化程度</th>
-              <th>民族</th>
-              <th>籍贯</th>
-              <th>工作时间</th>
-              <th>工龄</th>
-              <th>入路时间</th>
-              <th>路龄</th>
-            </tr>
-          </thead>
-              <tbody data-behavior='sortable'>
-                <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
-                  <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-                    <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
-                    <td><%= employee.job_number %></td>
-                    <td><%= employee.record_number %></td>
-                    <td><%= employee.workshop %></td>
-                    <td><%= employee.group %></td>
-                    <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
-                    <td><%= employee.sex %></td>
-                    <td><%= employee.age %></td>
-                    <td><%= employee.education_background %></td>
-                    <td><%= employee.nation %></td>
-                    <td><%= employee.native_place %></td>
-                    <td><%= employee.working_time %></td>
-                    <td><%= employee.working_years %></td>
-                    <td><%= employee.railway_time %></td>
-                    <td><%= employee.rali_years %></td>
-                  </tr>
-                <% end %>
-             </tbody>
-
-        </table>
+        <% if can? :manage, @employees %>
+            <table id="example" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>工资号</th>
+                  <th>工号</th>
+                  <th>档案号</th>
+                  <th>车间</th>
+                  <th>班组</th>
+                  <th>姓名</th>
+                  <th>性别</th>
+                  <th>年龄</th>
+                  <th>文化程度</th>
+                  <th>民族</th>
+                  <th>籍贯</th>
+                  <th>工作时间</th>
+                  <th>工龄</th>
+                  <th>入路时间</th>
+                  <th>路龄</th>
+                </tr>
+              </thead>
+                  <tbody data-behavior='sortable'>
+                    <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
+                      <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+                        <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
+                        <td><%= employee.job_number %></td>
+                        <td><%= employee.record_number %></td>
+                        <td><%= employee.workshop %></td>
+                        <td><%= employee.group %></td>
+                        <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+                        <td><%= employee.sex %></td>
+                        <td><%= employee.age %></td>
+                        <td><%= employee.education_background %></td>
+                        <td><%= employee.nation %></td>
+                        <td><%= employee.native_place %></td>
+                        <td><%= employee.working_time %></td>
+                        <td><%= employee.working_years %></td>
+                        <td><%= employee.railway_time %></td>
+                        <td><%= employee.rali_years %></td>
+                      </tr>
+                    <% end %>
+                 </tbody>
+            </table>
+         <% else %>
+         <table id="example" class="table table-bordered">
+           <thead>
+             <tr>
+               <th>车间</th>
+               <th>班组</th>
+               <th>姓名</th>
+               <th>性别</th>
+               <th>年龄</th>
+               <th>文化程度</th>
+               <th>民族</th>
+               <th>籍贯</th>
+             </tr>
+           </thead>
+               <tbody data-behavior='sortable'>
+                 <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
+                   <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+                     <td><%= employee.workshop %></td>
+                     <td><%= employee.group %></td>
+                     <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+                     <td><%= employee.sex %></td>
+                     <td><%= employee.age %></td>
+                     <td><%= employee.education_background %></td>
+                     <td><%= employee.nation %></td>
+                     <td><%= employee.native_place %></td>
+                   </tr>
+                 <% end %>
+              </tbody>
+         </table>
+         <% end %>
       </div>
     </div>
 
 
 
+   <% if can? :manage, Employee %>
+      <h4>上传现员表</h4>
 
-    <h4>上传现员表</h4>
-
-    <%= form_tag import_table_employees_path, multipart: true do %>
-      <%= file_field_tag :file%>
-      <%= submit_tag "上传"%>
+      <%= form_tag import_table_employees_path, multipart: true do %>
+        <%= file_field_tag :file%>
+        <%= submit_tag "上传"%>
+      <% end %>
     <% end %>
 
   </div>
-
 </div>

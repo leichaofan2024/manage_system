@@ -5,8 +5,18 @@ class EmployeesController < ApplicationController
     #按工种筛选和默认显示的情况
     if params[:work_type].present?
       @employees = Employee.where(work_type: params[:work_type])
-    else
+    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.all
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      if current_user.name == "内退管理员"
+        @employees = Employee.where(:workshop => "内退")
+      elsif current_user.name == "见习生管理员"
+        @employees = Employee.where(:workshop => "见习生")
+      else
+        @employees = Employee.where(:group => current_user.name)
+      end
+    else
+      @employees = Employee.where(:workshop => current_user.name.split("-")[0],:group => current_user.name.split("-")[1])
     end
     #下载表格配置
     @export_employees = Employee.order("id ASC")

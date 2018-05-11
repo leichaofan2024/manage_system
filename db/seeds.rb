@@ -52,8 +52,13 @@ puts "创建班组管理员，请稍等。。。"
   User.create(:name => i, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
 end
 
-@employees.where.not(:workshop => "机关").pluck(:group).uniq.each do |j|
-  User.create(:name => j, :password => "123456", :password_confirmation => "123456").add_role :groupadmin
+@workshops = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq
+@workshops.each do |j|
+  groups = Employee.where(:workshop => j).pluck(:group).uniq
+  groups.uniq.each do |k|
+    User.create(:name => (j + "-" + k), :password => "123456", :password_confirmation => "123456").add_role :groupadmin
+  end
 end
+
 group_count = Employee.pluck(:group).uniq.count
 puts "共创建#{group_count}个班组管理员"
