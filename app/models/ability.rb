@@ -4,8 +4,8 @@ class Ability
   def initialize(user)
     if user.has_role? :superadmin
       can :manage, :all
-    else
-      can :read, Employee
+    elsif user.has_role? :empadmin
+      can :manage, Employee
     end
   end
 

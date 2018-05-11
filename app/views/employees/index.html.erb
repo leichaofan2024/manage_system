@@ -1,5 +1,7 @@
 <%= render 'employee_navbar' %>
-<%= link_to "一键更新", update_employee_info_employees_path, method: :post %>
+<%if can? :update_employee_info, Employee%>
+  <%= link_to "一键更新", update_employee_info_employees_path, method: :post %>
+<% end %>
 <div class="main-18rau_0">
   <div>
     <div class="btn_group_top-1sKKU_0">
