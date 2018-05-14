@@ -30,18 +30,11 @@ User.create(name: "奖惩管理员", password: "123456", password_confirmation: 
 
 
 puts "创建车间管理员，请稍等。。。"
-Employee.pluck(:workshop).uniq.each do |e|
-  if e == "内退"
-    User.create(:name => "内退管理员", :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
-  elsif e == "见习生"
-    User.create(:name => "见习生管理员", :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
-  elsif e == "机关"
-    User.create(:name => e, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
-  else
+@not_organs = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq
+@not_organs.uniq.each do |e|
     User.create(:name => e, :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
-  end
 end
-workshop_count = Employee.pluck(:workshop).uniq.count
+workshop_count = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq.count
 puts "共创建#{workshop_count}个车间管理员"
 "\n"
 

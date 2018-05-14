@@ -8,13 +8,7 @@ class EmployeesController < ApplicationController
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.all
     elsif current_user.has_role? :workshopadmin
-      if current_user.name == "内退管理员"
-        @employees = Employee.where(:workshop => "内退")
-      elsif current_user.name == "见习生管理员"
-        @employees = Employee.where(:workshop => "见习生")
-      else
         @employees = Employee.where(:workshop => current_user.name)
-      end
     elsif current_user.has_role? :organsadmin
       @employees = Employee.where(:group => current_user.name)
     else
@@ -56,13 +50,7 @@ class EmployeesController < ApplicationController
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.search_records(params[:q])
     elsif current_user.has_role? :workshopadmin
-      if current_user.name == "内退管理员"
-        @employees = Employee.search_records(params[:q]).where(:workshop => "内退")
-      elsif current_user.name == "见习生管理员"
-        @employees = Employee.search_records(params[:q]).where(:workshop => "见习生")
-      else
-        @employees = Employee.search_records(params[:q]).where(:workshop => current_user.name)
-      end
+      @employees = Employee.search_records(params[:q]).where(:workshop => current_user.name)
     else
       @employees = Employee.search_records(params[:q]).where(:workshop => current_user.name.split("-")[0],:group => current_user.name.split("-")[1])
     end
