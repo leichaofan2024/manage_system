@@ -43,16 +43,23 @@
                         <% end %>
                       <% end %>
                     </td>
-                    <div id="showModal">
-                      <%= render 'show_modal' %>
-                    </div>
+                    <% attendance = Attendance.find_by(:employee_id => employee.id, :month => Time.now.month) %>
+                    <% attendance_ary = attendance.month_attendances.split('') %>
+                    <% @vacation.values.each do |code| %>
+                    	<% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
+                    <% end %>
+                  	<% day_number += 1%>
                   <% end %>
-                  <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
+                  <% @vacation.values.each do |code| %>
+                  	<td><%= attendance_hash[code] %></td>
+                  <% end %>
                 </tr>
               <% end %>
               <!-- 配置表格数据-开始 -->
            </tbody>
         </table>
+        <div id="showModal">
+        </div>
       </div>
     </div>
   </div>
