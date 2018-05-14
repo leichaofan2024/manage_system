@@ -1,0 +1,9 @@
+<% attendance = Attendance.find_by(:employee_id => employee.id, :month => Time.now.month) %>
+<% attendance_ary = attendance.month_attendances.split('') %> 
+<% @vacation.values.each do |code| %>
+	<% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
+	<% day_number += 1%>
+<% end %>
+<% @vacation.values.each do |code| %>
+	<td><%= attendance_hash[code] %></td>
+<% end %>

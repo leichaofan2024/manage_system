@@ -1,0 +1,34 @@
+<div class="card">
+  <div style="overflow: auto; width: 100%;">
+    <table id="example" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>顺号</th>
+          <th>班组</th>
+          <th>姓名</th>
+          <th>工资号</th>
+          <th>年龄</th>
+          <% @vacation_names.each do |name| %>
+            <th><%= name %></th>
+          <% end %>
+        </tr>
+      </thead>
+        <tbody data-behavior='sortable'>
+          <% @employees.each do |employee| %>
+            <% attendance_hash= {} %>
+            <% day_number = 1%>
+            <tr>
+              <td></td>
+              <td><%= employee.group %></td>
+              <td><%= employee.name %></td>
+              <td><%= employee.sal_number %></td>
+              <td><%= employee.age %></td>
+
+              <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
+              
+            </tr>
+          <% end %> 
+       </tbody>
+    </table>
+  </div>
+</div>

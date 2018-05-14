@@ -21,4 +21,16 @@ Rails.application.routes.draw do
       get :statistical_analysis_data
     end
   end
+
+  resources :attendances do
+    collection do
+      get :group
+      get :workshop
+      get :duan
+      get :year_statistics
+      get :setting
+      get :show_modal
+      post :create_attendance
+    end
+  end
 end

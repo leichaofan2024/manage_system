@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509024418) do
+ActiveRecord::Schema.define(version: 20180510064413) do
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "month_attendances", limit: 62
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "employee_id"
+    t.integer "month"
   end
 
   create_table "emp_basic_infos", primary_key: "emp_id", id: :integer, comment: "唯一标识", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
@@ -151,9 +153,11 @@ ActiveRecord::Schema.define(version: 20180509024418) do
   end
 
   create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "vacation_categories"
+    t.string "vacation_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "vacation_shortening", comment: "假期简称"
+    t.string "vacation_code", comment: "假期代码"
   end
 
 end
