@@ -43,16 +43,23 @@
                         <% end %>
                       <% end %>
                     </td>
-                    <div id="showModal">
-                      <%= render 'show_modal' %>
-                    </div>
+
+                  <% @vacation.values.each do |code| %>
+                    <% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
                   <% end %>
-                  <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
+                  <% day_number += 1%>
+                  <% end %>
+                  <% @vacation.values.each do |code| %>
+                    <td><%= attendance_hash[code] %></td>
+                  <% end %>
                 </tr>
               <% end %>
               <!-- 配置表格数据-开始 -->
            </tbody>
         </table>
+        <div id="showModal">
+        <%= render 'show_modal' %>
+      </div>
       </div>
     </div>
   </div>
