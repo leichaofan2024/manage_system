@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180515034209) do
+ActiveRecord::Schema.define(version: 20180515073138) do
+
+  create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "status", null: false
+    t.integer "group_id", null: false
+    t.integer "year", null: false
+    t.integer "month", null: false
+    t.integer "day", null: false
+    t.string "employee_id", default: "{}", null: false
+    t.string "apply_person", null: false
+    t.text "cause", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "attendance_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "edit_beforem", null: false
+    t.string "edit_after", null: false
+    t.integer "attendance_id", null: false
+    t.integer "day", null: false
+    t.string "modify_person", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "year", null: false
@@ -22,11 +45,13 @@ ActiveRecord::Schema.define(version: 20180515034209) do
   end
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "month_attendances"
+    t.string "month_attendances", default: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "employee_id"
     t.integer "month"
+    t.integer "year", null: false
+    t.integer "group_id", null: false
   end
 
   create_table "emp_basic_infos", primary_key: "emp_id", id: :integer, comment: "唯一标识", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
@@ -124,6 +149,13 @@ ActiveRecord::Schema.define(version: 20180515034209) do
     t.string "job_foreman_duty", comment: "班组长职务"
   end
 
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "name"
+    t.integer "workshop_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "name"
     t.string "resource_type"
@@ -167,6 +199,12 @@ ActiveRecord::Schema.define(version: 20180515034209) do
     t.datetime "updated_at", null: false
     t.string "vacation_shortening", comment: "假期简称"
     t.string "vacation_code", comment: "假期代码"
+  end
+
+  create_table "workshops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
