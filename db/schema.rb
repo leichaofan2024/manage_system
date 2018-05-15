@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510064413) do
+ActiveRecord::Schema.define(version: 20180515034209) do
+
+  create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "year", null: false
+    t.integer "month", null: false
+    t.integer "group_id", null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "month_attendances", limit: 62
+    t.string "month_attendances"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "employee_id"
@@ -38,11 +47,11 @@ ActiveRecord::Schema.define(version: 20180510064413) do
     t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
     t.string "job_number", null: false, comment: "工号"
     t.string "record_number", comment: "档案号"
-    t.string "workshop", null: false, comment: "车间"
-    t.string "group", null: false, comment: "班组"
+    t.string "workshop", null: false
+    t.string "group", null: false
     t.string "name", null: false
     t.string "sex", null: false
-    t.string "birth_date", null: false
+    t.string "birth_date"
     t.integer "birth_year"
     t.integer "age"
     t.string "nation", null: false, comment: "民族"
