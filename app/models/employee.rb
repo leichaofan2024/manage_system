@@ -6,6 +6,8 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
   has_many :attendances
+  belongs_to :workshop, :foreign_key => "workshop"
+  belongs_to :group, :foreign_key => "group"
 
 
   def self.search(query)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509061926) do
+ActiveRecord::Schema.define(version: 20180515025120) do
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "month_attendances", limit: 62
@@ -39,8 +39,8 @@ ActiveRecord::Schema.define(version: 20180509061926) do
     t.string "sal_number", default: "", comment: "工资号"
     t.string "job_number", comment: "工号"
     t.string "record_number", comment: "档案号"
-    t.string "workshop", comment: "车间"
-    t.string "group", comment: "班组"
+    t.string "workshop_id"
+    t.string "group_id"
     t.string "name"
     t.string "sex"
     t.string "birth_date"
@@ -115,6 +115,13 @@ ActiveRecord::Schema.define(version: 20180509061926) do
     t.string "job_foreman_duty", comment: "班组长职务"
   end
 
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "name"
+    t.integer "workshop_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "name"
     t.string "resource_type"
@@ -158,6 +165,12 @@ ActiveRecord::Schema.define(version: 20180509061926) do
     t.datetime "updated_at", null: false
     t.string "vacation_shortening", null: false, comment: "假期简称"
     t.string "vacation_code", null: false, comment: "假期代码"
+  end
+
+  create_table "workshops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
