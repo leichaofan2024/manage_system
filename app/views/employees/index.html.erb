@@ -132,7 +132,7 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="overflow: auto; width: 100%;">
-        <% if can? :manage, @employees %>
+        <% if can? :manage, Employee %>
           <%= render 'empshared/emp_table'%>
         <% else %>
           <%= render 'empshared/emp_table_not_empadmin'%>
