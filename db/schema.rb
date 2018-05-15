@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180515034209) do
+ActiveRecord::Schema.define(version: 20180515055155) do
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "status", null: false
@@ -73,8 +73,8 @@ ActiveRecord::Schema.define(version: 20180515034209) do
     t.string "sal_number", default: "", comment: "工资号"
     t.string "job_number", comment: "工号"
     t.string "record_number", comment: "档案号"
-    t.string "workshop_id"
-    t.string "group_id"
+    t.string "workshop"
+    t.string "group"
     t.string "name"
     t.string "sex"
     t.string "birth_date"
