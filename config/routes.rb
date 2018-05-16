@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get :setting
       get :show_modal
       post :create_attendance
+      post :verify
     end
   end
 end

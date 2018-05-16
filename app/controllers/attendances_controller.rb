@@ -2,8 +2,8 @@ class AttendancesController < ApplicationController
 layout 'home'
 
 	def group
-	  @days = 1..31
-		@employees = Employee.all
+	  	@days = 1..31
+		@employees = Employee.where(:id => 1..12)
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -36,7 +36,9 @@ layout 'home'
 	end
 
 	def workshop
-		@employees = Employee.where(:id => 8513..8524)
+		@workshop = Workshop.find_by(:name => current_user.name)
+		@groups = @workshop.groups
+		@employees = Employee.where(:id => 1..12)
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -46,7 +48,7 @@ layout 'home'
 	end
 
 	def duan
-		@employees = Employee.where(:id => 8513..8524)
+		@employees = Employee.where(:id => 1..12)
 	end
 
 

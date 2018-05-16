@@ -104,7 +104,6 @@ class Employee < ActiveRecord::Base
                      "家属"   => "family",
                      "J01BF" => "J01BF",
                      "职务化" => "duting"
-
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
