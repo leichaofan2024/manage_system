@@ -48,7 +48,7 @@ layout 'home'
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			@status = AttendanceStatus.find_by(:group_id => params[:group])
+			@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
 		else
 			@employees = Employee.where(:workshop => @workshop)
@@ -76,7 +76,19 @@ layout 'home'
 
 	##段管理员页面--开始
 	def duan
-		@employees = Employee.where(:id => 1..12)
+		@workshops = Workshop.all
+		if params[:workshop].present?
+			@employees = Employee.where(:workshop => params[:workshop])
+		else
+			@employees = Employee.where(:workshop => "1")
+		end
+
+		@vacation_names = VacationCategory.pluck("vacation_name").uniq
+		@categories = VacationCategory.all
+		@vacation = {}
+		@categories.each do |category|
+			@vacation[category.vacation_shortening] = category.vacation_code
+		end
 	end
 	##段管理员页面--结束
 

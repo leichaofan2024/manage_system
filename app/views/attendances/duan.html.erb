@@ -1,5 +1,17 @@
+<h4>本考勤表状态:</h4>
+<%= link_to "通过审核", verify_attendances_path, method: :post, class: "btn btn-primary" %>
+<div class="col-md-12" style="height: 100%">
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5>北京供电段</h5>
+      <ul>
+        <% @workshops.each do |workshop| %>
+          <li><a href='/attendances/duan?workshop=<%= workshop.id %>'><%= workshop.name %></a></li>
+        <% end %>
+      </ul>
+    </div>
+
 <div class="card">
-  <div style="overflow: auto; width: 100%;">
+  <div style="overflow: auto;" class="col-md-10">
     <table id="example" class="table table-bordered">
       <thead>
         <tr>
@@ -8,30 +20,26 @@
           <th>工资号</th>
           <th>车间</th>
           <th>班组</th>
-          <th>病假</th>
-          <th>事假</th>
-          <th>婚假</th>
-          <th>产假</th>
-          <th>探亲假天数</th>
-          <th>丧假</th>
-          <th>育儿假</th>
-          <th>工伤假</th>
-          <th>旷工</th>
-          <th>陪产假</th>
-          <th>备注</th>         
+          <% @vacation_names.each do |name| %>
+            <th><%= name %></th>
+          <% end %>        
         </tr>
       </thead>
         <tbody data-behavior='sortable'>  
         <% @employees.each do |employee| %> 
+        <% attendance_hash= {} %>
+        <% day_number = 1%>
 	      <tr>
 	        <td></td>
 	        <td><%= employee.name %></td>
 	        <td><%= employee.sal_number %></td>
-	        <td><%= employee.workshop %></td>
-	        <td><%= employee.group %></td> 
+	        <td><%= Workshop.find_by(:id => employee.workshop).name %></td>
+	        <td><%= Group.find_by(:id => employee.group).name %></td> 
+          <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
 	      </tr>
         <% end %>
        </tbody>
     </table>
   </div>
+</div>
 </div>
