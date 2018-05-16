@@ -1,17 +1,13 @@
-<%= link_to "通过审核", verify_attendances_path, class: "btn btn-primary" %>
-
+<h4>本考勤表状态:<%= @status.status %></h4>
+<%= link_to "通过审核", verify_attendances_path(:click_group => @click_group), method: :post, class: "btn btn-primary" %>
 <div class="col-md-12" style="height: 100%">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
+      <h5><%= link_to @workshop.name, organization_structure_employees_path(duan: "北京供电段") %></h5>
       <ul>
+        <% @groups.each do |group| %>
+          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+        <% end %>
         <li>
-          <em></em><a href='/attendances/workshop?workshop=<%= @workshop %>'><%= @workshop.name %></a>
-          <ul>
-            <% @groups.each do |group| %>
-              <li><a href='/attendances/workshop?group=<%= group %>'><%= group.name %></a></li>
-            <% end %>
-          </ul>
-        </li>
       </ul>
     </div>
 
@@ -36,14 +32,14 @@
             <% day_number = 1%>
             <tr>
               <td></td>
-              <td><%= employee.group %></td>
+              <td><%= Group.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.age %></td>
 
               <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
               
-            </tr>
+            </tr> 
           <% end %> 
        </tbody>
     </table>

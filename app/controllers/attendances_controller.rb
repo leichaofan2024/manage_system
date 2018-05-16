@@ -3,7 +3,7 @@ layout 'home'
 
 	def group
 	  	@days = 1..31
-		@employees = Employee.where(:id => 1..12)
+		@employees = Employee.all
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -38,13 +38,26 @@ layout 'home'
 	def workshop
 		@workshop = Workshop.find_by(:name => current_user.name)
 		@groups = @workshop.groups
-		@employees = Employee.where(:id => 1..12)
+		@click_group = params[:group]
+
+		if params[:group].present?
+			@status = AttendanceStatus.find_by(:group_id => params[:group])
+			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
+		else
+			@employees = Employee.where(:workshop => @workshop)
+		end
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
 			@vacation[category.vacation_shortening] = category.vacation_code
 		end
+	end
+
+	def verify
+		@attendance_status = AttendanceStatus.find_by(:group_id => params[:click_group])
+		@attendance_status.update(:status => "车间已审核")
+		redirect_back(fallback_location: workshop_attendances_path)
 	end
 
 	def duan
