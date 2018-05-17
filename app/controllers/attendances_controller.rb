@@ -3,7 +3,7 @@ layout 'home'
 
 	##班组页面--开始
 	def group
-		@employees = Employee.all
+		@employees = Employee.where(:workshop => "2")
 		@vacation_names = VacationCategory.pluck("vacation_name").uniq
 		@categories = VacationCategory.all
 		@vacation = {}
@@ -15,12 +15,41 @@ layout 'home'
 
 	##弹窗内选择假期的表单功能--开始
 	def create_attendance
+		#选择假期确定后存入attendance表中--开始
+		#根据表单传来的employee_id参数，找到要更新的考勤数据
 		@attendance = Attendance.find_by(:employee_id => params[:employee_id])
-		a = @attendance.month_attendances.split('')
-		a[params[:day].to_i] = params[:code]
-		b = a.join('')
-		@attendance.update(:month_attendances => b)
+		#把记录考勤的字符串分割成数组，赋值给attendance_ary
+		attendance_ary = @attendance.month_attendances.split('')
+		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
+		attendance_ary[params[:day].to_i] = params[:code]
+		#将替换过的新的数组变成字符串，赋值给attendance_string
+		attendance_string = attendance_ary.join('')
+		@attendance.update(:month_attendances => attendance_string)
 		@attendance.save
+		#选择假期确定后存入attendance表中--结束
+		#每次更新考勤数据，都更新一次总数(attendance_count)--开始
+		#将上面更新过的表示考勤的数组赋值给attendance_ary_after
+		attendance_ary_after = @attendance.month_attendances.split("")
+		#定义下面需要使用的空hash
+		@vacation = {}
+		attendance_hash= {}
+		#做出一个所有的假期缩写和假期code对应的hash，供下面使用--开始
+		@categories = VacationCategory.all
+		@categories.each do |category|
+			@vacation[category.vacation_shortening] = category.vacation_code
+		end
+		#做出一个所有的假期缩写和假期code对应的hash，供下面使用--结束
+		#通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
+		@vacation.values.each do |code|
+			attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
+		end
+		#将上面得到的attendance_hash存入数据库
+		attendance_hash.each do |i|
+			@attendance_count = AttendanceCount.find_by(:attendance_id => @attendance.id, :vacation_code => i[0])
+			@attendance_count ||= AttendanceCount.new
+			@attendance_count.update(:attendance_id => @attendance.id, :vacation_code => i[0], :count => i[1])
+		end
+		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
 		redirect_to group_attendances_path
 	end
 	##弹窗内选择假期的表单功能--结束
@@ -92,4 +121,13 @@ layout 'home'
 	end
 	##段管理员页面--结束
 
+	def annual_statistic
+		@workshops = Workshop.all
+		@vacation_names = VacationCategory.pluck("vacation_name").uniq
+		@categories = VacationCategory.all
+		@vacation = {}
+		@categories.each do |category|
+			@vacation[category.vacation_shortening] = category.vacation_code
+		end
+	end
 end
