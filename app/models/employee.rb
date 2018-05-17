@@ -7,8 +7,6 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model::Callbacks
   has_many :attendances
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
-  belongs_to :workshop
-  belongs_to :group 
 
 
   def self.search(query)
@@ -107,7 +105,6 @@ class Employee < ActiveRecord::Base
                      "家属"   => "family",
                      "J01BF" => "J01BF",
                      "职务化" => "duting"
-
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
@@ -128,7 +125,6 @@ class Employee < ActiveRecord::Base
   end
 
   scope :search_records, -> (params){self.search(params).records }
-
 
 
 end
