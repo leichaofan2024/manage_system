@@ -18,25 +18,25 @@
       <th>路龄</th>
     </tr>
   </thead>
-      <tbody data-behavior='sortable'>
-        <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
-          <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-            <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
-            <td><%= employee.job_number %></td>
-            <td><%= employee.record_number %></td>
-            <td><%= employee.workshop %></td>
-            <td><%= employee.group %></td>
-            <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
-            <td><%= employee.sex %></td>
-            <td><%= employee.age %></td>
-            <td><%= employee.education_background %></td>
-            <td><%= employee.nation %></td>
-            <td><%= employee.native_place %></td>
-            <td><%= employee.working_time %></td>
-            <td><%= employee.working_years %></td>
-            <td><%= employee.railway_time %></td>
-            <td><%= employee.rali_years %></td>
-          </tr>
-        <% end %>
-     </tbody>
+   <tbody data-behavior='sortable'>
+    <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
+      <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+        <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
+        <td><%= employee.job_number %></td>
+        <td><%= employee.record_number %></td>
+        <td><%= employee.workshop %></td>
+        <td><%= employee.group %></td>
+        <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+        <td><%= employee.sex %></td>
+        <td><%= employee.age %></td>
+        <td><%= employee.education_background %></td>
+        <td><%= employee.nation %></td>
+        <td><%= employee.native_place %></td>
+        <td><%= employee.working_time %></td>
+        <td><%= employee.working_years %></td>
+        <td><%= employee.railway_time %></td>
+        <td><%= employee.rali_years %></td>
+      </tr>
+    <% end %>
+ </tbody>
 </table>

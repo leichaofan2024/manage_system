@@ -11,20 +11,20 @@
       <th>籍贯</th>
     </tr>
   </thead>
-      <tbody data-behavior='sortable'>
-        <% if @employees.present? %>
-          <% @employees.__send__ controller.action_name == 'search' ? :each_with_index : :find_each do |employee, hit| %>
-            <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-              <td><%= employee.workshop %></td>
-              <td><%= employee.group %></td>
-              <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
-              <td><%= employee.sex %></td>
-              <td><%= employee.age %></td>
-              <td><%= employee.education_background %></td>
-              <td><%= employee.nation %></td>
-              <td><%= employee.native_place %></td>
-            </tr>
-          <% end %>
-        <% end %>
-     </tbody>
+   <tbody data-behavior='sortable'>
+    <% if @employees.present? %>
+      <% @employees.__send__ controller.action_name == 'search' ? :each_with_index : :find_each do |employee, hit| %>
+        <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+          <td><%= employee.workshop %></td>
+          <td><%= employee.group %></td>
+          <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+          <td><%= employee.sex %></td>
+          <td><%= employee.age %></td>
+          <td><%= employee.education_background %></td>
+          <td><%= employee.nation %></td>
+          <td><%= employee.native_place %></td>
+        </tr>
+      <% end %>
+    <% end %>
+ </tbody>
 </table>
