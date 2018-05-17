@@ -35,7 +35,7 @@
             <% attendance_ary.each do |day_attendance| %>
               <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
               <td>
-                <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, "data-toggle" => "modal", "data-target" => "#myModal" do %>
                   <% if day_attendance == "x" %>
                     <%= "未考勤" %>
                   <% else %>

@@ -1,7 +1,6 @@
 class CreateEmpBasicInfos < ActiveRecord::Migration[5.1]
   def change
-    create_table :emp_basic_infos, id: false, primary_key: "emp_id", options: "AUTO_INCREMENT = 900001", comment: "员工基本信息表" do |t|
-      t.integer     :emp_id,                     comment: "唯一标识"
+    create_table :emp_basic_infos, comment: "员工基本信息表" do |t|
       t.string      :sal_number,                 comment: "工资号"
       t.string      :workshop,                   comment: "车间"
       t.string      :group,                      comment: "班组"

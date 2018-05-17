@@ -1,3 +1,3 @@
 class EmpBasicInfo < ActiveRecord::Base
-  self.primary_key = 'emp_id'
+  belongs_to :employee
 end

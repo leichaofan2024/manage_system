@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180515073138) do
+ActiveRecord::Schema.define(version: 20180517033428) do
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "status", null: false
@@ -50,11 +50,11 @@ ActiveRecord::Schema.define(version: 20180515073138) do
     t.datetime "updated_at", null: false
     t.integer "employee_id"
     t.integer "month"
-    t.integer "year", null: false
-    t.integer "group_id", null: false
+    t.integer "year"
+    t.integer "group_id"
   end
 
-  create_table "emp_basic_infos", primary_key: "emp_id", id: :integer, comment: "唯一标识", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
+  create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
     t.string "sal_number", comment: "工资号"
     t.string "workshop", comment: "车间"
     t.string "group", comment: "班组"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20180515073138) do
     t.string "duty", comment: "职务"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "employee_id", null: false
+    t.index ["employee_id"], name: "index_emp_basic_infos_on_employee_id", unique: true
   end
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
