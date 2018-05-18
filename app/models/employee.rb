@@ -112,7 +112,36 @@ class Employee < ActiveRecord::Base
       employee = find_by(job_number: row["job_number"]) || new
       employee.attributes = row
       employee.save!
+      #更新Workshop数据
+      if !Workshop.find_by(name: row["workshop"]).present?
+        Workshop.create(:name => row["workshop"])
+      end
     end
+
+
+   # 更新Group表数据
+    Workshop.all.each do |i|
+      Employee.where(:workshop => i.name).pluck(:group).uniq.each do |j|
+        if !Group.find_by_name(j).present?
+        Group.create(:name => j, :workshop_id => i.id)
+      end
+    end
+
+    # 更新基本信息表数据
+    Employee.all.each do |i|
+      EmpBasicInfo.create(:sal_number => i.sal_number,
+                          :workshop => i.workshop,
+                          :group => i.group,
+                          :name => i.name,
+                          :job_number => i.job_number,
+                          :sex => i.sex,
+                          :identity_card_number => i.identity_card_number,
+                          :age => i.age,
+                          :duty => i.duty,
+                          :employee_id => i.id
+                        )
+    end
+
   end
 
   def self.to_csv(options = {})
