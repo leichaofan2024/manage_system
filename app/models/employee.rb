@@ -123,7 +123,8 @@ class Employee < ActiveRecord::Base
     Workshop.all.each do |i|
       Employee.where(:workshop => i.name).pluck(:group).uniq.each do |j|
         if !Group.find_by_name(j).present?
-        Group.create(:name => j, :workshop_id => i.id)
+          Group.create(:name => j, :workshop_id => i.id)
+        end
       end
     end
 
