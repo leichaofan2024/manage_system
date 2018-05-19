@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180518110553) do
+ActiveRecord::Schema.define(version: 20180519092318) do
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "status", null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20180518110553) do
   create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.integer "year", null: false
     t.integer "month", null: false
-    t.integer "group_id", null: false
+    t.integer "workshop_id", null: false
     t.string "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

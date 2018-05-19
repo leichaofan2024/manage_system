@@ -6,6 +6,7 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
   has_many :attendances
+  has_many :attendance_counts
 
 
   def self.search(query)

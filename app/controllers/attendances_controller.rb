@@ -47,6 +47,11 @@ layout 'home'
 			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id)
 		end
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
+		name = current_user.name.split("-")
+		@group = Group.find_by(:name => name[1])
+		if !AttendanceStatus.find_by(:workshop_id => @group.workshop.id).present?
+			AttendanceStatus.create(:workshop_id => @group.workshop.id, :status => "班组填写中")
+		end
 		redirect_to group_attendances_path
 	end
 	##弹窗内选择假期的表单功能--结束
@@ -89,8 +94,9 @@ layout 'home'
 
 	##审核功能--开始
 	def verify
-		@attendance_status = AttendanceStatus.find_by(:group_id => params[:click_group])
-		@attendance_status.update(:status => "车间已审核")
+		@workshop = Workshop.find_by(:name => current_user.name)
+		@attendance_status = AttendanceStatus.find_by(:workshop_id => @workshop) || AttendanceStatus.new
+		@attendance_status.update(:status => "车间已审核", :workshop_id => @workshop.id)
 		redirect_back(fallback_location: workshop_attendances_path)
 	end
 	##审核功能--结束
