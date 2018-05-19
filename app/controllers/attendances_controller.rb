@@ -49,8 +49,8 @@ layout 'home'
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
 		name = current_user.name.split("-")
 		@group = Group.find_by(:name => name[1])
-		if !AttendanceStatus.find_by(:workshop_id => @group.workshop.id).present?
-			AttendanceStatus.create(:workshop_id => @group.workshop.id, :status => "班组填写中")
+		if !AttendanceStatus.find_by(:group_id => @group.id).present?
+			AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
 		end
 		redirect_to group_attendances_path
 	end
@@ -78,11 +78,13 @@ layout 'home'
 		@groups = @workshop.groups	
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
-			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
 		else
 			@employees = Employee.where(:workshop => @workshop)
+		end
+		if AttendanceStatus.find_by(:group_id => params[:group]).present?
+			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
+			@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--结束
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
@@ -95,9 +97,26 @@ layout 'home'
 	##审核功能--开始
 	def verify
 		@workshop = Workshop.find_by(:name => current_user.name)
-		@attendance_status = AttendanceStatus.find_by(:workshop_id => @workshop) || AttendanceStatus.new
-		@attendance_status.update(:status => "车间已审核", :workshop_id => @workshop.id)
+		@attendance_status = AttendanceStatus.find_by(:group_id => params[:group]) || AttendanceStatus.new
+		@attendance_status.update(:status => "车间已审核", :group_id => params[:group])
 		redirect_back(fallback_location: workshop_attendances_path)
+
+		result = []
+		@groups = @workshop.groups
+		@groups.each do |group|
+			if AttendanceStatus.find_by(:group_id => group.id).status == "车间已审核"
+				result << "1"
+			else
+				result << "0"
+			end
+		end
+		if result.count("1") == @groups.count
+			@groups.each do |group|
+
+				AttendanceStatus.find_by(:group_id => group.id).update(:workshop_id => @workshop.id)
+			end
+		end
+
 	end
 	##审核功能--结束
 

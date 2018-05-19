@@ -1,5 +1,5 @@
 <h4>本考勤表状态:<%= @status %></h4>
-<%= link_to "通过审核", verify_attendances_path, method: :post, class: "btn btn-primary" %>
+<%= link_to "通过审核", verify_attendances_path(group: @click_group), method: :post, class: "btn btn-primary" %>
 <div class="col-md-12" style="height: 100%">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
       <h5><%= @workshop.name%></h5>
