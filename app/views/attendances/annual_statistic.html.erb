@@ -5,7 +5,7 @@
         <tr>
           <th>顺号</th>
           <th>车间</th>
-          <% @vacation_code.each do |code| %>
+          <% @vacation_codes.each do |code| %>
             <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
           <% end %>      
         </tr>
@@ -15,7 +15,7 @@
         <tr>
           <td></td>
 	        <td><%= workshop.name %></td>
-          <% @vacation_code.each do |code| %>
+          <% @vacation_codes.each do |code| %>
             <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>
           <% end %> 
 	      </tr>

@@ -13,9 +13,9 @@
                 <th><%= i %></th>
               <% end %>
               <!-- 生成每月1-31号的数字-结束 -->
-              <% @vacation_names.each do |name| %>
-                <th><%= name %></th>
-              <% end %>
+              <% @vacation_codes.each do |code| %>
+                <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+              <% end %> 
             </tr>
           </thead>
             <tbody data-behavior='sortable'>
@@ -45,14 +45,11 @@
                         <% end %>
                       <% end %>
                     </td>
-                    <% @vacation.values.each do |code| %>
-                    	<% attendance_hash[code] = attendance_ary.map{|x| x if x==code}.compact.count %>
-                    <% end %>
                   	<% day_number += 1%>
                   <% end %>
-                  <% @vacation.values.each do |code| %>
-                  	<td><%= attendance_hash[code] %></td>
-                  <% end %> 
+                  <% @vacation_codes.each do |code| %>
+                    <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                  <% end %>
                 </tr>
               <% end %>
               <!-- 配置表格数据-开始 -->

@@ -4,12 +4,7 @@ layout 'home'
 	##班组页面--开始
 	def group
 		@employees = Employee.where(:workshop => "2")
-		@vacation_names = VacationCategory.pluck("vacation_name").uniq
-		@categories = VacationCategory.all
-		@vacation = {}
-		@categories.each do |category|
-			@vacation[category.vacation_shortening] = category.vacation_code
-		end
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##班组页面--结束
 
@@ -88,12 +83,7 @@ layout 'home'
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
 		@click_group = params[:group]
 		#配置页面上统计考勤的表格数据
-		@vacation_names = VacationCategory.pluck("vacation_name").uniq
-		@categories = VacationCategory.all
-		@vacation = {}
-		@categories.each do |category|
-			@vacation[category.vacation_shortening] = category.vacation_code
-		end
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##车间页面--结束
 
@@ -126,6 +116,6 @@ layout 'home'
 	def annual_statistic
 		@workshops = Workshop.all
 		@count = {}
-		@vacation_code = VacationCategory.pluck("vacation_code").uniq
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 end
