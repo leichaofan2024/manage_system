@@ -5,35 +5,18 @@
         <tr>
           <th>顺号</th>
           <th>车间</th>
-          <% @vacation_names.each do |name| %>
-            <th><%= name %></th>
+          <% @vacation_code.each do |code| %>
+            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
           <% end %>      
         </tr>
       </thead>
-        <tbody data-behavior='sortable'> 
-        <% vacation_codes = [] %>
-        <% VacationCategory.all.each do |category| %>
-          <% vacation_codes << category.vacation_code %>
-        <% end %>
-        <% hash = {} %>     
-        <% count = 0 %>   
+        <tbody data-behavior='sortable'>  
 	      <% @workshops.each do |workshop| %> 
-        <% employees = Employee.where(:workshop => workshop.id) %>
-        <% employees.each do |employee| %>
-          <% attendance = Attendance.find_by(:employee_id => employee.id) %>
-          <% vacation_codes.each do |code| %>
-            <% attendance_count = AttendanceCount.find_by(:vacation_code => code, :attendance_id => attendance.id) %>
-            <% if attendance_count.present? %>
-              <% count += attendance_count.count %>
-              <% hash["code, workshop"] = count  %>
-            <% end %>
-          <% end %>
-        <% end %>
         <tr>
           <td></td>
 	        <td><%= workshop.name %></td>
-          <% vacation_codes.each do |code| %>
-            <td><%= hash["code, workshop"] %></td>
+          <% @vacation_code.each do |code| %>
+            <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>
           <% end %> 
 	      </tr>
         <% end %>

@@ -125,11 +125,7 @@ layout 'home'
 
 	def annual_statistic
 		@workshops = Workshop.all
-		@vacation_names = VacationCategory.pluck("vacation_name").uniq
-		@categories = VacationCategory.all
-		@vacation = {}
-		@categories.each do |category|
-			@vacation[category.vacation_shortening] = category.vacation_code
-		end
+		@count = {}
+		@vacation_code = VacationCategory.pluck("vacation_code").uniq
 	end
 end
