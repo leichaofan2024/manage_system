@@ -45,9 +45,11 @@ layout 'home'
 		end
 		#将上面得到的attendance_hash存入数据库
 		attendance_hash.each do |i|
-			@attendance_count = AttendanceCount.find_by(:attendance_id => @attendance.id, :vacation_code => i[0])
+			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
 			@attendance_count ||= AttendanceCount.new
-			@attendance_count.update(:attendance_id => @attendance.id, :vacation_code => i[0], :count => i[1])
+			group_id = Employee.find(params[:employee_id]).group
+			workshop_id = Employee.find(params[:employee_id]).workshop
+			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id)
 		end
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
 		redirect_to group_attendances_path
