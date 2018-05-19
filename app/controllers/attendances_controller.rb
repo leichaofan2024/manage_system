@@ -96,29 +96,38 @@ layout 'home'
 
 	##审核功能--开始
 	def verify
+		#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
 		@workshop = Workshop.find_by(:name => current_user.name)
-		@attendance_status = AttendanceStatus.find_by(:group_id => params[:group]) || AttendanceStatus.new
-		@attendance_status.update(:status => "车间已审核", :group_id => params[:group])
+		AttendanceStatus.find_by(:group_id => params[:group]).update(:status => "车间已审核", :group_id => params[:group])
 		redirect_back(fallback_location: workshop_attendances_path)
-
+		#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--结束
+		#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--开始
 		result = []
 		@groups = @workshop.groups
 		@groups.each do |group|
 			if AttendanceStatus.find_by(:group_id => group.id).status == "车间已审核"
-				result << "1"
+				result << 1
 			else
-				result << "0"
+				result << 0
 			end
 		end
-		if result.count("1") == @groups.count
+		if result.count(1) == @groups.count
 			@groups.each do |group|
 
 				AttendanceStatus.find_by(:group_id => group.id).update(:workshop_id => @workshop.id)
 			end
 		end
-
+		#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--结束
 	end
 	##审核功能--结束
+
+	def batch_verify
+		@workshop = Workshop.find_by(:name => current_user.name)
+		@groups = @workshop.groups
+		@groups.each do |group|
+			AttendanceStatus.find_by(:group_id => group.id).update(:status => "车间已审核", :workshop_id => @workshop.id)
+		end
+	end
 
 	##段管理员页面--开始
 	def duan

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get :show_modal
       post :create_attendance
       post :verify
+      post :batch_verify
       get :annual_statistic
     end
   end
