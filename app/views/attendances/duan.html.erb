@@ -1,37 +1,150 @@
-<div class="card">
-  <div style="overflow: auto; width: 100%;">
-    <table id="example" class="table table-bordered">
-      <thead>
-        <tr>
-          <th>顺号</th>
-          <th>姓名</th>
-          <th>工资号</th>
-          <th>车间</th>
-          <th>班组</th>
-          <th>病假</th>
-          <th>事假</th>
-          <th>婚假</th>
-          <th>产假</th>
-          <th>探亲假天数</th>
-          <th>丧假</th>
-          <th>育儿假</th>
-          <th>工伤假</th>
-          <th>旷工</th>
-          <th>陪产假</th>
-          <th>备注</th>         
-        </tr>
-      </thead>
-        <tbody data-behavior='sortable'>  
-        <% @employees.each do |employee| %> 
-	      <tr>
-	        <td></td>
-	        <td><%= employee.name %></td>
-	        <td><%= employee.sal_number %></td>
-	        <td><%= employee.workshop %></td>
-	        <td><%= employee.group %></td> 
-	      </tr>
-        <% end %>
-       </tbody>
-    </table>
-  </div>
+<!-- 进度条部分-开始 -->
+<!-- 总数统计，呼叫弹窗 -->
+<h4>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h4>
+<%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %>
+<!-- 进度条 -->
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" 
+        aria-valuemin="0" aria-valuemax="100" style="width: <%= "#{@workshops.count.to_f / Workshop.all.count.to_f}" %>%;">
+        <span class="sr-only">40% 完成</span>
+    </div>
 </div>
+<!-- 进度条部分-结束 -->
+
+<!-- 审核功能-开始 -->
+<%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
+<%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
+<!-- 审核功能-结束 -->
+<!-- 主体部分-开始 -->
+<div class="col-md-12" style="height: 100%">
+  <!-- 组织结构树状图-开始 -->
+  <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+    <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段") %></h5>
+    <ul>
+      <% @workshops.each do |workshop| %>
+      <li>
+        <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+        <ul>
+          <% @groups = workshop.groups %>
+          <% @groups.each do |group| %>
+            <li><a href='/attendances/duan?group=<%= group.id %>'><%= group.name %></a></li>
+          <% end %>
+        </ul>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+  <!-- 组织结构树状图-结束 -->
+  <!-- 表格-开始 -->
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-10">
+      <table id="example" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <% if @workshop.present? %>
+              <th>班组</th>
+            <% elsif @group.present? %>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>车间</th>
+              <th>班组</th>
+            <% else %>
+              <th>车间</th>
+            <% end %> 
+            <% @vacation_codes.each do |code| %>
+              <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+            <% end %>    
+          </tr>
+        </thead>
+          <tbody data-behavior='sortable'>        
+            <% if @workshop.present? %>
+              <% Group.where(:workshop_id => @workshop).each do |group| %>
+                <tr>
+                  <td><%= group.id %></td>
+                  <td><%= group.name %></td>
+                  <% @vacation_codes.each do |code| %>
+                    <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code).sum(:count) %>
+                    <% if count == 0 %>
+                      <td><%= count %></td>
+                    <% else %>
+                      <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id), class: "btn btn-primary" %></td>
+                    <% end %>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% elsif @group.present? %>
+              <% Employee.where(:group => @group).each do |employee| %>
+                <tr>
+                  <td><%= employee.id %></td>
+                  <td><%= employee.name %></td>
+                  <td><%= employee.sal_number %></td>
+                  <td><%= Workshop.find(employee.workshop).name %></td>
+                  <td><%= Group.find(employee.group).name %></td>
+                  <% @vacation_codes.each do |code| %>
+                    <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code).sum(:count) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% else %>
+              <% Workshop.all.each do |workshop| %>
+                <tr>
+                  <td><%= workshop.id %></td>
+                  <td><%= workshop.name %></td>
+                  <% @vacation_codes.each do |code| %>
+                    <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code).sum(:count) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>      
+         </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- 表格-结束 -->
+</div>
+<!-- 主体部分-结束 -->
+<!-- 弹框代码(使用ajax呼叫，所以没有render)-开始 -->
+<div id="show_processbar_detail">
+</div>
+<!-- 弹框代码(使用ajax呼叫，所以没有render)-结束 -->
+<!-- 进度条引用的库-开始 -->
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- 进度条引用的库-结束 -->
+<!-- 组织结构树状图的js代码-开始 -->
+<script type="text/javascript">
+  (function(e) {
+    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+      em.onclick = function(){ //onmouseover
+        var ul = this.nextSibling;
+        if(!ul){
+          return false;
+        }
+        ul = ul.nextSibling;
+        if(!ul) {
+          return false;
+        }
+        if(e.tag != 'a') {
+          ul = ul.nextSibling;
+          if(!ul){
+            return false;
+          }
+        } //a 标签控制 隐藏或删除该行
+        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+          if(li.tagName=="LI"){
+            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+              switch($ul.tagName){
+                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                break;
+                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  })({id:'menu',tag:'em'});
+</script>
+<!-- 组织结构树状图的js代码-结束 -->

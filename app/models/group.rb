@@ -1,3 +1,4 @@
 class Group < ApplicationRecord
-	belongs_to :workshop, :foreign_key => "workshop_id"
+	belongs_to :workshop
+	has_many :attendance_counts
 end

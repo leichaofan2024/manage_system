@@ -1,16 +1,29 @@
+<h4>本考勤表状态:<%= @status %></h4>
+<%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
+<%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
+<div class="col-md-12" style="height: 100%">
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5><%= @workshop.name%></h5>
+      <ul>
+        <% @groups.each do |group| %>
+          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+        <% end %>
+      </ul>
+    </div>
+
 <div class="card">
-  <div style="overflow: auto; width: 100%;">
+  <div class="col-md-10" style="overflow: auto">
     <table id="example" class="table table-bordered">
       <thead>
         <tr>
-          <th>顺号</th>
+          <th>ID</th> 
           <th>班组</th>
           <th>姓名</th>
           <th>工资号</th>
           <th>年龄</th>
-          <% @vacation_names.each do |name| %>
-            <th><%= name %></th>
-          <% end %>
+          <% @vacation_codes.each do |code| %>
+            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+          <% end %> 
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
@@ -18,17 +31,53 @@
             <% attendance_hash= {} %>
             <% day_number = 1%>
             <tr>
-              <td></td>
-              <td><%= employee.group %></td>
+              <td><%= employee.id %></td>
+              <td><%= Group.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.age %></td>
-
-              <%= render 'attendance_count', :employee => employee, :attendance_hash => attendance_hash, :day_number => day_number %>
-              
-            </tr>
+              <% @vacation_codes.each do |code| %>
+                <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+              <% end %> 
+            </tr> 
           <% end %> 
-       </tbody>
+       </tbody> 
     </table>
   </div>
 </div>
+</div>
+
+<script type="text/javascript">
+      (function(e) {
+        for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+          em.onclick = function(){ //onmouseover
+            var ul = this.nextSibling;
+            if(!ul){
+              return false;
+            }
+            ul = ul.nextSibling;
+            if(!ul) {
+              return false;
+            }
+            if(e.tag != 'a') {
+              ul = ul.nextSibling;
+              if(!ul){
+                return false;
+              }
+            } //a 标签控制 隐藏或删除该行
+            for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+              if(li.tagName=="LI"){
+                for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+                  switch($ul.tagName){
+                    case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                    break;
+                    case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+      })({id:'menu',tag:'em'});
+    </script>

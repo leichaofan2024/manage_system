@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180517075551) do
+ActiveRecord::Schema.define(version: 20180519114052) do
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "status", null: false
@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(version: 20180517075551) do
     t.text "cause", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "attendance_counts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "employee_id", null: false
+    t.string "vacation_code", null: false
+    t.integer "count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "year"
+    t.integer "month"
+    t.integer "group_id"
+    t.integer "workshop_id"
   end
 
   create_table "attendance_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -38,10 +50,11 @@ ActiveRecord::Schema.define(version: 20180517075551) do
   create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "year", null: false
     t.integer "month", null: false
-    t.integer "group_id", null: false
+    t.integer "workshop_id"
     t.string "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "group_id"
   end
 
   create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

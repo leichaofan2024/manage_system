@@ -7,7 +7,7 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model::Callbacks
   has_many :attendances
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
-
+  has_many :attendance_counts
 
   def self.search(query)
     __elasticsearch__.search(
