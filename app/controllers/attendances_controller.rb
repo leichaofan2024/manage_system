@@ -3,7 +3,9 @@ layout 'home'
 
 	##班组页面--开始
 	def group
-		@employees = Employee.where(:workshop => "2")
+		group_name = current_user.name.split("-")[1]
+		group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+		@employees = Employee.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##班组页面--结束
