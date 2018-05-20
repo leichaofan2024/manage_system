@@ -24,7 +24,7 @@
     <table id="example" class="table table-bordered">
       <thead>
         <tr>
-          <th>顺号</th>
+          <th>ID</th>
           <% if @workshop.present? %>
             <th>班组</th>
           <% elsif @group.present? %>
@@ -44,25 +44,34 @@
           <% if @workshop.present? %>
             <% Group.where(:workshop_id => @workshop).each do |group| %>
               <tr>
-                <td></td>
+                <td><%= group.id %></td>
                 <td><%= group.name %></td>
+                <% @vacation_codes.each do |code| %>
+                  <td><%= AttendanceCount.where(:group_id => group.id, :vacation_code => code).sum(:count) %></td>
+                <% end %>
               </tr>
             <% end %>
           <% elsif @group.present? %>
             <% Employee.where(:group => @group).each do |employee| %>
               <tr>
-                <td></td>
+                <td><%= employee.id %></td>
                 <td><%= employee.name %></td>
                 <td><%= employee.sal_number %></td>
                 <td><%= Workshop.find(employee.workshop).name %></td>
                 <td><%= Group.find(employee.group).name %></td>
+                <% @vacation_codes.each do |code| %>
+                  <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code).sum(:count) %></td>
+                <% end %>
               </tr>
             <% end %>
           <% else %>
             <% Workshop.all.each do |workshop| %>
               <tr>
-                <td></td>
+                <td><%= workshop.id %></td>
                 <td><%= workshop.name %></td>
+                <% @vacation_codes.each do |code| %>
+                  <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code).sum(:count) %></td>
+                <% end %>
               </tr>
             <% end %>
           <% end %>      
