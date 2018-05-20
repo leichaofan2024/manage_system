@@ -124,7 +124,8 @@ layout 'home'
 		end
 	end
 	##审核功能--结束
-
+    
+    ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
@@ -140,6 +141,7 @@ layout 'home'
 			end
 		end
 	end
+	##一键审核功能--结束
 
 	##段管理员页面--开始
 	def duan
@@ -153,26 +155,32 @@ layout 'home'
 	end
 	##段管理员页面--结束
 
+	##点击段页面的表格数字后显示的详情页面--开始
 	def duan_detail
-		@hash = {}
-		b = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group])
-		b.each do |i|
-			c = Employee.find_by(:id => i.employee_id).name
-			d = AttendanceCount.find_by(:employee_id => i.employee_id, :vacation_code => params[:code]).count
-			@hash[c] = d
+		@duan_detail = {}
+		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group])
+		attendance_counts.each do |attendance_count|
+			employee_name = Employee.find_by(:id => attendance_count.employee_id).name
+			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code]).count
+			@duan_detail[employee_name] = employee_count
 		end
 	end
+	##点击段页面的表格数字后显示的详情页面--结束
 
+	##使用ajax呼叫modal弹框的方法--开始
 	def processbar_detail
 		@workshops = params[:workshops]
 		respond_to do |format|
 			format.js
 		end
 	end
+	##使用ajax呼叫modal弹框的方法--结束
 
+	##段管理员看到的年考勤统计页面--开始
 	def annual_statistic
 		@workshops = Workshop.all
 		@count = {}
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
+	##段管理员看到的年考勤统计页面--结束
 end
