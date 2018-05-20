@@ -143,18 +143,13 @@ layout 'home'
 
 	##段管理员页面--开始
 	def duan
-		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-		@workshops = Workshop.find(status_workshop)
+		# status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+		# @workshops = Workshop.find(status_workshop)
+		@workshops = Workshop.all
 		@duan = params[:duan]
 		@workshop = params[:workshop]
 		@group = params[:group]
-		if @workshop.present?
-			@groups = Group.where(:workshop_id => @workshop)
-		elsif @group.present?
-			@employees = Employee.where(:group => @group)
-		else
-			@workshops = Workshop.all
-		end
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##段管理员页面--结束
 

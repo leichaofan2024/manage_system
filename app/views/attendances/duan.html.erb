@@ -34,26 +34,35 @@
             <th>班组</th>
           <% else %>
             <th>车间</th>
-          <% end %>        
+          <% end %> 
+          <% @vacation_codes.each do |code| %>
+            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+          <% end %>    
         </tr>
       </thead>
         <tbody data-behavior='sortable'>        
           <% if @workshop.present? %>
-            <% @groups.each do |group| %>
+            <% Group.where(:workshop_id => @workshop).each do |group| %>
               <tr>
                 <td></td>
                 <td><%= group.name %></td>
               </tr>
             <% end %>
-          <% end %>
-          <% if @group.present? %>
-            <% @employees.each do |employee| %>
+          <% elsif @group.present? %>
+            <% Employee.where(:group => @group).each do |employee| %>
               <tr>
                 <td></td>
                 <td><%= employee.name %></td>
                 <td><%= employee.sal_number %></td>
                 <td><%= Workshop.find(employee.workshop).name %></td>
                 <td><%= Group.find(employee.group).name %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <% Workshop.all.each do |workshop| %>
+              <tr>
+                <td></td>
+                <td><%= workshop.name %></td>
               </tr>
             <% end %>
           <% end %>      
