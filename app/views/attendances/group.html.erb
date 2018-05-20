@@ -36,15 +36,26 @@
               <% day_number = 1%>
               <% attendance_ary.each do |day_attendance| %>
                 <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                <td>
-                  <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                    <% if day_attendance == "x" %>
-                      <%= "未考勤" %>
-                    <% else %>
-                      <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                    <% end %>
+                <% time_range = (Time.now.day - 3)..(Time.now.day) %>
+                  <% if time_range === day_number %>
+                    <td>
+                      <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                        <% if day_attendance == "x" %>
+                          <%= day_number %>
+                        <% else %>
+                          <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                  <% else %>
+                    <td> 
+                      <% if day_attendance == "x" %>
+                        <%= day_number %>
+                      <% else %>
+                        <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                      <% end %>
+                    </td>
                   <% end %>
-                </td>
                 <% day_number += 1%>
               <% end %>
               <% @vacation_codes.each do |code| %>
