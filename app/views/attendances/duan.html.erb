@@ -47,7 +47,12 @@
                 <td><%= group.id %></td>
                 <td><%= group.name %></td>
                 <% @vacation_codes.each do |code| %>
-                  <td><%= AttendanceCount.where(:group_id => group.id, :vacation_code => code).sum(:count) %></td>
+                  <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code).sum(:count) %>
+                  <% if count == 0 %>
+                    <td><%= count %></td>
+                  <% else %>
+                    <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id), class: "btn btn-primary" %></td>
+                  <% end %>
                 <% end %>
               </tr>
             <% end %>

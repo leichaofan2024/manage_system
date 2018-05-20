@@ -1,0 +1,20 @@
+<div class="card">
+  <div style="overflow: auto;" class="col-md-10">
+    <table id="example" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>姓名</th>
+          <th>天数</th>
+        </tr>
+      </thead>
+        <tbody data-behavior='sortable'>   
+          <% @hash.each do |i| %>     
+            <tr>
+                <td><%= i[0] %></td>
+                <td><%= i[1] %></td>
+            </tr>   
+          <% end %>
+       </tbody>
+    </table>
+  </div>
+</div>

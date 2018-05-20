@@ -153,6 +153,16 @@ layout 'home'
 	end
 	##段管理员页面--结束
 
+	def duan_detail
+		@hash = {}
+		b = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group])
+		b.each do |i|
+			c = Employee.find_by(:id => i.employee_id).name
+			d = AttendanceCount.find_by(:employee_id => i.employee_id, :vacation_code => params[:code]).count
+			@hash[c] = d
+		end
+	end
+
 	def annual_statistic
 		@workshops = Workshop.all
 		@count = {}
