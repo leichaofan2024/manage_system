@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get :processbar_detail
       get :year_statistics
       get :setting
+      post :create_setting
       get :show_modal
       post :create_attendance
       post :verify

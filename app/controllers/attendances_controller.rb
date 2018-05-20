@@ -185,4 +185,10 @@ layout 'home'
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##段管理员看到的年考勤统计页面--结束
+
+	def create_setting
+		attendance_setting = AttendanceSetting.find_by(:vacation => params[:vacation]) || AttendanceSetting.new
+		attendance_setting.update(:vacation => params[:vacation], :count => params[:count])
+		redirect_to setting_attendances_path
+ 	end
 end
