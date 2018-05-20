@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       get :workshop
       get :duan
       get :duan_detail
+      get :processbar_detail
       get :year_statistics
       get :setting
       get :show_modal

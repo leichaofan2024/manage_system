@@ -143,13 +143,13 @@ layout 'home'
 
 	##段管理员页面--开始
 	def duan
-		# status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-		# @workshops = Workshop.find(status_workshop)
-		@workshops = Workshop.all
+		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+		@workshops = Workshop.find(status_workshop)
 		@duan = params[:duan]
 		@workshop = params[:workshop]
 		@group = params[:group]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		@a = Workshop.all.count
 	end
 	##段管理员页面--结束
 
@@ -160,6 +160,13 @@ layout 'home'
 			c = Employee.find_by(:id => i.employee_id).name
 			d = AttendanceCount.find_by(:employee_id => i.employee_id, :vacation_code => params[:code]).count
 			@hash[c] = d
+		end
+	end
+
+	def processbar_detail
+		@workshops = params[:workshops]
+		respond_to do |format|
+			format.js
 		end
 	end
 

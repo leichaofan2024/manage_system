@@ -1,0 +1,21 @@
+<div class="modal fade" id="verifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">各车间审核状态</h4>
+      </div>
+      <div class="modal-body">
+        <h5>通过审核的车间：</h5>
+        <% @workshops.each do |workshop| %>
+          <%= Workshop.find_by(:id => workshop).name %>
+        <% end %>
+        <h5>未通过审核的车间：</h5>
+        <% ary = @workshops.pluck("id") %>
+        <% Workshop.where.not(:id => ary).each do |workshop| %>
+          <%= workshop.name %>
+        <% end %>
+      </div>
+    </div> 
+  </div>
+</div>
