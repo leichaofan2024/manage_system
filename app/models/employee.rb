@@ -142,7 +142,7 @@ class Employee < ActiveRecord::Base
    #更新现员表的group_id
     Group.all.each do |i|
       Employee.all.each do |j|
-        if i.workshop_id == j.workshop_id && i.name == j.group
+        if i.name == j.group
           j.update(:group_id => i.id)
         end
       end
@@ -164,6 +164,7 @@ class Employee < ActiveRecord::Base
     end
 
 
+    #更新考勤表信息
     Employee.all.each do |i|
       Attendance.create(:employee_id => i.id, :group_id => i.group_id)
     end
