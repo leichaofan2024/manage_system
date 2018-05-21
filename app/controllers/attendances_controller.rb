@@ -61,8 +61,8 @@ layout 'home'
 	##使用ajax动态呼叫弹框功能--开始
 	def show_modal
 		@day_number = params[:day_number]
-		@categories = VacationCategory.all
 		@employee_id = params[:employee_id]
+		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
 			@vacation[category.vacation_shortening] = category.vacation_code

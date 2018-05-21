@@ -1,6 +1,6 @@
 <h4>人数控制设置</h4>
 <%= form_tag create_setting_attendances_path, method: 'post' do %>
-  <%= select_tag(:vacation, options_for_select(["加班", "夜班"]))  %>
+  <%= select_tag(:vacation, options_for_select(["加班", "轮夜"]))  %>
   <%= text_field_tag :count %> 
   <%= submit_tag :点击确定 %>
 <% end %>
