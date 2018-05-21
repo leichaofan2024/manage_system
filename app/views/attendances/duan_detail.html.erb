@@ -1,3 +1,4 @@
+<%= render "attendance_sidebar"%>
 <div class="card">
   <div style="overflow: auto;" class="col-md-10">
     <table id="example" class="table table-bordered">
@@ -7,12 +8,12 @@
           <th>天数</th>
         </tr>
       </thead>
-        <tbody data-behavior='sortable'>   
-          <% @duan_detail.each do |i| %>     
+        <tbody data-behavior='sortable'>
+          <% @duan_detail.each do |i| %>
             <tr>
                 <td><%= i[0] %></td>
                 <td><%= i[1] %></td>
-            </tr>   
+            </tr>
           <% end %>
        </tbody>
     </table>

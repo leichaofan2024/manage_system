@@ -164,7 +164,11 @@ layout 'home'
 	##段管理员页面--开始
 	def duan
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-		@workshops = Workshop.find(status_workshop)
+		if status_workshop.all?{|x| x.nil?}
+			@workshops = []
+		else
+			@workshops = Workshop.find(status_workshop)
+		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
 		@group = params[:group]

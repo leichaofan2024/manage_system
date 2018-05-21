@@ -1,4 +1,4 @@
-<%= render "workshop_sidebar"%>
+<%= render "attendance_sidebar"%>
 <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
   <%= @before_code %>
   <%= @after_code %>

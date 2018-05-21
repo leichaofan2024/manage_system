@@ -1,4 +1,4 @@
-<%= render 'workshop_sidebar'%>
+<%= render 'attendance_sidebar'%>
 <h4>本考勤表状态:<%= @status %></h4>
 <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
 <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
