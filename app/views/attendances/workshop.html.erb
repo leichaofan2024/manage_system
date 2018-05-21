@@ -1,3 +1,4 @@
+<%= render 'workshop_sidebar'%>
 <h4>本考勤表状态:<%= @status %></h4>
 <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
 <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
@@ -6,7 +7,11 @@
       <h5><%= @workshop.name%></h5>
       <ul>
         <% @groups.each do |group| %>
-          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <% if current_user.has_role? :workshopadmin %>
+            <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <% else %>
+            <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <% end %>
         <% end %>
       </ul>
     </div>
@@ -16,14 +21,14 @@
     <table id="example" class="table table-bordered">
       <thead>
         <tr>
-          <th>ID</th> 
+          <th>ID</th>
           <th>班组</th>
           <th>姓名</th>
           <th>工资号</th>
           <th>年龄</th>
           <% @vacation_codes.each do |code| %>
             <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
-          <% end %> 
+          <% end %>
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
@@ -38,10 +43,10 @@
               <td><%= employee.age %></td>
               <% @vacation_codes.each do |code| %>
                 <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
-              <% end %> 
-            </tr> 
-          <% end %> 
-       </tbody> 
+              <% end %>
+            </tr>
+          <% end %>
+       </tbody>
     </table>
   </div>
 </div>

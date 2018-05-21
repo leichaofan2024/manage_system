@@ -1,0 +1,16 @@
+<% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin) %>
+  <div class="header_info">
+    <ul class="d-flex pl-2 flex-items-center text-bold list-style-none" role="navigation">
+      <li>
+        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 20px;" href="/attendances/group_current_time_info">
+          班组考勤
+        </a>
+      </li>
+      <li>
+        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 80px;" href="/attendances/workshop">
+          考勤审核
+        </a>
+      </li>
+    </ul>
+  </div>
+<% end %>

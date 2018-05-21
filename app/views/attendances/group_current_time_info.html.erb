@@ -1,5 +1,4 @@
-<%= render "workshop_sidebar"%>
-<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+  <%= render "workshop_sidebar"%>
   <%= @before_code %>
   <%= @after_code %>
   <div class="card">
@@ -15,9 +14,9 @@
               <th><%= i %></th>
             <% end %>
             <!-- 生成每月1-31号的数字-结束 -->
-            <% @vacation_codes.each do |code| %>
+            <!-- <% @vacation_codes.each do |code| %>
               <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
-            <% end %>
+            <% end %> -->
           </tr>
         </thead>
           <tbody>
@@ -38,19 +37,14 @@
                 <% day_number = 1%>
                 <% attendance_ary.each do |day_attendance| %>
                   <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                  <td>
-                    <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                      <% if day_attendance == "x" %>
-                        <%= "未考勤" %>
-                      <% else %>
-                        <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                      <% end %>
+                <td>
+                    <% if day_attendance == "x" %>
+                      <%= " " %>
+                    <% else %>
+                      <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                     <% end %>
-                  </td>
+                </td>
                   <% day_number += 1%>
-                <% end %>
-                <% @vacation_codes.each do |code| %>
-                  <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
                 <% end %>
               </tr>
             <% end %>
@@ -63,4 +57,3 @@
     </div>
    </div>
   </div>
-<% end %>

@@ -55,8 +55,13 @@ layout 'home'
 			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id)
 		end
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
-		name = current_user.name.split("-")
-		@group = Group.find_by(:name => name[1])
+		if current_user.has_role? :groupadmin
+			name = current_user.name.split("-")
+			@group = Group.find_by(:name => name[1])
+		else
+			name = current_user.name
+			@group = Group.find_by(:name => name)
+		end
 		if !AttendanceStatus.find_by(:group_id => @group.id).present?
 			AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
 		end
@@ -82,8 +87,13 @@ layout 'home'
   ##车间页面--开始
 	def workshop
 		#为展示组织架构的树状图配置数据
-		@workshop = Workshop.find_by(:name => current_user.name)
-		@groups = @workshop.groups
+		if current_user.has_role? :workshopadmin
+			@workshop = Workshop.find_by(:name => current_user.name)
+			@groups = @workshop.groups
+		else
+			@workshop = Group.find_by(:name => current_user.name)
+			@groups = @workshop
+		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
 			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
@@ -191,4 +201,14 @@ layout 'home'
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
 	##段管理员看到的年考勤统计页面--结束
+
+
+	## 车间可以看到班组的实时考勤情况
+	def group_current_time_info
+		@workshop = Workshop.find_by(:name => current_user.name)
+		@groups = @workshop.groups
+		@employees = Employee.where(:workshop => @workshop.id)
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+	end
+	## end
 end

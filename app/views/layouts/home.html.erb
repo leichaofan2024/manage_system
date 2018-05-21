@@ -27,12 +27,12 @@
             </a>
           </li>
           <li class="nav-item">
-            <% if current_user.has_role? :groupadmin %>
+            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
               <a class="nav-link" href="/attendances/group">
                 <i  class="fa fa-tasks  material-icons"></i>
                 <p>考勤管理</p>
               </a>
-            <% elsif current_user.has_role? :workshopadmin %>
+            <% elsif current_user.has_role? :workshopadmin%>
               <a class="nav-link" href="/attendances/workshop">
                 <i  class="fa fa-tasks  material-icons"></i>
                 <p>考勤管理</p>

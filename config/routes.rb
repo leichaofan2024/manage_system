@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get :processbar_detail
       get :setting
       get :show_modal
+      get :group_current_time_info
       post :create_attendance
       post :verify
       post :batch_verify
