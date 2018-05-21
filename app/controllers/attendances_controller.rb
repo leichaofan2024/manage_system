@@ -3,10 +3,16 @@ layout 'home'
 
 	##班组页面--开始
 	def group
-		group_name = current_user.name.split("-")[1]
-		group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-		@employees = Employee.where(:group => group.id)
-		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		if current_user.has_role? :groupadmin
+			group_name = current_user.name.split("-")[1]
+			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+			@employees = Employee.where(:group => group.id)
+			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		elsif current_user.has_role? :organsadmin
+			group = Group.find_by(:name => current_user.name)
+			@employees = Employee.where(:group => group.id)
+			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		end
 	end
 	##班组页面--结束
 
@@ -73,7 +79,7 @@ layout 'home'
 	end
 	##使用ajax动态呼叫弹框功能--结束
 
-    ##车间页面--开始
+  ##车间页面--开始
 	def workshop
 		#为展示组织架构的树状图配置数据
 		@workshop = Workshop.find_by(:name => current_user.name)
