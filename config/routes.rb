@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       post :verify
       post :batch_verify
       get :annual_statistic
+      get :filter
     end
   end
 end

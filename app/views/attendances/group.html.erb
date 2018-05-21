@@ -1,5 +1,9 @@
-<%= @before_code %>
-<%= @after_code %>
+<%= form_tag filter_attendances_path, method: 'get' do %>
+  <%= label_tag :请输入时间段搜索 %>
+  <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
+  <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
+  <%= submit_tag :筛选 %>
+<% end %>
 <div class="card">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -29,37 +33,43 @@
               <td><%= employee.name %></td>
               <td><%= employee.duty %></td>
               <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-              <% attendance = Attendance.find_by(employee_id: employee.id) %>
+              <% if @year.present? && @month.present? %>
+                <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
+              <% else %>
+                <% attendance = Attendance.find_by(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
+              <% end %>
               <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-              <% attendance_ary = attendance.month_attendances.split('') %>
-              <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-              <% day_number = 1%>
-              <% attendance_ary.each do |day_attendance| %>
-                <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                <% time_range = (Time.now.day - 3)..(Time.now.day) %>
-                  <% if time_range === day_number %>
-                    <td>
-                      <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+              <% if attendance.present? %>
+                <% attendance_ary = attendance.month_attendances.split('') %>
+                <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                <% day_number = 1%>
+                <% attendance_ary.each do |day_attendance| %>
+                  <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                  <% time_range = (Time.now.day - 3)..(Time.now.day) %>
+                    <% if time_range === day_number %>
+                      <td>
+                        <%= link_to show_modal_attendances_path(employee_id: employee.id, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                          <% if day_attendance == "x" %>
+                            <%= day_number %>
+                          <% else %>
+                            <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                          <% end %>
+                        <% end %>
+                      </td>
+                    <% else %>
+                      <td> 
                         <% if day_attendance == "x" %>
                           <%= day_number %>
                         <% else %>
                           <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                         <% end %>
-                      <% end %>
-                    </td>
-                  <% else %>
-                    <td> 
-                      <% if day_attendance == "x" %>
-                        <%= day_number %>
-                      <% else %>
-                        <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                      <% end %>
-                    </td>
-                  <% end %>
-                <% day_number += 1%>
-              <% end %>
-              <% @vacation_codes.each do |code| %>
-                <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                      </td>
+                    <% end %>
+                  <% day_number += 1%>
+                <% end %>
+                <% @vacation_codes.each do |code| %>
+                  <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                <% end %>
               <% end %>
             </tr>
           <% end %>

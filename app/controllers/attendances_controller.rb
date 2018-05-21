@@ -7,6 +7,8 @@ layout 'home'
 		group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
 		@employees = Employee.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 	end
 	##班组页面--结束
 
@@ -72,6 +74,18 @@ layout 'home'
 		end
 	end
 	##使用ajax动态呼叫弹框功能--结束
+
+	def filter
+		@year = params[:year]
+		@month = params[:month]
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		group_name = current_user.name.split("-")[1]
+		group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+		@employees = Employee.where(:group => group.id)
+		render action: "group"
+	end
 
     ##车间页面--开始
 	def workshop
