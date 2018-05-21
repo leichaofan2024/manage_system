@@ -16,6 +16,8 @@
                     <%= radio_button_tag(:code, vacation[1]) %>
                     <%= hidden_field_tag :employee_id , @employee_id %>
                     <%= hidden_field_tag :employee , @employee %>
+                    <%= hidden_field_tag :month , @month %>
+                    <%= hidden_field_tag :year , @year %>
                     <%= hidden_field_tag :day , @day_number.to_i - 1 %>
                     <%= label_tag :"#{vacation[0]}" %><br><br>
                 <% end %>
@@ -26,6 +28,8 @@
                   <%= radio_button_tag(:code, vacation[1]) %>
                   <%= hidden_field_tag :employee_id , @employee_id %>
                   <%= hidden_field_tag :employee , @employee %>
+                  <%= hidden_field_tag :month , @month %>
+                  <%= hidden_field_tag :year , @year %>
                   <%= hidden_field_tag :day , @day_number.to_i - 1 %>
                   <%= label_tag :"#{vacation[0]}" %><br><br>
                 <% end %>      

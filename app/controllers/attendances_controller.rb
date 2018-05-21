@@ -16,7 +16,7 @@ layout 'home'
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始
 		#根据表单传来的employee_id参数，找到要更新的考勤数据
-		@attendance = Attendance.find_by(:employee_id => params[:employee_id])
+		@attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
 		#把记录考勤的字符串分割成数组，赋值给attendance_ary
 		attendance_ary = @attendance.month_attendances.split('')
 		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
@@ -64,6 +64,8 @@ layout 'home'
 	def show_modal
 		@day_number = params[:day_number]
 		@employee_id = params[:employee_id]
+		@year = params[:year]
+		@month = params[:month]
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
