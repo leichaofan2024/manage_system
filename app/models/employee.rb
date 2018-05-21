@@ -128,6 +128,26 @@ class Employee < ActiveRecord::Base
       end
     end
 
+
+  #更新现员表的workshop_id
+    Workshop.all.each do |i|
+      Employee.all.each do |j|
+        if i.name == j.workshop
+           j.update(:workshop_id => i.id)
+        end
+      end
+    end
+
+
+   #更新现员表的group_id
+    Group.all.each do |i|
+      Employee.all.each do |j|
+        if i.workshop_id == j.workshop_id && i.name == j.group
+          j.update(:group_id => i.id)
+        end
+      end
+    end
+
     # 更新基本信息表数据
     Employee.all.each do |i|
       EmpBasicInfo.create(:sal_number => i.sal_number,
@@ -141,6 +161,11 @@ class Employee < ActiveRecord::Base
                           :duty => i.duty,
                           :employee_id => i.id
                         )
+    end
+
+
+    Employee.all.each do |i|
+      Attendance.create(:employee_id => i.id, :group_id => i.group_id)
     end
 
   end

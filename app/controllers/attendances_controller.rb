@@ -77,7 +77,7 @@ layout 'home'
 	def workshop
 		#为展示组织架构的树状图配置数据
 		@workshop = Workshop.find_by(:name => current_user.name)
-		@groups = @workshop.groups	
+		@groups = @workshop.groups
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
 			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
@@ -126,7 +126,7 @@ layout 'home'
 		end
 	end
 	##审核功能--结束
-    
+
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
