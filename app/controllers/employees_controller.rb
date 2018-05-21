@@ -8,11 +8,15 @@ class EmployeesController < ApplicationController
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.all
     elsif current_user.has_role? :workshopadmin
-        @employees = Employee.where(:workshop => current_user.name)
+      workshop_id = Workshop.find_by(:name => current_user.name).id
+      @employees = Employee.where(:workshop => workshop_id)
     elsif current_user.has_role? :organsadmin
-      @employees = Employee.where(:group => current_user.name)
+      group_id = Group.find_by(:name => current_user.name).id
+      @employees = Employee.where(:group => group_id)
     else
-      @employees = Employee.where(:workshop => current_user.name.split("-")[0],:group => current_user.name.split("-")[1])
+      group_name = current_user.name.split("-")[1]
+      group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+      @employees = Employee.where(:workshop => group.workshop_id,:group => group.id)
     end
     #下载表格配置
     @export_employees = Employee.order("id ASC")

@@ -133,7 +133,7 @@ class Employee < ActiveRecord::Base
     Workshop.all.each do |i|
       Employee.all.each do |j|
         if i.name == j.workshop
-           j.update(:workshop_id => i.id)
+           j.update(:workshop => i.id)
         end
       end
     end
@@ -143,7 +143,7 @@ class Employee < ActiveRecord::Base
     Group.all.each do |i|
       Employee.all.each do |j|
         if i.name == j.group
-          j.update(:group_id => i.id)
+          j.update(:group => i.id)
         end
       end
     end
@@ -151,8 +151,8 @@ class Employee < ActiveRecord::Base
     # 更新基本信息表数据
     Employee.all.each do |i|
       EmpBasicInfo.create(:sal_number => i.sal_number,
-                          :workshop => i.workshop,
-                          :group => i.group,
+                          :workshop_id => i.workshop,
+                          :group_id => i.group,
                           :name => i.name,
                           :job_number => i.job_number,
                           :sex => i.sex,
@@ -166,7 +166,7 @@ class Employee < ActiveRecord::Base
 
     #更新考勤表信息
     Employee.all.each do |i|
-      Attendance.create(:employee_id => i.id, :group_id => i.group_id)
+      Attendance.create(:employee_id => i.id, :group_id => i.group)
     end
 
   end
