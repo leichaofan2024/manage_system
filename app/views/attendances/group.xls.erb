@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">顺号</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">职名</Data></Cell>
+          <%(1..31).each do |i|%>
+            <Cell><Data ss:Type="Number"><%= i.to_i %></Data></Cell>
+          <% end %>
+
+          <% @vacation_codes.each do |code| %>
+          <Cell><Data ss:Type="String">
+            <%= VacationCategory.find_by(:vacation_code => code).vacation_name %>
+          </Data></Cell>
+          <% end %>
+
+      </Row>
+    <% @employees.each do |employee| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <% attendance = Attendance.find_by(employee_id: employee.id) %>
+        <% attendance_ary = attendance.month_attendances.split('') %>
+        <% day_number = 1%>
+        <% attendance_ary.each do |day_attendance| %>
+          <Cell><Data ss:Type="String">
+            <% if day_attendance == "x" %>
+              <%= "未考勤" %>
+            <% else %>
+              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+            <% end %>
+          </Data></Cell>
+          <% day_number += 1%>
+        <% end %>
+
+          <% @vacation_codes.each do |code| %>
+            <Cell><Data ss:Type="String">
+              <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %>
+            </Data></Cell>
+          <% end %>
+
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -1,3 +1,4 @@
+<h2><%= link_to "导出表格", group_attendances_path(format: "xls")%></h2>
 <%= render "attendance_sidebar"%>
 <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
   <%= @before_code %>

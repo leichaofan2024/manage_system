@@ -13,6 +13,13 @@ layout 'home'
 			@employees = Employee.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
+
+		# 导出考勤表
+		respond_to do |format|
+      format.html
+      format.csv { send_data @employees.to_csv }
+      format.xls
+    end
 	end
 	##班组页面--结束
 
