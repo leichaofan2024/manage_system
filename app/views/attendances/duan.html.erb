@@ -1,39 +1,71 @@
-<!-- 进度条部分-开始 -->
-<!-- 总数统计，呼叫弹窗 -->
-<h4>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h4>
-<%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %>
-<!-- 进度条 -->
-<div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="60" 
-        aria-valuemin="0" aria-valuemax="100" style="width: <%= "#{@workshops.count.to_f / Workshop.all.count.to_f}" %>%;">
-        <span class="sr-only">40% 完成</span>
-    </div>
-</div>
-<!-- 进度条部分-结束 -->
+<% if @year.to_i == Time.now.year && @month.to_i == Time.now.month %>
+  <!-- 进度条部分-开始 -->
+  <!-- 总数统计，呼叫弹窗 -->
+  <h4>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h4>
+  <%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %>
+  <!-- 进度条 -->
+  <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="60" 
+          aria-valuemin="0" aria-valuemax="100" style="width: <%= "#{@workshops.count.to_f / Workshop.all.count.to_f}" %>%;">
+          <span class="sr-only">40% 完成</span>
+      </div>
+  </div>
+  <!-- 进度条部分-结束 -->
 
-<!-- 审核功能-开始 -->
-<%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
-<%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
-<!-- 审核功能-结束 -->
+  <!-- 审核功能-开始 -->
+  <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
+  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
+  <!-- 审核功能-结束 -->
+   
+<% end %>
+<%= form_tag filter_attendances_path, method: 'get' do %>
+  <%= label_tag :请输入时间段搜索 %>
+  <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
+  <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
+  <%= hidden_field_tag :type, "duan" %>
+  <%= submit_tag :筛选 %>
+<% end %>
 <!-- 主体部分-开始 -->
 <div class="col-md-12" style="height: 100%">
   <!-- 组织结构树状图-开始 -->
-  <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-    <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段") %></h5>
-    <ul>
-      <% @workshops.each do |workshop| %>
-      <li>
-        <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-        <ul>
-          <% @groups = workshop.groups %>
-          <% @groups.each do |group| %>
-            <li><a href='/attendances/duan?group=<%= group.id %>'><%= group.name %></a></li>
-          <% end %>
-        </ul>
-      </li>
-      <% end %>
-    </ul>
-  </div>
+  <% if @year.present? && @month.present? %>
+    <h4><%= @year %>年<%= @month %>月考勤表</h4>
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: @month, year: @year) %></h5>
+      <ul>
+        <% @workshops.each do |workshop| %>
+        <li>
+          <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
+          <ul>
+            <% @groups = workshop.groups %>
+            <% @groups.each do |group| %>
+              <li><a href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+            <% end %>
+          </ul>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤表</h4>
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: Time.now.month, year: Time.now.year) %></h5>
+      <ul>
+        <% @workshops.each do |workshop| %>
+        <li>
+          <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= workshop.name %></a>
+          <ul>
+            <% @groups = workshop.groups %>
+            <% @groups.each do |group| %>
+              <li><a href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
+            <% end %>
+          </ul>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
   <!-- 组织结构树状图-结束 -->
   <!-- 表格-开始 -->
   <div class="card">
@@ -64,11 +96,20 @@
                   <td><%= group.id %></td>
                   <td><%= group.name %></td>
                   <% @vacation_codes.each do |code| %>
-                    <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code).sum(:count) %>
-                    <% if count == 0 %>
-                      <td><%= count %></td>
+                    <% if @year.present? && @month.present? %>
+                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %>
+                      <% if count == 0 %>
+                        <td><%= count %></td>
+                      <% else %>
+                        <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id), class: "btn btn-primary" %></td>
+                      <% end %>
                     <% else %>
-                      <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id), class: "btn btn-primary" %></td>
+                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
+                      <% if count == 0 %>
+                        <td><%= count %></td>
+                      <% else %>
+                        <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id), class: "btn btn-primary" %></td>
+                      <% end %>
                     <% end %>
                   <% end %>
                 </tr>
@@ -92,7 +133,11 @@
                   <td><%= workshop.id %></td>
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
-                    <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code).sum(:count) %></td>
+                    <% if @year.present? && @month.present? %>
+                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
+                    <% else %>
+                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+                    <% end %>
                   <% end %>
                 </tr>
               <% end %>

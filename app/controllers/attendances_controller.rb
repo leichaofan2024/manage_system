@@ -48,7 +48,7 @@ layout 'home'
 			@attendance_count ||= AttendanceCount.new
 			group_id = Employee.find(params[:employee_id]).group
 			workshop_id = Employee.find(params[:employee_id]).workshop
-			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id)
+			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
 		end
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
 		name = current_user.name.split("-")
@@ -83,10 +83,30 @@ layout 'home'
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		group_name = current_user.name.split("-")[1]
-		group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-		@employees = Employee.where(:group => group.id)
-		render action: "group"
+		if params[:type] == "group"
+			
+			group_name = current_user.name.split("-")[1]
+			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+			@employees = Employee.where(:group => group.id)
+			render action: "group"
+		elsif params[:type] == "workshop"
+			@workshop = Workshop.find_by(:name => current_user.name)
+			@groups = @workshop.groups
+			@employees = Employee.where(:workshop => @workshop.id)	
+			render action: "workshop"
+		elsif params[:type] == "duan"
+			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
+				status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+				if status_workshop.all?{|x| x.nil?}
+					@workshops = []
+				else
+					@workshops = Workshop.find(status_workshop)
+				end
+			else
+				@workshops = Workshop.all
+			end
+			render action: "duan"
+		end
 	end
 
     ##车间页面--开始
@@ -109,6 +129,8 @@ layout 'home'
 		@click_group = params[:group]
 		#配置页面上统计考勤的表格数据
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 	end
 	##车间页面--结束
 
@@ -163,11 +185,19 @@ layout 'home'
 
 	##段管理员页面--开始
 	def duan
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-		@workshops = Workshop.find(status_workshop)
+		if status_workshop.all?{|x| x.nil?}
+			@workshops = []
+		else
+			@workshops = Workshop.find(status_workshop)
+		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
 		@group = params[:group]
+		@month = params[:month]
+		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@a = Workshop.all.count
 	end

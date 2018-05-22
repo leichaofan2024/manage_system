@@ -2,6 +2,7 @@
   <%= label_tag :请输入时间段搜索 %>
   <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
   <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
+  <%= hidden_field_tag :type, "group" %>
   <%= submit_tag :筛选 %>
 <% end %>
 <div class="card">
