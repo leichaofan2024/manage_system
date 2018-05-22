@@ -6,7 +6,17 @@
   xmlns:html="http://www.w3.org/TR/REC-html40">
   <Worksheet ss:Name="Sheet1">
     <Table>
-      <Row>
+      <Column ss:Width="100"/>
+      <Column ss:Width="100"/>
+      <Column ss:Width="100"/>
+      <Column ss:Width="100"/>
+      <% 31.times do %>
+        <Column ss:Width="80"/>
+      <% end %>
+      <% 20.times do %>
+        <Column ss:Width="100"/>
+      <% end %>
+      <Row ss:AutoFitHeight="0">
         <Cell><Data ss:Type="String">顺号</Data></Cell>
         <Cell><Data ss:Type="String">姓名</Data></Cell>
         <Cell><Data ss:Type="String">职名</Data></Cell>
@@ -22,7 +32,7 @@
 
       </Row>
     <% @employees.each do |employee| %>
-      <Row>
+      <Row ss:AutoFitHeight="0">
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
@@ -32,7 +42,7 @@
         <% attendance_ary.each do |day_attendance| %>
           <Cell><Data ss:Type="String">
             <% if day_attendance == "x" %>
-              <%= "未考勤" %>
+              <%= " " %>
             <% else %>
               <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
             <% end %>
