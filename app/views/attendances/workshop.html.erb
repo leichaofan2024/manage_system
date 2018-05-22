@@ -1,3 +1,13 @@
+<% groups = [] %>
+<% application_id = [] %> 
+<% Workshop.find_by(:name => current_user.name).groups.each do |group| %>
+  <% groups << group.id %>
+<% end %>
+<% applications = Application.where(:group_id => groups ) %>
+<% applications.each do |application| %>
+  <% application_id << application.id %>
+<% end %>
+<h4>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: workshop) %>条修改申请需要处理</h4> 
 <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
   <h4>本考勤表状态:<%= @status %></h4>
   <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
@@ -8,7 +18,7 @@
   <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
   <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
   <%= hidden_field_tag :type, "workshop" %>
-  <%= submit_tag :筛选 %>
+  <%= submit_tag :筛选 %> 
 <% end %>
 <div class="col-md-12" style="height: 100%">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">

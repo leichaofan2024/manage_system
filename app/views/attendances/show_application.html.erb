@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="col-md-10" style="overflow: auto">
+    <table id="example" class="table table-bordered">
+      <thead>
+      	<tr>
+      		<th>序号</th>
+      		<% if params[:type] == "duan" %>
+      	    	<th>车间</th>
+      	    <% end %>
+      	    <th>班组</th>
+      		<th>修改原因</th>
+      		<th>需修改考勤日期</th>
+      		<th>需修改人员</th>
+      		<th>申请提交人</th>
+      		<th>提交时间</th>
+      	    <th>操作</th>	
+      	</tr>
+      </thead>
+      <tbody>
+      	<% @applications.each do |application| %>
+	      	<tr>
+	      		<td><%= application %></td>
+	      		<% if params[:type] == "duan" %>
+	      			<% group = Group.find("#{Application.find(application).group_id}") %>
+	      	    	<td><%= Workshop.find("#{group.workshop_id}").name %></td>
+	      	    <% end %>
+	      		<td><%= Group.find("#{Application.find(application).group_id}").name %></td>
+	      		<td><%= Application.find(application).cause %></td>
+	      		<td><%= Application.find(application).month %>月<%= Application.find(application).day %>日</td>
+	      		<td><%= Employee.find_by(:id => "#{Application.find(application).employee_id}").name %></td>
+	      		<td><%= Application.find(application).apply_person %></td>
+	      		<td><%= Application.find(application).created_at %></td>
+	      		<% if params[:type] == "duan" %>
+	      			<td><%= link_to "通过申请", update_application_attendances_path(application_id: application, status: "段通过申请"), method: :post, class: "btn btn-primary" %></td>
+	      		<% else %>
+	      			<td><%= link_to "通过申请", update_application_attendances_path(application_id: application, status: "车间通过申请"), method: :post, class: "btn btn-primary" %></td>
+	      		<% end %>
+	      	</tr>
+      	<% end %>
+      </tbody>
+  </table>
+</div>
+</div>

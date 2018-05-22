@@ -1,3 +1,10 @@
+<% application_id = [] %>
+<% applications = Application.where(:status => "车间通过申请" ) %>
+<% applications.each do |application| %>
+  <% application_id << application.id %>
+<% end %>
+<h4>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: "duan") %>条修改申请需要处理</h4>
+
 <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->

@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       get :annual_statistic
       get :filter
       post :create_application
+      get :show_application
+      post :update_application
     end
   end
 end

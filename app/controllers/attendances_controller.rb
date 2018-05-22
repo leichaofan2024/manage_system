@@ -247,4 +247,14 @@ layout 'home'
  		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
  		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
  	end
+
+ 	def show_application
+ 		@applications = params[:applications]
+ 	end
+
+ 	def update_application
+ 		application = Application.find(params[:application_id])
+ 		application.update(:status => params[:status])
+ 		redirect_back(fallback_location: show_application_attendances_path)
+ 	end
 end
