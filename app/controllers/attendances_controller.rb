@@ -216,8 +216,13 @@ layout 'home'
 
 	## 车间可以看到班组的实时考勤情况
 	def group_current_time_info
-		@workshop = Workshop.find_by(:name => current_user.name)
-		@groups = @workshop.groups
+		if current_user.has_role? :workshopamdin
+			@workshop = Workshop.find_by(:name => current_user.name)
+			@groups = @workshop.groups
+		else
+			@workshop = Group.find_by(:name => current_user.name)
+			@groups = @workshop
+		end
 		@employees = Employee.where(:workshop => @workshop.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
