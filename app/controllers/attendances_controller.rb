@@ -242,4 +242,9 @@ layout 'home'
 		attendance_setting.update(:vacation => params[:vacation], :count => params[:count])
 		redirect_to setting_attendances_path
  	end
+
+ 	def create_application
+ 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
+ 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+ 	end
 end

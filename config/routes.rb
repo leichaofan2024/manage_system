@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       post :batch_verify
       get :annual_statistic
       get :filter
+      post :create_application
     end
   end
 end

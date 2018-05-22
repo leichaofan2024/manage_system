@@ -1,3 +1,4 @@
+<%= link_to "点击申请", "#", class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#applicationModal" %>
 <%= form_tag filter_attendances_path, method: 'get' do %>
   <%= label_tag :请输入时间段搜索 %>
   <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
@@ -93,3 +94,4 @@
   </div>
  </div>
 </div>
+<%= render 'application_modal' %>
