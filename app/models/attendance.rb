@@ -5,4 +5,6 @@ class Attendance < ApplicationRecord
 	#考勤表与角色表的关系
 	resourcify
 
+	scope :search_records, -> (params){self.search(params).records }
+
 end

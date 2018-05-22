@@ -50,13 +50,13 @@ class EmployeesController < ApplicationController
   #搜索和筛选--开始
   def search
     if current_user.has_role? :organsadmin
-      @employees = Employee.search_records(params[:q]).where(:group => current_user.name)
+      @employees = Employee.search_records(params[:q]).where(:group => Group.find_by_name(current_user.name).id)
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.search_records(params[:q])
     elsif current_user.has_role? :workshopadmin
-      @employees = Employee.search_records(params[:q]).where(:workshop => current_user.name)
+      @employees = Employee.search_records(params[:q]).where(:workshop => Workshop.find_by_name(current_user.name).id)
     else
-      @employees = Employee.search_records(params[:q]).where(:workshop => current_user.name.split("-")[0],:group => current_user.name.split("-")[1])
+      @employees = Employee.search_records(params[:q]).where(:workshop => Workshop.find_by_name(current_user.name.split("-")[0]).id,:group => Group.find_by_name(current_user.name.split("-")[1]).id)
     end
     render action: "index"
   end

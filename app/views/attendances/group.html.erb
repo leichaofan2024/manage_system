@@ -1,5 +1,12 @@
-<h2><%= link_to "导出表格", group_attendances_path(format: "xls")%></h2>
 <%= render "attendance_sidebar"%>
+<h2><%= link_to "导出表格", group_attendances_path(format: "xls")%></h2>
+
+<!-- <%= form_tag search_employees_path, method: 'get' do %>
+  <%= label_tag :查询%>
+  <%= text_field_tag :q, params[:q] %>
+  <%= submit_tag :search %>
+<% end %> -->
+
 <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
   <%= @before_code %>
   <%= @after_code %>
