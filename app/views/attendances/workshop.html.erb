@@ -1,6 +1,8 @@
-<h4>本考勤表状态:<%= @status %></h4>
-<%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
-<%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
+<% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+  <h4>本考勤表状态:<%= @status %></h4>
+  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
+  <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
+<% end %>
 <%= form_tag filter_attendances_path, method: 'get' do %>
   <%= label_tag :请输入时间段搜索 %>
   <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~

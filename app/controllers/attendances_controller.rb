@@ -188,10 +188,15 @@ layout 'home'
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-		if status_workshop.all?{|x| x.nil?}
-			@workshops = []
+		if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month)
+			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+			if status_workshop.all?{|x| x.nil?}
+				@workshops = []
+			else
+				@workshops = Workshop.find(status_workshop)
+			end
 		else
-			@workshops = Workshop.find(status_workshop)
+			@workshops = Workshop.all
 		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
@@ -206,10 +211,10 @@ layout 'home'
 	##点击段页面的表格数字后显示的详情页面--开始
 	def duan_detail
 		@duan_detail = {}
-		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group])
+		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group], month: params[:month], year: params[:year])
 		attendance_counts.each do |attendance_count|
 			employee_name = Employee.find_by(:id => attendance_count.employee_id).name
-			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code]).count
+			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code], month: params[:month], year: params[:year]).count
 			@duan_detail[employee_name] = employee_count
 		end
 	end

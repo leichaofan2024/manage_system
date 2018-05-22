@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <h5>通过审核的车间：</h5>
-        <% if @workshop.present? %>
+        <% if @workshops.present? %>
           <% @workshops.each do |workshop| %>
             <%= Workshop.find_by(:id => workshop).name %>
           <% end %>
