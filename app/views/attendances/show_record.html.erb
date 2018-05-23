@@ -10,11 +10,13 @@
 	    	</tr>
 	    </thead>
 	    <tbody>
-	    	<% attendance_records = AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => params[:employee], :month => params[:month], :year => params[:year]).id}") %>
+	    	<% attendances = Attendance.where(:employee_id => params[:employee], :month => params[:month], :year => params[:year]).pluck("id") %>
+	    	<% attendance_records = AttendanceRecord.where(:attendance_id => attendances) %>
 	    	
 	    	<% attendance_records.each do |record| %>
 		    	<tr>
-		    		<td>于<%= params[:year] %>年<%= params[:month] %>月<%= record.day %>日，将<%= Employee.find(params[:employee]).name %>的考勤从<%= record.edit_before %>修改为<%= record.edit_after %></td>
+		    		<% employee_id = Attendance.find(record.attendance_id).employee_id %>
+		    		<td>于<%= params[:year] %>年<%= params[:month] %>月<%= record.day %>日，将<%= Employee.find(employee_id).name %>的考勤从<%= record.edit_before %>修改为<%= record.edit_after %></td>
 		    		<td><%= record.modify_person %></td>
 		    		<td><%= record.created_at %></td>
 		    		<% attendance = Attendance.find(record.attendance_id) %>
