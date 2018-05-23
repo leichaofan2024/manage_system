@@ -17,6 +17,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
+    render layout: 'home'
   end
   #
   #  PUT /resource
