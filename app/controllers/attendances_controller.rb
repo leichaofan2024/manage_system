@@ -14,6 +14,9 @@ layout 'home'
 			group = Group.find_by(:name => current_user.name)
 			@employees = Employee.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
+			@employees = Employee.all
+			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
 
 		# 导出考勤表
