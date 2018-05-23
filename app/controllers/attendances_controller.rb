@@ -3,6 +3,8 @@ layout 'home'
 
 	##班组页面--开始
 	def group
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 		if current_user.has_role? :groupadmin
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
