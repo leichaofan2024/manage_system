@@ -1,2 +1,7 @@
 <%= render "attendance_sidebar"%>
-<h2>这是段管理员设置权限页面</h2>
+<h4>人数控制设置</h4>
+<%= form_tag create_setting_attendances_path, method: 'post' do %>
+  <%= select_tag(:vacation, options_for_select(["加班", "轮夜"]))  %>
+  <%= text_field_tag :count %>
+  <%= submit_tag :点击确定 %>
+<% end %>

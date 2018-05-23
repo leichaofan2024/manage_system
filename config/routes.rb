@@ -30,12 +30,17 @@ Rails.application.routes.draw do
       get :duan_detail
       get :processbar_detail
       get :setting
+      post :create_setting
       get :show_modal
       get :group_current_time_info
       post :create_attendance
       post :verify
       post :batch_verify
       get :annual_statistic
+      get :filter
+      post :create_application
+      get :show_application
+      post :update_application
     end
   end
 end

@@ -7,13 +7,16 @@
       </div>
       <div class="modal-body">
         <h5>通过审核的车间：</h5>
-        <% @workshops.each do |workshop| %>
-          <%= Workshop.find_by(:id => workshop).name %>
-        <% end %>
-        <h5>未通过审核的车间：</h5>
-        <% ary = @workshops.pluck("id") %>
-        <% Workshop.where.not(:id => ary).each do |workshop| %>
-          <%= workshop.name %>
+        <% if @workshops.present? %>
+          <% @workshops.each do |workshop| %>
+            <%= Workshop.find_by(:id => workshop).name %>
+          <% end %>
+
+          <h5>未通过审核的车间：</h5>
+          <% ary = @workshops.pluck("id") %>
+          <% Workshop.where.not(:id => ary).each do |workshop| %>
+            <%= workshop.name %>
+          <% end %>
         <% end %>
       </div>
     </div> 

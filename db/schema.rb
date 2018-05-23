@@ -47,9 +47,16 @@ ActiveRecord::Schema.define(version: 20180521054237) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "attendance_settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "vacation"
+    t.integer "count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.integer "year", null: false
-    t.integer "month", null: false
+    t.integer "year"
+    t.integer "month"
     t.integer "workshop_id"
     t.string "status", null: false
     t.datetime "created_at", null: false
@@ -68,8 +75,8 @@ ActiveRecord::Schema.define(version: 20180521054237) do
   end
 
   create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
-    t.string "sal_number", comment: "工资号"
-    t.string "workshop_id"
+    t.integer "sal_number", comment: "工资号"
+    t.integer "workshop_id"
     t.string "group_id"
     t.string "name", comment: "姓名"
     t.string "job_number", comment: "工号"

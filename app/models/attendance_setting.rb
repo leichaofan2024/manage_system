@@ -1,0 +1,2 @@
+class AttendanceSetting < ApplicationRecord
+end
