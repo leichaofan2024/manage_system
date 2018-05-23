@@ -24,8 +24,8 @@
         <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
         <td><%= employee.job_number %></td>
         <td><%= employee.record_number %></td>
-        <td><%= employee.workshop %></td>
-        <td><%= employee.group %></td>
+        <td><%= employee.info.workshop.name %></td>
+        <td><%= employee.info.group.name %></td>
         <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
         <td><%= employee.sex %></td>
         <td><%= employee.age %></td>
