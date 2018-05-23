@@ -1,3 +1,4 @@
+<%= render "attendance_sidebar"%>
 <% groups = [] %>
 <% application_id = [] %>
 <% Workshop.find_by(:name => current_user.name).groups.each do |group| %>
