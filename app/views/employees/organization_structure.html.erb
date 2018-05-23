@@ -13,11 +13,11 @@
       <ul>
         <% @workshops.each do |workshop| %>
         <li>
-          <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= workshop %></a>
+          <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= Workshop.find(workshop).name %></a>
           <ul>
             <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
             <% @groups.each do |group| %>
-              <li><a href='/employees/organization_structure?group=<%= group %>'><%= group %></a></li>
+              <li><a href='/employees/organization_structure?group=<%= group %>'><%= Group.find(group).name %></a></li>
             <% end %>
           </ul>
         </li>
