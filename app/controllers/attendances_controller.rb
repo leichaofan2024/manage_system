@@ -70,14 +70,22 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			name = current_user.name.split("-")
 			@group = Group.find_by(:name => name[1])
-		else
+			if !AttendanceStatus.find_by(:group_id => @group.id).present?
+				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			end
+		elsif current_user.has_role? :organsadmin
 			name = current_user.name
 			@group = Group.find_by(:name => name)
+			if !AttendanceStatus.find_by(:group_id => @group.id).present?
+				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			end
 		end
-		if !AttendanceStatus.find_by(:group_id => @group.id).present?
-			AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+		
+		if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
+			redirect_back(fallback_location: group_attendances_path)
+		elsif current_user.has_role? :attendance_admin
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
-		redirect_to group_attendances_path
 	end
 	##弹窗内选择假期的表单功能--结束
 
@@ -87,6 +95,7 @@ layout 'home'
 		@employee_id = params[:employee_id]
 		@year = params[:year]
 		@month = params[:month]
+		@type = params[:type]
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
@@ -94,7 +103,7 @@ layout 'home'
 		end
 		respond_to do |format|
 			format.js
-		end
+		end 
 	end
 	##使用ajax动态呼叫弹框功能--结束
 
@@ -291,5 +300,7 @@ layout 'home'
 			@employees = Employee.all
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 	end
 end
