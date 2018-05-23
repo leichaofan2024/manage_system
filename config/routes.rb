@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       get :show_application_detail
       post :update_application
       get :show_record
+      get :caiwu
     end
   end
 end

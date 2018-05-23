@@ -152,7 +152,7 @@
                 </tr>
               <% end %>
             <% else %>
-              <% Workshop.all.each do |workshop| %>
+              <% @workshops.each do |workshop| %>
                 <tr>
                   <td><%= workshop.id %></td>
                   <td><%= workshop.name %></td>

@@ -315,4 +315,11 @@ layout 'home'
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 	end
+
+	def caiwu
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
+		@vacation_codes = ["d","e","h","i","n","m","j","k"]
+		@workshops = Workshop.all
+	end
 end
