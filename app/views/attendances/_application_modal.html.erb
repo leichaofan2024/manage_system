@@ -1,36 +1,38 @@
-<div class="modal fade" id="applicationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">各车间审核状态</h4>
-      </div>
-      <div class="modal-body">
-        <h5>填写申请表</h5><br>
-        <%= form_tag create_application_attendances_path do %>
-          <% @years = Attendance.pluck("year").uniq %>
-          <% @months = Attendance.pluck("month").uniq.reverse %>
-          <% if current_user.has_role? :groupadmin %>
-            <% group_name = current_user.name.split("-")[1] %>
-            <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0])) %>
-          <% else %>
-            <% group_name = current_user.name %>
-            <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => "机关")) %>
+<% unless (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)%>
+  <div class="modal fade" id="applicationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title" id="myModalLabel">各车间审核状态</h4>
+        </div>
+        <div class="modal-body">
+          <h5>填写申请表</h5><br>
+          <%= form_tag create_application_attendances_path do %>
+            <% @years = Attendance.pluck("year").uniq %>
+            <% @months = Attendance.pluck("month").uniq.reverse %>
+            <% if current_user.has_role? :groupadmin %>
+              <% group_name = current_user.name.split("-")[1] %>
+              <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0])) %>
+            <% else %>
+              <% group_name = current_user.name %>
+              <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => "机关")) %>
+            <% end %>
+            <%= hidden_field_tag :group, group.id %><br>
+            <%= hidden_field_tag :apply_person, current_user.name %><br>
+            <%= hidden_field_tag :status, "班组发起申请" %>
+            <%= label_tag :请输入人员名称 %>
+            <%= text_field_tag :person, nil, :required => "true" %><br>
+            <%= label_tag :请输入要修改的日期 %>
+            <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择", :required => "true"}) %>年 &nbsp;
+            <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:prompt => "请选择", :required => "true"}) %>月 &nbsp;
+            <%= select_tag(:day, options_for_select(1..31), {:prompt => "请选择", :required => "true"}) %>日<br>
+            <%= label_tag :请输入修改原因 %>
+            <%= text_field_tag :cause, nil, :required => "true" %><br><br>
+            <%= submit_tag :发送申请 %>
           <% end %>
-          <%= hidden_field_tag :group, group.id %><br>
-          <%= hidden_field_tag :apply_person, current_user.name %><br>
-          <%= hidden_field_tag :status, "班组发起申请" %>
-          <%= label_tag :请输入人员名称 %>
-          <%= text_field_tag :person, nil, :required => "true" %><br>
-          <%= label_tag :请输入要修改的日期 %>
-          <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择", :required => "true"}) %>年 &nbsp;
-          <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:prompt => "请选择", :required => "true"}) %>月 &nbsp;
-          <%= select_tag(:day, options_for_select(1..31), {:prompt => "请选择", :required => "true"}) %>日<br>
-          <%= label_tag :请输入修改原因 %>
-          <%= text_field_tag :cause, nil, :required => "true" %><br><br>
-          <%= submit_tag :发送申请 %>
-        <% end %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>

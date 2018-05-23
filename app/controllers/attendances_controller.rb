@@ -14,6 +14,9 @@ layout 'home'
 			group = Group.find_by(:name => current_user.name)
 			@employees = Employee.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
+			@employees = Employee.all
+			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
 
 		# 导出考勤表
@@ -280,4 +283,13 @@ layout 'home'
  		application.update(:status => params[:status])
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
+
+	def group_current_time_info
+		if current_user.has_role? :workshopadmin
+			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id)
+		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
+			@employees = Employee.all
+		end
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+	end
 end
