@@ -1,0 +1,34 @@
+<div class="card">
+	<div style="overflow: auto;" class="col-md-10">
+	  <table id="example" class="table table-bordered">
+	    <thead>
+	    	<tr>
+	    		<th>修改详情</th>
+	    		<th>修改用户</th>
+	    		<th>修改时间</th>
+	    		<th>有无申请</th> 
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	<% attendance_records = AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => params[:employee], :month => params[:month], :year => params[:year]).id}") %>
+	    	
+	    	<% attendance_records.each do |record| %>
+		    	<tr>
+		    		<td>于<%= params[:year] %>年<%= params[:month] %>月<%= record.day %>日，将<%= Employee.find(params[:employee]).name %>的考勤从<%= record.edit_before %>修改为<%= record.edit_after %></td>
+		    		<td><%= record.modify_person %></td>
+		    		<td><%= record.created_at %></td>
+		    		<% attendance = Attendance.find(record.attendance_id) %>
+		    		<% application = Application.find_by(:employee_id => attendance.employee_id, :year => params[:year], :month => params[:month], :day => record.day) %>
+					<% if application.present? %>
+		    			<td><%= link_to "有", show_application_detail_attendances_path(application: application), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#showApplicationModal" %></td>
+		    		<% else %>
+		    			<td>无</td>
+		    		<% end %>
+		    	</tr>
+	    	<% end %>
+	    </tbody>
+	  </table>
+	</div>
+</div>
+<div id="showAppModal">
+</div>

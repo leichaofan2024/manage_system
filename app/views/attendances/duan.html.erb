@@ -94,6 +94,7 @@
             <% @vacation_codes.each do |code| %>
               <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
             <% end %>
+            <th>修改次数</th>
           </tr>
         </thead>
           <tbody data-behavior='sortable'>
@@ -135,6 +136,11 @@
                     <% else %>
                       <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: @month, year: @year).sum(:count) %></td>
                     <% end %>
+                  <% end %>
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) %></td>
+                  <% else %>
+                    <td><%= AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count %></td>
                   <% end %>
                 </tr>
               <% end %>

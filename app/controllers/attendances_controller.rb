@@ -20,7 +20,7 @@ layout 'home'
 		end
 
 		# 导出考勤表
-		respond_to do |format|
+		respond_to do |format| 
       format.html
       format.csv { send_data @employees.to_csv }
       format.xls
@@ -36,6 +36,11 @@ layout 'home'
 		#把记录考勤的字符串分割成数组，赋值给attendance_ary
 		attendance_ary = @attendance.month_attendances.split('')
 		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
+		#若当前用户是考勤管理员时，则存下修改记录--开始
+		if current_user.has_role? :attendance_admin
+			AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
+		end
+		#若当前用户是考勤管理员时，则存下修改记录--结束
 		attendance_ary[params[:day].to_i] = params[:code]
 		#将替换过的新的数组变成字符串，赋值给attendance_string
 		attendance_string = attendance_ary.join('')
@@ -293,11 +298,18 @@ layout 'home'
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 
+ 	def show_application_detail
+ 		@application = params[:application]
+ 		respond_to do |format|
+			format.js
+		end
+ 	end
+
 	def group_current_time_info
 		if current_user.has_role? :workshopadmin
 			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			@employees = Employee.all
+			@employees = Employee.where(id: 318..322)
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@years = Attendance.pluck("year").uniq
