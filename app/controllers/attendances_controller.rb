@@ -286,9 +286,9 @@ layout 'home'
 
 	def group_current_time_info
 		if current_user.has_role? :workshopadmin
-			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id)
+			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			@employees = Employee.all
+			@employees = Employee.order('id ASC').page(params[:page]).per(10)
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
