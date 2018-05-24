@@ -11,6 +11,7 @@
   <body>
   	<%= Gon::Base.render_data({}) %>
     <div class="container">
+      <%= render "common/flashes"%>
       <%= yield%>
     </div>
   </body>
