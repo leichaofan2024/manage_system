@@ -136,7 +136,12 @@ class Employee < ActiveRecord::Base
         if i.name == j.workshop
            j.update(:workshop => i.id)
         end
-        j.sal_number = '41' + j.job_number
+      end
+    end
+
+    # 更新现员表数据
+    Employee.all.each do |j|
+      j.sal_number = '41' + j.job_number
         j.birth_year = j.birth_date[0..3]
         j.age = Time.now.year - j.birth_year.to_i
         working_years_transfer = (Time.now - j.working_time.to_datetime)/60/60/24/365
@@ -144,7 +149,6 @@ class Employee < ActiveRecord::Base
         j.working_years = working_years_transfer.to_i
         j.rali_years = rali_years_transfer.to_i
         j.save!
-      end
     end
 
 

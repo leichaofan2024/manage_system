@@ -46,4 +46,13 @@ Rails.application.routes.draw do
       get :caiwu
     end
   end
+
+  resources :annual_holidays do
+    collection do
+      get :holiday_modal
+      post :create_holiday
+      get :holiday_statistic
+      get :holiday_plan
+    end
+  end
 end

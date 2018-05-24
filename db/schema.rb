@@ -10,25 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180524032745) do
+ActiveRecord::Schema.define(version: 20180524091545) do
 
   create_table "annual_holidays", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.integer "employee_id"
     t.integer "holiday_days"
-    t.integer "month_1"
-    t.integer "month_2"
-    t.integer "month_3"
-    t.integer "month_4"
-    t.integer "month_5"
-    t.integer "month_6"
-    t.integer "month_7"
-    t.integer "month_8"
-    t.integer "month_9"
-    t.integer "month_10"
-    t.integer "month_11"
-    t.integer "month_12"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "month"
   end
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
