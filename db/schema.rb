@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180523064234) do
+ActiveRecord::Schema.define(version: 20180524091545) do
+
+  create_table "annual_holidays", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "employee_id"
+    t.integer "holiday_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "month"
+  end
 
   create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "status", null: false
