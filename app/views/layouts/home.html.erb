@@ -20,7 +20,7 @@
 
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item active" onclick="openModule(event, 'Employee')">
+          <li class="nav-item" onclick="openModule(event, 'Employee')">
             <a class="nav-link" href="/employees">
               <i  class="fa fa-address-card  material-icons"></i>
               <p>现员管理</p>
@@ -76,22 +76,5 @@
     <%= yield %>
   </div>
 
- <script>
-   function openModule(evt, moduleName) {
-     var i, tabcontent, tablinks;
-
-     tabcontent = document.getElementByClassName("main-18rau_0");
-     for (i = 0; i < tabcontent.length; i++) {
-       tabcontent[i].style.display = "none";
-     }
-
-     tablinks = document.getElementByClassName("nav-item");
-     for (i = 0; i < tablinks.length; i++ ) {
-       tablinks[i].className = tablinks[i].className.replace(" active", "");
-     }
-     document.getElementById(moduleName).style.display = "block";
-     evt.currentTarget.className += " active";
-   }
- </script>
 </body>
 </html>
