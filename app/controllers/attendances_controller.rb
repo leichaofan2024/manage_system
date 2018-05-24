@@ -14,9 +14,6 @@ layout 'home'
 			group = Group.find_by(:name => current_user.name)
 			@employees = Employee.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			@employees = Employee.all
-			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
 
 		# 导出考勤表
@@ -286,6 +283,7 @@ layout 'home'
  	def create_application
  		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
  		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+ 		redirect_back(fallback_location: group_attendances_path)
  	end
 
  	def show_application

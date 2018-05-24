@@ -4,10 +4,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-          <h4 class="modal-title" id="myModalLabel">各车间审核状态</h4>
+          <h4 class="modal-title" id="myModalLabel">填写申请表</h4>
         </div>
         <div class="modal-body">
-          <h5>填写申请表</h5><br>
           <%= form_tag create_application_attendances_path do %>
             <% @years = Attendance.pluck("year").uniq %>
             <% @months = Attendance.pluck("month").uniq.reverse %>
