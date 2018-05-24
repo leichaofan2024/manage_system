@@ -183,10 +183,12 @@ layout 'home'
 			result = []
 			@groups = @workshop.groups
 			@groups.each do |group|
-				if AttendanceStatus.find_by(:group_id => group.id).status == "车间已审核"
-					result << 1
-				else
-					result << 0
+				if AttendanceStatus.find_by(:group_id => group.id).present?
+					if AttendanceStatus.find_by(:group_id => group.id).status == "车间已审核"
+						result << 1
+					else
+						result << 0
+					end
 				end
 			end
 			if result.count(1) == @groups.count
@@ -205,6 +207,7 @@ layout 'home'
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
+			
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
 			@groups.each do |group|

@@ -13,6 +13,7 @@
       		<th>需修改人员</th>
       		<th>申请提交人</th>
       		<th>提交时间</th>
+          <th>申请状态</th>
       	    <th>操作</th>	
       	</tr>
       </thead>
@@ -30,6 +31,7 @@
 	      		<td><%= Employee.find_by(:id => "#{Application.find(application).employee_id}").name %></td>
 	      		<td><%= Application.find(application).apply_person %></td>
 	      		<td><%= Application.find(application).created_at %></td>
+            <td><%= Application.find(application).status %></td>
 	      		<% if params[:type] == "duan" %>
 	      			<td><%= link_to "通过申请", update_application_attendances_path(application_id: application, status: "段通过申请"), method: :post, class: "btn btn-primary" %></td>
 	      		<% else %>
