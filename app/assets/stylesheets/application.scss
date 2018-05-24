@@ -1526,3 +1526,25 @@ h4 {
   width: 120px !important;
 }
 /*-------------end------------*/
+
+
+.header_info1 {
+  font-size: 14px !important;
+  display: block;
+  z-index: 1;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  height: 50px;
+  margin-top: -20px;
+  margin-left: 8px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  // border-bottom: 1px solid black;
+  position: relative;
+}
+.header_info1 ul li>a {
+    color: #0366d6;
+    text-decoration: none;
+    margin-top: 8px;
+    background-color: transparent;
+}

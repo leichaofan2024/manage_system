@@ -5,7 +5,7 @@ class AnnualHolidaysController < ApplicationController
 		if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin)
 			@employees = Employee.where(workshop: "#{Workshop.find_by(name: current_user.name).id}")
 		elsif (current_user.has_role? :attendance_admin) or (current_user.has_role? :superadmin)
-			@employees = Employee.all
+			@employees = Employee.order("id ASC").page(params[:page]).per(20)
 		end
 	end
 

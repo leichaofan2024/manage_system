@@ -25,7 +25,7 @@
 	        <tbody>
 	        	<% @employees.each do |employee| %>
 		        	<tr>
-		        		<td><%= employee.job_number %></td>	
+		        		<td><%= employee.job_number %></td>
 		        		<td><%= employee.record_number %></td>
 		        		<td><%= Workshop.find(employee.workshop).name %></td>
 		        		<td><%= Group.find(employee.group).name %></td>
@@ -65,6 +65,9 @@
 	        </tbody>
 	      </table>
 	    </div>
+	</div>
+	<div class="text-center">
+		<%= paginate @employees%>
 	</div>
 	<div id="showHolidayModal"></div>
 <% end %>
