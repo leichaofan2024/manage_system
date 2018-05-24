@@ -95,10 +95,6 @@ class EmployeesController < ApplicationController
     redirect_to employees_path
   end
 
-  def organization_structure
-
-  end
-
 ###年龄、工龄、路龄、学历图表分析页面数据配置---开始
   ##年龄分析
   def age_statistical_analysis
@@ -705,11 +701,11 @@ class EmployeesController < ApplicationController
   def organization_structure
     @workshops = Employee.pluck("workshop").uniq
     if params[:workshop].present?
-      @employees = Employee.where(workshop: params[:workshop])
+      @employees = Employee.where(workshop: params[:workshop]).page(params[:page]).per(16)
     elsif params[:group].present?
-      @employees = Employee.where(group: params[:group])
+      @employees = Employee.where(group: params[:group]).page(params[:page]).per(16)
     else
-      @employees = Employee.all
+      @employees = Employee.order('id ASC').page(params[:page]).per(16)
     end
   end
 

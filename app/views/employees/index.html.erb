@@ -1,8 +1,5 @@
 <%= render 'employee_navbar' %>
-<%if can? :update_employee_info, Employee%>
-  <%= link_to "一键更新", update_employee_info_employees_path, method: :post %>
-<% end %>
-<div class="main-18rau_0">
+<div id="Employee" class="main-18rau_0 tabcontent">
   <div>
     <div class="btn_group_top-1sKKU_0">
       <div>
@@ -18,7 +15,7 @@
               </div>
               <div class="ivu-tooltip-rel" style="text-align: right">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to update_employee_info_employees_path(method: :post) do  %>
+                  <%= link_to update_employee_info_employees_path,method: :post do  %>
                      <span style="color: #269Eff;">更新人员信息</span>
                   <% end %>
                 </button>

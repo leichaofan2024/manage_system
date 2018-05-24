@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
   <html style="height: 100%">
     <head>
@@ -53,8 +52,8 @@
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
-              <td><%= employee.workshop %></td>
-              <td><%= employee.group %></td>
+              <td><%= employee.info.workshop.name %></td>
+              <td><%= employee.info.group.name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>
               <td><%= employee.age %></td>
@@ -68,8 +67,11 @@
             </tr>
           <% end %>
        </tbody>
-  </table>
-    </div>
+      </table>
+     </div>
+     <div class="text-center">
+       <%= paginate @employees %>
+     </div>
     </div>
 
     <script type="text/javascript">
