@@ -8,6 +8,7 @@ class Employee < ActiveRecord::Base
   has_many :attendances
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
   has_many :attendance_counts
+  has_many :annual_holidays
 
   def self.search(query)
     __elasticsearch__.search(
