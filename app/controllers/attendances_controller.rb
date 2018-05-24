@@ -36,6 +36,11 @@ layout 'home'
 		#把记录考勤的字符串分割成数组，赋值给attendance_ary
 		attendance_ary = @attendance.month_attendances.split('')
 		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
+		#若当前用户是考勤管理员时，则存下修改记录--开始
+		if current_user.has_role? :attendance_admin
+			AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
+		end
+		#若当前用户是考勤管理员时，则存下修改记录--结束
 		attendance_ary[params[:day].to_i] = params[:code]
 		#将替换过的新的数组变成字符串，赋值给attendance_string
 		attendance_string = attendance_ary.join('')
@@ -70,14 +75,22 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			name = current_user.name.split("-")
 			@group = Group.find_by(:name => name[1])
-		else
+			if !AttendanceStatus.find_by(:group_id => @group.id).present?
+				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			end
+		elsif current_user.has_role? :organsadmin
 			name = current_user.name
 			@group = Group.find_by(:name => name)
+			if !AttendanceStatus.find_by(:group_id => @group.id).present?
+				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			end
 		end
-		if !AttendanceStatus.find_by(:group_id => @group.id).present?
-			AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+
+		if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
+			redirect_back(fallback_location: group_attendances_path)
+		elsif current_user.has_role? :attendance_admin
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
-		redirect_to group_attendances_path
 	end
 	##弹窗内选择假期的表单功能--结束
 
@@ -87,6 +100,7 @@ layout 'home'
 		@employee_id = params[:employee_id]
 		@year = params[:year]
 		@month = params[:month]
+		@type = params[:type]
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
@@ -284,6 +298,13 @@ layout 'home'
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 
+ 	def show_application_detail
+ 		@application = params[:application]
+ 		respond_to do |format|
+			format.js
+		end
+ 	end
+
 	def group_current_time_info
 		if current_user.has_role? :workshopadmin
 			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
@@ -291,5 +312,14 @@ layout 'home'
 			@employees = Employee.order('id ASC').page(params[:page]).per(10)
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
+	end
+
+	def caiwu
+		@years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
+		@vacation_codes = ["d","e","h","i","n","m","j","k"]
+		@workshops = Workshop.all
 	end
 end

@@ -94,6 +94,7 @@
             <% @vacation_codes.each do |code| %>
               <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
             <% end %>
+            <th>修改次数</th>
           </tr>
         </thead>
           <tbody data-behavior='sortable'>
@@ -119,6 +120,13 @@
                       <% end %>
                     <% end %>
                   <% end %>
+                  <% employees = Employee.where(:group => group.id).pluck("id") %>
+                  <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %> 
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
+                  <% else %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year) %></td>
+                  <% end %>
                 </tr>
               <% end %>
             <% elsif @group.present? %>
@@ -136,10 +144,15 @@
                       <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: @month, year: @year).sum(:count) %></td>
                     <% end %>
                   <% end %>
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) %></td>
+                  <% else %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year) %></td>
+                  <% end %>
                 </tr>
               <% end %>
             <% else %>
-              <% Workshop.all.each do |workshop| %>
+              <% @workshops.each do |workshop| %>
                 <tr>
                   <td><%= workshop.id %></td>
                   <td><%= workshop.name %></td>
@@ -149,6 +162,12 @@
                     <% else %>
                       <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
                     <% end %>
+                  <% end %>
+                  <% employees = Employee.where(:workshop => workshop.id).pluck("id") %>
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id")}").count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
+                  <% else %>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.where(:employee_id => employees, :month => @month, :year => @year).pluck("id")}").count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
                   <% end %>
                 </tr>
               <% end %>

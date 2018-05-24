@@ -1,0 +1,21 @@
+<div class="modal fade" id="showApplicationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">申请详情</h4>
+      </div>
+      <div class="modal-body">
+        <% application = Application.find(params[:application]) %>
+        <h5>申请内容：</h5>
+        <h5>申请修改<%= Employee.find(application.employee_id).name %>在<%= application.year %>年<%= application.month %>月<%= application.day %>日的考勤</h5>
+        <h5>申请状态：</h5>
+        <h5><%= application.status %></h5>
+        <h5>申请人：</h5>
+        <h5><%= application.apply_person %></h5>
+        <h5>申请时间：</h5>
+        <h5><%= application.created_at %></h5>
+      </div>
+    </div> 
+  </div>
+</div> 

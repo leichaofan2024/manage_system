@@ -40,7 +40,10 @@ Rails.application.routes.draw do
       get :filter
       post :create_application
       get :show_application
+      get :show_application_detail
       post :update_application
+      get :show_record
+      get :caiwu
     end
   end
 end
