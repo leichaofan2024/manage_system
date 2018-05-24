@@ -179,7 +179,7 @@ class Employee < ActiveRecord::Base
 
     #更新考勤表信息
     Employee.all.each do |i|
-      Attendance.create(:employee_id => i.id, :group_id => i.group)
+      Attendance.create(:employee_id => i.id, :group_id => i.group, :month => Time.now.month, :year => Time.now.year)
     end
 
   end
