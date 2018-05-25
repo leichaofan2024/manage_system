@@ -1542,8 +1542,6 @@ h4 {
   font-size: 14px !important;
   display: block;
   z-index: 1;
-  padding-top: 8px;
-  padding-bottom: 10px;
   height: 40px;
   margin-top: -10px;
   margin-left: -18px;
@@ -1560,6 +1558,14 @@ h4 {
     background-color: transparent;
 }
 
-
+.link-second-navbar {
+    font-size: 14px;
+    margin: -10px 20px;
+    color: #495060;
+    line-height: 60px;
+    height: 60px;
+    cursor: pointer;
+    display: inline-block;
+}
 
 /*-----------end-------------------*/
