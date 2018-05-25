@@ -433,6 +433,16 @@ ul {
     background-color: transparent;
 }
 
+.header_info:after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    height: 1px;
+    width: calc(100% - 30px);
+    background-color: rgba(180,180,180,.3);
+}
+
 
 /*-------------------内容主体----------------------*/
 .main_content.has-content {
@@ -1527,20 +1537,21 @@ h4 {
 }
 /*-------------end------------*/
 
-
+/*------------段管理员二级导航栏-------*/
 .header_info1 {
   font-size: 14px !important;
   display: block;
   z-index: 1;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  height: 50px;
-  margin-top: -20px;
-  margin-left: 8px;
+  padding-top: 8px;
+  padding-bottom: 10px;
+  height: 40px;
+  margin-top: -10px;
+  margin-left: -18px;
   margin-bottom: 10px;
   background-color: #fff;
-  // border-bottom: 1px solid black;
+  // border-bottom: 1px solid black;  修改底部颜色
   position: relative;
+  text-align: center;
 }
 .header_info1 ul li>a {
     color: #0366d6;
@@ -1548,3 +1559,7 @@ h4 {
     margin-top: 8px;
     background-color: transparent;
 }
+
+
+
+/*-----------end-------------------*/
