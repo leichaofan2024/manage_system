@@ -4,14 +4,14 @@
 <% Workshop.find_by(:name => current_user.name).groups.each do |group| %>
   <% groups << group.id %>
 <% end %>
-<% applications = Application.where(:group_id => groups ) %>
+<% applications = Application.where(:group_id => groups, :status => "班组发起申请" ) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
 <h4>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: @workshop) %>条修改申请需要处理</h4>
 <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-  <h4>本考勤表状态:<%= @status %></h4>
-  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %>
+  <h4>本考勤表状态:<%= @status %></h4> 
+  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "workshop"), method: :post, class: "btn btn-primary pull-right" %>
   <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary pull-right" %>
 <% end %>
 <%= form_tag filter_attendances_path, method: 'get' do %>

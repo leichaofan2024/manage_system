@@ -79,7 +79,11 @@ layout 'home'
 			name = current_user.name
 			@group = Group.find_by(:name => name)
 			if !AttendanceStatus.find_by(:group_id => @group.id).present?
-				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+				if current_user.has_role? :groupadmin
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+				elsif current_user.has_role? :organsadmin
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.wokkshop.id)
+				end
 			end
 		end
 
@@ -157,10 +161,12 @@ layout 'home'
 		else
 			@employees = Employee.where(:workshop => @workshop)
 		end
-		if AttendanceStatus.find_by(:group_id => params[:group]).present?
+		
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			@status = AttendanceStatus.find_by(:group_id => params[:group]).status
-		end
+			if params[:group].present?
+				@status = AttendanceStatus.find_by(:group_id => params[:group]).status
+			end
+		
 		#根据用户点击组织架构树状图来筛选展示的现员--结束
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
 		@click_group = params[:group]
@@ -207,7 +213,6 @@ layout 'home'
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
-			
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
 			@groups.each do |group|
@@ -218,7 +223,7 @@ layout 'home'
 			@workshops = Workshop.find(status_workshop)
 			@workshops.each do |workshop|
 				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-			end
+			end 
 		end
 	end
 	##一键审核功能--结束

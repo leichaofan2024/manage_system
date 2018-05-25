@@ -46,7 +46,11 @@
                     <% if day_attendance == "x" %>
                       <%= " " %>
                     <% else %>
-                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% if current_user.has_role? :workshopadmin %>
+                        <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                      <% else %>
+                        <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% end %>
                     <% end %>
                 </td>
                   <% day_number += 1%>

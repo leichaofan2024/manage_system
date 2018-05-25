@@ -10,11 +10,12 @@
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->
   <h4>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h4>
-  <%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %>
+  <%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %><br><br>
   <!-- 进度条 -->
+  <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
   <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow="60"
-          aria-valuemin="0" aria-valuemax="100" style="width: <%= "#{@workshops.count.to_f / Workshop.all.count.to_f}" %>%;">
+          aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
           <span class="sr-only">40% 完成</span>
       </div>
   </div>
@@ -164,11 +165,9 @@
                     <% end %>
                   <% end %>
                   <% employees = Employee.where(:workshop => workshop.id).pluck("id") %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id")}").count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
-                  <% else %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.where(:employee_id => employees, :month => @month, :year => @year).pluck("id")}").count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
-                  <% end %>
+                  <% attendances = Attendance.where(:employee_id => employees).pluck("id") %>
+                  <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
+                      <td><%= link_to records, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: "btn btn-primary" %></td>
                 </tr>
               <% end %>
             <% end %>
