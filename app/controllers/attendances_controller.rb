@@ -61,14 +61,29 @@ layout 'home'
 			attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
 		end
 		#将上面得到的attendance_hash存入数据库
+		sum = 0
 		attendance_hash.each do |i|
 			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
 			@attendance_count ||= AttendanceCount.new
 			group_id = Employee.find(params[:employee_id]).group
 			workshop_id = Employee.find(params[:employee_id]).workshop
 			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
+
+			if (i[0] == "f") && (i[1] > 0)
+				sum += i[1]
+			end
+			if (i[0] == "g") && (i[1] > 0)
+				sum += i[1]
+			end
 		end
+		annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
+		annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
+
+		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
+
+		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
+
 		if current_user.has_role? :groupadmin
 			name = current_user.name.split("-")
 			@group = Group.find_by(:name => name[1])
