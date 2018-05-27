@@ -122,7 +122,7 @@
                   <% end %>
                   <% employees = Employee.where(:group => group.id).pluck("id") %>
                   <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %> 
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
                   <% else %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year) %></td>
@@ -184,8 +184,8 @@
 </div>
 <!-- 弹框代码(使用ajax呼叫，所以没有render)-结束 -->
 <!-- 进度条引用的库-开始 -->
-<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 <!-- 进度条引用的库-结束 -->
 <!-- 组织结构树状图的js代码-开始 -->
 <script type="text/javascript">
