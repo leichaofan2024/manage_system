@@ -79,12 +79,13 @@
 
       <!--- 按工种分类筛选-开始  -->
       <% if can? :manage, Employee %>
-          <div class="s.default_down ivu-dropdown">
-            <div class="ivu-dropdown-rel">
-              <span>
-                <a class="dropdown-toggle" data-toggle="dropdown" href="/" >
-                  按职务筛选
-                  <b class="caret"></b>
+        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    按职务筛选
+                 <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                   <% @work_types = Employee.pluck("work_type").uniq %>
@@ -92,24 +93,12 @@
                     <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
                   <% end %>
                 </ul>
-                <i class="ivu-icon ivu-icon-arrow-down-b"></i>
-              </span>
-            </div>
-          </div>
-        <% end %>
+              </li>
+            </li>
+          </ul>
+        </div>
+      <% end %>
       <!--- 按工种分类筛选-结束  -->
-
-
-        <!-- <span class="border-u3lzp_0">|</span>
-        <div class="s.default_down ivu-dropdown">
-          <div class="ivu-dropdown-rel">
-            <button type="button" class="ivu-btn ivu-btn-text btn-2tqA7_0">
-              <span>最早入职优先<i class="ivu-icon ivu-icon-arrow-down-b"></i></span>
-            </button>
-          </div>
-        </div> -->
-
-
       </div>
     </div>
   </div>
