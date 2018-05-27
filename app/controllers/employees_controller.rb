@@ -4,9 +4,12 @@ class EmployeesController < ApplicationController
   def index
     #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
     if params[:worktype].present?
-      @employees = Employee.where(work_type: params[:work_type]).page(params[:page]).per(10)
+      @employees = Employee.where(work_type: params[:work_type])
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.order('id ASC').page(params[:page]).per(10)
+    elsif current_user.has_role? :workshopadmin
+      workshop_id = Workshop.find_by(:name => current_user.name).id
+      @employees = Employee.where(:workshop => workshop_id).page(params[:page]).per(10)
     elsif current_user.has_role? :organsadmin
       group_id = Group.find_by(:name => current_user.name).id
       @employees = Employee.where(:group => group_id).page(params[:page]).per(10)
