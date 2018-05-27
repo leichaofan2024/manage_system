@@ -5,63 +5,47 @@
 	      <table id="example" class="table table-bordered">
 	        <thead>
 	        	<tr>
-	        		<th>工号</th>
-	        		<th>档案号</th>
-	        		<th>车间</th>
-	        		<th>班组</th>
-	        		<th>姓名</th>
-	        		<th>性别</th>
-	        		<th>出生日期</th>
-	        		<th>工作时间</th>
-	        		<th>职务</th>
-	        		<th>级别</th>
-	        		<th>工龄</th>
+	        		<th>工种</th>
+	        		<th>上年末单位人数</th>
+	        		<th>休年休假人数</th>
+	        		<th>休年休假人数-1</th>
+	        		<th>休5天人数</th>
+	        		<th>休10天人数</th>
+	        		<th>休15天人数</th>
 	        		<th>应休假天数</th>
 	        		<% (1..12).each do |i| %>
-	        			<th><%= i %>月</th>
+	        			<th><%= i %>月份安排人数</th>
+	        			<th><%= i %>月份休假天数</th>
 	        		<% end %>
 	        	</tr>
 	        </thead>
-	        <tbody>
-	        	<% @employees.each do |employee| %>
-		        	<tr>
-		        		<td><%= employee.job_number %></td>	
-		        		<td><%= employee.record_number %></td>
-		        		<td><%= Workshop.find(employee.workshop).name %></td>
-		        		<td><%= Group.find(employee.group).name %></td>
-		        		<td><%= employee.name %></td>
-		        		<td><%= employee.sex %></td>
-		        		<td><%= employee.birth_date %></td>
-		        		<td><%= employee.working_time %></td>
-		        		<td><%= employee.duty %></td>
-		        		<td><%= employee.grade %></td>
-		        		<td><%= employee.working_years %></td>
-		        		<% if employee.working_years <= 10 %>
-		        			<% holidays = 5 %>
-		        		<% elsif (employee.working_years >= 11) && (employee.working_years <= 20) %>
-		        			<% holidays = 10 %>
-		        		<% elsif employee.working_years > 21 %>
-		        			<% holidays = 15 %>
-		        		<% end %>
-		        		<td><%= holidays %></td>
-		        		<% (1..12).each do |i| %>
-		        			<% annual_holiday = AnnualHoliday.find_by(:employee_id => employee.id, :month => i) %>
-		        			<% if current_user.has_role? :superadmin %>
-		        				<% if annual_holiday.present? %>
-			        				<td><%= annual_holiday.holiday_days %></td>
-			        			<% else %>
-			        				<td></td>
-			        			<% end %>
-		        			<% else %>
-			        			<% if annual_holiday.present? %>
-			        				<td><%= link_to annual_holiday.holiday_days, holiday_modal_annual_holidays_path(employee: employee, month: i), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#HolidayModal"  %></td>
-			        			<% else %>
-			        				<td><%= link_to "未填写", holiday_modal_annual_holidays_path(employee: employee, month: i), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#HolidayModal" %></td>
-			        			<% end %>
-		        			<% end %>
-		        		<% end %>
-		        	</tr>
-	        	<% end %>
+	        <tbody>  	
+        		<% AnnualHolidayWorkType.all.each do |type| %>
+        			<tr>
+        				<td><%= type.work_type %></td>
+        				<% ["last_year_people_number", "this_year_people_number", "other_this_year_people_number", "five_days", "ten_days", "fifteen_days", "holiday_days"].each do |number| %>
+	        				<td>
+	        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: number, workshop: current_user.name), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
+	        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: Workshop.find_by(name: current_user.name).id, year: Time.now.year, work_type: type) %>
+	        						<% if holiday.present? %>
+	        						  <% holiday_attribute = holiday.attributes %>
+		        						<% if holiday_attribute[number].present? %>
+		        							<%= holiday_attribute[number] %>
+		        						<% else %>
+		        							<%= "点击填写" %>
+		        						<% end %>
+		        					<% else %>
+		        						<%= "点击填写" %>
+		        					<% end %>
+	        					<% end %>
+	        				</td>
+        				<% end %>
+        				<% Date::MONTHNAMES[1..12].each do |i| %>
+        					<td><%= link_to "点击填写", holiday_modal_annual_holidays_path(work_type: type, number: "#{i}""_plan_number", workshop: current_user.name), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" %></td>
+        					<td><%= link_to "点击填写", holiday_modal_annual_holidays_path(work_type: type, number: "#{i}""_plan_days", workshop: current_user.name), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" %></td>
+        				<% end %>
+        			</tr>
+        		<% end %>
 	        </tbody>
 	      </table>
 	    </div>

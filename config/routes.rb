@@ -53,6 +53,8 @@ Rails.application.routes.draw do
       post :create_holiday
       get :holiday_statistic
       get :holiday_plan
+      get :holiday_modal
+      post :create_holiday_plan
     end
   end
 end
