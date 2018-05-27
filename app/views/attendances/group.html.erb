@@ -64,11 +64,13 @@
                             <% end %>
                           <% end %>
                         <% else %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                            <% if day_attendance == "x" %>
-                              <%= "未考勤" %>
+                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true,  "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                             <% if day_attendance == "x" %>
+                               <div class="btn btn-primary" style="background: white; color: black;">
+                                 <%= "-" %>
+                               </div>
                             <% else %>
-                              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                             <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                             <% end %>
                           <% end %>
                         <% end %>
@@ -76,7 +78,7 @@
                     <% else %>
                       <td>
                         <% if day_attendance == "x" %>
-                          <%= ""%>
+                          <%= "-"%>
                         <% else %>
                           <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                         <% end %>
