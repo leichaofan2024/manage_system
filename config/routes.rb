@@ -51,7 +51,8 @@ Rails.application.routes.draw do
     collection do
       get :holiday_modal
       post :create_holiday
-      get :holiday_statistic
+      get :duan_holiday_plan
+      get :workshop_holiday_plan
       get :holiday_plan
       get :holiday_modal
       post :create_holiday_plan

@@ -44,4 +44,12 @@ class AnnualHolidaysController < ApplicationController
 		redirect_back(fallback_location: annual_holidays_path)
 	end
 
+	def duan_holiday_plan
+		@workshops = Workshop.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
+		if params[:workshop].present?
+			holidays = AnnualHolidayPlan.find_by(workshop_id: params[:workshop])
+		
+		end
+	end
+
 end

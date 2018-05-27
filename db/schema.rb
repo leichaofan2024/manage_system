@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180527105902) do
+ActiveRecord::Schema.define(version: 20180527115130) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.integer "workshop_id"
     t.integer "work_type", comment: "工种"
     t.integer "last_year_people_number", comment: "上年末单位人数"
     t.integer "this_year_people_number", comment: "今年休年休假人数"
-    t.integer "other_this_year_people_number", comment: "今年休年休假人数1"
     t.integer "five_days", comment: "休5天人数"
     t.integer "ten_days", comment: "休10天人数"
     t.integer "fifteen_days", comment: "休15天人数"
