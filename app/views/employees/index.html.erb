@@ -137,11 +137,10 @@
     </div>
 
       <div class="text-center">
-        <% if params[:filter_type].blank? %>
+        <% if params[:filter_type].blank? && params[:q].blank? %>
           <%= paginate @employees %>
         <% end %>
       </div>
-
 
 
 
