@@ -15,7 +15,7 @@
           <tbody data-behavior='sortable'>
   	      <% @workshops.each do |workshop| %>
           <tr>
-            <td></td>
+            <td><%= workshop.id %></td>
   	        <td><%= workshop.name %></td>
             <% @vacation_codes.each do |code| %>
               <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>

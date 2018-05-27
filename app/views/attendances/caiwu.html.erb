@@ -1,11 +1,12 @@
 <%= render "attendance_sidebar"%>
-<div class="card">
-    <div style="overflow: auto;" class="col-md-10">
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
       <table id="example" class="table table-bordered">
         <thead>
         	<tr>
         	  <th>ID</th>
-              <th>车间</th>
+            <th>车间</th>
 	          <th>病假</th>
 	          <th>事假</th>
 	          <th>婚假</th>
@@ -24,12 +25,12 @@
 				  <td><%= workshop.id %></td>
 				  <td><%= workshop.name %></td>
 				  <% @vacation_codes.each do |code| %>
-				    <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td> 
+				    <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
 				  <% end %>
 				</tr>
 			<% end %>
         </tbody>
       </table>
     </div>
+  </div>
 </div>
-
