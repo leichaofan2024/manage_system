@@ -46,9 +46,9 @@ class AnnualHolidaysController < ApplicationController
 
 	def duan_holiday_plan
 		@workshops = Workshop.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
+		@duan = params[:duan]
 		if params[:workshop].present?
-			holidays = AnnualHolidayPlan.find_by(workshop_id: params[:workshop])
-		
+			@workshop = params[:workshop]
 		end
 	end
 
