@@ -26,8 +26,21 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def create_holiday_plan
-		holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => Time.now.year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
-		holiday.update(:workshop_id => params[:workshop].to_i, :year => Time.now.year, :work_type => params[:work_type], params[:input_name] => params[:number])
+		if params[:number].present?
+			holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => Time.now.year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
+			holiday.update(:workshop_id => params[:workshop].to_i, :year => Time.now.year, :work_type => params[:work_type], params[:input_name] => params[:number])
+		end
+		if params[:status].present?
+			if holiday.present?
+				if (holiday.this_year_people_number == holiday.five_days + holiday.ten_days + holiday.fifteen_days) && (holiday.this_year_people_number == holiday.January_plan_number + holiday.February_plan_number + holiday.March_plan_number + holiday.April_plan_number + holiday.May_plan_number + holiday.June_plan_number + holiday.July_plan_number + holiday.August_plan_number + holiday.September_plan_number + holiday.October_plan_number + holiday.November_plan_number + holiday.December_plan_number)
+					holiday.update(:status => "车间填写完毕")
+				else
+					flash[:alert] = "确认失败，请核对您的总数"
+				end
+			else
+				flash[:alert] = "确认失败，请核对您的总数"
+			end
+		end
 		redirect_back(fallback_location: annual_holidays_path)
 	end
 

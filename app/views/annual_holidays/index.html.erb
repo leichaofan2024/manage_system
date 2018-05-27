@@ -1,4 +1,5 @@
 <%= render 'annual_holiday_sidebar' %>
+<%= link_to "确认完成", create_holiday_plan_annual_holidays_path(status: "true"), method: :post, class: "btn btn-primary" %>
 <% if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) %>
 	<div class="card">
 	    <div style="overflow: auto;" class="col-md-10">
@@ -8,7 +9,6 @@
 	        		<th>工种</th>
 	        		<th>上年末单位人数</th>
 	        		<th>休年休假人数</th>
-	        		<th>休年休假人数-1</th>
 	        		<th>休5天人数</th>
 	        		<th>休10天人数</th>
 	        		<th>休15天人数</th>
@@ -23,7 +23,7 @@
         		<% AnnualHolidayWorkType.all.each do |type| %>
         			<tr>
         				<td><%= type.work_type %></td>
-        				<% ["last_year_people_number", "this_year_people_number", "other_this_year_people_number", "five_days", "ten_days", "fifteen_days", "holiday_days"].each do |number| %>
+        				<% ["last_year_people_number", "this_year_people_number", "five_days", "ten_days", "fifteen_days", "holiday_days"].each do |number| %>
 	        				<td>
 	        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: number, workshop: current_user.name), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
 	        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: Workshop.find_by(name: current_user.name).id, year: Time.now.year, work_type: type) %>
