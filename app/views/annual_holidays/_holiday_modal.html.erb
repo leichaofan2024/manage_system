@@ -3,15 +3,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">填写<%= Employee.find(@employee).name %><%= @month %>月份休假天数</h4>
+        <h4 class="modal-title" id="myModalLabel">填写<%= AnnualHolidayWorkType.find(@work_type).work_type %>的<%= @number %></h4>
       </div>
       <div class="modal-body">
-        <%= form_tag create_holiday_annual_holidays_path do %>
-          <%= label_tag :请输入休假天数： %>
-        	<%= text_field_tag :holiday_days %>
-          <%= hidden_field_tag :employee, @employee %>
-          <%= hidden_field_tag :month, @month %>
-        	<%= submit_tag :提交 %>
+        <%= form_tag create_holiday_plan_annual_holidays_path do %>
+          <%= text_field_tag :number %>
+          <%= hidden_field_tag :work_type, @work_type %>
+          <%= hidden_field_tag :input_name, @number %>
+          <%= hidden_field_tag :workshop, Workshop.find_by(name: @workshop).id %>
+          <%= submit_tag :点击填入 %>
         <% end %>
       </div>
     </div> 

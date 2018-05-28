@@ -1,0 +1,2 @@
+class AnnualHolidayWorkType < ApplicationRecord
+end

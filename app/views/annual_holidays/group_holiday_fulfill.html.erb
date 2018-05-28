@@ -1,0 +1,41 @@
+<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+	<div class="card">
+		    <div style="overflow: auto;" class="col-md-10">
+		      <table id="example" class="table table-bordered">
+		        <thead>
+		        	<tr>
+		        		<th>姓名</th>
+		        		<% (1..12).each do |i| %>
+		        			<th><%= i %></th>
+		        		<% end %>
+		        		<th>工龄</th>
+		        		<th>应休</th>
+		        		<th>实休</th>
+		        	</tr>
+		        </thead>
+		        <tbody>  	
+	        		<% @employees.each do |employee| %>
+	        			<tr>
+	        				<td><%= employee.name %></td>
+	        				<td><%= employee.working_years %></td>
+	        				<% (1..12).each do |month| %>
+	        					<% if AnnualHoliday.find_by(month: month, year: Time.now.year, employee_id: employee.id).present? %>
+									<td><%= AnnualHoliday.find_by(month: month, year: Time.now.year, employee_id: employee.id).holiday_days %></td>
+								<% else %>
+									<td><%= "" %></td>
+								<% end %>	
+	        				<% end %>
+	        				<% if employee.working_years <= 10 %>
+	        					<td><%= 5 %></td>
+	        				<% elsif employee.working_years >= 11 && employee.working_years <= 20 %>
+	        					<td><%= 10 %></td>
+	        				<% elsif employee.working_years >= 21 %>
+	        					<td><%= 15 %></td>
+	        				<% end %>
+							<td><%= AnnualHoliday.where(employee_id: employee.id, year: Time.now.year).sum(:holiday_days) %></td>
+	        			</tr>
+	        		<% end %>
+	        	</tbody>
+	        </table>
+	    </div>
+<% end %>

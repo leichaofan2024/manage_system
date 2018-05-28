@@ -49,10 +49,20 @@ Rails.application.routes.draw do
 
   resources :annual_holidays do
     collection do
+      #年休假计划
       get :holiday_modal
-      post :create_holiday
-      get :holiday_statistic
-      get :holiday_plan
+      post :create_holiday_plan
+      get :duan_holiday_plan
+      get :workshop_holiday_plan
+      #年休假落实
+      get :holiday_fulfill
+      get :group_holiday_fulfill
+      #年休假情况
+      get :holiday_fulfill_detail
+      #年休假完成率
+      get :holiday_fulfillment_rate
+      get :filter
+
     end
   end
 end

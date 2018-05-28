@@ -61,14 +61,29 @@ layout 'home'
 			attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
 		end
 		#将上面得到的attendance_hash存入数据库
+		sum = 0
 		attendance_hash.each do |i|
 			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
 			@attendance_count ||= AttendanceCount.new
 			group_id = Employee.find(params[:employee_id]).group
 			workshop_id = Employee.find(params[:employee_id]).workshop
 			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
+
+			if (i[0] == "f") && (i[1] > 0)
+				sum += i[1]
+			end
+			if (i[0] == "g") && (i[1] > 0)
+				sum += i[1]
+			end
 		end
+		annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
+		annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
 		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
+
+		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
+
+		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
+
 		if current_user.has_role? :groupadmin
 			name = current_user.name.split("-")
 			@group = Group.find_by(:name => name[1])
@@ -79,7 +94,11 @@ layout 'home'
 			name = current_user.name
 			@group = Group.find_by(:name => name)
 			if !AttendanceStatus.find_by(:group_id => @group.id).present?
-				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+				if current_user.has_role? :groupadmin
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+				elsif current_user.has_role? :organsadmin
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.wokkshop.id)
+				end
 			end
 		end
 
@@ -157,10 +176,12 @@ layout 'home'
 		else
 			@employees = Employee.where(:workshop => @workshop)
 		end
-		if AttendanceStatus.find_by(:group_id => params[:group]).present?
+		
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			@status = AttendanceStatus.find_by(:group_id => params[:group]).status
-		end
+			if params[:group].present?
+				@status = AttendanceStatus.find_by(:group_id => params[:group]).status
+			end
+		
 		#根据用户点击组织架构树状图来筛选展示的现员--结束
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
 		@click_group = params[:group]
@@ -207,7 +228,6 @@ layout 'home'
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
-			
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
 			@groups.each do |group|
@@ -218,7 +238,7 @@ layout 'home'
 			@workshops = Workshop.find(status_workshop)
 			@workshops.each do |workshop|
 				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-			end
+			end 
 		end
 	end
 	##一键审核功能--结束
