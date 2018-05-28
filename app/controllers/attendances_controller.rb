@@ -246,7 +246,6 @@ layout 'home'
 	def duan
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month)
 			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 			if status_workshop.all?{|x| x.nil?}
@@ -329,11 +328,21 @@ layout 'home'
 		if current_user.has_role? :workshopadmin
 			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			@employees = Employee.order('id ASC').page(params[:page]).per(10)
+			if params[:workshop].present?
+				@employees = Employee.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
+			else
+				@employees = Employee.order('id ASC').page(params[:page]).per(10)
+			end	
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		@years = Attendance.pluck("year").uniq
-		@months = Attendance.pluck("month").uniq.reverse
+		@workshops = Workshop.all
+		@workshop = Workshop.find_by(:name => params[:workshop]).id
+		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+		if status_workshop.all?{|x| x.nil?}
+			@workshops = []
+		else
+			@workshops = Workshop.find(status_workshop)
+		end
 	end
 
 	def caiwu
