@@ -4,12 +4,12 @@
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
-<h4>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: "duan") %>条修改申请需要处理</h4>
+<h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: "duan") %>条修改申请需要处理</h5>
 
 <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->
-  <h4>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h4>
+  <h5>目前已完成审核车间：<%= link_to @workshops.count %>个，未完成审核车间：<%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %>个</h5>
   <%= link_to "查看详情", processbar_detail_attendances_path(workshops: @workshops), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#verifyModal" %>
   <!-- 进度条 -->
   <div class="progress">
