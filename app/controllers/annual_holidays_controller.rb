@@ -61,7 +61,35 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfill_detail
-		@employees = Employee.where(id: 1..100)
+		@employees = Employee.where(id: 300..400)
+		@workshops = Workshop.all
+		@groups = Group.all
+		@years = AnnualHoliday.pluck("year").uniq
+	end
+
+	def filter
+		@workshops = Workshop.all
+		@groups = Group.all
+		@years = AnnualHoliday.pluck("year").uniq
+		if params[:year].present?
+			@params_year = params[:year]
+			if (params[:workshop].present?) && (params[:group].blank?)
+				@employees = Employee.where(:workshop => params[:workshop])
+			elsif (params[:workshop].blank?) && (params[:group].present?)
+				@employees = Employee.where(:group => params[:group])
+			elsif (params[:workshop].present?) && (params[:group].present?)
+				@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
+			end
+		else
+			if (params[:workshop].present?) && (params[:group].blank?)
+				@employees = Employee.where(:workshop => params[:workshop])
+			elsif (params[:workshop].blank?) && (params[:group].present?)
+				@employees = Employee.where(:group => params[:group])
+			elsif (params[:workshop].present?) && (params[:group].present?)
+				@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
+			end
+		end
+		render action: "holiday_fulfill_detail"
 	end
 
 end
