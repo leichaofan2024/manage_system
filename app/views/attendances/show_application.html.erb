@@ -4,7 +4,6 @@
     <table id="example" class="table table-bordered">
       <thead>
       	<tr>
-      		<th>序号</th>
       		<% if params[:type] == "duan" %>
       	    	<th>车间</th>
       	    <% end %>
@@ -21,7 +20,6 @@
       <tbody>
       	<% @applications.each do |application| %>
 	      	<tr>
-	      		<td><%= application %></td>
 	      		<% if params[:type] == "duan" %>
 	      			<% group = Group.find("#{Application.find(application).group_id}") %>
 	      	    	<td><%= Workshop.find("#{group.workshop_id}").name %></td>

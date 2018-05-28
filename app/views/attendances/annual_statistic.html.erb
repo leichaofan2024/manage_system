@@ -5,7 +5,6 @@
       <table id="example" class="table table-bordered">
         <thead>
           <tr>
-            <th>顺号</th>
             <th>车间</th>
             <% @vacation_codes.each do |code| %>
               <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
@@ -15,7 +14,6 @@
           <tbody data-behavior='sortable'>
   	      <% @workshops.each do |workshop| %>
           <tr>
-            <td><%= workshop.id %></td>
   	        <td><%= workshop.name %></td>
             <% @vacation_codes.each do |code| %>
               <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>

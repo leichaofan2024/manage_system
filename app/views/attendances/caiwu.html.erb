@@ -5,8 +5,7 @@
       <table id="example" class="table table-bordered">
         <thead>
         	<tr>
-        	  <th>ID</th>
-            <th>车间</th>
+              <th>车间</th>
 	          <th>病假</th>
 	          <th>事假</th>
 	          <th>婚假</th>
@@ -22,7 +21,6 @@
         <tbody>
         	<% @workshops.each do |workshop| %>
 				<tr>
-				  <td><%= workshop.id %></td>
 				  <td><%= workshop.name %></td>
 				  <% @vacation_codes.each do |code| %>
 				    <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>

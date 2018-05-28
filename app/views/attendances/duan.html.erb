@@ -124,7 +124,6 @@
       <table id="example" class="table table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
             <% if @workshop.present? %>
               <th>班组</th>
             <% elsif @group.present? %>
@@ -145,7 +144,6 @@
             <% if @workshop.present? %>
               <% Group.where(:workshop_id => @workshop).each do |group| %>
                 <tr>
-                  <td><%= group.id %></td>
                   <td><%= group.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
@@ -176,7 +174,6 @@
             <% elsif @group.present? %>
               <% Employee.where(:group => @group).each do |employee| %>
                 <tr>
-                  <td><%= employee.id %></td>
                   <td><%= employee.name %></td>
                   <td><%= employee.sal_number %></td>
                   <td><%= Workshop.find(employee.workshop).name %></td>
@@ -198,7 +195,6 @@
             <% else %>
               <% @workshops.each do |workshop| %>
                 <tr>
-                  <td><%= workshop.id %></td>
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>

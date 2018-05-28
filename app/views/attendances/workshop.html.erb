@@ -80,7 +80,7 @@
     <table id="example" class="table table-bordered">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>工资号</th>
           <th>班组</th>
           <th>姓名</th>
           <th>工资号</th>
@@ -95,7 +95,7 @@
             <% attendance_hash= {} %>
             <% day_number = 1%>
             <tr>
-              <td><%= employee.id %></td>
+              <td><%= employee.sal_number %></td>
               <td><%= Group.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sal_number %></td>
