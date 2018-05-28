@@ -1,0 +1,34 @@
+<%= render "attendance_sidebar"%>
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+        		<th>工资号</th>
+        		<th>部门名称</th>
+        		<th>姓名</th>
+        		<th>日勤夜班数</th>
+        		<th>节日加班</th>
+        		<th>轮值夜班天数</th>
+        	</tr>
+        </thead>
+        <tbody>
+        	<% @employees.each do |employee| %>
+        		<tr>
+	        		<td><%= employee.sal_number %></td>
+	        		<td><%= Group.find_by(:id => employee.group).name %></td>
+	        		<td><%= employee.name %></td>
+	        		<% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
+	        		<td><%= attendance_counts.find_by(vacation_code: "a").count %></td>
+	        		<td><%= attendance_counts.find_by(vacation_code: "c").count %></td>
+	        		<td><%= attendance_counts.find_by(vacation_code: "b").count %></td>
+
+	        	</tr>
+        	<% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

@@ -357,4 +357,8 @@ layout 'home'
 		end
 		redirect_back(fallback_location: set_holiday_start_time_attendances_path)
 	end
+
+	def caiwu2
+		@employees = Employee.all
+	end
 end
