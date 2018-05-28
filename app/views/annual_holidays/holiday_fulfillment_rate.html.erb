@@ -1,0 +1,128 @@
+<%= render 'annual_holiday_sidebar' %>
+<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) %>
+	<div class="card">
+		    <div style="overflow: auto;" class="col-md-10">
+		      <table id="example" class="table table-bordered">
+		        <thead>
+		        	<tr>
+		        		<th>车间</th>
+		        		<th>季度</th>
+						<th>完成人数</th>
+		        		<th>完成率</th>
+		        		<th>完成天数</th>
+		        		<th>完成率</th>
+		        	</tr>
+		        </thead>
+		        <tbody>  
+		        		
+	        		<% @workshops.each do |workshop| %>
+		        		<% (1..4).each do |i| %>
+		        		<% plan_sum = 0 %>
+		        			<tr>
+		        				<td><%= workshop.name %></td>
+		        				<td><%= i %></td>
+		        				<!-- 表数据配置-开始 -->
+		        				<!-- 第一季度完成天数 -->
+								<% employees = Employee.where(workshop: workshop.id).pluck("id").uniq %>
+								<% if i == 1 %>
+									<td></td>
+									<td></td>
+									<% first_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 1..3).sum(:holiday_days) %>
+			        				<td><%= first_quarter_number %></td>
+									<!-- 第一季度计划天数 -->
+									<% columns = ["January_plan_days", "February_plan_days", "March_plan_days"] %>
+									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
+									<% columns.each do |column| %>
+										<% if holiday_plan.present? %>
+											<% holiday_plan_attributes = holiday_plan.attributes %>
+											<% if holiday_plan_attributes[column].present? %>
+												<% plan_sum += holiday_plan_attributes[column] %>
+											<% end %>
+										<% end %>
+									<% end %>
+									<!-- 第一季度天数完成率 -->
+									<% if plan_sum != 0 %>
+										<td><%= (first_quarter_number.to_f/plan_sum)*100 %>%</td>
+									<% else %>
+										<td>0</td>
+									<% end %>
+								<!-- 第二季度完成天数 -->
+		        				<% elsif i == 2 %>
+		        					<td></td>
+									<td></td>
+		        					<% second_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 4..6).sum(:holiday_days) %>
+		        					<td><%= second_quarter_number %></td>
+		        					<!-- 第二季度计划天数 -->
+		        					<% columns = ["April_plan_days", "May_plan_days", "June_plan_days"] %>
+									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
+									<% columns.each do |column| %>
+										<% if holiday_plan.present? %>
+											<% holiday_plan_attributes = holiday_plan.attributes %>
+										<% if holiday_plan_attributes[column].present? %>
+											<% plan_sum += holiday_plan_attributes[column] %>
+										<% end %>
+										<% end %>
+									<% end %>
+									<!-- 第二季度完成天数率 -->
+									<% if plan_sum != 0 %>
+										<td><%= (second_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
+									<% else %>
+										<td>0</td>
+									<% end %>
+		    					<!-- 第三季度完成天数 -->
+		        				<% elsif i == 3 %>
+		        					<td></td>
+									<td></td>
+		        					<% third_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 7..9).sum(:holiday_days) %>
+		        					<td><%= third_quarter_number %></td>
+		        					<!-- 第三季度计划天数 -->
+		        					<% columns = ["July_plan_days", "August_plan_days", "Semptember_plan_days"] %>
+									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
+									<% columns.each do |column| %>
+										<% if holiday_plan.present? %>
+											<% holiday_plan_attributes = holiday_plan.attributes %>
+										<% if holiday_plan_attributes[column].present? %>
+											<% plan_sum += holiday_plan_attributes[column] %>
+										<% end %>
+										<% end %>
+									<% end %>
+									<!-- 第三季度完成天数率 -->
+									<% if plan_sum != 0 %>
+										<td><%= (third_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
+									<% else %>
+										<td>0</td>
+									<% end %>
+		        				<!-- 第四季度完成天数 -->
+		        				<% elsif i == 4 %>
+		        					<td></td>
+									<td></td>
+		        					<% forth_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 10..12).sum(:holiday_days) %>
+		        					<td><%= forth_quarter_number %></td>
+		        					<!-- 第四季度计划天数 -->
+		        					<% columns = ["October_plan_days", "November_plan_days", "December_plan_days"] %>
+									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
+									<% columns.each do |column| %>
+										<% if holiday_plan.present? %>
+											<% holiday_plan_attributes = holiday_plan.attributes %>
+										<% if holiday_plan_attributes[column].present? %>
+											<% plan_sum += holiday_plan_attributes[column] %>
+										<% end %>
+										<% end %>
+									<% end %>
+									<!-- 第四季度完成天数率 -->
+									<% if plan_sum != 0 %>
+										<td><%= (forth_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
+									<% else %>
+										<td>0</td>
+									<% end %>
+		        				<% end %>
+
+								<!-- 表数据配置-结束 -->
+		        			</tr>
+		        		<% end %>
+	        		<% end %>
+	        	</tbody>
+	        </table>
+	    </div>
+	</div>
+<% end %>

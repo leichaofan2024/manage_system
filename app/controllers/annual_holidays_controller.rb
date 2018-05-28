@@ -92,4 +92,8 @@ class AnnualHolidaysController < ApplicationController
 		render action: "holiday_fulfill_detail"
 	end
 
+	def holiday_fulfillment_rate
+		@workshops = Workshop.all
+	end
+
 end

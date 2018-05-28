@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       #年休假落实
       get :holiday_fulfill
       get :holiday_fulfill_detail
+      get :holiday_fulfillment_rate
       get :filter
 
     end
