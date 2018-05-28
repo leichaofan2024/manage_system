@@ -1,7 +1,32 @@
 <%= render "attendance_sidebar"%>
-<h4>人数控制设置</h4>
-<%= form_tag create_setting_attendances_path, method: 'post' do %>
-  <%= select_tag(:vacation, options_for_select(["加班", "轮夜"]))  %>
-  <%= text_field_tag :count %>
-  <%= submit_tag :点击确定 %>
-<% end %>
+
+
+<div class="wraper-7TeiU_0">
+  <div>
+    <div class="explain-3dUe1_0" style="margin-top: 0px;">
+      <div class="head-1n_Vg_0">
+        <div>使用指南</div>
+      </div>
+      <div class="content-3jF0K_0">
+        <div>
+          <p>1.考勤管理主要针对是班组人员，对其加班、夜班进行人数的控制</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="src-components-data-table2-src-data-table---app---1idss">
+        <div class="src-components-data-table2-src-data-table---table---2i3q8 src-components-data-table2-src-data-table---stripe---3xSWQ">
+          <div class="head-1n_Vg_0">
+            <div>人数控制设置</div><br>
+          </div>
+          <%= form_tag create_setting_attendances_path, method: 'post' do %>
+            <%= select_tag(:vacation, options_for_select(["加班", "轮夜"]))  %>
+            <%= text_field_tag :count %>
+            <%= submit_tag :点击确定 %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@
       <th>车间</th>
       <th>班组</th>
       <th>姓名</th>
+      <th>工种分类</th>
       <th>性别</th>
       <th>年龄</th>
       <th>文化程度</th>
@@ -27,6 +28,7 @@
         <td><%= employee.info.workshop.name %></td>
         <td><%= employee.info.group.name %></td>
         <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+        <td><%= employee.work_type%></td>
         <td><%= employee.sex %></td>
         <td><%= employee.age %></td>
         <td><%= employee.education_background %></td>
