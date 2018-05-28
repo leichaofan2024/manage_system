@@ -38,20 +38,8 @@
 	        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
 	        	 			<% columns.each do |column| %>
 		        				<td>
-		        					<% if @duan.present? %>
-		        						<% number = 0 %>
-		        						<% @workshops.each do |workshop| %>
-		        							<% holiday = AnnualHolidayPlan.find_by(workshop_id: workshop, year: Time.now.year, work_type: type) %>
-											<% if holiday.present? %>
-			        						  	<% holiday_attribute = holiday.attributes %>
-				        						<% if holiday_attribute[column].present? %>
-				        							<% number += holiday_attribute[column] %>
-				        						<% end %>
-				        					<% end %>	
-		        						<% end %>
-		        						<%= number %>
-		        					<% else %>
-		        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: @workshop, year: Time.now.year, work_type: type) %>
+		        					<% if @workshop.present? %>	
+										<% holiday = AnnualHolidayPlan.find_by(workshop_id: @workshop, year: Time.now.year, work_type: type) %>
 		        						<% if holiday.present? %>
 		        						  <% holiday_attribute = holiday.attributes %>
 			        						<% if holiday_attribute[column].present? %>
@@ -62,6 +50,18 @@
 			        					<% else %>
 			        						<%= "-" %>
 			        					<% end %>
+		        					<% else %>
+										<% number = 0 %>
+		        						<% @workshops.each do |workshop| %>
+		        							<% holiday = AnnualHolidayPlan.find_by(workshop_id: workshop, year: Time.now.year, work_type: type) %>
+											<% if holiday.present? %>
+			        						  	<% holiday_attribute = holiday.attributes %>
+				        						<% if holiday_attribute[column].present? %>
+				        							<% number += holiday_attribute[column] %>
+				        						<% end %>
+				        					<% end %>	
+		        						<% end %>
+		        						<%= number %>
 		        					<% end %>	
 		        				</td>
 	        				<% end %>

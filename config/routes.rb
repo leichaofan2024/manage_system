@@ -56,7 +56,10 @@ Rails.application.routes.draw do
       get :workshop_holiday_plan
       #年休假落实
       get :holiday_fulfill
+      get :group_holiday_fulfill
+      #年休假情况
       get :holiday_fulfill_detail
+      #年休假完成率
       get :holiday_fulfillment_rate
       get :filter
 

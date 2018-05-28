@@ -96,4 +96,9 @@ class AnnualHolidaysController < ApplicationController
 		@workshops = Workshop.all
 	end
 
+	def group_holiday_fulfill
+		group_name = current_user.name.split("-")[1] 
+		@employees = Employee.where(:group => Group.find_by(:name => group_name).id)
+	end
+
 end
