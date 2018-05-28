@@ -74,7 +74,11 @@
                 <% day_number = 1%>
                 <% attendance_ary.each do |day_attendance| %>
                   <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                  <% time_range = (Time.now.day - 3)..(Time.now.day) %>
+                  <% if Time.now.day >= 4 %>
+                    <% time_range = (Time.now.day - 3)..(Time.now.day) %>
+                  <% else %>
+                    <% time_range = 1..(Time.now.day) %>
+                  <% end %>
                     <% if time_range === day_number %>
                       <td>
                         <% if @year.present? && @month.present? %>

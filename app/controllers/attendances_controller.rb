@@ -16,7 +16,7 @@ layout 'home'
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
 
-		# 导出考勤表
+		# 导出考勤表 
 		respond_to do |format|
       format.html
       format.csv { send_data @employees.to_csv }
@@ -74,7 +74,7 @@ layout 'home'
 			end
 			if (i[0] == "g") && (i[1] > 0)
 				sum += i[1]
-			end
+			end 
 		end
 		annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
 		annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
@@ -135,7 +135,6 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
 			@employees = Employee.where(:group => group.id)
@@ -342,5 +341,20 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k"]
 		@workshops = Workshop.all
+	end
+
+	def create_holiday_time
+		if Employee.find_by(:sal_number => params[:sal_number]).nil?
+			flash[:alert] = "工资号不存在"
+		else
+			if Employee.find_by(:sal_number => params[:sal_number]).name == params[:name]
+				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
+				holiday_start_time.update(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time], name: params[:name])
+				flash[:notice] = "设置成功"
+			else
+				flash[:alert] = "姓名和工资号不匹配，请检查"
+			end
+		end
+		redirect_back(fallback_location: set_holiday_start_time_attendances_path)
 	end
 end
