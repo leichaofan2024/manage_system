@@ -1,6 +1,6 @@
 <%= render "attendance_sidebar"%>
 <% application_id = [] %>
-<% applications = Application.where(:status => "车间通过申请" ) %>
+<% applications = (Application.where(:status => "车间通过申请")) + (Application.where(:status => "科室发起申请")) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
