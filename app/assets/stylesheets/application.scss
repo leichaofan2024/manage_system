@@ -1628,9 +1628,9 @@ h4 {
 
 /*----------------a标签------------------*/
 a:focus{
-  color: white;
+  color: black;
   text-decoration: none;
-  outline: 0px auto -webkit-focus-ring-color;
+  outline: 0px auto;
   outline-offset: -2px;
 }
 /*----------------end-------------------*/
