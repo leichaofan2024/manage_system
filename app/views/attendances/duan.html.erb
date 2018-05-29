@@ -1,6 +1,6 @@
 <%= render "attendance_sidebar"%>
 <% application_id = [] %>
-<% applications = Application.where(:status => "车间通过申请" ) %>
+<% applications = (Application.where(:status => "车间通过申请")) + (Application.where(:status => "科室发起申请")) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
@@ -8,65 +8,6 @@
   <h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: "duan") %>条修改申请需要处理</h5>
 </div>
 
-<% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-  <!-- 进度条部分-开始 -->
-  <!-- 总数统计，呼叫弹窗 -->
-  <div class="col-md-12">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>已审核车间</th>
-          <th>未审核车间</th>
-          <th>详情</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><%= @workshops.count%></td>
-          <td><%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %></td>
-          <td><%= link_to "点击查看", processbar_detail_attendances_path(workshops: @workshops), remote: true, "data-toggle" => "modal", "data-target" => "#verifyModal" %></td>
-        </tr>
-      </tbody>
-    </table>
-  <!-- 进度条 -->
-  <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
-  <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="60"
-          aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
-          <span class="sr-only">40% 完成</span>
-      </div>
-  </div>
-  <!-- 进度条部分-结束 -->
-
-  <!-- 审核功能-开始 -->
-    <div class="btn_group_top-1sKKU_0">
-      <div>
-        <div class="btn_group-2MSRh_0">
-          <div class="ivu-tooltip">
-              <div class="ivu-tooltip-rel" >
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
-                     <span style="color: #269Eff;">审核</span>
-                  <% end %>
-                </button>
-              </div>
-              <div class="ivu-tooltip-rel">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
-                     <span style="color: #269Eff;">一键审核</span>
-                  <% end %>
-                </button>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
-  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %> -->
-  <!-- 审核功能-结束 -->
-<% end %>
 <div class="col-md-12">
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
@@ -124,7 +65,6 @@
       <table id="example" class="table table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
             <% if @workshop.present? %>
               <th>班组</th>
             <% elsif @group.present? %>
@@ -145,7 +85,6 @@
             <% if @workshop.present? %>
               <% Group.where(:workshop_id => @workshop).each do |group| %>
                 <tr>
-                  <td><%= group.id %></td>
                   <td><%= group.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
@@ -176,7 +115,6 @@
             <% elsif @group.present? %>
               <% Employee.where(:group => @group).each do |employee| %>
                 <tr>
-                  <td><%= employee.id %></td>
                   <td><%= employee.name %></td>
                   <td><%= employee.sal_number %></td>
                   <td><%= Workshop.find(employee.workshop).name %></td>
@@ -198,7 +136,6 @@
             <% else %>
               <% @workshops.each do |workshop| %>
                 <tr>
-                  <td><%= workshop.id %></td>
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
@@ -222,8 +159,7 @@
 </div>
 <!-- 主体部分-结束 -->
 <!-- 弹框代码(使用ajax呼叫，所以没有render)-开始 -->
-<div id="show_processbar_detail">
-</div>
+
 <!-- 弹框代码(使用ajax呼叫，所以没有render)-结束 -->
 <!-- 进度条引用的库-开始 -->
 <!-- <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>

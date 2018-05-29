@@ -135,7 +135,6 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
 			@employees = Employee.where(:group => group.id)
@@ -176,12 +175,12 @@ layout 'home'
 		else
 			@employees = Employee.where(:workshop => @workshop)
 		end
-		
+
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
 			if params[:group].present?
 				@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 			end
-		
+
 		#根据用户点击组织架构树状图来筛选展示的现员--结束
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
 		@click_group = params[:group]
@@ -238,7 +237,7 @@ layout 'home'
 			@workshops = Workshop.find(status_workshop)
 			@workshops.each do |workshop|
 				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-			end 
+			end
 		end
 	end
 	##一键审核功能--结束
@@ -247,7 +246,6 @@ layout 'home'
 	def duan
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month)
 			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 			if status_workshop.all?{|x| x.nil?}
@@ -330,11 +328,23 @@ layout 'home'
 		if current_user.has_role? :workshopadmin
 			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			@employees = Employee.order('id ASC').page(params[:page]).per(10)
+			if params[:workshop].present?
+				@employees = Employee.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
+			else
+				@employees = Employee.order('id ASC').page(params[:page]).per(10)
+			end
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		@years = Attendance.pluck("year").uniq
-		@months = Attendance.pluck("month").uniq.reverse
+		@workshops = Workshop.all
+		if params[:workshop].present?
+			@workshop = Workshop.find_by(:name => params[:workshop]).id
+		end
+		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
+		if status_workshop.all?{|x| x.nil?}
+			@workshops = []
+		else
+			@workshops = Workshop.find(status_workshop)
+		end
 	end
 
 	def caiwu
@@ -342,5 +352,24 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k"]
 		@workshops = Workshop.all
+	end
+
+	def create_holiday_time
+		if Employee.find_by(:sal_number => params[:sal_number]).nil?
+			flash[:alert] = "工资号不存在"
+		else
+			if Employee.find_by(:sal_number => params[:sal_number]).name == params[:name]
+				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
+				holiday_start_time.update(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time], name: params[:name])
+				flash[:notice] = "设置成功"
+			else
+				flash[:alert] = "姓名和工资号不匹配，请检查"
+			end
+		end
+		redirect_back(fallback_location: set_holiday_start_time_attendances_path)
+	end
+
+	def caiwu2
+		@employees = Employee.order('id ASC').page(params[:page]).per(20)
 	end
 end

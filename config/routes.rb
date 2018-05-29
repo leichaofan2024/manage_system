@@ -44,6 +44,10 @@ Rails.application.routes.draw do
       post :update_application
       get :show_record
       get :caiwu
+      get :caiwu2
+      get :set_holiday_start_time
+      post :create_holiday_time
+
     end
   end
 

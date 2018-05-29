@@ -19,7 +19,11 @@
             <% end %>
             <%= hidden_field_tag :group, group.id %><br>
             <%= hidden_field_tag :apply_person, current_user.name %><br>
-            <%= hidden_field_tag :status, "班组发起申请" %>
+            <% if current_user.has_role? :groupadmin %>
+              <%= hidden_field_tag :status, "班组发起申请" %>
+            <% elsif current_user.has_role? :organsadmin %>
+              <%= hidden_field_tag :status, "科室发起申请" %>
+            <% end %>
             <%= label_tag :请输入人员名称 %>
             <%= text_field_tag :person, nil, :required => "true" %><br>
             <%= label_tag :请输入要修改的日期 %>
