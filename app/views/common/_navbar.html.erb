@@ -2,9 +2,9 @@
     <div class="col-md-12" style="margin-right: 5px;">
         <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
 
-            <ul class="nav navbar-nav navbar-right"> 
-              <i class="fa fa-bell-o fa-lg"></i> 
-                
+            <ul class="nav navbar-nav navbar-right">
+              <i class="fa fa-bell-o fa-lg"></i>
+
                 <li>
                 <% if !current_user %>
                   <li><%= link_to("注册", new_user_registration_path) %> </li>
@@ -15,9 +15,9 @@
                         用户: <%= current_user.name %>
                         <b class="caret"></b>
                         <ul class="dropdown-menu">
-                          <% if current_user.has_role? :attendance_admin %>
+                          <!-- <% if current_user.has_role? :attendance_admin %>
                             <li><%= link_to "设置休假起始时间", set_holiday_start_time_attendances_path %></li>
-                          <% end %>
+                          <% end %> -->
                           <li><%= link_to "修改密码", edit_user_registration_path %></li>
                           <li><%= link_to "退出", destroy_user_session_path, method: :delete %></li>
                         </ul>
