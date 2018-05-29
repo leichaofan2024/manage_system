@@ -797,8 +797,11 @@ span {
     color: black;
 }
 
+
+
 .ivu-btn>.ivu-icon+span:hover {
   color: #269EFF;
+  border-color: white;
 }
 
 //头像
@@ -1622,3 +1625,12 @@ h4 {
     height: 1px;
 }
 /*----------------end--------------------*/
+
+/*----------------a标签------------------*/
+a:focus{
+  color: white;
+  text-decoration: none;
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+/*----------------end-------------------*/

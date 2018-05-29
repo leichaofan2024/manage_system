@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-<div class="col-md-12" style="margin-top: -50px;">
+<div class="col-md-12" style="margin-top: -10px;">
   <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
       <div class="btn_group-2MSRh_0">
@@ -32,7 +32,7 @@
      <% end %>
    <% end %>
 </div>
-<div class="col-md-12">
+<div class="col-md-12" style="margin-top: 20px;">
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
