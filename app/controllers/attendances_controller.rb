@@ -336,7 +336,9 @@ layout 'home'
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
-		@workshop = Workshop.find_by(:name => params[:workshop]).id
+		if params[:workshop].present?
+			@workshop = Workshop.find_by(:name => params[:workshop]).id
+		end
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []

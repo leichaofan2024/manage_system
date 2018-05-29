@@ -1,6 +1,5 @@
 <%= render "attendance_sidebar"%>
 
-
 <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
   <%= select_tag(:workshop, options_for_select(@workshops.collect{|u| u.name})) %>
   <%= submit_tag :点击筛选 %>
@@ -35,25 +34,29 @@
   </div>
   <!-- 进度条部分-结束 -->
 
+  <% if @workshop.present? %>
+    <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
+  <% end %>
+
   <!-- 审核功能-开始 -->
-    <div class="btn_group_top-1sKKU_0">
-      <div>
-        <div class="btn_group-2MSRh_0">
-          <div class="ivu-tooltip">
-              <div class="ivu-tooltip-rel" >
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
-                     <span style="color: #269Eff;">审核</span>
-                  <% end %>
-                </button>
-              </div>
-              <div class="ivu-tooltip-rel">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
-                     <span style="color: #269Eff;">一键审核</span>
-                  <% end %>
-                </button>
-              </div>
+  <div class="btn_group_top-1sKKU_0">
+    <div>
+      <div class="btn_group-2MSRh_0">
+        <div class="ivu-tooltip">
+            <div class="ivu-tooltip-rel" >
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
+                   <span style="color: #269Eff;">审核</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
+                   <span style="color: #269Eff;">一键审核</span>
+                <% end %>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -63,6 +66,11 @@
   <!-- <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
   <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %> -->
   <!-- 审核功能-结束 -->
+<% if @workshop.present? %>
+  <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
+<% else %>
+  <h4>全段考勤情况</h4>
+<% end %>
 <div class="col-md-12">
   <div class="card">
     <div style="overflow: auto; width: 100%;">
@@ -127,4 +135,7 @@
   <div class="text-center">
     <%= paginate @employees %>
   </div>
+</div>
+
+<div id="show_processbar_detail">
 </div>
