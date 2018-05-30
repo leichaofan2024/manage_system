@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       get :rali_years_statistical_analysis
       #图表点击后路径
       get :statistical_analysis_data
+      post :create_workshop
+      post :create_group
+      post :merge_workshop
     end
   end
 

@@ -16,7 +16,7 @@
                 <%= link_to group_attendances_path(format: "xls") do  %>
                    <span style="color: #269Eff;">导出记录</span>
                 <% end %>
-              </button>
+              </button> 
             </div>
         </div>
       </div>
@@ -84,7 +84,7 @@
                         <% if @year.present? && @month.present? %>
                           <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
                             <% if day_attendance == "x" %>
-                              <%= day_number %>
+                              <%= day_number %> 
                             <% else %>
                               <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                             <% end %>

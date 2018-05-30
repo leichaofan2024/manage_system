@@ -28,6 +28,16 @@ class EmployeesController < ApplicationController
   end
 
   def new
+    @employee = Employee.new
+  end
+
+  def create
+    @employee = Employee.new(employee_params)
+    if @employee.save
+
+    flash[:notice] = "创建成功"
+    end
+    redirect_to employees_path
   end
 
   def edit
@@ -699,7 +709,7 @@ class EmployeesController < ApplicationController
 
 ###组织架构页面数据配置
   def organization_structure
-    @workshops = Employee.pluck("workshop").uniq
+    @workshops = Workshop.all
     if params[:workshop].present?
       @employees = Employee.where(workshop: params[:workshop]).page(params[:page]).per(16)
     elsif params[:group].present?
@@ -709,5 +719,41 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def employee_params
+    params.require(:employee).permit(:birth_date)
+  end
+
+  def create_workshop
+    workshop = Workshop.find_by(:name => params[:name]) || Workshop.new
+    workshop.update(:name => params[:name])
+    flash[:notice] = "新增车间成功"
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def create_group
+    workshop_id = Workshop.find_by(:name => params[:workshop_name]).id
+    if workshop_id.present?
+      group = Group.find_by(:name => params[:name]) || Group.new
+      group.update(:name => params[:name], :workshop_id => workshop_id)
+      flash[:notice] = "新增班组成功"
+    else
+      flash[:alert] = "该车间名称不存在，请先检查"
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def merge_workshop
+    workshop_ids = params[:workshops]
+    first_workshop_id = workshop_ids[0]
+    workshop_ids.shift
+    Workshop.find(first_workshop_id).update(:name => params[:merge_workshop])
+    workshop_ids.each do |id|
+      Workshop.find(id).delete
+      Group.where(:workshop_id => id).update(:workshop_id => first_workshop_id)
+      Employee.where(:workshop => id).update(:workshop => first_workshop_id)
+    end
+    flash[:notice] = "合并车间成功"
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
 
 end

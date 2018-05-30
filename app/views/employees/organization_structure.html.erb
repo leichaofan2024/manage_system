@@ -8,15 +8,39 @@
     <%= render 'employee_navbar'%>
     <div class="col-md-12" style="height: 100%">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+     
+      <div class="ivu-tooltip-rel" style="text-align: right">
+        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
+             <span style="color: #269Eff;">新增车间</span>
+          <% end %>
+        </button>
+      </div>
+      <div class="ivu-tooltip-rel" style="text-align: right">
+        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
+             <span style="color: #269Eff;">新增班组</span>
+          <% end %>
+        </button>
+      </div>
+      <div class="ivu-tooltip-rel" style="text-align: right">
+        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
+             <span style="color: #269Eff;">合并车间</span>
+          <% end %>
+        </button>
+      </div>
+      
       <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
       <ul>
         <% @workshops.each do |workshop| %>
         <li>
-          <em></em><a href='/employees/organization_structure?workshop=<%= workshop %>'><%= Workshop.find(workshop).name %></a>
+          <em></em><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+
           <ul>
-            <% @groups = Employee.where(workshop: workshop).pluck("group").uniq %>
+            <% @groups = workshop.groups %>
             <% @groups.each do |group| %>
-              <li><a href='/employees/organization_structure?group=<%= group %>'><%= Group.find(group).name %></a></li>
+              <li><a href='/employees/organization_structure?group=<%= group.id %>'><%= group.name %></a></li>
             <% end %>
           </ul>
         </li>
@@ -25,6 +49,8 @@
     </div>
 
     <div class="col-md-10" style="overflow: auto;">
+      <h2><%= $workshop_ids %></h2>
+      <h2><%= $aaa %></h2>
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -52,8 +78,8 @@
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
-              <td><%= employee.info.workshop.name %></td>
-              <td><%= employee.info.group.name %></td>
+              <td><%= Workshop.find(employee.workshop).name %></td>
+              <td><%= Group.find(employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>
               <td><%= employee.age %></td>
@@ -73,6 +99,46 @@
        <%= paginate @employees %>
      </div>
     </div>
+
+
+<div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">新增车间</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag create_workshop_employees_path, method: 'post' do %>
+          <%= label_tag :请输入车间名称 %>
+          <%= text_field_tag :name %>
+          <%= submit_tag :点击新增 %>
+        <% end %>
+      </div>
+    </div> 
+  </div>
+</div>
+
+<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">新增车间</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag create_group_employees_path, method: 'post' do %>
+          <%= label_tag :请输入班组名称 %>
+          <%= text_field_tag :name %>
+          <%= label_tag :请输入所属车间名称 %>
+          <%= text_field_tag :workshop_name %>
+          <%= submit_tag :点击新增 %>
+        <% end %>
+      </div>
+    </div> 
+  </div>
+</div>
+<%= render "show_edit_workshop" %>
 
     <script type="text/javascript">
       (function(e) {
