@@ -17,6 +17,8 @@ Rails.application.routes.draw do
       get :education_statistical_analysis
       get :working_years_statistical_analysis
       get :rali_years_statistical_analysis
+      # 综合分析
+      get :compsite_statistical_analysis
       #图表点击后路径
       get :statistical_analysis_data
     end

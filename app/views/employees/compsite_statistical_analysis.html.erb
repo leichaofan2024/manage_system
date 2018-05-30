@@ -1,0 +1,108 @@
+<%= render 'employee_navbar'%>
+<%= render 'employee_navbar'%>
+  <!-- 年龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+
+<div id="sa-main">
+ <div id="dashboard">
+  <div class="dashboard-toolbar">
+    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析">综合分析</span>
+    <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
+  </div>
+
+
+ <div class="bd" style="width: 98%;">
+    <div class="widget-container" data-widgetid="1" data-size="normal">
+      <div class="widget-content-container">
+        <div class="mark-contend"></div>
+           <div class="widget-topbar" style="cursor: auto;">
+             <div class="widget-title">
+               <div class="title" data-method="nav" style="padding-top: 10px;">
+                  年龄分析饼图
+               </div>
+               <div class="range">
+                 <%= Time.now.strftime(("%Y年%m月%d日") )%>
+               </div>
+             </div>
+             <div class="pull-right widget-setting">
+               <div class="customer-menu"></div>
+             </div>
+           </div>
+
+           <div class="widget-chart-container container">
+             <div class="col-md-12" data-container="side"></div>
+             <div id="container1" style="height: 354px"></div>
+           </div>
+       </div>
+     </div>
+
+
+     <div class="widget-container" data-widgetid="1" data-size="normal">
+       <div class="widget-content-container">
+         <div class="mark-contend"></div>
+            <div class="widget-topbar" style="cursor: auto;">
+              <div class="widget-title">
+                <div class="title" data-method="nav" style="margin-top: 10px;">
+                   全段年龄分析表格
+                </div>
+                <div class="range">
+                  <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                </div>
+              </div>
+              <div class="pull-right widget-setting">
+                <div class="customer-menu"></div>
+              </div>
+            </div>
+
+            <div class="widget-chart-container container">
+              <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="color: blue; font-size:17px;">年龄段</th>
+                      <td style="color: blue; font-size:17px;">人数</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
+                      <th>25岁以下</th>
+                      <td><%= @age_25_below %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁">
+                      <th>26-30岁</th>
+                      <td><%= @age_26 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁">
+                      <th>31-35岁</th>
+                      <td><%= @age_31 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁">
+                      <th>36-40岁</th>
+                      <td><%= @age_36 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁">
+                      <th>41-45岁</th>
+                      <td><%= @age_41 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁">
+                      <th>46-50岁</th>
+                      <td><%= @age_46 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁">
+                      <th>51-55岁</th>
+                      <td><%= @age_51 %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上">
+                      <th>56岁以上</th>
+                      <td><%= @age_56_up %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+      </div>
+
+   </div>
+  </div>
+</div>
