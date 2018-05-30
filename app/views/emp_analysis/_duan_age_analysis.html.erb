@@ -1,4 +1,4 @@
-<div class="widget-container" data-widgetid="1" data-size="normal">
+<div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 10px; width:100%; height: 110px;">
   <div class="widget-content-container">
     <div class="mark-contend"></div>
      <div class="widget-topbar" style="cursor: auto;">
@@ -6,7 +6,7 @@
          <div class="title" data-method="nav" style="margin-top: 10px;">
             全段年龄分析表格
          </div>
-         <div class="range">
+         <div class="range" style="margin-bottom: 0px;">
            <%= Time.now.strftime(("%Y年%m月%d日") )%>
          </div>
        </div>
@@ -16,8 +16,8 @@
      </div>
 
      <div class="widget-chart-container container">
-       <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
-         <table class="table table-bordered">
+       <div style="background-color: white; height: 104px;padding-left:10px; padding-right: 10px; padding-top:30px ;overflow: auto">
+         <table id='example' class="table table-bordered">
            <thead>
              <tr>
                <th>供电段</th>
@@ -47,5 +47,5 @@
          </table>
        </div>
      </div>
-   </div>
- </div>
+  </div>
+</div>
