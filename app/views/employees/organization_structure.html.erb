@@ -37,6 +37,13 @@
           <% end %>
         </button>
       </div>
+      <div class="ivu-tooltip-rel" style="text-align: right">
+        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
+             <span style="color: #269Eff;">删除车间/班组</span>
+          <% end %>
+        </button>
+      </div>
       
       <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
       <ul>
@@ -145,6 +152,7 @@
 </div>
 <%= render "show_merge_workshop" %>
 <%= render "show_merge_group" %>
+<%= render "show_delete_organization" %>
 
     <script type="text/javascript">
       (function(e) {

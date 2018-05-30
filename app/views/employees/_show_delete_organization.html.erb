@@ -1,0 +1,24 @@
+<div class="modal fade" id="deleteOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">批量修改车间</h4>
+      </div>
+      <div class="modal-body">
+            <% Workshop.all.each do |workshop| %>
+              <h5>
+                <%= label_tag :q, "#{workshop.name}"%>
+                <%= link_to "删除", delete_organization_employees_path(workshop: workshop.id), method: :post, class: "btn btn-sm" %><br>
+               </h5>  
+              <% workshop.groups.each do |group| %>   
+                &nbsp; &nbsp; &nbsp;<%= label_tag :q, "#{group.name}"%>
+                <%= link_to "删除", delete_organization_employees_path(group: group.id), method: :post, class: "btn btn-sm" %><br><br>      
+              <% end %>  
+            <% end %>
+            <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
+          
+      </div>
+    </div> 
+  </div>
+</div>

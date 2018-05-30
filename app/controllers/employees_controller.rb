@@ -770,4 +770,25 @@ class EmployeesController < ApplicationController
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
+  def delete_organization
+    if params[:workshop].present?
+      workshop = Workshop.find(params[:workshop])
+      if workshop.groups.blank? && Employee.where(:workshop => params[:workshop]).blank?
+        workshop.delete
+        flash[:notice] = "删除成功"
+      else
+        flash[:alert] = "本车间下还有班组或人员，不能删除"
+      end
+    elsif params[:group].present?
+      group = Group.find(params[:group])
+      if Employee.where(:group => params[:group]).blank?
+        group.delete
+        flash[:notice] = "删除成功"
+      else
+        flash[:alert] = "本班组下还有人员，不能删除"
+      end
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
 end
