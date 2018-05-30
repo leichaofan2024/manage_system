@@ -154,7 +154,7 @@
                       <tr>
                         <th></th>
                         <% @workshops.each do |workshop| %>
-                            <th><%= workshop %></th>
+                            <th><%= Workshop.find(workshop.to_i).name %></th>
                         <% end %>
                       </tr>
                     </thead>

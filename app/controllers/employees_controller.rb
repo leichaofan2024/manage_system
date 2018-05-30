@@ -711,14 +711,12 @@ class EmployeesController < ApplicationController
 
   ### 综合分析
   def compsite_statistical_analysis
-    @age_25_below = Employee.where(age: 0..25).count
-    @age_26 = Employee.where(age: 26..30).count
-    @age_31 = Employee.where(age: 31..35).count
-    @age_36 = Employee.where(age: 36..40).count
-    @age_41 = Employee.where(age: 41..45).count
-    @age_46 = Employee.where(age: 46..50).count
-    @age_51 = Employee.where(age: 51..55).count
-    @age_56_up = Employee.where(age: 56..100).count
+    @age = Employee.pluck(:age).uniq
+    @work_types = Employee.pluck(:work_type).uniq
+    @workshops = Employee.pluck(:workshop).uniq
+    @groups = Employee.pluck(:group).uniq
+    @education_background = Employee.pluck(:education_background).uniq
+    @skilledness_authenticate = Employee.pluck(:skilledness_authenticate).uniq
   end
 
 
