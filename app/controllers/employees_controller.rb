@@ -743,32 +743,30 @@ class EmployeesController < ApplicationController
   end
 
   def merge_workshop
-    workshop_ids = params[:workshops]
-    first_workshop_id = workshop_ids[0]
-    workshop_ids.shift
-    Workshop.find(first_workshop_id).update(:name => params[:merge_workshop])
-    workshop_ids.each do |id|
-      Workshop.find(id).delete
-      Group.where(:workshop_id => id).update(:workshop_id => first_workshop_id)
-      Employee.where(:workshop => id).update(:workshop => first_workshop_id)
+    if Workshop.find_by(:name => params[:merge_workshop]).present?
+      flash[:notice] = "该车间名称已存在，请换一个试试~"
+    else  
+      workshop = Workshop.create(:name => params[:merge_workshop])
+      workshop_ids.each do |id|
+        Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
+        Employee.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
+        Workshop.where(:id => params[:workshops]).delete_all
+      end
+      flash[:notice] = "合并车间成功"
     end
-    flash[:notice] = "合并车间成功"
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
   def merge_group
-    group_ids = params[:groups]
-    if Workshop.find_by(:name => params[:workshop]).present?
-      workshop = Workshop.find_by(:name => params[:workshop])
-      group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
-        group_ids.each do |id|
-          Employee.where(:group => id).update(:group => group.id)
-          Group.find(id).delete
-        end
-    else
+    if !Workshop.find_by(:name => params[:workshop]).present?
       flash[:alert] = "您填写的车间名称不存在，请先增加车间"
-    end
-    flash[:notice] = "合并车间成功"
+    else
+      workshop = Workshop.find_by(:name => params[:workshop])    
+      group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
+      Employee.where(:group => params[:groups]).update(:group => group.id, :workshop => workshop.id)
+      Group.where(:id => params[:groups]).delete_all
+      flash[:notice] = "合并车间成功"    
+    end     
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
