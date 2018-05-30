@@ -25,8 +25,15 @@
       </div>
       <div class="ivu-tooltip-rel" style="text-align: right">
         <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
              <span style="color: #269Eff;">合并车间</span>
+          <% end %>
+        </button>
+      </div>
+      <div class="ivu-tooltip-rel" style="text-align: right">
+        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
+             <span style="color: #269Eff;">合并班组</span>
           <% end %>
         </button>
       </div>
@@ -138,7 +145,8 @@
     </div> 
   </div>
 </div>
-<%= render "show_edit_workshop" %>
+<%= render "show_merge_workshop" %>
+<%= render "show_merge_group" %>
 
     <script type="text/javascript">
       (function(e) {

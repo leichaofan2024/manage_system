@@ -756,4 +756,20 @@ class EmployeesController < ApplicationController
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
+  def merge_group
+    group_ids = params[:groups]
+    if Workshop.find_by(:name => params[:workshop]).present?
+      workshop = Workshop.find_by(:name => params[:workshop])
+      group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
+        group_ids.each do |id|
+          Employee.where(:group => id).update(:group => group.id)
+          Group.find(id).delete
+        end
+    else
+      flash[:alert] = "您填写的车间名称不存在，请先增加车间"
+    end
+    flash[:notice] = "合并车间成功"
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
 end

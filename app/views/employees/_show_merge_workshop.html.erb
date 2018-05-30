@@ -1,4 +1,4 @@
-<div class="modal fade" id="editWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="mergeWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,9 +6,8 @@
         <h4 class="modal-title" id="myModalLabel">批量修改车间</h4>
       </div>
       <div class="modal-body">
-          <% workshops = Workshop.all %>
           <%= form_tag merge_workshop_employees_path, method: 'post' do %>
-            <% workshops.each do |workshop| %>
+            <% Workshop.all.each do |workshop| %>
               <%= check_box_tag "workshops[]", workshop.id %>
               <%= label_tag :q, "#{workshop.name}"%><br>
             <% end %>

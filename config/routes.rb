@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       post :create_workshop
       post :create_group
       post :merge_workshop
+      post :merge_group
     end
   end
 
