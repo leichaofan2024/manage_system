@@ -1,47 +1,45 @@
-<div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 20px; margin-bottom: 50px; width:100%; height: 400px;">
-  <div class="widget-content-container">
-    <div class="mark-contend"></div>
-     <div class="widget-topbar" style="cursor: auto;">
-       <div class="widget-title">
-         <div class="title" data-method="nav" style="margin-top: 10px;">
-            各车间学历分析表格 (共<%= @workshops.count%>个-含机关)
-         </div>
-         <div class="range" style="margin-bottom: 0px;">
-           <%= Time.now.strftime(("%Y年%m月%d日") )%>
-         </div>
+<div class="widget-content-container" style="margin-bottom: 10px;">
+  <div class="mark-contend"></div>
+   <div class="widget-topbar" style="cursor: auto;">
+     <div class="widget-title">
+       <div class="title" data-method="nav" style="margin-top: 10px;">
+          各车间学历分析表格 (共<%= @workshops.count%>个-含机关)
        </div>
-       <div class="pull-right widget-setting">
-         <div class="customer-menu"></div>
+       <div class="range" style="margin-bottom: 0px;">
+         <%= Time.now.strftime(("%Y年%m月%d日") )%>
        </div>
      </div>
+     <div class="pull-right widget-setting">
+       <div class="customer-menu"></div>
+     </div>
+   </div>
 
-     <div class="widget-chart-container container">
-       <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:30px ;overflow: auto">
-         <table id="example" class="table table-bordered">
-           <thead>
+   <div class="widget-chart-container container">
+     <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:30px ;overflow: auto">
+       <table id="example" class="table table-bordered">
+         <thead>
+           <tr>
+             <th>车间</th>
+             <% @education_background.each do |education_background| %>
+              <% if education_background == nil%>
+                <th><%= "未填写" %></th>
+              <%else%>
+                <th><%= education_background %></th>
+               <% end %>
+             <% end %>
+           </tr>
+         </thead>
+          <tbody>
+           <% @workshops.each do |workshop| %>
              <tr>
-               <th>车间</th>
+               <td><%= Workshop.find(workshop.to_i).name%></td>
                <% @education_background.each do |education_background| %>
-                <% if education_background == nil%>
-                  <th><%= "未填写" %></th>
-                <%else%>
-                  <th><%= education_background %></th>
-                 <% end %>
+                 <td><%= Employee.where(:workshop => workshop, :education_background => education_background).count %></td>
                <% end %>
              </tr>
-           </thead>
-            <tbody>
-             <% @workshops.each do |workshop| %>
-               <tr>
-                 <td><%= Workshop.find(workshop.to_i).name%></td>
-                 <% @education_background.each do |education_background| %>
-                   <td><%= Employee.where(:workshop => workshop, :education_background => education_background).count %></td>
-                 <% end %>
-               </tr>
-             <% end %>
-          </tbody>
-         </table>
-       </div>
+           <% end %>
+        </tbody>
+       </table>
      </div>
-  </div>
+   </div>
 </div>
