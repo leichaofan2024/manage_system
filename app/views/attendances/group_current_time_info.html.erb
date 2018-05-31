@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-
+<% if current_user.has_role? :attendance_admin %>
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->
   <div class="col-md-12">
@@ -61,8 +61,8 @@
         </div>
       </div>
     </div>
-
   </div>
+  <% end %>
 
   <!-- <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
   <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %> -->
@@ -70,7 +70,7 @@
 <% if @workshop.present? %>
   <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
 <% else %>
-  <h4>全段<%= Time.now.month%>月考勤情况</h4>
+  <h4><%= Time.now.month%>月考勤情况</h4>
 <% end %>
 <div class="col-md-12">
   <div class="card">
@@ -81,6 +81,8 @@
             <th>工资号</th>
             <th>姓名</th>
             <th>职名</th>
+            <th>车间</th>
+            <th>班组</th>
             <!-- 生成每月1-31号的数字-开始 -->
             <% (1..31).each do |i| %>
               <th><%= i %></th>
@@ -101,6 +103,8 @@
                 <td><%= employee.sal_number %></td>
                 <td><%= employee.name %></td>
                 <td><%= employee.duty %></td>
+                <td><%= Workshop.find(employee.workshop).name %></td>
+                <td><%= Group.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
                 <% attendance = Attendance.find_by(employee_id: employee.id) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
