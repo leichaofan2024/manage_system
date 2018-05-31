@@ -34,8 +34,9 @@ class EmployeesController < ApplicationController
   def create
     @employee = Employee.new(employee_params)
     if @employee.save
-
-    flash[:notice] = "创建成功"
+      flash[:notice] = "创建成功"
+    else
+      flash[:alert] = "创建失败"
     end
     redirect_to employees_path
   end
@@ -818,10 +819,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  def employee_params
-    params.require(:employee).permit(:birth_date)
-  end
-
   def create_workshop
     workshop = Workshop.find_by(:name => params[:name]) || Workshop.new
     workshop.update(:name => params[:name])
@@ -908,6 +905,12 @@ class EmployeesController < ApplicationController
     @education_background = Employee.pluck(:education_background).uniq
     @skilledness_authenticate = Employee.pluck(:skilledness_authenticate).uniq
   end
+
+  private
+
+    def employee_params
+      params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number)
+    end
 
 
 end
