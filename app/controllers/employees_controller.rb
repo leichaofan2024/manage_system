@@ -216,7 +216,7 @@ class EmployeesController < ApplicationController
       #生成每个年龄段的【车间-人数】hash---结束
 
     #将以上算出最终hash的keys赋值给对应的变量，作为条形图的坐标轴信息
-    gon.bar_workshop = hash_25_below.keys
+    gon.bar_workshop = Workshop.pluck("name").uniq
     #将以上算出最终hash的values赋值给对应的变量，作为条形图的数据
     gon.bar_twenty_five_below = hash_25_below.values
     gon.bar_twenty_six = hash_26.values
@@ -325,7 +325,7 @@ class EmployeesController < ApplicationController
       hash_postgraduate[i] = loop_hash_postgraduate[i]
       @postgraduate_bar << h1
     end
-    gon.bar_workshop = hash_junior_high_school.keys
+    gon.bar_workshop = Workshop.pluck("name").uniq
     gon.bar_junior_high_school = hash_junior_high_school.values
     gon.bar_primary_school = hash_primary_school.values
     gon.bar_senior_high_school = hash_senior_high_school.values
@@ -443,7 +443,7 @@ class EmployeesController < ApplicationController
       hash_working_41_up[i] = loop_hash_working_41_up[i]
       @working_41_up_bar << j1
 
-      gon.bar_workshop = hash_working_5_below.keys
+      gon.bar_workshop = Workshop.pluck("name").uniq
       gon.bar_working_5_below = hash_working_5_below.values
       gon.bar_working_6 = hash_working_6.values
       gon.bar_working_11 = hash_working_11.values
@@ -531,7 +531,7 @@ class EmployeesController < ApplicationController
       hash_weiJianDing[i] = loog_hash_weiJianDing[i]
       @table_weiJianDing << f1
 
-      gon.bar_workshop = hash_gaoJiGong.keys
+      gon.bar_workshop = Workshop.pluck("name").uniq
       gon.bar_gaoJiGong = hash_gaoJiGong.values
       gon.bar_zhongJiGong = hash_zhongJiGong.values
       gon.bar_chuJiGong = hash_chuJiGong.values
@@ -638,7 +638,7 @@ class EmployeesController < ApplicationController
       @rali_36_up_bar << h1
     end
 
-    gon.bar_workshop = hash_rali_5_below.keys
+    gon.bar_workshop = Workshop.pluck("name").uniq
     gon.bar_rali_5_below = hash_rali_5_below.values
     gon.bar_rali_6 = hash_rali_6.values
     gon.bar_rali_11 = hash_rali_11.values
