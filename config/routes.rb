@@ -78,4 +78,10 @@ Rails.application.routes.draw do
 
     end
   end
+
+  resources :messages do
+    member do
+      post :update_have_read
+    end
+  end
 end

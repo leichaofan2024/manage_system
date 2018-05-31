@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180528134757) do
+ActiveRecord::Schema.define(version: 20180531090658) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "workshop_id"
@@ -146,16 +146,16 @@ ActiveRecord::Schema.define(version: 20180528134757) do
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
-    t.string "job_number", null: false, comment: "工号"
+    t.string "job_number", comment: "工号"
     t.string "record_number", comment: "档案号"
-    t.string "workshop", null: false
-    t.string "group", null: false
+    t.string "workshop"
+    t.string "group"
     t.string "name", null: false
-    t.string "sex", null: false
+    t.string "sex"
     t.string "birth_date"
     t.integer "birth_year"
     t.integer "age"
-    t.string "nation", null: false, comment: "民族"
+    t.string "nation", comment: "民族"
     t.string "native_place", comment: "籍贯"
     t.string "political_role", comment: "政治面貌"
     t.string "political_party_date", comment: "党团时间"
@@ -241,6 +241,16 @@ ActiveRecord::Schema.define(version: 20180528134757) do
     t.datetime "start_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "message_type"
+    t.text "message"
+    t.integer "user_id"
+    t.boolean "have_read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "remind_time"
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

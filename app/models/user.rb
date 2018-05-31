@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable
 
   validates :name, presence: true
+  has_many :messages
 
 
   # 增加角色前要做些什么

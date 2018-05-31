@@ -1,0 +1,37 @@
+<% if (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) %>
+	<%= render 'employees/employee_navbar'%>
+	<h4>消息中心</h4>
+	<div class="card" style="margin-top: 20px;">
+		<div style="overflow: auto; width: 100%;">
+		    <table id="example" class="table table-bordered">
+				<thead>
+					<tr>
+						<th>消息类型</th>
+						<th>消息内容</th>
+						<th>消息时间</th>
+						<th>是否阅读</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @messages.each do |message| %>
+						<tr>
+							<td><%= message.message_type %></td>
+							<td><%= message.message %></td>
+							<td><%= message.created_at %></td>
+							<% if message.have_read == false %>
+								<td>未读</td>
+								<td><%= link_to "我知道啦", update_have_read_message_path(message), method: :post, class: "btn btn-default" %></td>
+							<% elsif message.have_read == true %>
+								<td>已读</td>
+							<% end %>
+
+
+
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<% end %>
