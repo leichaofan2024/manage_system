@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
-  root "employees#index"
+  root "home#index"
   resources :employees do
     collection do
       #上传

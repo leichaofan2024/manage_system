@@ -1637,3 +1637,54 @@ a:focus{
   outline-offset: -2px;
 }
 /*----------------end-------------------*/
+
+
+/*---------------- flash提示信息 --------------*/
+.alert-success {
+    background-color: #58b45d;
+    border-color: #58b45d;
+    color: #fff;
+    font-size: bold;
+}
+
+.alert-warning {
+    background-color: #fd9d2c;
+    border-color: #fd9d2c;
+    color: #fff;
+}
+
+.alert-danger {
+    background-color: #f3524a;
+    border-color: #f3524a;
+    color: #fff;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    margin-top: -60px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 600px;
+}
+
+.alert-dismissible {
+    padding-right: 35px;
+    width: 500px;
+}
+
+//关闭按钮
+.alert-dismissable .close {
+    position: relative;
+    top: -2px;
+    right: -1px;
+    color: inherit;
+}
+button.close {
+    margin-left: -10px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+/*------------------ end --------------*/
