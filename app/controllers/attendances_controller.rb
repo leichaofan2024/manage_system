@@ -34,10 +34,13 @@ layout 'home'
 		attendance_ary = @attendance.month_attendances.split('')
 		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
 		#若当前用户是考勤管理员时，则存下修改记录--开始
-		if current_user.has_role? :attendance_admin
+		if (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
 			AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
 		end
 		#若当前用户是考勤管理员时，则存下修改记录--结束
+		if current_user.has_role? :workshopadmin
+			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day]}的考勤数据")
+		end
 		attendance_ary[params[:day].to_i] = params[:code]
 		#将替换过的新的数组变成字符串，赋值给attendance_string
 		attendance_string = attendance_ary.join('')
@@ -104,7 +107,7 @@ layout 'home'
 
 		if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
 			redirect_back(fallback_location: group_attendances_path)
-		elsif current_user.has_role? :attendance_admin
+		elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
 	end
