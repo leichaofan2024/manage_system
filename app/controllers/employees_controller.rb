@@ -20,7 +20,7 @@ class EmployeesController < ApplicationController
     end
     #下载表格配置
     @export_employees = Employee.order("id ASC")
-    respond_to do |format|
+    respond_to do |format| 
       format.html
       format.csv { send_data @employees.to_csv }
       format.xls

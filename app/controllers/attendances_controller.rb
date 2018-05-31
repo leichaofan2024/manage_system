@@ -299,7 +299,7 @@ layout 'home'
 		attendance_setting = AttendanceSetting.find_by(:vacation => params[:vacation]) || AttendanceSetting.new
 		attendance_setting.update(:vacation => params[:vacation], :count => params[:count])
 		redirect_to setting_attendances_path
- 	end
+ 	end 
 
  	def create_application
  		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
@@ -362,6 +362,17 @@ layout 'home'
 				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
 				holiday_start_time.update(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time], name: params[:name])
 				flash[:notice] = "设置成功"
+
+				if (holiday_start_time.vacation == "病假") or (holiday_start_time.vacation == "育儿假")
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 10368000}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有两个月到期哦")
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 12860000}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有一个月到期哦")
+				elsif holiday_start_time.vacation == "产假(顺产)"
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 16243200}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有两个月到期哦")
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 18835200}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有一个月到期哦")
+				elsif holiday_start_time.vacation == "产假(剖腹)"
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 17539200}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有两个月到期哦")
+					Message.create(user_id: "3", message_type: "休假提醒", have_read: "0", remind_time: "#{holiday_start_time.start_time + 20131200}", message: "#{holiday_start_time.name}的#{holiday_start_time.vacation}还有一个月到期哦")
+				end
 			else
 				flash[:alert] = "姓名和工资号不匹配，请检查"
 			end
