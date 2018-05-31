@@ -28,6 +28,16 @@ class EmployeesController < ApplicationController
   end
 
   def new
+    @employee = Employee.new
+  end
+
+  def create
+    @employee = Employee.new(employee_params)
+    if @employee.save
+
+    flash[:notice] = "创建成功"
+    end
+    redirect_to employees_path
   end
 
   def edit
@@ -445,6 +455,91 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def worktype_statistical_analysis
+    @workshops = Workshop.all
+    @gaoJiGong = Employee.where(work_type: ["高级工（１）", "高级工（２）"]).count
+    @zhongJiGong = Employee.where(work_type: ["中级工（１）", "中级工（２）", "中级工（３）"]).count
+    @chuJiGong = Employee.where(work_type: ["初级工（１）", "初级工（２）"]).count
+    @jiShi = Employee.where(work_type: "技师").count
+    @gaoJiJiShi = Employee.where(work_type: "高级技师").count
+    @weiJianDing = Employee.where(work_type: ["熟练制工人", "学徒工"]).count
+
+    gon.gaoJiGong = @gaoJiGong
+    gon.zhongJiGong = @zhongJiGong
+    gon.chuJiGong = @chuJiGong
+    gon.jiShi = @jiShi
+    gon.gaoJiJiShi = @gaoJiJiShi
+    gon.weiJianDing = @weiJianDing
+
+    @workshops = Employee.pluck("workshop").uniq
+    loop_hash_gaoJiGong = {}
+    hash_gaoJiGong = {}
+    loog_hash_zhongJiGong = {}
+    hash_zhongJiGong = {}
+    loog_hash_chuJiGong = {}
+    hash_chuJiGong = {}
+    loog_hash_jiShi = {}
+    hash_jiShi = {}
+    loog_hash_gaoJiJiShi = {}
+    hash_gaoJiJiShi = {}
+    loog_hash_weiJianDing = {}
+    hash_weiJianDing = {}
+
+    @table_gaoJiGong = []
+    @table_zhongJiGong = []
+    @table_chuJiGong = []
+    @table_jiShi = []
+    @table_gaoJiJiShi = []
+    @table_weiJianDing = []
+
+    @workshops.each do |i|
+      emp = Employee.where(workshop: i, :work_type => ["高级工（１）", "高级工（２）", "中级工（１）", "中级工（２）", "中级工（３）", "初级工（１）", "初级工（２）", "技师", "高级技师", "熟练制工人", "学徒工"]).count
+      a1 = Employee.where(workshop: i, :work_type => ["高级工（１）", "高级工（２）"]).count
+      a = (a1.to_f)/(emp.to_f)
+      loop_hash_gaoJiGong = {i => a}
+      hash_gaoJiGong[i] = loop_hash_gaoJiGong[i]
+      @table_gaoJiGong << a1
+
+      b1 = Employee.where(workshop: i, :work_type => ["中级工（１）", "中级工（２）", "中级工（３）"]).count
+      b = (b1.to_f)/(emp.to_f)
+      loog_hash_zhongJiGong = {i => b}
+      hash_zhongJiGong[i] = loog_hash_zhongJiGong[i]
+      @table_zhongJiGong << b1
+
+      c1 = Employee.where(workshop: i, :work_type => ["初级工（１）", "初级工（２）"]).count
+      c = (c1.to_f)/(emp.to_f)
+      loog_hash_chuJiGong = {i => c}
+      hash_chuJiGong[i] = loog_hash_chuJiGong[i]
+      @table_chuJiGong << c1
+
+      d1 = Employee.where(workshop: i, :work_type => "技师").count
+      d = (d1.to_f)/(emp.to_f)
+      loog_hash_jiShi = {i => d}
+      hash_jiShi[i] = loog_hash_jiShi[i]
+      @table_jiShi << d1
+
+      e1 = Employee.where(workshop: i, :work_type => "高级技师").count
+      e = (e1.to_f)/(emp.to_f)
+      loog_hash_gaoJiJiShi = {i => e}
+      hash_gaoJiJiShi[i] = loog_hash_gaoJiJiShi[i]
+      @table_gaoJiJiShi << e1
+
+      f1 = Employee.where(workshop: i, :work_type => ["熟练制工人", "学徒工"]).count
+      f = (f1.to_f)/(emp.to_f)
+      loog_hash_weiJianDing = {i => f}
+      hash_weiJianDing[i] = loog_hash_weiJianDing[i]
+      @table_weiJianDing << f1
+
+      gon.bar_workshop = hash_gaoJiGong.keys
+      gon.bar_gaoJiGong = hash_gaoJiGong.values
+      gon.bar_zhongJiGong = hash_zhongJiGong.values
+      gon.bar_chuJiGong = hash_chuJiGong.values
+      gon.bar_jiShi = hash_jiShi.values
+      gon.bar_gaoJiJiShi = hash_gaoJiJiShi.values
+      gon.bar_weiJianDing = hash_weiJianDing.values
+    end
+  end
+
   def rali_years_statistical_analysis
     @rali_years_5_below = Employee.where(rali_years: 0..5).count
     @rali_years_6 = Employee.where(rali_years: 6..10).count
@@ -623,6 +718,13 @@ class EmployeesController < ApplicationController
         when "36年以上"
           @employees = Employee.where(workshop: params[:workshop], rali_years: 36..100)
         end
+      elsif params[:work_type].present?
+        a = params[:work_type].to_s.gsub(/\p{Han}+/u).first
+        if a != "技师"
+          @employees = Employee.where("work_type LIKE ?", ['%', "#{a}", '%'].join).where(workshop: params[:workshop])
+        else
+          @employees = Employee.where(workshop: params[:workshop], :work_type => params[:work_type])
+        end
       end
     ##没有workshop参数则为饼图，以下为饼图数据配置
     else
@@ -692,6 +794,13 @@ class EmployeesController < ApplicationController
         when "36年以上"
           @employees = Employee.where(rali_years: 36..100)
         end
+      elsif params[:work_type].present?
+        a = params[:work_type].gsub(/\p{Han}+/u).first
+        if a != "技师"
+          @employees = Employee.where("work_type LIKE ?", ['%', "#{a}", '%'].join)
+        else
+          @employees = Employee.where(:work_type => params[:work_type])
+        end
       end
     end
   end
@@ -699,7 +808,7 @@ class EmployeesController < ApplicationController
 
 ###组织架构页面数据配置
   def organization_structure
-    @workshops = Employee.pluck("workshop").uniq
+    @workshops = Workshop.all
     if params[:workshop].present?
       @employees = Employee.where(workshop: params[:workshop]).page(params[:page]).per(16)
     elsif params[:group].present?
@@ -708,6 +817,79 @@ class EmployeesController < ApplicationController
       @employees = Employee.order('id ASC').page(params[:page]).per(16)
     end
   end
+
+  def employee_params
+    params.require(:employee).permit(:birth_date)
+  end
+
+  def create_workshop
+    workshop = Workshop.find_by(:name => params[:name]) || Workshop.new
+    workshop.update(:name => params[:name])
+    flash[:notice] = "新增车间成功"
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def create_group
+    workshop_id = Workshop.find_by(:name => params[:workshop_name]).id
+    if workshop_id.present?
+      group = Group.find_by(:name => params[:name]) || Group.new
+      group.update(:name => params[:name], :workshop_id => workshop_id)
+      flash[:notice] = "新增班组成功"
+    else
+      flash[:alert] = "该车间名称不存在，请先检查"
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def merge_workshop
+    if Workshop.find_by(:name => params[:merge_workshop]).present?
+      flash[:notice] = "该车间名称已存在，请换一个试试~"
+    else
+      workshop = Workshop.create(:name => params[:merge_workshop])
+      workshop_ids.each do |id|
+        Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
+        Employee.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
+        Workshop.where(:id => params[:workshops]).delete_all
+      end
+      flash[:notice] = "合并车间成功"
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def merge_group
+    if !Workshop.find_by(:name => params[:workshop]).present?
+      flash[:alert] = "您填写的车间名称不存在，请先增加车间"
+    else
+      workshop = Workshop.find_by(:name => params[:workshop])
+      group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
+      Employee.where(:group => params[:groups]).update(:group => group.id, :workshop => workshop.id)
+      Group.where(:id => params[:groups]).delete_all
+      flash[:notice] = "合并车间成功"
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def delete_organization
+    if params[:workshop].present?
+      workshop = Workshop.find(params[:workshop])
+      if workshop.groups.blank? && Employee.where(:workshop => params[:workshop]).blank?
+        workshop.delete
+        flash[:notice] = "删除成功"
+      else
+        flash[:alert] = "本车间下还有班组或人员，不能删除"
+      end
+    elsif params[:group].present?
+      group = Group.find(params[:group])
+      if Employee.where(:group => params[:group]).blank?
+        group.delete
+        flash[:notice] = "删除成功"
+      else
+        flash[:alert] = "本班组下还有人员，不能删除"
+      end
+    end
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
 
   ### 综合分析
   def compsite_statistical_analysis
@@ -719,7 +901,7 @@ class EmployeesController < ApplicationController
     @age_46 = Employee.where(age: 46..50).count
     @age_51 = Employee.where(age: 51..55).count
     @age_56_up = Employee.where(age: 56..100).count
-    
+
     @work_types = Employee.pluck(:work_type).uniq
     @workshops = Employee.pluck(:workshop).uniq
     @groups = Employee.pluck(:group).uniq

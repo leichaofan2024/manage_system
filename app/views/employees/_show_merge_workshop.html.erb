@@ -1,0 +1,23 @@
+<div class="modal fade" id="mergeWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">合并车间</h4>
+      </div>
+      <div class="modal-body">
+          <%= form_tag merge_workshop_employees_path, method: 'post' do %>
+            <% Workshop.all.each do |workshop| %>
+              <%= check_box_tag "workshops[]", workshop.id %>
+              <%= label_tag :q, "#{workshop.name}"%><br>
+            <% end %>
+            <%= label_tag :请输入合并后的车间名称 %>
+            <%= text_field_tag :merge_workshop %>
+            <%= submit_tag :确定 %>
+            <h6>注意：合并后，您选中车间下的班组会统一属于您填写的车间</h6>
+          <% end %>
+          
+      </div>
+    </div> 
+  </div>
+</div>
