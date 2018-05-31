@@ -1,48 +1,58 @@
 <%= render 'employee_navbar'%>
 
-<div class="col-md-12">
-  <div class="ivu-tooltip-rel" style="text-align: right">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
-         <span style="color: #269Eff;">新增车间</span>
-      <% end %>
-    </button>
+<div class="col-md-12" style="width:100%">
+ <div>
+  <div class="btn_group_top-1sKKU_0">
+    <div>
+      <div class="btn_group-2MSRh_0">
+        <div class="ivu-tooltip">
+          <% if can? :import, Employee%>
+            <div class="ivu-tooltip-rel" style="text-align: right;">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
+                   <span style="color: #269Eff;">新增车间</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
+                   <span style="color: #269Eff;">新增班组</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
+                   <span style="color: #269Eff;">合并车间</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
+                   <span style="color: #269Eff;">合并班组</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
+                   <span style="color: #269Eff;">删除车间/班组</span>
+                <% end %>
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="ivu-tooltip-rel" style="text-align: right">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
-         <span style="color: #269Eff;">新增班组</span>
-      <% end %>
-    </button>
-  </div>
-  <div class="ivu-tooltip-rel" style="text-align: right">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
-         <span style="color: #269Eff;">合并车间</span>
-      <% end %>
-    </button>
-  </div>
-  <div class="ivu-tooltip-rel" style="text-align: right">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
-         <span style="color: #269Eff;">合并班组</span>
-      <% end %>
-    </button>
-  </div>
-  <div class="ivu-tooltip-rel" style="text-align: right">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
-         <span style="color: #269Eff;">删除车间/班组</span>
-      <% end %>
-    </button>
-  </div>
+ </div>
 </div>
 
 
 
-
-
-<div class="col-md-12" style="height: 100%">
+<div class="col-md-12" style="height: 100%; margin-top: 40px;">
   <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
 
     <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
