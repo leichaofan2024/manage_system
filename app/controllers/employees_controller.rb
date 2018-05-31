@@ -455,6 +455,91 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def worktype_statistical_analysis
+    @workshops = Workshop.all
+    @gaoJiGong = Employee.where(work_type: ["高级工（１）", "高级工（２）"]).count
+    @zhongJiGong = Employee.where(work_type: ["中级工（１）", "中级工（２）", "中级工（３）"]).count
+    @chuJiGong = Employee.where(work_type: ["初级工（１）", "初级工（２）"]).count
+    @jiShi = Employee.where(work_type: "技师").count
+    @gaoJiJiShi = Employee.where(work_type: "高级技师").count
+    @weiJianDing = Employee.where(work_type: ["熟练制工人", "学徒工"]).count
+
+    gon.gaoJiGong = @gaoJiGong
+    gon.zhongJiGong = @zhongJiGong
+    gon.chuJiGong = @chuJiGong
+    gon.jiShi = @jiShi
+    gon.gaoJiJiShi = @gaoJiJiShi
+    gon.weiJianDing = @weiJianDing
+
+    @workshops = Employee.pluck("workshop").uniq
+    loop_hash_gaoJiGong = {}
+    hash_gaoJiGong = {}
+    loog_hash_zhongJiGong = {}
+    hash_zhongJiGong = {}
+    loog_hash_chuJiGong = {}
+    hash_chuJiGong = {}
+    loog_hash_jiShi = {}
+    hash_jiShi = {}
+    loog_hash_gaoJiJiShi = {}
+    hash_gaoJiJiShi = {}
+    loog_hash_weiJianDing = {}
+    hash_weiJianDing = {}
+
+    @table_gaoJiGong = []
+    @table_zhongJiGong = []
+    @table_chuJiGong = []
+    @table_jiShi = []
+    @table_gaoJiJiShi = []
+    @table_weiJianDing = []
+
+    @workshops.each do |i|
+      emp = Employee.where(workshop: i, :work_type => ["高级工（１）", "高级工（２）", "中级工（１）", "中级工（２）", "中级工（３）", "初级工（１）", "初级工（２）", "技师", "高级技师", "熟练制工人", "学徒工"]).count
+      a1 = Employee.where(workshop: i, :work_type => ["高级工（１）", "高级工（２）"]).count
+      a = (a1.to_f)/(emp.to_f)
+      loop_hash_gaoJiGong = {i => a}
+      hash_gaoJiGong[i] = loop_hash_gaoJiGong[i]
+      @table_gaoJiGong << a1
+
+      b1 = Employee.where(workshop: i, :work_type => ["中级工（１）", "中级工（２）", "中级工（３）"]).count
+      b = (b1.to_f)/(emp.to_f)
+      loog_hash_zhongJiGong = {i => b}
+      hash_zhongJiGong[i] = loog_hash_zhongJiGong[i]
+      @table_zhongJiGong << b1
+
+      c1 = Employee.where(workshop: i, :work_type => ["初级工（１）", "初级工（２）"]).count
+      c = (c1.to_f)/(emp.to_f)
+      loog_hash_chuJiGong = {i => c}
+      hash_chuJiGong[i] = loog_hash_chuJiGong[i]
+      @table_chuJiGong << c1
+
+      d1 = Employee.where(workshop: i, :work_type => "技师").count
+      d = (d1.to_f)/(emp.to_f)
+      loog_hash_jiShi = {i => d}
+      hash_jiShi[i] = loog_hash_jiShi[i]
+      @table_jiShi << d1
+
+      e1 = Employee.where(workshop: i, :work_type => "高级技师").count
+      e = (e1.to_f)/(emp.to_f)
+      loog_hash_gaoJiJiShi = {i => e}
+      hash_gaoJiJiShi[i] = loog_hash_gaoJiJiShi[i]
+      @table_gaoJiJiShi << e1
+
+      f1 = Employee.where(workshop: i, :work_type => ["熟练制工人", "学徒工"]).count
+      f = (f1.to_f)/(emp.to_f)
+      loog_hash_weiJianDing = {i => f}
+      hash_weiJianDing[i] = loog_hash_weiJianDing[i]
+      @table_weiJianDing << f1
+
+      gon.bar_workshop = hash_gaoJiGong.keys
+      gon.bar_gaoJiGong = hash_gaoJiGong.values
+      gon.bar_zhongJiGong = hash_zhongJiGong.values
+      gon.bar_chuJiGong = hash_chuJiGong.values
+      gon.bar_jiShi = hash_jiShi.values
+      gon.bar_gaoJiJiShi = hash_gaoJiJiShi.values
+      gon.bar_weiJianDing = hash_weiJianDing.values      
+    end
+  end
+
   def rali_years_statistical_analysis
     @rali_years_5_below = Employee.where(rali_years: 0..5).count
     @rali_years_6 = Employee.where(rali_years: 6..10).count
@@ -633,6 +718,13 @@ class EmployeesController < ApplicationController
         when "36年以上"
           @employees = Employee.where(workshop: params[:workshop], rali_years: 36..100)
         end
+      elsif params[:work_type].present?
+        a = params[:work_type].to_s.gsub(/\p{Han}+/u).first
+        if a != "技师"
+          @employees = Employee.where("work_type LIKE ?", ['%', "#{a}", '%'].join).where(workshop: params[:workshop])
+        else
+          @employees = Employee.where(workshop: params[:workshop], :work_type => params[:work_type])
+        end
       end
     ##没有workshop参数则为饼图，以下为饼图数据配置
     else
@@ -701,6 +793,13 @@ class EmployeesController < ApplicationController
           @employees = Employee.where(rali_years: 31..35)
         when "36年以上"
           @employees = Employee.where(rali_years: 36..100)
+        end
+      elsif params[:work_type].present?       
+        a = params[:work_type].gsub(/\p{Han}+/u).first
+        if a != "技师"
+          @employees = Employee.where("work_type LIKE ?", ['%', "#{a}", '%'].join)
+        else
+          @employees = Employee.where(:work_type => params[:work_type])
         end
       end
     end

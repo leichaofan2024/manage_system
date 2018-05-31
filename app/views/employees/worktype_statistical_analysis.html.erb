@@ -1,0 +1,363 @@
+<%= render 'employee_navbar'%>
+  <!-- 年龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
+
+<div id="sa-main">
+ <div id="dashboard">
+  <div class="dashboard-toolbar">
+    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析">工种分析</span>
+    <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
+  </div>
+
+
+ <div class="bd" style="width: 98%;">
+    <div class="widget-container" data-widgetid="1" data-size="normal">
+      <div class="widget-content-container">
+        <div class="mark-contend"></div>
+           <div class="widget-topbar" style="cursor: auto;">
+             <div class="widget-title">
+               <div class="title" data-method="nav" style="padding-top: 10px;">
+                  工种分析饼图
+               </div>
+               <div class="range">
+                 <%= Time.now.strftime(("%Y年%m月%d日") )%>
+               </div>
+             </div>
+             <div class="pull-right widget-setting">
+               <div class="customer-menu"></div>
+             </div>
+           </div>
+
+           <div class="widget-chart-container container">
+             <div class="col-md-12" data-container="side"></div>
+             <div id="container9" style="height: 354px"></div>
+           </div>
+       </div>
+     </div>
+
+
+     <div class="widget-container" data-widgetid="1" data-size="normal">
+       <div class="widget-content-container">
+         <div class="mark-contend"></div>
+            <div class="widget-topbar" style="cursor: auto;">
+              <div class="widget-title">
+                <div class="title" data-method="nav" style="margin-top: 10px;">
+                   全段工种分析表格
+                </div>
+                <div class="range">
+                  <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                </div>
+              </div>
+              <div class="pull-right widget-setting">
+                <div class="customer-menu"></div>
+              </div>
+            </div>
+
+            <div class="widget-chart-container container">
+              <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="color: blue; font-size:17px;">工种类型</th>
+                      <td style="color: blue; font-size:17px;">人数</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- ["高级工（１）", "高级工（２）", "中级工（１）", "中级工（２）", "中级工（３）", "初级工（１）", "初级工（２）", "技师", "高级技师", "熟练制工人", "学徒工"] -->
+                    <% gaoJiGong = ["高级工（１）", "高级工（２）"] %>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=<%= gaoJiGong%>">
+                      <th>高级工</th>
+                      <td><%= @gaoJiGong %></td>
+                    </tr>
+                    <% zhongJiGong = ["中级工（１）", "中级工（２）", "中级工（３）"] %>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=<%= zhongJiGong %>">
+                      <th>中级工</th>
+                      <td><%= @zhongJiGong %></td>
+                    </tr>
+                    <% chuJiGong = ["初级工（１）", "初级工（２）"] %>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=<%= chuJiGong %>">
+                      <th>初级工</th>
+                      <td><%= @chuJiGong %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=技师">
+                      <th>技师</th>
+                      <td><%= @jiShi %></td>
+                    </tr>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=高级技师">
+                      <th>高级技师</th>
+                      <td><%= @gaoJiJiShi %></td>
+                    </tr>
+                    <% weiJianDing = ["熟练制工人", "学徒工"] %>
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?work_type=<%= weiJianDing %>">
+                      <th>未鉴定</th>
+                      <td><%= @weiJianDing %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px; width:100%; height: 600px;">
+        <div class="widget-content-container">
+          <div class="mark-contend"></div>
+             <div class="widget-topbar" style="cursor: auto;">
+               <div class="widget-title">
+                 <div class="title" data-method="nav" style="padding-top:10px">
+                    工种分析条形图
+                 </div>
+                 <div class="range">
+                   <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                 </div>
+               </div>
+               <div class="pull-right widget-setting">
+                 <div class="customer-menu"></div>
+               </div>
+             </div>
+
+             <div class="widget-chart-container container">
+               <div class="col-md-12" data-container="side"></div>
+               <!-- 年龄分析条形图-开始  -->
+               <!-- 给条形图准备一个合适大小的dom  -->
+               <div id="container10" style="height: 600px"></div>
+             </div>
+         </div>
+       </div>
+
+
+       <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 10px; margin-bottom: 50px; width:100%; height: 400px;">
+         <div class="widget-content-container">
+           <div class="mark-contend"></div>
+              <div class="widget-topbar" style="cursor: auto;">
+                <div class="widget-title">
+                  <div class="title" data-method="nav" style="margin-top: 10px;">
+                     各车间工种分析表格
+                  </div>
+                  <div class="range" style="margin-bottom: 0px;">
+                    <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                  </div>
+                </div>
+                <div class="pull-right widget-setting">
+                  <div class="customer-menu"></div>
+                </div>
+              </div>
+
+              <div class="widget-chart-container container">
+                <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:30px ;overflow: auto">
+                  <table id="chart_table" class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <% @workshops.each do |workshop| %>
+                          <th><%= Workshop.find(workshop).name %></th>
+                        <% end %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>高级工</td>
+                        <% n = 0 %>
+                        <% @table_gaoJiGong.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => ["高级工（１）", "高级工（２）"], workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>中级工</td>
+                        <% n = 0 %>
+                        <% @table_zhongJiGong.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => ["中级工（１）", "中级工（２）", "中级工（３）"], workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>初级工</td>
+                        <% n = 0 %>
+                        <% @table_chuJiGong.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => ["初级工（１）", "初级工（２）"], workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>技师</td>
+                        <% n = 0 %>
+                        <% @table_jiShi.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => "技师", workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>高级技师</td>
+                        <% n = 0 %>
+                        <% @table_gaoJiJiShi.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => "高级技师", workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>未鉴定</td>
+                        <% n = 0 %>
+                        <% @table_weiJianDing.each do |i| %>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:work_type => ["熟练制工人", "学徒工"], workshop: @workshops[n]), style: "color: black" %></td>
+                          <% n = n+ 1%>
+                        <% end %>
+                      </tr>
+                    </tbody>
+                   </table>
+                </div>
+              </div>
+          </div>
+        </div>
+
+
+   </div>
+  </div>
+</div>
+
+
+<!-- 引入highcharts库  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  $(function () {
+    var chart9 = $('#container9').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: ''
+      },
+      // 数据提示框设置
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '{point.name}:<br> 百分比：<b>{point.percentage:.1f}%</b>, <br>数量：<b>{point.y}</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          },
+          // 设置是否显示图例
+          showInLegend: true
+        }
+      },
+      // 饼图的数据来源
+      series: [
+        {
+          colorByPoint: true,
+          // 设置饼图各个扇区的数据，注意需要数组类型的数据
+          data: [
+            {
+              name: '高级工',
+              y: gon.gaoJiGong
+            },{
+              name: '中级工',
+              y: gon.zhongJiGong
+            }, {
+              name: '初级工',
+              y: gon.chuJiGong
+            }, {
+              name: '技师',
+              y: gon.jiShi
+            }, {
+              name: '高级技师',
+              y: gon.gaoJiJiShi
+            }, {
+              name: '未鉴定',
+              y: gon.weiJianDing
+            }
+          ]
+        }
+      ]
+    });
+  });
+</script>
+
+
+<!-- 引入highcharts库  -->
+<!-- 年龄分析饼图-结束  -->
+<script src="/assets/javascripts/highcharts.js"></script>
+<script>
+  var chart10 = $(function () {
+    $('#container10').highcharts({
+      credits:{
+        enabled: false
+      },
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: ''
+      },
+      xAxis: {
+        lables: {
+          step: 1
+        },
+        categories: gon.bar_workshop
+      },
+      yAxis: {
+        min: 0,
+        lables: {
+          step: 1
+        },
+        title: {
+          text: '员工数量'
+        }
+      },
+      tooltip: {
+        formatter: function () {
+          var age_percentage = this.y * 100
+          return "<b>" + this.series.name + "</b><br>百分比" + Math.round(age_percentage) + " %";
+        }
+      },
+      legend: {
+        reversed: true
+      },
+      plotOptions: {
+        bar: {
+          pointWidth: 10,
+          pointPadding: 0
+        },
+        // 设置条形图的点击事件
+        series: {
+          stacking: 'normal'
+        }
+      },
+      series: [
+        {
+          name: '高级工',
+          data: gon.bar_gaoJiGong
+        }, {
+          name: '中级工',
+          data: gon.bar_zhongJiGong
+        }, {
+          name: '初级工',
+          data: gon.bar_chuJiGong
+        }, {
+          name: '技师',
+          data: gon.bar_jiShi
+        }, {
+          name: '高级技师',
+          data: gon.bar_gaoJiJiShi
+        }, {
+          name: '未鉴定',
+          data: gon.bar_weiJianDing
+        }
+      ]
+    });
+  })
+</script>
+  <!-- 年龄分析条形图-结束  -->

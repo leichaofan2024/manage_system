@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get :education_statistical_analysis
       get :working_years_statistical_analysis
       get :rali_years_statistical_analysis
+      get :worktype_statistical_analysis
       #图表点击后路径
       get :statistical_analysis_data
       post :create_workshop
