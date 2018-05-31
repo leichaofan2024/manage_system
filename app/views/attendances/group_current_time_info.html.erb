@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-
+<% if current_user.has_role? :attendance_admin %>
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->
   <div class="col-md-12">
@@ -38,31 +38,33 @@
     <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
   <% end %>
 
-  <!-- 审核功能-开始 -->
-  <div class="btn_group_top-1sKKU_0">
-    <div>
-      <div class="btn_group-2MSRh_0">
-        <div class="ivu-tooltip">
-            <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
-                   <span style="color: #269Eff;">审核</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
-                   <span style="color: #269Eff;">一键审核</span>
-                <% end %>
-              </button>
+    <!-- 审核功能-开始 -->
+    <% if !AttendanceStatus.find_by(:workshop_id => @workshop).status == "段已审核" %>
+      <div class="btn_group_top-1sKKU_0">
+        <div>
+          <div class="btn_group-2MSRh_0">
+            <div class="ivu-tooltip">
+                <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                    <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
+                       <span style="color: #269Eff;">审核</span>
+                    <% end %>
+                  </button>
+                </div>
+                <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                    <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
+                       <span style="color: #269Eff;">一键审核</span>
+                    <% end %>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-  </div>
+    <% end %>
+  <% end %>
 
   <!-- <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
   <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %> -->
@@ -70,7 +72,7 @@
 <% if @workshop.present? %>
   <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
 <% else %>
-  <h4>全段<%= Time.now.month%>月考勤情况</h4>
+  <h4><%= Time.now.month%>月考勤情况</h4>
 <% end %>
 <div class="col-md-12">
   <div class="card">
@@ -81,12 +83,14 @@
             <th>工资号</th>
             <th>姓名</th>
             <th>职名</th>
+            <th>车间</th>
+            <th>班组</th>
             <!-- 生成每月1-31号的数字-开始 -->
             <% (1..31).each do |i| %>
               <th><%= i %></th>
             <% end %>
             <!-- 生成每月1-31号的数字-结束 -->
-            <!-- <% @vacation_codes.each do |code| %>
+          <!--   <% @vacation_codes.each do |code| %>
               <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
             <% end %> -->
           </tr>
@@ -101,6 +105,8 @@
                 <td><%= employee.sal_number %></td>
                 <td><%= employee.name %></td>
                 <td><%= employee.duty %></td>
+                <td><%= Workshop.find(employee.workshop).name %></td>
+                <td><%= Group.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
                 <% attendance = Attendance.find_by(employee_id: employee.id) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
@@ -112,12 +118,8 @@
                 <td>
                     <% if day_attendance == "x" %>
                       <%= " " %>
-                    <% else %>
-                      <% if current_user.has_role? :workshopadmin %>
-                        <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                      <% else %>
-                        <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
-                      <% end %>
+                    <% else %>                    
+                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
                     <% end %>
                 </td>
                   <% day_number += 1%>

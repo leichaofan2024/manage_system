@@ -3,8 +3,8 @@ class EmployeesController < ApplicationController
 
   def index
     #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
-    if params[:worktype].present?
-      @employees = Employee.where(work_type: params[:work_type])
+    if params[:work_type].present?
+      @employees = Employee.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.order('id ASC').page(params[:page]).per(10)
     elsif current_user.has_role? :workshopadmin
@@ -843,7 +843,7 @@ class EmployeesController < ApplicationController
       flash[:notice] = "该车间名称已存在，请换一个试试~"
     else
       workshop = Workshop.create(:name => params[:merge_workshop])
-      workshop_ids.each do |id|
+      params[:workshops].each do |workshop_id|
         Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
         Employee.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
         Workshop.where(:id => params[:workshops]).delete_all

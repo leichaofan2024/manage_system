@@ -43,32 +43,6 @@
           		<%= submit_tag :点击确定 %>
           	<% end %>
           <% end %>
-
-          <% HolidayStartTime.all.each do |holiday_time| %>
-          	<%= past_time = (Time.now - holiday_time.start_time) / 86400 %>
-          	<% if (holiday_time.vacation == "病假") or (holiday_time.vacation == "育儿假") %>
-          		<% if ((180 - past_time) > 59) &&  ((180 - past_time) < 61) %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有两个月到期</h4>
-          		<% end %>
-          		<% if ((180 - past_time) > 29) &&  ((180 - past_time) < 31)  %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有一个月到期</h4>
-          		<% end %>
-          	<% elsif holiday_time.vacation == "产假(顺产)" %>
-          		<% if ((218 - past_time) > 59) &&  ((218 - past_time) < 61) %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有两个月到期</h4>
-          		<% end %>
-          		<% if ((218 - past_time) > 29) &&  ((218 - past_time) < 31)  %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有一个月到期</h4>
-          		<% end %>
-          	<% elsif holiday_time.vacation == "产假(剖腹)" %>
-          		<% if ((233 - past_time) > 59) &&  ((233 - past_time) < 61) %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有两个月到期</h4>
-          		<% end %>
-          		<% if ((233 - past_time) > 29) &&  ((233 - past_time) < 31)  %>
-          			<h4><%= holiday_time.name %>的<%= holiday_time.vacation %>还有一个月到期</h4>
-          		<% end %>
-          	<% end %>
-          <% end %>
         </div>
 
       </div>
