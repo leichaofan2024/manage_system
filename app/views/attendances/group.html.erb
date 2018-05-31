@@ -33,6 +33,7 @@
    <% end %>
 </div>
 <div class="col-md-12" style="margin-top: 20px;">
+<h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -86,7 +87,11 @@
                             <% if day_attendance == "x" %>
                               <%= day_number %> 
                             <% else %>
-                              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                              <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
+                                <%= "" %>
+                              <% else %>
+                                <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                              <% end %>
                             <% end %>
                           <% end %>
                         <% else %>
@@ -96,7 +101,11 @@
                                  <%= "-" %>
                                </div>
                             <% else %>
-                             <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                             <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
+                                <%= "" %>
+                              <% else %>
+                                <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                              <% end %>
                             <% end %>
                           <% end %>
                         <% end %>
@@ -106,7 +115,11 @@
                         <% if day_attendance == "x" %>
                           <%= "-"%>
                         <% else %>
-                          <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                          <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
+                            <%= "" %>
+                          <% else %>
+                            <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+                          <% end %>
                         <% end %>
                       </td>
                     <% end %>

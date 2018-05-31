@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">填写<%= AnnualHolidayWorkType.find(@work_type).work_type %>的<%= @number %></h4>
+        <h4 class="modal-title" id="myModalLabel">填写<%= current_user.name %>的年休假计划</h4>
       </div>
       <div class="modal-body">
         <%= form_tag create_holiday_plan_annual_holidays_path do %>

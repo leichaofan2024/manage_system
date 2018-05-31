@@ -200,6 +200,7 @@ layout 'home'
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
 			@workshop = Workshop.find_by(:name => current_user.name)
 			AttendanceStatus.find_by(:group_id => params[:group]).update(:status => "车间已审核", :group_id => params[:group])
+			flash[:notice] = "审核完成"
 			redirect_back(fallback_location: workshop_attendances_path)
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--结束
 			#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--开始
@@ -216,13 +217,14 @@ layout 'home'
 			end
 			if result.count(1) == @groups.count
 				@groups.each do |group|
-
 					AttendanceStatus.find_by(:group_id => group.id).update(:workshop_id => @workshop.id)
 				end
 			end
 			#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--结束
 		elsif params[:authority] == "duan"
 			AttendanceStatus.where(:workshop_id => params[:workshop]).update(:status => "段已审核")
+			flash[:notice] = "审核完成"
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
 	end
 	##审核功能--结束
@@ -234,12 +236,16 @@ layout 'home'
 			@groups = @workshop.groups
 			@groups.each do |group|
 				AttendanceStatus.find_by(:group_id => group.id).update(:status => "车间已审核", :workshop_id => @workshop.id)
+				flash[:notice] = "审核完毕"
+				redirect_back(fallback_location: workshop_attendances_path)
 			end
 		elsif params[:authority] == "duan"
 			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 			@workshops = Workshop.find(status_workshop)
 			@workshops.each do |workshop|
 				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
+				flash[:notice] = "审核完毕"
+				redirect_back(fallback_location: group_current_time_info_attendances_path)
 			end
 		end
 	end
