@@ -39,7 +39,7 @@ layout 'home'
 		end
 		#若当前用户是考勤管理员时，则存下修改记录--结束
 		if current_user.has_role? :workshopadmin
-			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day]}的考勤数据")
+			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day].to_i+1}的考勤数据")
 		end
 		attendance_ary[params[:day].to_i] = params[:code]
 		#将替换过的新的数组变成字符串，赋值给attendance_string

@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
 		elsif current_user.has_role? :attendance_admin
 			@messages = Message.where(:user_id => "3")
 		elsif current_user.has_role? :superadmin
-			@messages = Message.where(:user_id => "1")
+			@messages = Message.all
 		end
 	end
 
