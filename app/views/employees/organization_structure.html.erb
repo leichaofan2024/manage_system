@@ -35,10 +35,24 @@
                 <% end %>
               </button>
             </div>
-            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
+            <div class="ivu-tooltip-rel" style="text-align: right">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
                    <span style="color: #269Eff;">删除车间/班组</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
+                   <span style="color: #269Eff;">修改车间</span>
+                <% end %>
+              </button>
+            </div>
+            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editGroupModal" do  %>
+                   <span style="color: #269Eff;">修改班组</span>
                 <% end %>
               </button>
             </div>
@@ -163,6 +177,8 @@
 <%= render "show_merge_workshop" %>
 <%= render "show_merge_group" %>
 <%= render "show_delete_organization" %>
+<%= render "show_edit_workshop" %>
+<%= render "show_edit_group" %>
 
 <script type="text/javascript">
   (function(e) {

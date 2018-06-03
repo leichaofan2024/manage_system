@@ -28,6 +28,8 @@ Rails.application.routes.draw do
       post :merge_workshop
       post :merge_group
       post :delete_organization
+      post :edit_workshop
+      post :edit_group
     end
   end
 

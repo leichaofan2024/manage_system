@@ -36,6 +36,12 @@
                   <div class="title">
                     <span>合计</span>
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.count%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>其中：男</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(:sex => "男").count%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>女</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(:sex => "女").count%></span>
                     <span>人</span>
                   </div>
                 </div>

@@ -887,6 +887,22 @@ class EmployeesController < ApplicationController
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
+  def edit_workshop
+    Workshop.find(params[:workshop]).update(:name => params[:workshop_name])
+    flash[:notice] = "更新成功"
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
+  def edit_group
+    if !Workshop.find_by(:name => params[:workshop_name]).present?
+      flash[:alert] = "您填写的车间名称不存在，请先新增哦"
+    else
+      Group.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.find_by(:name => params[:workshop_name]).id)
+      flash[:notice] = "更新成功" 
+    end  
+    redirect_back(fallback_location: organization_structure_employees_path)
+  end
+
 
   ### 综合分析
   def compsite_statistical_analysis

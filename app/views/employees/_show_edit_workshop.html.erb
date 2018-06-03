@@ -1,0 +1,21 @@
+<div class="modal fade" id="editWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">合并车间</h4>
+      </div>
+      <div class="modal-body">
+          <%= form_tag edit_workshop_employees_path, method: 'post' do %>
+            <% Workshop.all.each do |workshop| %>
+              <%= radio_button_tag :workshop, workshop.id %>
+              <%= label_tag :q, "#{workshop.name}"%><br>
+            <% end %>
+            <%= label_tag :请输入修改后的车间名称 %>
+            <%= text_field_tag :workshop_name %>
+            <%= submit_tag :确定 %>
+          <% end %> 
+      </div>
+    </div> 
+  </div>
+</div>
