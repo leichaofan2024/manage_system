@@ -9,6 +9,7 @@ class Employee < ActiveRecord::Base
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
   has_many :attendance_counts
   has_many :annual_holidays
+  has_one :leaving_employee
 
 
 

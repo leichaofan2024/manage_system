@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       post :delete_organization
       post :edit_workshop
       post :edit_group
+      get :show_leaving_employee_modal
+      post :create_leaving
     end
   end
 

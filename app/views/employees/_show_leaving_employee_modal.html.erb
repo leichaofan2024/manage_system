@@ -1,0 +1,32 @@
+<div class="modal fade" id="leavingEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">
+          <% if @type == "调离" %>
+            调离人员
+          <% elsif @type == "调动" %>
+            调动人员
+          <% end %>
+        </h4>
+      </div> 
+      <div class="modal-body">
+          <%= form_tag create_leaving_employees_path, method: 'post' do %>
+            <% if @type == "调离" %>
+              <%= label_tag :填写调离原因： %>
+              <%= text_field_tag :cause %>
+            <% elsif @type == "调动" %>
+              <%= label_tag :填写调动后车间： %>
+              <%= text_field_tag :workshop %>
+              <%= label_tag :填写调动后班组： %>
+              <%= text_field_tag :group %>
+            <% end %>
+            <%= hidden_field_tag :employee, @employee %>
+            <%= hidden_field_tag :type, @type %>
+            <%= submit_tag :确定 %>
+          <% end %> 
+      </div>
+    </div> 
+  </div>
+</div>

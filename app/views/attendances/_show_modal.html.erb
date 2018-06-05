@@ -10,7 +10,7 @@
             <% @vacation.each do |vacation| %>
               <% group = Employee.find_by(id: @employee_id).group %>
               <% if @type == "duan" %>
-                <%= radio_button_tag(:code, vacation[1]) %> 
+                <%= radio_button_tag(:code, vacation[1]) %>  
                 <%= hidden_field_tag :employee_id , @employee_id %>  
                 <%= hidden_field_tag :employee , @employee %>
                 <%= hidden_field_tag :month , @month %>
