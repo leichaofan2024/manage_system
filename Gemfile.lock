@@ -22,7 +22,7 @@ GIT
       multi_json
 
 GEM
-  remote: https://rubygems.org/
+  remote: https://gems.ruby-china.org/
   specs:
     actioncable (5.1.6)
       actionpack (= 5.1.6)
