@@ -11,7 +11,9 @@ class Employee < ActiveRecord::Base
   has_many :annual_holidays
   has_one :leaving_employee
 
-
+  scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
+  scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
+  scope :transfer, ->(time){where(:id => LeavingEmployee.where("leaving_employees.start_time <= ? AND leaving_employees.end_time >= ?", time, time ).pluck("leaving_employees.employee_id") ) }
 
   def self.search(query)
     __elasticsearch__.search(
@@ -125,7 +127,7 @@ class Employee < ActiveRecord::Base
 
    # 更新Group表数据
     Workshop.all.each do |i|
-      Employee.where(:workshop => i.name).pluck(:group).uniq.each do |j|
+      Employee.current.where(:workshop => i.name).pluck(:group).uniq.each do |j|
         if !Group.find_by_name(j).present?
           Group.create(:name => j, :workshop_id => i.id)
         end
@@ -135,7 +137,7 @@ class Employee < ActiveRecord::Base
 
   #更新现员表的workshop_id
     Workshop.all.each do |i|
-      Employee.all.each do |j|
+      Employee.current.all.each do |j|
         if i.name == j.workshop
            j.update(:workshop => i.id)
         end
@@ -143,7 +145,7 @@ class Employee < ActiveRecord::Base
     end
 
     # 更新现员表数据
-    Employee.all.each do |j|
+    Employee.current.all.each do |j|
       j.sal_number = '41' + j.job_number
         j.birth_year = j.birth_date[0..3]
         j.age = Time.now.year - j.birth_year.to_i
@@ -157,7 +159,7 @@ class Employee < ActiveRecord::Base
 
    #更新现员表的group_id
     Group.all.each do |i|
-      Employee.all.each do |j|
+      Employee.current.all.each do |j|
         if i.name == j.group
           j.update(:group => i.id)
         end
@@ -165,7 +167,7 @@ class Employee < ActiveRecord::Base
     end
 
     # 更新基本信息表数据
-    Employee.all.each do |i|
+    Employee.current.all.each do |i|
       EmpBasicInfo.create(:sal_number => i.sal_number,
                           :workshop_id => i.workshop,
                           :group_id => i.group,
@@ -181,7 +183,7 @@ class Employee < ActiveRecord::Base
 
 
     #更新考勤表信息
-    Employee.all.each do |i|
+    Employee.current.all.each do |i|
       Attendance.create(:employee_id => i.id, :group_id => i.group, :month => Time.now.month, :year => Time.now.year)
     end
 

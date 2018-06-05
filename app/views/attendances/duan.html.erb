@@ -103,7 +103,7 @@
                       <% end %>
                     <% end %>
                   <% end %>
-                  <% employees = Employee.where(:group => group.id).pluck("id") %>
+                  <% employees = Employee.current.where(:group => group.id).pluck("id") %>
                   <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
                   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
@@ -113,7 +113,7 @@
                 </tr>
               <% end %>
             <% elsif @group.present? %>
-              <% Employee.where(:group => @group).each do |employee| %>
+              <% Employee.current.where(:group => @group).each do |employee| %>
                 <tr>
                   <td><%= employee.name %></td>
                   <td><%= employee.sal_number %></td>
@@ -144,7 +144,7 @@
                       <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
                     <% end %>
                   <% end %>
-                  <% employees = Employee.where(:workshop => workshop.id).pluck("id") %>
+                  <% employees = Employee.current.where(:workshop => workshop.id).pluck("id") %>
                   <% attendances = Attendance.where(:employee_id => employees).pluck("id") %>
                   <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
                       <td><%= link_to records, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: "btn btn-primary" %></td>

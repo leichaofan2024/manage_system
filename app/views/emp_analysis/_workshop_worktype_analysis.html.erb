@@ -34,7 +34,7 @@
              <tr>
                <td><%= Workshop.find(workshop.to_i).name%></td>
                <% @work_types.each do |worktype| %>
-                 <td><%= Employee.where(:workshop => workshop, :work_type => worktype).count %></td>
+                 <td><%= Employee.current.where(:workshop => workshop, :work_type => worktype).count %></td>
                <% end %>
              </tr>
            <% end %>

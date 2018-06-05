@@ -30,28 +30,28 @@ User.create(name: "奖惩管理员", password: "123456", password_confirmation: 
 
 
 puts "创建车间管理员，请稍等。。。"
-@not_organs = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq
+@not_organs = Employee.current.where.not(:workshop => "机关").pluck(:workshop).uniq
 @not_organs.uniq.each do |e|
     User.create(:name => e, :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
 end
-workshop_count = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq.count
+workshop_count = Employee.current.where.not(:workshop => "机关").pluck(:workshop).uniq.count
 puts "共创建#{workshop_count}个车间管理员"
 "\n"
 
 
 puts "创建班组管理员，请稍等。。。"
-@employees = Employee.all
+@employees = Employee.current.all
 @employees.where(:workshop => "机关").pluck(:group).uniq.each do |i|
   User.create(:name => i, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
 end
 
-@workshops = Employee.where.not(:workshop => "机关").pluck(:workshop).uniq
+@workshops = Employee.current.where.not(:workshop => "机关").pluck(:workshop).uniq
 @workshops.each do |j|
-  groups = Employee.where(:workshop => j).pluck(:group).uniq
+  groups = Employee.current.where(:workshop => j).pluck(:group).uniq
   groups.uniq.each do |k|
     User.create(:name => (j + "-" + k), :password => "123456", :password_confirmation => "123456").add_role :groupadmin
   end
 end
 
-group_count = Employee.pluck(:group).uniq.count
+group_count = Employee.current.pluck(:group).uniq.count
 puts "共创建#{group_count}个班组管理员"

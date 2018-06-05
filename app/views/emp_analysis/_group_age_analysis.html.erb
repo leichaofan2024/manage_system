@@ -34,14 +34,14 @@
            <% @groups.each do |group| %>
              <tr>
                <td><%= Group.find(group.to_i).name %></td>
-               <td><%= Employee.where(:group => group, age: 0..25).count %></td>
-               <td><%= Employee.where(:group => group, age: 26..30).count %></td>
-               <td><%= Employee.where(:group => group, age: 31..35).count %></td>
-               <td><%= Employee.where(:group => group, age: 36..40).count %></td>
-               <td><%= Employee.where(:group => group, age: 41..45).count %></td>
-               <td><%= Employee.where(:group => group, age: 46..50).count %></td>
-               <td><%= Employee.where(:group => group, age: 51..55).count %></td>
-               <td><%= Employee.where(:group => group, age: 56..1000).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 0..25).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 26..30).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 31..35).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 36..40).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 41..45).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 46..50).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 51..55).count %></td>
+               <td><%= Employee.current.where(:group => group, age: 56..1000).count %></td>
              </tr>
            <% end %>
         </tbody>
