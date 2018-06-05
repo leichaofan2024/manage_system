@@ -15,6 +15,7 @@ class CreateAnnualHolidays < ActiveRecord::Migration[5.1]
       t.integer :month_10
       t.integer :month_11
       t.integer :month_12
+      t.integer :year
       t.timestamps
     end
   end

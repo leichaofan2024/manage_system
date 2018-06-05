@@ -5,7 +5,6 @@ class CreateAnnualHolidayPlans < ActiveRecord::Migration[5.1]
       t.integer :work_type,                     comment: "工种"
       t.integer :last_year_people_number,       comment: "上年末单位人数"
       t.integer :this_year_people_number,       comment: "今年休年休假人数"
-      t.integer :other_this_year_people_number, comment: "今年休年休假人数1"
       t.integer :five_days,                     comment: "休5天人数"
       t.integer :ten_days,                      comment: "休10天人数"
       t.integer :fifteen_days,                  comment: "休15天人数"
