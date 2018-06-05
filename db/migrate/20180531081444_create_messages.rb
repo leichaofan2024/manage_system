@@ -5,7 +5,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.text :message
       t.integer :user_id
       t.boolean :have_read
-      t.datatime :remind_time
+      t.datetime :remind_time
       t.timestamps
     end
   end

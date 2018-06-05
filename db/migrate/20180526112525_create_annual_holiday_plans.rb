@@ -33,6 +33,8 @@ class CreateAnnualHolidayPlans < ActiveRecord::Migration[5.1]
       t.integer :November_plan_days,            comment: "十一月份休假天数"
       t.integer :December_plan_number,          comment: "十二月份安排人数"
       t.integer :December_plan_days,            comment: "十二月份休假天数"
+      t.string  :status
+      t.integer :year
       t.timestamps
     end
   end
