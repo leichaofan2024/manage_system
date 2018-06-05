@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       post :edit_group
       get :show_leaving_employee_modal
       post :create_leaving
+      get :employee_detail
     end
   end
 

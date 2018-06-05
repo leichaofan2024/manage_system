@@ -49,7 +49,7 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    @employee = Employee.current.find(params[:id])
+    @employee = Employee.find(params[:id])
   end
 
  #上传表格
@@ -925,6 +925,15 @@ class EmployeesController < ApplicationController
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
     end  
     redirect_back(fallback_location: employees_path)
+  end
+
+  def employee_detail
+    @type = params[:type]
+    if params[:type] == "调离"
+      @employees = Employee.leaving
+    elsif params[:type] == "调动"
+      @employees = Employee.transfer(Time.now)
+    end
   end
 
   ### 综合分析
