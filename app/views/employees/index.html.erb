@@ -47,12 +47,12 @@
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>最近一月调动</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.transfer(Time.now).count, employee_detail_employees_path(type: "调动")%></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
                     <span>人</span>
                   </div>
                 </div>
               </div>
-            </li>
+            </li> 
           </div>
         </div>
       </div>

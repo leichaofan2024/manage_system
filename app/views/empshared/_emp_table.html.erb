@@ -34,11 +34,9 @@
           <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
             <span class="label label-danger">已调离</span>
           <% end %>
-          <% leaving_employee = LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调动", :end_time => "3000-12-11 16:00:00") %>
-          <% if leaving_employee.present? %>
-            <% if (leaving_employee.start_time < Time.now) && (Time.now < leaving_employee.end_time) %>
+          
+          <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
               <span class="label label-warning">一月内有调动</span>
-            <% end %>
           <% end %>
         </td>
         <td><%= employee.work_type%></td>

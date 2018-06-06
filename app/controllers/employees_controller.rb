@@ -932,7 +932,7 @@ class EmployeesController < ApplicationController
     if params[:type] == "调离"
       @employees = Employee.leaving
     elsif params[:type] == "调动"
-      @employees = Employee.transfer(Time.now)
+      @employees = Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month)
     end
   end
 

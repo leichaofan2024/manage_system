@@ -1,3 +1,4 @@
+<%= render "employee_navbar"%>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -32,7 +33,7 @@
 					<td><%= Group.find(LeavingEmployee.find_by(employee_id: employee.id).transfer_from_group).name %></td>
 					<td><%= Workshop.find(LeavingEmployee.find_by(employee_id: employee.id).transfer_to_workshop).name %></td>
 					<td><%= Group.find(LeavingEmployee.find_by(employee_id: employee.id).transfer_to_group).name %></td>
-					<td><%= LeavingEmployee.find_by(employee_id: employee.id).start_time %></td>
+					<td><%= LeavingEmployee.find_by(employee_id: employee.id).created_at %></td>
 		      	<% end %>
 	      	</tr>
       	<% end %>

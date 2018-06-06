@@ -13,7 +13,7 @@ class Employee < ActiveRecord::Base
 
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
   scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
-  scope :transfer, ->(time){where(:id => LeavingEmployee.where("leaving_employees.start_time <= ? AND leaving_employees.end_time >= ?", time, time ).pluck("leaving_employees.employee_id") ) }
+  scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id") ) }
 
   def self.search(query)
     __elasticsearch__.search(
