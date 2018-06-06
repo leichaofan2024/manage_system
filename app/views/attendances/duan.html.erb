@@ -110,7 +110,7 @@
                   <% else %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year) %></td>
                   <% end %>
-                </tr>
+                </tr> 
               <% end %>
             <% elsif @group.present? %>
               <% Employee.current.where(:group => @group).each do |employee| %>

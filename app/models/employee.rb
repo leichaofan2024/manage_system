@@ -16,27 +16,23 @@ class Employee < ActiveRecord::Base
   scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id") ) }
 
   def self.transfer_search(start_time, end_time)
-    b = {}
+    b = {"to" => [], "from" => []}
     a = LeavingEmployee.where("leaving_employees.leaving_type = ?", "调动").group_by{|u| u.employee_id}
-    a.each do |employee_id, leaving_employees|
-      
-      m = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
-      n = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ?", end_time).select("employee_id", "transfer_from_workshop", "transfer_from_group", "created_at").order("created_at").first
-      q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
+    a.each do |employee_id, leaving_employees| 
+      m = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
+      n = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ?", end_time).select("id", "employee_id", "transfer_from_workshop", "transfer_from_group", "created_at").order("created_at").first
+      q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       if m.present?
-        b[employee_id] = m
+        b["to"] << m.id
       elsif n.nil?
-        b[employee_id] = q
+        b["to"] << q.id
       elsif q.nil?
-        b[employee_id] = n
+        b["from"] << n.id
       else
-        b[employee_id] = q
+        b["to"] << q.id
       end
     end 
     return b
-    
-    # b = LeavingEmployee.where("leaving_employees.leaving_type = ? AND leaving_employees.minimum("created_at") > ?", "调动", end_time).first.employee_id
-    # c = LeavingEmployee.where("leaving_employees.leaving_type = ? AND  ")
   end
 
   def self.search(query)
