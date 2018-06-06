@@ -916,11 +916,7 @@ class EmployeesController < ApplicationController
       LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "调离")
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调离"
     elsif params[:type] == "调动"
-      leaving_employee = LeavingEmployee.find_by(:employee_id => params[:employee], :leaving_type => "调动", :end_time => "3000-12-11 16:00:00")
-      if leaving_employee.present?
-        leaving_employee.update(:end_time => Time.now)
-      end
-      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :start_time => Time.now, :end_time => "3000-12-12", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.find_by(:name => params[:group]).id)
+      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.find_by(:name => params[:group]).id)
       Employee.current.find(params[:employee]).update(:workshop => Workshop.find_by(:name => params[:workshop]).id, :group => Group.find_by(:name => params[:group]).id)
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
     end  

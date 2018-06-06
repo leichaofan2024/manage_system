@@ -15,6 +15,27 @@ class Employee < ActiveRecord::Base
   scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
   scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id") ) }
 
+  def self.transfer_search(start_time, end_time)
+    b = {}
+    a = LeavingEmployee.where("leaving_employees.leaving_type = ?", "调动").group_by{|u| u.employee_id}
+    a.each do |employee_id, leaving_employees|
+      m = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
+      n = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ?", end_time).select("employee_id", "transfer_from_workshop", "transfer_from_group", "created_at").order("created_at").first
+      q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
+      if m.present? && n.nil? && q.nil?
+        b[employee_id] = m
+      elsif m.nil? && n.present? && q.nil?
+        b[employee_id] = n
+      elsif m.nil? && n.nil? && q.present?
+        b[employee_id] = q
+      end
+    end 
+    return b
+    
+    # b = LeavingEmployee.where("leaving_employees.leaving_type = ? AND leaving_employees.minimum("created_at") > ?", "调动", end_time).first.employee_id
+    # c = LeavingEmployee.where("leaving_employees.leaving_type = ? AND  ")
+  end
+
   def self.search(query)
     __elasticsearch__.search(
       {
