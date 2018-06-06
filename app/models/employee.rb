@@ -19,14 +19,17 @@ class Employee < ActiveRecord::Base
     b = {}
     a = LeavingEmployee.where("leaving_employees.leaving_type = ?", "调动").group_by{|u| u.employee_id}
     a.each do |employee_id, leaving_employees|
+      
       m = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       n = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ?", end_time).select("employee_id", "transfer_from_workshop", "transfer_from_group", "created_at").order("created_at").first
       q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
-      if m.present? && n.nil? && q.nil?
+      if m.present?
         b[employee_id] = m
-      elsif m.nil? && n.present? && q.nil?
+      elsif n.nil?
+        b[employee_id] = q
+      elsif q.nil?
         b[employee_id] = n
-      elsif m.nil? && n.nil? && q.present?
+      else
         b[employee_id] = q
       end
     end 
