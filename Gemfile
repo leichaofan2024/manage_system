@@ -40,6 +40,7 @@ gem 'elasticsearch-model', git: 'git://github.com/elasticsearch/elasticsearch-ra
 gem 'elasticsearch-rails', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
 gem 'gon'
 gem 'font-awesome-rails'
+gem 'ransack'
 
 group :development, :test do
   gem 'capybara', '~> 2.13'
