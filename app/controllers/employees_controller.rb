@@ -23,7 +23,7 @@ class EmployeesController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data @employees.to_csv }
-      format.xls
+      format.xls 
     end
   end
 
@@ -337,15 +337,24 @@ class EmployeesController < ApplicationController
   end
 
   def working_years_statistical_analysis
-    @working_years_5_below = Employee.current.where(working_years: 0..5).count
-    @working_years_6 = Employee.current.where(working_years: 6..10).count
-    @working_years_11 = Employee.current.where(working_years: 11..15).count
-    @working_years_16 = Employee.current.where(working_years: 16..20).count
-    @working_years_21 = Employee.current.where(working_years: 21..25).count
-    @working_years_26 = Employee.current.where(working_years: 26..30).count
-    @working_years_31 = Employee.current.where(working_years: 31..35).count
-    @working_years_36 = Employee.current.where(working_years: 36..40).count
-    @working_years_41_up = Employee.current.where(working_years: 41..100).count
+    @data_source = params[:data_source]
+    if params[:data_source] == "干部"
+      employees = Employee.current.cadre
+    elsif params[:data_source] == "工人"
+      employees = Employee.current.worker
+    else
+      employees = Employee.current
+    end
+
+    @working_years_5_below = employees.where(working_years: 0..5).count
+    @working_years_6 = employees.where(working_years: 6..10).count
+    @working_years_11 = employees.where(working_years: 11..15).count
+    @working_years_16 = employees.where(working_years: 16..20).count
+    @working_years_21 = employees.where(working_years: 21..25).count
+    @working_years_26 = employees.where(working_years: 26..30).count
+    @working_years_31 = employees.where(working_years: 31..35).count
+    @working_years_36 = employees.where(working_years: 36..40).count
+    @working_years_41_up = employees.where(working_years: 41..100).count
 
     gon.working_years_5_below = @working_years_5_below
     gon.working_years_6 = @working_years_6
@@ -357,7 +366,7 @@ class EmployeesController < ApplicationController
     gon.working_years_36 = @working_years_36
     gon.working_years_41_up = @working_years_41_up
 
-    @workshops = Employee.current.pluck("workshop").uniq
+    @workshops = employees.pluck("workshop").uniq
     loop_hash_working_5_below = {}
     hash_working_5_below = {}
     loop_hash_working_6 = {}
@@ -388,56 +397,56 @@ class EmployeesController < ApplicationController
     @working_41_up_bar = []
 
     @workshops.each do |i|
-      emp = Employee.current.where(workshop: i).count
-      a1 = Employee.current.where(workshop: i, working_years: 0..5).count
+      emp = employees.where(workshop: i).count
+      a1 = employees.where(workshop: i, working_years: 0..5).count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_working_5_below = {i => a}
       hash_working_5_below[i] = loop_hash_working_5_below[i]
       @working_5_below_bar << a1
 
-      b1 = Employee.current.where(workshop: i, working_years: 6..10).count
+      b1 = employees.where(workshop: i, working_years: 6..10).count
       b = (b1.to_f)/(emp.to_f)
       loop_hash_working_6 = {i => b}
       hash_working_6[i] = loop_hash_working_6[i]
       @working_6_bar << b1
 
-      c1 = Employee.current.where(workshop: i, working_years: 11..15).count
+      c1 = employees.where(workshop: i, working_years: 11..15).count
       c = (c1.to_f)/(emp.to_f)
       loop_hash_working_11 = {i => c}
       hash_working_11[i] = loop_hash_working_11[i]
       @working_11_bar << c1
 
-      d1 = Employee.current.where(workshop: i, working_years: 16..20).count
+      d1 = employees.where(workshop: i, working_years: 16..20).count
       d = (d1.to_f)/(emp.to_f)
       loop_hash_working_16 = {i => d}
       hash_working_16[i] = loop_hash_working_16[i]
       @working_16_bar << d1
 
-      e1 = Employee.current.where(workshop: i, working_years: 21..25).count
+      e1 = employees.where(workshop: i, working_years: 21..25).count
       e = (e1.to_f)/(emp.to_f)
       loop_hash_working_21 = {i => e}
       hash_working_21[i] = loop_hash_working_21[i]
       @working_21_bar << e1
 
-      f1 = Employee.current.where(workshop: i, working_years: 26..30).count
+      f1 = employees.where(workshop: i, working_years: 26..30).count
       f = (f1.to_f)/(emp.to_f)
       loop_hash_working_26 = {i => f}
       hash_working_26[i] = loop_hash_working_26[i]
       @working_26_bar << f1
 
-      g1 = Employee.current.where(workshop: i, working_years: 31..35).count
+      g1 = employees.where(workshop: i, working_years: 31..35).count
       g = (g1.to_f)/(emp.to_f)
       loop_hash_working_31 = {i => g}
       hash_working_31[i] = loop_hash_working_31[i]
       @working_31_bar << g1
 
-      h1 = Employee.current.where(workshop: i, working_years: 36..40).count
+      h1 = employees.where(workshop: i, working_years: 36..40).count
       h = (h1.to_f)/(emp.to_f)
       loop_hash_working_36 = {i => h}
       hash_working_36[i] = loop_hash_working_36[i]
       @working_36_bar << h1
 
-      j1 = Employee.current.where(workshop: i, working_years: 41..100).count
+      j1 = employees.where(workshop: i, working_years: 41..100).count
       j = (j1.to_f)/(emp.to_f)
       loop_hash_working_41_up = {i => j}
       hash_working_41_up[i] = loop_hash_working_41_up[i]

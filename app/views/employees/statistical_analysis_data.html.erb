@@ -44,6 +44,7 @@
   <table class="table table-bordered">
     <thead>
       <tr>
+        <th>级别</th>
         <th>工资号</th>
         <th>工号</th>
         <th>档案号</th>
@@ -64,6 +65,7 @@
         <tbody>
           <% @employees.each do |employee| %>
             <tr>
+              <td><%= employee.grade %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
