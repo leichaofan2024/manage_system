@@ -73,7 +73,7 @@
       <h5><%= @workshop.name%></h5>
       <ul>
         <% @groups.each do |group| %>
-          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
         <% end %>
       </ul>
     </div>
