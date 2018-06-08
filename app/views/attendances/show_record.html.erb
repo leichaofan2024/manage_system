@@ -17,7 +17,7 @@
 	    	<% attendance_records.each do |record| %>
 		    	<tr>
 		    		<% employee_id = Attendance.find(record.attendance_id).employee_id %>
-		    		<td>于<%= params[:year] %>年<%= params[:month] %>月<%= record.day %>日，将<%= Employee.find(employee_id).name %>的考勤从<%= record.edit_before %>修改为<%= record.edit_after %></td>
+		    		<td>于<%= params[:year] %>年<%= params[:month] %>月<%= record.day %>日，将<%= Employee.current.find(employee_id).name %>的考勤从<%= record.edit_before %>修改为<%= record.edit_after %></td>
 		    		<td><%= record.modify_person %></td>
 		    		<td><%= record.created_at %></td>
 		    		<% attendance = Attendance.find(record.attendance_id) %>

@@ -8,11 +8,11 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.where(:group => group.id)
+			@employees = Employee.current.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		elsif current_user.has_role? :organsadmin
 			group = Group.find_by(:name => current_user.name)
-			@employees = Employee.where(:group => group.id)
+			@employees = Employee.current.where(:group => group.id)
 			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
 
@@ -39,7 +39,7 @@ layout 'home'
 		end
 		#若当前用户是考勤管理员时，则存下修改记录--结束
 		if current_user.has_role? :workshopadmin
-			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day]}的考勤数据")
+			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day].to_i+1}的考勤数据")
 		end
 		attendance_ary[params[:day].to_i] = params[:code]
 		#将替换过的新的数组变成字符串，赋值给attendance_string
@@ -68,8 +68,8 @@ layout 'home'
 		attendance_hash.each do |i|
 			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
 			@attendance_count ||= AttendanceCount.new
-			group_id = Employee.find(params[:employee_id]).group
-			workshop_id = Employee.find(params[:employee_id]).workshop
+			group_id = Employee.current.find(params[:employee_id]).group
+			workshop_id = Employee.current.find(params[:employee_id]).workshop
 			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
 
 			if (i[0] == "f") && (i[1] > 0)
@@ -140,12 +140,12 @@ layout 'home'
 		if params[:type] == "group"
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.where(:group => group.id)
+			@employees = Employee.current.where(:group => group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
-			@employees = Employee.where(:workshop => @workshop.id)
+			@employees = Employee.current.where(:workshop => @workshop.id)
 			render action: "workshop"
 		elsif params[:type] == "duan"
 			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
@@ -174,9 +174,9 @@ layout 'home'
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
-			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
+			@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
 		else
-			@employees = Employee.where(:workshop => @workshop)
+			@employees = Employee.current.where(:workshop => @workshop)
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
@@ -272,6 +272,10 @@ layout 'home'
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@a = Workshop.all.count
+		#配置班组的现员数据（当前人员+调动人员）
+		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => @group)
 	end
 	##段管理员页面--结束
 
@@ -280,7 +284,7 @@ layout 'home'
 		@duan_detail = {}
 		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group], month: params[:month], year: params[:year])
 		attendance_counts.each do |attendance_count|
-			employee_name = Employee.find_by(:id => attendance_count.employee_id).name
+			employee_name = Employee.current.find_by(:id => attendance_count.employee_id).name
 			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code], month: params[:month], year: params[:year]).count
 			@duan_detail[employee_name] = employee_count
 		end
@@ -335,12 +339,12 @@ layout 'home'
 
 	def group_current_time_info
 		if current_user.has_role? :workshopadmin
-			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
+			@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 			if params[:workshop].present?
-				@employees = Employee.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
+				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
 			else
-				@employees = Employee.order('id ASC').page(params[:page]).per(10)
+				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
 			end
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -364,10 +368,10 @@ layout 'home'
 	end
 
 	def create_holiday_time
-		if Employee.find_by(:sal_number => params[:sal_number]).nil?
+		if Employee.current.find_by(:sal_number => params[:sal_number]).nil?
 			flash[:alert] = "工资号不存在"
 		else
-			if Employee.find_by(:sal_number => params[:sal_number]).name == params[:name]
+			if Employee.current.find_by(:sal_number => params[:sal_number]).name == params[:name]
 				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
 				holiday_start_time.update(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time], name: params[:name])
 				flash[:notice] = "设置成功"
@@ -390,6 +394,6 @@ layout 'home'
 	end
 
 	def caiwu2
-		@employees = Employee.order('id ASC').page(params[:page]).per(20)
+		@employees = Employee.current.order('id ASC').page(params[:page]).per(20)
 	end
 end

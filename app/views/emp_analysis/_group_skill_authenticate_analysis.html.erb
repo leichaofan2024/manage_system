@@ -34,7 +34,7 @@
              <tr>
                <td><%= Group.find(group.to_i).name%></td>
                <% @skilledness_authenticate.each do |skilledness_authenticate| %>
-                 <td><%= Employee.where(:group => group, :skilledness_authenticate => skilledness_authenticate).count %></td>
+                 <td><%= Employee.current.where(:group => group, :skilledness_authenticate => skilledness_authenticate).count %></td>
                <% end %>
              </tr>
            <% end %>

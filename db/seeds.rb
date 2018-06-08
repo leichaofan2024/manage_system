@@ -54,5 +54,5 @@ Group.where(:workshop_id => Workshop.where.not(:name => "机关").ids).pluck(:na
   end
 end
 
-group_count = Employee.pluck(:group).uniq.count
+group_count = Employee.current.pluck(:group).uniq.count
 puts "共创建#{group_count}个班组管理员"

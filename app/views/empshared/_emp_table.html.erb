@@ -29,7 +29,16 @@
         <td><%= Workshop.find(employee.workshop).name %></td>
         <td><%= Group.find(employee.group).name %></td>
         <td><%= employee.work_type %></td>
-        <td><%= employee.name %></td>
+        <td>
+          <%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %>
+          <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+            <span class="label label-danger">已调离</span>
+          <% end %>
+
+          <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+              <span class="label label-warning">一月内有调动</span>
+          <% end %>
+        </td>
         <td><%= employee.work_type%></td>
         <td><%= employee.sex %></td>
         <td><%= employee.age %></td>

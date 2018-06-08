@@ -29,7 +29,9 @@
   </table>
   <!-- <h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: @workshop) %>条修改申请需要处理</h5> -->
   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-    <h5>本月考勤表状态:<%= @status %></h5>
+    <% if @status.present? %>
+      <h5>本月考勤表状态:<%= @status %></h5>
+    <% end %>
     <div class="btn_group_top-1sKKU_0">
       <div>
         <div class="btn_group-2MSRh_0">
