@@ -180,7 +180,7 @@ layout 'home'
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			if params[:group].present?
+			if AttendanceStatus.find_by(:group_id => params[:group]).present?
 				@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 			end
 
@@ -312,7 +312,7 @@ layout 'home'
 		attendance_setting = AttendanceSetting.find_by(:vacation => params[:vacation]) || AttendanceSetting.new
 		attendance_setting.update(:vacation => params[:vacation], :count => params[:count])
 		redirect_to setting_attendances_path
- 	end 
+ 	end
 
  	def create_application
  		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
