@@ -141,10 +141,11 @@
             <% else %>
               <% @workshops.each do |workshop| %>
                 <tr>
+                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
                     <% else %>
                       <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
                     <% end %>
