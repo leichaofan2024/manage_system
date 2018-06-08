@@ -1,6 +1,9 @@
  <%= render 'employee_navbar'%>
  <!-- 学历分析饼图-开始  -->
-
+<%= form_tag education_statistical_analysis_employees_path, method: 'get' do %> 
+  <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>  
+  <%= submit_tag :点击筛选 %>
+<% end %>
  <div id="sa-main">
   <div id="dashboard">
    <div class="dashboard-toolbar">

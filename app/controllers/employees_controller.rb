@@ -111,14 +111,22 @@ class EmployeesController < ApplicationController
   def age_statistical_analysis
     #年龄分析---饼图数据设置---开始
     # 把各个年龄段的人数捞出，赋值给对应的实例变量
-    @age_25_below = Employee.current.where(age: 0..25).count
-    @age_26 = Employee.current.where(age: 26..30).count
-    @age_31 = Employee.current.where(age: 31..35).count
-    @age_36 = Employee.current.where(age: 36..40).count
-    @age_41 = Employee.current.where(age: 41..45).count
-    @age_46 = Employee.current.where(age: 46..50).count
-    @age_51 = Employee.current.where(age: 51..55).count
-    @age_56_up = Employee.current.where(age: 56..100).count
+    @data_source = params[:data_source]
+    if params[:data_source] == "干部"
+      employees = Employee.current.cadre
+    elsif params[:data_source] == "工人"
+      employees = Employee.current.worker
+    else
+      employees = Employee.current
+    end
+    @age_25_below = employees.where(age: 0..25).count
+    @age_26 = employees.where(age: 26..30).count
+    @age_31 = employees.where(age: 31..35).count
+    @age_36 = employees.where(age: 36..40).count
+    @age_41 = employees.where(age: 41..45).count
+    @age_46 = employees.where(age: 46..50).count
+    @age_51 = employees.where(age: 51..55).count
+    @age_56_up = employees.where(age: 56..100).count
     # 使用'gon'这个gem的方法，将数据赋值给对应的变量，在js中使用
     gon.twenty_five_below = @age_25_below
     gon.twenty_six = @age_26
@@ -130,7 +138,7 @@ class EmployeesController < ApplicationController
     gon.fifty_six_up = @age_56_up
     #年龄分析---饼图数据设置---结束
     #年龄分析---条形图数据设置---开始
-    @workshops = Employee.current.pluck("workshop").uniq
+    @workshops = employees.pluck("workshop").uniq
       #定义每个年龄段各个车间的hash（包括在循环里使用的和最后存入的）
       loop_hash_25_below = {}
       hash_25_below = {}
@@ -160,9 +168,9 @@ class EmployeesController < ApplicationController
       #使用循环把车间和人数存成hash
       @workshops.each do |i|
         #把每个车间的总人数存成变量
-        emp = Employee.current.where(workshop: i).count
+        emp = employees.where(workshop: i).count
         #把各年龄段在各车间的人数存成变量
-        a1 = Employee.current.where(workshop: i, age: 0..25).count
+        a1 = employees.where(workshop: i, age: 0..25).count
         #算出各年龄段人数占车间总人数的比重
         a = (a1.to_f)/(emp.to_f)
         #将每一次的计算结果存成"车间 => 百分比"的hash
@@ -171,43 +179,43 @@ class EmployeesController < ApplicationController
         hash_25_below[i] = loop_hash_25_below[i]
         @age_25_below_bar << a1
 
-        b1 = Employee.current.where(workshop: i, age: 26..30).count
+        b1 = employees.where(workshop: i, age: 26..30).count
         b = (b1.to_f)/(emp.to_f)
         loop_hash_26 = {i => b}
         hash_26[i] = loop_hash_26[i]
         @age_26_bar << b1
 
-        c1 = Employee.current.where(workshop: i, age: 31..35).count
+        c1 = employees.where(workshop: i, age: 31..35).count
         c = (c1.to_f)/(emp.to_f)
         loop_hash_31 = {i => c}
         hash_31[i] = loop_hash_31[i]
         @age_31_bar << c1
 
-        d1 = Employee.current.where(workshop: i, age: 36..40).count
+        d1 = employees.where(workshop: i, age: 36..40).count
         d = (d1.to_f)/(emp.to_f)
         loop_hash_36 = {i => d}
         hash_36[i] = loop_hash_36[i]
         @age_36_bar << d1
 
-        e1 = Employee.current.where(workshop: i, age: 41..45).count
+        e1 = employees.where(workshop: i, age: 41..45).count
         e = (e1.to_f)/(emp.to_f)
         loop_hash_41 = {i => e}
         hash_41[i] = loop_hash_41[i]
         @age_41_bar << e1
 
-        f1 = Employee.current.where(workshop: i, age: 46..50).count
+        f1 = employees.where(workshop: i, age: 46..50).count
         f = (f1.to_f)/(emp.to_f)
         loop_hash_46 = {i => f}
         hash_46[i] = loop_hash_46[i]
         @age_46_bar << f1
 
-        g1 = Employee.current.where(workshop: i, age: 51..55).count
+        g1 = employees.where(workshop: i, age: 51..55).count
         g = (g1.to_f)/(emp.to_f)
         loop_hash_51 = {i => g}
         hash_51[i] = loop_hash_51[i]
         @age_51_bar << g1
 
-        h1 = Employee.current.where(workshop: i, age: 56..70).count
+        h1 = employees.where(workshop: i, age: 56..70).count
         h = (h1.to_f)/(emp.to_f)
         loop_hash_56_up = {i => h}
         hash_56_up[i] = loop_hash_56_up[i]
@@ -231,14 +239,22 @@ class EmployeesController < ApplicationController
   end
 
   def education_statistical_analysis
-    @junior_high_school = Employee.current.where(education_background: ["初中"]).count
-    @primary_school = Employee.current.where(education_background: ["小学"]).count
-    @senior_high_school = Employee.current.where(education_background: "高中").count
-    @technical_school = Employee.current.where(education_background: "技校").count
-    @secondary_school = Employee.current.where(education_background: "中专").count
-    @university_specialties = Employee.current.where(education_background: "大学专科").count
-    @undergraduate = Employee.current.where(education_background: "大学本科").count
-    @postgraduate = Employee.current.where(education_background: "研究生").count
+    @data_source = params[:data_source]
+    if params[:data_source] == "干部"
+      employees = Employee.current.cadre
+    elsif params[:data_source] == "工人"
+      employees = Employee.current.worker
+    else
+      employees = Employee.current
+    end
+    @junior_high_school = employees.where(education_background: ["初中"]).count
+    @primary_school = employees.where(education_background: ["小学"]).count
+    @senior_high_school = employees.where(education_background: "高中").count
+    @technical_school = employees.where(education_background: "技校").count
+    @secondary_school = employees.where(education_background: "中专").count
+    @university_specialties = employees.where(education_background: "大学专科").count
+    @undergraduate = employees.where(education_background: "大学本科").count
+    @postgraduate = employees.where(education_background: "研究生").count
 
     gon.junior_high_school = @junior_high_school_below
     gon.senior_high_school = @senior_high_school
@@ -249,7 +265,7 @@ class EmployeesController < ApplicationController
     gon.postgraduate = @postgraduate
     gon.primary_school = @primary_school
 
-    @workshops = Employee.current.pluck("workshop").uniq
+    @workshops = employees.pluck("workshop").uniq
     loop_hash_junior_high_school = {}
     hash_junior_high_school = {}
     loop_hash_primary_school = {}
@@ -276,50 +292,50 @@ class EmployeesController < ApplicationController
     @undergraduate_bar = []
     @postgraduate_bar = []
     @workshops.each do |i|
-      emp = Employee.current.where(workshop: i).count
-      a1 = Employee.current.where(workshop: i, education_background: "初中").count
+      emp = employees.where(workshop: i).count
+      a1 = employees.where(workshop: i, education_background: "初中").count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_junior_high_school = {i => a}
       hash_junior_high_school[i] = loop_hash_junior_high_school[i]
       @junior_high_school_bar << a1
 
-      b1 = Employee.current.where(workshop: i, education_background: "小学").count
+      b1 = employees.where(workshop: i, education_background: "小学").count
       b = (b1.to_f)/(emp.to_f)
       loop_hash_primary_school = {i => b}
       hash_primary_school[i] = loop_hash_primary_school[i]
       @primary_school_bar << b1
 
-      c1 = Employee.current.where(workshop: i, education_background: "高中").count
+      c1 = employees.where(workshop: i, education_background: "高中").count
       c = (c1.to_f)/(emp.to_f)
       loop_hash_senior_high_school = {i => c}
       hash_senior_high_school[i] = loop_hash_senior_high_school[i]
       @senior_high_school_bar << c1
 
-      d1 = Employee.current.where(workshop: i, education_background: "技校").count
+      d1 = employees.where(workshop: i, education_background: "技校").count
       d = (d1.to_f)/(emp.to_f)
       loop_hash_technical_school = {i => d}
       hash_technical_school[i] = loop_hash_technical_school[i]
       @technical_school_bar << d1
 
-      e1 = Employee.current.where(workshop: i, education_background: "中专").count
+      e1 = employees.where(workshop: i, education_background: "中专").count
       e = (e1.to_f)/(emp.to_f)
       loop_hash_secondary_school = {i => e}
       hash_secondary_school[i] = loop_hash_secondary_school[i]
       @secondary_school_bar << e1
 
-      f1 = Employee.current.where(workshop: i, education_background: "大学专科").count
+      f1 = employees.where(workshop: i, education_background: "大学专科").count
       f = (f1.to_f)/(emp.to_f)
       loop_hash_university_specialties = {i => f}
       hash_university_specialties[i] = loop_hash_university_specialties[i]
       @university_specialties_bar << f1
 
-      g1 = Employee.current.where(workshop: i, education_background: "大学本科").count
+      g1 = employees.where(workshop: i, education_background: "大学本科").count
       g = (g1.to_f)/(emp.to_f)
       loop_hash_undergraduate = {i => g}
       hash_undergraduate[i] = loop_hash_undergraduate[i]
       @undergraduate_bar << g1
 
-      h1 = Employee.current.where(workshop: i, education_background: "研究生").count
+      h1 = employees.where(workshop: i, education_background: "研究生").count
       h = (h1.to_f)/(emp.to_f)
       loop_hash_postgraduate = {i => h}
       hash_postgraduate[i] = loop_hash_postgraduate[i]
@@ -551,14 +567,22 @@ class EmployeesController < ApplicationController
   end
 
   def rali_years_statistical_analysis
-    @rali_years_5_below = Employee.current.where(rali_years: 0..5).count
-    @rali_years_6 = Employee.current.where(rali_years: 6..10).count
-    @rali_years_11 = Employee.current.where(rali_years: 11..15).count
-    @rali_years_16 = Employee.current.where(rali_years: 16..20).count
-    @rali_years_21 = Employee.current.where(rali_years: 21..25).count
-    @rali_years_26 = Employee.current.where(rali_years: 26..30).count
-    @rali_years_31 = Employee.current.where(rali_years: 31..35).count
-    @rali_years_36_up = Employee.current.where(rali_years: 36..100).count
+    @data_source = params[:data_source]
+    if params[:data_source] == "干部"
+      employees = Employee.current.cadre
+    elsif params[:data_source] == "工人"
+      employees = Employee.current.worker
+    else
+      employees = Employee.current
+    end
+    @rali_years_5_below = employees.where(rali_years: 0..5).count
+    @rali_years_6 = employees.where(rali_years: 6..10).count
+    @rali_years_11 = employees.where(rali_years: 11..15).count
+    @rali_years_16 = employees.where(rali_years: 16..20).count
+    @rali_years_21 = employees.where(rali_years: 21..25).count
+    @rali_years_26 = employees.where(rali_years: 26..30).count
+    @rali_years_31 = employees.where(rali_years: 31..35).count
+    @rali_years_36_up = employees.where(rali_years: 36..100).count
 
     gon.rali_years_5_below = @rali_years_5_below
     gon.rali_years_6 = @rali_years_6
@@ -569,7 +593,7 @@ class EmployeesController < ApplicationController
     gon.rali_years_31 = @rali_years_31
     gon.rali_years_36_up = @rali_years_36_up
 
-  @workshops = Employee.current.pluck("workshop").uniq
+  @workshops = employees.pluck("workshop").uniq
     loop_hash_rali_5_below = {}
     hash_rali_5_below = {}
     loop_hash_rali_6 = {}
@@ -597,50 +621,50 @@ class EmployeesController < ApplicationController
     @rali_36_up_bar = []
 
     @workshops.each do |i|
-      emp = Employee.current.where(workshop: i).count
-      a1 = Employee.current.where(workshop: i, rali_years: 0..5).count
+      emp = employees.where(workshop: i).count
+      a1 = employees.where(workshop: i, rali_years: 0..5).count
       a = (a1.to_f)/(emp.to_f)
       loop_hash_rali_5_below = {i => a}
       hash_rali_5_below[i] = loop_hash_rali_5_below[i]
       @rali_5_below_bar << a1
 
-      b1 = Employee.current.where(workshop: i, rali_years: 6..10).count
+      b1 = employees.where(workshop: i, rali_years: 6..10).count
       b = (b1.to_f)/(emp.to_f)
       loop_hash_rali_6 = {i => b}
       hash_rali_6[i] = loop_hash_rali_6[i]
       @rali_6_bar << b1
 
-      c1 = Employee.current.where(workshop: i, rali_years: 11..15).count
+      c1 = employees.where(workshop: i, rali_years: 11..15).count
       c = (c1.to_f)/(emp.to_f)
       loop_hash_rali_11 = {i => c}
       hash_rali_11[i] = loop_hash_rali_11[i]
       @rali_11_bar << c1
 
-      d1 = Employee.current.where(workshop: i, rali_years: 16..20).count
+      d1 = employees.where(workshop: i, rali_years: 16..20).count
       d = (d1.to_f)/(emp.to_f)
       loop_hash_rali_16 = {i => d}
       hash_rali_16[i] = loop_hash_rali_16[i]
       @rali_16_bar << d1
 
-      e1 = Employee.current.where(workshop: i, rali_years: 21..25).count
+      e1 = employees.where(workshop: i, rali_years: 21..25).count
       e = (e1.to_f)/(emp.to_f)
       loop_hash_rali_21 = {i => e}
       hash_rali_21[i] = loop_hash_rali_21[i]
       @rali_21_bar << e1
 
-      f1 = Employee.current.where(workshop: i, rali_years: 26..30).count
+      f1 = employees.where(workshop: i, rali_years: 26..30).count
       f = (f1.to_f)/(emp.to_f)
       loop_hash_rali_26 = {i => f}
       hash_rali_26[i] = loop_hash_rali_26[i]
       @rali_26_bar << f1
 
-      g1 = Employee.current.where(workshop: i, rali_years: 31..35).count
+      g1 = employees.where(workshop: i, rali_years: 31..35).count
       g = (g1.to_f)/(emp.to_f)
       loop_hash_rali_31 = {i => g}
       hash_rali_31[i] = loop_hash_rali_31[i]
       @rali_31_bar << g1
 
-      h1 = Employee.current.where(workshop: i, rali_years: 36..100).count
+      h1 = employees.where(workshop: i, rali_years: 36..100).count
       h = (h1.to_f)/(emp.to_f)
       loop_hash_rali_36_up = {i => h}
       hash_rali_36_up[i] = loop_hash_rali_36_up[i]
