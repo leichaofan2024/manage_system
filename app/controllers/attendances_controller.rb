@@ -146,7 +146,10 @@ layout 'home'
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
-			@employees = Employee.current.where(:workshop => @workshop.id)
+
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop.id)
 			render action: "workshop"
 		elsif params[:type] == "duan"
 			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
@@ -175,9 +178,13 @@ layout 'home'
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
-			@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:group]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:group]).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
 		else
-			@employees = Employee.current.where(:workshop => @workshop)
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop)
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
