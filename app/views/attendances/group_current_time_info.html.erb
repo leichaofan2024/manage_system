@@ -34,7 +34,7 @@
     <%= submit_tag :点击筛选 %>
   <% end %>
 
-  <% if @workshop.present? %>
+  <% if AttendanceStatus.find_by(:workshop_id => @workshop).status.present? %>
     <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
   <% end %>
 
