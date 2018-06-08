@@ -113,12 +113,7 @@
                 </tr> 
               <% end %>
             <% elsif @group.present? %>
-              <% leaving_employees = Employee.transfer_search("#{@year}-#{@month}-01".to_datetime.beginning_of_month, "#{@year}-#{@month}-01".to_datetime.end_of_month) %>
-              <% to_leaving_employees = LeavingEmployee.where(id: leaving_employees["to"]) %>
-              <% from_leaving_employees = LeavingEmployee.where(id: leaving_employees["from"]) %>
-              <% a = to_leaving_employees.where(transfer_to_group: @group).pluck("employee_id") + from_leaving_employees.where(transfer_from_group: @group).pluck("employee_id") %>
-              <% employees = Employee.where(id: a) | Employee.current.where(:group => @group) %>
-              <% employees.each do |employee| %>
+              <% @employees.each do |employee| %>
                 <tr>
                   <td><%= employee.name %></td> 
                   <td><%= employee.sal_number %></td>
