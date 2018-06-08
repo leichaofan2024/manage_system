@@ -21,15 +21,15 @@
     </tr>
   </thead>
    <tbody data-behavior='sortable'>
-    <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
+    <% @employees.each do |employee| %>
       <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-        <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
+        <td><%= employee.sal_number %></td>
         <td><%= employee.job_number %></td>
         <td><%= employee.record_number %></td>
         <td><%= Workshop.find(employee.workshop).name %></td>
         <td><%= Group.find(employee.group).name %></td>
         <td><%= employee.work_type %></td>
-        <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+        <td><%= employee.name %></td>
         <td><%= employee.work_type%></td>
         <td><%= employee.sex %></td>
         <td><%= employee.age %></td>

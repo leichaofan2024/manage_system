@@ -13,11 +13,11 @@
   </thead>
    <tbody data-behavior='sortable'>
     <% if @employees.present? %>
-      <% @employees.__send__ controller.action_name == 'search' ? :each_with_index : :find_each do |employee, hit| %>
+      <% @employees.each do |employee| %>
         <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
           <td><%= employee.info.workshop.name %></td>
           <td><%= employee.info.group.name %></td>
-          <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+          <td><%= employee.name %></td>
           <td><%= employee.sex %></td>
           <td><%= employee.age %></td>
           <td><%= employee.education_background %></td>

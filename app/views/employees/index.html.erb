@@ -116,13 +116,6 @@
       <% end %>
     <% end %>
     <!--- 筛选-结束  -->
-    <!--- 搜索-开始  -->
-    <%= form_tag search_employees_path, method: 'get' do %>
-      <%= label_tag :查询%>
-      <%= text_field_tag :q, params[:q] %>
-      <%= submit_tag :search %>
-    <% end %>
-    <!--- 搜索-结束  -->
 
 
     <!--- 搜索-开始  -->

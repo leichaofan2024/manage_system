@@ -2,9 +2,7 @@ class Employee < ActiveRecord::Base
   # 不同的角色可以对Employee的资源进行不同的操作
   resourcify
 
-  #全局搜索：引入elasticsearch
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+
   has_many :attendances
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
   has_many :attendance_counts
@@ -12,26 +10,7 @@ class Employee < ActiveRecord::Base
 
 
 
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: ['sal_number^10', 'name']
-          }
-        },
-        highlight: {
-          pre_tags: ['<em class="label label-highlight">'],
-          post_tags: ['</em>'],
-          fields: {
-            sal_number:   { number_of_fragments: 0 },
-            name: { fragment_size: 25 }
-          }
-        }
-      }
-    )
-  end
+  
 
   def self.import_table(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)

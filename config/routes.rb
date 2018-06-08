@@ -6,7 +6,6 @@ Rails.application.routes.draw do
       #上传
       post :import_table
       #搜索和筛选
-      get  :search
       get :filter
       #一键更新路径
       post :update_employee_info
