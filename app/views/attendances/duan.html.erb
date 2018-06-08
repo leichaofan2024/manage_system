@@ -89,10 +89,11 @@
             <% if @workshop.present? %>
               <% Group.where(:workshop_id => @workshop).each do |group| %>
                 <tr>
+                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
                   <td><%= group.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
+                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
                       <% if count == 0 %>
                         <td><%= count %></td>
                       <% else %>
