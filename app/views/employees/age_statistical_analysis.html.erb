@@ -6,11 +6,10 @@
   <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>  
   <%= submit_tag :点击筛选 %>
 <% end %>
-
 <div id="sa-main">
  <div id="dashboard">
   <div class="dashboard-toolbar">
-    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析">年龄分析</span>
+    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析"><%= @data_source %>年龄分析</span>
     <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
   </div>
 
