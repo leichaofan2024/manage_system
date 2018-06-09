@@ -4,6 +4,9 @@
       <th>车间</th>
       <th>班组</th>
       <th>姓名</th>
+      <% if (!current_user.has_role? :groupadmin) && (!current_user.has_role? :organsadmin) %>
+        <th>电话号</th>
+      <% end %>
       <th>性别</th>
       <th>年龄</th>
       <th>文化程度</th>
@@ -18,6 +21,9 @@
           <td><%= employee.info.workshop.name %></td>
           <td><%= employee.info.group.name %></td>
           <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+          <% if (!current_user.has_role? :groupadmin) && (!current_user.has_role? :organsadmin) %>
+            <td><%= employee.phone_number %></td>
+          <% end %>
           <td><%= employee.sex %></td>
           <td><%= employee.age %></td>
           <td><%= employee.education_background %></td>
