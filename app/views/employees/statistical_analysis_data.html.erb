@@ -1,15 +1,15 @@
 
 <%= render 'employee_navbar'%>
 <% if params[:age].present? %>
-  <%= link_to "返回", age_statistical_analysis_employees_path %>
+  <%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:education].present? %>
-  <%= link_to "返回", education_statistical_analysis_employees_path %>
+  <%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:working_years].present? %>
-  <%= link_to "返回", working_years_statistical_analysis_employees_path %>
+  <%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:rali_years].present? %>
-  <%= link_to "返回", rali_years_statistical_analysis_employees_path %>
+  <%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:work_type].present? %>
-  <%= link_to "返回", worktype_statistical_analysis_employees_path %>
+  <%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %>
 <% end %>
 <br><br>
 

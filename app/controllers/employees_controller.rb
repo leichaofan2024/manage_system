@@ -691,9 +691,23 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
+          case paramz[:data_source]
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 0..25)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 0..25)
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
+          end
         when "26-30岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 26..30)
+          case paramz[:data_source]
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 26..30)
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 26..30)
+          end
         when "31-35岁"
           @employees = Employee.current.where(workshop: params[:workshop], age: 31..35)
         when "36-40岁"
