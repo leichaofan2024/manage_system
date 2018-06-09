@@ -691,15 +691,13 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          if params[:data_source].present?
-            case params[:data_source]
-            when "全员"
-              @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
-            when "干部"
-              @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 0..25)
-            when "工人"
-              @employees = Employee.current.worker.where(workshop: params[:workshop], age: 0..25)
-            end
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 0..25)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 0..25)
           end
         when "26-30岁"
           case params[:data_source]
@@ -767,48 +765,174 @@ class EmployeesController < ApplicationController
         end
       #学历分析条形图
       elsif params[:education].present?
-        @employees = Employee.current.where(workshop: params[:workshop], education_background: params[:education])
+        case params[:data_source]
+        when "全员"
+          @employees = Employee.current.where(workshop: params[:workshop], education_background: params[:education])
+        when "干部"
+          @employees = Employee.current.cadre.where(workshop: params[:workshop], education_background: params[:education])
+        when "工人"
+          @employees = Employee.current.worker.where(workshop: params[:workshop], education_background: params[:education])
+        end
       #工龄分析条形图
       elsif params[:working_years].present?
         case params[:working_years]
         when "5年以下"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 0..5)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 0..5)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 0..5)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 0..5)
+          end
         when "6-10年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 6..10)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 6..10)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 6..10)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 6..10)
+          end
         when "11-15年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 11..15)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 11..15)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 11..15)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 11..15)
+          end
         when "16-20年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 16..20)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 16..20)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 16..20)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 16..20)
+          end
         when "21-25年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 21..25)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 21..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 21..25)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 21..25)
+          end
         when "26-30年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 26..30)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 26..30)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 26..30)
+          end
         when "31-35年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 31..35)
+          end
         when "36-40年"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 36..40)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 36..40)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 36..40)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 36..40)
+          end
         when "41年以上"
-          @employees = Employee.current.where(workshop: params[:workshop], working_years: 41..100)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], working_years: 41..100)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], working_years: 41..100)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], working_years: 41..100)
+          end
         end
       #路龄分析条形图
       elsif params[:rali_years].present?
         case params[:rali_years]
         when "5年以下"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 0..5)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 0..5)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 0..5)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 0..5)
+          end
         when "6-10年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 6..10)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 6..10)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 6..10)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 6..10)
+          end
         when "11-15年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 11..15)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 11..15)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 11..15)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 11..15)
+          end
         when "16-20年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 16..20)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 16..20)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 16..20)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 16..20)
+          end
         when "21-25年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 21..25)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 21..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 21..25)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 21..25)
+          end
         when "26-30年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 26..30)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 26..30)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 26..30)
+          end
         when "31-35年"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 31..35)
+          end
         when "36年以上"
-          @employees = Employee.current.where(workshop: params[:workshop], rali_years: 36..100)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], rali_years: 36..100)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], rali_years: 36..100)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], rali_years: 36..100)
+          end
         end
       elsif params[:work_type].present?
         a = params[:work_type].to_s.gsub(/\p{Han}+/u).first
@@ -898,48 +1022,174 @@ class EmployeesController < ApplicationController
         end
       #学历分析饼图
       elsif params[:education].present?
-        @employees = Employee.current.where(education_background: params[:education])
+        case params[:data_source]
+        when "全员"
+          @employees = Employee.current.where(education_background: params[:education])
+        when "干部"
+          @employees = Employee.current.cadre.where(education_background: params[:education])
+        when "工人"
+          @employees = Employee.current.worker.where(education_background: params[:education])
+        end
       #工龄分析饼图
       elsif params[:working_years].present?
         case params[:working_years]
         when "5年以下"
-          @employees = Employee.current.where(working_years: 0..5)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 0..5)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 0..5)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 0..5)
+          end
         when "6-10年"
-          @employees = Employee.current.where(working_years: 6..10)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 6..10)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 6..10)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 6..10)
+          end
         when "11-15年"
-          @employees = Employee.current.where(working_years: 11..15)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 11..15)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 11..15)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 11..15)
+          end
         when "16-20年"
-          @employees = Employee.current.where(working_years: 16..20)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 16..20)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 16..20)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 16..20)
+          end
         when "21-25年"
-          @employees = Employee.current.where(working_years: 21..25)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 21..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 21..25)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 21..25)
+          end
         when "26-30年"
-          @employees = Employee.current.where(working_years: 26..30)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 26..30)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 26..30)
+          end
         when "31-35年"
-          @employees = Employee.current.where(working_years: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 31..35)
+          end
         when "36-40年"
-          @employees = Employee.current.where(working_years: 36..40)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 36..40)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 36..40)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 36..40)
+          end
         when "41年以上"
-          @employees = Employee.current.where(working_years: 41.100)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(working_years: 41..100)
+          when "干部"
+            @employees = Employee.current.cadre.where(working_years: 41..100)
+          when "工人"
+            @employees = Employee.current.worker.where(working_years: 41..100)
+          end
         end
       #路龄分析饼图
       elsif params[:rali_years].present?
         case params[:rali_years]
         when "5年以下"
-          @employees = Employee.current.where(rali_years: 0..5)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 0..5)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 0..5)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 0..5)
+          end
         when "6-10年"
-          @employees = Employee.current.where(rali_years: 6..10)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 6..10)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 6..10)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 6..10)
+          end
         when "11-15年"
-          @employees = Employee.current.where(rali_years: 11..15)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 11..15)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 11..15)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 11..15)
+          end
         when "16-20年"
-          @employees = Employee.current.where(rali_years: 16..20)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 16..20)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 16..20)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 16..20)
+          end
         when "21-25年"
-          @employees = Employee.current.where(rali_years: 21..25)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 21..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 21..25)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 21..25)
+          end
         when "26-30年"
-          @employees = Employee.current.where(rali_years: 26..30)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 26..30)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 26..30)
+          end
         when "31-35年"
-          @employees = Employee.current.where(rali_years: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 31..35)
+          end
         when "36年以上"
-          @employees = Employee.current.where(rali_years: 36..100)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(rali_years: 36..100)
+          when "干部"
+            @employees = Employee.current.cadre.where(rali_years: 36..100)
+          when "工人"
+            @employees = Employee.current.worker.where(rali_years: 36..100)
+          end
         end
       elsif params[:work_type].present?
         a = params[:work_type].gsub(/\p{Han}+/u).first

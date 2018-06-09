@@ -66,35 +66,35 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=5年以下">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=5年以下&data_source=<%= @data_source %>">
                         <th>5年以下</th>
                         <td><%= @rali_years_5_below %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=6-10年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=6-10年&data_source=<%= @data_source %>">
                         <th>6-10年</th>
                         <td><%= @rali_years_6 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=11-15年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=11-15年&data_source=<%= @data_source %>">
                         <th>11-15年</th>
                         <td><%= @rali_years_11 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=16-20年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=16-20年&data_source=<%= @data_source %>">
                         <th>16-20年</th>
                         <td><%= @rali_years_16 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=21-25年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=21-25年&data_source=<%= @data_source %>">
                         <th>21-25年</th>
                         <td><%= @rali_years_21 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=26-30年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=26-30年&data_source=<%= @data_source %>">
                         <th>26-30年</th>
                         <td><%= @rali_years_26 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=31-35年">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=31-35年&data_source=<%= @data_source %>">
                         <th>31-35年</th>
                         <td><%= @rali_years_31 %></td>
                       </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=36年以上">
+                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=36年以上&data_source=<%= @data_source %>">
                         <th>36年以上</th>
                         <td><%= @rali_years_36_up %></td>
                       </tr>
@@ -166,7 +166,7 @@
                           <td>5年以下</td>
                           <% n = 0 %>
                           <% @rali_5_below_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "5年以下", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "5年以下", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+ 1%>
                           <% end %>
                         </tr>
@@ -174,7 +174,7 @@
                           <td>6-10年</td>
                           <% n = 0 %>
                           <% @rali_6_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "6-10年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "6-10年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -182,7 +182,7 @@
                           <td>11-15年</td>
                           <% n = 0 %>
                           <% @rali_11_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "11-15年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "11-15年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -190,7 +190,7 @@
                           <td>16-20年</td>
                           <% n = 0 %>
                           <% @rali_16_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "16-20年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "16-20年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -198,7 +198,7 @@
                           <td>21-25年</td>
                           <% n = 0 %>
                           <% @rali_21_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "21-25年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "21-25年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -206,7 +206,7 @@
                           <td>26-30年</td>
                           <% n = 0 %>
                           <% @rali_26_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "26-30年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "26-30年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -214,7 +214,7 @@
                           <td>31-35年</td>
                           <% n = 0 %>
                           <% @rali_31_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "31-35年", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "31-35年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>
@@ -222,7 +222,7 @@
                           <td>36年以上</td>
                           <% n = 0 %>
                           <% @rali_36_up_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "36年以上", workshop: @workshops[n]), style: "color: black" %></td>
+                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "36年以上", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                             <% n = n+1 %>
                           <% end %>
                         </tr>

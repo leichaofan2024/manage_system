@@ -65,35 +65,35 @@
                      </tr>
                    </thead>
                    <tbody>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=小学">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=小学&data_source=<%= @data_source %>">
                        <th>小学</th>
                        <td><%= @primary_school %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=初中">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=初中&data_source=<%= @data_source %>">
                        <th>初中</th>
                        <td><%= @junior_high_school %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=高中">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=高中&data_source=<%= @data_source %>">
                        <th>高中</th>
                        <td><%= @senior_high_school %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=技校">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=技校&data_source=<%= @data_source %>">
                        <th>技校</th>
                        <td><%= @technical_school %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=中专">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=中专&data_source=<%= @data_source %>">
                        <th>中专</th>
                        <td><%= @secondary_school %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学专科">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学专科&data_source=<%= @data_source %>">
                        <th>大学专科</th>
                        <td><%= @university_specialties %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学本科">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=大学本科&data_source=<%= @data_source %>">
                        <th>大学本科</th>
                        <td><%= @undergraduate %></td>
                      </tr>
-                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=研究生">
+                     <tr class="row-click-able" data-url="/employees/statistical_analysis_data?education=研究生&data_source=<%= @data_source %>">
                        <th>研究生</th>
                        <td><%= @postgraduate %></td>
                      </tr>
@@ -165,7 +165,7 @@
                          <td>小学</td>
                          <% n = 0 %>
                          <% @primary_school_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "小学", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "小学", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+ 1%>
                          <% end %>
                        </tr>
@@ -173,7 +173,7 @@
                          <td>初中</td>
                          <% n = 0 %>
                          <% @junior_high_school_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "初中", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "初中", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -181,7 +181,7 @@
                          <td>高中</td>
                          <% n = 0 %>
                          <% @senior_high_school_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "高中", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "高中", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -189,7 +189,7 @@
                          <td>技校</td>
                          <% n = 0 %>
                          <% @technical_school_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "技校", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "技校", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -197,7 +197,7 @@
                          <td>中专</td>
                          <% n = 0 %>
                          <% @secondary_school_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "中专", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "中专", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -205,7 +205,7 @@
                          <td>大学专科</td>
                          <% n = 0 %>
                          <% @university_specialties_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学专科", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学专科", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -213,7 +213,7 @@
                          <td>大学本科</td>
                          <% n = 0 %>
                          <% @undergraduate_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学本科", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "大学本科", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
@@ -221,7 +221,7 @@
                          <td>研究生</td>
                          <% n = 0 %>
                          <% @postgraduate_bar.each do |i| %>
-                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "研究生", workshop: @workshops[n]), style: "color: black" %></td>
+                           <td><%= link_to i, statistical_analysis_data_employees_path(:education => "研究生", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
                            <% n = n+1 %>
                          <% end %>
                        </tr>
