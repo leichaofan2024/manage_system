@@ -3,6 +3,7 @@ class EmployeesController < ApplicationController
 
   def index
     #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
+    @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
     elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
@@ -19,10 +20,13 @@ class EmployeesController < ApplicationController
       @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).page(params[:page])
     end
     #下载表格配置
-    @export_employees = Employee.current.order("id ASC")
+    if params[:employees] == "全部"
+      @export_employees = Employee.all
+    else
+      @export_employees = Employee.where(id: params[:employees])
+    end
     respond_to do |format|
       format.html
-      format.csv { send_data @employees.to_csv }
       format.xls 
     end
   end
@@ -73,13 +77,14 @@ class EmployeesController < ApplicationController
   end
 
   def filter
+    @filter_type = params[:filter_type]
     case params[:filter_type]
     when "年龄"
-      @employees = Employee.current.where(age: params[:start_time]..params[:end_time])
+      @employees = Employee.current.where(age: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
     when "工龄"
-      @employees = Employee.current.where(working_years: params[:start_time]..params[:end_time])
+      @employees = Employee.current.where(working_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
     when "路龄"
-      @employees = Employee.current.where(rali_years: params[:start_time]..params[:end_time])
+      @employees = Employee.current.where(rali_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
     end
     render action: "index"
   end
@@ -950,85 +955,85 @@ class EmployeesController < ApplicationController
         when "25岁以下"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 0..25)
+            @employees = Employee.current.where(age: 0..25).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 0..25)
+            @employees = Employee.current.cadre.where(age: 0..25).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 0..25)
+            @employees = Employee.current.worker.where(age: 0..25).page(params[:page]).per(20)
           end
         when "26-30岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 26..30)
+            @employees = Employee.current.where(age: 26..30).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 26..30)
+            @employees = Employee.current.cadre.where(age: 26..30).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 26..30)
+            @employees = Employee.current.worker.where(age: 26..30).page(params[:page]).per(20)
           end
         when "31-35岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 31..35)
+            @employees = Employee.current.where(age: 31..35).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 31..35)
+            @employees = Employee.current.cadre.where(age: 31..35).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 31..35)
+            @employees = Employee.current.worker.where(age: 31..35).page(params[:page]).per(20)
           end
         when "36-40岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 36..40)
+            @employees = Employee.current.where(age: 36..40).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 36..40)
+            @employees = Employee.current.cadre.where(age: 36..40).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 36..40)
+            @employees = Employee.current.worker.where(age: 36..40).page(params[:page]).per(20)
           end
         when "41-45岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 41..45)
+            @employees = Employee.current.where(age: 41..45).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 41..45)
+            @employees = Employee.current.cadre.where(age: 41..45).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 41..45)
+            @employees = Employee.current.worker.where(age: 41..45).page(params[:page]).per(20)
           end
         when "46-50岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 46..50)
+            @employees = Employee.current.where(age: 46..50).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 46..50)
+            @employees = Employee.current.cadre.where(age: 46..50).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 46..50)
+            @employees = Employee.current.worker.where(age: 46..50).page(params[:page]).per(20)
           end
         when "51-55岁"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 51..55)
+            @employees = Employee.current.where(age: 51..55).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 51..55)
+            @employees = Employee.current.cadre.where(age: 51..55).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 51..55)
+            @employees = Employee.current.worker.where(age: 51..55).page(params[:page]).per(20)
           end
         when "56岁以上"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(age: 56..100)
+            @employees = Employee.current.where(age: 56..100).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(age: 56..100)
+            @employees = Employee.current.cadre.where(age: 56..100).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(age: 56..100)
+            @employees = Employee.current.worker.where(age: 56..100).page(params[:page]).per(20)
           end
         end
       #学历分析饼图
       elsif params[:education].present?
         case params[:data_source]
         when "全员"
-          @employees = Employee.current.where(education_background: params[:education])
+          @employees = Employee.current.where(education_background: params[:education]).page(params[:page]).per(20)
         when "干部"
-          @employees = Employee.current.cadre.where(education_background: params[:education])
+          @employees = Employee.current.cadre.where(education_background: params[:education]).page(params[:page]).per(20)
         when "工人"
-          @employees = Employee.current.worker.where(education_background: params[:education])
+          @employees = Employee.current.worker.where(education_background: params[:education]).page(params[:page]).per(20)
         end
       #工龄分析饼图
       elsif params[:working_years].present?
@@ -1036,83 +1041,83 @@ class EmployeesController < ApplicationController
         when "5年以下"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 0..5)
+            @employees = Employee.current.where(working_years: 0..5).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 0..5)
+            @employees = Employee.current.cadre.where(working_years: 0..5).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 0..5)
+            @employees = Employee.current.worker.where(working_years: 0..5).page(params[:page]).per(20)
           end
         when "6-10年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 6..10)
+            @employees = Employee.current.where(working_years: 6..10).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 6..10)
+            @employees = Employee.current.cadre.where(working_years: 6..10).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 6..10)
+            @employees = Employee.current.worker.where(working_years: 6..10).page(params[:page]).per(20)
           end
         when "11-15年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 11..15)
+            @employees = Employee.current.where(working_years: 11..15).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 11..15)
+            @employees = Employee.current.cadre.where(working_years: 11..15).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 11..15)
+            @employees = Employee.current.worker.where(working_years: 11..15).page(params[:page]).per(20)
           end
         when "16-20年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 16..20)
+            @employees = Employee.current.where(working_years: 16..20).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 16..20)
+            @employees = Employee.current.cadre.where(working_years: 16..20).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 16..20)
+            @employees = Employee.current.worker.where(working_years: 16..20).page(params[:page]).per(20)
           end
         when "21-25年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 21..25)
+            @employees = Employee.current.where(working_years: 21..25).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 21..25)
+            @employees = Employee.current.cadre.where(working_years: 21..25).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 21..25)
+            @employees = Employee.current.worker.where(working_years: 21..25).page(params[:page]).per(20)
           end
         when "26-30年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 26..30)
+            @employees = Employee.current.where(working_years: 26..30).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 26..30)
+            @employees = Employee.current.cadre.where(working_years: 26..30).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 26..30)
+            @employees = Employee.current.worker.where(working_years: 26..30).page(params[:page]).per(20)
           end
         when "31-35年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 31..35)
+            @employees = Employee.current.where(working_years: 31..35).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 31..35)
+            @employees = Employee.current.cadre.where(working_years: 31..35).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 31..35)
+            @employees = Employee.current.worker.where(working_years: 31..35).page(params[:page]).per(20)
           end
         when "36-40年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 36..40)
+            @employees = Employee.current.where(working_years: 36..40).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 36..40)
+            @employees = Employee.current.cadre.where(working_years: 36..40).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 36..40)
+            @employees = Employee.current.worker.where(working_years: 36..40).page(params[:page]).per(20)
           end
         when "41年以上"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(working_years: 41..100)
+            @employees = Employee.current.where(working_years: 41..100).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(working_years: 41..100)
+            @employees = Employee.current.cadre.where(working_years: 41..100).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(working_years: 41..100)
+            @employees = Employee.current.worker.where(working_years: 41..100).page(params[:page]).per(20)
           end
         end
       #路龄分析饼图
@@ -1121,90 +1126,97 @@ class EmployeesController < ApplicationController
         when "5年以下"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 0..5)
+            @employees = Employee.current.where(rali_years: 0..5).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 0..5)
+            @employees = Employee.current.cadre.where(rali_years: 0..5).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 0..5)
+            @employees = Employee.current.worker.where(rali_years: 0..5).page(params[:page]).per(20)
           end
         when "6-10年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 6..10)
+            @employees = Employee.current.where(rali_years: 6..10).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 6..10)
+            @employees = Employee.current.cadre.where(rali_years: 6..10).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 6..10)
+            @employees = Employee.current.worker.where(rali_years: 6..10).page(params[:page]).per(20)
           end
         when "11-15年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 11..15)
+            @employees = Employee.current.where(rali_years: 11..15).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 11..15)
+            @employees = Employee.current.cadre.where(rali_years: 11..15).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 11..15)
+            @employees = Employee.current.worker.where(rali_years: 11..15).page(params[:page]).per(20)
           end
         when "16-20年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 16..20)
+            @employees = Employee.current.where(rali_years: 16..20).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 16..20)
+            @employees = Employee.current.cadre.where(rali_years: 16..20).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 16..20)
+            @employees = Employee.current.worker.where(rali_years: 16..20).page(params[:page]).per(20)
           end
         when "21-25年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 21..25)
+            @employees = Employee.current.where(rali_years: 21..25).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 21..25)
+            @employees = Employee.current.cadre.where(rali_years: 21..25).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 21..25)
+            @employees = Employee.current.worker.where(rali_years: 21..25).page(params[:page]).per(20)
           end
         when "26-30年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 26..30)
+            @employees = Employee.current.where(rali_years: 26..30).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 26..30)
+            @employees = Employee.current.cadre.where(rali_years: 26..30).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 26..30)
+            @employees = Employee.current.worker.where(rali_years: 26..30).page(params[:page]).per(20)
           end
         when "31-35年"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 31..35)
+            @employees = Employee.current.where(rali_years: 31..35).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 31..35)
+            @employees = Employee.current.cadre.where(rali_years: 31..35).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 31..35)
+            @employees = Employee.current.worker.where(rali_years: 31..35).page(params[:page]).per(20)
           end
         when "36年以上"
           case params[:data_source]
           when "全员"
-            @employees = Employee.current.where(rali_years: 36..100)
+            @employees = Employee.current.where(rali_years: 36..100).page(params[:page]).per(20)
           when "干部"
-            @employees = Employee.current.cadre.where(rali_years: 36..100)
+            @employees = Employee.current.cadre.where(rali_years: 36..100).page(params[:page]).per(20)
           when "工人"
-            @employees = Employee.current.worker.where(rali_years: 36..100)
+            @employees = Employee.current.worker.where(rali_years: 36..100).page(params[:page]).per(20)
           end
         end
       elsif params[:work_type].present?
         a = params[:work_type].gsub(/\p{Han}+/u).first
         if a != "技师"
-          @employees = Employee.current.where("work_type LIKE ?", ['%', "#{a}", '%'].join)
+          @employees = Employee.current.where("work_type LIKE ?", ['%', "#{a}", '%'].join).page(params[:page]).per(20)
         else
-          @employees = Employee.current.where(:work_type => params[:work_type])
+          @employees = Employee.current.where(:work_type => params[:work_type]).page(params[:page]).per(20)
         end
       end
+    end
+    @export_employees = Employee.where(id: params[:employees])
+    respond_to do |format|
+      format.html
+      format.xls 
     end
   end
 ###点击图表详情页面数据配置---结束
 
 ###组织架构页面数据配置
   def organization_structure
+    @workshop = params[:workshop]
+    @group = params[:group]
     @workshops = Workshop.all
     if params[:workshop].present?
       @employees = Employee.current.where(workshop: params[:workshop]).page(params[:page]).per(16)
@@ -1212,6 +1224,15 @@ class EmployeesController < ApplicationController
       @employees = Employee.current.where(group: params[:group]).page(params[:page]).per(16)
     else
       @employees = Employee.current.order('id ASC').page(params[:page]).per(16)
+    end
+    if params[:employees] == "全部"
+      @export_employees = Employee.all
+    else
+      @export_employees = Employee.where(id: params[:employees])
+    end
+    respond_to do |format|
+      format.html
+      format.xls 
     end
   end
 

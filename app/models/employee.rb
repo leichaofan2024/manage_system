@@ -26,7 +26,7 @@ class Employee < ActiveRecord::Base
       q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       if m.present?
         b["to"] << m.id
-      elsif n.nil?
+      elsif n.nil? 
         b["to"] << q.id
       elsif q.nil?
         b["from"] << n.id
