@@ -14,6 +14,9 @@
 <br><br>
 
 <h4> 
+  <% if params[:data_source].present? %>
+    数据来源：<%= params[:data_source] %>&nbsp &nbsp &nbsp
+  <% end %>
   <% if params[:workshop].present? %>
     车间：<%= Workshop.find(params[:workshop]).name %> &nbsp &nbsp &nbsp
     <% if params[:age].present? %>

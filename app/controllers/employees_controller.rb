@@ -691,35 +691,79 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          case paramz[:data_source]
-          when "干部"
-            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 0..25)
-          when "工人"
-            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 0..25)
-          when "全员"
-            @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
+          if params[:data_source].present?
+            case params[:data_source]
+            when "全员"
+              @employees = Employee.current.where(workshop: params[:workshop], age: 0..25)
+            when "干部"
+              @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 0..25)
+            when "工人"
+              @employees = Employee.current.worker.where(workshop: params[:workshop], age: 0..25)
+            end
           end
         when "26-30岁"
-          case paramz[:data_source]
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 26..30)
           when "干部"
             @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 26..30)
           when "工人"
             @employees = Employee.current.worker.where(workshop: params[:workshop], age: 26..30)
-          when "全员"
-            @employees = Employee.current.where(workshop: params[:workshop], age: 26..30)
           end
         when "31-35岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 31..35)
+          end
         when "36-40岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 36..40)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 36..40)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 36..40)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 36..40)
+          end
         when "41-45岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 41..45)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 41..45)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 41..45)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 41..45)
+          end
         when "46-50岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 46..50)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 46..50)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 46..50)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 46..50)
+          end
         when "51-55岁"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 51..55)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 51..55)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 51..55)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 51..55)
+          end
         when "56岁以上"
-          @employees = Employee.current.where(workshop: params[:workshop], age: 56..60)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(workshop: params[:workshop], age: 56..60)
+          when "干部"
+            @employees = Employee.current.cadre.where(workshop: params[:workshop], age: 56..60)
+          when "工人"
+            @employees = Employee.current.worker.where(workshop: params[:workshop], age: 56..60)
+          end
         end
       #学历分析条形图
       elsif params[:education].present?
@@ -780,22 +824,77 @@ class EmployeesController < ApplicationController
       if params[:age].present?
         case params[:age]
         when "25岁以下"
-          @employees = Employee.current.where(age: 0..25)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 0..25)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 0..25)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 0..25)
+          end
         when "26-30岁"
-          @employees = Employee.current.where(age: 26..30)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 26..30)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 26..30)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 26..30)
+          end
         when "31-35岁"
-          @employees = Employee.current.where(age: 31..35)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 31..35)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 31..35)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 31..35)
+          end
         when "36-40岁"
-          @employees = Employee.current.where(age: 36..40)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 36..40)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 36..40)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 36..40)
+          end
         when "41-45岁"
-          @employees = Employee.current.where(age: 41..45)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 41..45)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 41..45)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 41..45)
+          end
         when "46-50岁"
-          @employees = Employee.current.where(age: 46..50)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 46..50)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 46..50)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 46..50)
+          end
         when "51-55岁"
-          @employees = Employee.current.where(age: 51..55)
-
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 51..55)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 51..55)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 51..55)
+          end
         when "56岁以上"
-          @employees = Employee.current.where(age: 56..100)
+          case params[:data_source]
+          when "全员"
+            @employees = Employee.current.where(age: 56..100)
+          when "干部"
+            @employees = Employee.current.cadre.where(age: 56..100)
+          when "工人"
+            @employees = Employee.current.worker.where(age: 56..100)
+          end
         end
       #学历分析饼图
       elsif params[:education].present?
