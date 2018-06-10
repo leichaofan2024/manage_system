@@ -8,13 +8,11 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.current.where(:group => group.id)
-			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		elsif current_user.has_role? :organsadmin
-			group = Group.find_by(:name => current_user.name)
-			@employees = Employee.current.where(:group => group.id)
-			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+			group = Group.find_by(:name => current_user.name)	
 		end
+		@employees = Employee.current.where(:group => group.id)
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 
 		# 导出考勤表
 		respond_to do |format|
@@ -140,12 +138,18 @@ layout 'home'
 		if params[:type] == "group"
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.current.where(:group => group.id)
+
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
-			@employees = Employee.current.where(:workshop => @workshop.id)
+
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop.id)
 			render action: "workshop"
 		elsif params[:type] == "duan"
 			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
@@ -174,9 +178,13 @@ layout 'home'
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
 		if params[:group].present?
-			@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:group]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:group]).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
 		else
-			@employees = Employee.current.where(:workshop => @workshop)
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop)
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示

@@ -1,19 +1,22 @@
 
 <%= render 'employee_navbar'%>
 <% if params[:age].present? %>
-  <%= link_to "返回", age_statistical_analysis_employees_path %>
+  <%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:education].present? %>
-  <%= link_to "返回", education_statistical_analysis_employees_path %>
+  <%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:working_years].present? %>
-  <%= link_to "返回", working_years_statistical_analysis_employees_path %>
+  <%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:rali_years].present? %>
-  <%= link_to "返回", rali_years_statistical_analysis_employees_path %>
+  <%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %>
 <% elsif params[:work_type].present? %>
-  <%= link_to "返回", worktype_statistical_analysis_employees_path %>
+  <%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %>
 <% end %>
 <br><br>
 
 <h4> 
+  <% if params[:data_source].present? %>
+    数据来源：<%= params[:data_source] %>&nbsp &nbsp &nbsp 
+  <% end %>
   <% if params[:workshop].present? %>
     车间：<%= Workshop.find(params[:workshop]).name %> &nbsp &nbsp &nbsp
     <% if params[:age].present? %>
@@ -38,12 +41,29 @@
       路龄：<%= params[:rali_years] %>&nbsp &nbsp &nbsp
     <% end %>
   <% end %>
-  人数： <%= @employees.count %>人
+  人数： <%= @employees.total_count %>人
 </h4>
+<!-- 通过@employees的总页数，找出所有的id-开始 -->
+<% pages = @employees.total_pages %>
+<% employee_ids = @employees.page(1).per(20).pluck("id") %>
+<% (2..pages).each do |i| %>
+  <% employee_ids += @employees.page(i).per(20).pluck("id") %>
+<% end %>
+<!-- 通过@employees的总页数，找出所有的id-结束 -->
+<% if can? :import, Employee%>
+  <div class="ivu-tooltip-rel">
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+      <%= link_to statistical_analysis_data_employees_path(format: "xls", employees: employee_ids) do %>
+         <span style="color: #269Eff;">导出表格</span>
+      <% end %>
+    </button>
+  </div>
+<% end %>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
   <table class="table table-bordered">
     <thead>
       <tr>
+        <th>级别</th>
         <th>工资号</th>
         <th>工号</th>
         <th>档案号</th>
@@ -64,6 +84,7 @@
         <tbody>
           <% @employees.each do |employee| %>
             <tr>
+              <td><%= employee.grade %></td>
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
@@ -85,6 +106,9 @@
   </table>
 </div>
 
+<div class="text-center">
+  <%= paginate @employees %>
+</div>
 
 
 

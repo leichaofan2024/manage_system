@@ -9,9 +9,11 @@ class Employee < ActiveRecord::Base
   has_many :annual_holidays
   has_one :leaving_employee
 
-  scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
-  scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id")) }
-  scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id") ) }
+  scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+  scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+  scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id"))}
+  scope :worker, -> { where(grade: nil)}
+  scope :cadre, -> {where.not(grade: nil)}
 
   def self.transfer_search(start_time, end_time)
     b = {"to" => [], "from" => []}
@@ -22,7 +24,7 @@ class Employee < ActiveRecord::Base
       q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       if m.present?
         b["to"] << m.id
-      elsif n.nil?
+      elsif n.nil? 
         b["to"] << q.id
       elsif q.nil?
         b["from"] << n.id

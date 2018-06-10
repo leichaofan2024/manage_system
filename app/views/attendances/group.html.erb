@@ -56,7 +56,7 @@
       </thead>
         <tbody data-behavior='sortable'>
         <!-- 配置表格数据-开始 -->
-          <% @employees.each do |employee| %>
+          <% @employees.each do |employee| %> 
             <!-- 声明后面需要用到的hash -->
             <% attendance_hash = {} %>
             <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
@@ -84,8 +84,8 @@
                   <% end %>
                     <% if time_range === day_number %>
                       <td>
-                        <% if @year.present? && @month.present? %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                        <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
                             <% if day_attendance == "x" %>
                               <%= day_number %>
                             <% else %>
@@ -96,18 +96,16 @@
                               <% end %>
                             <% end %>
                           <% end %>
-                        <% else %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true,  "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                             <% if day_attendance == "x" %>
-                               <div class="btn btn-primary" style="background: white; color: black;">
-                                 <%= "-" %>
-                               </div>
+                        <% else %> 
+                          <% if day_attendance == "x" %>
+                             <div class="btn btn-primary" style="background: white; color: black;">
+                               <%= "-" %>
+                             </div>
+                          <% else %>
+                           <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
+                              <%= "" %>
                             <% else %>
-                             <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
-                                <%= "" %>
-                              <% else %>
-                                <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                              <% end %>
+                              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                             <% end %>
                           <% end %>
                         <% end %>
