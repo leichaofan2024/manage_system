@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20180609113503) do
 
-  create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "workshop_id"
     t.integer "work_type", comment: "工种"
     t.integer "last_year_people_number", comment: "上年末单位人数"
@@ -51,13 +51,13 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.string "status"
   end
 
-  create_table "annual_holiday_work_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "annual_holiday_work_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "work_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "annual_holidays", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "annual_holidays", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id"
     t.integer "holiday_days"
     t.datetime "created_at", null: false
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.integer "year"
   end
 
-  create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "status", null: false
     t.integer "group_id", null: false
     t.integer "year", null: false
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "attendance_counts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "attendance_counts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id", null: false
     t.string "vacation_code", null: false
     t.integer "count", default: 0, null: false
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.integer "workshop_id"
   end
 
-  create_table "attendance_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "attendance_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "edit_before", null: false
     t.string "edit_after", null: false
     t.integer "attendance_id", null: false
@@ -101,14 +101,14 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "attendance_settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "attendance_settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "vacation"
     t.integer "count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "attendance_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "year"
     t.integer "month"
     t.integer "workshop_id"
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.integer "group_id"
   end
 
-  create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "attendances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "month_attendances", default: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -128,10 +128,9 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.integer "group_id"
   end
 
-  create_table "emp_basic_infos", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", comment: "员工基本信息表" do |t|
-    t.integer "emp_id", comment: "唯一标识"
-    t.string "sal_number", comment: "工资号"
-    t.string "workshop_id"
+  create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
+    t.integer "sal_number", comment: "工资号"
+    t.integer "workshop_id"
     t.string "group_id"
     t.string "name", comment: "姓名"
     t.string "job_number", comment: "工号"
@@ -145,13 +144,13 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.index ["employee_id"], name: "index_emp_basic_infos_on_employee_id", unique: true
   end
 
-  create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
-    t.string "sal_number", default: "", comment: "工资号"
+  create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "sal_number", default: "", collation: "utf8mb4_bin", comment: "工资号"
     t.string "job_number", comment: "工号"
     t.string "record_number", comment: "档案号"
     t.string "workshop"
     t.string "group"
-    t.string "name"
+    t.string "name", null: false
     t.string "sex"
     t.string "birth_date"
     t.integer "birth_year"
@@ -177,7 +176,6 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.string "people_source", comment: "人员来源"
     t.string "people_category", comment: "人员分类"
     t.string "education_background", comment: "文化程度"
-    t.string "graduation_time", comment: "毕业时间"
     t.string "graduation_school", comment: "毕业院校"
     t.string "school_sort", comment: "学校类别"
     t.string "major"
@@ -211,13 +209,15 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.float "comment_data", limit: 24, comment: "备用数据"
     t.string "TBZ"
     t.string "PY"
-    t.string "company_name", default: "北京供电段", comment: "单位名称"
+    t.string "company_name", default: "北京供电段", null: false, comment: "单位名称"
     t.string "CJBZPX"
     t.string "family"
     t.integer "J01BF"
     t.string "duting", comment: "职务化"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "graduation_time"
+    t.integer "position"
     t.integer "working_years", comment: "工作时长"
     t.integer "rali_years", comment: "入路时长"
     t.string "group_category", comment: "班组类别"
@@ -228,14 +228,14 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.string "phone_number"
   end
 
-  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "name"
     t.integer "workshop_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "holiday_start_times", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "holiday_start_times", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "sal_number"
     t.string "name"
     t.string "vacation"
@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "leaving_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "leaving_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id"
     t.text "cause"
     t.datetime "created_at", null: false
@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.integer "transfer_to_group"
   end
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "message_type"
     t.text "message"
     t.integer "user_id"
@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.datetime "remind_time"
   end
 
-  create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "name"
     t.string "resource_type"
     t.bigint "resource_id"
@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "email", default: "1", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "users_roles", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "users_roles", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "user_id"
     t.bigint "role_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"
@@ -303,15 +303,15 @@ ActiveRecord::Schema.define(version: 20180609113503) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
-  create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "vacation_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "vacation_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "vacation_shortening", null: false, comment: "假期简称"
-    t.string "vacation_code", null: false, comment: "假期代码"
+    t.string "vacation_shortening", comment: "假期简称"
+    t.string "vacation_code", comment: "假期代码"
   end
 
-  create_table "workshops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+  create_table "workshops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
