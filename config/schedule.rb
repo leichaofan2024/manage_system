@@ -20,7 +20,6 @@
 # Learn more: http://github.com/javan/whenever
 
 set :output, 'log/cron.log' #設定log的路徑
-
 every 1.minutes, roles: [:app] do
-    runner "Workshop.create_workshop"
+    runner "Message.retirement_remind"
 end
