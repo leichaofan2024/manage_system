@@ -18,9 +18,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-set :environment, :development
+
 set :output, 'log/cron.log' #設定log的路徑
 
-every 1.minutes do
-    rake "remind:retirement_remind"
+every 1.minutes, roles: [:app] do
+    runner "Workshop.create_workshop"
 end
