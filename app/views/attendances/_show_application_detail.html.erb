@@ -8,7 +8,7 @@
       <div class="modal-body">
         <% application = Application.find(params[:application]) %>
         <h5>申请内容：</h5>
-        <h5>申请修改<%= Employee.find(application.employee_id).name %>在<%= application.year %>年<%= application.month %>月<%= application.day %>日的考勤</h5>
+        <h5>申请修改<%= Employee.current.find(application.employee_id).name %>在<%= application.year %>年<%= application.month %>月<%= application.day %>日的考勤</h5>
         <h5>申请状态：</h5>
         <h5><%= application.status %></h5>
         <h5>申请人：</h5>

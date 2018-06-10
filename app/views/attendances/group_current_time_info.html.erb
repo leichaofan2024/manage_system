@@ -34,7 +34,7 @@
     <%= submit_tag :点击筛选 %>
   <% end %>
 
-  <% if @workshop.present? %>
+  <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
     <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
   <% end %>
 
@@ -72,7 +72,7 @@
 <% if @workshop.present? %>
   <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
 <% else %>
-  <h4><%= Time.now.month%>月考勤情况</h4>
+  <h4>5月考勤情况</h4>
 <% end %>
 <div class="col-md-12">
   <div class="card">
@@ -118,8 +118,8 @@
                 <td>
                     <% if day_attendance == "x" %>
                       <%= " " %>
-                    <% else %>                    
-                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                    <% else %>
+                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: "5", year: "2018", day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
                     <% end %>
                 </td>
                   <% day_number += 1%>

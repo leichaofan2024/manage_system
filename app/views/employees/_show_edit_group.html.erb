@@ -1,0 +1,23 @@
+<div class="modal fade" id="editGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">合并车间</h4>
+      </div>
+      <div class="modal-body">
+          <%= form_tag edit_group_employees_path, method: 'post' do %>
+            <% Group.all.each do |group| %>
+              <%= radio_button_tag :group, group.id %>
+              <%= label_tag :q, "#{group.name}"%><br>
+            <% end %>
+            <%= label_tag :请输入修改后的班组名称 %>
+            <%= text_field_tag :group_name %>
+            <%= label_tag :请输入修改后班组所属车间名称 %>
+            <%= text_field_tag :workshop_name %>
+            <%= submit_tag :确定 %>
+          <% end %> 
+      </div>
+    </div> 
+  </div>
+</div>

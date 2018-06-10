@@ -23,7 +23,7 @@
 		        				<td><%= i %></td>
 		        				<!-- 表数据配置-开始 -->
 		        				<!-- 第一季度完成天数 -->
-								<% employees = Employee.where(workshop: workshop.id).pluck("id").uniq %>
+								<% employees = Employee.current.where(workshop: workshop.id).pluck("id").uniq %>
 								<% if i == 1 %>
 									<td></td>
 									<td></td>
