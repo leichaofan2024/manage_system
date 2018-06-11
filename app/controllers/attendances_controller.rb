@@ -9,7 +9,7 @@ layout 'home'
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
 		elsif current_user.has_role? :organsadmin
-			group = Group.find_by(:name => current_user.name)	
+			group = Group.find_by(:name => current_user.name)
 		end
 		@employees = Employee.current.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq

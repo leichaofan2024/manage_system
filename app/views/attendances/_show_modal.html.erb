@@ -7,33 +7,37 @@
       </div>
       <div class="modal-body">
         <%= form_tag create_attendance_attendances_path, method: 'post' do %>
+          <% if @type == "duan" %>
             <% @vacation.each do |vacation| %>
               <% group = Employee.current.find_by(id: @employee_id).group %>
-              <% if @type == "duan" %>
-                <%= radio_button_tag(:code, vacation[1]) %>  
-                <%= hidden_field_tag :employee_id , @employee_id %>  
+
+                <%= radio_button_tag(:code, vacation[1]) %>
+                <%= hidden_field_tag :employee_id , @employee_id %>
                 <%= hidden_field_tag :employee , @employee %>
                 <%= hidden_field_tag :month , @month %>
                 <%= hidden_field_tag :year , @year %>
                 <%= hidden_field_tag :day , @day_number.to_i - 1 %>
                 <%= label_tag :"#{vacation[0]}" %><br><br>
-              <% else %>
-                <% if AttendanceSetting.find_by(:vacation => "加班").present? %>
-                  <% if vacation[0] == "加班" && AttendanceCount.where(:group_id => group, :vacation_code => vacation[1]).sum(:count) >= AttendanceSetting.find_by(:vacation => "加班").count %>
-                    <%= label_tag :"#{vacation[0]}" %><br><br>
-                    <% else %>
-                      <%= radio_button_tag(:code, vacation[1]) %>
-                      <%= hidden_field_tag :employee_id , @employee_id %>
-                      <%= hidden_field_tag :employee , @employee %>
-                      <%= hidden_field_tag :month , @month %>
-                      <%= hidden_field_tag :year , @year %>
-                      <%= hidden_field_tag :day , @day_number.to_i - 1 %>
-                      <%= label_tag :"#{vacation[0]}" %><br><br>
-                  <% end %>
-                <% elsif AttendanceSetting.find_by(:vacation => "轮夜").present? %>
-                  <% if vacation[0] == "轮夜" && AttendanceCount.where(:group_id => group, :vacation_code => vacation[1]).sum(:count) >= attendance_setting.count %>
-                    <%= label_tag :"#{vacation[0]}" %><br><br>
-                  <% else %>
+            <% end %>
+          <% else %>
+            <% @vacation.each do |vacation| %>
+              <% group = Employee.current.find_by(id: @employee_id).group %>
+              <% if vacation[0] == "加班" %>
+                <% if AttendanceSetting.find_by(:vacation => "加班").present? && (AttendanceCount.where(:group_id => group, :vacation_code => vacation[1]).sum(:count) >= AttendanceSetting.find_by(:vacation => "加班").count) %>
+                  <%= label_tag :"#{vacation[0]}" %><br><br>
+                <% else %>
+                  <%= radio_button_tag(:code, vacation[1]) %>
+                  <%= hidden_field_tag :employee_id , @employee_id %>
+                  <%= hidden_field_tag :employee , @employee %>
+                  <%= hidden_field_tag :month , @month %>
+                  <%= hidden_field_tag :year , @year %>
+                  <%= hidden_field_tag :day , @day_number.to_i - 1 %>
+                  <%= label_tag :"#{vacation[0]}" %><br><br>
+                <% end %>
+              <% elsif vacation[0] == "轮夜" %>
+                <% if AttendanceSetting.find_by(:vacation => "夜班").present? && (AttendanceCount.where(:group_id => group, :vacation_code => vacation[1]).sum(:count) >= AttendanceSetting.find_by(:vacation => "夜班").count)  %>
+                  <%= label_tag :"#{vacation[0]}" %><br><br>
+                <% else %>
                     <%= radio_button_tag(:code, vacation[1]) %>
                     <%= hidden_field_tag :employee_id , @employee_id %>
                     <%= hidden_field_tag :employee , @employee %>
@@ -41,13 +45,34 @@
                     <%= hidden_field_tag :year , @year %>
                     <%= hidden_field_tag :day , @day_number.to_i - 1 %>
                     <%= label_tag :"#{vacation[0]}" %><br><br>
-                  <% end %>  
-                <% end %>    
+                <% end %>
+              <% elsif vacation[0] == "日夜"%>
+                <% if AttendanceSetting.find_by(:vacation => "夜班").present? &&  (AttendanceCount.where(:group_id => group, :vacation_code => vacation[1]).sum(:count) >= AttendanceSetting.find_by(:vacation => "夜班").count)  %>
+                  <%= label_tag :"#{vacation[0]}" %><br><br>
+                <% else %>
+                    <%= radio_button_tag(:code, vacation[1]) %>
+                    <%= hidden_field_tag :employee_id , @employee_id %>
+                    <%= hidden_field_tag :employee , @employee %>
+                    <%= hidden_field_tag :month , @month %>
+                    <%= hidden_field_tag :year , @year %>
+                    <%= hidden_field_tag :day , @day_number.to_i - 1 %>
+                    <%= label_tag :"#{vacation[0]}" %><br><br>
+                <% end %>
+              <% else %>
+                <%= radio_button_tag(:code, vacation[1]) %>
+                <%= hidden_field_tag :employee_id , @employee_id %>
+                <%= hidden_field_tag :employee , @employee %>
+                <%= hidden_field_tag :month , @month %>
+                <%= hidden_field_tag :year , @year %>
+                <%= hidden_field_tag :day , @day_number.to_i - 1 %>
+                <%= label_tag :"#{vacation[0]}" %><br><br>
               <% end %>
             <% end %>
+
+          <% end %>
           <%= submit_tag :点击确定 %>
         <% end %>
       </div>
-    </div> 
+    </div>
   </div>
 </div>

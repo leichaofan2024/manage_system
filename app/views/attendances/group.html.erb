@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-<div class="col-md-12" style="margin-top: -10px;">
+<div class="col-md-12" style="margin-top: -10px;"> 
   <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
     <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
   <% end %>
