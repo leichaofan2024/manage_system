@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-<div class="col-md-12" style="margin-top: -10px;"> 
+<div class="col-md-12" style="margin-top: -10px;">
   <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
     <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
   <% end %>
@@ -35,7 +35,11 @@
    <% end %>
 </div>
 <div class="col-md-12" style="margin-top: 20px;">
-<h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
+<% if @year.present? && @month.present?%>
+  <h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+<% else %>
+  <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
+<% end %>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
