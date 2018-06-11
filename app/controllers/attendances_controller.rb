@@ -179,6 +179,8 @@ layout 'home'
 			@groups = @workshop
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
+		@choose_group = params[:group]
+		@choose_workshop = params[:workshop]
 		if params[:group].present?
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:group]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:group]).pluck("employee_id")
@@ -243,20 +245,16 @@ layout 'home'
 	def batch_verify
 		if params[:authority] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
-			@groups = @workshop.groups
-			@groups.each do |group|
-				AttendanceStatus.find_by(:group_id => group.id).update(:status => "车间已审核", :workshop_id => @workshop.id)
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: workshop_attendances_path)
-			end
+			@groups = @workshop.groups.pluck("id")
+			AttendanceStatus.where(:group_id => @groups).update(:status => "车间已审核", :workshop_id => @workshop.id)
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: workshop_attendances_path)
 		elsif params[:authority] == "duan"
-			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-			@workshops = Workshop.find(status_workshop)
-			@workshops.each do |workshop|
-				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: group_current_time_info_attendances_path)
-			end
+			workshops = AttendanceStatus.pluck("workshop_id").uniq
+			@workshops = Workshop.where(id: status_workshop)
+			AttendanceStatus.where(:workshop_id => workshops).update(:status => "段已审核")
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
 	end
 	##一键审核功能--结束
@@ -325,8 +323,13 @@ layout 'home'
  	end
 
  	def create_application
- 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
- 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+		if !Employee.find_by(:group => params[:group], :name => params[:person]).present?
+			flash[:alert] = "您填写的名字不在这个班组"
+		else
+	 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
+	 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+			flash[:notice] = "已发起申请"
+		end
  		redirect_back(fallback_location: group_attendances_path)
  	end
 
@@ -337,6 +340,7 @@ layout 'home'
  	def update_application
  		application = Application.find(params[:application_id])
  		application.update(:status => params[:status])
+		flash[:notice] = "已通过申请"
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 
