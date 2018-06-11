@@ -12,7 +12,7 @@
               <%= label_tag :q, "#{workshop.name}"%><br>
             <% end %>
             <%= label_tag :请输入修改后的车间名称 %>
-            <%= text_field_tag :workshop_name %>
+            <%= text_field_tag :workshop_name, nil, required: true %>
             <%= submit_tag :确定 %>
           <% end %> 
       </div>

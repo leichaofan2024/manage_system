@@ -61,35 +61,45 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfill_detail
-		@employees = Employee.current.where(id: 300..400)
+		@employees = Employee.current.page(params[:page]).per(20)
 		@workshops = Workshop.all
 		@groups = Group.all
 		@years = AnnualHoliday.pluck("year").uniq
 	end
 
 	def filter
+
 		@workshops = Workshop.all
 		@groups = Group.all
 		@years = AnnualHoliday.pluck("year").uniq
-		if params[:year].present?
-			@params_year = params[:year]
-			if (params[:workshop].present?) && (params[:group].blank?)
-				@employees = Employee.current.where(:workshop => params[:workshop])
-			elsif (params[:workshop].blank?) && (params[:group].present?)
-				@employees = Employee.current.where(:group => params[:group])
-			elsif (params[:workshop].present?) && (params[:group].present?)
-				@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
-			end
+		if !params[:workshop].present? && !params[:group].present? && !params[:year].present?
+			flash[:alert] = "请先选择筛选条件哦"
+			redirect_to holiday_fulfill_detail_annual_holidays_path
 		else
-			if (params[:workshop].present?) && (params[:group].blank?)
-				@employees = Employee.current.where(:workshop => params[:workshop])
-			elsif (params[:workshop].blank?) && (params[:group].present?)
-				@employees = Employee.current.where(:group => params[:group])
-			elsif (params[:workshop].present?) && (params[:group].present?)
-				@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+			if params[:year].present?
+				@params_year = params[:year]
+				if (params[:workshop].present?) && (params[:group].blank?)
+					@employees = Employee.current.where(:workshop => params[:workshop]).page(params[:page]).per(20)
+				elsif (params[:workshop].blank?) && (params[:group].present?)
+					@employees = Employee.current.where(:group => params[:group]).page(params[:page]).per(20)
+				elsif (params[:workshop].present?) && (params[:group].present?)
+					@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group]).page(params[:page]).per(20)
+				elsif (params[:workshop].blank?) && (params[:group].blank?)
+					@employees = Employee.current.page(params[:page]).per(20)
+				end
+				render action: "holiday_fulfill_detail"
+			else
+				if (params[:workshop].present?) && (params[:group].blank?)
+					@employees = Employee.current.where(:workshop => params[:workshop]).page(params[:page]).per(20)
+				elsif (params[:workshop].blank?) && (params[:group].present?)
+					@employees = Employee.current.where(:group => params[:group]).page(params[:page]).per(20)
+				elsif (params[:workshop].present?) && (params[:group].present?)
+					@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group]).page(params[:page]).per(20)
+				end
+				render action: "holiday_fulfill_detail"
 			end
 		end
-		render action: "holiday_fulfill_detail"
+		
 	end
 
 	def holiday_fulfillment_rate

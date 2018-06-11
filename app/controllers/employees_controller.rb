@@ -43,13 +43,19 @@ class EmployeesController < ApplicationController
   end
 
   def create
-    @employee = Employee.new(employee_params)
-    if @employee.save
-      flash[:notice] = "创建成功"
+    if (!Workshop.find_by(name: params[:workshop]).present?) or (!Group.find_by(name: params[:group]).present?)
+      flash[:alert] = "您填写的车间或班组不存在"
+      redirect_to new_employee_path
     else
-      flash[:alert] = "创建失败"
+      @employee = Employee.new(employee_params)
+      if @employee.save
+        flash[:notice] = "创建成功"
+      else
+        flash[:alert] = "创建失败"
+      end
+      redirect_to employees_path
     end
-    redirect_to employees_path
+    
   end
 
   def edit
@@ -57,6 +63,15 @@ class EmployeesController < ApplicationController
   end
 
   def update
+    @employee = Employee.current.find(params[:id])
+    if @employee.update(employee_params)
+      flash[:notice] = "更新信息成功"
+      redirect_to employee_path(params[:id])
+    else
+      flash[:alert] = "更新失败"
+      redirect_to edit_employee_path
+    end
+
   end
 
   def show
@@ -65,11 +80,14 @@ class EmployeesController < ApplicationController
 
  #上传表格
   def import_table
-    Employee.import_table(params[:file])
+    if !params[:file].present?
+      flash[:alert] = "您还没有选择文件哦"
+    else
+      Employee.import_table(params[:file])
+      flash[:notice] = "上传成功"
+    end
     redirect_to employees_path
   end
-
-
 
   def filter
     @filter_type = params[:filter_type]
@@ -1255,12 +1273,16 @@ class EmployeesController < ApplicationController
       flash[:notice] = "该车间名称已存在，请换一个试试~"
     else
       workshop = Workshop.create(:name => params[:merge_workshop])
-      params[:workshops].each do |workshop_id|
-        Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
-        Employee.current.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
-        Workshop.where(:id => params[:workshops]).delete_all
+      if !params[:workshops].present?
+        flash[:alert] = "请先选择车间再合并"
+      else
+        params[:workshops].each do |workshop_id|
+          Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
+          Employee.current.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
+          Workshop.where(:id => params[:workshops]).delete_all
+        end
+        flash[:notice] = "合并车间成功"
       end
-      flash[:notice] = "合并车间成功"
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
@@ -1269,11 +1291,15 @@ class EmployeesController < ApplicationController
     if !Workshop.find_by(:name => params[:workshop]).present?
       flash[:alert] = "您填写的车间名称不存在，请先增加车间"
     else
-      workshop = Workshop.find_by(:name => params[:workshop])
-      group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
-      Employee.current.where(:group => params[:groups]).update(:group => group.id, :workshop => workshop.id)
-      Group.where(:id => params[:groups]).delete_all
-      flash[:notice] = "合并车间成功"
+      if !params[:groups].present?
+        flash[:alert] = "请先选择班组再合并"
+      else
+        workshop = Workshop.find_by(:name => params[:workshop])
+        group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
+        Employee.current.where(:group => params[:groups]).update(:group => group.id, :workshop => workshop.id)
+        Group.where(:id => params[:groups]).delete_all
+        flash[:notice] = "合并车间成功"
+      end
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
@@ -1300,8 +1326,12 @@ class EmployeesController < ApplicationController
   end
 
   def edit_workshop
-    Workshop.find(params[:workshop]).update(:name => params[:workshop_name])
-    flash[:notice] = "更新成功"
+    if !params[:workshop].present?
+      flash[:alert] = "请先选择一个车间再修改"
+    else
+      Workshop.find(params[:workshop]).update(:name => params[:workshop_name])
+      flash[:notice] = "更新成功"
+    end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
@@ -1309,8 +1339,12 @@ class EmployeesController < ApplicationController
     if !Workshop.find_by(:name => params[:workshop_name]).present?
       flash[:alert] = "您填写的车间名称不存在，请先新增哦"
     else
-      Group.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.find_by(:name => params[:workshop_name]).id)
-      flash[:notice] = "更新成功"
+      if !params[:group].present?
+        flash[:alert] = "请先选择一个班组再修改"
+      else
+        Group.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.find_by(:name => params[:workshop_name]).id)
+        flash[:notice] = "更新成功"
+      end
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
@@ -1338,9 +1372,9 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      @employees = Employee.leaving
+      @leaving_employees = LeavingEmployee.where(:leaving_type => "调离")
     elsif params[:type] == "调动"
-      @employees = Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month)
+      @leaving_employees = LeavingEmployee.where(:leaving_type => "调动")
     end
   end
 

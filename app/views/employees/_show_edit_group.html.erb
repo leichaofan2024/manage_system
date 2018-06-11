@@ -12,9 +12,9 @@
               <%= label_tag :q, "#{group.name}"%><br>
             <% end %>
             <%= label_tag :请输入修改后的班组名称 %>
-            <%= text_field_tag :group_name %>
+            <%= text_field_tag :group_name, nil, required: true %>
             <%= label_tag :请输入修改后班组所属车间名称 %>
-            <%= text_field_tag :workshop_name %>
+            <%= text_field_tag :workshop_name, nil, required: true %>
             <%= submit_tag :确定 %>
           <% end %> 
       </div>

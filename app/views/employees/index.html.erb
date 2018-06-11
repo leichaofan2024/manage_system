@@ -136,8 +136,8 @@
       <%= form_tag filter_employees_path, method: 'get' do %>
         <%= label_tag :请选择筛选类别，并输入时间段：%>
         <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择", :required => "true"})%>
-        <%= text_field_tag :start_time %> ~
-        <%= text_field_tag :end_time %>
+        <%= text_field_tag :start_time, nil, required: true %> ~
+        <%= text_field_tag :end_time, nil, required: true %>
         <%= submit_tag :筛选 %>
       <% end %>
     <% end %>

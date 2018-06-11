@@ -41,29 +41,31 @@
     <% end %>
 
     <!-- 审核功能-开始 -->
-    <% if !AttendanceStatus.find_by(:workshop_id => @workshop).status == "段已审核" %>
-      <div class="btn_group_top-1sKKU_0">
-        <div>
-          <div class="btn_group-2MSRh_0">
-            <div class="ivu-tooltip">
-              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
-                     <span style="color: #269Eff;">审核</span>
-                  <% end %>
-                </button>
-              </div>
-              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
-                     <span style="color: #269Eff;">一键审核</span>
-                  <% end %>
-                </button>
+    <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+      <% if !AttendanceStatus.find_by(:workshop_id => @workshop).status == "段已审核" %>
+        <div class="btn_group_top-1sKKU_0">
+          <div>
+            <div class="btn_group-2MSRh_0">
+              <div class="ivu-tooltip">
+                <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                    <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
+                       <span style="color: #269Eff;">审核</span>
+                    <% end %>
+                  </button>
+                </div>
+                <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                    <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
+                       <span style="color: #269Eff;">一键审核</span>
+                    <% end %>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>   
+        </div>   
+      <% end %>
     <% end %>
   </div>
 <% end %>

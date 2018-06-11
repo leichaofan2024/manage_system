@@ -15,9 +15,9 @@
               <% end %>  
             <% end %>
             <%= label_tag :请输入合并后的班组名称 %>
-            <%= text_field_tag :merge_group %>
+            <%= text_field_tag :merge_group, nil, required: true %>
             <%= label_tag :请输入该班组所属的车间名称 %>
-            <%= text_field_tag :workshop %>
+            <%= text_field_tag :workshop, nil, required: true %>
             <%= submit_tag :确定 %>
             <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
           <% end %>
