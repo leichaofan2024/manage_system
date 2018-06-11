@@ -1334,9 +1334,9 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      @employees = Employee.leaving
+      @leaving_employees = LeavingEmployee.where(:leaving_type => "调离")
     elsif params[:type] == "调动"
-      @employees = Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month)
+      @leaving_employees = LeavingEmployee.where(:leaving_type => "调动")
     end
   end
 
