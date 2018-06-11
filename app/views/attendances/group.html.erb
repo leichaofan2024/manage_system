@@ -20,7 +20,7 @@
                 <% end %>
               </button> 
             </div>
-        </div>
+        </div> 
       </div>
 
   <!-- <h5><%= link_to "导出表格", group_attendances_path(format: "xls")%></h5> -->
@@ -35,7 +35,11 @@
    <% end %>
 </div>
 <div class="col-md-12" style="margin-top: 20px;">
-<h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+<% if @year.present? && @month.present?%>
+  <h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+<% else %>
+  <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
+<% end %>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">

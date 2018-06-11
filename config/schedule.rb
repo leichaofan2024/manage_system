@@ -18,8 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-
 set :output, 'log/cron.log' #設定log的路徑
-every 1.minutes, roles: [:app] do
-    runner "Message.retirement_remind"
+every 1.minutes do
+    command "echo '哇哈哈哈哈哈哈哈哈哈哈'"
 end

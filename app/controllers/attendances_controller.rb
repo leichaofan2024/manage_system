@@ -16,11 +16,11 @@ layout 'home'
 
 		# 导出考勤表
 		respond_to do |format|
-      format.html
-      format.csv { send_data @employees.to_csv }
-      format.xls
-    end
-	end
+	      format.html
+	      format.csv { send_data @employees.to_csv }
+	      format.xls
+	    end
+	end 
 	##班组页面--结束
 
 	##弹窗内选择假期的表单功能--开始
@@ -86,10 +86,12 @@ layout 'home'
 		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
 
 		if current_user.has_role? :groupadmin
-			name = current_user.name.split("-")
-			@group = Group.find_by(:name => name[1])
+			name = current_user.name.split("-")[1]
+			@group = Group.find_by(:name => name)
 			if !AttendanceStatus.find_by(:group_id => @group.id).present?
 				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			else
+				AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组填写中")
 			end
 		elsif current_user.has_role? :organsadmin
 			name = current_user.name
@@ -98,7 +100,7 @@ layout 'home'
 				if current_user.has_role? :groupadmin
 					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
 				elsif current_user.has_role? :organsadmin
-					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.wokkshop.id)
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.workshop.id)
 				end
 			end
 		end
