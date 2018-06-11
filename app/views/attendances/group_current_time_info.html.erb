@@ -72,7 +72,7 @@
 <% if @workshop.present? %>
   <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
 <% else %>
-  <h4>5月考勤情况</h4>
+  <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
 <% end %>
 <div class="col-md-12">
   <div class="card">
