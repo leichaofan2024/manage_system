@@ -61,7 +61,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfill_detail
-		@employees = Employee.current.where(id: 300..400)
+		@employees = Employee.current.page(params[:page]).per(20)
 		@workshops = Workshop.all
 		@groups = Group.all
 		@years = AnnualHoliday.pluck("year").uniq
