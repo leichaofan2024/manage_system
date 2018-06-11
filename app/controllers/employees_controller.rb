@@ -1,6 +1,13 @@
 class EmployeesController < ApplicationController
   layout 'home'
 
+  def update_holiday_information
+    a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
+    a.each do |i|
+      AnnualHolidayWorkType.create(:work_type => i)
+    end
+  end
+
   def index
     #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
     @work_type = params[:work_type]
@@ -27,7 +34,7 @@ class EmployeesController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.xls 
+      format.xls
     end
   end
 
@@ -1196,7 +1203,7 @@ class EmployeesController < ApplicationController
     @export_employees = Employee.where(id: params[:employees])
     respond_to do |format|
       format.html
-      format.xls 
+      format.xls
     end
   end
 ###点击图表详情页面数据配置---结束
@@ -1220,7 +1227,7 @@ class EmployeesController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.xls 
+      format.xls
     end
   end
 

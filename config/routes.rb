@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get :show_leaving_employee_modal
       post :create_leaving
       get :employee_detail
+      post :update_holiday_information
     end
   end
 
