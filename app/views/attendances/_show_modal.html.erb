@@ -17,7 +17,7 @@
                 <%= hidden_field_tag :month , @month %>
                 <%= hidden_field_tag :year , @year %>
                 <%= hidden_field_tag :day , @day_number.to_i - 1 %>
-                <%= label_tag :"#{vacation[0]}" %><br><br>
+                <%= label_tag :"#{vacation[0]}" %><br><br> 
             <% end %>
           <% else %>
             <% @vacation.each do |vacation| %>
