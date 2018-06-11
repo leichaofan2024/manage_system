@@ -35,6 +35,7 @@
       <div>
         <div class="btn_group-2MSRh_0">
           <div class="ivu-tooltip">
+            <% if @choose_group.present? %>
               <div class="ivu-tooltip-rel" >
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                   <%= link_to verify_attendances_path(authority: "workshop", group: @click_group), method: :post do %>
@@ -42,6 +43,7 @@
                   <% end %>
                 </button>
               </div>
+            <% else %>
               <div class="ivu-tooltip-rel">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                   <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
@@ -49,13 +51,11 @@
                   <% end %>
                 </button>
               </div>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary" %> -->
-    <!-- <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary" %> -->
   <% end %>
 
   <%= form_tag filter_attendances_path, method: 'get' do %>
@@ -65,11 +65,17 @@
     <%= hidden_field_tag :type, "workshop" %>
     <%= submit_tag :筛选 %>
   <% end %>
-
 </div>
+
+<% if (@choose_workshop.present?) or (@choose_group.present?)  %>
+  <h4><%= Workshop.find(@choose_workshop).name %>&nbsp<%= Group.find(@choose_group).name %>&nbsp考勤汇总</h4>
+<% else %>
+  <h4><%= @workshop.name %>全员汇总</h4>
+<% end %>
+
 <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= @workshop.name%></h5>
+      <h5><%= link_to @workshop.name, workshop_attendances_path(type: "duan", month: @month, year: @year)%></h5>
       <ul>
         <% @groups.each do |group| %>
           <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
