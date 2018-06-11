@@ -342,6 +342,7 @@ layout 'home'
  	def update_application
  		application = Application.find(params[:application_id])
  		application.update(:status => params[:status])
+		flash[:notice] = "已通过申请"
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 

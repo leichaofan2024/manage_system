@@ -16,18 +16,17 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>申请记录（条）</th>
+        <th>待处理申请（条）</th>
         <th>详情</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><%= applications.count%>条</td>
+        <td><%= Application.where(:group_id => groups, :status => "班组发起申请").count %>条</td>
         <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
       </tr>
     </tbody>
   </table>
-  <!-- <h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: @workshop) %>条修改申请需要处理</h5> -->
   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
     <% if @status.present? %>
       <h5>本月考勤表状态:<%= @status %></h5>
@@ -76,7 +75,7 @@
           <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
         <% end %>
       </ul>
-    </div> 
+    </div>
 
 <div class="card">
   <div class="col-md-10" style="overflow: auto">
