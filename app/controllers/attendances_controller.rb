@@ -378,13 +378,13 @@ layout 'home'
 	def caiwu
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@vacation_codes = ["d","e","h","i","n","m","j","k"]
+		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
 		@workshops = Workshop.all
 	end
 
 	def create_holiday_time
 		if Employee.current.find_by(:sal_number => params[:sal_number]).nil?
-			flash[:alert] = "工资号不存在"
+			flash[:alert] = "工资号不存在" 
 		else
 			if Employee.current.find_by(:sal_number => params[:sal_number]).name == params[:name]
 				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new

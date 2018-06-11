@@ -67,8 +67,6 @@ class EmployeesController < ApplicationController
     redirect_to employees_path
   end
 
-
-
   def filter
     @filter_type = params[:filter_type]
     case params[:filter_type]

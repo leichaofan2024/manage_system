@@ -22,10 +22,18 @@
 	        		<% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
               <% if attendance_counts.find_by(vacation_code: "a").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "a").count %></td>
-              <% elsif attendance_counts.find_by(vacation_code: "c").present? %>
+              <% else %>
+                <td></td>
+              <% end %>
+              <% if attendance_counts.find_by(vacation_code: "c").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "c").count %></td>
-              <% elsif attendance_counts.find_by(vacation_code: "b").present? %>
+              <% else %>
+                <td></td>
+              <% end %>
+              <% if attendance_counts.find_by(vacation_code: "b").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "b").count %></td>
+              <% else %>
+                <td></td>
               <% end %>
 	        	</tr>
         	<% end %>
