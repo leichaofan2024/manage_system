@@ -245,20 +245,16 @@ layout 'home'
 	def batch_verify
 		if params[:authority] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
-			@groups = @workshop.groups
-			@groups.each do |group|
-				AttendanceStatus.find_by(:group_id => group.id).update(:status => "车间已审核", :workshop_id => @workshop.id)
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: workshop_attendances_path)
-			end
+			@groups = @workshop.groups.pluck("id")
+			AttendanceStatus.where(:group_id => @groups).update(:status => "车间已审核", :workshop_id => @workshop.id)
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: workshop_attendances_path)
 		elsif params[:authority] == "duan"
-			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-			@workshops = Workshop.find(status_workshop)
-			@workshops.each do |workshop|
-				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: group_current_time_info_attendances_path)
-			end
+			workshops = AttendanceStatus.pluck("workshop_id").uniq
+			@workshops = Workshop.where(id: status_workshop)
+			AttendanceStatus.where(:workshop_id => workshops).update(:status => "段已审核")
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
 	end
 	##一键审核功能--结束
