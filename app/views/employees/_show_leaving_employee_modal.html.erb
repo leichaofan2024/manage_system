@@ -15,12 +15,12 @@
           <%= form_tag create_leaving_employees_path, method: 'post' do %>
             <% if @type == "调离" %>
               <%= label_tag :填写调离原因： %>
-              <%= text_field_tag :cause %>
+              <%= text_field_tag :cause, nil, required: true %>
             <% elsif @type == "调动" %>
               <%= label_tag :填写调动后车间： %>
-              <%= text_field_tag :workshop %>
+              <%= text_field_tag :workshop, nil, required: true %>
               <%= label_tag :填写调动后班组： %>
-              <%= text_field_tag :group %>
+              <%= text_field_tag :group, nil, required: true %>
             <% end %>
             <%= hidden_field_tag :employee, @employee %>
             <%= hidden_field_tag :type, @type %>
