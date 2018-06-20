@@ -43,11 +43,12 @@ class EmployeesController < ApplicationController
   end
 
   def create
-    if (!Workshop.find_by(name: params[:workshop]).present?) or (!Group.find_by(name: params[:group]).present?)
+    if (!Workshop.find_by("name = ?", params[:employee][:workshop]).present?) or (!Group.find_by("name = ?", params[:employee][:group]).present?)
       flash[:alert] = "您填写的车间或班组不存在"
       redirect_to new_employee_path
     else
       @employee = Employee.new(employee_params)
+      @employee.update(:workshop => Workshop.find_by("name = ?", params[:employee][:workshop]).id, :group => Group.find_by("name = ?", params[:employee][:group]).id)
       if @employee.save
         flash[:notice] = "创建成功"
       else
@@ -1399,7 +1400,7 @@ class EmployeesController < ApplicationController
   private
 
     def employee_params
-      params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number)
+      params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number, :avatar)
     end
 
 

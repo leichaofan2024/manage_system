@@ -1,6 +1,8 @@
  <%= render "employee_navbar"%>
 
 <%= form_for @employee do |f| %>
+<%= f.label :上传头像 %>
+<%= f.file_field :avatar %>
 <% transfer_columns = {
                         "sal_number" => "工资号",
                         "job_number" =>  "工号",
