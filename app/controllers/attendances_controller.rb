@@ -388,6 +388,13 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
 		@workshops = Workshop.all
+
+		# 导出考勤表
+		respond_to do |format|
+	      format.html
+	      format.csv { send_data @workshops.to_csv }
+	      format.xls
+	    end
 	end
 
 	def create_holiday_time
