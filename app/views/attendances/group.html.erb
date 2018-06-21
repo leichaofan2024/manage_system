@@ -130,7 +130,11 @@
                   <% day_number += 1%>
                 <% end %>
                 <% @vacation_codes.each do |code| %>
-                  <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                  <% if AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) == 0 %>
+                    <td></td>
+                  <% else %>
+                    <td style="color: #269EFF; font-weight: bold; font-size: 16px"><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                  <% end %>
                 <% end %>
               <% end %>
             </tr>
