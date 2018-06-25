@@ -16,24 +16,26 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>申请记录（条）</th>
+        <th>待处理申请（条）</th>
         <th>详情</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><%= applications.count%>条</td>
+        <td><%= Application.where(:group_id => groups, :status => "班组发起申请").count %>条</td>
         <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
       </tr>
     </tbody>
   </table>
-  <!-- <h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: @workshop) %>条修改申请需要处理</h5> -->
   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-    <h5>本月考勤表状态:<%= @status %></h5>
+    <% if @status.present? %>
+      <h5>本月考勤表状态:<%= @status %></h5>
+    <% end %>
     <div class="btn_group_top-1sKKU_0">
       <div>
         <div class="btn_group-2MSRh_0">
           <div class="ivu-tooltip">
+            <% if @choose_group.present? %>
               <div class="ivu-tooltip-rel" >
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                   <%= link_to verify_attendances_path(authority: "workshop", group: @click_group), method: :post do %>
@@ -41,20 +43,19 @@
                   <% end %>
                 </button>
               </div>
+            <% else %>
               <div class="ivu-tooltip-rel">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
+                  <%= link_to batch_verify_attendances_path(authority: "workshop"), method: :post do  %>
                      <span style="color: #269Eff;">一键审核</span>
                   <% end %>
                 </button>
               </div>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary" %> -->
-    <!-- <%= link_to "通过审核", verify_attendances_path(authority: "workshop", group: @click_group), method: :post, class: "btn btn-primary" %> -->
   <% end %>
 
   <%= form_tag filter_attendances_path, method: 'get' do %>
@@ -64,14 +65,20 @@
     <%= hidden_field_tag :type, "workshop" %>
     <%= submit_tag :筛选 %>
   <% end %>
-
 </div>
+
+<% if (@choose_workshop.present?) or (@choose_group.present?)  %>
+  <h4><%= Workshop.find(@choose_workshop).name %>&nbsp<%= Group.find(@choose_group).name %>&nbsp考勤汇总</h4>
+<% else %>
+  <h4><%= @workshop.name %>全员汇总</h4>
+<% end %>
+
 <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= @workshop.name%></h5>
+      <h5><%= link_to @workshop.name, workshop_attendances_path(type: "duan", month: @month, year: @year)%></h5>
       <ul>
         <% @groups.each do |group| %>
-          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
         <% end %>
       </ul>
     </div>

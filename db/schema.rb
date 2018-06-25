@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180531090658) do
+ActiveRecord::Schema.define(version: 20180609113503) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "workshop_id"
@@ -225,6 +225,7 @@ ActiveRecord::Schema.define(version: 20180531090658) do
     t.string "job_foreman_duty", comment: "班组长职务"
     t.integer "group_id"
     t.integer "workshop_id"
+    t.string "phone_number"
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -241,6 +242,18 @@ ActiveRecord::Schema.define(version: 20180531090658) do
     t.datetime "start_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "leaving_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "employee_id"
+    t.text "cause"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "leaving_type"
+    t.integer "transfer_from_workshop"
+    t.integer "transfer_from_group"
+    t.integer "transfer_to_workshop"
+    t.integer "transfer_to_group"
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

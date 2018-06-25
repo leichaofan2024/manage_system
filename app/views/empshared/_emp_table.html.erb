@@ -8,6 +8,7 @@
       <th>班组</th>
       <th>工种</th>
       <th>姓名</th>
+      <th>电话号</th>
       <th>工种分类</th>
       <th>性别</th>
       <th>年龄</th>
@@ -21,15 +22,25 @@
     </tr>
   </thead>
    <tbody data-behavior='sortable'>
-    <% @employees.__send__ controller.action_name == 'search' ? :each_with_hit : :find_each do |employee, hit| %>
+    <% @employees.each do |employee| %>
       <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-        <td><%= hit.try(:highlight).try(:sal_number)   ? hit.highlight.sal_number.join.html_safe : employee.sal_number %></td>
+        <td><%= employee.sal_number %></td>
         <td><%= employee.job_number %></td>
         <td><%= employee.record_number %></td>
         <td><%= Workshop.find(employee.workshop).name %></td>
         <td><%= Group.find(employee.group).name %></td>
         <td><%= employee.work_type %></td>
-        <td><%= hit.try(:highlight).try(:name)         ? hit.highlight.name.join('&hellip').html_safe : employee.name %></td>
+        <td>
+          <%=  employee.name %>
+          <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+            <span class="label label-danger">已调离</span>
+          <% end %>
+
+          <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+              <span class="label label-warning">一月内有调动</span>
+          <% end %>
+        </td>
+        <td><%= employee.phone_number %></td>
         <td><%= employee.work_type%></td>
         <td><%= employee.sex %></td>
         <td><%= employee.age %></td>

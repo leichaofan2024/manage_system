@@ -6,7 +6,6 @@ Rails.application.routes.draw do
       #上传
       post :import_table
       #搜索和筛选
-      get  :search
       get :filter
       #一键更新路径
       post :update_employee_info
@@ -28,6 +27,12 @@ Rails.application.routes.draw do
       post :merge_workshop
       post :merge_group
       post :delete_organization
+      post :edit_workshop
+      post :edit_group
+      get :show_leaving_employee_modal
+      post :create_leaving
+      get :employee_detail
+      post :update_holiday_information
     end
   end
 

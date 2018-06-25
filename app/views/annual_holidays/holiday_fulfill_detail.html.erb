@@ -21,7 +21,7 @@
 	        		<% (1..12).each do |i| %>
 	        			<th><%= i %></th>
 	        		<% end %>
-	        		<th>工龄</th>
+	        		<th>工龄</th> 
 	        		<th>应休</th>
 	        		<th>实休</th>
 	        	</tr>
@@ -31,8 +31,8 @@
         			<tr>
         				<td><%= employee.name %></td>
         				<td><%= employee.sal_number %></td>
-        				<td><%= Workshop.find_by(:id => Employee.find_by(:id => employee.id).workshop).name %></td>
-        				<td><%= Group.find_by(:id => Employee.find_by(:id => employee.id).group).name %></td>
+        				<td><%= Workshop.find_by(:id => Employee.current.find_by(:id => employee.id).workshop).name %></td>
+        				<td><%= Group.find_by(:id => Employee.current.find_by(:id => employee.id).group).name %></td>
 
         				<% (1..12).each do |i| %>
         					<% if @params_year.present? %>
@@ -63,6 +63,9 @@
         		<% end %>
         	</tbody>
         </table>
+        <div class="text-center">
+        	<%= paginate @employees %>
+        </div>
       </div>
 		</div>
 	<% end %>

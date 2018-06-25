@@ -2,10 +2,14 @@
   <!-- 年龄分析饼图-开始  -->
   <!-- 给饼图准备一个合适大小的dom  -->
 
+<%= form_tag age_statistical_analysis_employees_path, method: 'get' do %> 
+  <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>  
+  <%= submit_tag :点击筛选 %>
+<% end %>
 <div id="sa-main">
  <div id="dashboard">
   <div class="dashboard-toolbar">
-    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析">年龄分析</span>
+    <span contenteditable="false" class="dashboard-name" data-originname="年龄分析"><%= @data_source %>年龄分析</span>
     <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
   </div>
 
@@ -63,35 +67,35 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=25岁以下&data_source=<%= @data_source %>">
                       <th>25岁以下</th>
                       <td><%= @age_25_below %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=26-30岁&data_source=<%= @data_source %>">
                       <th>26-30岁</th>
                       <td><%= @age_26 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=31-35岁&data_source=<%= @data_source %>">
                       <th>31-35岁</th>
                       <td><%= @age_31 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=36-40岁&data_source=<%= @data_source %>">
                       <th>36-40岁</th>
                       <td><%= @age_36 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=41-45岁&data_source=<%= @data_source %>">
                       <th>41-45岁</th>
                       <td><%= @age_41 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=46-50岁&data_source=<%= @data_source %>">
                       <th>46-50岁</th>
                       <td><%= @age_46 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=51-55岁&data_source=<%= @data_source %>">
                       <th>51-55岁</th>
                       <td><%= @age_51 %></td>
                     </tr>
-                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上">
+                    <tr class="row-click-able" data-url="/employees/statistical_analysis_data?age=56岁以上&data_source=<%= @data_source %>">
                       <th>56岁以上</th>
                       <td><%= @age_56_up %></td>
                     </tr>
@@ -163,7 +167,7 @@
                         <td>25岁以下</td>
                         <% n = 0 %>
                         <% @age_25_below_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "25岁以下", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "25岁以下", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+ 1%>
                         <% end %>
                       </tr>
@@ -171,7 +175,7 @@
                         <td>26-30岁</td>
                         <% n = 0 %>
                         <% @age_26_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "26-30岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "26-30岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -179,7 +183,7 @@
                         <td>31-35岁</td>
                         <% n = 0 %>
                         <% @age_31_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "31-35岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "31-35岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -187,7 +191,7 @@
                         <td>36-40岁</td>
                         <% n = 0 %>
                         <% @age_36_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "36-40岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "36-40岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -195,7 +199,7 @@
                         <td>41-45岁</td>
                         <% n = 0 %>
                         <% @age_41_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "41-45岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "41-45岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -203,7 +207,7 @@
                         <td>46-50岁</td>
                         <% n = 0 %>
                         <% @age_46_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "46-50岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "46-50岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -211,7 +215,7 @@
                         <td>51-55岁</td>
                         <% n = 0 %>
                         <% @age_51_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "51-55岁", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "51-55岁", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>
@@ -219,7 +223,7 @@
                         <td>56岁以上</td>
                         <% n = 0 %>
                         <% @age_56_up_bar.each do |i| %>
-                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "56岁以上", workshop: @workshops[n]), style: "color: black" %></td>
+                          <td><%= link_to i, statistical_analysis_data_employees_path(:age => "56岁以上", workshop: @workshops[n], data_source: @data_source), style: "color: black" %></td>
                           <% n = n+1 %>
                         <% end %>
                       </tr>

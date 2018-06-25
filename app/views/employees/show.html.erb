@@ -1,8 +1,8 @@
 <%= render "employee_navbar"%>
-
 <div class="detail-3D1aE_0">
   <div class="wraper-3HSto_0">
     <div class="wraper-k3Z8K_0">
+
       <!--按钮-->
       <div class="backMain-19P3__0">
         <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
@@ -11,7 +11,6 @@
             <span>返回</span>
           <% end %>
       </div>
-
       <!--头像-->
       <div class="wraper-3Rhbr_0">
         <div class="detail-2tgTZ_0">
@@ -20,12 +19,43 @@
           <% end %>
         </div>
       </div>
-
+      <!-- 调离调动功能-开始 -->
+      <% if can? :manage, Employee %>
+        <% if LeavingEmployee.find_by(:employee_id => @employee.id, :leaving_type => "调离").present? %>
+          <!-- 调离标签 -->
+          <span class="label label-danger">已调离</span>
+        <% else %>
+          <!-- 调离按钮 -->
+          <div class="ivu-tooltip-rel" style="text-align: right">
+            <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+              <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调离"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
+                 <span style="color: #269Eff;">调离</span>
+              <% end %>
+            </button>
+          </div>
+        
+          <!-- 调动标签 -->
+          <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
+            <span class="label label-warning">一月内有调动</span>
+          <% end %>
+          <!-- 调动按钮 -->
+          <div class="ivu-tooltip-rel" style="text-align: right">
+            <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+              <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调动"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
+                 <span style="color: #269Eff;">调动</span>
+              <% end %>
+            </button>
+          </div>
+          <div id="showLeavingEmployee"></div>
+        <% end %>
+      <% end %>
+      <!-- 调离调动功能-结束 -->
       <!--姓名-->
       <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
 
+
       <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= @employee.info.workshop.name %>&nbsp <%= @employee.info.group.name%>&nbsp <%= @employee.duty%> </p>
+      <p class="depJop-2kBwS_0"><%= Workshop.find(@employee.workshop).name %>&nbsp <%= Group.find(@employee.group).name %>&nbsp <%= @employee.duty%> </p>
 
       <!--基本信息-->
       <p>

@@ -1,6 +1,8 @@
 <%= render "attendance_sidebar"%>
 <div class="col-md-12" style="margin-top: -10px;">
-  <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
+  <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+    <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
+  <% end %>
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
       <div class="btn_group-2MSRh_0">
         <div class="ivu-tooltip">
@@ -16,7 +18,7 @@
                 <%= link_to group_attendances_path(format: "xls") do  %>
                    <span style="color: #269Eff;">导出记录</span>
                 <% end %>
-              </button> 
+              </button>
             </div>
         </div>
       </div>
@@ -33,7 +35,11 @@
    <% end %>
 </div>
 <div class="col-md-12" style="margin-top: 20px;">
-<h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+<% if @year.present? && @month.present?%>
+  <h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+<% else %>
+  <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
+<% end %>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -82,10 +88,10 @@
                   <% end %>
                     <% if time_range === day_number %>
                       <td>
-                        <% if @year.present? && @month.present? %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                        <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
                             <% if day_attendance == "x" %>
-                              <%= day_number %> 
+                              <%= day_number %>
                             <% else %>
                               <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
                                 <%= "" %>
@@ -95,17 +101,15 @@
                             <% end %>
                           <% end %>
                         <% else %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true,  "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                             <% if day_attendance == "x" %>
-                               <div class="btn btn-primary" style="background: white; color: black;">
-                                 <%= "-" %>
-                               </div>
+                          <% if day_attendance == "x" %>
+                             <div class="btn btn-primary" style="background: white; color: black;">
+                               <%= "-" %>
+                             </div>
+                          <% else %>
+                           <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
+                              <%= "" %>
                             <% else %>
-                             <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
-                                <%= "" %>
-                              <% else %>
-                                <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                              <% end %>
+                              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
                             <% end %>
                           <% end %>
                         <% end %>

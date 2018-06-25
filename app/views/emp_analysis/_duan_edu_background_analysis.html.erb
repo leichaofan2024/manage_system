@@ -34,7 +34,7 @@
                <td><%= "全段" %></td>
                <% @education_background.each do |education_background| %>
                  <td>
-                  <%= Employee.where(:education_background => education_background).count %>
+                  <%= Employee.current.where(:education_background => education_background).count %>
                  </td>
                <% end %>
              </tr>

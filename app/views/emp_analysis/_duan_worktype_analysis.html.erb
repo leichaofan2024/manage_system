@@ -34,7 +34,7 @@
                <td><%= "全段" %></td>
                <% @work_types.each do |worktype| %>
                  <td>
-                 <%= Employee.where(:work_type => worktype).count %>
+                 <%= Employee.current.where(:work_type => worktype).count %>
                  </td>
                <% end %>
              </tr>

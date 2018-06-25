@@ -19,31 +19,34 @@
         </tr>
       </tbody>
     </table>
-  <!-- 进度条 -->
-  <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
-  <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="60"
-          aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
-          <span class="sr-only">40% 完成</span>
-      </div>
-  </div>
-  <!-- 进度条部分-结束 -->
+    <!-- 进度条 -->
+    <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+            aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
+            <span class="sr-only">40% 完成</span>
+        </div>
+    </div>
+    <!-- 进度条部分-结束 -->
 
-  <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
-    <%= select_tag(:workshop, options_for_select(@workshops.collect{|u| u.name})) %>
-    <%= submit_tag :点击筛选 %>
-  <% end %>
+    <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
+      <%= select_tag(:workshop, options_for_select(@workshops.collect{|u| u.name})) %>
+      <%= submit_tag :点击筛选 %>
+    <% end %>
 
-  <% if @workshop.present? %>
-    <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
-  <% end %>
+    <%= form_tag %>
+
+    <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+      <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
+    <% end %>
 
     <!-- 审核功能-开始 -->
-    <% if !AttendanceStatus.find_by(:workshop_id => @workshop).status == "段已审核" %>
-      <div class="btn_group_top-1sKKU_0">
-        <div>
-          <div class="btn_group-2MSRh_0">
-            <div class="ivu-tooltip">
+    <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+      <% if !AttendanceStatus.find_by(:workshop_id => @workshop).status == "段已审核" %>
+        <div class="btn_group_top-1sKKU_0">
+          <div>
+            <div class="btn_group-2MSRh_0">
+              <div class="ivu-tooltip">
                 <div class="ivu-tooltip-rel" style="margin-top:-80px;">
                   <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                     <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
@@ -61,18 +64,17 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </div>   
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
+<% end %>
 
-  <!-- <%= link_to "通过审核", verify_attendances_path(authority: "duan", workshop: @workshop), method: :post, class: "btn btn-primary" %>
-  <%= link_to "一键审核全部", batch_verify_attendances_path(authority: "duan"), method: :post, class: "btn btn-primary pull-right" %> -->
   <!-- 审核功能-结束 -->
 <% if @workshop.present? %>
   <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
 <% else %>
-  <h4><%= Time.now.month%>月考勤情况</h4>
+  <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
 <% end %>
 <div class="col-md-12">
   <div class="card">
@@ -118,7 +120,7 @@
                 <td>
                     <% if day_attendance == "x" %>
                       <%= " " %>
-                    <% else %>                    
+                    <% else %>
                       <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
                     <% end %>
                 </td>

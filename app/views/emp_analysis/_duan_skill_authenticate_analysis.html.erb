@@ -34,7 +34,7 @@
                <td><%= "全段" %></td>
                <% @skilledness_authenticate.each do |skilledness_authenticate| %>
                  <td>
-                  <%= Employee.where(:skilledness_authenticate => skilledness_authenticate).count %>
+                  <%= Employee.current.where(:skilledness_authenticate => skilledness_authenticate).count %>
                  </td>
                <% end %>
              </tr>

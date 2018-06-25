@@ -8,20 +8,18 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.where(:group => group.id)
-			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		elsif current_user.has_role? :organsadmin
 			group = Group.find_by(:name => current_user.name)
-			@employees = Employee.where(:group => group.id)
-			@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		end
+		@employees = Employee.current.where(:group => group.id)
+		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 
 		# 导出考勤表
 		respond_to do |format|
-      format.html
-      format.csv { send_data @employees.to_csv }
-      format.xls
-    end
+	      format.html
+	      format.csv { send_data @employees.to_csv }
+	      format.xls
+	    end
 	end
 	##班组页面--结束
 
@@ -29,86 +27,96 @@ layout 'home'
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始
 		#根据表单传来的employee_id参数，找到要更新的考勤数据
-		@attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
-		#把记录考勤的字符串分割成数组，赋值给attendance_ary
-		attendance_ary = @attendance.month_attendances.split('')
-		#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
-		#若当前用户是考勤管理员时，则存下修改记录--开始
-		if (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
-			AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
-		end
-		#若当前用户是考勤管理员时，则存下修改记录--结束
-		if current_user.has_role? :workshopadmin
-			Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day]}的考勤数据")
-		end
-		attendance_ary[params[:day].to_i] = params[:code]
-		#将替换过的新的数组变成字符串，赋值给attendance_string
-		attendance_string = attendance_ary.join('')
-		@attendance.update(:month_attendances => attendance_string)
-		@attendance.save
-		#选择假期确定后存入attendance表中--结束
-		#每次更新考勤数据，都更新一次总数(attendance_count)--开始
-		#将上面更新过的表示考勤的数组赋值给attendance_ary_after
-		attendance_ary_after = @attendance.month_attendances.split("")
-		#定义下面需要使用的空hash
-		@vacation = {}
-		attendance_hash= {}
-		#做出一个所有的假期缩写和假期code对应的hash，供下面使用--开始
-		@categories = VacationCategory.all
-		@categories.each do |category|
-			@vacation[category.vacation_shortening] = category.vacation_code
-		end
-		#做出一个所有的假期缩写和假期code对应的hash，供下面使用--结束
-		#通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
-		@vacation.values.each do |code|
-			attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
-		end
-		#将上面得到的attendance_hash存入数据库
-		sum = 0
-		attendance_hash.each do |i|
-			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
-			@attendance_count ||= AttendanceCount.new
-			group_id = Employee.find(params[:employee_id]).group
-			workshop_id = Employee.find(params[:employee_id]).workshop
-			@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
-
-			if (i[0] == "f") && (i[1] > 0)
-				sum += i[1]
+		if !params[:code].present?
+			flash[:alert] = "请先选择考勤"
+			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
+				redirect_back(fallback_location: group_attendances_path)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
+				redirect_back(fallback_location: group_current_time_info_attendances_path)
+			end 
+		else
+			@attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
+			#把记录考勤的字符串分割成数组，赋值给attendance_ary
+			attendance_ary = @attendance.month_attendances.split('')
+			#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
+			#若当前用户是考勤管理员时，则存下修改记录--开始
+			if (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
+				AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
 			end
-			if (i[0] == "g") && (i[1] > 0)
-				sum += i[1]
+			#若当前用户是考勤管理员时，则存下修改记录--结束
+			if current_user.has_role? :workshopadmin
+				Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day].to_i+1}的考勤数据")
 			end
-		end
-		annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
-		annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
-		#每次更新考勤数据，都更新一次总数(attendance_count)--结束
-
-		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
-
-		#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
-
-		if current_user.has_role? :groupadmin
-			name = current_user.name.split("-")
-			@group = Group.find_by(:name => name[1])
-			if !AttendanceStatus.find_by(:group_id => @group.id).present?
-				AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+			attendance_ary[params[:day].to_i] = params[:code]
+			#将替换过的新的数组变成字符串，赋值给attendance_string
+			attendance_string = attendance_ary.join('')
+			@attendance.update(:month_attendances => attendance_string)
+			@attendance.save
+			#选择假期确定后存入attendance表中--结束
+			#每次更新考勤数据，都更新一次总数(attendance_count)--开始
+			#将上面更新过的表示考勤的数组赋值给attendance_ary_after
+			attendance_ary_after = @attendance.month_attendances.split("")
+			#定义下面需要使用的空hash
+			@vacation = {}
+			attendance_hash= {}
+			#做出一个所有的假期缩写和假期code对应的hash，供下面使用--开始
+			@categories = VacationCategory.all
+			@categories.each do |category|
+				@vacation[category.vacation_shortening] = category.vacation_code
 			end
-		elsif current_user.has_role? :organsadmin
-			name = current_user.name
-			@group = Group.find_by(:name => name)
-			if !AttendanceStatus.find_by(:group_id => @group.id).present?
-				if current_user.has_role? :groupadmin
-					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
-				elsif current_user.has_role? :organsadmin
-					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.wokkshop.id)
+			#做出一个所有的假期缩写和假期code对应的hash，供下面使用--结束
+			#通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
+			@vacation.values.each do |code|
+				attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
+			end
+			#将上面得到的attendance_hash存入数据库
+			sum = 0
+			attendance_hash.each do |i|
+				@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
+				@attendance_count ||= AttendanceCount.new
+				group_id = Employee.current.find(params[:employee_id]).group
+				workshop_id = Employee.current.find(params[:employee_id]).workshop
+				@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
+
+				if (i[0] == "f") && (i[1] > 0)
+					sum += i[1]
+				end
+				if (i[0] == "g") && (i[1] > 0)
+					sum += i[1]
 				end
 			end
-		end
+			annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
+			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
+			#每次更新考勤数据，都更新一次总数(attendance_count)--结束
 
-		if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
-			redirect_back(fallback_location: group_attendances_path)
-		elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
-			redirect_back(fallback_location: group_current_time_info_attendances_path)
+			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
+
+			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
+			if current_user.has_role? :groupadmin
+				name = current_user.name.split("-")[1]
+				@group = Group.find_by(:name => name)
+				if !AttendanceStatus.find_by(:group_id => @group.id).present?
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+				else
+					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组填写中")
+				end
+			elsif current_user.has_role? :organsadmin
+				name = current_user.name
+				@group = Group.find_by(:name => name)
+				if !AttendanceStatus.find_by(:group_id => @group.id).present?
+					if current_user.has_role? :groupadmin
+						AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+					elsif current_user.has_role? :organsadmin
+						AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.workshop.id)
+					end
+				end
+			end
+
+			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
+				redirect_back(fallback_location: group_attendances_path)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
+				redirect_back(fallback_location: group_current_time_info_attendances_path)
+			end
 		end
 	end
 	##弹窗内选择假期的表单功能--结束
@@ -140,12 +148,18 @@ layout 'home'
 		if params[:type] == "group"
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			@employees = Employee.where(:group => group.id)
+
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
-			@employees = Employee.where(:workshop => @workshop.id)
+
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop.id)
 			render action: "workshop"
 		elsif params[:type] == "duan"
 			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
@@ -173,14 +187,20 @@ layout 'home'
 			@groups = @workshop
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
+		@choose_group = params[:group]
+		@choose_workshop = params[:workshop]
 		if params[:group].present?
-			@employees = Employee.where(:workshop => params[:workshop], :group => params[:group])
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:group]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:group]).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop], :group => params[:group])
 		else
-			@employees = Employee.where(:workshop => @workshop)
+			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop)
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
-			if params[:group].present?
+			if AttendanceStatus.find_by(:group_id => params[:group]).present?
 				@status = AttendanceStatus.find_by(:group_id => params[:group]).status
 			end
 
@@ -233,20 +253,16 @@ layout 'home'
 	def batch_verify
 		if params[:authority] == "workshop"
 			@workshop = Workshop.find_by(:name => current_user.name)
-			@groups = @workshop.groups
-			@groups.each do |group|
-				AttendanceStatus.find_by(:group_id => group.id).update(:status => "车间已审核", :workshop_id => @workshop.id)
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: workshop_attendances_path)
-			end
+			@groups = @workshop.groups.pluck("id")
+			AttendanceStatus.where(:group_id => @groups).update(:status => "车间已审核", :workshop_id => @workshop.id)
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: workshop_attendances_path)
 		elsif params[:authority] == "duan"
-			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-			@workshops = Workshop.find(status_workshop)
-			@workshops.each do |workshop|
-				AttendanceStatus.where(:workshop_id => workshop.id).update(:status => "段已审核")
-				flash[:notice] = "审核完毕"
-				redirect_back(fallback_location: group_current_time_info_attendances_path)
-			end
+			workshops = AttendanceStatus.pluck("workshop_id").uniq
+			@workshops = Workshop.where(id: status_workshop)
+			AttendanceStatus.where(:workshop_id => workshops).update(:status => "段已审核")
+			flash[:notice] = "审核完毕"
+			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		end
 	end
 	##一键审核功能--结束
@@ -272,6 +288,10 @@ layout 'home'
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@a = Workshop.all.count
+		#配置班组的现员数据（当前人员+调动人员）
+		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop], :group => params[:group])
 	end
 	##段管理员页面--结束
 
@@ -280,7 +300,7 @@ layout 'home'
 		@duan_detail = {}
 		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group], month: params[:month], year: params[:year])
 		attendance_counts.each do |attendance_count|
-			employee_name = Employee.find_by(:id => attendance_count.employee_id).name
+			employee_name = Employee.current.find_by(:id => attendance_count.employee_id).name
 			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code], month: params[:month], year: params[:year]).count
 			@duan_detail[employee_name] = employee_count
 		end
@@ -307,12 +327,18 @@ layout 'home'
 	def create_setting
 		attendance_setting = AttendanceSetting.find_by(:vacation => params[:vacation]) || AttendanceSetting.new
 		attendance_setting.update(:vacation => params[:vacation], :count => params[:count])
+		flash[:notice] = "已增加此权限"
 		redirect_to setting_attendances_path
- 	end 
+ 	end
 
  	def create_application
- 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
- 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+		if !Employee.find_by(:group => params[:group], :name => params[:person]).present?
+			flash[:alert] = "您填写的名字不在这个班组"
+		else
+	 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
+	 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
+			flash[:notice] = "已发起申请"
+		end
  		redirect_back(fallback_location: group_attendances_path)
  	end
 
@@ -323,6 +349,7 @@ layout 'home'
  	def update_application
  		application = Application.find(params[:application_id])
  		application.update(:status => params[:status])
+		flash[:notice] = "已通过申请"
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 
@@ -335,12 +362,12 @@ layout 'home'
 
 	def group_current_time_info
 		if current_user.has_role? :workshopadmin
-			@employees = Employee.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
+			@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 			if params[:workshop].present?
-				@employees = Employee.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
+				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
 			else
-				@employees = Employee.order('id ASC').page(params[:page]).per(10)
+				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
 			end
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -359,15 +386,15 @@ layout 'home'
 	def caiwu
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@vacation_codes = ["d","e","h","i","n","m","j","k"]
+		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
 		@workshops = Workshop.all
 	end
 
 	def create_holiday_time
-		if Employee.find_by(:sal_number => params[:sal_number]).nil?
-			flash[:alert] = "工资号不存在"
+		if Employee.current.find_by(:sal_number => params[:sal_number]).nil?
+			flash[:alert] = "工资号不存在" 
 		else
-			if Employee.find_by(:sal_number => params[:sal_number]).name == params[:name]
+			if Employee.current.find_by(:sal_number => params[:sal_number]).name == params[:name]
 				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
 				holiday_start_time.update(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time], name: params[:name])
 				flash[:notice] = "设置成功"
@@ -390,6 +417,6 @@ layout 'home'
 	end
 
 	def caiwu2
-		@employees = Employee.order('id ASC').page(params[:page]).per(20)
+		@employees = Employee.current.order('id ASC').page(params[:page]).per(20)
 	end
 end

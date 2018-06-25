@@ -1,4 +1,4 @@
-set :branch, "develop"
+set :branch, "delete-elasticsearch"
 
 # server-based syntax
 # ======================
