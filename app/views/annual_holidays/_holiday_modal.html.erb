@@ -10,8 +10,8 @@
           <%= text_field_tag :number %>
           <%= hidden_field_tag :work_type, @work_type %>
           <%= hidden_field_tag :input_name, @number %>
-          <%= hidden_field_tag :workshop, Workshop.find_by(name: @workshop).id %>
-          <%= submit_tag :点击填入 %>
+          <%= hidden_field_tag :workshop, @id %>
+          <%= submit_tag :点击填入 %> 
         <% end %>
       </div>
     </div> 

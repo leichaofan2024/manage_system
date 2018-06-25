@@ -13,6 +13,7 @@ class AnnualHolidaysController < ApplicationController
 		@work_type = params[:work_type]
 		@number = params[:number]
 		@workshop = params[:workshop]
+		@id = params[:id]
 		respond_to do |format|
 			format.js
 		end
