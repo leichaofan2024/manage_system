@@ -27,15 +27,23 @@ gem 'cancancan'
 gem "notifications"
 gem "ruby-push-notifications"
 
+#上传头像
+gem 'carrierwave'
+gem 'mini_magick'
+
 gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'simple_form'
+#上传下载表格
 gem 'roo'
 gem 'roo-xls'
+
 gem 'kaminari'
+#controller与js的参数传递
 gem 'gon'
+
 gem 'font-awesome-rails'
 gem 'ransack'
 

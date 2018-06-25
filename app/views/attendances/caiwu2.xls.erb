@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">工资号</Data></Cell>
+        <Cell><Data ss:Type="String">部门名称</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">日勤夜班数</Data></Cell>
+        <Cell><Data ss:Type="String">节日加班</Data></Cell>
+        <Cell><Data ss:Type="String">轮流夜班天数</Data></Cell>
+      </Row>
+    <% @export_employees.each do |employee| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Group.find_by(:id => employee.group).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
+        <% if attendance_counts.find_by(vacation_code: "a").present? %>
+          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "a").count %></Data></Cell>
+        <% else %>
+          <Cell><Data ss:Type="String"><%= "" %></Data></Cell>
+        <% end %>
+        <% if attendance_counts.find_by(vacation_code: "c").present? %>
+          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "c").count %></Data></Cell>
+        <% else %>
+          <Cell><Data ss:Type="String"><%= "" %></Data></Cell>
+        <% end %>
+        <% if attendance_counts.find_by(vacation_code: "b").present? %>
+          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "b").count %></Data></Cell>
+        <% else %>
+          <Cell><Data ss:Type="String"><%= "" %></Data></Cell>
+        <% end %>
+        
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
