@@ -1,6 +1,6 @@
 <%= render 'annual_holiday_sidebar' %>
 <div class="col-md-12">
-	<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) %>
+	<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) %>
 		<div class="col-md-12" style="margin-bottom: 10px;">
 			<%= form_tag filter_annual_holidays_path, method: 'get' do %>
 				<%= select_tag(:workshop, options_for_select(@workshops.collect{ |u| [u.name, u.id] }), {:prompt => "请选择车间"}) %>
@@ -21,7 +21,7 @@
 	        		<% (1..12).each do |i| %>
 	        			<th><%= i %></th>
 	        		<% end %>
-	        		<th>工龄</th> 
+	        		<th>工龄</th>
 	        		<th>应休</th>
 	        		<th>实休</th>
 	        	</tr>

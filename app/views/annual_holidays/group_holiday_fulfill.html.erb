@@ -1,4 +1,4 @@
-<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :leaderadmin)%>
 	<div class="card">
 		    <div style="overflow: auto;" class="col-md-10">
 		      <table id="example" class="table table-bordered">
@@ -13,7 +13,7 @@
 		        		<th>实休</th>
 		        	</tr>
 		        </thead>
-		        <tbody>  	
+		        <tbody>
 	        		<% @employees.each do |employee| %>
 	        			<tr>
 	        				<td><%= employee.name %></td>
@@ -23,7 +23,7 @@
 									<td><%= AnnualHoliday.find_by(month: month, year: Time.now.year, employee_id: employee.id).holiday_days %></td>
 								<% else %>
 									<td><%= "" %></td>
-								<% end %>	
+								<% end %>
 	        				<% end %>
 	        				<% if employee.working_years <= 10 %>
 	        					<td><%= 5 %></td>

@@ -33,7 +33,7 @@
               <% end %>
             </button>
           </div>
-        
+
           <!-- 调动标签 -->
           <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
             <span class="label label-warning">一月内有调动</span>
@@ -115,7 +115,7 @@
                   </span>
                 </div>
 
-                <% if can? :manage, Employee %>
+                <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -205,7 +205,7 @@
                   </span>
                 </div>
 
-                <% if can? :manage, Employee %>
+                <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -269,7 +269,7 @@
         <!-- 结束 -->
 
         <!--其他信息-->
-        <% if can? :manage, Employee %>
+        <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
         <div class="tructure-2zHdB_0">
           <!--基本信息的头部字-->
           <div class="head-3fDND_0">

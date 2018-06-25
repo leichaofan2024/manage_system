@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <% if can? :manage, Employee %>
+    <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
       <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
         <div class="queryTop-26iSU_0">
           <div class="condition-19RSN_0">

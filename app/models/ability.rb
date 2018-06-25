@@ -1,9 +1,12 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user) 
+  def initialize(user)
+    alias_action :index, :show, :filter, :age_statistical_analysis, :education_statistical_analysis, :working_years_statistical_analysis, :worktype_statistical_analysis, :rali_years_statistical_analysis,  :statistical_analysis_data, :organization_structure, :compsite_statistical_analysis, to: :leader_read
     if user.has_role? :superadmin
       can :manage, :all
+    elsif user.has_role? :leaderadmin
+      can :leader_read, Employee
     elsif user.has_role? :empadmin
       can :manage, Employee
     elsif user.has_role? :atttendance_admin

@@ -1,5 +1,5 @@
 <!--来自github上的导航栏的设计-->
-<% if can? :manage, Employee %>
+<% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
   <div class="header_info">
     <ul class="d-flex pl-2 flex-items-center text-bold list-style-none" role="navigation">
       <li>
