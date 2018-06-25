@@ -1,4 +1,6 @@
+
 <%= render "employee_navbar"%>
+<%= link_to "返回", :back %>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -15,10 +17,10 @@
 	      	  <th>调动前班组</th>
 	      	  <th>调动后车间</th>
 	      	  <th>调动后班组</th>
-	      	  <th>调动时间</th> 
+	      	  <th>调动时间</th>
 	      	<% end %>
       	</tr>
-      </thead> 
+      </thead>
       <tbody>
       	<% @leaving_employees.each do |employee| %>
 	      	<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">

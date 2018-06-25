@@ -20,7 +20,7 @@
         <Cell><Data ss:Type="String">民族</Data></Cell>
         <Cell><Data ss:Type="String">籍贯</Data></Cell>
         <Cell><Data ss:Type="String">政治面目</Data></Cell>
-        <Cell><Data ss:Type="String">党团时间</Data></Cell> 
+        <Cell><Data ss:Type="String">党团时间</Data></Cell>
         <Cell><Data ss:Type="String">工作时间</Data></Cell>
         <Cell><Data ss:Type="String">入路时间</Data></Cell>
         <Cell><Data ss:Type="String">本单位日期</Data></Cell>
@@ -83,8 +83,8 @@
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.workshop%></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.group %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Workshop.find(employee.workshop).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Group.find(employee.group).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.birth_date %></Data></Cell>

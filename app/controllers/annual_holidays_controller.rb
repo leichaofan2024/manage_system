@@ -13,6 +13,7 @@ class AnnualHolidaysController < ApplicationController
 		@work_type = params[:work_type]
 		@number = params[:number]
 		@workshop = params[:workshop]
+		@id = params[:id]
 		respond_to do |format|
 			format.js
 		end
@@ -99,7 +100,7 @@ class AnnualHolidaysController < ApplicationController
 				render action: "holiday_fulfill_detail"
 			end
 		end
-		
+
 	end
 
 	def holiday_fulfillment_rate
@@ -107,7 +108,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def group_holiday_fulfill
-		group_name = current_user.name.split("-")[1] 
+		group_name = current_user.name.split("-")[1]
 		@employees = Employee.current.where(:group => Group.find_by(:name => group_name).id)
 	end
 
