@@ -23,7 +23,11 @@
     <tbody>
       <tr>
         <td><%= Application.where(:group_id => groups, :status => "班组发起申请").count %>条</td>
-        <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
+        <% unless Application.where(:group_id => groups, :status => "班组发起申请").count == 0 %>
+          <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
+        <% else %>
+          <td><%= "无申请" %></td>
+        <% end %>
       </tr>
     </tbody>
   </table>
