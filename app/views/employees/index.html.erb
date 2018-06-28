@@ -147,7 +147,9 @@
       <div style="overflow: auto; width: 100%;">
         <% if can? :manage, Employee %>
           <%= render 'empshared/emp_table'%>
-        <% else %>
+        <% elsif current_user.has_role? :workshopadmin %>
+          <%= render 'empshared/workshop_table'%>
+        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
           <%= render 'empshared/emp_table_not_empadmin'%>
          <% end %>
       </div>

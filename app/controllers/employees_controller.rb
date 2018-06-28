@@ -34,6 +34,11 @@ class EmployeesController < ApplicationController
     elsif current_user.has_role? :workshopadmin
       workshop_id = Workshop.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(10)
+      @workshop = Workshop.find_by(:name => current_user.name)
+			@groups = @workshop.groups
+      if params[:group].present?
+        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(10)
+      end
     elsif current_user.has_role? :organsadmin
       group_id = Group.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:group => group_id).page(params[:page]).per(10)
