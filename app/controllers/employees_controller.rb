@@ -91,9 +91,8 @@ class EmployeesController < ApplicationController
       redirect_to employee_path(params[:id])
     else
       flash[:alert] = "更新失败"
-      redirect_to edit_employee_path
+      redirect_to employee_path(params[:id])
     end
-
   end
 
   def show
