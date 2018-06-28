@@ -33,7 +33,7 @@
         <tbody>
 
           <% @employees.each do |employee| %>
-            <tr>
+              <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>

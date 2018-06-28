@@ -15,13 +15,13 @@
 
       <div class="wraper-3Rhbr_0">
         <div class="detail-2tgTZ_0">
-          <!-- <% if @employee.avatar.present? %>
+          <% if @employee.avatar.present? %>
             <img src="<%= @employee.avatar.thum%>" width="120" height="120", class="img-circle" >
-          <% else %> -->
+          <% else %>
             <% if @employee.name != nil %>
               <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
             <% end %>
-          <!-- <% end %> -->
+          <% end %>
         </div>
       </div>
       <!-- 调离调动功能-开始 -->
@@ -68,6 +68,13 @@
         <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
         <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
       </p>
+      <p>
+        <%= form_for @employee do |f| %>
+          <%= f.label :上传头像 %>
+          <%= f.file_field :avatar %>
+          <%= submit_tag "点击上传" %>
+        <% end %>
+      </p>
     </div>
   </div>
 
@@ -83,7 +90,7 @@
             <div class="info-2zzSp_0">
               <%= "基本信息"%>
             </div>
-            <% if can? :edit, @employee %>
+            <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) %>
               <div class="right-Qtwf2_0">
                 <div class="edit-2kYy__0">
                   <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
@@ -120,7 +127,7 @@
                   </span>
                 </div>
 
-                <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
+                <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -210,7 +217,7 @@
                   </span>
                 </div>
 
-                <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
+                <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -274,7 +281,7 @@
         <!-- 结束 -->
 
         <!--其他信息-->
-        <% if (can? :manage, Employee) || (can? :leader_read, Employee)  %>
+        <% if (can? :manage, Employee) || (can? :leader_read, Employee) || ( current_user.has_role? :workshopadmin ) %>
         <div class="tructure-2zHdB_0">
           <!--基本信息的头部字-->
           <div class="head-3fDND_0">

@@ -20,6 +20,7 @@
 
 puts "创建多个管理员"
 User.create(name: "超级管理员", password: "123456", password_confirmation: "123456").add_role :superadmin
+User.create(name: "供电段管理员", password: "123456", password_confirmation: "123456").add_role :leaderadmin
 User.create(name: "现员管理员", password: "123456", password_confirmation: "123456").add_role :empadmin
 User.create(name: "考勤管理员", password: "123456", password_confirmation: "123456").add_role :attendance_admin
 User.create(name: "定额管理员", password: "123456", password_confirmation: "123456").add_role :limitadmin
