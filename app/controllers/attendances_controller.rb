@@ -33,7 +33,7 @@ layout 'home'
 				redirect_back(fallback_location: group_attendances_path)
 			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
 				redirect_back(fallback_location: group_current_time_info_attendances_path)
-			end 
+			end
 		else
 			@attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
 			#把记录考勤的字符串分割成数组，赋值给attendance_ary
@@ -388,11 +388,18 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
 		@workshops = Workshop.all
+
+		# 导出考勤表
+		respond_to do |format|
+	      format.html
+	      format.csv { send_data @workshops.to_csv }
+	      format.xls
+	    end
 	end
 
 	def create_holiday_time
 		if Employee.current.find_by(:sal_number => params[:sal_number]).nil?
-			flash[:alert] = "工资号不存在" 
+			flash[:alert] = "工资号不存在"
 		else
 			if Employee.current.find_by(:sal_number => params[:sal_number]).name == params[:name]
 				holiday_start_time = HolidayStartTime.find_by(sal_number: params[:sal_number], vacation: params[:vacation], start_time: params[:start_time]) || HolidayStartTime.new
@@ -418,5 +425,12 @@ layout 'home'
 
 	def caiwu2
 		@employees = Employee.current.order('id ASC').page(params[:page]).per(20)
+		@export_employees = Employee.current
+		# 导出考勤表
+		respond_to do |format|
+	      format.html
+	      format.csv { send_data @export_employees.to_csv }
+	      format.xls
+	    end
 	end
 end

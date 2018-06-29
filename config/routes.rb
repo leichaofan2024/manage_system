@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       post :create_leaving
       get :employee_detail
       post :update_holiday_information
+      post :insert_attendance_cate
     end
   end
 

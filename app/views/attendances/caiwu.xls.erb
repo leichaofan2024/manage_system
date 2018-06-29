@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">车间</Data></Cell>
+        <Cell><Data ss:Type="String">病假</Data></Cell>
+        <Cell><Data ss:Type="String">事假</Data></Cell>
+        <Cell><Data ss:Type="String">婚假</Data></Cell>
+        <Cell><Data ss:Type="String">产假</Data></Cell>
+        <Cell><Data ss:Type="String">探亲假</Data></Cell>
+        <Cell><Data ss:Type="String">丧假</Data></Cell>
+        <Cell><Data ss:Type="String">育儿假</Data></Cell>
+        <Cell><Data ss:Type="String">陪产假</Data></Cell>
+        <Cell><Data ss:Type="String">工伤假</Data></Cell>
+        <Cell><Data ss:Type="String">旷工</Data></Cell>
+      </Row>
+    <% @workshops.each do |workshop| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= workshop.name %></Data></Cell>
+        <% @vacation_codes.each do |code| %>
+            <Cell><Data ss:Type="String"><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></Data></Cell>
+        <% end %>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -38,7 +38,6 @@
         <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% attendance = Attendance.find_by(employee_id: employee.id) %>
         <% attendance_ary = attendance.month_attendances.split('') %>
-        <% day_number = 1%>
         <% attendance_ary.each do |day_attendance| %>
           <Cell><Data ss:Type="String">
             <% if day_attendance == "x" %>
@@ -47,7 +46,6 @@
               <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
             <% end %>
           </Data></Cell>
-          <% day_number += 1%>
         <% end %>
 
           <% @vacation_codes.each do |code| %>

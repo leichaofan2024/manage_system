@@ -1,4 +1,12 @@
+
 <%= render "attendance_sidebar"%>
+<div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
+  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+    <%= link_to caiwu2_attendances_path(format: "xls") do  %>
+       <span style="color: #269Eff;">导出记录</span>
+    <% end %>
+  </button>
+</div>
 <div class="col-md-12">
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
@@ -10,7 +18,7 @@
         		<th>姓名</th>
         		<th>日勤夜班数</th>
         		<th>节日加班</th>
-        		<th>轮值夜班天数</th>
+        		<th>轮流夜班天数</th>
         	</tr>
         </thead>
         <tbody>

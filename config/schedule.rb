@@ -20,5 +20,5 @@
 # Learn more: http://github.com/javan/whenever
 set :output, 'log/cron.log' #設定log的路徑
 # every 1.minutes do
-#     command "echo '哇哈哈哈哈哈哈哈哈哈哈'"
+#     runner "Workshop.create_workshop"
 # end

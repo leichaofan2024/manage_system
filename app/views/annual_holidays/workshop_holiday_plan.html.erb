@@ -31,8 +31,13 @@
 	        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
 	        				<% columns.each do |column| %>
 		        				<td>
-		        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: column, workshop: current_user.name), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
-		        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: Workshop.find_by(name: current_user.name).id, year: Time.now.year, work_type: type) %>
+		        					<% if current_user.has_role? :workshopadmin %>
+	        							<% id = Workshop.find_by(name: current_user.name).id %>
+	        						<% elsif current_user.has_role? :organsadmin %>
+	        							<% id = Group.find_by(name: current_user.name).id %>
+	        						<% end  %>
+		        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
+		        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: Time.now.year, work_type: type) %>
 		        						<% if holiday.present? %>
 		        						  <% holiday_attribute = holiday.attributes %>
 			        						<% if holiday_attribute[column].present? %>

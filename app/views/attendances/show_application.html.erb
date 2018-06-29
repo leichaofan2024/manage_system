@@ -18,6 +18,7 @@
       	</tr>
       </thead>
       <tbody>
+        <% if @applications.present? %>
       	<% @applications.each do |application| %>
 	      	<tr>
 	      		<% if params[:type] == "duan" %>
@@ -46,6 +47,7 @@
 	      		<% end %>
 	      	</tr>
       	<% end %>
+        <% end %>
       </tbody>
   </table>
 </div>

@@ -1,6 +1,22 @@
 class EmployeesController < ApplicationController
   layout 'home'
 
+  def insert_attendance_cate
+   hash = {}
+   a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
+   b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
+   n=0
+   ("a".."r").each do |i|
+     hash[i] = [a[n], b[n]]
+     n+=1
+   end
+
+   hash.each do |m|
+     p = m[1]
+       VacationCategory.create(:vacation_code => m[0], :vacation_shortening => p[0], :vacation_name => p[1] )
+   end
+  end
+
   def update_holiday_information
     a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
     a.each do |i|
@@ -18,6 +34,11 @@ class EmployeesController < ApplicationController
     elsif current_user.has_role? :workshopadmin
       workshop_id = Workshop.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(10)
+      @workshop = Workshop.find_by(:name => current_user.name)
+			@groups = @workshop.groups
+      if params[:group].present?
+        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(10)
+      end
     elsif current_user.has_role? :organsadmin
       group_id = Group.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:group => group_id).page(params[:page]).per(10)
@@ -43,11 +64,12 @@ class EmployeesController < ApplicationController
   end
 
   def create
-    if (!Workshop.find_by(name: params[:workshop]).present?) or (!Group.find_by(name: params[:group]).present?)
+    if (!Workshop.find_by("name = ?", params[:employee][:workshop]).present?) or (!Group.find_by("name = ?", params[:employee][:group]).present?)
       flash[:alert] = "您填写的车间或班组不存在"
       redirect_to new_employee_path
     else
       @employee = Employee.new(employee_params)
+      @employee.update(:workshop => Workshop.find_by("name = ?", params[:employee][:workshop]).id, :group => Group.find_by("name = ?", params[:employee][:group]).id)
       if @employee.save
         flash[:notice] = "创建成功"
       else
@@ -55,7 +77,7 @@ class EmployeesController < ApplicationController
       end
       redirect_to employees_path
     end
-    
+
   end
 
   def edit
@@ -69,9 +91,8 @@ class EmployeesController < ApplicationController
       redirect_to employee_path(params[:id])
     else
       flash[:alert] = "更新失败"
-      redirect_to edit_employee_path
+      redirect_to employee_path(params[:id])
     end
-
   end
 
   def show
@@ -1399,7 +1420,7 @@ class EmployeesController < ApplicationController
   private
 
     def employee_params
-      params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number)
+      params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number, :avatar)
     end
 
 

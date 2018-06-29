@@ -2,6 +2,8 @@ class Employee < ActiveRecord::Base
   # 不同的角色可以对Employee的资源进行不同的操作
   resourcify
 
+  #上传头像
+  mount_uploader :avatar, AvatarUploader
 
   has_many :attendances
   has_one :info, class_name: "EmpBasicInfo", dependent: :destroy
@@ -9,33 +11,39 @@ class Employee < ActiveRecord::Base
   has_many :annual_holidays
   has_one :leaving_employee
 
+  #去掉调离的所有人
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+  #所有调离的人
   scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+  #一段时间内所有调动的人
   scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id"))}
+  #所有工人
   scope :worker, -> { where(grade: nil)}
+  #所有干部
   scope :cadre, -> {where.not(grade: nil)}
 
+  #某个时间段调动的人
   def self.transfer_search(start_time, end_time)
     b = {"to" => [], "from" => []}
     a = LeavingEmployee.where("leaving_employees.leaving_type = ?", "调动").group_by{|u| u.employee_id}
-    a.each do |employee_id, leaving_employees| 
+    a.each do |employee_id, leaving_employees|
       m = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       n = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at > ?", end_time).select("id", "employee_id", "transfer_from_workshop", "transfer_from_group", "created_at").order("created_at").first
       q = LeavingEmployee.where(id: leaving_employees.map{|u| u.id}).where("leaving_employees.created_at < ?", start_time).select("id", "employee_id", "transfer_to_workshop", "transfer_to_group", "created_at").order("created_at").last
       if m.present?
         b["to"] << m.id
-      elsif n.nil? 
+      elsif n.nil?
         b["to"] << q.id
       elsif q.nil?
         b["from"] << n.id
       else
         b["to"] << q.id
       end
-    end 
+    end
     return b
   end
 
-  
+
 
   def self.import_table(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)

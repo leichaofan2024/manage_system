@@ -1,5 +1,4 @@
 <%= render 'employee_navbar' %>
-<%= link_to "更新休假信息", update_holiday_information_employees_path, method: :post %>
 <!-- 通过@employees的总页数，找出所有的id-开始 -->
 <% pages = @employees.total_pages %>
 <% employee_ids = @employees.page(1).per(10).pluck("id") %>
@@ -40,7 +39,7 @@
       </div>
     </div>
 
-    <% if can? :manage, Employee %>
+    <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
       <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
         <div class="queryTop-26iSU_0">
           <div class="condition-19RSN_0">
@@ -148,7 +147,9 @@
       <div style="overflow: auto; width: 100%;">
         <% if can? :manage, Employee %>
           <%= render 'empshared/emp_table'%>
-        <% else %>
+        <% elsif current_user.has_role? :workshopadmin %>
+          <%= render 'empshared/workshop_table'%>
+        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
           <%= render 'empshared/emp_table_not_empadmin'%>
          <% end %>
       </div>
