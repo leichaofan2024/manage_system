@@ -18,5 +18,7 @@
 
 config/database.yml
 
+/public/uploads
+
 
 .byebug_history
