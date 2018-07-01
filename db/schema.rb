@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180701081136) do
+ActiveRecord::Schema.define(version: 20180701094237) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.integer "workshop_id"
@@ -326,15 +326,15 @@ ActiveRecord::Schema.define(version: 20180701081136) do
     t.string "col1"
     t.string "col2"
     t.string "col3"
-    t.integer "col4"
-    t.integer "col5"
-    t.integer "col6"
-    t.integer "col7"
-    t.integer "col8"
-    t.integer "col9"
-    t.integer "col10"
-    t.integer "col11"
-    t.integer "col12"
+    t.string "col4"
+    t.string "col5"
+    t.string "col6"
+    t.string "col7"
+    t.string "col8"
+    t.string "col9"
+    t.string "col10"
+    t.string "col11"
+    t.string "col12"
     t.integer "col13"
     t.integer "col14"
     t.integer "col15"

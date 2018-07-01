@@ -89,4 +89,11 @@ Rails.application.routes.draw do
       post :update_have_read
     end
   end
+
+  resources :wages do
+    collection do
+      post :import_table
+      get :import_wage
+    end
+  end
 end

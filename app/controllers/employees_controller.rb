@@ -13,7 +13,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(10)
     elsif current_user.has_role? :workshopadmin
       workshop_id = Workshop.find_by(:name => current_user.name).id

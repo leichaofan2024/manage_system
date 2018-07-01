@@ -1,0 +1,6 @@
+<h5>上传工资表</h5>
+
+<%= form_tag import_table_wages_path, multipart: true do %>
+<%= file_field_tag :file%>
+<%= submit_tag "上传"%>
+<% end %>

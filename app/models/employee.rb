@@ -10,7 +10,6 @@ class Employee < ActiveRecord::Base
   has_many :attendance_counts
   has_many :annual_holidays
   has_one :leaving_employee
-  has_many :wages
 
   #去掉调离的所有人
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
@@ -50,7 +49,7 @@ class Employee < ActiveRecord::Base
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",
                      "工号" => "job_number",
-                     "档案号" => "record_number",
+                     "档案号" => "record_number", 
                      "部门" => "workshop",
                      "班组名称" => "group",
                      "班组类别" => "group_category",
