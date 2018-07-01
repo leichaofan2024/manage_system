@@ -10,6 +10,7 @@ class Employee < ActiveRecord::Base
   has_many :attendance_counts
   has_many :annual_holidays
   has_one :leaving_employee
+  has_many :wages
 
   #去掉调离的所有人
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
