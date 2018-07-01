@@ -2,87 +2,107 @@ class CreateWages < ActiveRecord::Migration[5.1]
   def change
     create_table :wages do |t|
       t.integer :employee_id
-      t.string :bank_account, comment: "银行账号"
-      t.string :housing_accumulation_fund_account, comment: "公积金号"
-      t.string :account_category, comment: "账号类别"
-      t.integer :skill, comment: "技能"
-      t.integer :post, comment: "岗位"
-      t.integer :post_safety_assessment, comment: "岗安考核"
-      t.integer :working_years, comment: "工龄"
-      t.integer :overtime_days, comment: "加班天数"
-      t.integer :overtime_pay, comment: "加班费"
-      t.integer :daytime_night_shift, comment: "日勤夜班"
-      t.integer :night_shift_by_turn, comment: "轮流夜班"
-      t.integer :night_shift_pay, comment: "夜班费"
-      t.integer :living_allowance, comment: "生活补贴"
-      t.integer :increase_performance, comment: "增效"
-      t.integer :transportation_fee, comment: "交通费"
-      t.integer :hygiene_fee, comment: "卫生费"
-      t.integer :single_subsidy, comment: "独补"
-      t.integer :child_care_subsidy, comment: "托补"
-      t.integer :milk_subsidy, comment: "奶补"
-      t.integer :house_subsidy, comment: "房补"
-      t.integer :survivor_subsidy, comment: "遗属补贴"
-      t.integer :huimin_subsidy, comment: "回民补贴"
-      t.integer :cadre_subsidy, comment: "干部补贴"
-      t.integer :worker_subsidy, comment: "工人补贴"
-      t.integer :book_fee, comment: "书报费"
-      t.integer :bonus, comment: "奖金"
-      t.integer :increased_salary, comment: "增资"
-      t.integer :first_line_allowance, comment: "一线津贴"
-      t.integer :special_salary, comment: "特种工资"
-      t.integer :work_injury_treatment, comment: "工伤待遇"
-      t.integer :five_seven_subsidy, comment: "五七补"
-      t.integer :minimum_wage, comment: "最低工资"
-      t.integer :taBu1, comment: "它补1"
-      t.integer :taBu2, comment: "它补2"
-      t.integer :high_temperature_allowance, comment: "高温津贴"
-      t.integer :wage_payable, comment: "应发工资"
-      t.integer :real_wage, comment: "实发工资"
-      t.integer :summary1, comment: "汇总1"
-      t.integer :summary2, comment: "汇总2"
-      t.integer :summary3, comment: "汇总3"
-      t.integer :withholding_annuity, comment: "扣年金"
-      t.integer :withholding_fee, comment: "扣会费"
-      t.integer :withholding_housing_accumulation_fund, comment: "扣公积金"
-      t.integer :withholding_pension, comment: "扣养老金"
-      t.integer :withholding_unemployment_compensation, comment: "扣失业金"
-      t.integer :withholding_medical_insurance, comment: "扣医保"
-      t.integer :tax_calculation, comment: "税款计算"
-      t.integer :withholding_bundling, comment: "扣捆绑"
-      t.integer :total_room_charge, comment: "房费合计"
-      t.integer :beijing_room_charge, comment: "北京房费"
-      t.integer :fengtai_room_charge, comment: "丰台房费"
-      t.integer :jingxi_room_charge, comment: "京西房费"
-      t.integer :chengde_room_charge, comment: "承德房费"
-      t.integer :huaibei_room_charge, comment: "怀北房费"
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
-      t.integer :
+      t.integer :month
+      t.integer :year
+      t.string :col1
+      t.string :col2
+      t.string :col3
+      t.integer :col4
+      t.integer :col5
+      t.integer :col6
+      t.integer :col7
+      t.integer :col8
+      t.integer :col9
+      t.integer :col10
+      t.integer :col11
+      t.integer :col12
+      t.integer :col13
+      t.integer :col14
+      t.integer :col15
+      t.integer :col16
+      t.integer :col17
+      t.integer :col18
+      t.integer :col19
+      t.integer :col20
+      t.integer :col21
+      t.integer :col22
+      t.integer :col23
+      t.integer :col24
+      t.integer :col25
+      t.integer :col26
+      t.integer :col27
+      t.integer :col28
+      t.integer :col29
+      t.integer :col30
+      t.integer :col31
+      t.integer :col32
+      t.integer :col33
+      t.integer :col34
+      t.integer :col35
+      t.integer :col36
+      t.integer :col37
+      t.integer :col38
+      t.integer :col39
+      t.integer :col40
+      t.integer :col41
+      t.integer :col42
+      t.integer :col43
+      t.integer :col44
+      t.integer :col45
+      t.integer :col46
+      t.integer :col47
+      t.integer :col48
+      t.integer :col49
+      t.integer :col50
+      t.integer :col51
+      t.integer :col52
+      t.integer :col53
+      t.integer :col54
+      t.integer :col55
+      t.integer :col56
+      t.integer :col57
+      t.integer :col58
+      t.integer :col59
+      t.integer :col60
+      t.integer :col61
+      t.integer :col62
+      t.integer :col63
+      t.integer :col64
+      t.integer :col65
+      t.integer :col66
+      t.integer :col67
+      t.integer :col68
+      t.integer :col69
+      t.integer :col70
+      t.integer :col71
+      t.integer :col72
+      t.integer :col73
+      t.integer :col74
+      t.integer :col75
+      t.integer :col76
+      t.integer :col77
+      t.integer :col78
+      t.integer :col79
+      t.integer :col80
+      t.integer :col81
+      t.integer :col82
+      t.integer :col83
+      t.integer :col84
+      t.integer :col85
+      t.integer :col86
+      t.integer :col87
+      t.integer :col88
+      t.integer :col89
+      t.integer :col90
+      t.integer :col91
+      t.integer :col92
+      t.integer :col93
+      t.integer :col94
+      t.integer :col95
+      t.integer :col96
+      t.integer :col97
+      t.integer :col98
+      t.integer :col99
       t.timestamps
     end
   end
