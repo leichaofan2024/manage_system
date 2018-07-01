@@ -96,4 +96,12 @@ Rails.application.routes.draw do
       get :import_wage
     end
   end
+
+  resources :bonus do
+    collection do
+      post :import_table
+      get :import_bonus
+    end
+  end
+
 end
