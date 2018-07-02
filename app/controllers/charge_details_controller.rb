@@ -1,10 +1,11 @@
-class RelativeSalersController < ApplicationController
+class ChargeDetailsController < ApplicationController
   layout 'home'
+
   def index
-    @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    @charge_details = ChargeDetail.page(params[:page]).per(20)
     respond_to do |format|
       format.html
-      format.csv { send_data @relative_salers.to_csv}
+      format.csv { send_data @charge_details.to_csv}
       format.xls
     end
   end
@@ -13,11 +14,11 @@ class RelativeSalersController < ApplicationController
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
     else
-      RelativeSaler.import(params[:file])
+      ChargeDetail.import(params[:file])
       flash[:notice] = "上传成功"
     end
-    redirect_to relative_salers_path
+    redirect_to charge_details_path
   end
 
-  
+
 end

@@ -3,11 +3,13 @@
 <%= render 'import_relative_saler_table'%>
 
 <% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
-  <h5>上传工效挂钩明细表</h5>
-  <%= form_tag import_relative_salers_path, multipart: true do %>
-    <%= file_field_tag :file%>
-    <%= submit_tag "上传"%>
-  <% end %>
+  <div class="col-md-12">
+    <h5>上传工效挂钩明细表</h5>
+    <%= form_tag import_relative_salers_path, multipart: true do %>
+      <%= file_field_tag :file%>
+      <%= submit_tag "上传"%>
+    <% end %>
+  </div>
 <% end %>
 
 <% if current_user.has_role? :awardadmin %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702065247) do
+ActiveRecord::Schema.define(version: 20180702084045) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "workshop_id"
@@ -126,6 +126,36 @@ ActiveRecord::Schema.define(version: 20180702065247) do
     t.integer "month"
     t.integer "year"
     t.integer "group_id"
+  end
+
+  create_table "charge_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "考核扣款明细表" do |t|
+    t.string "序号"
+    t.string "科室车间"
+    t.integer "扣款合计"
+    t.integer "安全业绩扣款"
+    t.integer "生产经营绩效扣款"
+    t.integer "总重吨公里扣款"
+    t.integer "综合指标扣款"
+    t.integer "设备质量扣款"
+    t.integer "盈亏结果扣款"
+    t.integer "安全质量扣款"
+    t.integer "安全质量考核中牌卡扣分"
+    t.integer "安全质量考核中牌卡扣款"
+    t.integer "工作质量扣款"
+    t.integer "抽考扣款"
+    t.integer "红牌中层扣款"
+    t.integer "处分扣款"
+    t.integer "其他扣款"
+    t.integer "挂钩考核扣款"
+    t.float "安全业绩扣分", limit: 24
+    t.float "总重吨公里扣分", limit: 24
+    t.float "综合指标扣分", limit: 24
+    t.float "设备质量扣分", limit: 24
+    t.float "盈亏结果扣分", limit: 24
+    t.float "安全质量扣分", limit: 24
+    t.float "工作质量扣分", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|

@@ -1,0 +1,16 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<% if current_user.has_role? :awardadmin %>
+  <%= render 'import_charge_details'%>
+  <div class="col-md-12">
+    <h5>上传扣款明细表</h5>
+    <%= form_tag import_charge_details_path, multipart: true do %>
+      <%= file_field_tag :file%>
+      <%= submit_tag "上传"%>
+    <% end %>
+  </div>
+<% end %>
+
+<% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
+  <%= render 'not_awardadmin_charge_detail'%>
+<% end %>

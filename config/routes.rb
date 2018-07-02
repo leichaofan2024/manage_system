@@ -95,4 +95,8 @@ Rails.application.routes.draw do
   resources :relative_salers do
     collection { post :import }
   end
+
+  resources :charge_details do
+    collection { post :import }
+  end
 end
