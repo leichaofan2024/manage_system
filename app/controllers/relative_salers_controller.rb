@@ -2,8 +2,12 @@ class RelativeSalersController < ApplicationController
   layout 'home'
   def index
     @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    respond_to do |format|
+      format.html
+      format.csv { send_data @relative_salers.to_csv}
+      format.xls
+    end
   end
-
 
   def import
     if !params[:file].present?

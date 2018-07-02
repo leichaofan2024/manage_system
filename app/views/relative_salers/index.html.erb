@@ -2,8 +2,14 @@
 
 <%= render 'import_relative_saler_table'%>
 
-<h5>上传工效挂钩明细表</h5>
-<%= form_tag import_relative_salers_path, multipart: true do %>
-  <%= file_field_tag :file%>
-  <%= submit_tag "上传"%>
+<% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
+  <h5>上传工效挂钩明细表</h5>
+  <%= form_tag import_relative_salers_path, multipart: true do %>
+    <%= file_field_tag :file%>
+    <%= submit_tag "上传"%>
+  <% end %>
+<% end %>
+
+<% if current_user.has_role? :awardadmin %>
+  <%= link_to "表格导出", relative_salers_path(format: "xls"), class: "btn"%>
 <% end %>
