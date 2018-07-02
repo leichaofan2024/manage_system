@@ -1,0 +1,11 @@
+<div class="col-md-10">
+  <%= simple_form_for @notice do |f| %>
+    <div class="form-group">
+      <%= f.input :title  %>
+      <%= f.input :content %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "Submit", disable_with: "Submiting...", class: "button"%>
+    </div>
+  <% end %>
+</div>

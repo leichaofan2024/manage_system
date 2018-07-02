@@ -1,0 +1,46 @@
+<!-- <div class="container">
+  <div class="card">
+    <div class="card-header" style="background: red; height: 30px; padding-left: 20px">
+      ha
+    </div>
+  <div class="card-body">
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+  </div>
+  <div class="card-footer">
+    2 days ago
+  </div>
+</div>
+</div> -->
+
+
+<div class="col-md-10">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>标题</th>
+            <th>发布者</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @notices.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.title %></td>
+              <td><%= User.find(item.user_id).name %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @notices %>
+  </div>
+</div>
+<div class="col-md-2">
+  <%= link_to "新建公告", new_announcement_path, class: "btn btn-primary"%>
+</div>

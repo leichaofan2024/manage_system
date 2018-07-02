@@ -99,4 +99,7 @@ Rails.application.routes.draw do
   resources :charge_details do
     collection { post :import }
   end
+
+
+  resources :announcements
 end

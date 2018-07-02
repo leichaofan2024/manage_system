@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   has_many :relative_salers
 
+  has_many :announcements
 
   # 增加角色前要做些什么
   def before_add_method(role)
