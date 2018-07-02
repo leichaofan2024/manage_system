@@ -90,4 +90,9 @@ Rails.application.routes.draw do
       post :update_have_read
     end
   end
+
+  # 奖惩模块
+  resources :relative_salers do
+    collection { post :import }
+  end
 end

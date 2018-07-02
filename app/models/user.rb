@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   has_many :messages
 
+  has_many :relative_salers
+
 
   # 增加角色前要做些什么
   def before_add_method(role)
