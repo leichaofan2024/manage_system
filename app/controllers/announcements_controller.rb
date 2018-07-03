@@ -50,6 +50,21 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+
+  #表模板下载
+  def download_table_template
+    @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    respond_to do |format|
+      format.html
+      format.csv { send_data @relative_salers.to_csv}
+      format.xls
+    end
+  end
+
+  def method_name
+
+  end
+
   private
 
    def notice_params
