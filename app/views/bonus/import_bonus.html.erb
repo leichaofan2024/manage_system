@@ -1,6 +1,45 @@
+<div class="ivu-tooltip-rel">
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to import_bonus_bonus_path(format: "xls") do %>
+           <span style="color: #269Eff;">导出表格</span>
+        <% end %>
+    </button>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+        		<% BonusHeader.pluck("header").each do |i| %>
+        			<th><%= i %></th>
+        		<% end %>
+        	</tr>
+        </thead>
+        <tbody>
+        	<% @bonus.each do |bonus| %>
+	        	<tr>
+	        		<% (1..BonusHeader.count).each do |i| %>
+	        			<td><%= bonus.send("col" + i.to_s) %></td>
+	        		<% end %>
+	        	</tr>
+        	<% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <h5>上传奖金表</h5>
 
 <%= form_tag import_table_bonus_path, multipart: true do %>
 <%= file_field_tag :file%>
 <%= submit_tag "上传"%>
 <% end %>
+
+<div class="text-center">
+	<% if params[:filter_type].blank? && params[:q].blank? %>
+	  <%= paginate @bonus %>
+	<% end %>
+</div>

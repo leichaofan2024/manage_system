@@ -1,7 +1,13 @@
 class WagesController < ApplicationController
 	layout 'home'
 	def import_wage
-		
+		@wages = Wage.page(params[:page]).per(20)
+    #下载表格配置
+    @export_wages = Wage.all
+    respond_to do |format|
+      format.html
+      format.xls
+    end
 	end
 
 	#上传表格

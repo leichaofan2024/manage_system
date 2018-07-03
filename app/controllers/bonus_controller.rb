@@ -1,5 +1,16 @@
 class BonusController < ApplicationController
 	layout 'home'
+
+  def import_bonus
+    @bonus = Bonu.page(params[:page]).per(20)
+    #下载表格配置
+    @export_bonus = Bonu.all
+    respond_to do |format|
+      format.html
+      format.xls
+    end
+  end
+
 	#上传表格
     def import_table
       if !params[:file].present?
