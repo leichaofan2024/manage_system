@@ -102,6 +102,10 @@ Rails.application.routes.draw do
 
 
   resources :announcements do
-    collection { get :download_table_template }
+    collection do
+      get :download_table_template
+      get :download_charge_details_table_template  
+    end
+
   end
 end
