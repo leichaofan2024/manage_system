@@ -1,0 +1,34 @@
+<% if current_user.has_role? :awardadmin %>
+  <div class="col-md-12">
+    <div class="back-btn" style="margin-bottom: 10px;margin-left: 15px;">
+      <%= link_to '返回公告一览页', announcements_path%>
+    </div>
+    <div class="col-md-10">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%= @notice.title %></div>
+        <div class="panel-body">
+          <%= @notice.content %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <%= link_to "删除此公告", announcement_path(@notice), method: :delete, class: "btn btn-primary", data: { confirm: "确定删除么" }%><br><br>
+      <%= link_to "编辑此公告", edit_announcement_path(@notice), class: "btn btn-primary"%>
+    </div>
+  </div>
+
+<% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)%>
+  <div class="container">
+    <div class="back-btn" style="margin-bottom: 10px;margin-left: 15px;">
+      <%= link_to '返回公告一览页', announcements_path%>
+    </div>
+    <div class="col-md-10">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%= @notice.title %></div>
+        <div class="panel-body">
+          <%= @notice.content %>
+        </div>
+      </div>
+    </div>
+</div>
+<% end %>
