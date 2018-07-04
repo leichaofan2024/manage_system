@@ -105,6 +105,10 @@ Rails.application.routes.draw do
     collection do
       get :download_table_template
       get :download_charge_details_table_template
+      get :download_rectification_awards_table_template
+      get :download_middle_awards_table_template
+      get :download_teamleader_awards_table_template
+      get :download_other_awards_table_template
     end
   end
 

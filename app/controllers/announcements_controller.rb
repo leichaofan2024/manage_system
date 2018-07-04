@@ -69,6 +69,38 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def download_rectification_awards_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls
+    end
+  end
+
+  def download_middle_awards_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls
+    end
+  end
+
+  def download_teamleader_awards_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls
+    end
+  end
+
+  def download_other_awards_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls
+    end
+  end
+
   private
 
    def notice_params
