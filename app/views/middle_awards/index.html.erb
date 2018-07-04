@@ -1,0 +1,32 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>工资号</th>
+            <th>部门</th>
+            <th>返奖金额</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @middle_awards.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.姓名%></td>
+              <td><%= item.工资号 %></td>
+              <td><%= item.部门 %></td>
+              <td><%= item.返奖金额 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+</div>

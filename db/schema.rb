@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180704030832) do
+ActiveRecord::Schema.define(version: 20180704035541) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -306,6 +306,28 @@ ActiveRecord::Schema.define(version: 20180704030832) do
     t.datetime "remind_time"
   end
 
+  create_table "middle_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "中层干部返奖明细表" do |t|
+    t.string "序号"
+    t.string "姓名"
+    t.string "工资号"
+    t.string "部门"
+    t.string "返奖金额"
+    t.string "备注"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "other_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "工资号"
+    t.string "姓名"
+    t.string "车间"
+    t.string "返奖金额"
+    t.string "备注"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rectification_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "序号"
     t.string "科室车间"
@@ -352,6 +374,18 @@ ActiveRecord::Schema.define(version: 20180704030832) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "teamleader_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "车间"
+    t.string "班组"
+    t.string "工资号"
+    t.string "姓名"
+    t.string "性别"
+    t.string "金额"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

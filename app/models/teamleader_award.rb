@@ -1,0 +1,2 @@
+class TeamleaderAward < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class OtherAward < ApplicationRecord
+end

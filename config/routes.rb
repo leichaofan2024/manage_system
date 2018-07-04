@@ -109,4 +109,7 @@ Rails.application.routes.draw do
   end
 
   resources :rectification_awards
+  resources :other_awards
+  resources :middle_awards
+  resources :teamleader_awards
 end

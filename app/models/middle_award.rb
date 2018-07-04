@@ -1,0 +1,2 @@
+class MiddleAward < ApplicationRecord
+end
