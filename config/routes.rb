@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       post :import_table
       get :import_wage
       post :create_header
+      post :edit_header
     end
   end
 

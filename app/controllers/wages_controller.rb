@@ -29,6 +29,13 @@ class WagesController < ApplicationController
       flash[:notice] = "新增成功"
     end
     redirect_to import_wage_wages_path
-
   end
+
+  def edit_header
+    wage_header = WageHeader.find_by(header: params[:before_header])
+    wage_header.update(header: params[:after_header])
+    flash[:notice] = "修改成功"
+    redirect_to import_wage_wages_path
+  end
+
 end
