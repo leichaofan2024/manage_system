@@ -1,0 +1,38 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+             <th>序号</th>
+             <th>科室车间</th>
+             <th>整改返奖合计</th>
+             <th>牌卡合计</th>
+             <th>中层返奖</th>
+             <th>班组长返奖</th>
+             <th>抽考返奖</th>
+             <th>其他返奖</th>
+             <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @rectifications.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.整改返奖合计 %></td>
+              <td><%= item.牌卡合计 %></td>
+              <td><%= item.中层返奖 %></td>
+              <td><%= item.班组长返奖 %></td>
+              <td><%= item.抽考返奖 %></td>
+              <td><%= item.其他返奖 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+</div>

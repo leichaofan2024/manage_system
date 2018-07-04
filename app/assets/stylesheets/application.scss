@@ -1706,3 +1706,11 @@ button.close {
     border-radius: 4px;
 }
 /*--------------- end -----------------*/
+
+/*------------表格表头的链接颜色----------*/
+.table-bordered a:visited {
+    color: #376ad3;
+    font-weight: bold;
+    font-size: 18px;
+}
+/*-----------------end-----------------*/

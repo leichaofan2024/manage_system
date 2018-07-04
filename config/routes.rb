@@ -104,8 +104,9 @@ Rails.application.routes.draw do
   resources :announcements do
     collection do
       get :download_table_template
-      get :download_charge_details_table_template  
+      get :download_charge_details_table_template
     end
-
   end
+
+  resources :rectification_awards
 end

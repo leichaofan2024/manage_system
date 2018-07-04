@@ -1,0 +1,2 @@
+class RectificationAward < ApplicationRecord
+end
