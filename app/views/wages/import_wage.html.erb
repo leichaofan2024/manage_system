@@ -4,7 +4,13 @@
            <span style="color: #269Eff;">导出表格</span>
         <% end %>
     </button>
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWageHeader" do  %>
+          <span style="color: #269Eff;">新增表头</span>
+        <% end %>
+    </button>
 </div>
+
 <div class="col-md-12">
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
@@ -44,3 +50,5 @@
 	  <%= paginate @wages %>
 	<% end %>
 </div>
+
+<%= render "show_create_header" %>

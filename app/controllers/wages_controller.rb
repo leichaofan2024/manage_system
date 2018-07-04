@@ -20,4 +20,15 @@ class WagesController < ApplicationController
     end
     redirect_to import_wage_wages_path
   end
+
+  def create_header
+    if WageHeader.find_by(header: params[:header]).present?
+      flash[:alert] = "您填写的表头已存在"
+    else
+      WageHeader.create(header: params[:header])
+      flash[:notice] = "新增成功"
+    end
+    redirect_to import_wage_wages_path
+
+  end
 end
