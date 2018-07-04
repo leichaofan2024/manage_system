@@ -21,4 +21,22 @@ class BonusController < ApplicationController
       end
       redirect_to import_bonus_bonus_path
     end
+
+    def create_header
+    if BonusHeader.find_by(header: params[:header]).present?
+      flash[:alert] = "您填写的表头已存在"
+    else
+      BonusHeader.create(header: params[:header])
+      flash[:notice] = "新增成功"
+    end
+    redirect_to import_bonus_bonus_path
+  end
+
+  def edit_header
+    bonus_header = BonusHeader.find_by(header: params[:before_header])
+    bonus_header.update(header: params[:after_header])
+    flash[:notice] = "修改成功"
+    redirect_to import_bonus_bonus_path
+  end
+
 end
