@@ -1,7 +1,11 @@
 class RelativeSalersController < ApplicationController
   layout 'home'
   def index
-    @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    if current_user.has_role? :awardadmin
+      @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    else
+      @relative_salers = RelativeSaler.where(:科室车间 => current_user.name).page(params[:page]).per(20)
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @relative_salers.to_csv}
@@ -19,5 +23,5 @@ class RelativeSalersController < ApplicationController
     redirect_to relative_salers_path
   end
 
-  
+
 end
