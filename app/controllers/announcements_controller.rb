@@ -14,7 +14,7 @@ class AnnouncementsController < ApplicationController
 
   def create
     @notice = Announcement.new(notice_params)
-    @notice.user = current_user
+    @notice.user_id = current_user.id
     if  @notice.save
       flash[:notice] = "新增关于#{@notice.title} 的公告"
       redirect_to announcements_path
