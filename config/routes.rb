@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       get :download_middle_awards_table_template
       get :download_teamleader_awards_table_template
       get :download_other_awards_table_template
+      get :download_emp_table_template
     end
   end
 
