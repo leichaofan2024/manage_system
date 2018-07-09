@@ -1,9 +1,17 @@
 <div class="minHeight1000 bg-gray">
+    <div class="col-md-12">
+      <div class="back-btn" style="margin-bottom: 10px; font-size: 15px;">
+       <%= link_to "返回", :back%>
+      </div>
+    </div>
+
     <div class="search-page w1200 pt30 bc">
       <% if @employees.present? %>
         <%= render 'empshared/search'%>
       <% else %>
-        <p class="tc mt100">未找到~</p>
+        <div class="col-md-12">
+          <p class="tc mt100" style="font-size: 18px;">未找到~</p>
+        </div>
       <% end %>
     </div>
 </div>
