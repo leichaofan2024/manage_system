@@ -1,0 +1,9 @@
+<div class="minHeight1000 bg-gray">
+    <div class="search-page w1200 pt30 bc">
+      <% if @employees.present? %>
+        <%= render 'empshared/search'%>
+      <% else %>
+        <p class="tc mt100">未找到~</p>
+      <% end %>
+    </div>
+</div>

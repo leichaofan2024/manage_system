@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   layout 'home'
+  before_action :validate_search_key, only: [:search]
 
   def insert_attendance_cate
    hash = {}
@@ -1417,10 +1418,38 @@ class EmployeesController < ApplicationController
     @skilledness_authenticate = Employee.current.pluck(:skilledness_authenticate).uniq
   end
 
+  def search
+    if @query_string.present?
+      @employees = search_params
+    end
+  end
+
   private
 
     def employee_params
       params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number, :avatar)
+    end
+
+  protected
+
+    def validate_search_key
+      @query_string = params[:q].gsub(/\\|\'|\/|\?/, "") if params[:q].present?
+    end
+
+    def search_params
+      if current_user.has_role? :organsadmin
+        group_id = Group.find_by(:name => current_user.name).id
+        @employees = Employee.current.where(:group => group_id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+        Employee.ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      elsif current_user.has_role? :workshopadmin
+        workshop_id = Workshop.find_by(:name => current_user.name).id
+        @employees = Employee.current.where(:workshop => workshop_id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      else
+        group_name = current_user.name.split("-")[1]
+        group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+        @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      end
     end
 
 

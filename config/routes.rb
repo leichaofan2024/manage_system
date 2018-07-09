@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       get :employee_detail
       post :update_holiday_information
       post :insert_attendance_cate
+      #搜索功能
+      get :search
     end
   end
 
@@ -81,7 +83,6 @@ Rails.application.routes.draw do
       #年休假完成率
       get :holiday_fulfillment_rate
       get :filter
-
     end
   end
 
