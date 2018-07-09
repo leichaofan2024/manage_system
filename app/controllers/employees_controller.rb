@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   layout 'home'
+  before_action :validate_search_key, only: [:search]
 
   def insert_attendance_cate
    hash = {}
@@ -1417,10 +1418,26 @@ class EmployeesController < ApplicationController
     @skilledness_authenticate = Employee.current.pluck(:skilledness_authenticate).uniq
   end
 
+  def search
+    if @query_string.present?
+      @employees = search_params
+    end
+  end
+
   private
 
     def employee_params
       params.require(:employee).permit(:name, :workshop, :group, :birth_date, :nation, :native_place, :political_role, :education_background, :graduation_school, :major, :registered_residence, :family_address, :identity_card_number, :avatar)
+    end
+
+  protected
+
+    def validate_search_key
+      @query_string = params[:q].gsub(/\\|\'|\/|\?/, "") if params[:q].present?
+    end
+
+    def search_params
+      Employee.ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
     end
 
 
