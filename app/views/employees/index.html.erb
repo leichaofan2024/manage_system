@@ -6,8 +6,11 @@
   <% employee_ids += @employees.page(i).per(10).pluck("id") %>
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
+
+
 <div id="Employee" class="main-18rau_0 tabcontent">
   <div>
+    <!-- 导出与新增-开始 -->
     <div class="btn_group_top-1sKKU_0">
       <div>
         <div class="btn_group-2MSRh_0">
@@ -38,7 +41,9 @@
         </div>
       </div>
     </div>
+    <!-- 导出与新增-结束 -->
 
+    <!-- 总数统计-开始 -->
     <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
       <div class="switchTab-3pFw5_0" style="margin-top: 50px;">
         <div class="queryTop-26iSU_0">
@@ -98,49 +103,12 @@
         </div>
       </div>
     <% end %>
-
-    <div class="toolbar-26gsx_0">
-      <div>
-
-      <!--- 按工种分类筛选-开始  -->
-      <% if can? :manage, Employee %>
-        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    按工种筛选
-                 <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <% @work_types = Employee.current.pluck("work_type").uniq %>
-                  <% @work_types.each do |work_type| %>
-                    <li><%= link_to work_type, employees_path(work_type: work_type) %></li>
-                  <% end %>
-                </ul>
-              </li>
-            </li>
-          </ul>
-        </div>
-      <% end %>
-      <!--- 按工种分类筛选-结束  -->
-      </div>
-    </div>
+    <!-- 总数统计-结束 -->
   </div>
+  <div><br>
+   
 
 
- <div>
-    <!--- 筛选-开始  -->
-    <% if can? :manage, Employee %>
-      <%= form_tag filter_employees_path, method: 'get' do %>
-        <%= label_tag :请选择筛选类别，并输入时间段：%>
-        <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择", :required => "true"})%>
-        <%= text_field_tag :start_time, nil, required: true %> ~
-        <%= text_field_tag :end_time, nil, required: true %>
-        <%= submit_tag :筛选 %>
-      <% end %>
-    <% end %>
-    <!--- 筛选-结束  -->
 
     <div class="row">
       <div class="col-sm-9 col-lg-8" style="margin-bottom: 10px; margin-top: 5px; width: 600px;">
@@ -155,12 +123,26 @@
           </div>
         <% end %>
       </div>
-    </div>
+    </div><br>
+
+    <%= form_tag filter_employees_path, method: 'get' do %>
+      <%= label_tag :按男女： %>
+      <%= select_tag(:sex, options_for_select(["男","女"]), {:prompt => "请选择"}) %>
+      <%= label_tag :按职务： %>
+      <%= select_tag(:duty, options_for_select(Employee.pluck("duty").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+      <%= label_tag :按技术职称： %>
+      <%= select_tag(:work_type, options_for_select(Employee.pluck("work_type").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+      <%= label_tag :按时间段： %>
+      <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择"})%>
+      <%= text_field_tag :start_time %> ~
+      <%= text_field_tag :end_time %>
+      <%= submit_tag :筛选 %>
+    <% end %>
 
     <!--- 搜索-开始  -->
     <div class="card">
-      <div style="overflow: auto; width: 100%;">
-        <% if can? :manage, Employee %>
+      <div style="width: 100%;">
+        <% if can? :manage, Employee %> 
           <%= render 'empshared/emp_table'%>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table'%>
@@ -189,3 +171,40 @@
 
   </div>
 </div>
+
+<!-- 树状图配套的js代码-开始 -->
+<script type="text/javascript">
+  (function(e) {
+    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+      em.onclick = function(){ //onmouseover
+        var ul = this.nextSibling;
+        if(!ul){
+          return false;
+        }
+        ul = ul.nextSibling;
+        if(!ul) {
+          return false;
+        }
+        if(e.tag != 'a') {
+          ul = ul.nextSibling;
+          if(!ul){
+            return false;
+          }
+        } //a 标签控制 隐藏或删除该行
+        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+          if(li.tagName=="LI"){
+            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+              switch($ul.tagName){
+                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                break;
+                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  })({id:'menu',tag:'em'});
+</script>
+<!-- 树状图配套的js代码-结束 -->

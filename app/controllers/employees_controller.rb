@@ -2,52 +2,61 @@ class EmployeesController < ApplicationController
   layout 'home'
   before_action :validate_search_key, only: [:search]
 
-  def insert_attendance_cate
-   hash = {}
-   a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
-   b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
-   n=0
-   ("a".."r").each do |i|
-     hash[i] = [a[n], b[n]]
-     n+=1
-   end
+  # def insert_attendance_cate
+  #  hash = {}
+  #  a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
+  #  b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
+  #  n=0
+  #  ("a".."r").each do |i|
+  #    hash[i] = [a[n], b[n]]
+  #    n+=1
+  #  end
 
-   hash.each do |m|
-     p = m[1]
-       VacationCategory.create(:vacation_code => m[0], :vacation_shortening => p[0], :vacation_name => p[1] )
-   end
-  end
+  #  hash.each do |m|
+  #    p = m[1]
+  #      VacationCategory.create(:vacation_code => m[0], :vacation_shortening => p[0], :vacation_name => p[1] )
+  #  end
+  # end
 
-  def update_holiday_information
-    a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
-    a.each do |i|
-      AnnualHolidayWorkType.create(:work_type => i)
-    end
-  end
+  # def update_holiday_information
+  #   a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
+  #   a.each do |i|
+  #     AnnualHolidayWorkType.create(:work_type => i)
+  #   end
+  # end
 
   def index
-    #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
-    @work_type = params[:work_type]
-    if params[:work_type].present?
-      @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
-      @employees = Employee.current.order('id ASC').page(params[:page]).per(10)
-    elsif current_user.has_role? :workshopadmin
-      workshop_id = Workshop.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(10)
-      @workshop = Workshop.find_by(:name => current_user.name)
-			@groups = @workshop.groups
-      if params[:group].present?
-        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(10)
-      end
-    elsif current_user.has_role? :organsadmin
-      group_id = Group.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:group => group_id).page(params[:page]).per(10)
+    if params[:workshop].present?
+      @employees = Employee.current.where(workshop: params[:workshop]).page(params[:page]).per(15)
+    elsif params[:group].present?
+      @employees = Employee.current.where(group: params[:group]).page(params[:page]).per(15)
     else
-      group_name = current_user.name.split("-")[1]
-      group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-      @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).page(params[:page])
+      @employees = Employee.current.page(params[:page]).per(15)
     end
+
+
+    #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
+   #  @work_type = params[:work_type]
+   #  if params[:work_type].present?
+   #    @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
+   #  elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+   #    @employees = Employee.current.order('id ASC').page(params[:page]).per(10)
+   #  elsif current_user.has_role? :workshopadmin
+   #    workshop_id = Workshop.find_by(:name => current_user.name).id
+   #    @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(10)
+   #    @workshop = Workshop.find_by(:name => current_user.name)
+			# @groups = @workshop.groups
+   #    if params[:group].present?
+   #      @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(10)
+   #    end
+   #  elsif current_user.has_role? :organsadmin
+   #    group_id = Group.find_by(:name => current_user.name).id
+   #    @employees = Employee.current.where(:group => group_id).page(params[:page]).per(10)
+   #  else
+   #    group_name = current_user.name.split("-")[1]
+   #    group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+   #    @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).page(params[:page])
+   #  end
     #下载表格配置
     if params[:employees] == "全部"
       @export_employees = Employee.all
@@ -112,15 +121,41 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    @filter_type = params[:filter_type]
-    case params[:filter_type]
-    when "年龄"
-      @employees = Employee.current.where(age: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
-    when "工龄"
-      @employees = Employee.current.where(working_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
-    when "路龄"
-      @employees = Employee.current.where(rali_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
+    if params[:workshop].present? 
+      condition = ''
+      if params[:sex].present?
+        condition += ".where(sex: #{params[:sex]}).page(params[:page]).per(10)"
+        binding.pry
+      end
+      if params[:duty].present?
+        condition += ".where(duty: #{params[:duty]}).page(params[:page]).per(10)"
+      end
+      if params[:work_type].present?
+        condition += ".where(work_type: #{params[:work_type]}).page(params[:page]).per(10)"
+      end
+      if params[:filter_type].present?
+        case params[:filter_type]
+        when "年龄" 
+          condition += ".where(age: params[:start_time]..params[:end_time]).page(params[:page]).per(10)"
+        when "工龄"
+          condition += ".where(working_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)"
+        when "路龄"
+          condition += ".where(rali_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)"
+        end
+      end
+
+      @employees = eval("Employee#{condition}")
+    elsif params[:group].present?
     end
+    # @filter_type = params[:filter_type]
+    # case params[:filter_type]
+    # when "年龄"
+    #   @employees = Employee.current.where(age: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
+    # when "工龄"
+    #   @employees = Employee.current.where(working_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
+    # when "路龄"
+    #   @employees = Employee.current.where(rali_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
+    # end
     render action: "index"
   end
   #搜索和筛选--结束
