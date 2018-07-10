@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710081033) do
+ActiveRecord::Schema.define(version: 20180710082817) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -359,6 +359,17 @@ ActiveRecord::Schema.define(version: 20180710081033) do
     t.string "班组长返奖"
     t.string "抽考返奖"
     t.string "其他返奖"
+    t.string "备注"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "red_middle_charges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "姓名"
+    t.string "工资号"
+    t.string "部门"
+    t.string "核减金额"
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

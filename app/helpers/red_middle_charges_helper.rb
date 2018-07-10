@@ -1,0 +1,2 @@
+module RedMiddleChargesHelper
+end

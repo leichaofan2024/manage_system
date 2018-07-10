@@ -138,5 +138,9 @@ Rails.application.routes.draw do
   resources :examination_charges do
     collection { post :import}
   end
-  
+
+  resources :red_middle_charges do
+    collection { post :import}
+  end
+
 end
