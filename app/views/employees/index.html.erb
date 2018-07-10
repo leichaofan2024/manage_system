@@ -1,10 +1,6 @@
 <%= render 'employee_navbar' %>
 <!-- 通过@employees的总页数，找出所有的id-开始 -->
-<% pages = @employees.total_pages %>
-<% employee_ids = @employees.page(1).per(10).pluck("id") %>
-<% (2..pages).each do |i| %>
-  <% employee_ids += @employees.page(i).per(10).pluck("id") %>
-<% end %>
+
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
 
 
@@ -136,6 +132,11 @@
       <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择"})%>
       <%= text_field_tag :start_time %> ~
       <%= text_field_tag :end_time %>
+      <% if params[:workshop].present? %>
+        <%= hidden_field_tag :workshop, params[:workshop] %>
+      <% elsif params[:group].present? %>
+        <%= hidden_field_tag :group, params[:group] %>
+      <% end %>
       <%= submit_tag :筛选 %>
     <% end %>
 
@@ -152,11 +153,9 @@
       </div>
     </div>
 
-      <div class="text-center">
-        <% if params[:filter_type].blank? && params[:q].blank? %>
-          <%= paginate @employees %>
-        <% end %>
-      </div>
+    <div class="text-center">
+      <%= paginate @employees %>
+    </div>
 
 
 

@@ -5,12 +5,12 @@
     <ul>
       <% Workshop.all.each do |workshop| %>
       <li>
-        <em></em><a href='/employees?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+        <em></em><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
 
         <ul>
           <% @groups = workshop.groups %>
           <% @groups.each do |group| %>
-            <li><a href='/employees?group=<%= group.id %>'><%= group.name %></a></li>
+            <li><a href='/employees/filter?group=<%= group.id %>'><%= group.name %></a></li>
           <% end %>
         </ul>
       </li>
@@ -29,8 +29,8 @@
           <th>班组</th>
           <th>工种</th>
           <th>姓名</th>
+          <th>职务</th>
           <th>电话号</th>
-          <th>工种分类</th>
           <th>性别</th>
           <th>年龄</th>
           <th>文化程度</th>
@@ -61,8 +61,8 @@
                   <span class="label label-warning">一月内有调动</span>
               <% end %>
             </td>
+            <td><%= employee.duty %></td>
             <td><%= employee.phone_number %></td>
-            <td><%= employee.work_type%></td>
             <td><%= employee.sex %></td>
             <td><%= employee.age %></td>
             <td><%= employee.education_background %></td>
