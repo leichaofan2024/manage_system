@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710082817) do
+ActiveRecord::Schema.define(version: 20180710085510) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -346,6 +346,15 @@ ActiveRecord::Schema.define(version: 20180710082817) do
     t.string "车间"
     t.string "返奖金额"
     t.string "备注"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "people_changes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "车间"
+    t.string "班组"
+    t.string "姓名"
+    t.string "变动原因"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -143,4 +143,8 @@ Rails.application.routes.draw do
     collection { post :import}
   end
 
+  resources :people_changes do
+    collection { post :import}
+  end
+
 end
