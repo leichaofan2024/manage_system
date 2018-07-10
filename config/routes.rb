@@ -130,4 +130,8 @@ Rails.application.routes.draw do
   resources :teamleader_awards do
     collection { post :import}
   end
+
+  resources :examination_awards do
+    collection { post :import}
+  end
 end

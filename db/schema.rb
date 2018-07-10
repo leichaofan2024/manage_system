@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180704035541) do
+ActiveRecord::Schema.define(version: 20180710074255) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -266,6 +266,17 @@ ActiveRecord::Schema.define(version: 20180704035541) do
     t.integer "workshop_id"
     t.string "phone_number"
     t.string "avatar"
+  end
+
+  create_table "examination_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "抽考返奖表" do |t|
+    t.string "序号"
+    t.string "工资编号"
+    t.string "姓名"
+    t.string "车间"
+    t.string "金额"
+    t.string "备注"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

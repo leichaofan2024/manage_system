@@ -1,0 +1,44 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="col-md-12">
+  <div class="back-btn" style="margin-bottom: 10px;">
+    <%= link_to "返回", rectification_awards_path %>
+  </div>
+
+  <h4 class="text-center" style="margin-bottom: 10px;">抽考返奖明细表</h4>
+
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>工资编号</th>
+            <th>姓名</th>
+            <th>车间</th>
+            <th>金额</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @examinations.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.工资编号 %></td>
+              <td><%= item.姓名 %></td>
+              <td><%= item.车间 %></td>
+              <td><%= item.金额 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%= form_tag import_examination_awards_path, multipart: true do %>
+    <%= file_field_tag :file%>
+    <%= submit_tag "上传"%>
+  <% end %>
+
+</div>
