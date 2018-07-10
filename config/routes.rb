@@ -96,6 +96,10 @@ Rails.application.routes.draw do
       get :import_wage
       post :create_header
       post :edit_header
+      get :divide_level_wage
+      get :production_stuff_wage
+      get :high_speed_rail_stuff
+      get :main_driving_stuff
     end
   end
 

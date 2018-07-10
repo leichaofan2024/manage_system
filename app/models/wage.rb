@@ -1,5 +1,7 @@
 class Wage < ApplicationRecord
 
+scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+
 	def self.import_table(file)
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
 	    # header = spreadsheet.row(1)
