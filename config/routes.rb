@@ -91,4 +91,27 @@ Rails.application.routes.draw do
       post :update_have_read
     end
   end
+
+  resources :wages do
+    collection do
+      post :import_table
+      get :import_wage
+      post :create_header
+      post :edit_header
+      get :divide_level_wage
+      get :production_stuff_wage
+      get :high_speed_rail_stuff
+      get :main_driving_stuff
+    end
+  end
+
+  resources :bonus do
+    collection do
+      post :import_table
+      get :import_bonus
+      post :create_header
+      post :edit_header
+    end
+  end
+
 end

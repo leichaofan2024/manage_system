@@ -49,7 +49,7 @@ class Employee < ActiveRecord::Base
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",
                      "工号" => "job_number",
-                     "档案号" => "record_number",
+                     "档案号" => "record_number", 
                      "部门" => "workshop",
                      "班组名称" => "group",
                      "班组类别" => "group_category",
