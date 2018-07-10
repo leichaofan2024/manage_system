@@ -134,4 +134,9 @@ Rails.application.routes.draw do
   resources :examination_awards do
     collection { post :import}
   end
+
+  resources :examination_charges do
+    collection { post :import}
+  end
+  
 end
