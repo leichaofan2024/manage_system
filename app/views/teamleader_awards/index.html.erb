@@ -37,4 +37,10 @@
       </table>
     </div>
   </div>
+
+  <%= form_tag import_teamleader_awards_path, multipart: true do %>
+    <%= file_field_tag :file%>
+    <%= submit_tag "上传"%>
+  <% end %>
+
 </div>

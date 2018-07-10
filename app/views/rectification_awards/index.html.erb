@@ -29,7 +29,7 @@
               <td><%= item.id %></td>
               <td><%= item.科室车间 %></td>
               <td><%= item.整改返奖合计 %></td>
-              <td><%= item.牌卡合计 %></td>
+              <td><%= item.牌卡返奖 %></td>
               <td><%= item.中层返奖 %></td>
               <td><%= item.班组长返奖 %></td>
               <td><%= item.抽考返奖 %></td>
@@ -41,4 +41,10 @@
       </table>
     </div>
   </div>
+
+  <%= form_tag import_rectification_awards_path, multipart: true do %>
+    <%= file_field_tag :file%>
+    <%= submit_tag "上传"%>
+  <% end %>
+
 </div>

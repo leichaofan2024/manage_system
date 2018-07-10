@@ -332,7 +332,7 @@ ActiveRecord::Schema.define(version: 20180704035541) do
     t.string "序号"
     t.string "科室车间"
     t.string "整改返奖合计"
-    t.string "牌卡合计"
+    t.string "牌卡返奖"
     t.string "中层返奖"
     t.string "班组长返奖"
     t.string "抽考返奖"

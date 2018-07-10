@@ -115,8 +115,19 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rectification_awards
-  resources :other_awards
-  resources :middle_awards
-  resources :teamleader_awards
+  resources :rectification_awards do
+    collection { post :import}
+  end
+
+  resources :other_awards do
+    collection { post :import}
+  end
+
+  resources :middle_awards do
+    collection { post :import}
+  end
+
+  resources :teamleader_awards do
+    collection { post :import}
+  end
 end
