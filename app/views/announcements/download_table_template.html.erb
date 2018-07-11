@@ -1,4 +1,5 @@
 <div class="container">
+  <div class="col-md-6 col-md-offset-2">
   <div class="back-btn" style="margin-bottom: 10px;">
     <%= link_to '返回首页', '/'%>
   </div>
@@ -44,6 +45,12 @@
         <span class="badge" style="background: #fff; color: black"><%= link_to "点击下载", download_other_awards_table_template_announcements_path(format: "xls")%></span>
         其他返奖明细表
       </li>
+      <li class="list-group-item">
+        <span class="badge" style="background: #fff; color: black"><%= link_to "点击下载", download_people_change_table_template_announcements_path(format: "xls")%></span>
+        人员变动情况表
+      </li>
+
     </ul>
+  </div>
   </div>
 </div>
