@@ -1,6 +1,10 @@
 <%= render 'employee_navbar' %>
 <!-- 通过@employees的总页数，找出所有的id-开始 -->
-
+<% pages = @employees.total_pages %>
+<% employee_ids = @employees.page(1).per(16).pluck("id") %>
+<% (2..pages).each do |i| %>
+  <% employee_ids += @employees.page(i).per(16).pluck("id") %>
+<% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
 
 
@@ -14,7 +18,7 @@
             <% if can? :import, Employee%>
               <div class="ivu-tooltip-rel">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <% if @work_type.present? or @filter_type.present? %>
+                  <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
                     <%= link_to employees_path(format: "xls", employees: employee_ids) do %>
                        <span style="color: #269Eff;">导出表格</span>
                     <% end %>
@@ -22,7 +26,7 @@
                     <%= link_to employees_path(format: "xls", employees: "全部") do %>
                        <span style="color: #269Eff;">导出表格</span>
                     <% end %>
-                  <% end %>
+                  <% end %> 
                 </button>
               </div>
               <div class="ivu-tooltip-rel" style="text-align: right">

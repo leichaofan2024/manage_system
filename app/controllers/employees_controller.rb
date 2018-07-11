@@ -136,6 +136,12 @@ class EmployeesController < ApplicationController
     end
     condition += ").page(params[:page]).per(15)"
     @employees = eval("Employee#{condition}") 
+    @sex = params[:sex]
+    @duty = params[:duty]
+    @work_type = params[:work_type]
+    @filter_type = params[:filter_type]
+    @workshop = params[:workshop]
+    @group = params[:group]
     render action: "index"
   end
   #搜索和筛选--结束
