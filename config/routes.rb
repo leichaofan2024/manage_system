@@ -114,6 +114,7 @@ Rails.application.routes.draw do
       get :download_emp_table_template
       get :download_examination_awards_table_template
       get :download_people_change_table_template
+      get :download_examination_charges_table_template
     end
   end
 
