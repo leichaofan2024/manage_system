@@ -53,14 +53,17 @@
                 <div class="panel_main pannel-two change-type">
                   <div class="title">
                     <span>合计</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count%></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>其中：男</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "男").count%></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>女</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "女").count%></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>平均年龄</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).sum("age") / Employee.where(id: employee_ids).count %></span>
+                    <span>岁</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>调离</span>
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
