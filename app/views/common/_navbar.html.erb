@@ -1,7 +1,10 @@
 <nav class="navbar navbar-fixed-top" role="navigation">
     <div class="col-md-12" style="margin-right: 5px;">
-        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+      <div class="col-md-6 col-md-offset-2" style="padding-top: 20px" >
+        <marquee loop="4" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
+      </div>
 
+        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
               <% if (current_user.has_role? :empadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin) %>
                 <li class="dropdown">
@@ -29,9 +32,6 @@
               <% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :awardadmin) %>
                   <%= link_to "表模板下载入口", download_table_template_announcements_path %>
               <% end %>
-         <!--      <% if (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) %>
-                <li><%= link_to("消息中心", messages_path) %></li>
-              <% end %> -->
                 <li>
                 <% if !current_user %>
                   <li><%= link_to("注册", new_user_registration_path) %> </li>
