@@ -1,7 +1,7 @@
 <nav class="navbar navbar-fixed-top" role="navigation">
     <div class="col-md-12" style="margin-right: 5px;">
       <div class="col-md-6 col-md-offset-2" style="padding-top: 20px" >
-        <marquee loop="4" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
+        <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
       </div>
 
         <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
