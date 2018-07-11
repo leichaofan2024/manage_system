@@ -108,12 +108,12 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    condition = '.current.where('     
+    condition = ".current.where(company_name: '北京供电段'"     
     if params[:workshop].present?
-      condition += "workshop: #{params[:workshop]}"
+      condition += ", workshop: #{params[:workshop]}"
     end
     if params[:group].present?
-      condition += "group: #{params[:group]}"
+      condition += ", group: #{params[:group]}"
     end
     if params[:sex].present?
       condition += ", sex: '#{params[:sex]}'"
