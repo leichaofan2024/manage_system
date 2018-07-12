@@ -20,9 +20,27 @@ class ChargeDetailsController < ApplicationController
     redirect_to charge_details_path
   end
 
+  def new
+    @charge_detail = ChargeDetail.new
+  end
+
+  def create
+    @charge_detail = ChargeDetail.new(charge_params)
+    if @charge_detail.save!
+      flash[:notice] = "上传成功"
+      redirect_to charge_details_path
+    else
+      flash[:notice] = "上传失败"
+    end
+  end
+
   def upload
 
   end
 
+  private
+    def charge_params
+      params.require(:charge_detail).permit(:upload_time)
+    end
 
 end

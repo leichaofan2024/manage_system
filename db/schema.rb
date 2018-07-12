@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710085510) do
+ActiveRecord::Schema.define(version: 20180712044907) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(version: 20180710085510) do
     t.float "工作质量扣分", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_time"
   end
 
   create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
