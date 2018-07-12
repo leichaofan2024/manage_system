@@ -14,7 +14,7 @@ class ChargeDetailsController < ApplicationController
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
     else
-      ChargeDetail.import(params[:file])
+      ChargeDetail.import(params[:file], params[:upload_time])
       flash[:notice] = "上传成功"
     end
     redirect_to charge_details_path

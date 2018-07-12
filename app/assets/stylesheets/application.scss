@@ -1718,3 +1718,12 @@ button.close {
 
 
 /*--------------上传表页面样式-----------*/
+
+
+.form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}

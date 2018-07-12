@@ -1,35 +1,27 @@
 <%= render 'relative_salers/saler_navbar'%>
 
 
-<%= form_for @charge_detail do |f| %>
+<%= form_tag import_charge_details_path, multipart: true, method: 'post' do %>
 
-<div class="container">
-    <div class="col-sm-6" style="height:130px; width: 300px">
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker10'>
-                <%= f.text_field :upload_time, :class => "form-control" %>
-                <!-- <input type='text' class="form-control" /> -->
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar">
-                    </span>
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
+  <div class="container">
+      <div class="col-sm-6" style="height:130px; width: 300px">
+          <div class="form-group">
+              <div class='input-group date' id='datetimepicker10'>
+                  <%= text_field_tag :upload_time, :class => "form-control" %>
+                  <!-- <input type='text' class="form-control" /> -->
+                  <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar">
+                      </span>
+                  </span>
+              </div>
+          </div>
+      </div>
+  </div>
 
-<%= f.submit "Save", :class => "btn btn-primary" %>
-
-<% end %>
-
-
-<%= form_tag import_red_middle_charges_path, multipart: true do %>
   <%= file_field_tag :file %>
-  <%= submit_tag  "上传"%>
+  <%= submit_tag "Save", :class => "btn btn-primary" %>
+
 <% end %>
-
-
-
 
 <script type="text/javascript">
     $(function () {
