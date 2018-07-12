@@ -1,16 +1,10 @@
 <%= render 'relative_salers/saler_navbar'%>
 
 <% if current_user.has_role? :awardadmin %>
-  <%= render 'import_charge_details'%>
-  <div class="col-md-12">
-    <!-- <h5>上传扣款明细表</h5>
-    <%= form_tag import_charge_details_path, multipart: true do %>
-      <%= file_field_tag :file%>
-      <%= submit_tag "上传"%>
-    <% end %> -->
-
+  <div class="col-md-2 col-md-offset-10" >
     <%= link_to "上传扣款明细表", new_charge_detail_path, class: 'btn btn-primary'%>
   </div>
+  <%= render 'import_charge_details'%>
 <% end %>
 
 <% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
