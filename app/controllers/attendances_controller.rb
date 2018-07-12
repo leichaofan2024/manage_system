@@ -146,9 +146,12 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-			group_name = current_user.name.split("-")[1]
-			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-
+			if current_user.has_role? :organsadmin
+				group = Group.find_by(name: current_user.name, workshop_id: 1)
+			elsif current_user.has_role? :groupadmin
+				group_name = current_user.name.split("-")[1]
+				group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+			end
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
 			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
