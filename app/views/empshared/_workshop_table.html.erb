@@ -1,9 +1,10 @@
 <div class="col-md-12" style="height: 100%; margin-top:20px;">
   <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-    <h5><a href='/employees'><%= @workshop.name %></a></h5>
+    <% workshop = Workshop.find_by(name: current_user.name) %>
+    <h5><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
     <ul>
-      <% @groups.each do |group| %>
-        <li><a href='/employees?group=<%= group.id %>'><%= group.name %></a></li>
+      <% workshop.groups.each do |group| %>
+        <li><a href='/employees/filter?group=<%= group.id %>'><%= group.name %></a></li>
       <% end %>
     </ul>
   </div>

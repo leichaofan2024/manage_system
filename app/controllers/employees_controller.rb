@@ -2,47 +2,43 @@ class EmployeesController < ApplicationController
   layout 'home'
   before_action :validate_search_key, only: [:search]
 
-  def insert_attendance_cate
-   hash = {}
-   a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
-   b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
-   n=0
-   ("a".."r").each do |i|
-     hash[i] = [a[n], b[n]]
-     n+=1
-   end
+  # def insert_attendance_cate
+  #  hash = {}
+  #  a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
+  #  b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
+  #  n=0
+  #  ("a".."r").each do |i|
+  #    hash[i] = [a[n], b[n]]
+  #    n+=1
+  #  end
 
-   hash.each do |m|
-     p = m[1]
-       VacationCategory.create(:vacation_code => m[0], :vacation_shortening => p[0], :vacation_name => p[1] )
-   end
-  end
+  #  hash.each do |m|
+  #    p = m[1]
+  #      VacationCategory.create(:vacation_code => m[0], :vacation_shortening => p[0], :vacation_name => p[1] )
+  #  end
+  # end
 
-  def update_holiday_information
-    a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
-    a.each do |i|
-      AnnualHolidayWorkType.create(:work_type => i)
-    end
-  end
+  # def update_holiday_information
+  #   a = ["全部职工","干部","工人","其中：主要工种","接触网工","电力工","轨道车司机"]
+  #   a.each do |i|
+  #     AnnualHolidayWorkType.create(:work_type => i)
+  #   end
+  # end
 
   def index
-    #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
-    @work_type = params[:work_type]
-    if params[:work_type].present?
-      @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
-      @employees = Employee.current.order('id ASC').page(params[:page]).per(10)
+    if (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+      @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
       workshop_id = Workshop.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(10)
+      @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(15)
       @workshop = Workshop.find_by(:name => current_user.name)
 			@groups = @workshop.groups
       if params[:group].present?
-        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(10)
+        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(15)
       end
     elsif current_user.has_role? :organsadmin
       group_id = Group.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:group => group_id).page(params[:page]).per(10)
+      @employees = Employee.current.where(:group => group_id).page(params[:page]).per(15)
     else
       group_name = current_user.name.split("-")[1]
       group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
@@ -112,15 +108,48 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    @filter_type = params[:filter_type]
-    case params[:filter_type]
-    when "年龄"
-      @employees = Employee.current.where(age: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
-    when "工龄"
-      @employees = Employee.current.where(working_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
-    when "路龄"
-      @employees = Employee.current.where(rali_years: params[:start_time]..params[:end_time]).page(params[:page]).per(10)
+    if current_user.has_role? :empadmin or current_user.has_role? :attendance_admin or current_user.has_role? :superadmin or current_user.has_role? :leaderadmin
+      condition = ".current.where(company_name: '北京供电段'" 
+    elsif current_user.has_role? :workshopadmin 
+      condition = ".current.where(workshop: Workshop.find_by(name: current_user.name).id"
+    elsif current_user.has_role? :organsadmin
+      condition = ".current.where(group: Group.find_by(name: current_user.name).id"
+    elsif current_user.has_role? :groupadmin
+      condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
+    end     
+    if params[:workshop].present?
+      condition += ", workshop: #{params[:workshop]}"
     end
+    if params[:group].present?
+      condition += ", group: #{params[:group]}"
+    end
+    if params[:sex].present?
+      condition += ", sex: '#{params[:sex]}'"
+    end
+    if params[:duty].present?
+      condition += ", duty: '#{params[:duty]}'"
+    end
+    if params[:work_type].present?
+      condition += ", work_type: '#{params[:work_type]}'"
+    end
+    if params[:filter_type].present?
+      case params[:filter_type]
+      when "年龄"
+        condition += ", age: #{params[:start_time]}..#{params[:end_time]}"
+      when "工龄"
+        condition += ", working_years: #{params[:start_time]}..#{params[:end_time]}"
+      when "路龄"
+        condition += ", rali_years: #{params[:start_time]}..#{params[:end_time]}"
+      end    
+    end
+    condition += ").page(params[:page]).per(15)"
+    @employees = eval("Employee#{condition}") 
+    @sex = params[:sex] 
+    @duty = params[:duty]
+    @work_type = params[:work_type]
+    @filter_type = params[:filter_type]
+    @workshop = params[:workshop]
+    @group = params[:group]
     render action: "index"
   end
   #搜索和筛选--结束
