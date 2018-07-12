@@ -20,5 +20,9 @@ class ChargeDetailsController < ApplicationController
     redirect_to charge_details_path
   end
 
+  def upload
+
+  end
+
 
 end

@@ -3,11 +3,13 @@
 <% if current_user.has_role? :awardadmin %>
   <%= render 'import_charge_details'%>
   <div class="col-md-12">
-    <h5>上传扣款明细表</h5>
+    <!-- <h5>上传扣款明细表</h5>
     <%= form_tag import_charge_details_path, multipart: true do %>
       <%= file_field_tag :file%>
       <%= submit_tag "上传"%>
-    <% end %>
+    <% end %> -->
+
+    <%= link_to "上传扣款明细表", upload_charge_details_path, method: :post, class: 'btn btn-primary'%>
   </div>
 <% end %>
 
