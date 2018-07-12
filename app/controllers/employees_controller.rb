@@ -109,14 +109,17 @@ class EmployeesController < ApplicationController
 
   def filter
     if current_user.has_role? :empadmin or current_user.has_role? :attendance_admin or current_user.has_role? :superadmin or current_user.has_role? :leaderadmin
-      condition = ".current.where(company_name: '北京供电段'" 
-    elsif current_user.has_role? :workshopadmin 
+      condition = ".current.where(company_name: '北京供电段'"
+    elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.find_by(name: current_user.name).id"
     elsif current_user.has_role? :organsadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name).id"
     elsif current_user.has_role? :groupadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
-    end     
+    end
+    if params[:duam].present?
+      condition = ".current.where(company_name: '北京供电段'"
+    end
     if params[:workshop].present?
       condition += ", workshop: #{params[:workshop]}"
     end
@@ -140,11 +143,11 @@ class EmployeesController < ApplicationController
         condition += ", working_years: #{params[:start_time]}..#{params[:end_time]}"
       when "路龄"
         condition += ", rali_years: #{params[:start_time]}..#{params[:end_time]}"
-      end    
+      end
     end
     condition += ").page(params[:page]).per(15)"
-    @employees = eval("Employee#{condition}") 
-    @sex = params[:sex] 
+    @employees = eval("Employee#{condition}")
+    @sex = params[:sex]
     @duty = params[:duty]
     @work_type = params[:work_type]
     @filter_type = params[:filter_type]

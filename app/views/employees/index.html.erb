@@ -26,7 +26,7 @@
                     <%= link_to employees_path(format: "xls", employees: "全部") do %>
                        <span style="color: #269Eff;">导出表格</span>
                     <% end %>
-                  <% end %> 
+                  <% end %>
                 </button>
               </div>
               <div class="ivu-tooltip-rel" style="text-align: right">
@@ -63,8 +63,13 @@
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>平均年龄</span>
+                    <% if Employee.where(id: employee_ids).count == 0 %>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF">0</span>
+                      <span>岁</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <% else %>
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).sum("age") / Employee.where(id: employee_ids).count %></span>
-                    <span>岁</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                      <span>岁</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <% end %>
 
                     <span>调离</span>
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
@@ -101,7 +106,7 @@
     <!-- 总数统计-结束 -->
   </div>
   <div><br>
-   
+
 
 
 
@@ -109,7 +114,7 @@
       <div class="col-sm-9 col-lg-8" style="margin-bottom: 10px; margin-top: 5px; width: 600px;">
         <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
           <div class="input-group">
-            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="">
+            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
             <span class="input-group-btn">
               <button type="submit" class="btn btn-default search-bar-submit">
                 <span class="glyphicon glyphicon-search"></span>
@@ -142,7 +147,7 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="width: 100%;">
-        <% if can? :manage, Employee %> 
+        <% if can? :manage, Employee %>
           <%= render 'empshared/emp_table' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>

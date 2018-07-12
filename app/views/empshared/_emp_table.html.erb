@@ -1,7 +1,7 @@
 <div class="col-md-12" style="height: 100%; margin-top: 40px;">
   <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
 
-    <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
+    <h5><%= link_to "北京供电段", filter_employees_path(duan: "北京供电段") %></h5>
     <ul>
       <% Workshop.all.each do |workshop| %>
       <li>
@@ -25,7 +25,7 @@
           <th>工资号</th>
           <th>工号</th>
           <th>档案号</th>
-          <th>车间</th> 
+          <th>车间</th>
           <th>班组</th>
           <th>工种</th>
           <th>姓名</th>
