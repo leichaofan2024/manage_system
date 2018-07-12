@@ -1,13 +1,13 @@
 <%= render 'relative_salers/saler_navbar'%>
 
-
+<!--
 <div class="ivu-card-body">
   <div>
     <div class="title-3USED">上传某某表</div>
       <div class="ivu-date-picker" style="width: 300px;">
         <div class="ivu-date-picker-rel">
           <div class="ivu-input-wrapper ivu-input-type ivu-date-picker-editor">
-            
+
           </div>
         </div>
       </div>
@@ -19,4 +19,28 @@
 
     </div>
   </div>
+</div> -->
+
+
+<div class="container">
+    <div class="col-sm-6" style="height:130px; width: 300px">
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker10'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar">
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker10').datetimepicker({
+            viewMode: 'years',
+            format: 'YYYY-MM'
+        });
+    });
+</script>
