@@ -143,21 +143,23 @@
                 <td><%= Workshop.find(employee.workshop).name %></td>
                 <td><%= Group.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-                <% attendance = Attendance.find_by(employee_id: employee.id) %>
+                <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-                <% attendance_ary = attendance.month_attendances.split('') %>
-                <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                <% day_number = 1%>
-                <% attendance_ary.each do |day_attendance| %>
-                  <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                <td>
-                    <% if day_attendance == "x" %>
-                      <%= "" %>
-                    <% else %>
-                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
-                    <% end %>
-                </td>
-                  <% day_number += 1%>
+                <% if attendance.present? %>
+                  <% attendance_ary = attendance.month_attendances.split('') %>
+                  <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                  <% day_number = 1%>
+                  <% attendance_ary.each do |day_attendance| %>
+                    <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                  <td>
+                      <% if day_attendance == "x" %>
+                        <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% else %>
+                        <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% end %>
+                  </td>
+                    <% day_number += 1%>
+                  <% end %>
                 <% end %>
               </tr>
             <% end %>
