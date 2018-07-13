@@ -1718,12 +1718,28 @@ button.close {
 
 
 /*--------------上传表页面样式-----------*/
+// 返回按钮
+.back-btn {
+  margin-top: 40px;
+}
 
+.back-btn a {
+  color: #495060;
+  font-size: 14px;
+}
 
-.form-control {
-    position: relative;
-    z-index: 2;
-    float: left;
-    width: 100%;
-    margin-bottom: 0;
+.back-btn a:hover {
+  color: #376ad3;
+}
+
+.btn-separator-item {
+  margin: 0 15px;
+  color: #376ad3;
+  display: inline-block;
+}
+
+.upload-font {
+  font-size: 14px;
+  font-weight: 700;
+  color: #495060;
 }

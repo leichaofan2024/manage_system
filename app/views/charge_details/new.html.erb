@@ -1,15 +1,18 @@
 <%= render 'relative_salers/saler_navbar'%>
-
+<div class="back-btn" >
+  <%= link_to "返回", charge_details_path %>
+  <span class="btn-separator-item">|</span>
+  <span class="upload-font">上传扣款明细表</span>
+</div>
 
 <%= form_tag import_charge_details_path, multipart: true, method: 'post' do %>
 
   <div class="container">
-      <div class="col-sm-6" style="height:130px; width: 300px">
+      <div class="col-sm-6" style="height: 120px; width: 300px">
           <div class="form-group">
               <div class='input-group date' id='datetimepicker10'>
-                  <%= text_field_tag :upload_time, :class => "form-control" %>
-                  <!-- <input type='text' class="form-control" /> -->
-                  <span class="input-group-addon">
+                <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" />
+                  <span class="input-group-addon" style="margin-left: -20px">
                       <span class="glyphicon glyphicon-calendar">
                       </span>
                   </span>
@@ -19,16 +22,16 @@
   </div>
 
   <%= file_field_tag :file %>
-  <%= submit_tag "Save", :class => "btn btn-primary" %>
+  <%= submit_tag "保存", :class => "btn btn-primary" %>
 
 <% end %>
 
 <script type="text/javascript">
-    $(function () {
-        $('#datetimepicker10').datetimepicker({
-            viewMode: 'years',
-            format: 'YYYY-MM',
-            locale: moment.locale('zh-cn')
-        });
-    });
+  $(function () {
+      $('#datetimepicker10').datetimepicker({
+          viewMode: 'years',
+          format: 'YYYY-MM',
+          locale: moment.locale('zh-cn')
+      });
+  });
 </script>
