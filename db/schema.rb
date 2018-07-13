@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712044907) do
+ActiveRecord::Schema.define(version: 20180713075139) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -165,7 +165,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.float "工作质量扣分", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "upload_time"
+    t.string "upload_year"
+    t.string "upload_month", limit: 45
   end
 
   create_table "emp_basic_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "员工基本信息表" do |t|
@@ -278,6 +279,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "examination_charges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -338,6 +341,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "other_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -349,6 +354,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "people_changes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -358,6 +365,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "变动原因"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "rectification_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -372,6 +381,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "red_middle_charges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -383,6 +394,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "备注"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "relative_salers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", comment: "工效挂钩工资明细表" do |t|
@@ -406,6 +419,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -429,6 +444,8 @@ ActiveRecord::Schema.define(version: 20180712044907) do
     t.string "金额"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "upload_year"
+    t.string "upload_month"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

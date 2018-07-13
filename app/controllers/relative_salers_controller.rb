@@ -16,11 +16,27 @@ class RelativeSalersController < ApplicationController
   def import
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
+      render :new
     else
-      RelativeSaler.import(params[:file])
+      RelativeSaler.import(params[:file], params[:upload_time])
       flash[:notice] = "上传成功"
+      redirect_to relative_salers_path
     end
-    redirect_to relative_salers_path
+  end
+
+  def new
+    @relative_saler = RelativeSaler.new
+  end
+
+  def create
+    @relative_saler = RelativeSaler.new(charge_params)
+    if @relative_saler.save!
+      flash[:notice] = "上传成功"
+      redirect_to relative_salers_path
+    else
+      flash[:notice] = "上传失败"
+      render :new
+    end
   end
 
 
