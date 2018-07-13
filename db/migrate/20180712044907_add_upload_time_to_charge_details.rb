@@ -21,6 +21,9 @@ class AddUploadTimeToChargeDetails < ActiveRecord::Migration[5.1]
     add_column :examination_awards, :upload_year, :string
     add_column :examination_awards, :upload_month, :string
 
+    add_column :examination_charges, :upload_year, :string
+    add_column :examination_charges, :upload_month, :string
+
     add_column :red_middle_charges, :upload_year, :string
     add_column :red_middle_charges, :upload_month, :string
 

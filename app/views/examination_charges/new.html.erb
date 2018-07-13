@@ -1,0 +1,47 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="back-btn" >
+  <%= link_to "返回", examination_charges_path %>
+  <span class="btn-separator-item">|</span>
+  <span class="upload-font">上传抽考扣款明细表</span>
+</div>
+
+<div class="col-md-6 col-md-offset-3 upload-input-card">
+  <h4>上传抽考扣款明细表</h4>
+  <%= form_tag import_examination_charges_path, multipart: true, method: 'post' do %>
+    <div class="col-md-6 col-md-offset-4 datepicker-input">
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker10'>
+              <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required: true />
+                <span class="input-group-addon" style="margin-left: -20px">
+                    <span class="glyphicon glyphicon-calendar">
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="file-style">
+      <%= file_field_tag :file %>
+    </div>
+    <%= submit_tag "点击上传", :class => "btn btn-primary-status" %>
+  <% end %>
+</div>
+
+<div class="col-md-6 col-md-offset-3 remind-circle">
+  <h5 style="margin-left: -15px; margin-top: 40px;">温馨提示</h5>
+  <p>1、暂不支持复合表头（即合并单元格）；</p>
+  <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【抽考扣款明细模板】", download_rectification_awards_table_template_announcements_path(format: "xls") %></p>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(function () {
+      $('#datetimepicker10').datetimepicker({
+          viewMode: 'years',
+          format: 'YYYY-MM',
+          locale: moment.locale('zh-cn')
+      });
+  });
+</script>
