@@ -390,12 +390,13 @@ layout 'home'
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
-		@workshops = Workshop.all
+		@employees = Employee.page(params[:page]).per(20)
 
 		# 导出考勤表
+		@export_employees = Employee.all
 		respond_to do |format|
 	      format.html
-	      format.csv { send_data @workshops.to_csv }
+	      format.csv { send_data @export_employees.to_csv }
 	      format.xls
 	    end
 	end

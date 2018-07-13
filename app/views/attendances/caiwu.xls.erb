@@ -8,6 +8,10 @@
     <Table>
       <Row>
         <Cell><Data ss:Type="String">车间</Data></Cell>
+        <Cell><Data ss:Type="String">班组</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">工资号</Data></Cell>
+        <Cell><Data ss:Type="String">职务</Data></Cell>
         <Cell><Data ss:Type="String">病假</Data></Cell>
         <Cell><Data ss:Type="String">事假</Data></Cell>
         <Cell><Data ss:Type="String">婚假</Data></Cell>
@@ -19,11 +23,15 @@
         <Cell><Data ss:Type="String">工伤假</Data></Cell>
         <Cell><Data ss:Type="String">旷工</Data></Cell>
       </Row>
-    <% @workshops.each do |workshop| %>
+    <% @export_employees.each do |employee| %>
       <Row>
-        <Cell><Data ss:Type="String"><%= workshop.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Workshop.find(employee.workshop).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Group.find(employee.group).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% @vacation_codes.each do |code| %>
-            <Cell><Data ss:Type="String"><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).count %></Data></Cell>
         <% end %>
       </Row>
     <% end %>

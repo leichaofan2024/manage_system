@@ -13,9 +13,11 @@
       <table id="example" class="table table-bordered">
         <thead>
         	<tr>
-        		<th>工资号</th>
-        		<th>部门名称</th>
-        		<th>姓名</th>
+        		<th>车间</th>
+            <th>班组</th>
+            <th>姓名</th>
+            <th>工资号</th>
+            <th>职务</th>
         		<th>日勤夜班数</th>
         		<th>节日加班</th>
         		<th>轮流夜班天数</th>
@@ -24,24 +26,26 @@
         <tbody>
         	<% @employees.each do |employee| %>
         		<tr>
+              <td><%= Workshop.find(employee.workshop).name %></td>
+              <td><%= Group.find(employee.group).name %></td>
+              <td><%= employee.name %></td>
 	        		<td><%= employee.sal_number %></td>
-	        		<td><%= Group.find_by(:id => employee.group).name %></td>
-	        		<td><%= employee.name %></td>
+              <td><%= employee.duty %></td>
 	        		<% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
               <% if attendance_counts.find_by(vacation_code: "a").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "a").count %></td>
               <% else %>
-                <td></td>
+                <td>0</td>
               <% end %>
               <% if attendance_counts.find_by(vacation_code: "c").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "c").count %></td>
               <% else %>
-                <td></td>
+                <td>0</td>
               <% end %>
               <% if attendance_counts.find_by(vacation_code: "b").present? %>
   	        		<td><%= attendance_counts.find_by(vacation_code: "b").count %></td>
               <% else %>
-                <td></td>
+                <td>0</td>
               <% end %>
 	        	</tr>
         	<% end %>
