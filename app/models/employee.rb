@@ -49,7 +49,7 @@ class Employee < ActiveRecord::Base
     spreadsheet = Roo::Spreadsheet.open(file.path)
     head_transfer = {"工资号" => "sal_number",
                      "工号" => "job_number",
-                     "档案号" => "record_number", 
+                     "档案号" => "record_number",
                      "部门" => "workshop",
                      "班组名称" => "group",
                      "班组类别" => "group_category",
@@ -126,75 +126,98 @@ class Employee < ActiveRecord::Base
       row = Hash[[header, spreadsheet.row(j)].transpose]
       employee = find_by(job_number: row["job_number"]) || new
       employee.attributes = row
-      employee.save!
-      #更新Workshop数据
-      if !Workshop.find_by(name: row["workshop"]).present?
-        Workshop.create(:name => row["workshop"])
+      employee.sal_number = '41' + employee.job_number
+      employee.birth_year = employee.birth_date[0..3]
+      employee.age = Time.now.year - employee.birth_year.to_i
+      working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
+      rali_years_transfer = (Time.now - employee.railway_time.to_datetime)/60/60/24/365
+      employee.working_years = working_years_transfer.to_i
+      employee.rali_years = rali_years_transfer.to_i
+
+      # 更新Workshop数据
+      workshop = Workshop.find_by(name: row["workshop"])
+      if !workshop.present?
+        workshop_new = Workshop.create!(:name => row["workshop"])
+        group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
+        employee.workshop = workshop_new.id
+        employee.group = group_new.id
+
+      else
+        group = Group.find_by(:workshop_id => workshop.id,:name => row["group"] )
+        if !group.present?
+          group_new = Group.create!(:name => row["group"], :workshop_id => workshop.id)
+          employee.group = group_new.id
+        else
+          employee.group = group.id
+        end
+        employee.workshop = workshop.id
       end
+      employee.save!
     end
+
 
 
    # 更新Group表数据
-    Workshop.all.each do |i|
-      Employee.current.where(:workshop => i.name).pluck(:group).uniq.each do |j|
-        if !Group.find_by_name(j).present?
-          Group.create(:name => j, :workshop_id => i.id)
-        end
-      end
-    end
+    # Workshop.all.each do |i|
+    #   Employee.current.where(:workshop => i.name).pluck(:group).uniq.each do |j|
+    #     if !Group.find_by_name(j).present?
+    #       Group.create(:name => j, :workshop_id => i.id)
+    #     end
+    #   end
+    # end
 
 
   #更新现员表的workshop_id
-    Workshop.all.each do |i|
-      Employee.current.all.each do |j|
-        if i.name == j.workshop
-           j.update(:workshop => i.id)
-        end
-      end
-    end
+    # Workshop.all.each do |i|
+    #   Employee.current.all.each do |j|
+    #     if i.name == j.workshop
+    #        j.update(:workshop => i.id)
+    #     end
+    #   end
+    # end
 
     # 更新现员表数据
-    Employee.current.all.each do |j|
-      j.sal_number = '41' + j.job_number
-        j.birth_year = j.birth_date[0..3]
-        j.age = Time.now.year - j.birth_year.to_i
-        working_years_transfer = (Time.now - j.working_time.to_datetime)/60/60/24/365
-        rali_years_transfer = (Time.now - j.railway_time.to_datetime)/60/60/24/365
-        j.working_years = working_years_transfer.to_i
-        j.rali_years = rali_years_transfer.to_i
-        j.save!
-    end
+    # Employee.current.all.each do |j|
+    #   j.sal_number = '41' + j.job_number
+    #     j.birth_year = j.birth_date[0..3]
+    #     j.age = Time.now.year - j.birth_year.to_i
+    #     working_years_transfer = (Time.now - j.working_time.to_datetime)/60/60/24/365
+    #     rali_years_transfer = (Time.now - j.railway_time.to_datetime)/60/60/24/365
+    #     j.working_years = working_years_transfer.to_i
+    #     j.rali_years = rali_years_transfer.to_i
+    #     j.save!
+    # end
 
 
    #更新现员表的group_id
-    Group.all.each do |i|
-      Employee.current.all.each do |j|
-        if i.name == j.group
-          j.update(:group => i.id)
-        end
-      end
-    end
+    # Group.all.each do |i|
+    #   Employee.current.all.each do |j|
+    #     if i.name == j.group
+    #       j.update(:group => i.id)
+    #     end
+    #   end
+    # end
 
     # 更新基本信息表数据
-    Employee.current.all.each do |i|
-      EmpBasicInfo.create(:sal_number => i.sal_number,
-                          :workshop_id => i.workshop,
-                          :group_id => i.group,
-                          :name => i.name,
-                          :job_number => i.job_number,
-                          :sex => i.sex,
-                          :identity_card_number => i.identity_card_number,
-                          :age => i.age,
-                          :duty => i.duty,
-                          :employee_id => i.id
-                        )
-    end
+    # Employee.current.all.each do |i|
+    #   EmpBasicInfo.create(:sal_number => i.sal_number,
+    #                       :workshop_id => i.workshop,
+    #                       :group_id => i.group,
+    #                       :name => i.name,
+    #                       :job_number => i.job_number,
+    #                       :sex => i.sex,
+    #                       :identity_card_number => i.identity_card_number,
+    #                       :age => i.age,
+    #                       :duty => i.duty,
+    #                       :employee_id => i.id
+    #                     )
+    # end
 
 
     #更新考勤表信息
-    Employee.current.all.each do |i|
-      Attendance.create(:employee_id => i.id, :group_id => i.group, :month => Time.now.month, :year => Time.now.year)
-    end
+    # Employee.current.all.each do |i|
+    #   Attendance.create(:employee_id => i.id, :group_id => i.group, :month => Time.now.month, :year => Time.now.year)
+    # end
 
   end
 
