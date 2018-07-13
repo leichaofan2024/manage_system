@@ -1743,3 +1743,43 @@ button.close {
   font-weight: 700;
   color: #495060;
 }
+
+// 默认按钮样式
+.btn-primary-status{
+  color: #fff;
+  background-color: #007bff;
+  border-color: #2e6da4;
+  margin-bottom: 30px;
+  width: 270px;
+  margin-left: 110px;
+}
+
+.file-style {
+  margin: 10px 110px;
+}
+
+// 上传卡片样式
+.upload-input-card {
+  margin-top: 30px;
+  background: white;
+  border-radius: 8px 8px 2px 2px ;
+  box-shadow: 0 0 30px rgba(45, 140, 240, 0.1) !important;
+  width: 500px;
+}
+
+// 时间选择框
+.datepicker-input {
+  height: 120px;
+  width: 300px;
+  margin-left: 95px;
+  height: 80px;
+}
+
+// 温馨提示样式
+.remind-circle p {
+  margin-left: -15px;
+}
+
+.remind-circle h4 {
+
+}
