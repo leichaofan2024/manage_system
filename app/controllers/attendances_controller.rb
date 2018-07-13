@@ -279,7 +279,7 @@ layout 'home'
 			if status_workshop.all?{|x| x.nil?}
 				@workshops = []
 			else
-				@workshops = Workshop.find(status_workshop)
+				@workshops = Workshop.find(status_workshop) 
 			end
 		else
 			@workshops = Workshop.all
