@@ -8,11 +8,27 @@ class PeopleChangesController < ApplicationController
   def import
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
+      render :new
     else
-      PeopleChange.import(params[:file])
+      PeopleChange.import(params[:file], params[:upload_time])
       flash[:notice] = "上传成功"
+      redirect_to people_changes_path
     end
-    redirect_to people_changes_path
+  end
+
+  def new
+    @change = PeopleChange.new
+  end
+
+  def create
+    @change = PeopleChange.new
+    if @change.save!
+      flash[:notice] = "上传成功"
+      redirect_to people_changes_path
+    else
+      flash[:notice] = "上传失败"
+      render :new
+    end
   end
 
 end
