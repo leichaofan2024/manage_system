@@ -375,6 +375,7 @@ layout 'home'
 				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 			end
 		end 
+		@group = params[:group]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq

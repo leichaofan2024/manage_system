@@ -31,37 +31,7 @@
       </tr>
     </tbody>
   </table>
-  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-    <% if @status.present? %>
-      <h5>本月考勤表状态:<%= @status %></h5>
-    <% end %>
-    <div class="btn_group_top-1sKKU_0">
-      <div>
-        <div class="btn_group-2MSRh_0">
-          <div class="ivu-tooltip">
-            <% if @choose_group.present? %>
-              <div class="ivu-tooltip-rel" >
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to verify_attendances_path(authority: "workshop", group: @click_group), method: :post do %>
-                     <span style="color: #269Eff;">审核</span>
-                  <% end %>
-                </button>
-              </div>
-            <% else %>
-              <div class="ivu-tooltip-rel">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "workshop"), method: :post do  %>
-                     <span style="color: #269Eff;">一键审核</span>
-                  <% end %>
-                </button>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
+  
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
     <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~

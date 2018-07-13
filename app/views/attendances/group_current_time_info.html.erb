@@ -28,14 +28,7 @@
         </div>
     </div>
     <!-- 进度条部分-结束 -->
-
-    <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
-      <%= select_tag(:workshop, options_for_select(@workshops.collect{|u| u.name})) %>
-      <%= submit_tag :点击筛选 %>
-    <% end %>
-
-    <%= form_tag %>
-
+    <%= form_tag  %>
     <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
     <% end %>
@@ -68,15 +61,49 @@
       <% end %>
     <% end %>
   </div>
-<% end %>
   <!-- 审核功能-结束 -->
-
   <% if @workshop.present? %>
     <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
   <% else %>
-    <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
+    <h4>供电段考勤情况</h4>
   <% end %>
+<% end %>
 
+<% if current_user.has_role? :workshopadmin %>
+  <!-- 审核功能-开始 -->
+  <br><br><br>
+    <div class="btn_group_top-1sKKU_0">
+      <div>
+        <div class="btn_group-2MSRh_0">
+          <div class="ivu-tooltip">
+            <% if @group.present? %>
+              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                  <%= link_to verify_attendances_path(authority: "workshop", group: @group), method: :post do %>
+                     <span style="color: #269Eff;">审核</span>
+                  <% end %>
+                </button>
+              </div>
+            <% end %>
+            <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to batch_verify_attendances_path(authority: "workshop"), method: :post do  %>
+                   <span style="color: #269Eff;">一键审核</span>
+                <% end %>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>   
+  <!-- 审核功能-结束 -->
+  <% if @group.present? %>
+    <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+    <h4><%= Group.find(@group).name %>考勤情况</h4>
+  <% else %>
+    <h4><%= current_user.name %>考勤情况</h4>
+  <% end %>
+<% end %>
 
   <div class="col-md-12"  style="height: 100%">
     <!-- 组织结构树状图-开始 -->
