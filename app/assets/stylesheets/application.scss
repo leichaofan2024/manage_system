@@ -1721,6 +1721,8 @@ button.close {
 // 返回按钮
 .back-btn {
   margin-top: 40px;
+  margin-top: -8px;
+  text-align: left;
 }
 
 .back-btn a {
@@ -1728,7 +1730,7 @@ button.close {
   font-size: 14px;
 }
 
-.back-btn a:hover {
+.head-btn .back-btn a:hover {
   color: #376ad3;
 }
 
