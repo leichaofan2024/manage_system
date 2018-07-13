@@ -1783,3 +1783,21 @@ button.close {
 .remind-circle h4 {
 
 }
+
+// 上传各种表格的按钮
+.btn-primary-upload {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #2e6da4;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-weight: 10px;
+}
+
+.head-btn {
+  text-align: right;
+}
+
+.head-btn a:hover {
+  color: white;
+}
