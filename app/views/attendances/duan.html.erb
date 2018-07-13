@@ -180,7 +180,12 @@
             <% else %>
               <% Workshop.all.each do |workshop| %>
                 <tr>
-                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
+                  <% if @leaving_employees.nil? %>
+                    <% transfer_employees = nil %>
+                  <% else %>
+                    <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
+                  <% end %>
+
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
