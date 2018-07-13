@@ -368,16 +368,15 @@ layout 'home'
 			@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 			if params[:workshop].present?
-				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
+				@employees = Employee.current.where(:workshop => params[:workshop]).order('id ASC').page(params[:page]).per(10)
+			elsif params[:group].present?
+				@employees = Employee.current.where(:group => params[:group]).order('id ASC').page(params[:page]).per(10)
 			else
 				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
-			end
+			end 
 		end
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
-		if params[:workshop].present?
-			@workshop = Workshop.find_by(:name => params[:workshop]).id
-		end
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []

@@ -69,16 +69,49 @@
     <% end %>
   </div>
 <% end %>
-
   <!-- 审核功能-结束 -->
-<% if @workshop.present? %>
-  <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
-<% else %>
-  <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
-<% end %>
-<div class="col-md-12">
+
+  <% if @workshop.present? %>
+    <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
+  <% else %>
+    <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
+  <% end %>
+
+
+  <div class="col-md-12"  style="height: 100%">
+    <!-- 组织结构树状图-开始 -->
+    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
+      <ul>
+        <% @workshops.each do |verify_workshop| %>
+        <li>
+          <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'><%= verify_workshop.name %></a>
+          <ul>
+            <% @groups = verify_workshop.groups %>
+            <% @groups.each do |group| %>
+              <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+            <% end %>
+          </ul> 
+        </li>
+        <% end %>
+        <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+          <li>
+            <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+            <ul>
+              <% @groups = no_verify_workshop.groups %>
+              <% @groups.each do |group| %>
+                <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+              <% end %>
+            </ul> 
+          </li>
+        <% end %>
+      </ul><br>
+      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
+    </div>
+  <!-- 组织结构树状图-结束 -->
+
   <div class="card">
-    <div style="overflow: auto; width: 100%;">
+    <div style="overflow: auto;" class="col-md-10">
       <table id="example" class="table table-bordered">
         <thead>
           <tr>
@@ -144,3 +177,40 @@
 
 <div id="show_processbar_detail">
 </div>
+
+<!-- 组织结构树状图的js代码-开始 -->
+<script type="text/javascript">
+  (function(e) {
+    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+      em.onclick = function(){ //onmouseover
+        var ul = this.nextSibling;
+        if(!ul){
+          return false;
+        }
+        ul = ul.nextSibling;
+        if(!ul) {
+          return false;
+        }
+        if(e.tag != 'a') {
+          ul = ul.nextSibling;
+          if(!ul){
+            return false;
+          }
+        } //a 标签控制 隐藏或删除该行
+        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+          if(li.tagName=="LI"){
+            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+              switch($ul.tagName){
+                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                break;
+                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  })({id:'menu',tag:'em'});
+</script>
+<!-- 组织结构树状图的js代码-结束 -->
