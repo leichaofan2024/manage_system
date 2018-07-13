@@ -19,7 +19,6 @@ class ChargeDetailsController < ApplicationController
       flash[:notice] = "上传成功"
       redirect_to charge_details_path
     end
-
   end
 
   def new
