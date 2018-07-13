@@ -9,10 +9,28 @@ class RectificationAwardsController < ApplicationController
   def import
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
+      render :new
     else
-      RectificationAward.import(params[:file])
+      RectificationAward.import(params[:file], params[:upload_time])
       flash[:notice] = "上传成功"
+      redirect_to rectification_awards_path
     end
-    redirect_to rectification_awards_path
   end
+
+  def new
+    @rectifications = RectificationAward.new
+  end
+
+  def create
+    @rectifications = RectificationAward.new
+    if @rectifications.save!
+      flash[:notice] = "上传成功"
+      redirect_to rectification_awards_path
+    else
+      flash[:notice] = "上传失败"
+      render :new
+    end
+  end
+
+
 end
