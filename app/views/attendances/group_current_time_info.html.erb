@@ -80,34 +80,46 @@
 
   <div class="col-md-12"  style="height: 100%">
     <!-- 组织结构树状图-开始 -->
-    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
-      <ul>
-        <% @workshops.each do |verify_workshop| %>
-        <li>
-          <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'><%= verify_workshop.name %></a>
-          <ul>
-            <% @groups = verify_workshop.groups %>
-            <% @groups.each do |group| %>
-              <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
-            <% end %>
-          </ul> 
-        </li>
-        <% end %>
-        <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+    <% if current_user.has_role? :workshopadmin %>
+      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+        <% workshop = Workshop.find_by(name: current_user.name) %>
+        <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
+        <ul>
+          <% workshop.groups.each do |group| %>
+            <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+        <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
+        <ul>
+          <% @workshops.each do |verify_workshop| %>
           <li>
-            <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+            <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'><%= verify_workshop.name %></a>
             <ul>
-              <% @groups = no_verify_workshop.groups %>
+              <% @groups = verify_workshop.groups %>
               <% @groups.each do |group| %>
-                <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
               <% end %>
             </ul> 
           </li>
-        <% end %>
-      </ul><br>
-      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
-    </div>
+          <% end %>
+          <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+            <li>
+              <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+              <ul>
+                <% @groups = no_verify_workshop.groups %>
+                <% @groups.each do |group| %>
+                  <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                <% end %>
+              </ul> 
+            </li>
+          <% end %>
+        </ul><br>
+        <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
+      </div>
+    <% end %>
   <!-- 组织结构树状图-结束 -->
 
   <div class="card">

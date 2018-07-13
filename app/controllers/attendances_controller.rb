@@ -364,17 +364,17 @@ layout 'home'
  	end
 
 	def group_current_time_info
-		if current_user.has_role? :workshopadmin
-			@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
-		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			if params[:workshop].present?
-				@employees = Employee.current.where(:workshop => params[:workshop]).order('id ASC').page(params[:page]).per(10)
-			elsif params[:group].present?
-				@employees = Employee.current.where(:group => params[:group]).order('id ASC').page(params[:page]).per(10)
-			else
+		if params[:workshop].present?
+			@employees = Employee.current.where(:workshop => params[:workshop]).order('id ASC').page(params[:page]).per(10)
+		elsif params[:group].present?
+			@employees = Employee.current.where(:group => params[:group]).order('id ASC').page(params[:page]).per(10)
+		else
+			if (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
-			end 
-		end
+			elsif current_user.has_role? :workshopadmin
+				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
+			end
+		end 
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
