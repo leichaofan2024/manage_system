@@ -118,6 +118,7 @@ Rails.application.routes.draw do
       get :download_examination_charges_table_template
       get :download_red_middle_charges_table_template
       get :download_relative_salers_total_table_template
+      get :download_standard_award_total_table_template
     end
   end
 
@@ -156,5 +157,11 @@ Rails.application.routes.draw do
   resources :relative_salers_totals do
     collection {post :import}
   end
+
+  resources :standard_award_totals do
+    collection {post :import}
+  end
+
+
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716063055) do
+ActiveRecord::Schema.define(version: 20180716071943) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -455,6 +455,20 @@ ActiveRecord::Schema.define(version: 20180716063055) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "standard_award_totals", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "科室车间"
+    t.string "标准化合计"
+    t.string "标准化科室车间"
+    t.string "标准化班组"
+    t.string "标杆优秀达标车间奖励"
+    t.string "科室车间备份"
+    t.string "upload_year"
+    t.string "upload_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teamleader_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

@@ -1,0 +1,2 @@
+module StandardAwardTotalsHelper
+end
