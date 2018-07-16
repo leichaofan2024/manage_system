@@ -117,6 +117,7 @@ Rails.application.routes.draw do
       get :download_people_change_table_template
       get :download_examination_charges_table_template
       get :download_red_middle_charges_table_template
+      get :download_relative_salers_total_table_template
     end
   end
 
@@ -150,6 +151,10 @@ Rails.application.routes.draw do
 
   resources :people_changes do
     collection { post :import}
+  end
+
+  resources :relative_salers_totals do
+    collection {post :import}
   end
 
 end
