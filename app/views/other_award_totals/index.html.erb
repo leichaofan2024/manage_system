@@ -1,0 +1,52 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="head-btn col-md-12">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 其他单项总明细表</h4>
+  </div>
+  <%= link_to "上传其他单项总明细表", new_other_award_total_path, class: 'btn btn-primary-upload'%>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>科室车间</th>
+            <th>综合考核排名奖励</th>
+            <th>发现和防止安全隐患奖励</th>
+            <th>奖励1</th>
+            <th>奖励2</th>
+            <th>奖励3</th>
+            <th>奖励4</th>
+            <th>奖励5</th>
+            <th>奖励6</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @totals.each do |item| %>
+            <tr>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.排名奖励 %></td>
+              <td><%= item.防止安全隐患奖励 %></td>
+              <td><%= item.奖励1 %></td>
+              <td><%= item.奖励2 %></td>
+              <td><%= item.奖励3 %></td>
+              <td><%= item.奖励4 %></td>
+              <td><%= item.奖励5 %></td>
+              <td><%= item.奖励6 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @totals %>
+  </div>
+
+</div>

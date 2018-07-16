@@ -121,6 +121,7 @@ Rails.application.routes.draw do
       get :download_standard_award_total_table_template
       get :download_standard_group_table_template
       get :download_star_award_table_template
+      get :download_other_award_total_table_template
     end
   end
 
@@ -169,6 +170,10 @@ Rails.application.routes.draw do
   end
 
   resources :star_awards do
+    collection {post :import}
+  end
+
+  resources :other_award_totals do
     collection {post :import}
   end
 

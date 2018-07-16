@@ -173,6 +173,14 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def download_other_award_total_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls
+    end
+  end
+
   private
 
    def notice_params
