@@ -1,0 +1,58 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="head-btn col-md-12">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 星级岗奖励总明细表</h4>
+  </div>
+  <%= link_to "上传星级岗奖励总明细表", new_star_award_path, class: 'btn btn-primary-upload'%>
+</div>
+
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>科室车间</th>
+            <th>星级岗合计</th>
+            <th>五星金额</th>
+            <th>四星金额</th>
+            <th>三星金额</th>
+            <th>二星金额</th>
+            <th>一星金额</th>
+            <th>五星人数</th>
+            <th>四星人数</th>
+            <th>三星人数</th>
+            <th>二星人数</th>
+            <th>一星人数</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @star_awards.each do |item| %>
+            <tr>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.发放合计 %></td>
+              <td><%= item.五星岗 %></td>
+              <td><%= item.四星岗 %></td>
+              <td><%= item.三星岗 %></td>
+              <td><%= item.二星岗 %></td>
+              <td><%= item.一星岗 %></td>
+              <td><%= item.五星人数 %></td>
+              <td><%= item.四星人数 %></td>
+              <td><%= item.三星人数 %></td>
+              <td><%= item.二星人数 %></td>
+              <td><%= item.一星人数 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @star_awards %>
+  </div>
+</div>

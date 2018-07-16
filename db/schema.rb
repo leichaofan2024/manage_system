@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716074730) do
+ActiveRecord::Schema.define(version: 20180716082617) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -479,6 +479,28 @@ ActiveRecord::Schema.define(version: 20180716074730) do
     t.string "奖励标准"
     t.string "人数"
     t.string "奖励金额"
+    t.string "备注"
+    t.string "upload_year"
+    t.string "upload_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "star_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "科室车间"
+    t.string "序号"
+    t.string "星级岗合计"
+    t.string "总人数"
+    t.string "五星金额"
+    t.string "四星金额"
+    t.string "三星金额"
+    t.string "二星金额"
+    t.string "一星金额"
+    t.string "五星人数"
+    t.string "四星人数"
+    t.string "三星人数"
+    t.string "二星人数"
+    t.string "一星人数"
     t.string "备注"
     t.string "upload_year"
     t.string "upload_month"
