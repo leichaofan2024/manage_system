@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716071943) do
+ActiveRecord::Schema.define(version: 20180716074730) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -465,6 +465,21 @@ ActiveRecord::Schema.define(version: 20180716071943) do
     t.string "标准化班组"
     t.string "标杆优秀达标车间奖励"
     t.string "科室车间备份"
+    t.string "upload_year"
+    t.string "upload_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "standard_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "科室车间"
+    t.string "班组名称"
+    t.string "评定等级"
+    t.string "奖励标准"
+    t.string "人数"
+    t.string "奖励金额"
+    t.string "备注"
     t.string "upload_year"
     t.string "upload_month"
     t.datetime "created_at", null: false
