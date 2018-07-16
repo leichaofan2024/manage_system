@@ -2,7 +2,7 @@ class RedMiddleChargesController < ApplicationController
   layout 'home'
 
   def index
-    @charges = RedMiddleCharge.all
+    @charges = RedMiddleCharge.page(params[:page]).per(15)
   end
 
   def import

@@ -2,7 +2,7 @@ class PeopleChangesController < ApplicationController
   layout 'home'
 
   def index
-    @changes = PeopleChange.all
+    @changes = PeopleChange.page(params[:page]).per(15)
   end
 
   def import

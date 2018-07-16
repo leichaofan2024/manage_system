@@ -2,7 +2,7 @@ class TeamleaderAwardsController < ApplicationController
   layout 'home'
 
   def index
-    @teamleader_awards = TeamleaderAward.all
+    @teamleader_awards = TeamleaderAward.page(params[:page]).per(15)
   end
 
   def import

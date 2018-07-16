@@ -2,7 +2,7 @@ class MiddleAwardsController < ApplicationController
   layout 'home'
 
   def index
-    @middle_awards = MiddleAward.all
+    @middle_awards = MiddleAward.page(params[:page]).per(15)
   end
 
   def import

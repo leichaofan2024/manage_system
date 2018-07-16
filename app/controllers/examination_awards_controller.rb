@@ -2,7 +2,7 @@ class ExaminationAwardsController < ApplicationController
   layout 'home'
 
   def index
-    @examinations = ExaminationAward.all
+    @examinations = ExaminationAward.page(params[:page]).per(15)
   end
 
   def import

@@ -2,7 +2,7 @@ class ExaminationChargesController < ApplicationController
  layout 'home'
 
   def index
-    @examination_charges = ExaminationCharge.all
+    @examination_charges = ExaminationCharge.page(params[:page]).per(15)
   end
 
   def import

@@ -3,7 +3,7 @@ class RectificationAwardsController < ApplicationController
 
 
   def index
-    @rectifications = RectificationAward.all
+    @rectifications = RectificationAward.page(params[:page]).per(15)
   end
 
   def import

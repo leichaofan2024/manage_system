@@ -41,6 +41,10 @@
     </div>
   </div>
 
+  <div class="text-center">
+    <%= paginate @examinations %>
+  </div>
+
   <!-- <%= form_tag import_examination_awards_path, multipart: true do %>
     <%= file_field_tag :file%>
     <%= submit_tag "上传"%>
