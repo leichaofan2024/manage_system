@@ -17,17 +17,16 @@
             <th>部门班组</th>
             <th>工资号</th>
             <th>姓名</th>
+            <th>系数</th>
             <th>挂钩工资</th>
             <th>安全质量</th>
             <th>工作质量</th>
-            <th>行车</th>
-            <th><%= link_to '整改返奖', rectification_awards_path %></th>
             <th>一体化</th>
             <th>兼职兼岗</th>
             <th>其他</th>
             <th>应发</th>
             <th>考核扣款</th>
-            <th>合计</th>
+            <th>备注</th>
             <th>上传者</th>
           </tr>
         </thead>
@@ -39,17 +38,16 @@
               <td><%= item.部门班组 %></td>
               <td><%= item.工资号 %></td>
               <td><%= item.姓名 %></td>
+              <td><%= item.系数 %></td>
               <td><%= item.挂钩工资 %></td>
               <td><%= item.安全质量 %></td>
               <td><%= item.工作质量 %></td>
-              <td><%= item.行车 %></td>
-              <td><%= item.整改返奖 %></td>
               <td><%= item.一体化 %></td>
               <td><%= item.兼职兼岗 %></td>
               <td><%= item.其他 %></td>
               <td><%= item.应发 %></td>
               <td><%= item.考核扣款 %></td>
-              <td><%= item.合计 %></td>
+              <td><%= item.备注 %></td>
               <td><%= User.find(item.user_id).name %></td>
             </tr>
           <% end %>
