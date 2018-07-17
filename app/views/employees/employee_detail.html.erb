@@ -22,7 +22,7 @@
       	</tr>
       </thead>
       <tbody>
-      	<% @leaving_employees.each do |employee| %>
+      	<% @employees.each do |employee| %>
 	      	<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 	      		<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      		<td><%= Employee.find(employee.employee_id).name %></td>
