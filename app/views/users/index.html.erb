@@ -1,20 +1,40 @@
-<table id="example" class="table table-bordered">
-  <thead>
-    <tr>
-      <th>用户名</th>
-      <th>密码</th>
-    </tr>
-  </thead>
-   <tbody data-behavior='sortable'>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-        <td><%= user.password%></td>
-      </tr>
-    <% end %>
- </tbody>
-</table>
+<div class="head-btn col-md-12" style="margin-top: -45px;">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">用户管理页面</h4>
+  </div>
+  <%= link_to "新增用户", new_user_path, class: 'btn btn-primary-upload'%>
+</div>
 
-<div class="text-center">
-  <%= paginate @users%>
+<div class="col-md-12">
+  <div class="card" style="overflow: auto">
+  <table id="example" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>用户编号</th>
+        <th>用户名称</th>
+        <th>初识密码</th>
+        <th>用户权限</th>
+        <th>创建时间</th>
+        <th colspan="2">操作</th>
+      </tr>
+    </thead>
+     <tbody data-behavior='sortable'>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.name %></td>
+          <td><%= "123456" %></td>
+          <td><%= user.roles.first.translate_role %></td>
+          <td><%= user.created_at.strftime("%Y-%m-%d")%></td>
+          <td><%= link_to "编辑", edit_user_path(user) %></td>
+          <td><%= link_to "删除", user_path(user), method: :delete, class: "btn btn-sm btn-default", data: { confirm: "确定要删除该用户么"} %></td>
+        </tr>
+      <% end %>
+   </tbody>
+  </table>
+  </div>
+  <div class="text-center">
+    <%= paginate @users%>
+  </div>
+
 </div>
