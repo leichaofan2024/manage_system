@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
 
-  validates :name, presence: true
+  validates :name, presence: { message: "请填写姓名"}
   has_many :messages
 
   has_many :relative_salers

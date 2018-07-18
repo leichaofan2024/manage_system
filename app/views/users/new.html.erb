@@ -1,0 +1,12 @@
+<h1>新增用户</h1>
+
+<div class="col-md-10">
+  <%= simple_form_for @user do |f| %>
+    <div class="form-group">
+      <%= f.input :name, :label => "姓名", required: true, autofocus: true %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "保存", disable_with: "Submiting...", class: "button"%>
+    </div>
+  <% end %>
+</div>
