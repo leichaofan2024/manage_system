@@ -4,10 +4,10 @@ class EmployeesController < ApplicationController
 
   # def insert_attendance_cate
   #  hash = {}
-  #  a=["日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
-  #  b=["日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
+  #  a=["日勤","日夜","轮夜","加班","病","事","年","休养","婚","产","育儿","陪产","差","丧","探亲","搬家","培训","旷","工伤"]
+  #  b=["日勤","日勤夜班","轮流夜班","节日加班","病假","事假","年休假","年休假（健康休养）","婚假","产假","育儿假","陪产假","出差","丧假","探亲假","搬家假","入学培训","旷工","工伤假"]
   #  n=0
-  #  ("a".."r").each do |i|
+  #  ("a".."s").each do |i|
   #    hash[i] = [a[n], b[n]]
   #    n+=1
   #  end
@@ -26,7 +26,7 @@ class EmployeesController < ApplicationController
   # end
 
   def index
-    if  (current_user.has_role? :leaderadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+    if (current_user.has_role? :leaderadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
       workshop_id = Workshop.find_by(:name => current_user.name).id
@@ -1426,9 +1426,9 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      @leaving_employees = LeavingEmployee.where(:leaving_type => "调离")
+      @employees = LeavingEmployee.where(:leaving_type => "调离")
     elsif params[:type] == "调动"
-      @leaving_employees = LeavingEmployee.where(:leaving_type => "调动")
+      @employees = LeavingEmployee.where(:leaving_type => "调动")
     end
   end
 

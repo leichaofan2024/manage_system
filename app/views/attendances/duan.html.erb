@@ -5,12 +5,26 @@
   <% application_id << application.id %>
 <% end %>
 <!-- 处理申请 -->
+
 <div class="col-md-12">
-  <% if applications.count == 0 %>
-    <h5>您没有需要处理的申请，点击这里可查看已处理申请<%= link_to "查看往期", show_application_attendances_path(applications: Application.all.pluck("id"), type: "duan") %></h5>
-  <% else %>
-    <h5>您有<%= link_to applications.count, show_application_attendances_path(applications: application_id, type: "duan") %>条修改申请需要处理</h5>
-  <% end %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>待处理申请（条）</th>
+        <th>详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= applications.count %>条</td>
+        <% if applications.count == 0 %>
+          <td><%= link_to "查看往期", show_application_attendances_path(applications: Application.all.pluck("id"), type: "duan"), class: "btn btn-primary"  %></td>
+        <% else %>
+          <td><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary" %></td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <!-- 筛选 -->
 <div class="col-md-12">
@@ -30,36 +44,60 @@
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
       <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: @month, year: @year) %></h5>
       <ul>
-        <% @workshops.each do |workshop| %>
+        <% @workshops.each do |verify_workshop| %>
         <li>
-          <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
+          <em></em><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= verify_workshop.name %></a>
           <ul>
-            <% @groups = workshop.groups %>
+            <% @groups = verify_workshop.groups %>
             <% @groups.each do |group| %>
-              <li><a href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+              <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
             <% end %>
-          </ul>
+          </ul> 
         </li>
         <% end %>
-      </ul>
+        <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+          <li>
+            <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+            <ul>
+              <% @groups = no_verify_workshop.groups %>
+              <% @groups.each do |group| %>
+                <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+              <% end %>
+            </ul> 
+          </li>
+        <% end %>
+      </ul><br>
+      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
     </div>
   <% else %>
     <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤表</h4>
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
       <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: Time.now.month, year: Time.now.year) %></h5>
       <ul>
-        <% @workshops.each do |workshop| %>
+        <% @workshops.each do |verify_workshop| %>
         <li>
-          <em></em><a href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= workshop.name %></a>
+          <em></em><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= verify_workshop.name %></a>
           <ul>
-            <% @groups = workshop.groups %>
+            <% @groups = verify_workshop.groups %>
             <% @groups.each do |group| %>
-              <li><a href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
+              <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
             <% end %>
           </ul>
         </li>
         <% end %>
-      </ul>
+        <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+          <li>
+          <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= no_verify_workshop.name %></a>
+          <ul>
+            <% @groups = no_verify_workshop.groups %>
+            <% @groups.each do |group| %>
+              <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
+            <% end %>
+          </ul>
+        </li>
+        <% end %>
+      </ul><br>
+      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
     </div>
   <% end %>
 
@@ -140,9 +178,14 @@
                 </tr>
               <% end %>
             <% else %>
-              <% @workshops.each do |workshop| %>
+              <% Workshop.all.each do |workshop| %>
                 <tr>
-                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
+                  <% if @leaving_employees.nil? %>
+                    <% transfer_employees = nil %>
+                  <% else %>
+                    <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
+                  <% end %>
+
                   <td><%= workshop.name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>

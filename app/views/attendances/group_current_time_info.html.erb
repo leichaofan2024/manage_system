@@ -28,14 +28,7 @@
         </div>
     </div>
     <!-- 进度条部分-结束 -->
-
-    <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
-      <%= select_tag(:workshop, options_for_select(@workshops.collect{|u| u.name})) %>
-      <%= submit_tag :点击筛选 %>
-    <% end %>
-
-    <%= form_tag %>
-
+    <%= form_tag  %>
     <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
     <% end %>
@@ -68,17 +61,96 @@
       <% end %>
     <% end %>
   </div>
+  <!-- 审核功能-结束 -->
+  <% if @workshop.present? %>
+    <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
+  <% else %>
+    <h4>供电段考勤情况</h4>
+  <% end %>
 <% end %>
 
+<% if current_user.has_role? :workshopadmin %>
+  <!-- 审核功能-开始 -->
+  <br><br><br>
+    <div class="btn_group_top-1sKKU_0">
+      <div>
+        <div class="btn_group-2MSRh_0">
+          <div class="ivu-tooltip">
+            <% if @group.present? %>
+              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                  <%= link_to verify_attendances_path(authority: "workshop", group: @group), method: :post do %>
+                     <span style="color: #269Eff;">审核</span>
+                  <% end %>
+                </button>
+              </div>
+            <% end %>
+            <div class="ivu-tooltip-rel" style="margin-top:-80px;">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to batch_verify_attendances_path(authority: "workshop"), method: :post do  %>
+                   <span style="color: #269Eff;">一键审核</span>
+                <% end %>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>   
   <!-- 审核功能-结束 -->
-<% if @workshop.present? %>
-  <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
-<% else %>
-  <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤情况</h4>
+  <% if @group.present? %>
+    <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+    <h4><%= Group.find(@group).name %>考勤情况</h4>
+  <% else %>
+    <h4><%= current_user.name %>考勤情况</h4>
+  <% end %>
 <% end %>
-<div class="col-md-12">
+
+  <div class="col-md-12"  style="height: 100%">
+    <!-- 组织结构树状图-开始 -->
+    <% if current_user.has_role? :workshopadmin %>
+      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+        <% workshop = Workshop.find_by(name: current_user.name) %>
+        <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
+        <ul>
+          <% workshop.groups.each do |group| %>
+            <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+        <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
+        <ul>
+          <% @workshops.each do |verify_workshop| %>
+          <li>
+            <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'><%= verify_workshop.name %></a>
+            <ul>
+              <% @groups = verify_workshop.groups %>
+              <% @groups.each do |group| %>
+                <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+              <% end %>
+            </ul> 
+          </li>
+          <% end %>
+          <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+            <li>
+              <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+              <ul>
+                <% @groups = no_verify_workshop.groups %>
+                <% @groups.each do |group| %>
+                  <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                <% end %>
+              </ul> 
+            </li>
+          <% end %>
+        </ul><br>
+        <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
+      </div>
+    <% end %>
+  <!-- 组织结构树状图-结束 -->
+
   <div class="card">
-    <div style="overflow: auto; width: 100%;">
+    <div style="overflow: auto;" class="col-md-10">
       <table id="example" class="table table-bordered">
         <thead>
           <tr>
@@ -110,21 +182,23 @@
                 <td><%= Workshop.find(employee.workshop).name %></td>
                 <td><%= Group.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-                <% attendance = Attendance.find_by(employee_id: employee.id) %>
+                <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-                <% attendance_ary = attendance.month_attendances.split('') %>
-                <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                <% day_number = 1%>
-                <% attendance_ary.each do |day_attendance| %>
-                  <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                <td>
-                    <% if day_attendance == "x" %>
-                      <%= " " %>
-                    <% else %>
-                      <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
-                    <% end %>
-                </td>
-                  <% day_number += 1%>
+                <% if attendance.present? %>
+                  <% attendance_ary = attendance.month_attendances.split('') %>
+                  <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                  <% day_number = 1%>
+                  <% attendance_ary.each do |day_attendance| %>
+                    <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                  <td>
+                      <% if day_attendance == "x" %>
+                        <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% else %>
+                        <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                      <% end %>
+                  </td>
+                    <% day_number += 1%>
+                  <% end %>
                 <% end %>
               </tr>
             <% end %>
@@ -144,3 +218,40 @@
 
 <div id="show_processbar_detail">
 </div>
+
+<!-- 组织结构树状图的js代码-开始 -->
+<script type="text/javascript">
+  (function(e) {
+    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
+      em.onclick = function(){ //onmouseover
+        var ul = this.nextSibling;
+        if(!ul){
+          return false;
+        }
+        ul = ul.nextSibling;
+        if(!ul) {
+          return false;
+        }
+        if(e.tag != 'a') {
+          ul = ul.nextSibling;
+          if(!ul){
+            return false;
+          }
+        } //a 标签控制 隐藏或删除该行
+        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
+          if(li.tagName=="LI"){
+            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
+              switch($ul.tagName){
+                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
+                break;
+                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  })({id:'menu',tag:'em'});
+</script>
+<!-- 组织结构树状图的js代码-结束 -->

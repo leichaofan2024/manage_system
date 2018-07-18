@@ -7,7 +7,6 @@
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
 
-
 <div id="Employee" class="main-18rau_0 tabcontent">
   <div>
     <!-- 导出与新增-开始 -->
@@ -57,10 +56,10 @@
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>其中：男</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count%></span>
+                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>女</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count%></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>平均年龄</span>
                     <% if Employee.where(id: employee_ids).count == 0 %>

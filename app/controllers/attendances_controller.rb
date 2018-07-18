@@ -279,7 +279,7 @@ layout 'home'
 			if status_workshop.all?{|x| x.nil?}
 				@workshops = []
 			else
-				@workshops = Workshop.find(status_workshop)
+				@workshops = Workshop.find(status_workshop) 
 			end
 		else
 			@workshops = Workshop.all
@@ -364,20 +364,20 @@ layout 'home'
  	end
 
 	def group_current_time_info
-		if current_user.has_role? :workshopadmin
-			@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
-		elsif (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
-			if params[:workshop].present?
-				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => params[:workshop]).id).order('id ASC').page(params[:page]).per(10)
-			else
+		if params[:workshop].present?
+			@employees = Employee.current.where(:workshop => params[:workshop]).order('id ASC').page(params[:page]).per(10)
+		elsif params[:group].present?
+			@employees = Employee.current.where(:group => params[:group]).order('id ASC').page(params[:page]).per(10)
+		else
+			if (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
+			elsif current_user.has_role? :workshopadmin
+				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 			end
-		end
+		end 
+		@group = params[:group]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
-		if params[:workshop].present?
-			@workshop = Workshop.find_by(:name => params[:workshop]).id
-		end
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []
@@ -390,12 +390,13 @@ layout 'home'
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
-		@workshops = Workshop.all
+		@employees = Employee.page(params[:page]).per(20)
 
 		# 导出考勤表
+		@export_employees = Employee.all
 		respond_to do |format|
 	      format.html
-	      format.csv { send_data @workshops.to_csv }
+	      format.csv { send_data @export_employees.to_csv }
 	      format.xls
 	    end
 	end
