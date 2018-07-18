@@ -56,10 +56,10 @@
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>其中：男</span>
-                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(type: "sex") %></span>
+                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>女</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(type: "sex") %></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>平均年龄</span>
                     <% if Employee.where(id: employee_ids).count == 0 %>
@@ -146,7 +146,7 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="width: 100%;">
-        <% if can? :manage, Employee %>
+        <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
           <%= render 'empshared/emp_table' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
