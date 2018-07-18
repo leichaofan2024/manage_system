@@ -2,7 +2,7 @@ class ChargeDetailsController < ApplicationController
   layout 'home'
 
   def index
-    @charge_details = ChargeDetail.page(params[:page]).per(20)
+    @charge_details = ChargeDetail.page(params[:page]).per(15)
     respond_to do |format|
       format.html
       format.csv { send_data @charge_details.to_csv}
