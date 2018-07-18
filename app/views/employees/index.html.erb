@@ -147,7 +147,7 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="width: 100%;">
-        <% if can? :manage, Employee %>
+        <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
           <%= render 'empshared/emp_table' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
