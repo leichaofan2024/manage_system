@@ -1,8 +1,6 @@
 <%= render "employee_navbar"%>
 
 <%= form_for @employee do |f| %>
-  <%= f.label :上传头像 %>
-  <%= f.file_field :avatar %>
 <% transfer_columns = {
                         "sal_number" => "工资号",
                         "job_number" =>  "工号",
@@ -110,6 +108,13 @@
         <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
         <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
       </p>
+      <p>
+        <%= form_for @employee do |f| %>
+          <%= f.label :上传头像 %>
+          <%= f.file_field :avatar %>
+          <%= submit_tag "点击上传" %>
+        <% end %>
+      </p>
     </div>
   </div>
 
@@ -118,6 +123,52 @@
   <div class="main-1XSRW_0" style="background: #F8F8F9">
     <div>
       <div>
+        <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
+          <!--基本信息-->
+          <div class="tructure-2zHdB_0">
+            <!--基本信息的头部字-->
+            <div class="head-3fDND_0">
+              <div class="info-2zzSp_0" style="background: #F8F8F9">
+                <%= "基本信息"%>
+              </div>
+            </div>
+            <div class="edit-NsWan_0">
+              <div class="info-2UJx6_0">
+                <div class="ivu-row-flex">
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                       <div>
+                         <div class="ivu-form ivu-form-label-right">
+                           <div class="ivu-form-item">
+                             <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >联系电话</label>
+                             <div class="ivu-form-item-content" style="margin-left: 150px;">
+                               <div class="ivu-input-wrapper ivu-input-type">
+                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                                 <%= f.text_field :phone_number %>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="center-uRe1b_0">
+                      <span>
+                        <font style="vertical-align: inherit;">
+                          <font style="vertical-align: inherit;"><%= f.submit :保存 %></font>
+                        </font>
+                      </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
         <!--基本信息-->
         <div class="tructure-2zHdB_0">
           <!--基本信息的头部字-->
@@ -126,7 +177,6 @@
               <%= "基本信息"%>
             </div>
           </div>
-
           <div class="edit-NsWan_0">
             <div class="info-2UJx6_0">
               <div class="ivu-row-flex">
@@ -451,6 +501,27 @@
                   </span>
                 </div>
 
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">联系电话</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :phone_number %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
               </div>
             </div>
           </div>
@@ -546,7 +617,7 @@
             </div>
 
             <div class="center-uRe1b_0">
-          
+
               <button type="button" class="ivu-btn ivu-btn-cancel margin-3iLZ-_0" >
                 <span>
                   <font style="vertical-align: inherit;">
@@ -561,6 +632,7 @@
         <!-- 结束 -->
 
         </div>
+       <% end %>
       </div>
     </div>
   </div>

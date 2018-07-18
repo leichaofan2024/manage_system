@@ -16,7 +16,7 @@
       <div class="wraper-3Rhbr_0">
         <div class="detail-2tgTZ_0">
           <% if @employee.avatar.present? %>
-            <img src="<%= @employee.avatar.thum%>" width="120" height="120", class="img-circle" >
+            <img src="<%= @employee.avatar.thum %>">
           <% else %>
             <% if @employee.name != nil %>
               <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
@@ -90,7 +90,7 @@
             <div class="info-2zzSp_0">
               <%= "基本信息"%>
             </div>
-            <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) %>
+            <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
               <div class="right-Qtwf2_0">
                 <div class="edit-2kYy__0">
                   <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
@@ -217,6 +217,17 @@
                   </span>
                 </div>
 
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                      <div class="formGroup-313Le_0">
+                        <label class="controlLabel-3ZJIZ_0">电话号</label>
+                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+
                 <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
@@ -268,6 +279,18 @@
                       <div class="formGroup-313Le_0">
                         <label class="controlLabel-3ZJIZ_0">身份证号</label>
                         <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.identity_card_number%></div>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                      <div class="formGroup-313Le_0">
+                        <label class="controlLabel-3ZJIZ_0">联系电话</label>
+                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
                       </div>
                     </div>
                   </span>
