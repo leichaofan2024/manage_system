@@ -13,6 +13,7 @@
       </div>
       <!--头像-->
 
+
       <div class="wraper-3Rhbr_0">
         <div class="detail-2tgTZ_0">
           <% if @employee.avatar.present? %>
@@ -68,13 +69,15 @@
         <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
         <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
       </p>
-      <p>
-        <%= form_for @employee do |f| %>
-          <%= f.label :上传头像 %>
-          <%= f.file_field :avatar %>
-          <%= submit_tag "点击上传" %>
-        <% end %>
-      </p>
+      <% if current_user.has_role? :groupadmin %>
+        <p>
+          <%= form_for @employee do |f| %>
+            <%= f.label :上传头像 %>
+            <%= f.file_field :avatar %>
+            <%= submit_tag "点击上传" %>
+          <% end %>
+        </p>
+      <% end %>
     </div>
   </div>
 

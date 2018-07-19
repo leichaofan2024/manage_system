@@ -115,7 +115,13 @@
       <!--头像-->
       <div class="wraper-3Rhbr_0">
         <div class="detail-2tgTZ_0">
-          <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
+          <% if @employee.avatar.present? %>
+            <img src="<%= @employee.avatar.thum %>">
+          <% else %>
+            <% if @employee.name != nil %>
+              <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
+            <% end %>
+          <% end %>
         </div>
       </div>
 
@@ -123,7 +129,7 @@
       <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
 
       <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= @employee.workshop%> &nbsp <%= @employee.duty%> </p>
+      <p class="depJop-2kBwS_0"><%= Workshop.find(@employee.workshop).name %> &nbsp <%= Group.find(@employee.group).name %> &nbsp <%= @employee.duty%> </p>
 
       <!--基本信息-->
       <p>
