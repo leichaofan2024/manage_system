@@ -1,4 +1,5 @@
 class AnnouncementsController < ApplicationController
+  before_action :required_is_admin, only: [:new, :create, :edit, :update]
   layout 'home'
   def index
     @notices = Announcement.order('id DESC').page(params[:page]).per(20)

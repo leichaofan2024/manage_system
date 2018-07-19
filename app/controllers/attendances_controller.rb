@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-layout 'home'
+  layout 'home'
 
 	##班组页面--开始
 	def group

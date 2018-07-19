@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   layout 'home'
+  before_action :required_is_admin
 
   def index
     @users = User.where.not(id: current_user.id).page(params[:page]).per(10)

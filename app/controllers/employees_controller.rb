@@ -1,6 +1,7 @@
 class EmployeesController < ApplicationController
   layout 'home'
   before_action :validate_search_key, only: [:search]
+  before_action :required_is_groupadmin, only: [:edit]
 
   def insert_attendance_cate
    hash = {}
