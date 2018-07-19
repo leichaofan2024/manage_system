@@ -1,0 +1,2 @@
+class DivideLevelWage < ApplicationRecord
+end
