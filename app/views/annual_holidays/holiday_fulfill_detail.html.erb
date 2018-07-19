@@ -3,11 +3,40 @@
 	<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) %>
 		<div class="col-md-12" style="margin-bottom: 10px;">
 			<%= form_tag filter_annual_holidays_path, method: 'get' do %>
-				<%= select_tag(:workshop, options_for_select(@workshops.collect{ |u| [u.name, u.id] }), {:prompt => "请选择车间"}) %>
-				<%= select_tag(:group, options_for_select(@groups.collect{ |u| [u.name, u.id] }), {:prompt => "请选择班组"}) %>&nbsp;&nbsp;
+				<script type="text/javascript">
+		            function selCity()
+		            {
+		                var arr = gon.group_name;
+
+		                var selNode = document.getElementById("selid");
+		                var subselNode = document.getElementById("subselid");
+		                var index = selNode.selectedIndex;
+		                var citys = arr[index];
+
+		                subselNode.options.length = 0;
+
+		                for(var i=0; i<citys.length; i++)
+		                {
+		                    var optionNode = document.createElement("option");
+		                    optionNode.value = citys[i][1];
+		                    optionNode.innerText = citys[i][0];
+		                    subselNode.appendChild(optionNode);
+		                }
+		            }
+		        </script>
+		        <select name="workshop" id="selid" onchange="selCity(this)">
+	                <option>--选择车间--</option>
+	                <% Workshop.pluck("name","id").each do |name| %>
+	                    <option value="<%=name[1]%>"><%= name[0]%></option>
+	                <% end %>
+	            </select>
+	            <select name="group" id="subselid">
+	                <option>--选择班组--</option>
+	            </select>
+				
 				<%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择年份"}) %>
 				<%= submit_tag :点击筛选 %>
-			<% end %>
+			<% end %> 
 		</div>
 		<div class="card">
 	    <div style="overflow: auto;" class="col-md-12">

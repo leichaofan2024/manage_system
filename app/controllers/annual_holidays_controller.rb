@@ -63,8 +63,12 @@ class AnnualHolidaysController < ApplicationController
 
 	def holiday_fulfill_detail
 		@employees = Employee.current.page(params[:page]).per(20)
-		@workshops = Workshop.all
-		@groups = Group.all
+		workshop = Workshop.pluck("name")
+	    @group = [["--选择省份--"]]
+	    workshop.each do |name|
+	      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+	    end
+	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
 	end
 
