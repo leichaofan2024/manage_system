@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  prepend_before_action :require_no_authentication, :only => [:cancel ]
   before_action :configure_sign_up_params, only: [:create]
   layout "session", except: [:update, :edit]
   # before_action :configure_account_update_params, only: [:update]
@@ -12,7 +13,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super
+    # build_resource(sign_up_params)
+    # resource.save
+    @user = User.new(:name => params[:user][:name], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation])
+    if @user.save!
+      flash[:notice] = "新增#{@user.name} 成功"
+      redirect_to users_path
+    else
+      flash[:warning] = "新增失败"
+      render :new
+    end
   end
 
   # GET /resource/edit

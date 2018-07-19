@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   layout 'home'
 
   def index
-    @users = User.page(params[:page]).per(10)
+    @users = User.where.not(id: current_user.id).page(params[:page]).per(10)
   end
 
   def new
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "新增#{@user.name} 成功"
-      redirect_to user_path(params[:id])
+      redirect_to users_path
     else
       flash[:warning] = "新增失败"
       render :new
