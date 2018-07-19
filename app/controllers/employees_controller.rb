@@ -67,6 +67,12 @@ class EmployeesController < ApplicationController
     else
       @employee = Employee.new(employee_params)
       @employee.update(:workshop => Workshop.find_by("name = ?", params[:employee][:workshop]).id, :group => Group.find_by("name = ?", params[:employee][:group]).id)
+      @employee.birth_year = @employee.birth_date[0..3]
+      @employee.age = Time.now.year - @employee.birth_year.to_i
+      working_years_transfer = (Time.now - @employee.working_time.to_datetime)/60/60/24/365
+      rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
+      @employee.working_years = working_years_transfer.to_i
+      @employee.rali_years = rali_years_transfer.to_i
       if @employee.save
         flash[:notice] = "创建成功"
       else
@@ -83,7 +89,14 @@ class EmployeesController < ApplicationController
 
   def update
     @employee = Employee.current.find(params[:id])
-    if @employee.update(employee_params)
+    @employee.update(employee_params)
+    @employee.birth_year = @employee.birth_date[0..3]
+    @employee.age = Time.now.year - @employee.birth_year.to_i
+    working_years_transfer = (Time.now - @employee.working_time.to_datetime)/60/60/24/365
+    rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
+    @employee.working_years = working_years_transfer.to_i
+    @employee.rali_years = rali_years_transfer.to_i
+    if @employee.save
       flash[:notice] = "更新信息成功"
       redirect_to employee_path(params[:id])
     else

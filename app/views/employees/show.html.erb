@@ -363,6 +363,28 @@
                   <span class="customField-2KxGL_0">
                     <div>
                       <div class="formGroup-313Le_0">
+                        <label class="controlLabel-3ZJIZ_0">工龄</label>
+                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_years%></div>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                      <div class="formGroup-313Le_0">
+                        <label class="controlLabel-3ZJIZ_0">路龄</label>
+                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.rali_years%></div>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                      <div class="formGroup-313Le_0">
                         <label class="controlLabel-3ZJIZ_0">入路时间</label>
                         <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.railway_time.to_datetime.strftime("%Y年%m月%d日") if @employee.railway_time.present?%></div>
                       </div>
