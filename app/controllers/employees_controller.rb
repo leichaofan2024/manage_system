@@ -58,15 +58,21 @@ class EmployeesController < ApplicationController
 
   def new
     @employee = Employee.new
+    workshop = Workshop.pluck("name")
+      @group = [["--选择省份--"]]
+      workshop.each do |name|
+        @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+      end
+      gon.group_name = @group
   end
 
   def create
-    if (!Workshop.find_by("name = ?", params[:employee][:workshop]).present?) or (!Group.find_by("name = ?", params[:employee][:group]).present?)
+    if (!Workshop.find_by("id = ?", params[:employee][:workshop]).present?) or (!Group.find_by("id = ?", params[:employee][:group]).present?)
       flash[:alert] = "您填写的车间或班组不存在"
       redirect_to new_employee_path
     else
       @employee = Employee.new(employee_params)
-      @employee.update(:workshop => Workshop.find_by("name = ?", params[:employee][:workshop]).id, :group => Group.find_by("name = ?", params[:employee][:group]).id)
+      @employee.update(:workshop => params[:employee][:workshop], :group => params[:employee][:group])
       @employee.birth_year = @employee.birth_date[0..3]
       @employee.age = Time.now.year - @employee.birth_year.to_i
       working_years_transfer = (Time.now - @employee.working_time.to_datetime)/60/60/24/365
@@ -85,6 +91,12 @@ class EmployeesController < ApplicationController
 
   def edit
     @employee = Employee.current.find(params[:id])
+    workshop = Workshop.pluck("name")
+    @group = []
+    workshop.each do |name|
+      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+    end
+    gon.group_name = @group
   end
 
   def update
