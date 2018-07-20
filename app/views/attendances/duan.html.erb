@@ -157,17 +157,18 @@
                     <% end %>
                   <% end %>
                   <% employees = Employee.current.where(:group => group.id).pluck("id") %>
-                  <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
                   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                    <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year) %></td>
                   <% else %>
+                    <% attendances = Attendance.where(:employee_id => employees, :month => @month, :year => @year).pluck("id") %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year) %></td>
                   <% end %>
                 </tr> 
               <% end %>
             <% elsif @group.present? %>
               <% @employees.each do |employee| %>
-                <tr>
+                <tr> 
                   <td><%= employee.name %></td> 
                   <td><%= employee.sal_number %></td>
                   <td><%= Workshop.find(employee.workshop).name %></td>
@@ -182,7 +183,7 @@
                   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                     <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) %></td>
                   <% else %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year) %></td>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year) %></td>
                   <% end %>
                 </tr>
               <% end %>
@@ -204,9 +205,15 @@
                     <% end %>
                   <% end %>
                   <% employees = Employee.current.where(:workshop => workshop.id).pluck("id") %>
-                  <% attendances = Attendance.where(:employee_id => employees).pluck("id") %>
-                  <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
+                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                    <% attendances = Attendance.where(:employee_id => employees, year: Time.now.year, month: Time.now.month).pluck("id") %>
+                    <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
                       <td><%= link_to records, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: "btn btn-primary" %></td>
+                  <% else %>
+                    <% attendances = Attendance.where(:employee_id => employees, year: @year, month: @month).pluck("id") %>
+                    <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
+                      <td><%= link_to records, show_record_attendances_path(employee: employees, month: @month, year: @year), class: "btn btn-primary" %></td>
+                  <% end %>
                 </tr>
               <% end %>
             <% end %>
@@ -217,9 +224,6 @@
   <!-- 表格-结束 -->
 </div>
 <!-- 主体部分-结束 -->
-<!-- 弹框代码(使用ajax呼叫，所以没有render)-开始 -->
-
-<!-- 弹框代码(使用ajax呼叫，所以没有render)-结束 -->
 <!-- 进度条引用的库-开始 -->
 <!-- <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->

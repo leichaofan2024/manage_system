@@ -304,7 +304,7 @@ layout 'home'
 		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
-		@group = params[:group]
+		@group = params[:group] 
 		@month = params[:month]
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
