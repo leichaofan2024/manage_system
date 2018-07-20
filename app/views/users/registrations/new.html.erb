@@ -7,8 +7,12 @@
 
     <div class="form-inputs">
       <div style="margin-bottom: 25px" >
-        <%= f.input :name, :label => false, :error => false, placeholder: "用户名", required: true, autofocus: true %>
-        <%= f.select :roles, 选择权限: Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]).pluck(:translate_role) %>
+        <%= f.input :name, :label => false, placeholder: "用户名", required: true, autofocus: true %>
+
+        <div class="form-group">
+          <%= f.label :选择权限 %>
+          <%= f.select :roles,  Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]).pluck(:translate_role)%>
+        </div>
         <!-- <%= f.input :name, :label => false, as: :radio_buttons, collection:  [['一般用户', false], ['企业用户', true]], required: true %> -->
         <!-- <%= f.input :roles, as: :radio_buttons, collection: Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]), value_method: :name, required: true %> -->
         <%= f.input :password, :label => false, placeholder: "输入密码", required: true %>

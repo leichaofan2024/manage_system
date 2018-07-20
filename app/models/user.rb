@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable
 
   validates :name, presence: { message: "请填写姓名"}
+  validates :password, presence: { message: "请设置密码，最小长度为6位数字"}
+  validates :password_confirmation, presence: { message: "密码不一致"}
   has_many :messages
 
   has_many :relative_salers
