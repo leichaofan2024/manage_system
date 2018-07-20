@@ -3,7 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   prepend_before_action :require_no_authentication, :only => [:cancel ]
   before_action :configure_sign_up_params, only: [:create]
-  layout "session", except: [:update, :edit]
+  layout "home", only: [:new]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -13,10 +13,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    # build_resource(sign_up_params)
-    # resource.save
+    hash = { "车间管理员" => 'workshopadmin', "科室管理员" => 'organsadmin', "班组管理员" => 'groupadmin', "领导" => 'leaderadmin' }
     @user = User.new(:name => params[:user][:name], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation])
-    if @user.save!
+    @user.add_role(hash[params[:user][:roles]])
+    if @user.save
       flash[:notice] = "新增#{@user.name} 成功"
       redirect_to users_path
     else

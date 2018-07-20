@@ -1,19 +1,25 @@
-<h2>注册</h2>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+<div class="col-md-4 col-md-offset-4">
+  <h4 class="text-left">创建新用户</h4>
 
-  <div class="form-inputs">
-    <div style="margin-bottom: 25px" > <!-- class="input-group" -->
-      <%= f.input :name, :label => false, :error => false, placeholder: "用户名", required: true, autofocus: true %>
-      <%= f.input :password, :label => false, placeholder: "输入密码", required: true %>
-      <%= f.input :password_confirmation, :label => false, placeholder: "请再次输入", required: true %>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= f.error_notification %>
+
+    <div class="form-inputs">
+      <div style="margin-bottom: 25px" >
+        <%= f.input :name, :label => false, :error => false, placeholder: "用户名", required: true, autofocus: true %>
+        <%= f.select :roles, 选择权限: Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]).pluck(:translate_role) %>
+        <!-- <%= f.input :name, :label => false, as: :radio_buttons, collection:  [['一般用户', false], ['企业用户', true]], required: true %> -->
+        <!-- <%= f.input :roles, as: :radio_buttons, collection: Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]), value_method: :name, required: true %> -->
+        <%= f.input :password, :label => false, placeholder: "输入密码", required: true %>
+        <%= f.input :password_confirmation, :label => false, placeholder: "请再次输入", required: true %>
+      </div>
     </div>
-  </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "注册" %>
-  </div>
-<% end %>
+    <div class="form-actions">
+      <%= f.button :submit, "点击创建" %>
+    </div>
+  <% end %>
 
-<%= render "users/shared/links" %>
+  <%= link_to "返回", :back %>
+</div>

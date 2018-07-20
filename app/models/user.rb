@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   rolify :before_add => :before_add_method #增加角色时，要做些什么
+  # before_create :set_default_role
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
@@ -15,6 +16,11 @@ class User < ActiveRecord::Base
   def before_add_method(role)
 
   end
+
+  #设置默认权限
+  # def set_default_role
+  #   self.roles.first ||= Role.find_by_name('groupadmin')
+  # end
 
 
 end
