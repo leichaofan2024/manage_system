@@ -35,7 +35,16 @@
     <%= hidden_field_tag :type, "duan" %>
     <%= submit_tag :筛选 %>
   <% end %>
+  <div class="ivu-tooltip-rel" style="text-align: right;">
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+      <%= link_to create_default_attendance_attendances_path, method: 'post' do  %>
+         <span style="color: #269Eff;">新建下月考勤</span>
+      <% end %>
+    </button>
+  </div>
 </div>
+
+
 <!-- 主体部分-开始 -->
 <div class="col-md-12" style="height: 100%">
   <!-- 组织结构树状图-开始 -->

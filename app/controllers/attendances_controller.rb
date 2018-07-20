@@ -23,6 +23,24 @@ layout 'home'
 	end
 	##班组页面--结束
 
+	def create_default_attendance
+		Employee.pluck("id").uniq.each do |i|
+			if Time.now.month == 12
+				attendance = Attendance.where(employee_id: i, year: Time.now.year + 1, month: 1)
+				if !attendance.present?
+					Attendance.create(employee_id: i, year: Time.now.year + 1, month: 1)
+				end
+			else
+				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
+				if !attendance.present?
+					Attendance.create(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
+				end
+			end
+			flash[:notice] = "下月考勤表新增成功"
+		end	
+		redirect_back(fallback_location: duan_attendances_path)
+	end
+
 	##弹窗内选择假期的表单功能--开始
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始

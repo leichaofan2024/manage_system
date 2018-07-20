@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get :show_modal
       get :group_current_time_info
       post :create_attendance
+      post :create_default_attendance
       post :verify
       post :batch_verify
       get :annual_statistic
@@ -64,7 +65,6 @@ Rails.application.routes.draw do
       get :caiwu2
       get :set_holiday_start_time
       post :create_holiday_time
-
     end
   end
 
