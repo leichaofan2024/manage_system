@@ -13,6 +13,10 @@
 	      	  <th>原车间</th>
 	      	  <th>原班组</th>
 	      	  <th>调离时间</th>
+	      	<% elsif @type == "退休" %>
+	      	  <th>原车间</th>
+	      	  <th>原班组</th>
+	      	  <th>退休时间</th>
 	      	<% elsif @type == "调动" %>
 	      	  <th>调动前车间</th>
 	      	  <th>调动前班组</th>
@@ -50,7 +54,15 @@
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
 					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
 					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-					<td><%= employee.created_at %></td>
+					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+				</tr>
+			<% elsif @type == "退休" %>
+				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
+	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
+	      			<td><%= Employee.find(employee.employee_id).name %></td>
+					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 				</tr>
 	      	<% elsif @type == "调动" %>
 	      		<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
@@ -60,7 +72,7 @@
 		      		<td><%= Group.find(employee.transfer_from_group).name %></td>
 		      		<td><%= Workshop.find(employee.transfer_to_workshop).name %></td>
 		      		<td><%= Group.find(employee.transfer_to_group).name %></td>
-		      		<td><%= employee.created_at %></td>
+		      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 		      	</tr>
 	      	<% else %>
 	      		<tr class="row-click-able" data-url="/employees/<%= employee.id %>">

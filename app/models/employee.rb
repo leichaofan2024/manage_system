@@ -11,12 +11,14 @@ class Employee < ActiveRecord::Base
   has_many :annual_holidays
   has_one :leaving_employee
 
-  #去掉调离的所有人
-  scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
+  #去掉调离和退休的所有人
+  scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).pluck("employee_id"))}
   #所有调离的人
   scope :leaving, -> { where(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
   #一段时间内所有调动的人
-  scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id"))}
+  scope :transfer, ->(start_time, end_time){where(:id => LeavingEmployee.where(:leaving_type => "调动").where("leaving_employees.created_at > ? AND leaving_employees.created_at < ?", start_time, end_time ).pluck("leaving_employees.employee_id"))}
+  #所有退休的人
+  scope :retire, -> { where(:id => LeavingEmployee.where(:leaving_type => "退休").pluck("employee_id"))}
   #所有工人
   scope :worker, -> { where(grade: nil)}
   #所有干部

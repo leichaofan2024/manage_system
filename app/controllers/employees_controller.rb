@@ -1445,6 +1445,9 @@ class EmployeesController < ApplicationController
       LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.find_by(:name => params[:group]).id)
       Employee.current.find(params[:employee]).update(:workshop => Workshop.find_by(:name => params[:workshop]).id, :group => Group.find_by(:name => params[:group]).id)
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+    elsif params[:type] == "退休"
+      LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "退休")
+      flash[:notice] = "#{Employee.find(params[:employee]).name}已退休"
     end
     redirect_back(fallback_location: employees_path)
   end
@@ -1452,9 +1455,11 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      @employees = LeavingEmployee.where(:leaving_type => "调离")
+      @employees = LeavingEmployee.where(:leaving_type => "调离").page(params[:page]).per(15)
     elsif params[:type] == "调动"
-      @employees = LeavingEmployee.where(:leaving_type => "调动")
+      @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
+    elsif params[:type] == "退休"
+      @employees = LeavingEmployee.where(:leaving_type => "退休").page(params[:page]).per(15)
     else
       if params[:default] == "男"
         condition = ".current.where(sex: '男'"
