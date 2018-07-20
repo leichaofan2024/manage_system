@@ -142,7 +142,7 @@ class EmployeesController < ApplicationController
     elsif current_user.has_role? :groupadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
     end
-    if params[:duam].present?
+    if params[:duan].present?
       condition = ".current.where(company_name: '北京供电段'"
     end
     if params[:workshop].present?
@@ -1454,6 +1454,33 @@ class EmployeesController < ApplicationController
       @employees = LeavingEmployee.where(:leaving_type => "调离")
     elsif params[:type] == "调动"
       @employees = LeavingEmployee.where(:leaving_type => "调动")
+    else
+      if params[:default] == "男"
+        condition = ".current.where(sex: '男'"
+      elsif params[:default] == "女"
+        condition = ".current.where(sex: '女'"
+      end
+      if params[:aa][:duty].present?
+        condition += ", duty: '#{params[:aa][:duty]}'"
+      end
+      if params[:aa][:work_type].present?
+        condition += ", work_type: '#{params[:aa][:work_type]}'"
+      end
+      if params[:aa][:sex].present?
+        condition += ", sex: '#{params[:aa][:sex]}'"
+      end
+      if params[:aa][:filter_type].present?
+        case params[:aa][:filter_type]
+        when "年龄"
+          condition += ", age: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        when "工龄"
+          condition += ", working_years: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        when "路龄"
+          condition += ", rali_years: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        end
+      end
+      condition += ").page(params[:page]).per(15)"
+      @employees = eval("Employee#{condition}")
     end
   end
 
