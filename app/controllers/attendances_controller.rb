@@ -312,7 +312,7 @@ layout 'home'
 		#配置班组的现员数据（当前人员+调动人员）
 		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
-		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
 	end
 	##段管理员页面--结束
 
