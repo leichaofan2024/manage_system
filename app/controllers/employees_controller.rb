@@ -79,6 +79,7 @@ class EmployeesController < ApplicationController
       rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
       @employee.working_years = working_years_transfer.to_i
       @employee.rali_years = rali_years_transfer.to_i
+      Attendance.create(employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
       if @employee.save
         flash[:notice] = "创建成功"
       else
