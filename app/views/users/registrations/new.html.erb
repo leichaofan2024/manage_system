@@ -22,15 +22,37 @@
         </div>
 
         <div id="optionID1">
-          <input type="text" name="input-workshop-group" placeholder="请输入车间名称">
-          <input type="text" name="input-workshop" placeholder="请输入班组名称">
+          <select name="workshop" id="selid" onchange="selCity(this)">
+            <option>--选择车间--</option>
+            <% Workshop.pluck("name","id").each do |name| %>
+                <option value="<%=name[1]%>"><%= name[0]%></option>
+            <% end %>
+	         </select>
+	         <select name="group" id="subselid">
+	             <option>--选择班组--</option>
+	          </select>
         </div>
+
+
         <div id="optionID2" style="display:none">
-          <input type="text" name="input-workshop"placeholder="请输入车间名称">
+          <select>
+            <% Workshop.where.not(:name => '机关').pluck(:name).each do |item| %>
+              <option><%= item %></option>
+            <% end %>
+          </select>
+
         </div>
+
+
         <div id="optionID3" style="display:none">
-          <input type="text" name="input-organs" placeholder="请输入科室名称">
+          <select>
+            <% Group.where(:workshop_id => Workshop.where(:name => "机关").pluck(:id)).pluck(:name).each do |item| %>
+              <option><%= item %></option>
+            <% end %>
+          </select>
         </div>
+
+
         <div id="optionID4" style="display:none">
         </div>
 
@@ -49,8 +71,7 @@
 </div>
 
 <script>
-function selectDiv(selectOptionValue){
-    console.log(selectOptionValue);
+function selectDiv(selectOptionValue) {
     for (var i=1;i<5;i++){
         var currentDivId = "optionID"+i;
         if (selectOptionValue == currentDivId){
@@ -59,5 +80,21 @@ function selectDiv(selectOptionValue){
             document.getElementById(currentDivId).style.display='none';
         }
     }
+}
+
+function selCity() {
+  var arr = gon.group_name;
+  var selNode = document.getElementById("selid");
+  var subselNode = document.getElementById("subselid");
+  var index = selNode.selectedIndex;
+  var citys = arr[index];
+  subselNode.options.length = 0;
+
+  for(var i=0; i<citys.length; i++) {
+      var optionNode = document.createElement("option");
+      optionNode.value = citys[i][1];
+      optionNode.innerText = citys[i][0];
+      subselNode.appendChild(optionNode);
+  }
 }
 </script>

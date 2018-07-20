@@ -7,9 +7,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    workshop = Workshop.pluck("name")
+    @group = [["--选择省份--"]]
+    workshop.each do |name|
+      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+    end
+    gon.group_name = @group
+    super
+  end
 
   # POST /resource
   def create
