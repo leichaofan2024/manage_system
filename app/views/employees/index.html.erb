@@ -56,10 +56,10 @@
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>其中：男</span>
-                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
+                    <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(aa: request.query_parameters, default: "男") %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>女</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(aa: request.query_parameters, default: "女") %></span>
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>平均年龄</span>
                     <% if Employee.where(id: employee_ids).count == 0 %>
@@ -75,6 +75,9 @@
                     <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                     <span>最近一月调动</span>
                       <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>退休</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= link_to Employee.retire.count, employee_detail_employees_path(type: "退休")%></span>
                     <span>人</span>
                   </div>
                 </div>

@@ -79,6 +79,7 @@ class EmployeesController < ApplicationController
       rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
       @employee.working_years = working_years_transfer.to_i
       @employee.rali_years = rali_years_transfer.to_i
+      Attendance.create(employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
       if @employee.save
         flash[:notice] = "创建成功"
       else
@@ -142,7 +143,7 @@ class EmployeesController < ApplicationController
     elsif current_user.has_role? :groupadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
     end
-    if params[:duam].present?
+    if params[:duan].present?
       condition = ".current.where(company_name: '北京供电段'"
     end
     if params[:workshop].present?
@@ -1444,6 +1445,9 @@ class EmployeesController < ApplicationController
       LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.find_by(:name => params[:group]).id)
       Employee.current.find(params[:employee]).update(:workshop => Workshop.find_by(:name => params[:workshop]).id, :group => Group.find_by(:name => params[:group]).id)
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+    elsif params[:type] == "退休"
+      LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "退休")
+      flash[:notice] = "#{Employee.find(params[:employee]).name}已退休"
     end
     redirect_back(fallback_location: employees_path)
   end
@@ -1451,9 +1455,38 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      @employees = LeavingEmployee.where(:leaving_type => "调离")
+      @employees = LeavingEmployee.where(:leaving_type => "调离").page(params[:page]).per(15)
     elsif params[:type] == "调动"
-      @employees = LeavingEmployee.where(:leaving_type => "调动")
+      @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
+    elsif params[:type] == "退休"
+      @employees = LeavingEmployee.where(:leaving_type => "退休").page(params[:page]).per(15)
+    else
+      if params[:default] == "男"
+        condition = ".current.where(sex: '男'"
+      elsif params[:default] == "女"
+        condition = ".current.where(sex: '女'"
+      end
+      if params[:aa][:duty].present?
+        condition += ", duty: '#{params[:aa][:duty]}'"
+      end
+      if params[:aa][:work_type].present?
+        condition += ", work_type: '#{params[:aa][:work_type]}'"
+      end
+      if params[:aa][:sex].present?
+        condition += ", sex: '#{params[:aa][:sex]}'"
+      end
+      if params[:aa][:filter_type].present?
+        case params[:aa][:filter_type]
+        when "年龄"
+          condition += ", age: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        when "工龄"
+          condition += ", working_years: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        when "路龄"
+          condition += ", rali_years: #{params[:aa][:start_time]}..#{params[:aa][:end_time]}"
+        end
+      end
+      condition += ").page(params[:page]).per(15)"
+      @employees = eval("Employee#{condition}")
     end
   end
 

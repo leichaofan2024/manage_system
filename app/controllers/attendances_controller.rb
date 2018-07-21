@@ -23,6 +23,24 @@ layout 'home'
 	end
 	##班组页面--结束
 
+	def create_default_attendance
+		Employee.pluck("id").uniq.each do |i|
+			if Time.now.month == 12
+				attendance = Attendance.where(employee_id: i, year: Time.now.year + 1, month: 1)
+				if !attendance.present?
+					Attendance.create(employee_id: i, year: Time.now.year + 1, month: 1)
+				end
+			else
+				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
+				if !attendance.present?
+					Attendance.create(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
+				end
+			end
+			flash[:notice] = "下月考勤表新增成功"
+		end	
+		redirect_back(fallback_location: duan_attendances_path)
+	end
+
 	##弹窗内选择假期的表单功能--开始
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始
@@ -286,7 +304,7 @@ layout 'home'
 		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
-		@group = params[:group]
+		@group = params[:group] 
 		@month = params[:month]
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -294,7 +312,7 @@ layout 'home'
 		#配置班组的现员数据（当前人员+调动人员）
 		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
-		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
 	end
 	##段管理员页面--结束
 

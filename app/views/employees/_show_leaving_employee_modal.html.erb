@@ -8,6 +8,8 @@
             调离人员
           <% elsif @type == "调动" %>
             调动人员
+          <% elsif @type == "退休" %>
+            退休
           <% end %>
         </h4>
       </div> 
@@ -21,6 +23,9 @@
               <%= text_field_tag :workshop, nil, required: true %>
               <%= label_tag :填写调动后班组： %>
               <%= text_field_tag :group, nil, required: true %>
+            <% elsif @type == "退休" %>
+              <%= label_tag :填写退休原因： %>
+              <%= text_field_tag :cause, nil, required: true %>
             <% end %>
             <%= hidden_field_tag :employee, @employee %>
             <%= hidden_field_tag :type, @type %>

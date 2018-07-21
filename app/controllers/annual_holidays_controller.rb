@@ -73,7 +73,6 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def filter
-
 		@workshops = Workshop.all
 		@groups = Group.all
 		@years = AnnualHoliday.pluck("year").uniq
