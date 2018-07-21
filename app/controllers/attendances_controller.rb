@@ -114,18 +114,19 @@ layout 'home'
 				name = current_user.name.split("-")[1]
 				@group = Group.find_by(:name => name)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
-					AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+
+					AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
 				else
-					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组填写中")
+					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
 				end
 			elsif current_user.has_role? :organsadmin
 				name = current_user.name
 				@group = Group.find_by(:name => name)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 					if current_user.has_role? :groupadmin
-						AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中")
+						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
 					elsif current_user.has_role? :organsadmin
-						AttendanceStatus.create(:group_id => @group.id, :status => "班组填写中", :workshop_id => @group.workshop.id)
+						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
 					end
 				end
 			end
