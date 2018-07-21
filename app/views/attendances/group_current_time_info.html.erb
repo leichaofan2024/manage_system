@@ -28,7 +28,6 @@
         </div>
     </div>
     <!-- 进度条部分-结束 -->
-    <%= form_tag  %>
     <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
     <% end %>
@@ -97,7 +96,7 @@
       </div>
     </div>   
   <!-- 审核功能-结束 -->
-  <% if @group.present? %>
+  <% if AttendanceStatus.find_by(:group_id => @group).present? %>
     <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
     <h4><%= Group.find(@group).name %>考勤情况</h4>
   <% else %>
