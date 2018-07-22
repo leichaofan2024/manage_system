@@ -24,10 +24,14 @@
       	<% @applications.each do |application| %>
 	      	<tr>
 	      		<% if params[:type] == "duan" %>
-	      			<% group = Group.find("#{Application.find(application).group_id}") %>
+              <% if Group.find("#{Application.find(application).group_id}").present? %>
+	      			  <% group = Group.find("#{Application.find(application).group_id}") %>
 	      	    	<td><%= Workshop.find("#{group.workshop_id}").name %></td>
-	      	    <% end %>
-	      		<td><%= Group.find("#{Application.find(application).group_id}").name %></td>
+              <% end %>
+	      	  <% end %>
+            <% if Group.find("#{Application.find(application).group_id}").present? %>
+	      		  <td><%= Group.find("#{Application.find(application).group_id}").name %></td>
+            <% end %>
 	      		<td><%= Application.find(application).cause %></td>
 	      		<td><%= Application.find(application).month %>月<%= Application.find(application).day %>日</td>
 	      		<td><%= Employee.current.find_by(:id => "#{Application.find(application).employee_id}").name %></td>
