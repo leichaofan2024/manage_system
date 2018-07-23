@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-        </div>   
+        </div>
       <% end %>
     <% end %>
   </div>
@@ -94,7 +94,7 @@
           </div>
         </div>
       </div>
-    </div>   
+    </div>
   <!-- 审核功能-结束 -->
   <% if AttendanceStatus.find_by(:group_id => @group).present? %>
     <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
@@ -128,7 +128,7 @@
               <% @groups.each do |group| %>
                 <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
               <% end %>
-            </ul> 
+            </ul>
           </li>
           <% end %>
           <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
@@ -139,7 +139,7 @@
                 <% @groups.each do |group| %>
                   <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
                 <% end %>
-              </ul> 
+              </ul>
             </li>
           <% end %>
         </ul><br>
@@ -191,7 +191,7 @@
                     <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
                   <td>
                       <% if day_attendance == "x" %>
-                        <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                        <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
                       <% else %>
                         <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
                       <% end %>

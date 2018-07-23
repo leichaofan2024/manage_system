@@ -82,10 +82,11 @@ class EmployeesController < ApplicationController
       Attendance.create(employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
       if @employee.save
         flash[:notice] = "创建成功"
+        redirect_to employee_path(@employee)
       else
         flash[:alert] = "创建失败"
+        render :new 
       end
-      redirect_to employees_path
     end
 
   end
