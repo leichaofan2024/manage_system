@@ -1461,12 +1461,11 @@ class EmployeesController < ApplicationController
       @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
     elsif params[:type] == "退休"
       @employees = LeavingEmployee.where(:leaving_type => "退休").page(params[:page]).per(15)
+    elsif params[:default] == "男"
+      @employees = Employee.current.where(:sex => '男').page(params[:page]).per(15)
+    elsif params[:default] == "女"
+      @employees = Employee.current.where(:sex => '女').page(params[:page]).per(15)
     else
-      if params[:default] == "男"
-        condition = ".current.where(sex: '男'"
-      elsif params[:default] == "女"
-        condition = ".current.where(sex: '女'"
-      end
       if params[:aa][:duty].present?
         condition += ", duty: '#{params[:aa][:duty]}'"
       end
