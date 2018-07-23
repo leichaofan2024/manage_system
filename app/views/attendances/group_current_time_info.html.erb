@@ -22,7 +22,7 @@
     <!-- 进度条 -->
     <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
     <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="60"
             aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
             <span class="sr-only">40% 完成</span>
         </div>
