@@ -1,21 +1,23 @@
 
 <%= render 'employee_navbar'%>
-<% if params[:age].present? %>
-  <%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %>
-<% elsif params[:education].present? %>
-  <%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %>
-<% elsif params[:working_years].present? %>
-  <%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %>
-<% elsif params[:rali_years].present? %>
-  <%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %>
-<% elsif params[:work_type].present? %>
-  <%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %>
-<% end %>
+<div class="col-md-12">
+  <% if params[:age].present? %>
+    <%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %>
+  <% elsif params[:education].present? %>
+    <%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %>
+  <% elsif params[:working_years].present? %>
+    <%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %>
+  <% elsif params[:rali_years].present? %>
+    <%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %>
+  <% elsif params[:work_type].present? %>
+    <%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %>
+  <% end %>
+</div>
 <br><br>
 
-<h4> 
+<h4>
   <% if params[:data_source].present? %>
-    数据来源：<%= params[:data_source] %>&nbsp &nbsp &nbsp 
+    数据来源：<%= params[:data_source] %>&nbsp &nbsp &nbsp
   <% end %>
   <% if params[:workshop].present? %>
     车间：<%= Workshop.find(params[:workshop]).name %> &nbsp &nbsp &nbsp
@@ -41,22 +43,24 @@
       路龄：<%= params[:rali_years] %>&nbsp &nbsp &nbsp
     <% end %>
   <% end %>
-  人数： <%= @employees.total_count %>人
+  人数： <%= @employees.page(1).per(15).total_count %>人
 </h4>
 <!-- 通过@employees的总页数，找出所有的id-开始 -->
-<% pages = @employees.total_pages %>
+<% pages = @employees.page(1).total_pages %>
 <% employee_ids = @employees.page(1).per(20).pluck("id") %>
 <% (2..pages).each do |i| %>
   <% employee_ids += @employees.page(i).per(20).pluck("id") %>
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
 <% if can? :import, Employee%>
-  <div class="ivu-tooltip-rel">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to statistical_analysis_data_employees_path(format: "xls", employees: employee_ids) do %>
-         <span style="color: #269Eff;">导出表格</span>
-      <% end %>
-    </button>
+  <div class="col-md-12" style="margin-bottom: 10px">
+    <div class="ivu-tooltip-rel">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to statistical_analysis_data_employees_path(format: "xls", employees: employee_ids) do %>
+           <span style="color: #269Eff;">导出表格</span>
+        <% end %>
+      </button>
+    </div>
   </div>
 <% end %>
 <div class="col-md-12" style="overflow: auto; width: 100%;">
@@ -105,11 +109,3 @@
        </tbody>
   </table>
 </div>
-
-<div class="text-center">
-  <%= paginate @employees %>
-</div>
-
-
-
-
