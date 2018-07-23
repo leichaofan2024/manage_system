@@ -151,9 +151,11 @@
       <div style="width: 100%;">
         <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
           <%= render 'empshared/emp_table' %>
+        <% elsif current_user.has_role? :attendance_admin %>
+          <%= render 'empshared/other_duanadmin' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
-        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :attendance_admin)%>
+        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
           <%= render 'empshared/emp_table_not_empadmin'%>
          <% end %>
       </div>
@@ -165,14 +167,14 @@
 
 
 
-   <% if can? :manage, Employee %>
+   <!-- <% if can? :manage, Employee %>
       <h5>上传现员表</h5>
 
       <%= form_tag import_table_employees_path, multipart: true do %>
         <%= file_field_tag :file%>
         <%= submit_tag "上传"%>
       <% end %>
-    <% end %>
+   <% end %> -->
 
   </div>
 </div>
