@@ -101,26 +101,9 @@
 
 
 <div class="detail-3D1aE_0">
-  <div class="wraper-3HSto_0">
-    <div class="wraper-k3Z8K_0">
-      <!--按钮-->
-      <div class="backMain-19P3__0">
-        <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
-          <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to employees_path do%>
-            <span>返回</span>
-          <% end %>
-      </div>
-
-      <p>
-        <%= form_for @employee do |f| %>
-          <%= f.label :上传头像 %>
-          <%= f.file_field :avatar %>
-          <%= submit_tag "点击上传" %>
-        <% end %>
-      </p>
-    </div>
-  </div>
+  <%= link_to employees_path do%>
+    <span>返回</span>
+  <% end %>
 
 
   <!--下边-->
@@ -750,18 +733,41 @@
                   <% end %>
 
 
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                       <div>
+                         <div class="ivu-form ivu-form-label-right">
+                           <div class="ivu-form-item">
+                             <label class="ivu-form-item-label" style="width: 150px;"><%= f.label :上传头像 %></label>
+                             <div class="ivu-form-item-content" style="margin-left: 150px;">
+                               <div class="ivu-input-wrapper ivu-input-type">
+                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                                 <%= f.file_field :avatar %>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                      </div>
+                     </span>
+                   </div>
+
+
               </div>
             </div>
 
-            <div class="center-uRe1b_0">
 
-              <button type="button" class="ivu-btn ivu-btn-cancel margin-3iLZ-_0" >
+
+
+
+
+            <div class="center-uRe1b_0">
                 <span>
                   <font style="vertical-align: inherit;">
                     <font style="vertical-align: inherit;"><%= f.submit :保存 %></font>
                   </font>
-                </span>
-              </button>
+                </span>            
             </div>
 
           </div>
