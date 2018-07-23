@@ -2,7 +2,7 @@ class Employee < ActiveRecord::Base
   # 不同的角色可以对Employee的资源进行不同的操作
   resourcify
 
-  #上传头像
+  #上传照片
   mount_uploader :avatar, AvatarUploader
 
   has_many :attendances

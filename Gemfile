@@ -27,7 +27,7 @@ gem 'cancancan'
 gem "notifications"
 gem "ruby-push-notifications"
 
-#上传头像
+#上传照片
 gem 'carrierwave'
 gem 'mini_magick'
 
