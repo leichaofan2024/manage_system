@@ -400,6 +400,7 @@ layout 'home'
 		end 
 		@group = params[:group]
 		@workshop = params[:workshop]
+		@duan = params[:duan]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		@workshops = Workshop.all
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
