@@ -9,7 +9,7 @@
 <div class="col-md-12" style="width:100%">
  <div>
   <div class="btn_group_top-1sKKU_0">
-    <div> 
+    <div>
       <div class="btn_group-2MSRh_0">
         <div class="ivu-tooltip">
           <% if can? :import, Employee%>
@@ -24,7 +24,7 @@
                     <span style="color: #269Eff;">导出表格</span>
                   <% end %>
                 <% end %>
-                   
+
               </button>
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right;">
@@ -81,7 +81,7 @@
       </div>
     </div>
   </div>
- </div> 
+ </div>
 </div>
 <h5>人数：<%= @employees.total_count %></h5>
 <div class="col-md-12" style="height: 100%; margin-top: 40px;">
@@ -91,7 +91,7 @@
     <ul>
       <% @workshops.each do |workshop| %>
       <li>
-        <em></em><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+        <i class="fa fa-plus-square" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
 
         <ul>
           <% @groups = workshop.groups %>
@@ -230,5 +230,5 @@
         }
       }
     }
-  })({id:'menu',tag:'em'});
+  })({id:'menu',tag:'i'});
 </script>
