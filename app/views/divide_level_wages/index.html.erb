@@ -1,0 +1,51 @@
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+            <th>序号</th>
+            <th>项目</th>
+            <% DivideLevelWageHead.all.each do |head| %>
+              <th><%= head.head_name %></th>
+            <% end %>
+            <th><%= link_to("+",new_head_divide_level_wages_path,style: "color: blue;") %></th>
+        	</tr>
+        </thead>
+        <tbody>
+          <% n = 0 %>
+          <% DivideLevelWage.all.each do |level| %>
+            <% n = n+1%>
+            <% wage_people = Wage.where(:col3 => Employee.where(level.formula).pluck("sal_number")) %>
+            <tr>
+              <td><%= n %></td>
+              <td>
+                <%= level.name %>
+                <%= link_to("编辑",edit_line_divide_level_wages_path(:id => level.id),style: "color: blue;") %>
+                <%= link_to("删除",delete_line_divide_level_wages_path(:id => level.id),method: :delete,style: "color: blue;") %>
+              </td>
+
+              <% DivideLevelWageHead.all.each do |head| %>
+                <% form_cel_value = 0 %>
+                <% head.formula.keys.each do |key| %>
+                  <% if head.formula[key] == "1" %>
+                     <% form_cel_value += wage_people.sum(key).to_i %>
+                  <% elsif head.formula[key] == "2" %>
+                     <% form_cel_value -= wage_people.sum(key).to_i %>
+                  <% end %>
+                <% end %>
+                <td>
+                  <%= form_cel_value %>
+                </td>
+              <% end %>
+            </tr>
+
+          <% end %>
+          <tr>
+            <td><%= link_to("+",new_line_divide_level_wages_path,style: "color: blue;") %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

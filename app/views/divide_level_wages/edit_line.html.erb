@@ -1,0 +1,11 @@
+<h4>项目编辑</h4>
+<p style = "font-size= 30px;font-weight:900">当前项目名称：</p>
+<p> <%= @dividelevelwage.name %> </p>
+<p style = "font-size= 30px;font-weight:900">当前筛选条件：</p>
+<p>
+  <% @dividelevelwage.formula.keys.each do |key| %>
+    <%= Employee.head_transfer[key] %>: <%= @dividelevelwage.formula[key] %><br>
+  <% end %>
+</p>
+<br>
+<%= render "line_form"%>

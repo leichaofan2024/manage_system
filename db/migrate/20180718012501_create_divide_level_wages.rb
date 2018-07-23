@@ -1,7 +1,7 @@
 class CreateDivideLevelWages < ActiveRecord::Migration[5.1]
   def change
     create_table :divide_level_wages do |t|
-      t.integer :formula,array: true
+      t.json :formula
       t.string :name
       t.integer :col1
       t.integer :col2

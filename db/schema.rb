@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180718012501) do
+ActiveRecord::Schema.define(version: 20180719065924) do
 
   create_table "annual_holiday_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.integer "workshop_id"
@@ -222,8 +222,16 @@ ActiveRecord::Schema.define(version: 20180718012501) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "divide_level_wage_heads", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "divide_head_name"
+    t.string "head_name"
+    t.json "formula"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "divide_level_wages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
-    t.integer "formula"
+    t.json "formula"
     t.string "name"
     t.integer "col1"
     t.integer "col2"

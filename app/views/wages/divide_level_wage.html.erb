@@ -4,15 +4,30 @@
       <table id="example" class="table table-bordered">
         <thead>
         	<tr>
-            <th>期末人数</th>
-            <th>工资总额</th>
-            <th>人均工资</th>
+            <th>序号</th>
+            <th>项目</th>
+            <% DivideLevelWageHead.all.each do |head| %>
+              <th><%= head.head_name %></th>
+            <% end %>
+            <th><%= link_to("+",create_head_divide_level_wages_path,method: :post) %></th>
         	</tr>
         </thead>
         <tbody>
-          <tr>
-            <td><%= Wage.count %></td>
-          </tr>
+          <% n = 0 %>
+          <% DivideLevelWage.all.each do |level| %>
+            <% n = n+1%>
+            <tr>
+              <td><%= n %></td>
+              <td>
+                <%= level.name %>
+                <%= link_to("编辑",edit_divide_level_wage_path(level)) %>
+                <%= link_to("删除",divide_level_wage_path(level),method: :delete) %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= link_to("+",new_divide_level_wage_path) %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

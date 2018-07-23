@@ -1,0 +1,25 @@
+<%= form_tag create_head_divide_level_wages_path,method: :post do |f| %>
+  <%= label_tag "表头名称：" %>
+  <%= hidden_field_tag "divide_head_name",@divide_head_name %>
+  <%= text_field_tag "head_name"  %>
+  <br>
+  <%= label_tag "计算公式："%>
+  <br>
+  <% @wage_header_hash.keys.each do |key| %>
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;
+      <span >
+        <select class="" name= "<%= key%>">
+          <option disabled selected value>--请选择--</option>
+          <option value="1">+</option>
+          <option value="2">-</option>
+
+        </select>
+      </span>
+      <%= label_tag @wage_header_hash[key]%>
+    </span>
+  <% end %>
+  <br>
+  <br>
+  <%= submit_tag :筛选 %>
+<% end %>

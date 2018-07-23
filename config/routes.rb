@@ -114,4 +114,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :divide_level_wages do
+    collection do
+      post :create_line
+      delete :delete_line
+      get :edit_line
+      get :new_line
+      get :new_head
+      post :create_head
+      delete :delete_head
+      get :edit_head
+    end
+  end
+
+
 end
