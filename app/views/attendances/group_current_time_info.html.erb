@@ -83,7 +83,7 @@
       <div>
         <div class="btn_group-2MSRh_0">
           <div class="ivu-tooltip">
-            <% if (@group.present?) && (AttendanceStatus.find_by(:group_id => @group).status == "班组/科室填写中") %>
+            <% if (@group.present?) && (AttendanceStatus.find_by(:group_id => @group).present?) && (AttendanceStatus.find_by(:group_id => @group).status == "班组/科室填写中") %>
               <div class="ivu-tooltip-rel" style="margin-top:-80px;">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                   <%= link_to verify_attendances_path(authority: "workshop", group: @group), method: :post do %>
