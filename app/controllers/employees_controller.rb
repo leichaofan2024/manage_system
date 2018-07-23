@@ -85,7 +85,7 @@ class EmployeesController < ApplicationController
         redirect_to employee_path(@employee)
       else
         flash[:alert] = "创建失败"
-        render :new 
+        render :new
       end
     end
 
@@ -110,7 +110,7 @@ class EmployeesController < ApplicationController
     rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
     @employee.working_years = working_years_transfer.to_i
     @employee.rali_years = rali_years_transfer.to_i
-    if @employee.save
+    if @employee.save!
       flash[:notice] = "更新信息成功"
       redirect_to employee_path(params[:id])
     else
@@ -1520,7 +1520,7 @@ class EmployeesController < ApplicationController
     def employee_params
       params.require(:employee).permit(:name, :sal_number, :job_number, :record_number, :workshop, :group, :name, :sex, :birth_date, :birth_year, :age, :nation, :native_place, :political_role, :political_party_date, :working_time, :railway_time, :entry_time, :duty, :employment_period, :part_time, :grade, :promotion_leader_time, :technique_duty,
        :hold_technique_time, :work_type, :job_foreman, :contract_station, :three_one, :people_source, :people_category, :education_background, :graduation_school, :school_sort, :major, :where_place, :employment_form, :contract_period, :conclude_contract_time, :record_saler, :skilledness_saler, :station_saler, :seniority_saler, :skilledness_authenticate, :treatment, :station_rank, :skilledness_rank, :station_now, :station_now_time, :retire_condition,
-       :marriage_status, :separate_status, :visit_family, :registered_residence, :family_address, :comment, :identity_card_number, :employee_card_number, :trade_code, :produce_group, :saler_item, :other_saler, :comment_data, :graduation_time, :position, :group_category, :job_foreman_category, :job_foreman_duty, :phone_number, :avatar, :station_rank, :skilledness_rank, :entry_time)
+       :marriage_status, :separate_status, :visit_family, :registered_residence, :family_address, :comment, :identity_card_number, :employee_card_number, :trade_code, :produce_group, :saler_item, :other_saler, :comment_data, :graduation_time, :position, :group_category, :job_foreman_category, :job_foreman_duty, :phone_number, :avatar, :station_rank, :skilledness_rank, :entry_time, :company_name)
     end
 
   protected
