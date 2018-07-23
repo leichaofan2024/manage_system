@@ -17,6 +17,9 @@
       		<th>申请提交人</th>
       		<th>提交时间</th>
           <th>申请状态</th>
+          <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
+            <th>操作</th>
+          <% end %>
       	</tr>
       </thead>
       <tbody>
@@ -24,16 +27,35 @@
       	<% @applications.each do |application| %>
 	      	<tr>
 	      		<% if params[:type] == "duan" %>
-	      			<% group = Group.find("#{Application.find(application).group_id}") %>
+              <% if Group.find("#{Application.find(application).group_id}").present? %>
+	      			  <% group = Group.find("#{Application.find(application).group_id}") %>
 	      	    	<td><%= Workshop.find("#{group.workshop_id}").name %></td>
-	      	    <% end %>
-	      		<td><%= Group.find("#{Application.find(application).group_id}").name %></td>
+              <% end %>
+	      	  <% end %>
+            <% if Group.find("#{Application.find(application).group_id}").present? %>
+	      		  <td><%= Group.find("#{Application.find(application).group_id}").name %></td>
+            <% end %>
 	      		<td><%= Application.find(application).cause %></td>
 	      		<td><%= Application.find(application).month %>月<%= Application.find(application).day %>日</td>
 	      		<td><%= Employee.current.find_by(:id => "#{Application.find(application).employee_id}").name %></td>
 	      		<td><%= Application.find(application).apply_person %></td>
 	      		<td><%= Application.find(application).created_at %></td>
             <td><%= Application.find(application).status %></td>
+            <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
+              <% if params[:type] == "duan" %>
+                <% if Application.find(application).status == "段通过申请" %>
+                  <td>已处理</td>
+                <% else %>
+                  <td><%= link_to "通过申请", update_application_attendances_path(application_id: application, status: "段通过申请"), method: :post, class: "btn btn-primary" %></td>
+                <% end %>
+              <% else %>
+                <% if (Application.find(application).status == "车间通过申请") or (Application.find(application).status == "段通过申请") %>
+                  <td>已处理</td>
+                <% else %>
+                  <td><%= link_to "通过申请", update_application_attendances_path(application_id: application, status: "车间通过申请"), method: :post, class: "btn btn-primary" %></td>
+                <% end %>
+              <% end %>
+            <% end %>
 	      	</tr>
       	<% end %>
         <% end %>

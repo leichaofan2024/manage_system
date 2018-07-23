@@ -14,8 +14,7 @@
               <% group_name = current_user.name.split("-")[1] %>
               <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0])) %>
             <% else %>
-              <% group_name = current_user.name %>
-              <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => "机关")) %>
+              <% group = Group.find_by(:name => current_user.name, :workshop_id => Workshop.find_by(:name => "机关")) %>
             <% end %>
             <%= hidden_field_tag :group, group.id %><br>
             <%= hidden_field_tag :apply_person, current_user.name %><br>
