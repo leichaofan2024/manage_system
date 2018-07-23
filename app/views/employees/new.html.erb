@@ -107,7 +107,7 @@
       <div class="backMain-19P3__0">
         <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
           <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to :back, class: "btn btn-primary" do%>
+          <%= link_to employees_path do%>
             <span>返回</span>
           <% end %>
       </div>
@@ -132,12 +132,33 @@
           <!--基本信息的头部字-->
           <div class="head-3fDND_0">
             <div class="info-2zzSp_0" style="background: #F8F8F9">
-              <%= "基本信息"%>
+              <%= "必填信息"%>
             </div>
           </div>
           <div class="edit-NsWan_0">
             <div class="info-2UJx6_0">
               <div class="ivu-row-flex">
+
+
+                <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                       <div>
+                         <div class="ivu-form ivu-form-label-right">
+                           <div class="ivu-form-item">
+                             <label class="ivu-form-item-label" style="width: 150px;">工资号</label>
+                             <div class="ivu-form-item-content" style="margin-left: 150px;">
+                               <div class="ivu-input-wrapper ivu-input-type">
+                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                                 <%= f.text_field :sal_number, required: true %>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                      </div>
+                    </span>
+                  </div>
 
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
@@ -178,7 +199,7 @@
                     </div>
                   </span>
                 </div>
-                
+
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -225,6 +246,26 @@
                      <div>
                        <div class="ivu-form ivu-form-label-right">
                          <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">职务</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :duty, required: true %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
                            <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >出生日期</label>
                            <div class="ivu-form-item-content" style="margin-left: 150px;">
                              <div class="ivu-input-wrapper ivu-input-type">
@@ -238,6 +279,88 @@
                     </div>
                   </span>
                 </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">工作时间</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :working_time, required: true %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">文化程度</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :education_background, required: true %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">工种分类</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :work_type, required: true %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
+                <div class="ivu-col ivu-col-span-12">
+                  <span class="customField-2KxGL_0">
+                    <div>
+                     <div>
+                       <div class="ivu-form ivu-form-label-right">
+                         <div class="ivu-form-item">
+                           <label class="ivu-form-item-label" style="width: 150px;">入路时间</label>
+                           <div class="ivu-form-item-content" style="margin-left: 150px;">
+                             <div class="ivu-input-wrapper ivu-input-type">
+                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
+                               <%= f.text_field :railway_time, required: true %>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    </div>
+                  </span>
+                </div>
+
 
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
@@ -319,49 +442,6 @@
                     </div>
                   </span>
                 </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工作时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :working_time, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">文化程度</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :education_background, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
 
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
@@ -598,86 +678,10 @@
           <div class="edit-NsWan_0">
             <div class="info-2UJx6_0">
               <div class="ivu-row-flex">
-              
-              <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工资号</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :sal_number, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-                
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">职务</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :duty, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工种分类</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :work_type, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">入路时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :railway_time, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
+
+
 
                 <% station_info_columns = ["job_number", "record_number", "station_rank", "skilledness_rank", "entry_time", "employment_period", "part_time", "grade", "promotion_leader_time", "technique_duty", "hold_technique_time", "job_foreman", "contract_station", "three_one", "people_source" , "people_category" ,"where_place", "employment_form", "contract_period", "conclude_contract_time", "skilledness_authenticate", "station_rank", "skilledness_rank", "station_now",       "station_now_time", "retire_condition", "visit_family", "employee_card_number", "trade_code", "produce_group", "company_name" ]%>
 

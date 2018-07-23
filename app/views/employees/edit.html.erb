@@ -107,7 +107,7 @@
       <div class="backMain-19P3__0">
         <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
           <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to :back, class: "btn btn-primary" do%>
+          <%= link_to employee_path(@employee) do%>
             <span>返回</span>
           <% end %>
       </div>
@@ -138,11 +138,8 @@
         <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
       </p>
       <p>
-        <%= form_for @employee do |f| %>
           <%= f.label :上传头像 %>
           <%= f.file_field :avatar %>
-          <%= submit_tag "点击上传" %>
-        <% end %>
       </p>
     </div>
   </div>
@@ -249,7 +246,7 @@
                     </div>
                   </span>
                 </div>
-                
+
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>
@@ -710,7 +707,7 @@
                     </div>
                   </span>
                 </div>
-                
+
                 <div class="ivu-col ivu-col-span-12">
                   <span class="customField-2KxGL_0">
                     <div>

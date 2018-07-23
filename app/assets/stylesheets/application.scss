@@ -712,7 +712,7 @@ li.active > a:hover{
 .wraper-k3Z8K_0 {
   position: relative;
   width: 100%;
-  min-height: 216px;
+  min-height: 256px;
   padding: 52px 32px 48px 207px;
   border-radius: 4px;
   border: 1px solid #f0f4f8;
@@ -1502,6 +1502,22 @@ h4 {
   color: red;
 }
 
+
+.highlight-1iKYJ_1 {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+
+.highlight-1iKYJ_1  > a {
+  color: #269EFF;
+}
+
+.highlight-1iKYJ_1 > a:hover {
+  color: red;
+}
+
 // 筛选等一堆按钮
 
 .toolbar-26gsx_0 {
@@ -1705,3 +1721,11 @@ button.close {
     border-radius: 4px;
 }
 /*--------------- end -----------------*/
+
+// 车间考勤班组考勤页面按钮样式
+
+.btn-primary2 {
+  background-color: #fff;
+  color: #269eff;
+  border-color: #269eff;
+}

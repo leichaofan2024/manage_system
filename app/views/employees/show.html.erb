@@ -7,7 +7,7 @@
       <div class="backMain-19P3__0">
         <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
           <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to :back, class: "btn btn-primary" do%>
+          <%= link_to employees_path do %>
             <span>返回</span>
           <% end %>
       </div>
@@ -36,7 +36,7 @@
             <!-- 调动标签 -->
             <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
               <span class="label label-warning">一月内有调动</span>
-            <% else %>   
+            <% else %>
               <!-- 调动按钮 -->
               <div class="ivu-tooltip-rel" style="text-align: right">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">

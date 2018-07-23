@@ -47,6 +47,21 @@ gem 'gon'
 gem 'font-awesome-rails'
 gem 'ransack'
 
+
+#异步
+gem 'sidekiq'
+
+#时间选择器
+gem 'bootstrap-datepicker-rails'
+
+# 中文翻译
+gem 'rails-i18n'
+gem 'devise-i18n'
+
+gem "select2-rails"
+
+gem "nested_form_fields"
+
 group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
