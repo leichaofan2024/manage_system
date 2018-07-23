@@ -15,8 +15,9 @@
   </div>
 
   <div class="header_info1">
-    <span class="link-second-navbar"><%= link_to "考勤审核", workshop_attendances_path%></span>
-    <span class="link-second-navbar"><%= link_to "班组考勤情况", group_current_time_info_attendances_path%></span>
+    <span class="link-second-navbar"><%= link_to "考勤概况", workshop_attendances_path%></span>
+    <span class="link-second-navbar"><%= link_to "考勤审核", group_current_time_info_attendances_path%></span>
+
   </div>
 
 <% elsif current_user.has_role? :organsadmin %>
