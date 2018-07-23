@@ -1,19 +1,23 @@
 <%= render "attendance_sidebar" %>
 <div class="card">
 	<div style="overflow: auto;" class="col-md-10">
+		<div class="btn-back" style="margin-bottom: 10px">
+      <%= link_to '返回', :back %>
+    </div>
+
 	  <table id="example" class="table table-bordered">
 	    <thead>
 	    	<tr>
 	    		<th>修改详情</th>
 	    		<th>修改用户</th>
 	    		<th>修改时间</th>
-	    		<th>有无申请</th> 
+	    		<th>有无申请</th>
 	    	</tr>
 	    </thead>
 	    <tbody>
 	    	<% attendances = Attendance.where(:employee_id => params[:employee], :month => params[:month], :year => params[:year]).pluck("id") %>
 	    	<% attendance_records = AttendanceRecord.where(:attendance_id => attendances) %>
-	    	
+
 	    	<% attendance_records.each do |record| %>
 		    	<tr>
 		    		<% employee_id = Attendance.find(record.attendance_id).employee_id %>
