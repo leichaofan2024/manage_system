@@ -42,7 +42,7 @@
           <div>
             <div class="btn_group-2MSRh_0">
               <div class="ivu-tooltip">
-                <% if (@workshop.present?) && (AttendanceStatus.find_by(:workshop_id => @workshop).status == "车间已审核") %>
+                <% if (@workshop.present?) && (AttendanceStatus.find_by(:workshop_id => @workshop).present?) && (AttendanceStatus.find_by(:workshop_id => @workshop).status == "车间已审核") %>
                   <div class="ivu-tooltip-rel" style="margin-top:-80px;">
                     <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                       <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
@@ -67,6 +67,13 @@
   </div>
 
   <!-- 审核功能-结束 -->
+  <% if @workshop.present? %>
+    <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
+  <% elsif @group.present? %>
+    <h4><%= Group.find(@group).name %>考勤情况</h4>
+  <% else @duan.present? %>
+    <h4>供电段考勤情况</h4>
+  <% end %>
 <% end %>
 
 <% if current_user.has_role? :workshopadmin %>
@@ -146,11 +153,11 @@
           <% end %>
           <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
             <li>
-              <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+              <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
               <ul>
                 <% @groups = no_verify_workshop.groups %>
                 <% @groups.each do |group| %>
-                  <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                  <li><a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
                 <% end %>
               </ul>
             </li>
