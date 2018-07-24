@@ -7,7 +7,7 @@
   <% groups << group.id %>
 <% end %>
 
-<% applications = Application.where(:group_id => groups ) %>
+<% applications = Application.where(:group_id => groups) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
@@ -26,7 +26,7 @@
         <% unless Application.where(:group_id => groups, :status => "班组发起申请").count == 0 %>
           <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
         <% else %>
-          <td><%= "无申请" %></td>
+          <td><%= link_to "查看往期", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary"  %></td>
         <% end %>
       </tr>
     </tbody>
