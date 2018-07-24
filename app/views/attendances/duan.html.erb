@@ -23,9 +23,9 @@
       <tr>
         <td><%= applications.count %>条</td>
         <% if applications.count == 0 %>
-          <td><%= link_to "查看往期", show_application_attendances_path(applications: all_application_id, type: "duan"), class: "btn btn-primary22"  %></td>
+          <td><%= link_to "查看往期", show_application_attendances_path(applications: all_application_id, type: "duan"), class: "btn btn-primary2"  %></td>
         <% else %>
-          <td><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary22" %></td>
+          <td><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary2" %></td>
         <% end %>
       </tr>
     </tbody>
@@ -186,9 +186,9 @@
                     <% end %>
                   <% end %>
                   <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) , class: 'btn btn-primary22'%></td>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) , class: 'btn btn-primary2'%></td>
                   <% else %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary22' %></td>
+                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
                   <% end %>
                 </tr>
               <% end %>
