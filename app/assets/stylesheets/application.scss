@@ -513,13 +513,13 @@ table{
    margin:0 auto;
 }
 
-.table-bordered a:link{
-  color: white; //未点击的链接链接
-}
-
-.table-bordered a:visited{
-  color: white; //点击过链接的颜色
-}
+// .table-bordered a:link{
+//   color: white; //未点击的链接链接
+// }
+//
+// .table-bordered a:visited{
+//   color: white; //点击过链接的颜色
+// }
 
 .table > thead > tr > th,
 .table > thead > tr > td,
@@ -1728,4 +1728,21 @@ button.close {
   background-color: #fff;
   color: #269eff;
   border-color: #269eff;
+}
+
+.btn-primary2 > a{
+  color: #269eff;
+}
+
+// 返回按钮
+
+.back-btn {
+  text-align: left;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.back-btn a {
+  color: #495060;
+  font-size: 14px;
 }

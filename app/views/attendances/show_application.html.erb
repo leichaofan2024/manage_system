@@ -1,9 +1,10 @@
 <%= render "attendance_sidebar"%>
-<%= link_to :back, class: "btn btn-primary" do%>
-  <span>返回</span>
-<% end %><br><br>
+
 <div class="card">
   <div class="col-md-10" style="overflow: auto">
+    <div class="back-btn">
+      <%= link_to '返回', :back %>
+    </div>
     <table id="example" class="table table-bordered">
       <thead>
       	<tr>
@@ -20,7 +21,7 @@
           <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
             <th>操作</th>
           <% end %>
-      	</tr> 
+      	</tr>
       </thead>
       <tbody>
         <% if @applications.present? %>
