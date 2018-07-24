@@ -1,8 +1,13 @@
 <%= render "attendance_sidebar"%>
 <% application_id = [] %>
+<% all_application_id = [] %>
 <% applications = (Application.where(:status => "车间通过申请")) + (Application.where(:status => "科室发起申请")) %>
+<% all_applications = (Application.where(:status => "科室发起申请")) + (Application.where(:status => "段通过申请")) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
+<% end %>
+<% all_applications.each do |application| %>
+  <% all_application_id << application.id %>
 <% end %>
 <!-- 处理申请 -->
 
@@ -18,7 +23,7 @@
       <tr>
         <td><%= applications.count %>条</td>
         <% if applications.count == 0 %>
-          <td><%= link_to "查看往期", show_application_attendances_path(applications: Application.all.pluck("id"), type: "duan"), class: "btn btn-primary"  %></td>
+          <td><%= link_to "查看往期", show_application_attendances_path(applications: all_application_id, type: "duan"), class: "btn btn-primary"  %></td>
         <% else %>
           <td><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary" %></td>
         <% end %>

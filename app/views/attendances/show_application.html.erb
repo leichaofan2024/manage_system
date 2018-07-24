@@ -20,7 +20,7 @@
           <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
             <th>操作</th>
           <% end %>
-      	</tr>
+      	</tr> 
       </thead>
       <tbody>
         <% if @applications.present? %>
