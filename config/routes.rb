@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
   root "employees#index"
+  get "/home" ,to: "home#index"
   resources :employees do
     collection do
       #上传
@@ -116,10 +117,11 @@ Rails.application.routes.draw do
 
   resources :divide_level_wages do
     collection do
-      post :create_line
-      delete :delete_line
-      get :edit_line
       get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
       get :new_head
       post :create_head
       delete :delete_head

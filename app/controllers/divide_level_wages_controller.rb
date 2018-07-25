@@ -6,10 +6,8 @@ class DivideLevelWagesController < ApplicationController
 
   end
 
-  def new
-  end
-
   def new_line
+    @divide_level_wage = DivideLevelWage.new
   end
 
   def create_line
@@ -18,6 +16,7 @@ class DivideLevelWagesController < ApplicationController
       @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name"].include?(key) || (value =="")}
       @divide_level_wage = DivideLevelWage.new(:name => @name, :formula => @params_hash)
       if @divide_level_wage.save
+        flash[:notice] = "项目新增成功！"
         redirect_to divide_level_wages_path
       else
         flash[:warning] = "项目名称不能重复！"
@@ -34,19 +33,32 @@ class DivideLevelWagesController < ApplicationController
   end
 
   def update_line
-    if params[:name].present?
-      @name = params[:name]
-      @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name"].include?(key) || (value =="")}
-      @divide_level_wage = DivideLevelWage.new(:name => @name, :formula => @params_hash)
-      if @divide_level_wage.save
+    @dividelevelwage = DivideLevelWage.find(params[:id])
+    @name = params[:name]
+    @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name","id","_method"].include?(key) || (value =="")}
+    if @name.present? && @params_hash.present?
+       if @dividelevelwage.update(:name => @name, :formula => @params_hash)
         redirect_to divide_level_wages_path
+        flash[:notice] = "项目名及筛选条件更新成功！"
       else
         flash[:warning] = "项目名称不能重复！"
         render "divide_level_wages/new_line"
       end
-    else
-      flash[:warning] = "项目名称不能为空!"
-      render "divide_level_wages/new_line"
+    elsif @name.present? && @params_hash.blank?
+      if @dividelevelwage.update(:name => @name)
+
+        redirect_to divide_level_wages_path
+        flash[:notice] = "项目名更新成功！"
+      else
+        flash[:warning] = "项目名称不能重复！"
+        render "divide_level_wages/new_line"
+      end
+    elsif @name.blank? && @params_hash.present?
+      @dividelevelwage.update(:formula => @params_hash)
+      redirect_to divide_level_wages_path
+      flash[:notice] = "筛选条件更新成功！"
+    elsif @name.blank? && @params_hash.blank?
+      redirect_to divide_level_wages_path
     end
   end
 
@@ -84,36 +96,16 @@ class DivideLevelWagesController < ApplicationController
       render "divide_level_wages/new_head"
     end
   end
-  def create
-  end
 
-  def edit
+  def edit_head
 
   end
 
-  def update
+  def update_head
 
   end
 
-
-
-  def create_header
-    if WageHeader.find_by(header: params[:header]).present?
-      flash[:alert] = "您填写的表头已存在"
-    else
-      WageHeader.create(header: params[:header])
-      flash[:notice] = "新增成功"
-    end
-    redirect_to import_wage_wages_path
-  end
-
-  def edit_header
-    wage_header = WageHeader.find_by(header: params[:before_header])
-    wage_header.update(header: params[:after_header])
-    flash[:notice] = "修改成功"
-    redirect_to import_wage_wages_path
-  end
-
+  
   # private
   #
   # def divide_level_wage_params

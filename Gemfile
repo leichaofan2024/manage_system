@@ -46,6 +46,7 @@ gem 'gon'
 
 gem 'font-awesome-rails'
 gem 'ransack'
+gem "select2-rails"
 
 group :development, :test do
   gem 'capybara', '~> 2.13'

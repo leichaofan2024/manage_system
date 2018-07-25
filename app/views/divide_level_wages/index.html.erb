@@ -7,7 +7,10 @@
             <th>序号</th>
             <th>项目</th>
             <% DivideLevelWageHead.all.each do |head| %>
+    
+
               <th><%= head.head_name %></th>
+
             <% end %>
             <th><%= link_to("+",new_head_divide_level_wages_path,style: "color: blue;") %></th>
         	</tr>
@@ -20,9 +23,11 @@
             <tr>
               <td><%= n %></td>
               <td>
-                <%= level.name %>
-                <%= link_to("编辑",edit_line_divide_level_wages_path(:id => level.id),style: "color: blue;") %>
-                <%= link_to("删除",delete_line_divide_level_wages_path(:id => level.id),method: :delete,style: "color: blue;") %>
+                <%= link_to edit_line_divide_level_wages_path(:id => level.id),style: "color: black;" do %>
+                  <%= level.name %>
+                <% end %>
+                <!-- <%= link_to("",edit_line_divide_level_wages_path(:id => level.id),class: "fa fa-pencil-square-o",style: "color: blue;") %>&nbsp|&nbsp
+                <%= link_to("",delete_line_divide_level_wages_path(:id => level.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %> -->
               </td>
 
               <% DivideLevelWageHead.all.each do |head| %>
