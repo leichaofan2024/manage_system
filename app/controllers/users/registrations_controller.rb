@@ -20,8 +20,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     hash = { "车间管理员" => 'workshopadmin', "科室管理员" => 'organsadmin', "班组管理员" => 'groupadmin', "领导" => 'leaderadmin' }
-    @user = User.new(:name => params[:user][:name], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation])
+    @user = User.new(:name => params[:user][:name],
+                     :password => params[:user][:password],
+                     :password_confirmation => params[:user][:password_confirmation],
+                     :workshop_id => params[:user][:workshop],
+                     :group_id => params[:user][:group])
     @user.add_role(hash[params[:user][:roles]])
+    binding.pry
     if @user.save
       flash[:notice] = "新增#{@user.name} 成功"
       redirect_to users_path
