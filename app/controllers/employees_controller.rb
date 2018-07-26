@@ -139,7 +139,7 @@ class EmployeesController < ApplicationController
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.find_by(name: current_user.name).id"
-    elsif current_user.has_role? :organsadmin
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
       condition = ".current.where(group: Group.find_by(name: current_user.name).id"
     elsif current_user.has_role? :groupadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
