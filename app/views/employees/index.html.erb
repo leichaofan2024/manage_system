@@ -155,7 +155,7 @@
           <%= render 'empshared/other_duanadmin' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
-        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
           <%= render 'empshared/emp_table_not_empadmin'%>
          <% end %>
       </div>

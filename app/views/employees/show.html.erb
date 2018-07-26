@@ -80,7 +80,7 @@
         <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
         <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
       </p>
-      <% if current_user.has_role? :groupadmin %>
+      <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)  %>
         <p>
           <%= form_for @employee do |f| %>
             <%= f.label :上传照片 %>
