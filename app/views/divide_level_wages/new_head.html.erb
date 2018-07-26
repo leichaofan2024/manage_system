@@ -1,25 +1,71 @@
-<%= form_tag create_head_divide_level_wages_path,method: :post do |f| %>
-  <%= label_tag "表头名称：" %>
-  <%= hidden_field_tag "divide_head_name",@divide_head_name %>
-  <%= text_field_tag "head_name"  %>
-  <br>
-  <%= label_tag "计算公式："%>
-  <br>
-  <% @wage_header_hash.keys.each do |key| %>
-    <span style = "margin-left:20px;display:inline-block;width:200px">
-      &nbsp;&nbsp;
-      <span >
-        <select class="" name= "<%= key%>">
-          <option disabled selected value>--请选择--</option>
-          <option value="1">+</option>
-          <option value="2">-</option>
 
-        </select>
+<div class="">
+  <%= link_to("<<  返回",divide_level_wages_path) %>
+</div>
+
+<div class="" style= "padding-bottom: 30px;">
+  <h4>新增表头</h4>
+
+
+  <%= form_tag create_head_divide_level_wages_path,method: :post do |f| %>
+    <%= label_tag "表头名称：" %>
+    <%= hidden_field_tag "divide_head_name",@divide_head_name %>
+    <%= text_field_tag "head_name"  %>
+    <br>
+    <%= label_tag "资金计算公式："%>
+    <br>
+    <br>
+    <% (Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]).each do |key| %>
+      <span style = "margin-left:20px;display:inline-block;width:200px">
+        &nbsp;&nbsp;
+        <span >
+          <select class="" name= "<%= key%>">
+            <option disabled selected value>--请选择--</option>
+            <option value="1">+</option>
+            <option value="2">-</option>
+
+          </select>
+        </span>
+        <%= label_tag Wage.head_transfer[key]%>
       </span>
-      <%= label_tag @wage_header_hash[key]%>
-    </span>
+    <% end %>
+
+    <br>
+    <br>
+    <%= label_tag "人数计算公式："%>
+    <br>
+    <br>
+
+
+    <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
+      <span style = "margin-left:20px;display:inline-block;width:200px">
+        &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>
+        <span >
+          <% if key == "workshop" %>
+            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+              <% Workshop.all.each do |workshop| %>
+                <option value="<%= workshop.id %>"><%= workshop.name %></option>
+              <% end %>
+            </select>
+          <% elsif key == "group"%>
+            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+              <% Group.all.each do |group| %>
+                <option value="<%= group.id %>"><%= group.name %></option>
+              <% end %>
+            </select>
+          <% else %>
+            <%=  select_tag key,options_for_select(Employee.pluck(key).uniq),multiple: true,class: "form-control" %>
+          <% end %>
+          <!-- <%= check_box_tag key,"yes",false %> -->
+        </span>
+
+      </span>
+      <script>
+        $("#<%= key%>").select2( { theme: "bootstrap"} );
+      </script>
+    <% end %>
+    <br>
+    <br>
+    <%= submit_tag :筛选 %>
   <% end %>
-  <br>
-  <br>
-  <%= submit_tag :筛选 %>
-<% end %>
+</div>

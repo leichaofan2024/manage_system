@@ -72,11 +72,6 @@ class DivideLevelWagesController < ApplicationController
 
   def new_head
    @divide_head_name = "col"+(DivideLevelWageHead.count+1).to_s
-   @wage_header_hash = Hash.new
-    WageHeader.all.each do |wage_header|
-      key = "col"+wage_header.id.to_s
-      @wage_header_hash[key] = wage_header.header
-    end
   end
 
   def create_head
@@ -98,14 +93,49 @@ class DivideLevelWagesController < ApplicationController
   end
 
   def edit_head
+   @divide_head = DivideLevelWageHead.find(params[:id])
 
   end
 
   def update_head
-
+    @divide_level_wage_head = DivideLevelWageHead.find(params[:id])
+    @name = params[:head_name]
+    @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name","id"].include?(key) || (value =="")}
+    if @name.present? && @params_hash.present?
+      @divide_level_wage_head.update(:head_name => @name ,:formula => @params_hash)
+      redirect_to divide_level_wages_path
+      flash[:notice] = "成功更新表头及公式！"
+    elsif @name.present? && @params_hash.blank?
+      @divide_level_wage_head.update(:head_name => @name )
+      redirect_to divide_level_wages_path
+      flash[:notice] = "成功更新表头！"
+    elsif @name.blank? && @params_hash.present?
+      @divide_level_wage_head.update(:formula => @params_hash)
+      redirect_to divide_level_wages_path
+      flash[:notice] = "成功更新公式！"
+    else
+      redirect_to divide_level_wages_path
+    end
   end
 
-  
+  def delete_head
+    @divide_level_wage_head = DivideLevelWageHead.find(params[:id])
+    @divide_level_wage_heads = DivideLevelWageHead.all
+    name = @divide_level_wage_head.head_name
+    divide_head_id = (@divide_level_wage_head.divide_head_name.split("l")[1]).to_i
+    head_count = DivideLevelWageHead.count - 1
+    @divide_level_wage_head.delete
+
+    (divide_head_id..head_count).each do |divide_head|
+
+        @divide_level_wage_heads[divide_head-1].update(:divide_head_name => ("col" + divide_head.to_s))
+    end
+
+    flash[:notice] = "已删除'#{name}'!"
+    redirect_to divide_level_wages_path
+  end
+
+
   # private
   #
   # def divide_level_wage_params

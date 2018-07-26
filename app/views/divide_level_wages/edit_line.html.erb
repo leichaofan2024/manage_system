@@ -15,9 +15,9 @@
       <% if key == "workshop"%>
         <%= Employee.head_transfer[key] %>: <%= Workshop.where(:id => @dividelevelwage.formula[key]).pluck("name") %><br>
       <% elsif key == "group" %>
-
+        <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @dividelevelwage.formula[key]).pluck("name") %><br>
       <% else %>
-      <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @dividelevelwage.formula[key]).pluck("name") %><br>
+      <%= Employee.head_transfer[key] %>: <%= @dividelevelwage.formula[key] %><br>
       <% end %>
     <% end %>
   </p>

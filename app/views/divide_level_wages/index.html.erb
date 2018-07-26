@@ -7,9 +7,9 @@
             <th>序号</th>
             <th>项目</th>
             <% DivideLevelWageHead.all.each do |head| %>
-    
 
-              <th><%= head.head_name %></th>
+
+              <th><%= link_to(head.head_name,edit_head_divide_level_wages_path(:id => head.id),style: "color: black;") %></th>
 
             <% end %>
             <th><%= link_to("+",new_head_divide_level_wages_path,style: "color: blue;") %></th>
@@ -19,7 +19,8 @@
           <% n = 0 %>
           <% DivideLevelWage.all.each do |level| %>
             <% n = n+1%>
-            <% wage_people = Wage.where(:col3 => Employee.where(level.formula).pluck("sal_number")) %>
+            <% employee_people = Employee.where(level.formula)%>
+            <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
             <tr>
               <td><%= n %></td>
               <td>
@@ -31,12 +32,25 @@
               </td>
 
               <% DivideLevelWageHead.all.each do |head| %>
-                <% form_cel_value = 0 %>
-                <% head.formula.keys.each do |key| %>
-                  <% if head.formula[key] == "1" %>
-                     <% form_cel_value += wage_people.sum(key).to_i %>
-                  <% elsif head.formula[key] == "2" %>
-                     <% form_cel_value -= wage_people.sum(key).to_i %>
+                <% head_formula = head.formula %>
+                <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
+                  <% if head_formula.keys.include?("age") %>
+                    <% age_range = []%>
+                    <%  head_formula["age"].each do |value| %>
+                      <% age_range<< value.to_i %>
+                    <% end %>
+                    <% head_formula["age"] = (age_range.min..age_range.max)%>
+                  <% end %>
+                  <% form_cel_value= employee_people.where(head_formula).count %>
+
+                <% else %>
+                  <% form_cel_value = 0 %>
+                  <% head_formula.keys.each do |key| %>
+                    <% if head_formula[key] == "1" %>
+                       <% form_cel_value += wage_people.sum(key).to_i %>
+                    <% elsif head_formula[key] == "2" %>
+                       <% form_cel_value -= wage_people.sum(key).to_i %>
+                    <% end %>
                   <% end %>
                 <% end %>
                 <td>
