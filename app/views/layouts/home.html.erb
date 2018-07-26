@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="nav-item" onclick="openModule(event, 'Attendance')">
-            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
               <a class="nav-link" href="/attendances/group">
                 <i  class="fa fa-calendar-check-o material-icons"></i>
                 <p>考勤管理</p>

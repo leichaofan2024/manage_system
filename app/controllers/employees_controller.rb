@@ -36,7 +36,7 @@ class EmployeesController < ApplicationController
       if params[:group].present?
         @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(15)
       end
-    elsif current_user.has_role? :organsadmin
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
       group_id = Group.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:group => group_id).page(params[:page]).per(15)
     else
