@@ -8,7 +8,7 @@ layout 'home'
 		if current_user.has_role? :groupadmin
 			group_name = current_user.name.split("-")[1]
 			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-		elsif current_user.has_role? :organsadmin
+		elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
 			group = Group.find_by(:name => current_user.name)
 		end
 		@employees = Employee.current.where(:group => group.id)
@@ -29,19 +29,19 @@ layout 'home'
 				attendance = Attendance.where(employee_id: i, year: Time.now.year + 1, month: 1)
 				if !attendance.present?
 					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year + 1, month: 1)
-					attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new	
+					attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new
 					attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
 			else
 				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
 				if !attendance.present?
 					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year, month: Time.now.month + 1)
-					attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new	
+					attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new
 					attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
 			end
 			flash[:notice] = "下月考勤表新增成功"
-		end	
+		end
 		redirect_back(fallback_location: duan_attendances_path)
 	end
 
@@ -135,7 +135,7 @@ layout 'home'
 				end
 			end
 
-			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
+			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
 				redirect_back(fallback_location: group_attendances_path)
 			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
 				redirect_back(fallback_location: group_current_time_info_attendances_path)
@@ -302,14 +302,14 @@ layout 'home'
 			if status_workshop.all?{|x| x.nil?}
 				@workshops = []
 			else
-				@workshops = Workshop.find(status_workshop) 
+				@workshops = Workshop.find(status_workshop)
 			end
 		else
 			@workshops = Workshop.all
 		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
-		@group = params[:group] 
+		@group = params[:group]
 		@month = params[:month]
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -397,7 +397,7 @@ layout 'home'
 			elsif current_user.has_role? :workshopadmin
 				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 			end
-		end 
+		end
 		@group = params[:group]
 		@workshop = params[:workshop]
 		@duan = params[:duan]

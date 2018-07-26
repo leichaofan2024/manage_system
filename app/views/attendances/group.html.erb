@@ -12,7 +12,7 @@
       <tr>
         <% if current_user.has_role? :groupadmin %>
           <% applications = Application.where(group_id: Group.find_by(name: current_user.name.split('-')[1]).id) %>
-        <% elsif current_user.has_role? :organsadmin %>
+        <% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
           <% applications = Application.where(group_id: Group.find_by(name: current_user.name).id) %>
         <% end %>
         <td><%= applications.count %></td>
@@ -24,7 +24,7 @@
   <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
     <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
   <% end %>
-  <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) %>
+  <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
       <div class="btn_group-2MSRh_0">
         <div class="ivu-tooltip">
             <div class="ivu-tooltip-rel">
@@ -41,7 +41,7 @@
                 <% end %>
               </button>
             </div>
-        </div> 
+        </div>
       </div>
 
   <!-- <h5><%= link_to "导出表格", group_attendances_path(format: "xls")%></h5> -->

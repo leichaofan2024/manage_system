@@ -13,12 +13,14 @@
             <% if current_user.has_role? :groupadmin %>
               <% group_name = current_user.name.split("-")[1] %>
               <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0])) %>
+            <% elsif current_user.has_role? :wgadmin %>
+              <% group = Group.find_by(:name => current_user.name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]))%>
             <% else %>
               <% group = Group.find_by(:name => current_user.name, :workshop_id => Workshop.find_by(:name => "机关")) %>
             <% end %>
             <%= hidden_field_tag :group, group.id %><br>
             <%= hidden_field_tag :apply_person, current_user.name %><br>
-            <% if current_user.has_role? :groupadmin %>
+            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin) %>
               <%= hidden_field_tag :status, "班组发起申请" %>
             <% elsif current_user.has_role? :organsadmin %>
               <%= hidden_field_tag :status, "科室发起申请" %>

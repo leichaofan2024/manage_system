@@ -36,7 +36,7 @@ class EmployeesController < ApplicationController
       if params[:group].present?
         @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(15)
       end
-    elsif current_user.has_role? :organsadmin
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
       group_id = Group.find_by(:name => current_user.name).id
       @employees = Employee.current.where(:group => group_id).page(params[:page]).per(15)
     else
@@ -139,7 +139,7 @@ class EmployeesController < ApplicationController
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.find_by(name: current_user.name).id"
-    elsif current_user.has_role? :organsadmin
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
       condition = ".current.where(group: Group.find_by(name: current_user.name).id"
     elsif current_user.has_role? :groupadmin
       condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
@@ -1537,6 +1537,9 @@ class EmployeesController < ApplicationController
       elsif current_user.has_role? :workshopadmin
         workshop_id = Workshop.find_by(:name => current_user.name).id
         @employees = Employee.current.where(:workshop => workshop_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
+      elsif current_user.has_role? :wgadmin
+        group =  Group.find_by(:name => current_user.name)
+        @employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name.split("-")[0]).id, :group => group.id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
       else
         group_name = current_user.name.split("-")[1]
         group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)

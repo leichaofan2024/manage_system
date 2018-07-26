@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable
 
   validates :name, presence: true
+  validates :name, uniqueness: true
   has_many :messages
 
 
