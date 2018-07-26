@@ -36,6 +36,11 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
 	        	employee_id = Employee.find_by(:sal_number => row[e]).id
 	        	wage.employee_id = employee_id
 	        end
+          # wage.col86 = 
+          # wage.col87 =
+          # wage.col88 =
+          # wage.col89 =
+          # wage.col90 =
 	        wage.save!
 	    end
 	end
