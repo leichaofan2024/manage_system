@@ -13,7 +13,7 @@
           <%= f.label :选择权限 %>
           <!-- <%= f.select :roles,  Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]).pluck(:translate_role) %> -->
           <!-- <% @select_roles = Role.where.not(:name => ["superadmin", "attendance_admin", "awardadmin", "limitadmin", "empadmin", "saleradmin"]).pluck(:translate_role) %> -->
-          <select  onChange="selectDiv(this.value)">
+          <select  onChange="selectDiv(this.value)" name="roles">
             <option value="optionID1">班组管理员</option>
             <option value="optionID2">车间管理员</option>
             <option value="optionID3">科室管理员</option>
