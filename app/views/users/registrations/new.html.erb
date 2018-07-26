@@ -35,17 +35,22 @@
 
 
         <div id="optionID2" style="display:none">
-          <select>
+          <select name="workshop">
+            <option disabled selected value></option>
             <% Workshop.where.not(:name => '机关').pluck(:name).each do |item| %>
               <option><%= item %></option>
             <% end %>
           </select>
-
         </div>
 
 
         <div id="optionID3" style="display:none">
-          <select>
+          <select name="workshop">
+            <option disabled selected value></option>
+            <option value="机关">机关</option>
+          </select>
+          <select name="group">
+            <option disabled selected value></option>
             <% Group.where(:workshop_id => Workshop.where(:name => "机关").pluck(:id)).pluck(:name).each do |item| %>
               <option><%= item %></option>
             <% end %>
