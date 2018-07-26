@@ -38,7 +38,7 @@
     <!-- 审核功能-开始 -->
 
 
-        <div class="btn_group_top-1sKKU_0">
+        <!-- <div class="btn_group_top-1sKKU_0">
           <div>
             <div class="btn_group-2MSRh_0">
               <div class="ivu-tooltip">
@@ -63,7 +63,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
   </div>
 
   <!-- 审核功能-结束 -->
@@ -79,7 +79,7 @@
 <% if current_user.has_role? :workshopadmin %>
   <!-- 审核功能-开始 -->
   <br><br><br>
-    <div class="btn_group_top-1sKKU_0">
+    <!-- <div class="btn_group_top-1sKKU_0">
       <div>
         <div class="btn_group-2MSRh_0">
           <div class="ivu-tooltip">
@@ -104,7 +104,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   <!-- 审核功能-结束 -->
   <% if @workshop.present? %>
     <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
