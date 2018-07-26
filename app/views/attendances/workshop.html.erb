@@ -3,7 +3,7 @@
 <% groups = [] %>
 <% application_id = [] %>
 
-<% Workshop.find_by(:name => current_user.name).groups.each do |group| %>
+<% Workshop.find(current_user.workshop_id).groups.each do |group| %>
   <% groups << group.id %>
 <% end %>
 

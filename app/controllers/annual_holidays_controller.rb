@@ -3,7 +3,7 @@ class AnnualHolidaysController < ApplicationController
 
 	def index
 		if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin)
-			@employees = Employee.current.where(workshop: "#{Workshop.find_by(name: current_user.name).id}")
+			@employees = Employee.current.where(workshop: "#{current_user.workshop_id}")
 		elsif (current_user.has_role? :attendance_admin) or (current_user.has_role? :superadmin)
 			@employees = Employee.current.order("id ASC").page(params[:page]).per(20)
 		end
@@ -108,8 +108,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def group_holiday_fulfill
-		group_name = current_user.name.split("-")[1]
-		@employees = Employee.current.where(:group => Group.find_by(:name => group_name).id)
+		@employees = Employee.current.where(:group => current_user.group_id)
 	end
 
 end
