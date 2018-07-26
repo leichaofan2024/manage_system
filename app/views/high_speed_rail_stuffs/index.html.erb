@@ -1,0 +1,70 @@
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+            <th>序号</th>
+            <th>项目</th>
+            <% HighSpeedRailStuffHead.all.each do |head| %>
+
+
+              <th><%= link_to(head.head_name,edit_head_high_speed_rail_stuffs_path(:id => head.id),style: "color: black;") %></th>
+
+            <% end %>
+            <th><%= link_to("+",new_head_high_speed_rail_stuffs_path,style: "color: blue;") %></th>
+        	</tr>
+        </thead>
+        <tbody>
+          <% n = 0 %>
+          <% HighSpeedRailStuff.all.each do |level| %>
+            <% n = n+1%>
+            <% employee_people = Employee.where(level.formula)%>
+            <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
+            <tr>
+              <td><%= n %></td>
+              <td>
+                <%= link_to edit_line_high_speed_rail_stuffs_path(:id => level.id),style: "color: black;" do %>
+                  <%= level.name %>
+                <% end %>
+                <!-- <%= link_to("",edit_line_divide_level_wages_path(:id => level.id),class: "fa fa-pencil-square-o",style: "color: blue;") %>&nbsp|&nbsp
+                <%= link_to("",delete_line_divide_level_wages_path(:id => level.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %> -->
+              </td>
+
+              <% HighSpeedRailStuffHead.all.each do |head| %>
+                <% head_formula = head.formula %>
+                <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
+                  <% if head_formula.keys.include?("age") %>
+                    <% age_range = []%>
+                    <%  head_formula["age"].each do |value| %>
+                      <% age_range<< value.to_i %>
+                    <% end %>
+                    <% head_formula["age"] = (age_range.min..age_range.max)%>
+                  <% end %>
+                  <% form_cel_value= employee_people.where(head_formula).count %>
+
+                <% else %>
+                  <% form_cel_value = 0 %>
+                  <% head_formula.keys.each do |key| %>
+                    <% if head_formula[key] == "1" %>
+                       <% form_cel_value += wage_people.sum(key).to_i %>
+                    <% elsif head_formula[key] == "2" %>
+                       <% form_cel_value -= wage_people.sum(key).to_i %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+                <td>
+                  <%= form_cel_value %>
+                </td>
+              <% end %>
+            </tr>
+
+          <% end %>
+          <tr>
+            <td><%= link_to("+",new_line_high_speed_rail_stuffs_path,style: "color: blue;") %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
