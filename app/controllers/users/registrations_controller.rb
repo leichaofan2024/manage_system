@@ -26,7 +26,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
                      :workshop_id => params[:workshop],
                      :group_id => params[:group])
     @user.add_role(hash[params[:roles]])
-    binding.pry
     if @user.save
       flash[:notice] = "新增#{@user.name} 成功"
       redirect_to users_path
