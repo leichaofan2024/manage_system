@@ -1,0 +1,109 @@
+<div class="">
+  <%= link_to("<<  返回",main_driving_stuffs_path) %>
+</div>
+<div style="padding-bottom:30px;">
+  <h4>表头编辑</h4>
+  <div class="pull-right" style= "margin-right:30px;color:red;">
+    <%= "删除表头："%>
+    <%= link_to("",delete_head_main_driving_stuffs_path(:id => @main_stuff_head.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %>
+  </div>
+  <p style = "font-size= 30px;font-weight:900">当前项目名称：</p>
+  <p> <%= @main_stuff_head.head_name %> </p>
+  <p style = "font-size= 30px;font-weight:900">当前公式：</p>
+  <p>
+    <% n = 0 %>
+    <% @main_stuff_head.formula.keys.each do |key| %>
+      <% if @main_stuff_head.formula[key]=="1" %>
+        <% if n == 0 %>
+          "<%= Wage.head_transfer[key] %>"
+        <% else %>
+        +  "<%= Wage.head_transfer[key] %>"
+        <% end %>
+      <% elsif @main_stuff_head.formula[key]=="2" %>
+      -  "<%= Wage.head_transfer[key] %>"
+      <% else %>
+        <p>
+            <% if key == "workshop"%>
+              <%= Employee.head_transfer[key] %>: <%= Workshop.where(:id => @main_stuff_head.formula[key]).pluck("name") %><br>
+            <% elsif key == "group" %>
+              <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @main_stuff_head.formula[key]).pluck("name") %><br>
+            <% elsif key == "age" %>
+              <%= Employee.head_transfer[key] %>范围:
+              <% age_range = []%>
+              <%  @main_stuff_head.formula[key].each do |value| %>
+                <% age_range<< value.to_i %>
+              <% end %>
+              <%= age_range.min %>   ~   <%= age_range.max %>
+              <br>
+            <% else %>
+            <%= Employee.head_transfer[key] %>: <%= @main_stuff_head.formula[key] %><br>
+            <% end %>
+        </p>
+      <% end %>
+      <% n += 1%>
+    <% end %>
+  </p>
+  <br>
+
+
+
+
+<%= form_tag update_head_main_driving_stuffs_path(:id => @main_stuff_head.id),method: :patch do |f| %>
+  <%= label_tag "表头名称：" %>
+  <%= text_field_tag "head_name"  %>
+  <br>
+  <%= label_tag "资金计算公式："%>
+  <br>
+  <br>
+  <% (Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]).each do |key| %>
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;
+      <span >
+        <select class="" name= "<%= key%>">
+          <option disabled selected value>--请选择--</option>
+          <option value="1">+</option>
+          <option value="2">-</option>
+
+        </select>
+      </span>
+      <%= label_tag Wage.head_transfer[key]%>
+    </span>
+  <% end %>
+  <br>
+  <br>
+  <%= label_tag "人数计算公式："%>
+  <br>
+  <br>
+
+
+  <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>
+      <span >
+        <% if key == "workshop" %>
+          <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+            <% Workshop.all.each do |workshop| %>
+              <option value="<%= workshop.id %>"><%= workshop.name %></option>
+            <% end %>
+          </select>
+        <% elsif key == "group"%>
+          <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+            <% Group.all.each do |group| %>
+              <option value="<%= group.id %>"><%= group.name %></option>
+            <% end %>
+          </select>
+        <% else %>
+          <%=  select_tag key,options_for_select(Employee.pluck(key).uniq),multiple: true,class: "form-control" %>
+        <% end %>
+        <!-- <%= check_box_tag key,"yes",false %> -->
+      </span>
+
+    </span>
+    <script>
+      $("#<%= key%>").select2( { theme: "bootstrap"} );
+    </script>
+  <% end %>
+  <br>
+  <br>
+  <%= submit_tag :筛选 %>
+<% end %>

@@ -147,5 +147,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :main_driving_stuffs do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
 
 end
