@@ -1,7 +1,7 @@
 class RelativeSalersController < ApplicationController
   layout 'home'
   def index
-    if current_user.has_role? :awardadmin
+    if (current_user.has_role? :awardadmin) || (current_user.has_role? :superadmin)
       @relative_salers = RelativeSaler.page(params[:page]).per(20)
     else
       @relative_salers = RelativeSaler.where(:科室车间 => Workshop.find(current_user.workshop_id).name ).page(params[:page]).per(20)
