@@ -2,6 +2,7 @@ class RelativeSaler < ApplicationRecord
   cattr_accessor :current_user
 
   belongs_to :user, optional: true
+  
   def self.import(file, upload_time)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     header = spreadsheet.row(1)

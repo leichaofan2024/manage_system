@@ -9,7 +9,7 @@
       <ul class="list-group">
         <% @notices.each do |item|%>
           <li class="list-group-item">
-            <span class="badge" style="background: #fff; color: black"><%= item.user.name + ' 发布于'%>&nbsp &nbsp<%= item.created_at %></span>
+             <span class="badge" style="background: #fff; color: black"><%= item.user.name + ' 发布于'%>&nbsp &nbsp<%= item.created_at %></span>
             <%= link_to item.title, announcement_path(item) %>
           </li>
         <% end %>
