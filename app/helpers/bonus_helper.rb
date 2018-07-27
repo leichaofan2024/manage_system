@@ -1,0 +1,2 @@
+module BonusHelper
+end

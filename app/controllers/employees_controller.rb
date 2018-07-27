@@ -31,7 +31,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+    elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(10)
     elsif current_user.has_role? :workshopadmin
       @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(10)
@@ -1435,6 +1435,7 @@ class EmployeesController < ApplicationController
 
     def search_params
       if current_user.has_role? :organsadmin
+<<<<<<< HEAD
         @employees = Employee.current.where(:group => current_user.group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
         Employee.ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
@@ -1442,6 +1443,19 @@ class EmployeesController < ApplicationController
         @employees = Employee.current.where(:workshop => current_user.workshop_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       else
         @employees = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
+=======
+        group_id = Group.find_by(:name => current_user.name).id
+        @employees = Employee.current.where(:group => group_id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+        Employee.ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      elsif current_user.has_role? :workshopadmin
+        workshop_id = Workshop.find_by(:name => current_user.name).id
+        @employees = Employee.current.where(:workshop => workshop_id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+      else
+        group_name = current_user.name.split("-")[1]
+        group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
+        @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+>>>>>>> b11e8e7abc5bdd101fe4724ca35389fe81c9517e
       end
     end
 

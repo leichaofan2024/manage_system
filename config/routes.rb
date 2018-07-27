@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
   root "employees#index"
+  get "/home" ,to: "home#index"
   resources :employees do
     collection do
       #上传
@@ -83,7 +84,6 @@ Rails.application.routes.draw do
       #年休假完成率
       get :holiday_fulfillment_rate
       get :filter
-
     end
   end
 
@@ -178,5 +178,91 @@ Rails.application.routes.draw do
   end
 
   resources :users
+
+  resources :wages do
+    collection do
+      post :import_table
+      get :import_wage
+      post :create_header
+      post :edit_header
+      get :divide_level_wage
+      get :production_stuff_wage
+      get :high_speed_rail_stuff
+      get :main_driving_stuff
+    end
+  end
+
+  resources :bonus do
+    collection do
+      post :import_table
+      get :import_bonus
+      post :create_header
+      post :edit_header
+    end
+  end
+
+  resources :divide_level_wages do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :production_stuff_wages do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :main_driving_stuffs do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :high_speed_rail_stuffs do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
 
 end

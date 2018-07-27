@@ -1,0 +1,2 @@
+class WageHeader < ApplicationRecord
+end

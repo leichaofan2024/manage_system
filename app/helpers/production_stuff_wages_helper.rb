@@ -1,0 +1,2 @@
+module ProductionStuffWagesHelper
+end
