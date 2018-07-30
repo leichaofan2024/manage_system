@@ -1,5 +1,10 @@
 <div class="col-md-12" style="margin-top: -50px;">
-  <a href="#" ><< 返回 </a>
+  <a href="/wages/import_wage" ><< 返回 </a>
+  <div class="col-md-12" style="margin-top: 15px;margin-bottom: 15px;">
+    <%= form_tag main_driving_stuffs_path, method: 'get' do %>
+      <%= render "wages/customize_form_partial"%>
+    <% end %>
+  </div>
   <h5 style="text-align: center;">主要行车工种情况统计表</h5>
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
@@ -22,7 +27,13 @@
           <% MainDrivingStuff.all.each do |level| %>
             <% n = n+1%>
             <% employee_people = Employee.where(level.formula)%>
-            <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
+            <% if params[:year].present? && params[:year]!= "全部" && params[:month].present?%>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year],:month => params[:month]) %>
+            <% elsif params[:year].present? && params[:year]!= "全部" && params[:month].blank?%>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year]) %>
+            <% else %>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
+            <% end %>
             <tr>
               <td><%= n %></td>
               <td>

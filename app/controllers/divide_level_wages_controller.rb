@@ -3,6 +3,15 @@ class DivideLevelWagesController < ApplicationController
 
 
   def index
+    @years = Wage.pluck("year").uniq
+    @months = [["选择月份"]]
+
+    if @years.present?
+      @years.each do |year|
+        @months<< Wage.where(:year => year).pluck("month").uniq.compact
+      end
+    end
+    gon.month = @months
 
   end
 
