@@ -45,7 +45,7 @@
                         <b class="caret"></b>
                         <ul class="dropdown-menu">
                           <% if current_user.has_role? :awardadmin %>
-                            <li><%= link_to '用户管理', users_path %></li>
+                            <!-- <li><%= link_to '用户管理', users_path %></li> -->
                             <li><%= link_to "公告系统", announcements_path %></li>
                           <% end %>
                           <li><%= link_to "修改密码", edit_user_registration_path %></li>
