@@ -57,3 +57,19 @@ end
 
 group_count = Employee.current.pluck(:group).uniq.count
 puts "共创建#{group_count}个班组管理员"
+
+
+
+    [ 4] "groupadmin",
+    [ 7] "organsadmin",
+    [10] "wgadmin",
+    [11] "workshopadmin"
+
+
+User.all.each do |u|
+  if u.has_role? :workshopadmin
+    u.update(:workshop_id => Workshop.find_by(name: u.name).id.to_i)
+  elsif u.has_role? :organsadmin
+    u.update(:group_id => Group.find_by(name: u.name).id.to_i, :workshop_id => Group.find_by(name: u.name).workshop_id.to_i)
+  end
+end

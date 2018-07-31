@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
 
   validates :name, presence: { message: "请填写姓名"}
   validates :name, uniqueness: { message: "已有其他用户使用该用户名"}
-  validates :password, presence: { message: "请设置密码，最小长度为6位数字"}
-  validates :password_confirmation, presence: { message: "密码不一致"}
+  # validates :password, presence: { message: "请设置密码，最小长度为6位数字"}
+  # validates :password_confirmation, presence: { message: "密码不一致"}
   has_many :messages
 
   has_many :relative_salers
