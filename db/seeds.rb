@@ -73,3 +73,35 @@ User.all.each do |u|
     u.update(:group_id => Group.find_by(name: u.name).id.to_i, :workshop_id => Group.find_by(name: u.name).workshop_id.to_i)
   end
 end
+
+
+User.all.each do |u|
+  if u.has_role? :attendance_admin
+     u.update(:role_id => Role.find_by_name('attendance_admin').id)
+  elsif u.has_role? :workshopadmin
+   u.update(:role_id => Role.find_by_name('workshopadmin').id)
+  elsif u.has_role? :awardadmin 
+   u.update(:role_id => Role.find_by_name('awardadmin').id)
+  elsif u.has_role? :empadmin
+   u.update(:role_id => Role.find_by_name('empadmin').id)
+  elsif u.has_role? :groupadmin
+   u.update(:role_id => Role.find_by_name('groupadmin').id)
+  elsif u.has_role? :leaderadmin
+   u.update(:role_id => Role.find_by_name('leaderadmin').id)
+  elsif u.has_role? :limitadmin
+   u.update(:role_id => Role.find_by_name('limitadmin').id)
+  elsif u.has_role? :organsadmin
+   u.update(:role_id => Role.find_by_name('organsadmin').id)
+  elsif u.has_role? :saleradmin
+   u.update(:role_id => Role.find_by_name('saleradmin').id)
+  elsif u.has_role? :superadmin
+   u.update(:role_id => Role.find_by_name('superadmin').id)
+  elsif u.has_role? :wgadmin
+   u.update(:role_id => Role.find_by_name('wgadmin').id)
+  end
+end
+
+
+
+
+
