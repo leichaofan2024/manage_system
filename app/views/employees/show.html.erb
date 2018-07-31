@@ -36,16 +36,15 @@
             <!-- 调动标签 -->
             <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
               <span class="label label-warning">一月内有调动</span>
-            <% else %>
-              <!-- 调动按钮 -->
-              <div class="ivu-tooltip-rel" style="text-align: right">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调动"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
-                     <span style="color: #269Eff;">调动</span>
-                  <% end %>
-                </button>
-              </div>
             <% end %>
+            <!-- 调动按钮 -->
+            <div class="ivu-tooltip-rel" style="text-align: right">
+              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调动"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
+                   <span style="color: #269Eff;">调动</span>
+                <% end %>
+              </button>
+            </div>
             <!-- 退休按钮 -->
             <div class="ivu-tooltip-rel" style="text-align: right">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
