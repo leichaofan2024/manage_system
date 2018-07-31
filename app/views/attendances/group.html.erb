@@ -2,24 +2,20 @@
 <div class="col-md-12" style="margin-top: -10px;">
 
     <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>我的申请</th>
-        <th>详情</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% if current_user.has_role? :groupadmin %>
-          <% applications = Application.where(group_id: Group.find_by(name: current_user.name.split('-')[1]).id) %>
-        <% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-          <% applications = Application.where(group_id: Group.find_by(name: current_user.name).id) %>
-        <% end %>
-        <td><%= applications.count %></td>
-        <td><%= link_to "查看详情", show_application_attendances_path(applications: applications.pluck("id")), class: "btn btn-primary" %></td>
-      </tr>
-    </tbody>
-  </table>
+      <thead>
+        <tr>
+          <th>我的申请</th>
+          <th>详情</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <% applications = Application.where(group_id: current_user.group_id) %>
+          <td><%= applications.count %></td>
+          <td><%= link_to "查看详情", show_application_attendances_path(applications: applications.pluck("id")), class: "btn btn-primary2" %></td>
+        </tr>
+      </tbody>
+    </table>
 
   <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
     <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>

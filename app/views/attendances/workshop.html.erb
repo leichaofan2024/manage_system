@@ -24,14 +24,14 @@
       <tr>
         <td><%= Application.where(:group_id => groups, :status => "班组发起申请").count %>条</td>
         <% unless Application.where(:group_id => groups, :status => "班组发起申请").count == 0 %>
-          <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary" %></td>
+          <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary2" %></td>
         <% else %>
-          <td><%= link_to "查看往期", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary"  %></td>
+          <td><%= link_to "查看往期", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary2"  %></td>
         <% end %>
       </tr>
     </tbody>
   </table>
-  
+
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
     <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
