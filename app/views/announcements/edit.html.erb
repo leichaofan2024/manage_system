@@ -1,0 +1,11 @@
+<div class="col-md-10">
+  <%= simple_form_for @notice do |f| %>
+    <div class="form-group">
+      <%= f.input :title, :label => "标题", required: true, autofocus: true %>
+      <%= f.input :content, :label => "公告内容", required: true, autofocus: true %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "点击发布", disable_with: "Submiting...", class: "button"%>
+    </div>
+  <% end %>
+</div>

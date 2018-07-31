@@ -1,0 +1,50 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="head-btn col-md-12">
+  <div class="back-btn">
+    <%= link_to "返回", rectification_awards_path %>
+  </div>
+
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 班组长返奖明细表</h4>
+  </div>
+  <%= link_to "上传班组长返奖明细表", new_teamleader_award_path, class: 'btn btn-primary-upload'%>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>车间</th>
+            <th>班组</th>
+            <th>工资号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>金额</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @teamleader_awards.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.车间 %></td>
+              <td><%= item.班组 %></td>
+              <td><%= item.工资号 %></td>
+              <td><%= item.姓名 %></td>
+              <td><%= item.性别 %></td>
+              <td><%= item.金额 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @teamleader_awards %>
+  </div>
+
+</div>

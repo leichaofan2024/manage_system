@@ -1,15 +1,14 @@
 class AttendancesController < ApplicationController
-layout 'home'
+  layout 'home'
 
 	##班组页面--开始
 	def group
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		if current_user.has_role? :groupadmin
-			group_name = current_user.name.split("-")[1]
-			group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-		elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
-			group = Group.find_by(:name => current_user.name)
+			group = Group.find(current_user.group_id)
+		elsif current_user.has_role? :organsadmin
+			group = Group.find(current_user.group_id)
 		end
 		@employees = Employee.current.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -115,8 +114,7 @@ layout 'home'
 
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
 			if current_user.has_role? :groupadmin
-				name = current_user.name.split("-")[1]
-				@group = Group.find_by(:name => name)
+				@group = Group.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 
 					AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -124,8 +122,7 @@ layout 'home'
 					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
 				end
 			elsif current_user.has_role? :organsadmin
-				name = current_user.name
-				@group = Group.find_by(:name => name)
+				@group = Group.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 					if current_user.has_role? :groupadmin
 						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -169,18 +166,14 @@ layout 'home'
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-			if current_user.has_role? :organsadmin
-				group = Group.find_by(name: current_user.name, workshop_id: 1)
-			elsif current_user.has_role? :groupadmin
-				group_name = current_user.name.split("-")[1]
-				group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-			end
+			group = Group.find(current_user.group_id)
+
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
 			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
-			@workshop = Workshop.find_by(:name => current_user.name)
+			@workshop = Workshop.find(current_user.workshop_id)
 			@groups = @workshop.groups
 
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
@@ -206,10 +199,10 @@ layout 'home'
 	def workshop
 		#为展示组织架构的树状图配置数据
 		if current_user.has_role? :workshopadmin
-			@workshop = Workshop.find_by(:name => current_user.name)
+			@workshop = Workshop.find(current_user.workshop_id)
 			@groups = @workshop.groups
 		else
-			@workshop = Group.find_by(:name => current_user.name)
+			@workshop = Group.find(current_user.group_id)
 			@groups = @workshop
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
@@ -244,7 +237,7 @@ layout 'home'
 	def verify
 		if params[:authority] == "workshop"
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
-			@workshop = Workshop.find_by(:name => current_user.name)
+			@workshop = Workshop.find(current_user.workshop_id)
 			AttendanceStatus.find_by(:group_id => params[:group]).update(:status => "车间已审核", :group_id => params[:group])
 			flash[:notice] = "审核完成"
 			redirect_back(fallback_location: workshop_attendances_path)
@@ -278,7 +271,7 @@ layout 'home'
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
-			@workshop = Workshop.find_by(:name => current_user.name)
+			@workshop = Workshop.find(current_user.workshop_id)
 			@groups = @workshop.groups.pluck("id")
 			AttendanceStatus.where(:group_id => @groups).update(:status => "车间已审核", :workshop_id => @workshop.id)
 			flash[:notice] = "审核完毕"

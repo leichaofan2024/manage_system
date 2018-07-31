@@ -32,9 +32,9 @@
 	        				<% columns.each do |column| %>
 		        				<td>
 		        					<% if current_user.has_role? :workshopadmin %>
-	        							<% id = Workshop.find_by(name: current_user.name).id %>
+	        							<% id = Workshop.find(current_user.workshop_id) %>
 	        						<% elsif current_user.has_role? :organsadmin %>
-	        							<% id = Group.find_by(name: current_user.name).id %>
+	        							<% id = Group.find(current_user.group_id) %>
 	        						<% end  %>
 		        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
 		        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: Time.now.year, work_type: type) %>

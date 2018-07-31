@@ -1,0 +1,2 @@
+module ExaminationAwardsHelper
+end

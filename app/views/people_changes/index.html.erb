@@ -1,0 +1,39 @@
+<%= render 'relative_salers/saler_navbar'%>
+<div class="head-btn col-md-12">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 人员变动情况细表</h4>
+  </div>
+  <%= link_to "上传人员变动情况表", new_people_change_path, class: 'btn btn-primary-upload'%>
+</div>
+
+<div class="col-md-12">
+
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>车间</th>
+            <th>班组</th>
+            <th>姓名</th>
+            <th>变动原因</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @changes.each do |item| %>
+            <tr>
+              <td><%= item.车间 %></td>
+              <td><%= item.班组 %></td>
+              <td><%= item.姓名 %></td>
+              <td><%= item.变动原因 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @changes %>
+  </div>
+</div>

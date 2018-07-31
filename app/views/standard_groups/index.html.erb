@@ -1,0 +1,48 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="head-btn col-md-12">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 标准化班组表</h4>
+  </div>
+  <%= link_to "上传标准化班组表", new_standard_group_path, class: 'btn btn-primary-upload'%>
+</div>
+
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>科室车间</th>
+            <th>班组名称 </th>
+            <th>评定等级</th>
+            <th>奖励标准</th>
+            <th>人数</th>
+            <th>奖励金额</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @standard_groups.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.班组名称 %></td>
+              <td><%= item.评定等级 %></td>
+              <td><%= item.奖励标准 %></td>
+              <td><%= item.人数 %></td>
+              <td><%= item.奖励金额 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @standard_groups %>
+  </div>
+</div>

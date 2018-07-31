@@ -1,0 +1,43 @@
+<% if current_user.has_role? :awardadmin %>
+  <div class="back-btn" style="margin-bottom: 10px;margin-left: 15px;">
+    <%= link_to '返回奖惩管理', relative_salers_path%>
+  </div>
+
+  <div class="col-md-10">
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="font-size: 15px; font-weight: bold">我发布的公告</div>
+      <ul class="list-group">
+        <% @notices.each do |item|%>
+          <li class="list-group-item">
+             <span class="badge" style="background: #fff; color: black"><%= item.user.name + ' 发布于'%>&nbsp &nbsp<%= item.created_at %></span>
+            <%= link_to item.title, announcement_path(item) %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="col-md-2">
+    <%= link_to "新建公告", new_announcement_path, class: "btn btn-primary"%>
+  </div>
+
+<% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)%>
+  <div class="container">
+    <div class="back-btn" style="margin-bottom: 10px;">
+      <%= link_to '返回奖惩管理', relative_salers_path%>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading text-center" style="font-size: 15px; font-weight: bold">公告栏</div>
+      <ul class="list-group">
+        <% @notices.each do |item|%>
+          <li class="list-group-item">
+            <span class="badge" style="background: #fff; color: black"><%= item.user.name + ' 发布于'%>&nbsp &nbsp<%= item.created_at %></span>
+            <%= link_to item.title, announcement_path(item) %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

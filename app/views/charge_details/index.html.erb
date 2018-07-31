@@ -1,0 +1,14 @@
+<%= render 'relative_salers/saler_navbar'%>
+<% if current_user.has_role? :awardadmin %>
+    <div class="head-btn col-md-12">
+      <div class="col-md-6">
+        <h4 style="text-align: left; margin-left: -15px;">2018年7月 扣款明细表</h4>
+      </div>
+      <%= link_to "上传扣款明细表", new_charge_detail_path, class: 'btn btn-primary-upload'%>
+    </div>
+    <%= render 'import_charge_details'%>
+<% end %>
+
+<% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
+  <%= render 'not_awardadmin_charge_detail'%>
+<% end %>

@@ -1,6 +1,7 @@
 class EmployeesController < ApplicationController
   layout 'home'
   before_action :validate_search_key, only: [:search]
+  before_action :required_is_groupadmin, only: [:edit]
 
   # def insert_attendance_cate
   #  hash = {}
@@ -26,23 +27,23 @@ class EmployeesController < ApplicationController
   # end
 
   def index
-    if (current_user.has_role? :leaderadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+    #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
+    @work_type = params[:work_type]
+    if params[:work_type].present?
+      @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
+    elsif (current_user.has_role? :leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
-      workshop_id = Workshop.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:workshop => workshop_id).page(params[:page]).per(15)
-      @workshop = Workshop.find_by(:name => current_user.name)
+      @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(15)
+      @workshop = Workshop.find(current_user.workshop_id)
 			@groups = @workshop.groups
       if params[:group].present?
         @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(15)
       end
     elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
-      group_id = Group.find_by(:name => current_user.name).id
-      @employees = Employee.current.where(:group => group_id).page(params[:page]).per(15)
+      @employees = Employee.current.where(:group => current_user.group_id).page(params[:page]).per(10)
     else
-      group_name = current_user.name.split("-")[1]
-      group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-      @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).page(params[:page])
+      @employees = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).page(params[:page])
     end
     #下载表格配置
     if params[:employees] == "全部"
@@ -1530,20 +1531,13 @@ class EmployeesController < ApplicationController
 
     def search_params
       if current_user.has_role? :organsadmin
-        group_id = Group.find_by(:name => current_user.name).id
-        @employees = Employee.current.where(:group => group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
+        @employees = Employee.current.where(:group => current_user.group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
         Employee.ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       elsif current_user.has_role? :workshopadmin
-        workshop_id = Workshop.find_by(:name => current_user.name).id
-        @employees = Employee.current.where(:workshop => workshop_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
-      elsif current_user.has_role? :wgadmin
-        group =  Group.find_by(:name => current_user.name)
-        @employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name.split("-")[0]).id, :group => group.id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+        @employees = Employee.current.where(:workshop => current_user.workshop_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       else
-        group_name = current_user.name.split("-")[1]
-        group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]).id)
-        @employees = Employee.current.where(:workshop => group.workshop_id,:group => group.id).ransack({ :name_or_job_number_cont => @query_string}).result(distinct: true)
+        @employees = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       end
     end
 

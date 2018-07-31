@@ -1,0 +1,2 @@
+module HighSpeedRailStuffsHelper
+end

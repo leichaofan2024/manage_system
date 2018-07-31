@@ -17,6 +17,9 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 @import "font-awesome";
+@import 'bootstrap-datetimepicker';
+@import "select2";
+@import "select2-bootstrap";
 
 /*------------------ 登录页面 ---------------------*/
 .user_setup{
@@ -1742,7 +1745,91 @@ button.close {
   margin-bottom: 10px;
 }
 
+.table-bordered a:visited {
+    color: #376ad3;
+    font-weight: bold;
+    font-size: 18px;
+}
+/*-----------------end-----------------*/
+
+
+/*--------------上传表页面样式-----------*/
+// 返回按钮
 .back-btn a {
   color: #495060;
   font-size: 14px;
+}
+
+.head-btn .back-btn a:hover {
+  color: #376ad3;
+}
+
+.btn-separator-item {
+  margin: 0 15px;
+  color: #376ad3;
+  display: inline-block;
+}
+
+.upload-font {
+  font-size: 14px;
+  font-weight: 700;
+  color: #495060;
+}
+
+// 默认按钮样式
+.btn-primary-status{
+  color: #fff;
+  background-color: #007bff;
+  border-color: #2e6da4;
+  margin-bottom: 30px;
+  width: 270px;
+  margin-left: 110px;
+}
+
+.file-style {
+  margin: 10px 110px;
+}
+
+// 上传卡片样式
+.upload-input-card {
+  margin-top: 30px;
+  background: white;
+  border-radius: 8px 8px 2px 2px ;
+  box-shadow: 0 0 30px rgba(45, 140, 240, 0.1) !important;
+  width: 500px;
+}
+
+// 时间选择框
+.datepicker-input {
+  height: 120px;
+  width: 300px;
+  margin-left: 95px;
+  height: 80px;
+}
+
+// 温馨提示样式
+.remind-circle p {
+  margin-left: -15px;
+}
+
+.remind-circle h4 {
+
+}
+
+// 上传各种表格的按钮
+.btn-primary-upload {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #2e6da4;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-weight: 10px;
+}
+
+.head-btn {
+  text-align: right;
+}
+
+.head-btn a:hover {
+  color: white;
 }

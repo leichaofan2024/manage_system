@@ -1,0 +1,55 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+<div class="head-btn col-md-12">
+  <div class="back-btn">
+    <%= link_to "返回", relative_salers_totals_path %>
+  </div>
+
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 整改返奖明细表</h4>
+  </div>
+  <%= link_to "上传整改返奖明细表", new_rectification_award_path, class: 'btn btn-primary-upload'%>
+</div>
+
+<div class="col-md-12">
+
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+             <th>序号</th>
+             <th>科室车间</th>
+             <th>整改返奖合计</th>
+             <th>牌卡合计</th>
+             <th><%= link_to "中层返奖", middle_awards_path %></th>
+             <th><%= link_to "班组长返奖", teamleader_awards_path %></th>
+             <th><%= link_to "抽考返奖", examination_awards_path %></th>
+             <th><%= link_to "其他返奖", other_awards_path %></th>
+             <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @rectifications.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.整改返奖合计 %></td>
+              <td><%= item.牌卡返奖 %></td>
+              <td><%= item.中层返奖 %></td>
+              <td><%= item.班组长返奖 %></td>
+              <td><%= item.抽考返奖 %></td>
+              <td><%= item.其他返奖 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @rectifications %>
+  </div>
+
+</div>

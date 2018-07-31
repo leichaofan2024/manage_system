@@ -10,14 +10,7 @@
           <%= form_tag create_application_attendances_path do %>
             <% @years = Attendance.pluck("year").uniq %>
             <% @months = Attendance.pluck("month").uniq.reverse %>
-            <% if current_user.has_role? :groupadmin %>
-              <% group_name = current_user.name.split("-")[1] %>
-              <% group = Group.find_by(:name => group_name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0])) %>
-            <% elsif current_user.has_role? :wgadmin %>
-              <% group = Group.find_by(:name => current_user.name, :workshop_id => Workshop.find_by(:name => current_user.name.split("-")[0]))%>
-            <% else %>
-              <% group = Group.find_by(:name => current_user.name, :workshop_id => Workshop.find_by(:name => "机关")) %>
-            <% end %>
+            <% group = Group.find(current_user.group_id) %>
             <%= hidden_field_tag :group, group.id %><br>
             <%= hidden_field_tag :apply_person, current_user.name %><br>
             <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin) %>

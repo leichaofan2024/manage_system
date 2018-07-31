@@ -86,6 +86,36 @@
           </div>
         </div>
       </div>
+    <% elsif current_user.has_role? :awardadmin%>
+      <div class="switchTab-3pFw5_0" style="margin-top: -50px;">
+        <div class="queryTop-26iSU_0">
+          <div class="condition-19RSN_0">
+            <li class="grow8">
+              <div class="condition-19RSN_0 active-2SUrt_0">
+                <div class="panel_main pannel-two change-type">
+                  <div class="title">
+                    <span>合计</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>其中：男</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "男").count%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>女</span>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "女").count%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>调离</span>
+                      <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
+                    <span>人</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>最近一月调动</span>
+                      <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
+                    <span>人</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </div>
     <% else %>
       <div class="switchTab-3pFw5_0" style="margin-top: -65px;">
         <div class="queryTop-26iSU_0">
@@ -95,7 +125,15 @@
                 <div class="panel_main pannel-two change-type">
                   <div class="title">
                     <span>合计</span>
-                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count %></span>
+                    <% if (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin)%>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count %></span>
+                    <% elsif current_user.has_role? :workshopadmin %>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:workshop => current_user.workshop_id).count%></span>
+                    <% elsif current_user.has_role? :organsadmin%>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%=  Employee.current.where(:group => current_user.group_id).count %></span>
+                    <% elsif current_user.has_role? :groupadmin%>
+                      <span class="highlight-1iKYJ_0" style="color: #269EFF"><%=  Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).count %></span>
+                    <% end %>
                     <span>人</span>
                   </div>
                 </div>
@@ -155,9 +193,9 @@
           <%= render 'empshared/other_duanadmin' %>
         <% elsif (current_user.has_role? :workshopadmin) %>
           <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
-        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :awardadmin)%>
           <%= render 'empshared/emp_table_not_empadmin'%>
-         <% end %>
+        <% end %>
       </div>
     </div>
 

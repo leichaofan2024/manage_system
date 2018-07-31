@@ -1,0 +1,61 @@
+<%= render 'relative_salers/saler_navbar'%>
+
+
+<div class="head-btn col-md-12">
+  <div class="col-md-6">
+    <h4 style="text-align: left; margin-left: -15px;">2018年7月 工挂工资汇总表</h4>
+  </div>
+  <%= link_to "上传工挂工资汇总表", new_relative_salers_total_path, class: 'btn btn-primary-upload'%>
+</div>
+
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>科室车间</th>
+            <th>挂钩工资</th>
+            <th>安全质量</th>
+            <th>工作质量</th>
+            <th>行车</th>
+            <th><%= link_to '整改返奖', rectification_awards_path%></th>
+            <th>一体化</th>
+            <th>兼职兼岗</th>
+            <th>其他</th>
+            <th>应发</th>
+            <th>考核扣款</th>
+            <th>小计</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @totals.each do |item| %>
+            <tr>
+              <td><%= item.id %></td>
+              <td><%= item.科室车间 %></td>
+              <td><%= item.挂钩工资 %></td>
+              <td><%= item.安全质量 %></td>
+              <td><%= item.工作质量 %></td>
+              <td><%= item.行车 %></td>
+              <td><%= item.整改返奖 %></td>
+              <td><%= item.一体化 %></td>
+              <td><%= item.兼职兼岗 %></td>
+              <td><%= item.其他 %></td>
+              <td><%= item.应发 %></td>
+              <td><%= item.考核扣款 %></td>
+              <td><%= item.小计 %></td>
+              <td><%= item.备注 %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @totals %>
+  </div>
+</div>

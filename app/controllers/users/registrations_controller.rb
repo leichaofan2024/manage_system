@@ -1,18 +1,38 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  prepend_before_action :require_no_authentication, :only => [:cancel ]
   before_action :configure_sign_up_params, only: [:create]
-  layout "session", except: [:update, :edit]
+  layout "home", only: [:new, :create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    workshop = Workshop.pluck("name")
+    @group = [["--选择省份--"]]
+    workshop.each do |name|
+      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+    end
+    gon.group_name = @group
+    super
+  end
 
   # POST /resource
   def create
-    super
+    hash = { "optionID2" => 'workshopadmin', "optionID3" => 'organsadmin', "optionID1" => 'groupadmin', "optionID4" => 'leaderadmin' }
+    @user = User.new(:name => params[:user][:name],
+                     :password => params[:user][:password],
+                     :password_confirmation => params[:user][:password_confirmation],
+                     :workshop_id => params[:workshop],
+                     :group_id => params[:group])
+    @user.add_role(hash[params[:roles]])
+    if @user.save
+      flash[:notice] = "新增#{@user.name} 成功"
+      redirect_to users_path
+    else
+      flash[:warning] = "新增失败"
+      render :new
+    end
   end
 
   # GET /resource/edit
@@ -60,4 +80,5 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
 end

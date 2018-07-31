@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
   root "employees#index"
+  get "/home" ,to: "home#index"
   resources :employees do
     collection do
       #上传
@@ -91,4 +92,177 @@ Rails.application.routes.draw do
       post :update_have_read
     end
   end
+
+  # 奖惩模块
+  resources :relative_salers do
+    collection { post :import }
+  end
+
+  resources :charge_details do
+    collection { post :import }
+    collection { post :upload }
+  end
+
+
+  resources :announcements do
+    collection do
+      get :download_table_template
+      get :download_charge_details_table_template
+      get :download_rectification_awards_table_template
+      get :download_middle_awards_table_template
+      get :download_teamleader_awards_table_template
+      get :download_other_awards_table_template
+      get :download_emp_table_template
+      get :download_examination_awards_table_template
+      get :download_people_change_table_template
+      get :download_examination_charges_table_template
+      get :download_red_middle_charges_table_template
+      get :download_relative_salers_total_table_template
+      get :download_standard_award_total_table_template
+      get :download_standard_group_table_template
+      get :download_star_award_table_template
+      get :download_other_award_total_table_template
+    end
+  end
+
+  resources :rectification_awards do
+    collection { post :import}
+  end
+
+  resources :other_awards do
+    collection { post :import}
+  end
+
+  resources :middle_awards do
+    collection { post :import}
+  end
+
+  resources :teamleader_awards do
+    collection { post :import}
+  end
+
+  resources :examination_awards do
+    collection { post :import}
+  end
+
+  resources :examination_charges do
+    collection { post :import}
+  end
+
+  resources :red_middle_charges do
+    collection { post :import}
+  end
+
+  resources :people_changes do
+    collection { post :import}
+  end
+
+  resources :relative_salers_totals do
+    collection {post :import}
+  end
+
+  resources :standard_award_totals do
+    collection {post :import}
+  end
+
+  resources :standard_groups do
+    collection {post :import}
+  end
+
+  resources :star_awards do
+    collection {post :import}
+  end
+
+  resources :other_award_totals do
+    collection {post :import}
+  end
+
+  resources :users
+
+  resources :wages do
+    collection do
+      post :import_table
+      get :import_wage
+      post :create_header
+      post :edit_header
+      get :divide_level_wage
+      get :production_stuff_wage
+      get :high_speed_rail_stuff
+      get :main_driving_stuff
+    end
+  end
+
+  resources :bonus do
+    collection do
+      post :import_table
+      get :import_bonus
+      post :create_header
+      post :edit_header
+    end
+  end
+
+  resources :divide_level_wages do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :production_stuff_wages do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :main_driving_stuffs do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
+  resources :high_speed_rail_stuffs do
+    collection do
+      get :new_line
+      post :create_line
+      patch :update_line
+      get :edit_line
+      delete :delete_line
+
+      get :new_head
+      post :create_head
+      get :edit_head
+      patch :update_head
+      delete :delete_head
+    end
+  end
+
 end

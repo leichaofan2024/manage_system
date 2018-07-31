@@ -1,0 +1,77 @@
+<div class="" style="">
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+        自定义统计表
+        <b class="caret"></b>
+          <ul class="dropdown-menu" style = "overflow:auto;">
+            <li><%= link_to "铁路企业分层次人员工资情况统计表", divide_level_wages_path %></li>
+            <li><%= link_to "运输站段生产人员人数和报酬统计表", production_stuff_wages_path %></li>
+            <li><%= link_to "主要行车工种情况统计表", main_driving_stuffs_path %></li>
+            <li><%= link_to "高铁岗位人员情况统计表", high_speed_rail_stuffs_path %></li>
+          </ul>
+
+
+    </a>
+  </li>
+</div>
+
+<div class="ivu-tooltip-rel pull-right">
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to import_wage_wages_path(format: "xls") do %>
+           <span style="color: #269Eff;">导出表格</span>
+        <% end %>
+    </button>
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWageHeader" do  %>
+          <span style="color: #269Eff;">新增表头</span>
+        <% end %>
+    </button>
+    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWageHeader" do  %>
+          <span style="color: #269Eff;">修改表头</span>
+        <% end %>
+    </button>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+        		<% WageHeader.pluck("header").each do |i| %>
+        			<th><%= i %></th>
+        		<% end %>
+        	</tr>
+        </thead>
+        <tbody>
+        	<% @wages.each do |wage| %>
+	        	<tr>
+	        		<% (1..WageHeader.count).each do |i| %>
+	        			<td><%= wage.send("col" + i.to_s) %></td>
+	        		<% end %>
+	        	</tr>
+        	<% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<h5>上传工资表</h5>
+
+<%= form_tag import_table_wages_path, multipart: true do %>
+<%= file_field_tag :file%>
+<%= submit_tag "上传"%>
+<% end %>
+
+<div class="text-center">
+	<% if params[:filter_type].blank? && params[:q].blank? %>
+	  <%= paginate @wages %>
+	<% end %>
+</div>
+
+<%= render "show_create_header" %>
+<%= render "show_edit_header" %>

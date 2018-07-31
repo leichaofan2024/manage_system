@@ -1,0 +1,60 @@
+<div class='col-md-12'>
+  <div class="card">
+    <div style="overflow: auto; width: 100%;">
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>科室车间</th>
+            <th>扣款合计</th>
+            <th>安全业绩扣款</th>
+            <th>生产经营绩效扣款</th>
+            <th>总重吨公里扣款</th>
+            <th>综合指标扣款</th>
+            <th>设备质量扣款</th>
+            <th>盈亏结果扣款</th>
+            <th>安全质量扣款</th>
+            <th>安全质量考核中牌卡扣分</th>
+            <th>安全质量考核中牌卡扣款</th>
+            <th>工作质量扣款</th>
+            <th><%= link_to "抽考扣款",examination_charges_path %></th>
+            <th><%= link_to "红牌中层扣款",red_middle_charges_path %></th>
+            <th>处分扣款</th>
+            <th>其他扣款</th>
+            <th>年份</th>
+            <th>月份</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @charge_details.each do |item| %>
+               <td><%= item.id %></td>
+               <td><%= item.科室车间 %></td>
+               <td><%= item.扣款合计 %></td>
+               <td><%= item.安全业绩扣款 %></td>
+               <td><%= item.生产经营绩效扣款 %></td>
+               <td><%= item.总重吨公里扣款 %></td>
+               <td><%= item.综合指标扣款 %></td>
+               <td><%= item.设备质量扣款 %></td>
+               <td><%= item.盈亏结果扣款 %></td>
+               <td><%= item.安全质量扣款 %></td>
+               <td><%= item.安全质量考核中牌卡扣分 %></td>
+               <td><%= item.安全质量考核中牌卡扣款 %></td>
+               <td><%= item.工作质量扣款 %></td>
+               <td><%= item.抽考扣款 %></td>
+               <td><%= item.红牌中层扣款 %></td>
+               <td><%= item.处分扣款 %></td>
+               <td><%= item.其他扣款 %></td>
+               <td><%= item.upload_year %></td>
+               <td><%= item.upload_month %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <%= paginate @charge_details %>
+  </div>
+</div>

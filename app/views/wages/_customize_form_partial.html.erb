@@ -1,0 +1,39 @@
+<script type="text/javascript">
+        function selCity()
+        {
+            var arr = gon.month;
+            var selNode = document.getElementById("selid");
+            var subselNode = document.getElementById("subselid");
+            var index = selNode.selectedIndex;
+            var citys = arr[index];
+
+            subselNode.options.length = 0;
+
+            for(var i=0; i<citys.length; i++)
+            {
+                var optionNode = document.createElement("option");
+                optionNode.value = citys[i];
+                optionNode.innerText = citys[i];
+                subselNode.appendChild(optionNode);
+            }
+        }
+
+        </script>
+  <%= label_tag :请输入时间段搜索 %>
+  <select class="" name="year" id= "selid" onchange="selCity(this)" required = "true">
+    <option disabled selected value>选择年份</option>
+    <% @years.each do |year| %>
+      <option value="<%= year%>"><%= year%></option>
+    <% end %>
+    <option value="全部">全部</option>
+  </select> 年
+  <span style="width: 200px;display: inline-block;">
+    <select class= "form-control"  multiple="multiple" name="month[]" id="subselid">
+      <option disabled value></option>
+    </select>
+  </span> 月
+
+  <%= submit_tag :筛选 %>
+  <script>
+    $("#subselid").select2( { theme: "bootstrap"} );
+  </script>

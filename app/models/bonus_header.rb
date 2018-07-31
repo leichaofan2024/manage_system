@@ -1,0 +1,2 @@
+class BonusHeader < ApplicationRecord
+end

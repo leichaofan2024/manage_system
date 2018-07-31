@@ -1,0 +1,65 @@
+<div class="">
+  <%= link_to("<<  返回",production_stuff_wages_path) %>
+</div>
+<div style="padding-bottom:30px;">
+  <h4>项目编辑</h4>
+  <div class="pull-right" style= "margin-right:30px;color:red;">
+    <%= "删除本项目："%>
+    <%= link_to("",delete_line_production_stuff_wages_path(:id => @production_wage.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %>
+  </div>
+  <p style = "font-size= 30px;font-weight:900">当前项目名称：</p>
+  <p> <%= @production_wage.name %> </p>
+  <p style = "font-size= 30px;font-weight:900">当前筛选条件：</p>
+  <p>
+    <% @production_wage.formula.keys.each do |key| %>
+      <% if key == "workshop"%>
+        <%= Employee.head_transfer[key] %>: <%= Workshop.where(:id => @production_wage.formula[key]).pluck("name") %><br>
+      <% elsif key == "group" %>
+        <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @production_wage.formula[key]).pluck("name") %><br>
+      <% else %>
+      <%= Employee.head_transfer[key] %>: <%= @production_wage.formula[key] %><br>
+      <% end %>
+    <% end %>
+  </p>
+  <br>
+
+
+  <%= form_tag update_line_production_stuff_wages_path(:id => @production_wage.id),method: :patch do |f| %>
+    <%= label_tag "项目名称：" %>
+    <%= text_field_tag "name"  %>
+    <br>
+    <%= label_tag "筛选条件："%>
+    <br>
+
+    <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
+      <span style = "margin-left:20px;display:inline-block;width:200px">
+        &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>
+        <span >
+          <% if key == "workshop" %>
+            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+              <% Workshop.all.each do |workshop| %>
+                <option value="<%= workshop.id %>"><%= workshop.name %></option>
+              <% end %>
+            </select>
+          <% elsif key == "group"%>
+            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+              <% Group.all.each do |group| %>
+                <option value="<%= group.id %>"><%= group.name %></option>
+              <% end %>
+            </select>
+          <% else %>
+            <%=  select_tag key,options_for_select(Employee.pluck(key).uniq),multiple: true,class:"form-control" %>
+          <% end %>
+          <!-- <%= check_box_tag key,"yes",false %> -->
+        </span>
+
+      </span>
+      <script>
+        $("#<%= key%>").select2( { theme: "bootstrap"} );
+      </script>
+    <% end %>
+    <br>
+    <br>
+    <%= submit_tag :筛选 %>
+  <% end %>
+</div>

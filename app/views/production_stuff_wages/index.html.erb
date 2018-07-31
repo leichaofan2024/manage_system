@@ -1,0 +1,83 @@
+<div class="col-md-12" style="margin-top: -50px;">
+  <a href="/wages/import_wage" ><< 返回 </a>
+  <div class="col-md-12" style="margin-top: 15px;margin-bottom: 15px;">
+    <%= form_tag production_stuff_wages_path, method: 'get' do %>
+      <%= render "wages/customize_form_partial"%>
+    <% end %>
+  </div>
+  <h5 style="text-align: center;">运输站段生产人员人数和报酬统计表</h5>
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
+        <thead>
+        	<tr>
+            <th>序号</th>
+            <th>项目</th>
+            <% ProductionStuffWageHead.all.each do |head| %>
+
+
+              <th><%= link_to(head.head_name,edit_head_production_stuff_wages_path(:id => head.id),style: "color: black;") %></th>
+
+            <% end %>
+            <th><%= link_to("+",new_head_production_stuff_wages_path,style: "color: blue;") %></th>
+        	</tr>
+        </thead>
+        <tbody>
+          <% n = 0 %>
+          <% ProductionStuffWage.all.each do |level| %>
+            <% n = n+1%>
+            <% employee_people = Employee.where(level.formula)%>
+            <% if params[:year].present? && params[:year]!= "全部" && params[:month].present?%>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year],:month => params[:month]) %>
+            <% elsif params[:year].present? && params[:year]!= "全部" && params[:month].blank?%>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year]) %>
+            <% else %>
+              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
+            <% end %>
+            <tr>
+              <td><%= n %></td>
+              <td>
+                <%= link_to edit_line_production_stuff_wages_path(:id => level.id),style: "color: black;" do %>
+                  <%= level.name %>
+                <% end %>
+                <!-- <%= link_to("",edit_line_divide_level_wages_path(:id => level.id),class: "fa fa-pencil-square-o",style: "color: blue;") %>&nbsp|&nbsp
+                <%= link_to("",delete_line_divide_level_wages_path(:id => level.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %> -->
+              </td>
+
+              <% ProductionStuffWageHead.all.each do |head| %>
+                <% head_formula = head.formula %>
+                <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
+                  <% if head_formula.keys.include?("age") %>
+                    <% age_range = []%>
+                    <%  head_formula["age"].each do |value| %>
+                      <% age_range<< value.to_i %>
+                    <% end %>
+                    <% head_formula["age"] = (age_range.min..age_range.max)%>
+                  <% end %>
+                  <% form_cel_value= employee_people.where(head_formula).count %>
+
+                <% else %>
+                  <% form_cel_value = 0 %>
+                  <% head_formula.keys.each do |key| %>
+                    <% if head_formula[key] == "1" %>
+                       <% form_cel_value += wage_people.sum(key).to_i %>
+                    <% elsif head_formula[key] == "2" %>
+                       <% form_cel_value -= wage_people.sum(key).to_i %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+                <td>
+                  <%= form_cel_value %>
+                </td>
+              <% end %>
+            </tr>
+
+          <% end %>
+          <tr>
+            <td><%= link_to("+",new_line_production_stuff_wages_path,style: "color: blue;") %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

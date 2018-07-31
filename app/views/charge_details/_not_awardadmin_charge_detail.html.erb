@@ -1,0 +1,94 @@
+<div class="col-md-12">
+  <div class="card">
+    <div style="width: 100%;">
+      <table class="table table-bordered" style="margin-left:0%;">
+          <tr>
+            <th style="font-size: 15px;">科室车间: <%= Workshop.find(current_user.workshop_id).name %></th>
+            <th style="font-size: 15px;"><%= Time.now.month%>月份</th>
+            <th style="font-size: 15px;">计算单位: 元</th>
+          </tr>
+          <tr>
+            <th style="font-size: 15px; background-color:#3877c8; color: #fff">项目</th>
+            <th style="font-size: 15px; background-color:#3877c8; color: #fff">扣款金额</th>
+            <th style="font-size: 15px; background-color:#3877c8; color: #fff">备注</th>
+          </tr>
+          <tr style="font-size: 14px">
+            <td style="width: 20%">当月考核扣款</td>
+            <td style="width: 20%" class="text-right"><%= current_user_info.扣款合计%></td>
+            <td style="width: 20%"></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>一.安全业绩考核</td>
+            <td class="text-right"><%= current_user_info.安全业绩扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>二.生产经营绩效考核</td>
+            <td class="text-right"><%= current_user_info.生产经营绩效扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td style="padding-left: 20px">1.总重吨公里</td>
+            <td class="text-right"><%= current_user_info.总重吨公里扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td style="padding-left: 20px">2.综合指标</td>
+            <td class="text-right"><%= current_user_info.综合指标扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td  style="padding-left: 20px">3.设备质量</td>
+            <td class="text-right"><%= current_user_info.设备质量扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>三.盈亏结果考核</td>
+            <td class="text-right"><%= current_user_info.盈亏结果扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>四.安全质量考核</td>
+            <td class="text-right"><%= current_user_info.安全质量扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td style="padding-left: 20px">其中: 牌卡考核扣款</td>
+            <td class="text-right"><%= current_user_info.安全质量考核中牌卡扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 15px">
+            <td  style="padding-left: 55px">牌卡考核扣分</td>
+            <td class="text-right"><%= current_user_info.安全质量考核中牌卡扣分%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>五.工作质量考核</td>
+            <td class="text-right"><%= current_user_info.工作质量扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>六.抽考扣款</td>
+            <td class="text-right"><%= current_user_info.抽考扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>七.红牌中层扣款</td>
+            <td class="text-right"><%= current_user_info.红牌中层扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>八.处分扣款</td>
+            <td  class="text-right"><%= current_user_info.处分扣款%></td>
+            <td></td>
+          </tr>
+          <tr style="font-size: 14px">
+            <td>九.其他扣款</td>
+            <td class="text-right"><%= current_user_info.其他扣款%></td>
+            <td></td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  <div>
+</div>
