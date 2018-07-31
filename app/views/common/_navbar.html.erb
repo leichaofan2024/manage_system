@@ -29,10 +29,10 @@
                 </li>
               <% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
                 <li>
-                  <%= link_to "近期公告", announcements_path %>
+                  <!-- <%= link_to "近期公告", announcements_path %> -->
                 </li>
               <% elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :awardadmin) %>
-                  <%= link_to "表模板下载入口", download_table_template_announcements_path %>
+                  <!-- <%= link_to "表模板下载入口", download_table_template_announcements_path %> -->
               <% end %>
                 <li>
                 <% if !current_user %>
