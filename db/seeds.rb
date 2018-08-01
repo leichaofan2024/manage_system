@@ -41,15 +41,15 @@ puts "共创建#{workshop_count}个车间管理员"
 
 
 puts "创建班组管理员，请稍等。。。"
-Group.where(:workshop_id => Workshop.current.where(:name => "机关").ids).pluck(:name).each do |i|
+Group.current.where(:workshop_id => Workshop.current.where(:name => "机关").ids).pluck(:name).each do |i|
   User.create(:name => i, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
 end
 
 
-Group.where(:workshop_id => Workshop.current.where.not(:name => "机关").ids).pluck(:name)
+Group.current.where(:workshop_id => Workshop.current.where.not(:name => "机关").ids).pluck(:name)
 @workshops = Workshop.current.where.not(:name => "机关")
 @workshops.each do |j|
-  groups = Group.where(:workshop_id => j.id).pluck(:name).uniq
+  groups = Group.current.where(:workshop_id => j.id).pluck(:name).uniq
   groups.uniq.each do |k|
     User.create(:name => (j.name + "-" + k), :password => "123456", :password_confirmation => "123456").add_role :groupadmin
   end
@@ -70,7 +70,7 @@ User.all.each do |u|
   if u.has_role? :workshopadmin
     u.update(:workshop_id => Workshop.current.find_by(name: u.name).id.to_i)
   elsif u.has_role? :organsadmin
-    u.update(:group_id => Group.find_by(name: u.name).id.to_i, :workshop_id => Group.find_by(name: u.name).workshop_id.to_i)
+    u.update(:group_id => Group.current.find_by(name: u.name).id.to_i, :workshop_id => Group.current.find_by(name: u.name).workshop_id.to_i)
   end
 end
 

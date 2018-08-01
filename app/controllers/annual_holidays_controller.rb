@@ -66,7 +66,7 @@ class AnnualHolidaysController < ApplicationController
 		workshop = Workshop.current.pluck("name")
 	    @group = [["--选择省份--"]]
 	    workshop.current.each do |name|
-	      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+	      @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
 	    end
 	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
@@ -74,7 +74,7 @@ class AnnualHolidaysController < ApplicationController
 
 	def filter
 		@workshops = Workshop.current
-		@groups = Group.all
+		@groups = Group.current
 		@years = AnnualHoliday.pluck("year").uniq
 		if !params[:workshop].present? && !params[:group].present? && !params[:year].present?
 			flash[:alert] = "请先选择筛选条件哦"

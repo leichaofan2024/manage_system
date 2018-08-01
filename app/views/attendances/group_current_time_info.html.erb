@@ -70,7 +70,7 @@
   <% if @workshop.present? %>
     <h4><%= Workshop.current.find(@workshop).name %>考勤情况</h4>
   <% elsif @group.present? %>
-    <h4><%= Group.find(@group).name %>考勤情况</h4>
+    <h4><%= Group.current.find(@group).name %>考勤情况</h4>
   <% else @duan.present? %>
     <h4>供电段考勤情况</h4>
   <% end %>
@@ -115,7 +115,7 @@
     <% if AttendanceStatus.find_by(:group_id => @group).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
     <% end %>
-      <h4><%= Group.find(@group).name %>考勤情况</h4>
+      <h4><%= Group.current.find(@group).name %>考勤情况</h4>
   <% else %>
     <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).status %></h4>
@@ -199,7 +199,7 @@
                 <td><%= employee.name %></td>
                 <td><%= employee.duty %></td>
                 <td><%= Workshop.current.find(employee.workshop).name %></td>
-                <td><%= Group.find(employee.group).name %></td>
+                <td><%= Group.current.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
                 <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->

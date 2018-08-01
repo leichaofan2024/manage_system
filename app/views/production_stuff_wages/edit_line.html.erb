@@ -15,7 +15,7 @@
       <% if key == "workshop"%>
         <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @production_wage.formula[key]).pluck("name") %><br>
       <% elsif key == "group" %>
-        <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @production_wage.formula[key]).pluck("name") %><br>
+        <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @production_wage.formula[key]).pluck("name") %><br>
       <% else %>
       <%= Employee.head_transfer[key] %>: <%= @production_wage.formula[key] %><br>
       <% end %>
@@ -43,7 +43,7 @@
             </select>
           <% elsif key == "group"%>
             <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-              <% Group.all.each do |group| %>
+              <% Group.current.each do |group| %>
                 <option value="<%= group.id %>"><%= group.name %></option>
               <% end %>
             </select>

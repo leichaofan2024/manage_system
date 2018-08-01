@@ -62,13 +62,13 @@ class EmployeesController < ApplicationController
     workshop = Workshop.current.pluck("name")
       @group = [["--选择省份--"]]
       workshop.current.each do |name|
-        @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+        @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
       end
       gon.group_name = @group
   end
 
   def create
-    if (!Workshop.current.find_by("id = ?", params[:employee][:workshop]).present?) or (!Group.find_by("id = ?", params[:employee][:group]).present?)
+    if (!Workshop.current.find_by("id = ?", params[:employee][:workshop]).present?) or (!Group.current.find_by("id = ?", params[:employee][:group]).present?)
       flash[:alert] = "您填写的车间或班组不存在"
       redirect_to new_employee_path
     else
@@ -97,7 +97,7 @@ class EmployeesController < ApplicationController
     workshop = Workshop.current.pluck("name")
     @group = []
     workshop.current.each do |name|
-      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group
   end
@@ -141,9 +141,9 @@ class EmployeesController < ApplicationController
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"
     elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
-      condition = ".current.where(group: Group.find_by(name: current_user.name).id"
+      condition = ".current.where(group: Group.current.find_by(name: current_user.name).id"
     elsif current_user.has_role? :groupadmin
-      condition = ".current.where(group: Group.find_by(name: current_user.name.split('-')[1]).id"
+      condition = ".current.where(group: Group.current.find_by(name: current_user.name.split('-')[1]).id"
     end
     if params[:duan].present?
       condition = ".current.where(company_name: '北京供电段'"
@@ -1344,7 +1344,7 @@ class EmployeesController < ApplicationController
   def create_group
     workshop_id = Workshop.current.find_by(:name => params[:workshop_name]).id
     if workshop_id.present?
-      if Group.find_by(:name => params[:name]).present?
+      if Group.current.find_by(:name => params[:name]).present?
         flash[:alert] = "该班组名称已存在，换一个试试~"
       else
         Group.create(name: params[:name], workshop_id: workshop_id)
@@ -1366,7 +1366,7 @@ class EmployeesController < ApplicationController
       else
         params[:workshops].each do |workshop_id|
           Employee.where(workshop: workshop_id).update(workshop: workshop.id)
-          Group.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
+          Group.current.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
           User.groupadmin.where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.pluck("id")).update(workshop_id: workshop.id)
         end
         User.workshopadmin.where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
@@ -1383,10 +1383,10 @@ class EmployeesController < ApplicationController
       if !params[:groups].present?
         flash[:alert] = "请先选择班组再合并"
       else
-        if !Group.find_by(workshop_id: Workshop.current.find_by(name: params[:workshop]).id ,name: params[:merge_group]).present?
+        if !Group.current.find_by(workshop_id: Workshop.current.find_by(name: params[:workshop]).id ,name: params[:merge_group]).present?
           flash[:notice] = "该班组名称不存在，请先新增哦~"
         else
-          group = Group.find_by(name: params[:merge_group])
+          group = Group.current.find_by(name: params[:merge_group])
           params[:groups].each do |group_id|
             Employee.where(group: group_id).update(group: group.id)
           end
@@ -1409,9 +1409,10 @@ class EmployeesController < ApplicationController
         flash[:alert] = "本车间下还有班组或人员，不能删除"
       end
     elsif params[:group].present?
-      group = Group.find(params[:group])
+      group = Group.current.find(params[:group])
       if Employee.current.where(:group => params[:group]).blank?
-        group.delete
+        group.update(status: "0")
+        User.all_group.where(group_id: params[:group]).delete_all
         flash[:notice] = "删除成功"
       else
         flash[:alert] = "本班组下还有人员，不能删除"
@@ -1437,7 +1438,7 @@ class EmployeesController < ApplicationController
       if !params[:group].present?
         flash[:alert] = "请先选择一个班组再修改"
       else
-        Group.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.current.find_by(:name => params[:workshop_name]).id)
+        Group.current.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.current.find_by(:name => params[:workshop_name]).id)
         flash[:notice] = "更新成功"
       end
     end
@@ -1457,8 +1458,8 @@ class EmployeesController < ApplicationController
       LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "调离")
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调离"
     elsif params[:type] == "调动"
-      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.find_by(:name => params[:group]).id)
-      Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.find_by(:name => params[:group]).id)
+      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
+      Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.current.find_by(:name => params[:group]).id)
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
     elsif params[:type] == "退休"
       LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "退休")

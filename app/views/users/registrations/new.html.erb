@@ -51,7 +51,7 @@
           </select>
           <select name="group">
             <option disabled selected value></option>
-            <% Group.where(:workshop_id => Workshop.current.where(:name => "机关").pluck(:id)).pluck('name', 'id').each do |item| %>
+            <% Group.current.where(:workshop_id => Workshop.current.where(:name => "机关").pluck(:id)).pluck('name', 'id').each do |item| %>
               <option value="<%= item[1]%>"><%= item[0] %></option>
             <% end %>
           </select>

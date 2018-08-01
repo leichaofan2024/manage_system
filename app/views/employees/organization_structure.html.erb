@@ -133,7 +133,7 @@
             <td><%= employee.job_number %></td>
             <td><%= employee.record_number %></td>
             <td><%= Workshop.current.find(employee.workshop).name %></td>
-            <td><%= Group.find(employee.group).name %></td>
+            <td><%= Group.current.find(employee.group).name %></td>
             <td><%= employee.name %></td>
             <td><%= employee.sex %></td>
             <td><%= employee.age %></td>

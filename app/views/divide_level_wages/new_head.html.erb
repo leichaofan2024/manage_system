@@ -49,7 +49,7 @@
             </select>
           <% elsif key == "group"%>
             <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-              <% Group.all.each do |group| %>
+              <% Group.current.each do |group| %>
                 <option value="<%= group.id %>"><%= group.name %></option>
               <% end %>
             </select>

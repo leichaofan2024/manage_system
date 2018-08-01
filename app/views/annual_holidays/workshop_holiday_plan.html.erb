@@ -34,7 +34,7 @@
 		        					<% if current_user.has_role? :workshopadmin %>
 	        							<% id = Workshop.current.find(current_user.workshop_id) %>
 	        						<% elsif current_user.has_role? :organsadmin %>
-	        							<% id = Group.find(current_user.group_id) %>
+	        							<% id = Group.current.find(current_user.group_id) %>
 	        						<% end  %>
 		        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
 		        						<% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: Time.now.year, work_type: type) %>

@@ -140,7 +140,7 @@
         </thead>
           <tbody data-behavior='sortable'>
             <% if @workshop.present? %>
-              <% Group.where(:workshop_id => @workshop).each do |group| %>
+              <% Group.current.where(:workshop_id => @workshop).each do |group| %>
                 <tr>
                   <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
                   <td><%= group.name %></td>
@@ -177,7 +177,7 @@
                   <td><%= employee.name %></td>
                   <td><%= employee.sal_number %></td>
                   <td><%= Workshop.current.find(employee.workshop).name %></td>
-                  <td><%= Group.find(employee.group).name %></td>
+                  <td><%= Group.current.find(employee.group).name %></td>
                   <% @vacation_codes.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                       <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: Time.now.month, year: Time.now.year).sum(:count) %></td>

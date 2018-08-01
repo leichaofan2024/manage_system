@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     workshop = Workshop.current.pluck("name")
     @group = [["--选择省份--"]]
     workshop.current.each do |name|
-      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group
     super

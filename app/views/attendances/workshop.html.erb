@@ -42,7 +42,7 @@
 </div>
 
 <% if (@choose_workshop.present?) or (@choose_group.present?)  %>
-  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.find(@choose_group).name %>&nbsp考勤汇总</h4>
+  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp考勤汇总</h4>
 <% else %>
   <h4><%= @workshop.name %>全员汇总</h4>
 <% end %>
@@ -77,7 +77,7 @@
             <% day_number = 1%>
             <tr>
               <td><%= employee.sal_number %></td>
-              <td><%= Group.find_by(:id => employee.group).name %></td>
+              <td><%= Group.current.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.age %></td>
               <% @vacation_codes.each do |code| %>

@@ -6,9 +6,9 @@ class AttendancesController < ApplicationController
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		if current_user.has_role? :groupadmin
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 		elsif current_user.has_role? :organsadmin
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 		end
 		@employees = Employee.current.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -114,7 +114,7 @@ class AttendancesController < ApplicationController
 
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
 			if current_user.has_role? :groupadmin
-				@group = Group.find(current_user.group_id)
+				@group = Group.current.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 
 					AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -122,7 +122,7 @@ class AttendancesController < ApplicationController
 					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
 				end
 			elsif current_user.has_role? :organsadmin
-				@group = Group.find(current_user.group_id)
+				@group = Group.current.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 					if current_user.has_role? :groupadmin
 						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -166,7 +166,7 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
@@ -202,7 +202,7 @@ class AttendancesController < ApplicationController
 			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = @workshop.groups
 		else
-			@workshop = Group.find(current_user.group_id)
+			@workshop = Group.current.find(current_user.group_id)
 			@groups = @workshop
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
