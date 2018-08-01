@@ -33,11 +33,11 @@ layout 'home'
 					attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
 			else
-				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
+				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month)
 				if !attendance.present?
-					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year, month: Time.now.month + 1)
-					attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new
-					attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
+					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year, month: Time.now.month)
+					# attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new
+					# attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
 			end
 			flash[:notice] = "下月考勤表新增成功"
