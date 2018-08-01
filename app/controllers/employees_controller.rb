@@ -1332,18 +1332,24 @@ class EmployeesController < ApplicationController
   end
 
   def create_workshop
-    workshop = Workshop.find_by(:name => params[:name]) || Workshop.new
-    workshop.update(:name => params[:name])
-    flash[:notice] = "新增车间成功"
+    if Workshop.find_by(:name => params[:name]).present?
+      flash[:alert] = "该车间名称已存在，换一个试试~"
+    else
+      Workshop.create(:name => params[:name])
+      flash[:notice] = "新增车间成功"
+    end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
   def create_group
     workshop_id = Workshop.find_by(:name => params[:workshop_name]).id
     if workshop_id.present?
-      group = Group.find_by(:name => params[:name]) || Group.new
-      group.update(:name => params[:name], :workshop_id => workshop_id)
-      flash[:notice] = "新增班组成功"
+      if Group.find_by(:name => params[:name]).present?
+        flash[:alert] = "该班组名称已存在，换一个试试~"
+      else
+        Group.create(name: params[:name], workshop_id: workshop_id)
+        flash[:notice] = "新增班组成功"
+      end
     else
       flash[:alert] = "该车间名称不存在，请先检查"
     end
@@ -1351,18 +1357,19 @@ class EmployeesController < ApplicationController
   end
 
   def merge_workshop
-    if Workshop.find_by(:name => params[:merge_workshop]).present?
-      flash[:notice] = "该车间名称已存在，请换一个试试~"
+    if !Workshop.find_by(:name => params[:merge_workshop]).present?
+      flash[:notice] = "该车间名称不存在，请先新增哦~"
     else
-      workshop = Workshop.create(:name => params[:merge_workshop])
+      workshop = Workshop.find_by(:name => params[:merge_workshop])
       if !params[:workshops].present?
         flash[:alert] = "请先选择车间再合并"
       else
         params[:workshops].each do |workshop_id|
-          Group.where(:workshop_id => params[:workshops]).update(:workshop_id => workshop.id)
-          Employee.current.where(:workshop => params[:workshops]).update(:workshop => workshop.id)
-          Workshop.where(:id => params[:workshops]).delete_all
+          Employee.where(workshop: workshop_id).update(workshop: workshop.id)
+          Group.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
+          User.where(role_id: Role.where(name: ["groupadmin", "wgadmin"]).pluck("id")).where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.pluck("id")).update(workshop_id: workshop.id)
         end
+        User.where.(role_id: Role.find_by(name: "workshopadmin").id).where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
         flash[:notice] = "合并车间成功"
       end
     end
@@ -1376,11 +1383,16 @@ class EmployeesController < ApplicationController
       if !params[:groups].present?
         flash[:alert] = "请先选择班组再合并"
       else
-        workshop = Workshop.find_by(:name => params[:workshop])
-        group = Group.create(:name => params[:merge_group], :workshop_id => workshop.id)
-        Employee.current.where(:group => params[:groups]).update(:group => group.id, :workshop => workshop.id)
-        Group.where(:id => params[:groups]).delete_all
-        flash[:notice] = "合并车间成功"
+        if !Group.find_by(workshop_id: Workshop.find_by(name: params[:workshop]).id ,name: params[:merge_group]).present?
+          flash[:notice] = "该班组名称不存在，请先新增哦~"
+        else
+          group = Group.find_by(name: params[:merge_group])
+          params[:groups].each do |group_id|
+            Employee.where(group: group_id).update(group: group.id)
+          end
+          User.where(role_id: Role.where(name: ["groupadmin", "wgadmin", "organsadmin"]).pluck("id")).where.(group_id: params[:groups]).where.not(group_id: group.id).delete_all
+          flash[:notice] = "合并车间成功"
+        end
       end
     end
     redirect_back(fallback_location: organization_structure_employees_path)
