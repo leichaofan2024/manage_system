@@ -1369,7 +1369,7 @@ class EmployeesController < ApplicationController
           Group.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
           User.where(role_id: Role.where(name: ["groupadmin", "wgadmin"]).pluck("id")).where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.pluck("id")).update(workshop_id: workshop.id)
         end
-        User.where.(role_id: Role.find_by(name: "workshopadmin").id).where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
+        User.where(role_id: Role.find_by(name: "workshopadmin").id).where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
         flash[:notice] = "合并车间成功"
       end
     end
