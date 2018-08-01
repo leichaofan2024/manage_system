@@ -1415,7 +1415,7 @@ class EmployeesController < ApplicationController
       else
         flash[:alert] = "本班组下还有人员，不能删除"
       end
-    end
+    end 
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
