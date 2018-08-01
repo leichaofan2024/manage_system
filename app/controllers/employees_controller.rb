@@ -1390,8 +1390,8 @@ class EmployeesController < ApplicationController
           params[:groups].each do |group_id|
             Employee.where(group: group_id).update(group: group.id)
           end
-          User.all_group.where.(group_id: params[:groups]).where.not(group_id: group.id).delete_all
-          flash[:notice] = "合并车间成功"
+          User.all_group.where(group_id: params[:groups]).where.not(group_id: group.id).delete_all
+          flash[:notice] = "合并班组成功"
         end
       end
     end

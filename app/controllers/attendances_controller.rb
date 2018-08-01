@@ -52,7 +52,7 @@ class AttendancesController < ApplicationController
 			flash[:alert] = "请先选择考勤"
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin)
 				redirect_back(fallback_location: group_attendances_path)
-			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
 				redirect_back(fallback_location: group_current_time_info_attendances_path)
 			end
 		else
@@ -134,7 +134,7 @@ class AttendancesController < ApplicationController
 
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
 				redirect_back(fallback_location: group_attendances_path)
-			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
 				redirect_back(fallback_location: group_current_time_info_attendances_path)
 			end
 		end

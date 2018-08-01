@@ -92,7 +92,7 @@
       <% @workshops.each do |workshop| %>
       <li>
         <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-
+ 
         <ul>
           <% @groups = workshop.groups %>
           <% @groups.each do |group| %>
