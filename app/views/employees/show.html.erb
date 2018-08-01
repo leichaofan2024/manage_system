@@ -71,7 +71,7 @@
 
 
       <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= Workshop.find(@employee.workshop).name %>&nbsp <%= Group.find(@employee.group).name %>&nbsp <%= @employee.duty%> </p>
+      <p class="depJop-2kBwS_0"><%= Workshop.current.find(@employee.workshop).name %>&nbsp <%= Group.current.find(@employee.group).name %>&nbsp <%= @employee.duty%> </p>
 
       <!--基本信息-->
       <p>

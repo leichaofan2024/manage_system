@@ -3,7 +3,7 @@
     <div style="width: 100%;">
       <table class="table table-bordered" style="margin-left:0%;">
           <tr>
-            <th style="font-size: 15px;">科室车间: <%= Workshop.find(current_user.workshop_id).name %></th>
+            <th style="font-size: 15px;">科室车间: <%= Workshop.current.find(current_user.workshop_id).name %></th>
             <th style="font-size: 15px;"><%= Time.now.month%>月份</th>
             <th style="font-size: 15px;">计算单位: 元</th>
           </tr>

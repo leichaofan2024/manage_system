@@ -3,7 +3,7 @@
 
     <h5><%= link_to "北京供电段", filter_employees_path(duan: "北京供电段") %></h5>
     <ul>
-      <% Workshop.all.each do |workshop| %>
+      <% Workshop.current.each do |workshop| %>
       <li>
         <em></em><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
 
@@ -42,8 +42,8 @@
         <% if @employees.present? %>
           <% @employees.each do |employee| %>
             <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-              <td><%= Workshop.find(employee.workshop).name %></td>
-              <td><%= Group.find(employee.group).name %></td>
+              <td><%= Workshop.current.find(employee.workshop).name %></td>
+              <td><%= Group.current.find(employee.group).name %></td>
               <td><%= employee.name %></td>
               <% if (!current_user.has_role? :groupadmin) && (!current_user.has_role? :organsadmin) %>
                 <td><%= employee.phone_number %></td>

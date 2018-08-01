@@ -11,13 +11,13 @@
       <span >
         <% if key == "workshop" %>
           <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-            <% Workshop.all.each do |workshop| %>
+            <% Workshop.current.each do |workshop| %>
               <option value="<%= workshop.id %>"><%= workshop.name %></option>
             <% end %>
           </select>
         <% elsif key == "group"%>
           <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-            <% Group.all.each do |group| %>
+            <% Group.current.each do |group| %>
               <option value="<%= group.id %>"><%= group.name %></option>
             <% end %>
           </select>

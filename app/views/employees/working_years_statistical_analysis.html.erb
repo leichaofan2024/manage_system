@@ -161,7 +161,7 @@
                          <tr>
                            <th></th>
                            <% @workshops.each do |workshop| %>
-                               <th><%= Workshop.find(workshop).name %></th>
+                               <th><%= Workshop.current.find(workshop).name %></th>
                            <% end %>
                          </tr>
                        </thead>

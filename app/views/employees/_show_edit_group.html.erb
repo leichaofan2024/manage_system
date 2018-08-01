@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
           <%= form_tag edit_group_employees_path, method: 'post' do %>
-            <% Group.all.each do |group| %>
+            <% Group.current.each do |group| %>
               <%= radio_button_tag :group, group.id %>
               <%= label_tag :q, "#{group.name}"%><br>
             <% end %>

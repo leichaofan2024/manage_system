@@ -83,8 +83,8 @@
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Workshop.find(employee.workshop).name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Group.find(employee.group).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.birth_date %></Data></Cell>

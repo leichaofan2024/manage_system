@@ -33,7 +33,7 @@
           <tbody>
            <% @groups.each do |group| %>
              <tr>
-               <td><%= Group.find(group.to_i).name %></td>
+               <td><%= Group.current.find(group.to_i).name %></td>
                <td><%= Employee.current.where(:group => group, age: 0..25).count %></td>
                <td><%= Employee.current.where(:group => group, age: 26..30).count %></td>
                <td><%= Employee.current.where(:group => group, age: 31..35).count %></td>

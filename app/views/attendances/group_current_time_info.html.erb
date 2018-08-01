@@ -14,13 +14,13 @@
       <tbody>
         <tr>
           <td><%= @workshops.count%></td>
-          <td><%= "#{Workshop.all.count.to_i - @workshops.count.to_i}" %></td>
+          <td><%= "#{Workshop.current.count.to_i - @workshops.count.to_i}" %></td>
           <td><%= link_to "点击查看", processbar_detail_attendances_path(workshops: @workshops), remote: true, "data-toggle" => "modal", "data-target" => "#verifyModal" %></td>
         </tr>
       </tbody>
     </table>
     <!-- 进度条 -->
-    <% percent = (@workshops.count.to_f) / (Workshop.all.count.to_f) * 100 %>
+    <% percent = (@workshops.count.to_f) / (Workshop.current.count.to_f) * 100 %>
     <div class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="60"
             aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
@@ -51,7 +51,7 @@
                     </button>
                   </div>
                 <% end %>
-                <% if (@duan.present?) && (Workshop.where.not(id: @workshops.pluck("id")) == 0) %>
+                <% if (@duan.present?) && (Workshop.current.where.not(id: @workshops.pluck("id")) == 0) %>
                   <div class="ivu-tooltip-rel" style="margin-top:-80px;">
                     <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                       <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
@@ -68,9 +68,9 @@
 
   <!-- 审核功能-结束 -->
   <% if @workshop.present? %>
-    <h4><%= Workshop.find(@workshop).name %>考勤情况</h4>
+    <h4><%= Workshop.current.find(@workshop).name %>考勤情况</h4>
   <% elsif @group.present? %>
-    <h4><%= Group.find(@group).name %>考勤情况</h4>
+    <h4><%= Group.current.find(@group).name %>考勤情况</h4>
   <% else @duan.present? %>
     <h4>供电段考勤情况</h4>
   <% end %>
@@ -115,10 +115,10 @@
     <% if AttendanceStatus.find_by(:group_id => @group).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
     <% end %>
-      <h4><%= Group.find(@group).name %>考勤情况</h4>
+      <h4><%= Group.current.find(@group).name %>考勤情况</h4>
   <% else %>
-    <% if AttendanceStatus.find_by(:workshop_id => Workshop.find_by(name: current_user.name).id).present? %>
-      <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.find_by(name: current_user.name).id).status %></h4>
+    <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? %>
+      <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).status %></h4>
     <% end %>
     <h4><%= current_user.name %>考勤情况</h4>
   <% end %>
@@ -128,7 +128,7 @@
     <!-- 组织结构树状图-开始 -->
     <% if current_user.has_role? :workshopadmin %>
       <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-        <% workshop = Workshop.find_by(name: current_user.name) %>
+        <% workshop = Workshop.current.find_by(name: current_user.name) %>
         <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
         <ul>
           <% workshop.groups.each do |group| %>
@@ -151,7 +151,7 @@
             </ul>
           </li>
           <% end %>
-          <% Workshop.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+          <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
             <li>
               <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
               <ul>
@@ -198,8 +198,8 @@
                 <td><%= employee.sal_number %></td>
                 <td><%= employee.name %></td>
                 <td><%= employee.duty %></td>
-                <td><%= Workshop.find(employee.workshop).name %></td>
-                <td><%= Group.find(employee.group).name %></td>
+                <td><%= Workshop.current.find(employee.workshop).name %></td>
+                <td><%= Group.current.find(employee.group).name %></td>
                 <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
                 <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
                 <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->

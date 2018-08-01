@@ -32,7 +32,7 @@
           <tbody>
            <% @groups.each do |group| %>
              <tr>
-               <td><%= Group.find(group.to_i).name%></td>
+               <td><%= Group.current.find(group.to_i).name%></td>
                <% @education_background.each do |education_background| %>
                  <td><%= Employee.current.where(:group => group, :education_background => education_background).count %></td>
                <% end %>

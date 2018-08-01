@@ -13,9 +13,9 @@
   <p>
     <% @high_speed_stuff.formula.keys.each do |key| %>
       <% if key == "workshop"%>
-        <%= Employee.head_transfer[key] %>: <%= Workshop.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
+        <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
       <% elsif key == "group" %>
-        <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
+        <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
       <% else %>
       <%= Employee.head_transfer[key] %>: <%= @high_speed_stuff.formula[key] %><br>
       <% end %>
@@ -37,13 +37,13 @@
         <span >
           <% if key == "workshop" %>
             <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-              <% Workshop.all.each do |workshop| %>
+              <% Workshop.current.each do |workshop| %>
                 <option value="<%= workshop.id %>"><%= workshop.name %></option>
               <% end %>
             </select>
           <% elsif key == "group"%>
             <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-              <% Group.all.each do |group| %>
+              <% Group.current.each do |group| %>
                 <option value="<%= group.id %>"><%= group.name %></option>
               <% end %>
             </select>

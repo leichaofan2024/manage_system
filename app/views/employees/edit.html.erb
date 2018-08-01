@@ -129,7 +129,7 @@
       <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
 
       <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= Workshop.find(@employee.workshop).name %> &nbsp <%= Group.find(@employee.group).name %> &nbsp <%= @employee.duty%> </p>
+      <p class="depJop-2kBwS_0"><%= Workshop.current.find(@employee.workshop).name %> &nbsp <%= Group.current.find(@employee.group).name %> &nbsp <%= @employee.duty%> </p>
 
       <!--基本信息-->
       <p>
@@ -258,7 +258,7 @@
                            <div class="ivu-form-item-content" style="margin-left: 150px;">
                              <div class="ivu-input-wrapper ivu-input-type">
                                <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.select(:workshop, options_for_select(Workshop.all.collect{ |u| [u.name, u.id] }, :selected => Workshop.find(@employee.workshop).id), {required: true}, id: "selid",  :onchange => "selCity(this)" ) %>
+                               <%= f.select(:workshop, options_for_select(Workshop.current.collect{ |u| [u.name, u.id] }, :selected => Workshop.current.find(@employee.workshop).id), {required: true}, id: "selid",  :onchange => "selCity(this)" ) %>
                              </div>
                            </div>
                          </div>
@@ -278,7 +278,7 @@
                            <div class="ivu-form-item-content" style="margin-left: 150px;">
                              <div class="ivu-input-wrapper ivu-input-type">
                                <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.select(:group, options_for_select(Group.all.collect{ |u| [u.name, u.id] }, :selected => Group.find(@employee.group).id), {required: true}, id: "subselid") %>
+                               <%= f.select(:group, options_for_select(Group.current.collect{ |u| [u.name, u.id] }, :selected => Group.current.find(@employee.group).id), {required: true}, id: "subselid") %>
                              </div>
                            </div>
                          </div>

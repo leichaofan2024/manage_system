@@ -10,7 +10,7 @@
           <%= form_tag create_application_attendances_path do %>
             <% @years = Attendance.pluck("year").uniq %>
             <% @months = Attendance.pluck("month").uniq.reverse %>
-            <% group = Group.find(current_user.group_id) %>
+            <% group = Group.current.find(current_user.group_id) %>
             <%= hidden_field_tag :group, group.id %><br>
             <%= hidden_field_tag :apply_person, current_user.name %><br>
             <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin) %>

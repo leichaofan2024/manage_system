@@ -6,9 +6,9 @@ class AttendancesController < ApplicationController
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		if current_user.has_role? :groupadmin
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 		elsif current_user.has_role? :organsadmin
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 		end
 		@employees = Employee.current.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
@@ -114,7 +114,7 @@ class AttendancesController < ApplicationController
 
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
 			if current_user.has_role? :groupadmin
-				@group = Group.find(current_user.group_id)
+				@group = Group.current.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 
 					AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -122,7 +122,7 @@ class AttendancesController < ApplicationController
 					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
 				end
 			elsif current_user.has_role? :organsadmin
-				@group = Group.find(current_user.group_id)
+				@group = Group.current.find(current_user.group_id)
 				if !AttendanceStatus.find_by(:group_id => @group.id).present?
 					if current_user.has_role? :groupadmin
 						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
@@ -166,14 +166,14 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		if params[:type] == "group"
-			group = Group.find(current_user.group_id)
+			group = Group.current.find(current_user.group_id)
 
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
 			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
-			@workshop = Workshop.find(current_user.workshop_id)
+			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = @workshop.groups
 
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
@@ -186,10 +186,10 @@ class AttendancesController < ApplicationController
 				if status_workshop.all?{|x| x.nil?}
 					@workshops = []
 				else
-					@workshops = Workshop.find(status_workshop)
+					@workshops = Workshop.current.find(status_workshop)
 				end
 			else
-				@workshops = Workshop.all
+				@workshops = Workshop.current
 			end
 			render action: "duan"
 		end
@@ -199,10 +199,10 @@ class AttendancesController < ApplicationController
 	def workshop
 		#为展示组织架构的树状图配置数据
 		if current_user.has_role? :workshopadmin
-			@workshop = Workshop.find(current_user.workshop_id)
+			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = @workshop.groups
 		else
-			@workshop = Group.find(current_user.group_id)
+			@workshop = Group.current.find(current_user.group_id)
 			@groups = @workshop
 		end
 		#根据用户点击组织架构树状图来筛选展示的现员--开始
@@ -237,7 +237,7 @@ class AttendancesController < ApplicationController
 	def verify
 		if params[:authority] == "workshop"
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
-			@workshop = Workshop.find(current_user.workshop_id)
+			@workshop = Workshop.current.find(current_user.workshop_id)
 			AttendanceStatus.find_by(:group_id => params[:group]).update(:status => "车间已审核", :group_id => params[:group])
 			flash[:notice] = "审核完成"
 			redirect_back(fallback_location: workshop_attendances_path)
@@ -271,14 +271,14 @@ class AttendancesController < ApplicationController
     ##一键审核功能--开始
 	def batch_verify
 		if params[:authority] == "workshop"
-			@workshop = Workshop.find(current_user.workshop_id)
+			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = @workshop.groups.pluck("id")
 			AttendanceStatus.where(:group_id => @groups).update(:status => "车间已审核", :workshop_id => @workshop.id)
 			flash[:notice] = "审核完毕"
 			redirect_back(fallback_location: workshop_attendances_path)
 		elsif params[:authority] == "duan"
 			workshops = AttendanceStatus.pluck("workshop_id").uniq
-			@workshops = Workshop.where(id: status_workshop)
+			@workshops = Workshop.current.where(id: status_workshop)
 			AttendanceStatus.where(:workshop_id => workshops).update(:status => "段已审核")
 			flash[:notice] = "审核完毕"
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
@@ -295,10 +295,10 @@ class AttendancesController < ApplicationController
 			if status_workshop.all?{|x| x.nil?}
 				@workshops = []
 			else
-				@workshops = Workshop.find(status_workshop)
+				@workshops = Workshop.current.find(status_workshop)
 			end
 		else
-			@workshops = Workshop.all
+			@workshops = Workshop.current
 		end
 		@duan = params[:duan]
 		@workshop = params[:workshop]
@@ -306,7 +306,6 @@ class AttendancesController < ApplicationController
 		@month = params[:month]
 		@year = params[:year]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		@a = Workshop.all.count
 		#配置班组的现员数据（当前人员+调动人员）
 		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
@@ -337,7 +336,7 @@ class AttendancesController < ApplicationController
 
 	##段管理员看到的年考勤统计页面--开始
 	def annual_statistic
-		@workshops = Workshop.all
+		@workshops = Workshop.current
 		@count = {}
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 	end
@@ -388,19 +387,19 @@ class AttendancesController < ApplicationController
 			if (current_user.has_role? :superadmin) || (current_user.has_role? :attendance_admin)
 				@employees = Employee.current.order('id ASC').page(params[:page]).per(10)
 			elsif current_user.has_role? :workshopadmin
-				@employees = Employee.current.where(:workshop => Workshop.find_by(:name => current_user.name).id).page(params[:page]).per(10)
+				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).page(params[:page]).per(10)
 			end
 		end
 		@group = params[:group]
 		@workshop = params[:workshop]
 		@duan = params[:duan]
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		@workshops = Workshop.all
+		@workshops = Workshop.current
 		status_workshop = AttendanceStatus.pluck("workshop_id").uniq
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []
 		else
-			@workshops = Workshop.find(status_workshop)
+			@workshops = Workshop.current.find(status_workshop)
 		end
 	end
 
