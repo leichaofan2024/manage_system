@@ -63,5 +63,37 @@ User.all.each do |u|
     u.update(:workshop_id => Workshop.current.find_by(name: u.name).id.to_i)
   elsif u.has_role? :organsadmin
     u.update(:group_id => Group.current.find_by(name: u.name).id.to_i, :workshop_id => Group.current.find_by(name: u.name).workshop_id.to_i)
+  elsif u.has_role? :groupadmin
+    u.update()
   end
 end
+
+a = []
+User.all.each do |u|
+  if u.has_role? :workshopadmin
+    a << Workshop.find_by(name: u.name).id
+  end
+end
+
+hash = {}
+User.all.each do |u|
+  if u.has_role? :groupadmin
+    hash[Group.find_by(name: u.name.split('-')[1]).id] = Workshop.find_by(name: u.name.split('-')[0]).id
+  end
+end
+
+b = []
+User.all.each do |u|
+  if u.has_role? :organsadmin
+    b << Group.find_by(name: u.name).id     
+  end
+end
+
+hash1 = {}
+User.all.each do |u|
+  if u.has_role? :wgadmin
+    hash1[Group.find_by(name: u.name).id] = Workshop.find_by(name: u.name.split('-')[0]).id
+  end
+end
+
+
