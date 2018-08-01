@@ -4,8 +4,7 @@ class Workshop < ApplicationRecord
 	has_many :employees, class_name: "EmpBasicInfo"
 	has_many :annual_holiday_plans
 
+	validates :name, presence: { message: "请填写车间名称"}
+  validates :name, uniqueness: { message: "重复的车间名"}
 
-	def self.create_workshop
-		Workshop.create(name: "啦啦啦班组")
-	end
 end
