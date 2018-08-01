@@ -30,7 +30,7 @@
 	      		<% if params[:type] == "duan" %>
               <% if Group.find("#{Application.find(application).group_id}").present? %>
 	      			  <% group = Group.find("#{Application.find(application).group_id}") %>
-	      	    	<td><%= Workshop.find("#{group.workshop_id}").name %></td>
+	      	    	<td><%= Workshop.current.find("#{group.workshop_id}").name %></td>
               <% end %>
 	      	  <% end %>
             <% if Group.find("#{Application.find(application).group_id}").present? %>

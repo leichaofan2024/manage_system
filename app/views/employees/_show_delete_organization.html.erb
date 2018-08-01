@@ -6,7 +6,7 @@
         <h4 class="modal-title" id="myModalLabel">批量修改车间</h4>
       </div>
       <div class="modal-body">
-            <% Workshop.all.each do |workshop| %>
+            <% Workshop.current.each do |workshop| %>
               <h5>
                 <%= label_tag :q, "#{workshop.name}"%>
                 <%= link_to "删除", delete_organization_employees_path(workshop: workshop.id), method: :post, class: "btn btn-sm" %><br>

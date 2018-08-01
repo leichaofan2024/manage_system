@@ -1,6 +1,6 @@
 <div class="col-md-12" style="height: 100%; margin-top:20px;">
   <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-    <% workshop = Workshop.find_by(name: current_user.name) %>
+    <% workshop = Workshop.current.find_by(name: current_user.name) %>
     <h5><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
     <ul>
       <% workshop.groups.each do |group| %>
@@ -41,7 +41,7 @@
               <td><%= employee.sal_number %></td>
               <td><%= employee.job_number %></td>
               <td><%= employee.record_number %></td>
-              <td><%= Workshop.find(employee.workshop).name %></td>
+              <td><%= Workshop.current.find(employee.workshop).name %></td>
               <td><%= Group.find(employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>

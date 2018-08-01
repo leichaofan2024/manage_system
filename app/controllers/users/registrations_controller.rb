@@ -8,10 +8,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-    workshop = Workshop.pluck("name")
+    workshop = Workshop.current.pluck("name")
     @group = [["--选择省份--"]]
-    workshop.each do |name|
-      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+    workshop.current.each do |name|
+      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group
     super

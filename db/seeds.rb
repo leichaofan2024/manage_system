@@ -31,23 +31,23 @@ User.create(name: "奖惩管理员", password: "123456", password_confirmation: 
 
 
 puts "创建车间管理员，请稍等。。。"
-@not_organs = Workshop.where.not(:name => "机关").pluck(:name).uniq
+@not_organs = Workshop.current.where.not(:name => "机关").pluck(:name).uniq
 @not_organs.uniq.each do |e|
     User.create(:name => e, :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
 end
-workshop_count = Workshop.where.not(:name => "机关").pluck(:name).uniq.count
+workshop_count = Workshop.current.where.not(:name => "机关").pluck(:name).uniq.count
 puts "共创建#{workshop_count}个车间管理员"
 "\n"
 
 
 puts "创建班组管理员，请稍等。。。"
-Group.where(:workshop_id => Workshop.where(:name => "机关").ids).pluck(:name).each do |i|
+Group.where(:workshop_id => Workshop.current.where(:name => "机关").ids).pluck(:name).each do |i|
   User.create(:name => i, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
 end
 
 
-Group.where(:workshop_id => Workshop.where.not(:name => "机关").ids).pluck(:name)
-@workshops = Workshop.where.not(:name => "机关")
+Group.where(:workshop_id => Workshop.current.where.not(:name => "机关").ids).pluck(:name)
+@workshops = Workshop.current.where.not(:name => "机关")
 @workshops.each do |j|
   groups = Group.where(:workshop_id => j.id).pluck(:name).uniq
   groups.uniq.each do |k|
@@ -68,7 +68,7 @@ puts "共创建#{group_count}个班组管理员"
 
 User.all.each do |u|
   if u.has_role? :workshopadmin
-    u.update(:workshop_id => Workshop.find_by(name: u.name).id.to_i)
+    u.update(:workshop_id => Workshop.current.find_by(name: u.name).id.to_i)
   elsif u.has_role? :organsadmin
     u.update(:group_id => Group.find_by(name: u.name).id.to_i, :workshop_id => Group.find_by(name: u.name).workshop_id.to_i)
   end

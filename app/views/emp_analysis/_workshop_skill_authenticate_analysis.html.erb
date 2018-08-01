@@ -32,7 +32,7 @@
           <tbody>
            <% @workshops.each do |workshop| %>
              <tr>
-               <td><%= Workshop.find(workshop.to_i).name%></td>
+               <td><%= Workshop.current.find(workshop.to_i).name%></td>
                <% @skilledness_authenticate.each do |skilledness_authenticate| %>
                  <td><%= Employee.current.where(:workshop => workshop, :skilledness_authenticate => skilledness_authenticate).count %></td>
                <% end %>

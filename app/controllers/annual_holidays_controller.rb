@@ -39,7 +39,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def duan_holiday_plan
-		@workshops = Workshop.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
+		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
 		@duan = params[:duan]
 		if params[:workshop].present?
 			@workshop = params[:workshop]
@@ -63,17 +63,17 @@ class AnnualHolidaysController < ApplicationController
 
 	def holiday_fulfill_detail
 		@employees = Employee.current.page(params[:page]).per(20)
-		workshop = Workshop.pluck("name")
+		workshop = Workshop.current.pluck("name")
 	    @group = [["--选择省份--"]]
-	    workshop.each do |name|
-	      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+	    workshop.current.each do |name|
+	      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
 	    end
 	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
 	end
 
 	def filter
-		@workshops = Workshop.all
+		@workshops = Workshop.current
 		@groups = Group.all
 		@years = AnnualHoliday.pluck("year").uniq
 		if !params[:workshop].present? && !params[:group].present? && !params[:year].present?
@@ -107,7 +107,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfillment_rate
-		@workshops = Workshop.all
+		@workshops = Workshop.current
 	end
 
 	def group_holiday_fulfill

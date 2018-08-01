@@ -3,7 +3,7 @@
 <% groups = [] %>
 <% application_id = [] %>
 
-<% Workshop.find(current_user.workshop_id).groups.each do |group| %>
+<% Workshop.current.find(current_user.workshop_id).groups.each do |group| %>
   <% groups << group.id %>
 <% end %>
 
@@ -42,7 +42,7 @@
 </div>
 
 <% if (@choose_workshop.present?) or (@choose_group.present?)  %>
-  <h4><%= Workshop.find(@choose_workshop).name %>&nbsp<%= Group.find(@choose_group).name %>&nbsp考勤汇总</h4>
+  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.find(@choose_group).name %>&nbsp考勤汇总</h4>
 <% else %>
   <h4><%= @workshop.name %>全员汇总</h4>
 <% end %>

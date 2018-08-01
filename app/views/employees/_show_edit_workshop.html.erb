@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
           <%= form_tag edit_workshop_employees_path, method: 'post' do %>
-            <% Workshop.all.each do |workshop| %>
+            <% Workshop.current.each do |workshop| %>
               <%= radio_button_tag :workshop, workshop.id %>
               <%= label_tag :q, "#{workshop.name}"%><br>
             <% end %>

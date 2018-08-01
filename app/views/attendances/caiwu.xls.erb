@@ -25,7 +25,7 @@
       </Row>
     <% @export_employees.each do |employee| %>
       <Row>
-        <Cell><Data ss:Type="String"><%= Workshop.find(employee.workshop).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= Group.find(employee.group).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>

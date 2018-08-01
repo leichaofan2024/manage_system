@@ -216,7 +216,7 @@ class Employee < ActiveRecord::Base
       employee.rali_years = rali_years_transfer.to_i
 
       # 更新Workshop数据
-      workshop = Workshop.find_by(name: row["workshop"])
+      workshop = Workshop.current.find_by(name: row["workshop"])
       if !workshop.present?
         workshop_new = Workshop.create!(:name => row["workshop"])
         group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
@@ -239,7 +239,7 @@ class Employee < ActiveRecord::Base
 
 
    # 更新Group表数据
-    # Workshop.all.each do |i|
+    # Workshop.current.each do |i|
     #   Employee.current.where(:workshop => i.name).pluck(:group).uniq.each do |j|
     #     if !Group.find_by_name(j).present?
     #       Group.create(:name => j, :workshop_id => i.id)
@@ -249,7 +249,7 @@ class Employee < ActiveRecord::Base
 
 
   #更新现员表的workshop_id
-    # Workshop.all.each do |i|
+    # Workshop.current.each do |i|
     #   Employee.current.all.each do |j|
     #     if i.name == j.workshop
     #        j.update(:workshop => i.id)

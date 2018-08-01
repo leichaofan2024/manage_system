@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
           <%= form_tag merge_workshop_employees_path, method: 'post' do %>
-            <% Workshop.all.each do |workshop| %>
+            <% Workshop.current.each do |workshop| %>
               <%= check_box_tag "workshops[]", workshop.id %>
               <%= label_tag :q, "#{workshop.name}"%><br>
             <% end %>

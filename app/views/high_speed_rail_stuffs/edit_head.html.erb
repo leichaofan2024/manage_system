@@ -24,7 +24,7 @@
       <% else %>
         <p>
             <% if key == "workshop"%>
-              <%= Employee.head_transfer[key] %>: <%= Workshop.where(:id => @high_speed_stuff_head.formula[key]).pluck("name") %><br>
+              <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @high_speed_stuff_head.formula[key]).pluck("name") %><br>
             <% elsif key == "group" %>
               <%= Employee.head_transfer[key] %>: <%= Group.where(:id => @high_speed_stuff_head.formula[key]).pluck("name") %><br>
             <% elsif key == "age" %>
@@ -82,7 +82,7 @@
       <span >
         <% if key == "workshop" %>
           <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-            <% Workshop.all.each do |workshop| %>
+            <% Workshop.current.each do |workshop| %>
               <option value="<%= workshop.id %>"><%= workshop.name %></option>
             <% end %>
           </select>

@@ -26,7 +26,7 @@
 		        </script>
 		        <select name="workshop" id="selid" onchange="selCity(this)">
 	                <option>--选择车间--</option>
-	                <% Workshop.pluck("name","id").each do |name| %>
+	                <% Workshop.current.pluck("name","id").each do |name| %>
 	                    <option value="<%=name[1]%>"><%= name[0]%></option>
 	                <% end %>
 	            </select>
@@ -60,7 +60,7 @@
         			<tr>
         				<td><%= employee.name %></td>
         				<td><%= employee.sal_number %></td>
-        				<td><%= Workshop.find_by(:id => Employee.current.find_by(:id => employee.id).workshop).name %></td>
+        				<td><%= Workshop.current.find_by(:id => Employee.current.find_by(:id => employee.id).workshop).name %></td>
         				<td><%= Group.find_by(:id => Employee.current.find_by(:id => employee.id).group).name %></td>
 
         				<% (1..12).each do |i| %>

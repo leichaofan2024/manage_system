@@ -43,7 +43,7 @@
         <span >
           <% if key == "workshop" %>
             <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
-              <% Workshop.all.each do |workshop| %>
+              <% Workshop.current.each do |workshop| %>
                 <option value="<%= workshop.id %>"><%= workshop.name %></option>
               <% end %>
             </select>

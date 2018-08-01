@@ -24,7 +24,7 @@
         <div id="optionID1">
           <select name="workshop" id="selid" onchange="selCity(this)">
             <option disabled selected value>--选择车间--</option>
-            <% Workshop.pluck("name","id").each do |name| %>
+            <% Workshop.current.pluck("name","id").each do |name| %>
                 <option value="<%=name[1]%>"><%= name[0]%></option>
             <% end %>
 	         </select>
@@ -37,7 +37,7 @@
         <div id="optionID2" style="display:none">
           <select name="workshop">
             <option disabled selected value>--选择车间--</option>
-            <% Workshop.where.not(:name => '机关').pluck('name', 'id').each do |item| %>
+            <% Workshop.current.where.not(:name => '机关').pluck('name', 'id').each do |item| %>
               <option value="<%= item[1]%>"><%= item[0] %></option>
             <% end %>
           </select>
@@ -47,11 +47,11 @@
         <div id="optionID3" style="display:none">
           <select name="workshop">
             <option disabled selected value></option>
-            <option value="<%= Workshop.find_by_name('机关').id %>">机关</option>
+            <option value="<%= Workshop.current.find_by_name('机关').id %>">机关</option>
           </select>
           <select name="group">
             <option disabled selected value></option>
-            <% Group.where(:workshop_id => Workshop.where(:name => "机关").pluck(:id)).pluck('name', 'id').each do |item| %>
+            <% Group.where(:workshop_id => Workshop.current.where(:name => "机关").pluck(:id)).pluck('name', 'id').each do |item| %>
               <option value="<%= item[1]%>"><%= item[0] %></option>
             <% end %>
           </select>
