@@ -15,8 +15,10 @@ class WagesController < ApplicationController
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
     else
-      Wage.import_table(params[:file])
-      flash[:notice] = "上传成功"
+      import_message = Wage.import_table(params[:file],params[:year],params[:month])
+      if import_message["head"].present?
+        flash[:alert] = import_message["head"]
+			end
     end
     redirect_to import_wage_wages_path
   end
