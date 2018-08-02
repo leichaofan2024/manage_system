@@ -60,7 +60,7 @@ puts "共创建#{group_count}个班组管理员"
 
 User.all.each do |u|
   if u.has_role? :workshopadmin
-    u.update(:workshop_id => Workshop.current.find_by(name: u.name).id.to_i)
+    u.update(:workshop_id => Workshop.current.find_by(name: u.name).id)
   elsif u.has_role? :organsadmin
     u.update(:group_id => Group.current.find_by(name: u.name).id.to_i, :workshop_id => Group.current.find_by(name: u.name).workshop_id.to_i)
   elsif u.has_role? :groupadmin
@@ -68,32 +68,55 @@ User.all.each do |u|
   end
 end
 
-a = []
+
 User.all.each do |u|
   if u.has_role? :workshopadmin
-    a << Workshop.find_by(name: u.name).id
+    u.update(workshop_id: Workshop.find_by(name: u.name).id)
   end
 end
 
-hash = {}
 User.all.each do |u|
   if u.has_role? :groupadmin
-    hash[Group.find_by(name: u.name.split('-')[1]).id] = Workshop.find_by(name: u.name.split('-')[0]).id
+    u.update(workshop_id: Workshop.find_by(name: u.name.split('-')[0]).id, group_id: Group.find_by(name: u.name.split('-')[1]).id)
   end
 end
 
-b = []
 User.all.each do |u|
   if u.has_role? :organsadmin
-    b << Group.find_by(name: u.name).id     
+    u.update(workshop_id: Workshop.find_by(name: '机关').id, group_id: Group.find_by(name: u.name).id)
   end
 end
 
-hash1 = {}
 User.all.each do |u|
   if u.has_role? :wgadmin
-    hash1[Group.find_by(name: u.name).id] = Workshop.find_by(name: u.name.split('-')[0]).id
+    u.update(workshop_id: Workshop.find_by(name: u.name.split('-')[0]).id, group_id: Group.find_by(name: u.name).id)
   end
 end
 
 
+
+User.all.each do |u|
+  if u.has_role? :attendance_admin
+     u.update(:role_id =>  Role.find_by_name('attendance_admin').id )
+  elsif u.has_role? :workshopadmin
+   u.update(:role_id =>  Role.find_by_name('workshopadmin').id )
+  elsif u.has_role? :awardadmin
+   u.update(:role_id =>  Role.find_by_name('awardadmin').id )
+  elsif u.has_role? :empadmin
+   u.update(:role_id =>  Role.find_by_name('empadmin').id )
+  elsif u.has_role? :groupadmin
+   u.update(:role_id =>  Role.find_by_name('groupadmin').id )
+  elsif u.has_role? :leaderadmin
+   u.update(:role_id =>  Role.find_by_name('leaderadmin').id )
+  elsif u.has_role? :limitadmin
+   u.update(:role_id =>  Role.find_by_name('limitadmin').id )
+  elsif u.has_role? :organsadmin
+   u.update(:role_id =>  Role.find_by_name('organsadmin').id )
+  elsif u.has_role? :saleradmin
+   u.update(:role_id =>  Role.find_by_name('saleradmin').id )
+  elsif u.has_role? :superadmin
+   u.update(:role_id =>  Role.find_by_name('superadmin').id )
+  elsif u.has_role? :wgadmin
+   u.update(:role_id =>  Role.find_by_name('wgadmin').id )
+  end
+end
