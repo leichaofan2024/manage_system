@@ -5,11 +5,7 @@ class AttendancesController < ApplicationController
 	def group
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		if current_user.has_role? :groupadmin
-			group = Group.current.find(current_user.group_id)
-		elsif current_user.has_role? :organsadmin
-			group = Group.current.find(current_user.group_id)
-		end
+		group = Group.current.find(current_user.group_id)
 		@employees = Employee.current.where(:group => group.id)
 		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
 
