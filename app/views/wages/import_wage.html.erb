@@ -63,8 +63,10 @@
 <h5>上传工资表</h5>
 
 <%= form_tag import_table_wages_path, multipart: true do %>
-<%= file_field_tag :file%>
-<%= submit_tag "上传"%>
+  <%= select_tag "year",options_for_select([2018,2019,2020,2021,2022,2023]),required: true %>
+  <%= select_tag "month",options_for_select([1,2,3,4,5,6,7,8,9,10,11,12]),required: true %>
+  <%= file_field_tag :file%>
+  <%= submit_tag "上传"%>
 <% end %>
 
 <div class="text-center">

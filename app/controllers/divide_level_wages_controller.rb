@@ -22,7 +22,7 @@ class DivideLevelWagesController < ApplicationController
   def create_line
     if params[:name].present?
       @name = params[:name]
-      @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name"].include?(key) || (value =="")}
+      @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name","_method"].include?(key) || (value =="")}
       @divide_level_wage = DivideLevelWage.new(:name => @name, :formula => @params_hash)
       if @divide_level_wage.save
         flash[:notice] = "项目新增成功！"
@@ -87,7 +87,7 @@ class DivideLevelWagesController < ApplicationController
     if params[:head_name].present?
       divide_head_name= params[:divide_head_name]
       @name = params[:head_name]
-      @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name"].include?(key) || (value =="")}
+      @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name","_method"].include?(key) || (value =="")}
       @divide_level_wage_head = DivideLevelWageHead.new(:head_name => @name, :divide_head_name => divide_head_name,:formula => @params_hash)
       if @divide_level_wage_head.save
         redirect_to divide_level_wages_path
@@ -109,7 +109,7 @@ class DivideLevelWagesController < ApplicationController
   def update_head
     @divide_level_wage_head = DivideLevelWageHead.find(params[:id])
     @name = params[:head_name]
-    @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name","id"].include?(key) || (value =="")}
+    @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name","id","_method"].include?(key) || (value =="")}
     if @name.present? && @params_hash.present?
       @divide_level_wage_head.update(:head_name => @name ,:formula => @params_hash)
       redirect_to divide_level_wages_path
