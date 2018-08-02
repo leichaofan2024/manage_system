@@ -1,7 +1,6 @@
 class Wage < ApplicationRecord
 
 scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
-delegate :url_helpers, to: 'Rails.application.routes' 
   def self.head_transfer
     wage_header_hash = Hash.new
      WageHeader.all.each do |wage_header|
@@ -28,7 +27,7 @@ delegate :url_helpers, to: 'Rails.application.routes'
         n += 1
         if !wage_headers.include?(fh)
           wage_import_message["head"] = "您上传的工资表第#{n}列表头名‘#{fh}’与系统不匹配，请前往修改！"
-          redirect_to import_wage_wages_path
+
         end
       end
 	    header_ids = WageHeader.pluck("id").map{|m| "col"+ m.to_s}
