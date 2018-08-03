@@ -6,17 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# puts "创建用户角色"
-# Role.create(:name => "superadmin")        #超级管理员
-# Role.create(:name => "empadmin")          #现员管理员
-# Role.create(:name => "attendance_admin")  #考勤管理员
-# Role.create(:name => "saleradmin")        #工资管理员
-# Role.create(:name => "awardadmin")        #奖惩管理员
-# Role.create(:name => "limitadmin")        #定额管理员
-# Role.create(:name => "organsadmin")       #机关管理员
-# Role.create(:name => "workshopadmin")     #车间管理员
-# Role.create(:name => "groupadmin")        #班组管理员
-
 
 puts "创建多个管理员"
 User.create(name: "超级管理员", password: "123456", password_confirmation: "123456").add_role :superadmin
