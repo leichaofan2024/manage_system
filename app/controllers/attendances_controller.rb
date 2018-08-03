@@ -7,8 +7,8 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		group = Group.current.find(current_user.group_id)
 		@employees = Employee.current.where(:group => group.id)
-		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
-
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		# 导出考勤表
 		respond_to do |format|
 	      format.html
@@ -160,7 +160,8 @@ class AttendancesController < ApplicationController
 		@month = params[:month]
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		if params[:type] == "group"
 			group = Group.current.find(current_user.group_id)
 

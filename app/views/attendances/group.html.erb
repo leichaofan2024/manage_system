@@ -70,16 +70,15 @@
             <th><%= i %></th>
           <% end %>
           <!-- 生成每月1-31号的数字-结束 -->
-          <% @vacation_codes.each do |code| %>
-            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+          <% @vacation_name_hash.values.each do |name| %>
+            <th><%= name %></th>
           <% end %>
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
         <!-- 配置表格数据-开始 -->
           <% @employees.each do |employee| %>
-            <!-- 声明后面需要用到的hash -->
-            <% attendance_hash = {} %>
+
             <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
             <tr>
               <td><%= employee.sal_number %></td>
@@ -93,10 +92,10 @@
               <% end %>
               <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
               <% if attendance.present? %>
-                <% attendance_ary = attendance.month_attendances.split('') %>
+                <% attendance = attendance.month_attendances %>
                 <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                <% day_number = 1%>
-                <% attendance_ary.each do |day_attendance| %>
+                <% day_number = 1 %>
+                <% (0..30).each do |day| %>
                   <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
                   <% if Time.now.day >= 4 %>
                     <% time_range = (Time.now.day - 3)..(Time.now.day) %>
@@ -107,50 +106,39 @@
                       <td>
                         <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                           <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                            <% if day_attendance == "x" %>
+                            <% if attendance[day] == "x" %>
                               <%= day_number %>
                             <% else %>
-                              <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
-                                <%= "" %>
-                              <% else %>
-                                <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                              <% end %>
+                              <%= @vacation_code_hash[attendance[day]] %>
                             <% end %>
                           <% end %>
                         <% else %>
-                          <% if day_attendance == "x" %>
+                          <% if attendance[day] == "x" %>
                              <div class="btn btn-primary" style="background: white; color: black;">
                                <%= "-" %>
                              </div>
                           <% else %>
-                           <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
-                              <%= "" %>
-                            <% else %>
-                              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                            <% end %>
+                            <%= @vacation_code_hash[attendance[day]] %>
                           <% end %>
                         <% end %>
                       </td>
                     <% else %>
                       <td>
-                        <% if day_attendance == "x" %>
+                        <% if attendance[day] == "x" %>
                           <%= "-"%>
                         <% else %>
-                          <% if VacationCategory.find_by(:vacation_code => day_attendance).nil? %>
-                            <%= "" %>
-                          <% else %>
-                            <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
-                          <% end %>
+                          <%= @vacation_code_hash[attendance[day]] %>
                         <% end %>
                       </td>
                     <% end %>
                   <% day_number += 1%>
                 <% end %>
-                <% @vacation_codes.each do |code| %>
-                  <% if AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) == 0 %>
+                <% @vacation_code_hash.keys.each do |code| %>
+                  <% count = AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count)%>
+                  <% if  count== 0 %>
                     <td></td>
                   <% else %>
-                    <td style="color: #269EFF; font-weight: bold; font-size: 16px"><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %></td>
+                    <td style="color: #269EFF; font-weight: bold; font-size: 16px"><%= count %></td>
                   <% end %>
                 <% end %>
               <% end %>
