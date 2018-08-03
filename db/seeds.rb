@@ -5,6 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+# 更新每个车间下的班组
+
+
 
 
 puts "创建多个管理员"
@@ -47,17 +50,59 @@ end
 group_count = Employee.current.pluck(:group).uniq.count
 puts "共创建#{group_count}个班组管理员"
 
-User.all.each do |u|
-  if u.has_role? :workshopadmin
-    u.update(:workshop_id => Workshop.current.find_by(name: u.name).id)
-  elsif u.has_role? :organsadmin
-    u.update(:group_id => Group.current.find_by(name: u.name).id.to_i, :workshop_id => Group.current.find_by(name: u.name).workshop_id.to_i)
-  elsif u.has_role? :groupadmin
-    u.update()
-  end
+
+
+
+#######################################################################################
+Group.where(:name => '车间').pluck(:workshop_id).uniq.each do |i|
+  Group.where(:name => '车间', :workshop_id => i).update(:name => Workshop.find(i).name + '-车间')
+end
+
+Group.where(:name => '车间车班').pluck(:workshop_id).uniq.each do |i|
+  Group.where(:name => '车间车班', :workshop_id => i).update(:name => Workshop.find(i).name + '-车间车班')
+end
+
+Group.where(:name => '汽车班').pluck(:workshop_id).uniq.each do |i|
+  Group.where(:name => '汽车班', :workshop_id => i).update(:name => Workshop.find(i).name + '-汽车班')
+end
+#######################################################################################
+
+a = "-车间"
+User.where("name LIKE ?", ['%', "#{a}", '%'].join).each do |u|
+  u.remove_role :groupadmin
+end
+
+b = "-车间车班"
+User.where("name LIKE ?", ['%', "#{b}", '%'].join).each do |u|
+  u.remove_role :groupadm
+end
+
+c = "-汽车班"
+User.where("name LIKE ?", ['%', "#{c}", '%'].join).each do |u|
+  u.remove_role :groupadmin
 end
 
 
+User.where("name LIKE ?", ['%', "#{a}", '%'].join).each do |u|
+  u.add_role :wgadmin
+end
+
+
+User.where("name LIKE ?", ['%', "#{b}", '%'].join).each do |u|
+  u.add_role :wgadmin
+end
+
+
+User.where("name LIKE ?", ['%', "#{c}", '%'].join).each do |u|
+  u.add_role :wgadmin
+end
+
+
+
+
+
+#######################################################################################
+# 更新每个用户的workshop_id 和 group_id
 User.all.each do |u|
   if u.has_role? :workshopadmin
     u.update(workshop_id: Workshop.find_by(name: u.name).id)
@@ -81,6 +126,7 @@ User.all.each do |u|
     u.update(workshop_id: Workshop.find_by(name: u.name.split('-')[0]).id, group_id: Group.find_by(name: u.name).id)
   end
 end
+
 
 
 
@@ -109,3 +155,4 @@ User.all.each do |u|
    u.update(:role_id =>  Role.find_by_name('wgadmin').id )
   end
 end
+#######################################################################################
