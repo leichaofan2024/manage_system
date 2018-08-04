@@ -51,12 +51,14 @@
      <% end %>
    <% end %>
 </div>
+
 <div class="col-md-12" style="margin-top: 20px;">
 <% if @year.present? && @month.present?%>
   <h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
 <% else %>
   <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
 <% end %>
+<a href="#">考勤汇总统计 >></a>
 <div class="card" style="margin-top: 20px;">
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
@@ -70,9 +72,7 @@
             <th><%= i %></th>
           <% end %>
           <!-- 生成每月1-31号的数字-结束 -->
-          <% @vacation_name_hash.values.each do |name| %>
-            <th><%= name %></th>
-          <% end %>
+
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
@@ -133,14 +133,7 @@
                     <% end %>
                   <% day_number += 1%>
                 <% end %>
-                <% @vacation_code_hash.keys.each do |code| %>
-                  <% count = AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count)%>
-                  <% if  count== 0 %>
-                    <td></td>
-                  <% else %>
-                    <td style="color: #269EFF; font-weight: bold; font-size: 16px"><%= count %></td>
-                  <% end %>
-                <% end %>
+
               <% end %>
             </tr>
           <% end %>

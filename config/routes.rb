@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :attendances do
     collection do
       get :group
+      get :group_statistics
       get :workshop
       get :duan
       get :duan_detail

@@ -16,6 +16,15 @@ class AttendancesController < ApplicationController
 	      format.xls
 	    end
 	end
+  #班组考勤统计
+  def group_statistics
+    @years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
+		group = Group.current.find(current_user.group_id)
+		@employees = Employee.current.where(:group => group.id)
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
+  end
 	##班组页面--结束
 
 	def create_default_attendance
