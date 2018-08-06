@@ -24,9 +24,9 @@
             <Cell><Data ss:Type="Number"><%= i.to_i %></Data></Cell>
           <% end %>
 
-          <% @vacation_codes.each do |code| %>
+          <% @vacation_name_hash.values.each do |name| %>
           <Cell><Data ss:Type="String">
-            <%= VacationCategory.find_by(:vacation_code => code).vacation_name %>
+            <%= name %>
           </Data></Cell>
           <% end %>
 
@@ -36,7 +36,11 @@
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
-        <% attendance = Attendance.find_by(employee_id: employee.id) %>
+        <% if @year.present? && @month.present? %>
+          <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
+        <% else %>
+          <% attendance = Attendance.find_by(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
+        <% end %>
         <% attendance_ary = attendance.month_attendances.split('') %>
         <% attendance_ary.each do |day_attendance| %>
           <Cell><Data ss:Type="String">
@@ -48,7 +52,7 @@
           </Data></Cell>
         <% end %>
 
-          <% @vacation_codes.each do |code| %>
+          <% @vacation_name_hash.keys.each do |code| %>
             <Cell><Data ss:Type="String">
               <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %>
             </Data></Cell>
