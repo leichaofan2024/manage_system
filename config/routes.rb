@@ -44,6 +44,8 @@ Rails.application.routes.draw do
     collection do
       get :group
       get :group_statistics
+      get :group_employee_detail
+      post :group_yijian_create
       get :workshop
       get :duan
       get :duan_detail

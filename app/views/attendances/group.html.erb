@@ -69,7 +69,34 @@
           <th>职名</th>
           <!-- 生成每月1-31号的数字-开始 -->
           <% (1..31).each do |i| %>
-            <th><%= i %></th>
+            <% if Time.now.day >= 4 %>
+              <% time_range = (Time.now.day - 3)..(Time.now.day) %>
+            <% else %>
+              <% time_range = 1..(Time.now.day) %>
+            <% end %>
+            <% if time_range === i %>
+              <th>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+                      <%= i %>
+                      <b class="caret"></b>
+                      <ul class="dropdown-menu">
+                        <li><%= link_to "一键设置考勤：", "#" %></li>
+                        <%if params[:year].present? && params[:month].present? %>
+                          <li><%= link_to "日勤", group_yijian_create_attendances_path(:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month => params[:month],:day => i-1,:code =>"日勤" ),method: :post  %></li>
+                          <li><%= link_to "节",group_yijian_create_attendances_path(:group_id =>current_user.group_id  ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                        <% else %>
+                        <li><%= link_to "日勤", group_yijian_create_attendances_path(:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日勤"),method: :post  %></li>
+                        <li><%= link_to "节",group_yijian_create_attendances_path(:group_id =>current_user.group_id  ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                        <% end %>
+                      </ul>
+                  </a>
+                </li>
+
+              </th>
+            <% else %>
+              <th><%= i %></th>
+            <% end %>
           <% end %>
           <!-- 生成每月1-31号的数字-结束 -->
 
@@ -82,7 +109,18 @@
             <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
             <tr>
               <td><%= employee.sal_number %></td>
-              <td><%= employee.name %></td>
+              <td>
+                <%if params[:year].present? && params[:month].present? %>
+                  <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
+                    <%= employee.name %>
+                  <% end %>
+                <% else %>
+                  <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
+                    <%= employee.name %>
+                  <% end %>
+                <% end %>
+              </td>
+
               <td><%= employee.duty %></td>
               <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
               <% if @year.present? && @month.present? %>

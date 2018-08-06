@@ -1,0 +1,10 @@
+
+
+<h3>这是日历列表：</h3>
+<% (0..30).each do |day| %>
+  <%= day + 1 %>天
+  （<%= @vacation_name_hash[@attendance.month_attendances[day]] %>） &nbsp &nbsp
+<% end %>
+
+<h3>这是统计：</h3>
+<%= @attendance_statistics %>
