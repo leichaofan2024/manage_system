@@ -61,14 +61,14 @@ class EmployeesController < ApplicationController
     @employee = Employee.new
     workshop = Workshop.current.pluck("name")
       @group = [["--选择省份--"]]
-      workshop.current.each do |name|
+      workshop.each do |name|
         @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
       end
       gon.group_name = @group
   end
 
   def create
-    if (!Workshop.current.find_by("id = ?", params[:employee][:workshop]).present?) or (!Group.current.find_by("id = ?", params[:employee][:group]).present?)
+    if (!Workshop.find_by("id = ?", params[:employee][:workshop]).present?) or (!Group.current.find_by("id = ?", params[:employee][:group]).present?)
       flash[:alert] = "您填写的车间或班组不存在"
       redirect_to new_employee_path
     else
@@ -96,7 +96,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.current.find(params[:id])
     workshop = Workshop.current.pluck("name")
     @group = []
-    workshop.current.each do |name|
+    workshop.each do |name|
       @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group

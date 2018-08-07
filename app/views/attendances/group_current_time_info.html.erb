@@ -190,49 +190,103 @@
         </thead>
           <tbody>
           <!-- 配置表格数据-开始 -->
-            <% @employees.each do |employee| %>
-              <!-- 声明后面需要用到的hash -->
-              <% attendance_hash = {} %>
-              <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
-              <tr>
-                <td><%= employee.sal_number %></td>
-                <td><%= employee.name %></td>
-                <td><%= employee.duty %></td>
-                <td><%= Workshop.current.find(employee.workshop).name %></td>
-                <td><%= Group.current.find(employee.group).name %></td>
-                <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-                <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
-                <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-                <% if attendance.present? %>
-                  <% attendance_ary = attendance.month_attendances.split('') %>
-                  <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                  <% day_number = 1%>
-                  <% attendance_ary.each do |day_attendance| %>
-                    <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                  <td>
-                      <% if day_attendance == "x" %>
-                        <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
-                      <% else %>
-                        <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
-                      <% end %>
-                  </td>
-                    <% day_number += 1%>
+            <% if @employees.present? %>
+              <% @employees.each do |employee| %>
+                <!-- 声明后面需要用到的hash -->
+                <% attendance_hash = {} %>
+                <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
+                <tr>
+                  <td><%= employee.sal_number %></td>
+                  <td><%= employee.name %></td>
+                  <td><%= employee.duty %></td>
+                  <td><%= Workshop.current.find(employee.workshop).name %></td>
+                  <td><%= Group.current.find(employee.group).name %></td>
+                  <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
+                  <% if params[:year].present? %>
+                    <% attendance = Attendance.find_by(employee_id: employee.id, year: params[:year], month: params[:month]) %>
+                  <% else %>
+                    <% attendance = Attendance.find_by(employee_id: employee.id, year: Time.now.year, month: Time.now.month) %>
                   <% end %>
-                <% end %>
-              </tr>
-            <% end %>
+                  <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
+                  <% if attendance.present? %>
+                    <% attendance_ary = attendance.month_attendances.split('') %>
+                    <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                    <% day_number = 1%>
+                    <% attendance_ary.each do |day_attendance| %>
+                      <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                    <td>
+                      <% if params[:year].present? %>
+                        <% if day_attendance == "x" %>
+                          <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params[:month], year: params[:year], day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                        <% else %>
+                          <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params[:month], year: params[:year], day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                        <% end %>
+                      <% else %>
+                        <% if day_attendance == "x" %>
+                          <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                        <% else %>
+                          <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                      <% day_number += 1%>
+                    <% end %>
+                  <% end %>
+                </tr>
+                <tr>
+                  <% if params[:year].present? %>
+                    <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
+                      <td colspan=36>
+                        <% attendance_status = AttendanceStatus.find_by(:year => @shenhe_year,:month => @shenhe_month,:group_id => employee.group)%>
+                        <% if (attendance_status.present?) && (attendance_status.status == "班组/科室填写中") %>
+                          <% if current_user.has_role? :workshopadmin %>
+                            <%= link_to verify_attendances_path(authority: "workshop", group_id: employee.group,year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                               <span style="color: #269Eff;">审核(<%= Group.current.find(employee.group).name%>)</span>
+                            <% end %>
+                          <% else %>
+                            <span style= "color:red;">车间未审核！(<%= Group.current.find(employee.group).name%>)</span>
+                          <% end %>
+                        <% elsif (attendance_status.present? )&& (attendance_status.status == "车间已审核")%>
+                          <% if current_user.has_role? :attendance_admin %>
+                            <%= link_to verify_attendances_path(authority: "duan", group_id: employee.group,year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                               <span style="color: #269Eff;">审核(<%= Group.current.find(employee.group).name%>)</span>
+                            <% end %>
+                          <% else %>
+                            <span style="color: green;"><%= Group.current.find(employee.group).name%>(车间已审核)</span>
+                          <% end %>
+                        <% elsif (attendance_status.present?) && (attendance_status.status == "段已审核")%>
+                            <span style="color: green;"><%= Group.current.find(employee.group).name%>(段已审核)</span>
+                        <% end %>
+                      </td>
+                    <% end %>
+                  <% end %>
+                </tr>
+              <% end %>
+
             <!-- 配置表格数据-开始 -->
-         </tbody>
+            <% end %>
+          </tbody>
         </table>
-       <div id="showModal">
-      </div>
+        <% if params[:year].present? %>
+          <div class="" style = "margin-bottom: 50px;">
+            <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
+              <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                 <span style="color: #269Eff;">一键审核</span>
+              <% end %>
+            <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
+              <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                 <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+        <div id="showModal">
+        </div>
     </div>
   </div>
 
 
-  <div class="text-center">
-    <%= paginate @employees %>
-  </div>
+
 </div>
 
 <div id="show_processbar_detail">
