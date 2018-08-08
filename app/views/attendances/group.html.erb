@@ -72,7 +72,7 @@
 
             <% if @time_range === i %>
               <th>
-                <%if params[:year].present? && params[:month].present? %>
+                <%if params[:year].present? && params[:month].present? &&  (params[:month].to_i != Time.now.month) %>
                   <%= i %>
                 <% else %>
                   <li class="dropdown">
