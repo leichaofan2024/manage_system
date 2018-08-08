@@ -1,4 +1,13 @@
 
+<div class="" style= "margin-bottom:50px;">
+  <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) && params[:year].present? %>
+    <%= link_to("返回 >>",group_attendances_path(:year => params[:year],:month => params[:month],:type => "group"))%>
+  <% else %>
+    <%= link_to("返回 >>",group_attendances_path) %>
+  <% end %>
+</div>
+
+
 
 <h3>这是日历列表：</h3>
 <% (0..30).each do |day| %>

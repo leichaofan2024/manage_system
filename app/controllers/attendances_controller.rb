@@ -57,8 +57,11 @@ class AttendancesController < ApplicationController
     end
     @attendance_statistics = Hash.new
     @vacation_name_hash.keys.each do |name|
-
-      @attendance_statistics[@vacation_name_hash[name]] = @attendance_count.find_by(:vacation_code => name ).count
+      if @attendance_count.find_by(:vacation_code => name ).present?
+        @attendance_statistics[@vacation_name_hash[name]] = @attendance_count.find_by(:vacation_code => name ).count
+      else
+        @attendance_statistics[@vacation_name_hash[name]] = 0
+      end
     end
 
   end
