@@ -62,10 +62,10 @@
 
 
   <Worksheet ss:Name="Sheet1">
-    <Table>
+    <Table x:ExpandedColumnCount="3" x:ExpandedRowCount="3" x:FullColumns="1" x:FullRows="1">
       <Column ss:Width="20"/>
       <Column ss:Width="45"/>
-      <Column ss:Width="60"/>
+      <Column ss:Width="70"/>
       <% 31.times do %>
         <Column ss:Width="20"/>
       <% end %>
@@ -102,9 +102,10 @@
           <% end %>
 
       </Row>
+      <% i = 1 %>
     <% @employees.each do |employee| %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= i %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% attendance = Attendance.find_by(employee_id: employee.id) %>
@@ -125,7 +126,9 @@
             </Data></Cell>
           <% end %>
       </Row>
+      <% i += 1 %>
     <% end %>
+
     <Row ss:Height="40.0">
       <Cell ss:StyleID="End" ss:MergeAcross="51"><Data ss:Type="String">填报人：</Data></Cell>
     </Row>
