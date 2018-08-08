@@ -1,11 +1,10 @@
 <nav class="navbar navbar-fixed-top" role="navigation">
     <div class="col-md-12" style="margin-right: 5px;">
       <div class="col-md-6 col-md-offset-2" style="padding-top: 20px" >
-        <% if Announcement.last.present? %>
-          <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
-        <% end %>
         <% if @attendance_marquee == 1 %>
-          <marquee loop="5" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month) %></marquee>
+          <marquee loop="" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month) %></marquee>
+        <% elsif Announcement.last.present? %>
+          <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
         <% end %>
       </div>
 

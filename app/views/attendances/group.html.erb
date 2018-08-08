@@ -69,12 +69,8 @@
           <th>职名</th>
           <!-- 生成每月1-31号的数字-开始 -->
           <% (1..31).each do |i| %>
-            <% if Time.now.day >= 4 %>
-              <% time_range = (Time.now.day - 3)..(Time.now.day) %>
-            <% else %>
-              <% time_range = 1..(Time.now.day) %>
-            <% end %>
-            <% if time_range === i %>
+
+            <% if @time_range === i %>
               <th>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
@@ -135,12 +131,8 @@
                 <% day_number = 1 %>
                 <% (0..30).each do |day| %>
                   <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                  <% if Time.now.day >= 4 %>
-                    <% time_range = (Time.now.day - 3)..(Time.now.day) %>
-                  <% else %>
-                    <% time_range = 1..(Time.now.day) %>
-                  <% end %>
-                    <% if time_range === day_number %>
+
+                    <% if @time_range === day_number %>
                       <td>
                         <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                           <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>

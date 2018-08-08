@@ -129,10 +129,18 @@
     <% if current_user.has_role? :workshopadmin %>
       <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
         <% workshop = Workshop.current.find_by(name: current_user.name) %>
-        <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
+        <% if params[:year].present? %>
+          <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= workshop.name %></a></h5>
+        <% else %>
+          <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
+        <% end %>
         <ul>
-          <% workshop.groups.each do |group| %>
-            <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+          <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
+            <% if params[:year].present? %>
+              <li><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= group.name %></a></li>
+            <% else%>
+              <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+            <% end %>
           <% end %>
         </ul>
       </div>
@@ -141,23 +149,61 @@
         <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
         <ul>
           <% @workshops.each do |verify_workshop| %>
-          <li>
-            <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'><%= verify_workshop.name %></a>
-            <ul>
-              <% @groups = verify_workshop.groups %>
-              <% @groups.each do |group| %>
-                <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+            <li>
+              <em></em>
+              <% if params[:year].present? %>
+                <a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                  <%= verify_workshop.name %>
+                </a>
+              <% else %>
+                <a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
+                  <%= verify_workshop.name %>
+                </a>
               <% end %>
-            </ul>
-          </li>
+              <ul>
+                <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
+                <% groups.each do |group| %>
+                  <li>
+                    <% if params[:year].present? %>
+                      <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                        <%= group.name %>
+                      </a>
+                    <% else %>
+                      <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'>
+                        <%= group.name %>
+                      </a>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
           <% end %>
           <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
             <li>
-              <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+              <em></em>
+              <% if params[:year].present? %>
+                <a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                  <%= no_verify_workshop.name %>
+                </a>
+              <% else %>
+                <a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
+                  <%= no_verify_workshop.name %>
+                </a>
+              <% end %>
               <ul>
-                <% @groups = no_verify_workshop.groups %>
-                <% @groups.each do |group| %>
-                  <li><a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
+                <% no_verify_groups.each do |group| %>
+                  <li>
+                    <% if params[:year].present? %>
+                      <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                        <%= group.name %>
+                      </a>
+                    <% else %>
+                      <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>'>
+                        <%= group.name %>
+                      </a>
+                    <% end %>
+                  </li>
                 <% end %>
               </ul>
             </li>
@@ -273,9 +319,12 @@
               <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
                  <span style="color: #269Eff;">一键审核</span>
               <% end %>
+
             <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
-              <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
-                 <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
+              <% if @duan_yijian_permission == 1%>
+                <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                   <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
+                <% end %>
               <% end %>
             <% end %>
           </div>
