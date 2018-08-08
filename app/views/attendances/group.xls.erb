@@ -17,6 +17,17 @@
       </Borders>
       <Interior ss:Pattern="Solid"/>
     </Style>
+    <Style ss:ID="End">
+      <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+      <Font ss:FontName="sans-serif" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
     <Style ss:ID="Titlelittle">
       <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
       <Font ss:FontName="SimSun" ss:Size="16"/>
@@ -34,7 +45,7 @@
       <Interior ss:Pattern="Solid"/>
       <Font ss:FontName="SimSun" ss:Size="16"/>
     </Style>
-    <Style ss:ID="HyperlinkId">
+    <Style ss:ID="Description">
       <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
       <Borders>
       <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
@@ -56,34 +67,36 @@
       <Column ss:Width="45"/>
       <Column ss:Width="60"/>
       <% 31.times do %>
-        <Column ss:Width="20" ss:AutoFitwidth="0"/>
+        <Column ss:Width="20"/>
       <% end %>
       <% 20.times do %>
         <Column ss:Width="20"/>
       <% end %>
-      <Row>
+      <Row ss:AutoFitHeight="0" ss:Height="70.0">
         <Cell ss:StyleID="Title" ss:MergeAcross="51"><Data ss:Type="String">北京供电段考勤表</Data></Cell>
       </Row>
-      <Row>
+      <Row ss:AutoFitHeight="0" ss:Height="30.0">
         <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">车间：</Data></Cell>
         <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">班组：</Data></Cell>
         <Cell ss:StyleID="Titlelittle" ss:MergeAcross="9"><Data ss:Type="String">年 月份</Data></Cell>
       </Row>
       <Row>
-        <Cell ss:StyleID="Titleright" ss:Index="1" ss:MergeAcross="2"><Data ss:Type="String">测试</Data></Cell>
-        <Cell ss:StyleID="Titleright" ss:MergeAcross="30"><Data ss:Type="String">测试</Data></Cell>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">顺号</Data></Cell>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">职名</Data></Cell>
+        <Cell ss:StyleID="Titleright" ss:MergeAcross="30"><Data ss:Type="String"/></Cell>
         <Cell ss:StyleID="Titleright" ss:MergeAcross="17"><Data ss:Type="String">工时统计</Data></Cell>
       </Row>
-      <Row>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">顺号</Data></Cell>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">姓名</Data></Cell>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">职名</Data></Cell>
-          <%(1..31).each do |i|%>
-            <Cell ss:StyleID="HyperlinkId"><Data ss:Type="Number"><%= i.to_i %></Data></Cell>
-          <% end %>
+      <Row ss:AutoFitHeight="0" ss:Height="45.0">
+        <Cell ss:StyleID="Description" ss:Index="4"><Data ss:Type="Number">1</Data></Cell>
+            <%(2..31).each do |i|%>
+            <Cell ss:StyleID="Description">
+                <Data ss:Type="Number"><%= i.to_i %></Data>
+            </Cell>
+            <% end %>
 
           <% @vacation_codes.each do |code| %>
-          <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
             <%= VacationCategory.find_by(:vacation_code => code).vacation_shortening.strip %>
           </Data></Cell>
           <% end %>
@@ -91,13 +104,13 @@
       </Row>
     <% @employees.each do |employee| %>
       <Row>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String"><%= employee.name %></Data></Cell>
-        <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% attendance = Attendance.find_by(employee_id: employee.id) %>
         <% attendance_ary = attendance.month_attendances.split('') %>
         <% attendance_ary.each do |day_attendance| %>
-          <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
             <% if day_attendance == "x" %>
               <%= " " %>
             <% else %>
@@ -107,12 +120,15 @@
         <% end %>
 
           <% @vacation_codes.each do |code| %>
-            <Cell ss:StyleID="HyperlinkId"><Data ss:Type="String">
+            <Cell ss:StyleID="Description"><Data ss:Type="String">
               <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %>
             </Data></Cell>
           <% end %>
       </Row>
     <% end %>
+    <Row ss:Height="40.0">
+      <Cell ss:StyleID="End" ss:MergeAcross="51"><Data ss:Type="String">填报人：</Data></Cell>
+    </Row>
     </Table>
   </Worksheet>
 </Workbook>
