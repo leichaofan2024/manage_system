@@ -104,19 +104,12 @@ class AttendancesController < ApplicationController
       if current_user.has_role? :groupadmin
         @group = Group.current.find(current_user.group_id)
         if !AttendanceStatus.find_by(:group_id => @group.id).present?
-
           AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
-        else
-          AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
         end
       elsif current_user.has_role? :organsadmin
         @group = Group.current.find(current_user.group_id)
         if !AttendanceStatus.find_by(:group_id => @group.id).present?
-          if current_user.has_role? :groupadmin
-            AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
-          elsif current_user.has_role? :organsadmin
             AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
-          end
         end
       end
 
@@ -209,7 +202,7 @@ class AttendancesController < ApplicationController
 			#将上面得到的attendance_hash存入数据库
 			sum = 0
 			attendance_hash.each do |i|
-				@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0])
+				@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0], :month => params[:month], :year => params[:year])
 				@attendance_count ||= AttendanceCount.new
 				group_id = Employee.current.find(params[:employee_id]).group
 				workshop_id = Employee.current.find(params[:employee_id]).workshop
@@ -229,24 +222,17 @@ class AttendancesController < ApplicationController
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
 
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
-			if current_user.has_role? :groupadmin
-				@group = Group.current.find(current_user.group_id)
-				if !AttendanceStatus.find_by(:group_id => @group.id).present?
-
-					AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
-				else
-					AttendanceStatus.find_by(:group_id => @group.id).update(:status => "班组/科室填写中")
-				end
-			elsif current_user.has_role? :organsadmin
-				@group = Group.current.find(current_user.group_id)
-				if !AttendanceStatus.find_by(:group_id => @group.id).present?
-					if current_user.has_role? :groupadmin
-						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
-					elsif current_user.has_role? :organsadmin
-						AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
-					end
-				end
-			end
+      if current_user.has_role? :groupadmin
+        @group = Group.current.find(current_user.group_id)
+        if !AttendanceStatus.find_by(:group_id => @group.id).present?
+          AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
+        end
+      elsif current_user.has_role? :organsadmin
+        @group = Group.current.find(current_user.group_id)
+        if !AttendanceStatus.find_by(:group_id => @group.id).present?
+            AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
+        end
+      end
 
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
 				redirect_back(fallback_location: group_attendances_path)

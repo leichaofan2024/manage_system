@@ -54,9 +54,9 @@
 
 <div class="col-md-12" style="margin-top: 20px;">
 <% if @year.present? && @month.present?%>
-  <h3 class="text-center"><%= @year %>年<%= @month %>考勤数据</h3>
+  <h3 class="text-center"><%= @year %>年<%= @month %>月考勤数据</h3>
 <% else %>
-  <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>考勤数据</h3>
+  <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>月考勤数据</h3>
 <% end %>
 <a href="#">考勤汇总统计 >></a>
 <div class="card" style="margin-top: 20px;">
@@ -72,23 +72,21 @@
 
             <% if @time_range === i %>
               <th>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
-                      <%= i %>
-                      <b class="caret"></b>
-                      <ul class="dropdown-menu">
-                        <li><%= link_to "一键设置考勤：", "#" %></li>
-                        <%if params[:year].present? && params[:month].present? %>
-                          <li><%= link_to "日勤", group_yijian_create_attendances_path(:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month => params[:month],:day => i-1,:code =>"日勤" ),method: :post  %></li>
-                          <li><%= link_to "节",group_yijian_create_attendances_path(:group_id =>current_user.group_id  ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"节" ),method: :post  %></li>
-                        <% else %>
-                        <li><%= link_to "日勤", group_yijian_create_attendances_path(:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日勤"),method: :post  %></li>
-                        <li><%= link_to "节",group_yijian_create_attendances_path(:group_id =>current_user.group_id  ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
-                        <% end %>
-                      </ul>
-                  </a>
-                </li>
-
+                <%if params[:year].present? && params[:month].present? %>
+                  <%= i %>
+                <% else %>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+                        <%= i %>
+                        <b class="caret"></b>
+                        <ul class="dropdown-menu">
+                          <li><%= link_to "一键设置考勤：", "#" %></li>
+                            <li><%= link_to "日勤", group_yijian_create_attendances_path(:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日勤"),method: :post  %></li>
+                            <li><%= link_to "节",group_yijian_create_attendances_path(:group_id =>current_user.group_id  ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                        </ul>
+                    </a>
+                  </li>
+                <% end %>
               </th>
             <% else %>
               <th><%= i %></th>
@@ -144,7 +142,7 @@
                           <% end %>
                         <% else %>
                           <% if attendance[day] == "x" %>
-                             <div class="btn btn-primary" style="background: white; color: black;">
+                             <div>
                                <%= "-" %>
                              </div>
                           <% else %>
