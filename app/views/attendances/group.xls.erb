@@ -1,41 +1,115 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding='UTF-8'?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:o="urn:schemas-microsoft-com:office:office"
   xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:html="http://www.w3.org/TR/REC-html40">
+
+  <Styles>
+    <Style ss:ID="Title">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:Bold="1" ss:FontName="sans-serif" ss:Size="36"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="End">
+      <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+      <Font ss:FontName="sans-serif" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titlelittle">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titleright">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Borders>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+    </Style>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+
+
+
+
+
   <Worksheet ss:Name="Sheet1">
-    <Table>
-      <Column ss:Width="100"/>
-      <Column ss:Width="100"/>
-      <Column ss:Width="100"/>
-      <Column ss:Width="100"/>
+    <Table x:ExpandedColumnCount="3" x:ExpandedRowCount="3" x:FullColumns="1" x:FullRows="1">
+      <Column ss:Width="20"/>
+      <Column ss:Width="45"/>
+      <Column ss:Width="70"/>
       <% 31.times do %>
-        <Column ss:Width="80"/>
+        <Column ss:Width="20"/>
       <% end %>
       <% 20.times do %>
-        <Column ss:Width="100"/>
+        <Column ss:Width="20"/>
       <% end %>
-      <Row ss:AutoFitHeight="0">
-        <Cell><Data ss:Type="String">顺号</Data></Cell>
-        <Cell><Data ss:Type="String">姓名</Data></Cell>
-        <Cell><Data ss:Type="String">职名</Data></Cell>
-          <%(1..31).each do |i|%>
-            <Cell><Data ss:Type="Number"><%= i.to_i %></Data></Cell>
-          <% end %>
+      <Row ss:AutoFitHeight="0" ss:Height="70.0">
+        <Cell ss:StyleID="Title" ss:MergeAcross="51"><Data ss:Type="String">北京供电段考勤表</Data></Cell>
+      </Row>
+      <Row ss:AutoFitHeight="0" ss:Height="30.0">
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">车间：</Data></Cell>
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">班组：</Data></Cell>
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="9"><Data ss:Type="String">年 月份</Data></Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">顺号</Data></Cell>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">职名</Data></Cell>
+        <Cell ss:StyleID="Titleright" ss:MergeAcross="30"><Data ss:Type="String"/></Cell>
+        <Cell ss:StyleID="Titleright" ss:MergeAcross="17"><Data ss:Type="String">工时统计</Data></Cell>
+      </Row>
+      <Row ss:AutoFitHeight="0" ss:Height="45.0">
+        <Cell ss:StyleID="Description" ss:Index="4"><Data ss:Type="Number">1</Data></Cell>
+            <%(2..31).each do |i|%>
+            <Cell ss:StyleID="Description">
+                <Data ss:Type="Number"><%= i.to_i %></Data>
+            </Cell>
+            <% end %>
 
-          <% @vacation_name_hash.values.each do |name| %>
-          <Cell><Data ss:Type="String">
-            <%= name %>
+
+          <% @vacation_code_hash.keys.each do |code| %>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
+            <%= @vacation_code_hash[code].strip %>
           </Data></Cell>
           <% end %>
 
       </Row>
+      <% i = 1 %>
     <% @employees.each do |employee| %>
-      <Row ss:AutoFitHeight="0">
-        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% if @year.present? && @month.present? %>
           <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
         <% else %>
@@ -43,23 +117,27 @@
         <% end %>
         <% attendance_ary = attendance.month_attendances.split('') %>
         <% attendance_ary.each do |day_attendance| %>
-          <Cell><Data ss:Type="String">
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
             <% if day_attendance == "x" %>
               <%= " " %>
             <% else %>
-              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
+              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening.strip %>
             <% end %>
           </Data></Cell>
         <% end %>
 
           <% @vacation_name_hash.keys.each do |code| %>
-            <Cell><Data ss:Type="String">
+            <Cell ss:StyleID="Description"><Data ss:Type="String">
               <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %>
             </Data></Cell>
           <% end %>
-
       </Row>
+      <% i += 1 %>
     <% end %>
+
+    <Row ss:Height="40.0">
+      <Cell ss:StyleID="End" ss:MergeAcross="51"><Data ss:Type="String">填报人：</Data></Cell>
+    </Row>
     </Table>
   </Worksheet>
 </Workbook>
