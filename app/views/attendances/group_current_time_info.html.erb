@@ -144,47 +144,53 @@
       </div>
     <% else %>
       <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-        <h5><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %></h5>
+        <h5>
+          <% if params[:year].present? %>
+            <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: params[:year],month: params[:month]) %>
+          <% else %>
+            <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %>
+          <% end %>
+        </h5>
         <ul>
           <% @workshops.each do |verify_workshop| %>
             <li>
-              <em></em>
+
               <% if params[:year].present? %>
-                <a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
                   <%= verify_workshop.name %>
                 </a>
               <% else %>
-                <a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
+                <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
                   <%= verify_workshop.name %>
                 </a>
               <% end %>
               <ul>
                 <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
                 <% groups.each do |group| %>
-                  <li>
-                    <% if params[:year].present? %>
-                      <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
-                        <%= group.name %>
-                      </a>
-                    <% else %>
-                      <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'>
-                        <%= group.name %>
-                      </a>
-                    <% end %>
-                  </li>
+
+                  <% if params[:year].present? %>
+                    <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                      <%= group.name %>
+                    </a></li>
+                  <% else %>
+                    <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'>
+                      <%= group.name %>
+                    </a></li>
+                  <% end %>
+
                 <% end %>
               </ul>
             </li>
           <% end %>
-          <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+          <% @workshops_not_varify.each do |no_verify_workshop| %>
             <li>
-              <em></em>
+
               <% if params[:year].present? %>
-                <a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
                   <%= no_verify_workshop.name %>
                 </a>
               <% else %>
-                <a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
+                <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
                   <%= no_verify_workshop.name %>
                 </a>
               <% end %>
@@ -206,7 +212,8 @@
               </ul>
             </li>
           <% end %>
-        </ul><br>
+        </ul>
+        <br>
         <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
       </div>
     <% end %>

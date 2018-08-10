@@ -8,7 +8,7 @@
         <em></em><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
 
         <ul>
-          <% @groups = workshop.groups %>
+          <% @groups = Group.current.where(:workshop_id => workshop.id) %>
           <% @groups.each do |group| %>
             <li><a href='/employees/filter?group=<%= group.id %>'><%= group.name %></a></li>
           <% end %>
