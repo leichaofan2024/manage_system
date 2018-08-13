@@ -52,26 +52,54 @@
       			<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
-					<td><%= Workshop.current.find(Employee.find(employee.employee_id).workshop).name %></td>
-					<td><%= Group.current.find(Employee.find(employee.employee_id).group).name %></td>
+					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
 					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 				</tr>
 			<% elsif @type == "退休" %>
 				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
-					<td><%= Workshop.current.find(Employee.find(employee.employee_id).workshop).name %></td>
-					<td><%= Group.current.find(Employee.find(employee.employee_id).group).name %></td>
+					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
 					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 				</tr>
 	      	<% elsif @type == "调动" %>
 	      		<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 		      		<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
-		      		<td><%= Workshop.current.find(employee.transfer_from_workshop).name %></td>
-		      		<td><%= Group.current.find(employee.transfer_from_group).name %></td>
-		      		<td><%= Workshop.current.find(employee.transfer_to_workshop).name %></td>
-		      		<td><%= Group.current.find(employee.transfer_to_group).name %></td>
+		      		<td>
+                <% workshop_from = Workshop.find_by(:id => employee.transfer_from_workshop) %>
+                <% if workshop_from.present? %>
+                  <%= workshop_from.name %>
+                <% else %>
+                  <span style = "color: red ;">调动前车间已被删除！</span>
+                <% end %>
+              </td>
+		      		<td>
+                <% group_from = Group.find_by(:id => employee.transfer_from_group) %>
+                <% if group_from.present? %>
+                  <%= group_from.name %>
+                <% else %>
+                  <span style = "color: red ;">调动前班组已被删除！</span>
+                <% end %>
+              </td>
+		      		<td>
+                <% workshop_to = Workshop.find_by(:id => employee.transfer_to_workshop) %>
+                <% if workshop_to.present? %>
+                  <%= workshop_to.name %>
+                <% else %>
+                  <span style = "color: red ;">调动后车间已被删除！</span>
+                <% end %>
+              </td>
+		      		<td>
+                <% group_to = Group.find_by(:id => employee.transfer_to_group) %>
+                <% if group_to.present? %>
+                  <%= group_to.name %>
+                <% else %>
+                  <span style = "color: red ;">调动后班组已被删除！</span>
+                <% end %>
+              </td>
 		      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 		      	</tr>
 	      	<% else %>
