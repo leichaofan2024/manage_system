@@ -3,7 +3,17 @@
 <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
 <tr>
   <td><%= employee.sal_number %></td>
-  <td><%= employee.name %></td>
+  <td>
+    <%if params_year.present? && params_month.present? %>
+      <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params_month, year: params_year) do %>
+        <%= employee.name %>
+      <% end %>
+    <% else %>
+      <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
+        <%= employee.name %>
+      <% end %>
+    <% end %>
+  </td>
   <td><%= employee.duty %></td>
   <td><%= Workshop.current.find(employee.workshop).name %></td>
   <td><%= Group.current.find(employee.group).name %></td>

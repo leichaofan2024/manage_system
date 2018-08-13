@@ -31,9 +31,10 @@ class AttendancesController < ApplicationController
 	end
   #班组个人考勤统计
   def group_employee_detail
-    @group = Group.current.find(current_user.group_id)
-    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @employee = Employee.current.find(params[:id])
+    @group = Group.current.find(@employee.group)
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+
 
     # @yi_jian = Hash.new
     if params[:year].present? && params[:month].present?
