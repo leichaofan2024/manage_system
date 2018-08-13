@@ -60,13 +60,58 @@
 <% end %>
 <a href="#">考勤汇总统计 >></a>
 <div class="card" style="margin-top: 20px;">
-  <div style="overflow: auto; width: 100%;">
-    <table id="example" class="table table-bordered">
+
+  <!-- 固定前三列： -->
+
+
+  <div style="width: 18%;display: inline-block;">
+    <table class="table table-bordered">
       <thead>
-        <tr>
+        <tr style= "height:35px;">
           <th>工资号</th>
           <th>姓名</th>
           <th>职名</th>
+
+        </tr>
+      </thead>
+        <tbody data-behavior='sortable'>
+        <!-- 配置表格数据-开始 -->
+          <% @employees.each do |employee| %>
+
+            <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
+            <tr style= "height:55px;">
+              <td><%= employee.sal_number %></td>
+              <td>
+                <%if params[:year].present? && params[:month].present? %>
+                  <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
+                    <%= employee.name %>
+                  <% end %>
+                <% else %>
+                  <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
+                    <%= employee.name %>
+                  <% end %>
+                <% end %>
+              </td>
+
+              <td><%= employee.duty %></td>
+
+            </tr>
+          <% end %>
+          <!-- 配置表格数据-结束 -->
+       </tbody>
+    </table>
+
+
+   </div>
+
+  <!-- 考勤填写部分： -->
+
+
+  <div class="pull-right" style="overflow: auto; width: 82%;">
+    <table id="example" class="table table-bordered">
+      <thead>
+        <tr style= "height:35px;">
+      
           <!-- 生成每月1-31号的数字-开始 -->
           <% (1..31).each do |i| %>
 
@@ -101,21 +146,8 @@
           <% @employees.each do |employee| %>
 
             <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
-            <tr>
-              <td><%= employee.sal_number %></td>
-              <td>
-                <%if params[:year].present? && params[:month].present? %>
-                  <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
-                    <%= employee.name %>
-                  <% end %>
-                <% else %>
-                  <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
-                    <%= employee.name %>
-                  <% end %>
-                <% end %>
-              </td>
+            <tr style= "height:55px;">
 
-              <td><%= employee.duty %></td>
               <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
               <% if @year.present? && @month.present? %>
                 <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
