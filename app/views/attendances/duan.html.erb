@@ -60,9 +60,9 @@
       <ul>
         <% @workshops.each do |verify_workshop| %>
         <li>
-          <em></em><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= verify_workshop.name %></a>
+          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= verify_workshop.name %></a>
           <ul>
-            <% @groups = verify_workshop.groups %>
+            <% @groups = Group.current.where(:workshop_id => verify_workshop.id) %>
             <% @groups.each do |group| %>
               <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
             <% end %>
@@ -71,9 +71,9 @@
         <% end %>
         <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
           <li>
-            <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
             <ul>
-              <% @groups = no_verify_workshop.groups %>
+              <% @groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
               <% @groups.each do |group| %>
                 <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
               <% end %>
@@ -92,7 +92,7 @@
         <li>
           <em></em><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= verify_workshop.name %></a>
           <ul>
-            <% @groups = verify_workshop.groups %>
+            <% @groups = Group.current.where(:workshop_id => verify_workshop.id) %>
             <% @groups.each do |group| %>
               <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
             <% end %>
@@ -103,7 +103,7 @@
           <li>
           <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= no_verify_workshop.name %></a>
           <ul>
-            <% @groups = no_verify_workshop.groups %>
+            <% @groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
             <% @groups.each do |group| %>
               <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
             <% end %>

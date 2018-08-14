@@ -563,15 +563,15 @@ class AttendancesController < ApplicationController
           @duan_yijian_permission = 1
         end
       end
-			   @employees = Employee.current.where(:workshop => params[:workshop]).order('employees.group ASC')
+			   @employees = Employee.current.where(:workshop => params[:workshop]).order('employees.group ASC,employees.id ASC')
 		elsif params[:group].present?
-			@employees = Employee.current.where(:group => params[:group]).order('employees.group ASC')
+			@employees = Employee.current.where(:group => params[:group]).order('employees.group ASC,employees.id ASC')
 		else
       if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)
         if @workshops_not_varify.present?
-      	  @employees = Employee.current.where(:workshop => @workshops_not_varify.first.id).order('employees.group ASC')
+      	  @employees = Employee.current.where(:workshop => @workshops_not_varify.first.id).order('employees.group ASC,employees.id ASC')
         else
-          @employees = Employee.current.where(:workshop => Workshop.first.id).order('employees.group ASC')
+          @employees = Employee.current.where(:workshop => Workshop.first.id).order('employees.group ASC,employees.id ASC')
         end
       elsif current_user.has_role? :workshopadmin
         group_ids = Group.current.where(:workshop_id => current_user.workshop_id).pluck(:id)
@@ -584,7 +584,7 @@ class AttendancesController < ApplicationController
             AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id,:status => "班组/科室填写中")
           end
         end
-				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).order('employees.group ASC')
+				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).order('employees.group ASC,employees.id ASC')
       end
 		end
 

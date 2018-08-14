@@ -156,11 +156,11 @@
             <li>
 
               <% if params[:year].present? %>
-                <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
                   <%= verify_workshop.name %>
                 </a>
               <% else %>
-                <em></em><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
                   <%= verify_workshop.name %>
                 </a>
               <% end %>
@@ -186,11 +186,11 @@
             <li>
 
               <% if params[:year].present? %>
-                <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
                   <%= no_verify_workshop.name %>
                 </a>
               <% else %>
-                <em></em><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
                   <%= no_verify_workshop.name %>
                 </a>
               <% end %>
@@ -324,6 +324,6 @@
         }
       }
     }
-  })({id:'menu',tag:'em'});
+  })({id:'menu',tag:'i'});
 </script>
 <!-- 组织结构树状图的js代码-结束 -->
