@@ -5,7 +5,7 @@
     <ul>
       <% Workshop.current.each do |workshop| %>
       <li>
-        <em></em><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
 
         <ul>
           <% @groups = Group.current.where(:workshop_id => workshop.id) %>

@@ -90,7 +90,7 @@
       <ul>
         <% @workshops.each do |verify_workshop| %>
         <li>
-          <em></em><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= verify_workshop.name %></a>
+          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= verify_workshop.name %></a>
           <ul>
             <% @groups = Group.current.where(:workshop_id => verify_workshop.id) %>
             <% @groups.each do |group| %>
@@ -101,7 +101,7 @@
         <% end %>
         <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
           <li>
-          <em></em><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= no_verify_workshop.name %></a>
+          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= no_verify_workshop.name %></a>
           <ul>
             <% @groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
             <% @groups.each do |group| %>
@@ -266,6 +266,6 @@
         }
       }
     }
-  })({id:'menu',tag:'em'});
+  })({id:'menu',tag:'i'});
 </script>
 <!-- 组织结构树状图的js代码-结束 -->
