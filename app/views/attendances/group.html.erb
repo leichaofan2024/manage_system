@@ -1,4 +1,5 @@
 <%= render "attendance_sidebar"%>
+
 <div class="col-md-12" style="margin-top: -10px;">
 
     <table class="table table-bordered">
@@ -60,11 +61,11 @@
 <% end %>
 <a href="#">考勤汇总统计 >></a>
 <div class="card" style="margin-top: 20px;">
-
+  <div style="display:table;">
   <!-- 固定前三列： -->
 
 
-  <div style="width: 18%;display: inline-block;">
+  <div style="display:table-cell; width: 18%;">
     <table class="table table-bordered">
       <thead>
         <tr style= "height:35px;">
@@ -107,11 +108,11 @@
   <!-- 考勤填写部分： -->
 
 
-  <div class="pull-right" style="overflow: auto; width: 82%;">
+  <div style="overflow: scroll; width: 82%;">
     <table id="example" class="table table-bordered">
       <thead>
         <tr style= "height:35px;">
-      
+
           <!-- 生成每月1-31号的数字-开始 -->
           <% (1..31).each do |i| %>
 
@@ -204,7 +205,11 @@
     <div id="showModal">
     </div>
    </div>
+
+   </div>
   </div>
+
+
   <div class="pull-right" style= "margin:20px;">
     <button type="button" name="button">上传考勤</button>
   </div>
