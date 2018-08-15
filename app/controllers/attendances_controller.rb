@@ -135,6 +135,13 @@ class AttendancesController < ApplicationController
   end
 	##班组页面--结束
 
+
+  # 班组申请
+  def group_application
+    @group = Group.where(:id => current_user.group_id)
+    @employees = Employee.current.where(:group_id => @group.id)
+  end
+  # 班组申请结束
 	def create_default_attendance
 		Employee.pluck("id").uniq.each do |i|
 			if Time.now.month == 12
