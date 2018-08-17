@@ -3,11 +3,11 @@
 <% groups = [] %>
 <% application_id = [] %>
 
-<% Workshop.current.find(current_user.workshop_id).groups.each do |group| %>
+<% @groups.each do |group| %>
   <% groups << group.id %>
 <% end %>
 
-<% applications = Application.where(:group_id => groups) %>
+<% applications = Application.where(:group_id => groups,:status => "班组发起申请") %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
@@ -24,9 +24,7 @@
       <tr>
         <td><%= Application.where(:group_id => groups, :status => "班组发起申请").count %>条</td>
         <% unless Application.where(:group_id => groups, :status => "班组发起申请").count == 0 %>
-          <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop), class: "btn btn-primary2" %></td>
-        <% else %>
-          <td><%= link_to "查看往期", show_application_attendances_path(applications: application_id, type: "duan"), class: "btn btn-primary2"  %></td>
+          <td><%= link_to "点击查看", show_application_attendances_path(applications: application_id, type: @workshop.id), class: "btn btn-primary2" %></td>
         <% end %>
       </tr>
     </tbody>
@@ -41,20 +39,43 @@
   <% end %>
 </div>
 
-<% if (@choose_workshop.present?) or (@choose_group.present?)  %>
-  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp考勤汇总</h4>
+<% if (@choose_workshop.present?) && (@choose_group.present?)  %>
+  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp
+    <% if @year.present? && @month.present? %>
+      <%= @month %>
+    <% else %>
+      <%= Time.now.month %>
+    <% end %>月
+    考勤汇总
+  </h4>
 <% else %>
-  <h4><%= @workshop.name %>全员汇总</h4>
+  <h4><%= @workshop.name %>
+    <% if @year.present? && @month.present? %>
+      <%= @month %>
+    <% else %>
+      <%= Time.now.month %>
+    <% end %>月
+    考勤汇总
+  </h4>
 <% end %>
 
 <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= link_to @workshop.name, workshop_attendances_path(type: "duan", month: @month, year: @year)%></h5>
-      <ul>
-        <% @groups.each do |group| %>
-          <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
-        <% end %>
-      </ul>
+      <% if @year.present? && @month.present? %>
+        <h5><%= link_to @workshop.name, filter_attendances_path(type: "workshop", month: @month, year: @year)%></h5>
+        <ul>
+          <% @groups.each do |group| %>
+            <li><a href='/attendances/filter?type=workshop&group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <h5><%= link_to @workshop.name, workshop_attendances_path(type: "duan")%></h5>
+        <ul>
+          <% @groups.each do |group| %>
+            <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
 
 <div class="card">
@@ -66,21 +87,19 @@
           <th>班组</th>
           <th>姓名</th>
           <th>年龄</th>
-          <% @vacation_codes.each do |code| %>
-            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+          <% @vacation_name_hash.values.each do |name| %>
+            <th><%= name %></th>
           <% end %>
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
           <% @employees.each do |employee| %>
-            <% attendance_hash= {} %>
-            <% day_number = 1%>
             <tr>
               <td><%= employee.sal_number %></td>
               <td><%= Group.current.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.age %></td>
-              <% @vacation_codes.each do |code| %>
+              <% @vacation_code_hash.keys.each do |code| %>
                 <% if @year.present? && @month.present? %>
                   <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id, :month => @month, :year => @year).sum(:count) %></td>
                 <% else %>

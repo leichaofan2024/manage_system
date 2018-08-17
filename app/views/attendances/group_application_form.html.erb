@@ -1,0 +1,91 @@
+<div class="" >
+  <a href="/attendances/group_application?month=<%= params[:month]%>&year=<%= params[:year]%>"> << 返回 </a>
+  <div class="">
+    <h4 class="modal-title">填写申请表</h4>
+  </div>
+  <% if params[:type] == "一键申请" %>
+
+      <div class="">
+          <h5>更改对象：</h5>
+          <p><b>姓名：</b>
+            <% @employees_yijian.each do |employee| %>
+              <%= employee.name %>
+            <% end %>
+          </p>
+
+          <%= form_tag create_application_attendances_path do %>
+            <%= hidden_field_tag :type, "一键申请" %>
+            <%= hidden_field_tag :group_id, @group_id %>
+            <%= hidden_field_tag :year, @year %>
+            <%= hidden_field_tag :month, @month %>
+            <%= hidden_field_tag :day, (@day+1) %>
+            <%= hidden_field_tag :apply_person, current_user.name %>
+            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin) %>
+              <%= hidden_field_tag :status, "班组发起申请" %>
+            <% elsif current_user.has_role? :organsadmin %>
+              <%= hidden_field_tag :status, "科室发起申请" %>
+            <% end %>
+            <%= hidden_field_tag :application_after, params[:code] %>
+            <p><%= label_tag "统一申请修改为：" %></p>
+            <p style = "width:100px;">
+              <%= @vacation_name_hash[params[:code]] %>
+            </p>
+
+            <script>
+              $("#application-select").select2( { theme: "bootstrap"} );
+            </script>
+            <p><%= label_tag :请输入修改原因 %></p>
+            <p style = "width:500px;"><%= text_field_tag :cause, nil, :required => "true", class: "form-control" %></p>
+            <%= submit_tag :发送申请 %>
+          <% end %>
+      </div>
+  <% else %>
+
+    <div class="">
+        <h5>更改对象：</h5>
+        <p><b>姓名：</b><%= @employee.name %></p>
+        <p><b>当前考勤状态：</b>
+          <% if @month_attendances[@day] == "x" %>
+            <span style = "color:red;">"未填写！"</span>
+          <% else %>
+            <%= @vacation_name_hash[@month_attendances[@day]] %>
+          <% end %>
+        </p>
+        <%= form_tag create_application_attendances_path do %>
+          <% if params[:type] == "更新" %>
+            <%= hidden_field_tag :type, params[:type] %>
+            <%= hidden_field_tag :application_id, @application.id %>
+          <% end %>
+          <%= hidden_field_tag :employee_id, @employee.id %>
+          <%= hidden_field_tag :group_id, @group_id %>
+          <%= hidden_field_tag :year, @year %>
+          <%= hidden_field_tag :month, @month %>
+          <%= hidden_field_tag :day, (@day+1) %>
+          <%= hidden_field_tag :apply_person, current_user.name %>
+          <%= hidden_field_tag :application_before, @month_attendances[@day] %>
+          <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin) %>
+            <%= hidden_field_tag :status, "班组发起申请" %>
+          <% elsif current_user.has_role? :organsadmin %>
+            <%= hidden_field_tag :status, "科室发起申请" %>
+          <% end %>
+          <p><%= label_tag "申请修改为：" %></p>
+          <p style = "width:100px;">
+            <select class="form-control" name="application_after" id="application-select">
+              <% @vacation_name_hash.keys.each do |key| %>
+                <option value="<%= key %>"><%= @vacation_name_hash[key] %></option>
+              <% end %>
+            </select>
+          </p>
+
+          <script>
+            $("#application-select").select2( { theme: "bootstrap"} );
+          </script>
+          <p><%= label_tag :请输入修改原因 %></p>
+          <p style = "width:500px;"><%= text_field_tag :cause, nil, :required => "true", class: "form-control" %></p>
+          <%= submit_tag :发送申请 %>
+        <% end %>
+
+
+    </div>
+  <% end %>
+</div>

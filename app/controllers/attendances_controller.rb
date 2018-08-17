@@ -136,12 +136,162 @@ class AttendancesController < ApplicationController
 	##班组页面--结束
 
 
-  # 班组申请
+  # 班组申请页面
   def group_application
-    @group = Group.where(:id => current_user.group_id)
-    @employees = Employee.current.where(:group_id => @group.id)
+    @group = Group.current.find_by(:id => current_user.group_id)
+    @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
+    # 只获取当前月和上个月的信息，否则返回填写考勤页
+    if (params[:year].present? && params[:month].present?) && (params[:month].to_i != Time.now.month)
+      if Time.now.month == 1
+        if (params[:year].to_i == (Time.now.year - 1)) && (params[:month].to_i == 12)
+          @year = params[:year].to_i
+          @month = params[:month].to_i
+        else
+          redirect_to filter_attendances_path(:type => "group",:year => params[:year],:month=> params[:month])
+          flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
+        end
+      else
+        if (params[:year].to_i == Time.now.year) && (params[:month].to_i == (Time.now.month - 1))
+          @year = params[:year].to_i
+          @month = params[:month].to_i
+        else
+          redirect_to filter_attendances_path(:type => "group",:year => params[:year],:month=> params[:month])
+          flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
+        end
+      end
+    elsif (!params[:year].present? && !params[:month].present?) || (params[:year].to_i == Time.now.year && params[:month].to_i == Time.now.month)
+      @year = Time.now.year
+      @month = Time.now.month
+    else
+      redirect_to group_attendances_path
+      flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
+    end
+
   end
-  # 班组申请结束
+  # 班组申请页面结束
+
+  # 班组提交申请
+  def group_application_form
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
+    @year = params[:year].to_i
+    @month = params[:month].to_i
+    @day = params[:day].to_i
+    @group_id = params[:group_id]
+    if params[:type] == "更新"
+      @employee = Employee.find(params[:employee_id])
+      @month_attendances = Attendance.find_by(:employee_id => @employee.id, :month => @month, :year => @year)
+      if @month_attendances.present?
+        @month_attendances = @month_attendances.month_attendances
+      else
+        @month_attendances = []
+      end
+      @application = Application.where(:employee_id => @employee.id, :month => @month, :year => @year,:day => @day+1).last
+    elsif params[:type] == "一键申请"
+      @group = Group.find(params[:group_id])
+      @employees = Employee.current.where(:group => @group.id)
+      @employee_ids = []
+      @employees.each do |employee|
+        application = Application.where(:employee_id => employee.id, :month => @month, :year => @year,:day => @day+1).last
+        if !application.present?
+          @employee_ids << employee.id
+        end
+      end
+      @employees_yijian = Employee.where(:id => @employee_ids)
+    else
+      @employee = Employee.find(params[:employee_id])
+      @month_attendances = Attendance.find_by(:employee_id => @employee.id, :month => @month, :year => @year)
+      if @month_attendances.present?
+        @month_attendances = @month_attendances.month_attendances
+      else
+        @month_attendances = []
+      end
+    end
+
+
+
+  end
+  # 班组提交申请结束
+
+  def create_application
+    # 申请未被审核前，班组重复申请时：
+    if params[:type] == "更新"
+      @application = Application.find(params[:application_id])
+      @application.update( :cause => params[:cause],:application_after => params[:application_after])
+    elsif params[:type] == "一键申请"
+      @group = Group.find(params[:group_id])
+      @employees = Employee.current.where(:group => @group.id)
+      @employees.each do |employee|
+        application = Application.where(:employee_id => employee.id, :month => params[:month], :year => params[:year],:day => params[:day])
+        @month_attendances = Attendance.find_by(:employee_id => employee.id, :month => params[:month], :year => params[:year])
+        if !application.present?
+          Application.create(:group_id => params[:group_id], :employee_id => employee.id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause],
+                             :apply_person => params[:apply_person], :status => params[:status],:application_before => @month_attendances[(params[:day].to_i - 1)],:application_after => params[:application_after])
+        end
+      end
+
+    else
+   		Application.create(:group_id => params[:group_id], :employee_id => params[:employee_id], :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause],
+                         :apply_person => params[:apply_person], :status => params[:status],:application_before => params[:application_before],:application_after => params[:application_after])
+    end
+    flash[:notice] = "已发起申请"
+ 		redirect_to group_application_attendances_path(:year => params[:year],:month => params[:month] )
+ 	end
+
+  def update_application
+    # 申请未被审核前，班组重复申请时：
+    if params[:type] == "duan"
+      if params[:yijian] == "duan"
+        @applications = Application.where(:status => ["科室发起申请","车间通过申请"])
+        @applications.update(:status => params[:status])
+        @applications.each do |application|
+          if application.application_after.present?
+            attendance = Attendance.find_by(:employee_id => application.employee_id,:year => application.year, :month => application.month)
+            month_attendances = attendance.month_attendances
+            month_attendances[(application.day - 1)] = application.application_after
+            attendance.update(:month_attendances => month_attendances)
+          end
+        end
+      else
+        @application = Application.find(params[:application_id])
+     		@application.update(:status => params[:status])
+        if @application.application_after.present?
+          attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
+          month_attendances = attendance.month_attendances
+          month_attendances[(@application.day - 1)] = @application.application_after
+          attendance.update(:month_attendances => month_attendances)
+        end
+      end
+    else
+      if params[:yijian] == "workshop"
+        groups = Group.current.where(:workshop_id => params[:type])
+        @applications = Application.where(:group_id => groups.ids,:status => "班组发起申请")
+        @applications.update(:status => params[:status])
+      else
+        @application = Application.find_by(:id => params[:application_id],:status => "班组发起申请")
+     		@application.update(:status => params[:status])
+      end
+    end
+		flash[:notice] = "已通过申请"
+ 		redirect_back(fallback_location: show_application_attendances_path)
+ 	end
+
+ 	def show_application
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
+ 		@applications = Application.where(:id => params[:applications])
+ 	end
+
+
+
+ 	def show_application_detail
+ 		@application = params[:application]
+ 		respond_to do |format|
+			format.js
+		end
+ 	end
+
+
 	def create_default_attendance
 		Employee.pluck("id").uniq.each do |i|
 			if Time.now.month == 12
@@ -301,23 +451,21 @@ class AttendancesController < ApplicationController
 			render action: "group"
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.current.find(current_user.workshop_id)
-			@groups = @workshop.groups
-
+			@groups = Group.current.where(:workshop_id => @workshop.id)
+      @choose_group = params[:group]
+  		@choose_workshop = params[:workshop]
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop.id).pluck("employee_id")
 			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop.id)
 			render action: "workshop"
 		elsif params[:type] == "duan"
-			if Time.now.year == params[:year].to_i && Time.now.month == params[:month].to_i
-				status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-				if status_workshop.all?{|x| x.nil?}
-					@workshops = []
-				else
-					@workshops = Workshop.current.find(status_workshop)
-				end
-			else
-				@workshops = Workshop.current
-			end
+			@workshops = Workshop.current
+      @duan = params[:duan]
+  		@workshop = params[:workshop]
+  		@group = params[:group]
+      @leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
+  		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+  		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
 			render action: "duan"
 		end
 	end
@@ -327,7 +475,7 @@ class AttendancesController < ApplicationController
 		#为展示组织架构的树状图配置数据
 		if current_user.has_role? :workshopadmin
 			@workshop = Workshop.current.find(current_user.workshop_id)
-			@groups = @workshop.groups
+			@groups = Group.current.where(workshop_id: @workshop.id)
 		else
 			@workshop = Group.current.find(current_user.group_id)
 			@groups = @workshop
@@ -336,13 +484,9 @@ class AttendancesController < ApplicationController
 		@choose_group = params[:group]
 		@choose_workshop = params[:workshop]
 		if params[:group].present?
-			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
-			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:group]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:group]).pluck("employee_id")
-			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop], :group => params[:group])
+			@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group])
 		else
-			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
-			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: @workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: @workshop).pluck("employee_id")
-			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => @workshop)
+			@employees =Employee.current.where(:workshop => @workshop)
 		end
 
 			#根据用户点击组织架构树状图捞出该班组的审核状态，用于展示
@@ -354,7 +498,8 @@ class AttendancesController < ApplicationController
 		#为了使审核按钮知道当前哪个班组在被审核，将用户点击组织架构树状图产生的参数重新传入views页面，供审核按钮使用
 		@click_group = params[:group]
 		#配置页面上统计考勤的表格数据
-		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 	end
@@ -429,26 +574,16 @@ class AttendancesController < ApplicationController
 	def duan
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month)
-			status_workshop = AttendanceStatus.pluck("workshop_id").uniq
-			if status_workshop.all?{|x| x.nil?}
-				@workshops = []
-			else
-				@workshops = Workshop.current.find(status_workshop)
-			end
-		else
-			@workshops = Workshop.current
-		end
+
+		@workshops = Workshop.current
 		@duan = params[:duan]
 		@workshop = params[:workshop]
 		@group = params[:group]
-		@month = params[:month]
-		@year = params[:year]
-		@vacation_codes = VacationCategory.pluck("vacation_code").uniq
+
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		#配置班组的现员数据（当前人员+调动人员）
-		@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
-		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
-		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
+		@employees = Employee.current.where(:group => params[:group])
 	end
 	##段管理员页面--结束
 
@@ -488,34 +623,7 @@ class AttendancesController < ApplicationController
 		redirect_to setting_attendances_path
  	end
 
- 	def create_application
-		if !Employee.find_by(:group => params[:group], :name => params[:person]).present?
-			flash[:alert] = "您填写的名字不在这个班组"
-		else
-	 		employee_id = Employee.find_by(:group => params[:group], :name => params[:person]).id
-	 		Application.create(:group_id => params[:group], :employee_id => employee_id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause], :apply_person => params[:apply_person], :status => params[:status])
-			flash[:notice] = "已发起申请"
-		end
- 		redirect_back(fallback_location: group_attendances_path)
- 	end
 
- 	def show_application
- 		@applications = params[:applications]
- 	end
-
- 	def update_application
- 		application = Application.find(params[:application_id])
- 		application.update(:status => params[:status])
-		flash[:notice] = "已通过申请"
- 		redirect_back(fallback_location: show_application_attendances_path)
- 	end
-
- 	def show_application_detail
- 		@application = params[:application]
- 		respond_to do |format|
-			format.js
-		end
- 	end
 
 	def group_current_time_info
     @shenhe_year = if Time.now.month == 1

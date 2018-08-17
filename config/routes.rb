@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
-  root "employees#index"
-  get "/home" ,to: "home#index"
+
+  root "home#index"
   resources :employees do
     collection do
       #上传
@@ -46,6 +46,11 @@ Rails.application.routes.draw do
       get :group_statistics
       get :group_employee_detail
       get :group_application
+      get :group_application_form
+      post :create_application
+      post :update_application
+      get :show_application
+      get :show_application_detail
       post :group_yijian_create
       get :workshop
       get :duan
@@ -61,10 +66,8 @@ Rails.application.routes.draw do
       post :batch_verify
       get :annual_statistic
       get :filter
-      post :create_application
-      get :show_application
-      get :show_application_detail
-      post :update_application
+
+
       get :show_record
       get :caiwu
       get :caiwu2

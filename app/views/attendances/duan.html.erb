@@ -2,7 +2,7 @@
 <% application_id = [] %>
 <% all_application_id = [] %>
 <% applications = (Application.where(:status => "车间通过申请")) + (Application.where(:status => "科室发起申请")) %>
-<% all_applications = (Application.where(:status => "科室发起申请")) + (Application.where(:status => "段通过申请")) %>
+<% all_applications = (Application.where(:status => "段通过申请")) %>
 <% applications.each do |application| %>
   <% application_id << application.id %>
 <% end %>
@@ -56,62 +56,39 @@
   <% if @year.present? && @month.present? %>
     <h4><%= @year %>年<%= @month %>月考勤表</h4>
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: @month, year: @year) %></h5>
+      <h5><%= link_to "北京供电段", filter_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
       <ul>
-        <% @workshops.each do |verify_workshop| %>
-        <li>
-          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= verify_workshop.name %></a>
-          <ul>
-            <% @groups = Group.current.where(:workshop_id => verify_workshop.id) %>
-            <% @groups.each do |group| %>
-              <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
-            <% end %>
-          </ul>
-        </li>
-        <% end %>
-        <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
+        <% @workshops.each do |workshop| %>
           <li>
-            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= no_verify_workshop.name %></a>
+            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/filter?type=duan&workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
             <ul>
-              <% @groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
-              <% @groups.each do |group| %>
-                <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+              <% groups = Group.current.where(:workshop_id => workshop.id) %>
+              <% groups.each do |group| %>
+                <li><a style="color:green" href='/attendances/filter?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
               <% end %>
             </ul>
           </li>
         <% end %>
+
       </ul><br>
-      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
     </div>
   <% else %>
     <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤表</h4>
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <h5><%= link_to "北京供电段", duan_attendances_path(duan: "北京供电段", month: Time.now.month, year: Time.now.year) %></h5>
+      <h5><%= link_to "北京供电段", duan_attendances_path %></h5>
       <ul>
-        <% @workshops.each do |verify_workshop| %>
+        <% @workshops.each do |workshop| %>
         <li>
-          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"><a style="color:green" href='/attendances/duan?workshop=<%= verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= verify_workshop.name %></a>
+          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
           <ul>
-            <% @groups = Group.current.where(:workshop_id => verify_workshop.id) %>
-            <% @groups.each do |group| %>
-              <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
-            <% end %>
-          </ul>
-        </li>
-        <% end %>
-        <% Workshop.current.where.not(id: @workshops.pluck("id")).each do |no_verify_workshop| %>
-          <li>
-          <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= no_verify_workshop.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= no_verify_workshop.name %></a>
-          <ul>
-            <% @groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
-            <% @groups.each do |group| %>
-              <li><a style="color:red" href='/attendances/duan?group=<%= group.id %>&month=<%= Time.now.month %>&year=<%= Time.now.year %>'><%= group.name %></a></li>
+            <% groups = Group.current.where(:workshop_id => workshop.id) %>
+            <% groups.each do |group| %>
+              <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>'><%= group.name %></a></li>
             <% end %>
           </ul>
         </li>
         <% end %>
       </ul><br>
-      <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
     </div>
   <% end %>
 
@@ -132,8 +109,8 @@
             <% else %>
               <th>车间</th>
             <% end %>
-            <% @vacation_codes.each do |code| %>
-              <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+            <% @vacation_name_hash.values.each do |name| %>
+              <th><%= name %></th>
             <% end %>
             <th>修改次数</th>
           </tr>
@@ -144,7 +121,7 @@
                 <tr>
                   <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
                   <td><%= group.name %></td>
-                  <% @vacation_codes.each do |code| %>
+                  <% @vacation_name_hash.keys.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                       <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
                       <% if count == 0 %>
@@ -178,7 +155,7 @@
                   <td><%= employee.sal_number %></td>
                   <td><%= Workshop.current.find(employee.workshop).name %></td>
                   <td><%= Group.current.find(employee.group).name %></td>
-                  <% @vacation_codes.each do |code| %>
+                  <% @vacation_name_hash.keys.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                       <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: Time.now.month, year: Time.now.year).sum(:count) %></td>
                     <% else %>
@@ -202,7 +179,7 @@
                   <% end %>
 
                   <td><%= workshop.name %></td>
-                  <% @vacation_codes.each do |code| %>
+                  <% @vacation_name_hash.keys.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
                       <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
                     <% else %>
