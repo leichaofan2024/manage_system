@@ -22,21 +22,21 @@
     <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
   <% end %>
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-    <div class="">
-      <% if @year.present? && @month.present? %>
-        <%= link_to "申请",group_application_attendances_path(:year => @year,:month => @month)%>
-      <% else %>
-        <%= link_to "申请",group_application_attendances_path%>
-      <% end %>
-    </div>
+
       <div class="btn_group-2MSRh_0">
         <div class="ivu-tooltip">
-            <div class="ivu-tooltip-rel">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+            <div class="ivu-tooltip-rel" style="margin-right: 5px;">
+              <% if @year.present? && @month.present? %>
+                <%= link_to "点击申请",group_application_attendances_path(:year => @year,:month => @month),class:"btn btn-primary" %>
+              <% else %>
+                <%= link_to "点击申请",group_application_attendances_path,class:"btn btn-primary" %>
+              <% end %>
+
+              <!-- <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to "#", "data-toggle" => "modal", "data-target" => "#applicationModal" do %>
                    <span style="color: #269Eff;">点击申请</span>
                 <% end %>
-              </button>
+              </button> -->
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
