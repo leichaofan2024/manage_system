@@ -122,10 +122,10 @@
   <% end %>
 <% end %>
 
-  <div class="col-md-12"  style="height: 100%">
+  <div class="col-md-12 col-lg-12 col-sm-12"  style="height: 100%">
     <!-- 组织结构树状图-开始 -->
     <% if current_user.has_role? :workshopadmin %>
-      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
         <% workshop = Workshop.current.find_by(name: current_user.name) %>
         <% if params[:year].present? %>
           <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= workshop.name %></a></h5>
@@ -143,7 +143,7 @@
         </ul>
       </div>
     <% else %>
-      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+      <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
         <h5>
           <% if params[:year].present? %>
             <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: params[:year],month: params[:month]) %>
@@ -219,16 +219,55 @@
     <% end %>
   <!-- 组织结构树状图-结束 -->
 
-  <div class="card">
-    <div style="overflow: auto;" class="col-md-10">
-      <table id="example" class="table table-bordered">
+  <div class="col-md-10 col-lg-10 col-sm-10 pull-right" style = "margin-bottom: 5px;-webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);background-color: #fff;">
+    <div class ="col-md-6 col-lg-5 col-sm-6" style="margin-right:-16px;margin-left:-5px;">
+      <table class="table table-bordered">
         <thead>
-          <tr>
+          <tr style= "height:35px;">
             <th>工资号</th>
             <th>姓名</th>
             <th>职名</th>
             <th>车间</th>
             <th>班组</th>
+
+          </tr>
+        </thead>
+          <tbody>
+          <!-- 配置表格数据-开始 -->
+            <% if @employees.present? %>
+              <% @employees.each do |employee| %>
+                <tr style= "height:55px;">
+                  <td><%= employee.sal_number %></td>
+                  <td>
+                    <%if params[:year].present? && params[:month].present? %>
+                      <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
+                        <%= employee.name %>
+                      <% end %>
+                    <% else %>
+                      <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
+                        <%= employee.name %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td><%= employee.duty %></td>
+                  <td><%= Workshop.current.find(employee.workshop).name %></td>
+                  <td><%= Group.current.find(employee.group).name %></td>
+                </tr>
+              <% end %>
+
+            <% end %>
+          </tbody>
+        </table>
+
+
+    </div>
+
+
+    <div  class ="col-md-6 col-lg-7 col-sm-6" style="margin-left:-16px;overflow: auto; ">
+      <table id="example" class="table table-bordered">
+        <thead>
+          <tr style= "height:35px;">
+
             <!-- 生成每月1-31号的数字-开始 -->
             <% (1..31).each do |i| %>
               <th><%= i %></th>

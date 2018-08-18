@@ -219,23 +219,31 @@ class AttendancesController < ApplicationController
     if params[:type] == "更新"
       @application = Application.find(params[:application_id])
       @application.update( :cause => params[:cause],:application_after => params[:application_after])
+      flash[:notice] = "已发起申请"
     elsif params[:type] == "一键申请"
       @group = Group.find(params[:group_id])
       @employees = Employee.current.where(:group => @group.id)
+      yijian_array = []
       @employees.each do |employee|
         application = Application.where(:employee_id => employee.id, :month => params[:month], :year => params[:year],:day => params[:day])
         @month_attendances = Attendance.find_by(:employee_id => employee.id, :month => params[:month], :year => params[:year])
         if !application.present?
           Application.create(:group_id => params[:group_id], :employee_id => employee.id, :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause],
                              :apply_person => params[:apply_person], :status => params[:status],:application_before => @month_attendances[(params[:day].to_i - 1)],:application_after => params[:application_after])
+          yijian_array << "true"
         end
       end
-
+      if !yijian_array.include?("true")
+        flash[:alert] = "#{params[:month]}月#{params[:day]}所有人均已发送过申请，无法使用一键功能，如需修改，请逐一申请！"
+      else
+        flash[:notice] = "已发起申请"
+      end
     else
    		Application.create(:group_id => params[:group_id], :employee_id => params[:employee_id], :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause],
                          :apply_person => params[:apply_person], :status => params[:status],:application_before => params[:application_before],:application_after => params[:application_after])
+      flash[:notice] = "已发起申请"
     end
-    flash[:notice] = "已发起申请"
+
  		redirect_to group_application_attendances_path(:year => params[:year],:month => params[:month] )
  	end
 
@@ -279,7 +287,7 @@ class AttendancesController < ApplicationController
 
  	def show_application
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
- 		@applications = Application.where(:id => params[:applications])
+ 		@applications = Application.where(:id => params[:applications]).order("created_at DESC")
  	end
 
 

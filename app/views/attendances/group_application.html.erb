@@ -115,20 +115,12 @@
                           </td>
                         <% elsif application.present? && (application.last.status == "车间通过申请") %>
                           <td style = "background-color: #FF5722;">
-                              <% if attendance[day] == "x" %>
-                                <%= day_number %>
-                              <% else %>
-                                <%= @vacation_code_hash[attendance[day]] %>
-                              <% end %>
+                                <%= @vacation_code_hash[application.last.application_after] %>
                           </td>
                         <% elsif application.present? && ((application.last.status == "班组发起申请") || (application.last.status == "科室发起申请")) %>
                           <td style = "background-color:#FFD54F;">
                               <%= link_to group_application_form_attendances_path(:type => "更新",:group_id =>current_user.group_id ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
-                                <% if attendance[day] == "x" %>
-                                  <%= day_number %>
-                                <% else %>
-                                  <%= @vacation_code_hash[attendance[day]] %>
-                                <% end %>
+                                  <%= @vacation_code_hash[application.last.application_after] %>
                               <% end %>
                           </td>
                         <% end %>
