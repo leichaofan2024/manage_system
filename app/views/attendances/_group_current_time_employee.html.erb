@@ -32,7 +32,7 @@
     <% end %>
   <% end %>
 </tr>
-<% if params_year.present? && (params_year.to_i == shenhe_year) && (params_month.to_i == shenhe_month) %>
+<% if params_year.present? && (params_year.to_i == shenhe_year) && (params_month.to_i == shenhe_month) && (shenhe_day === Time.now.day) %>
   <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
     <tr>
       <td colspan=36>

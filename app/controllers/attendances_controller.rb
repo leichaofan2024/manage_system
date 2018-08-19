@@ -20,6 +20,23 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		group = Group.current.find(current_user.group_id)
 		@employees = Employee.current.where(:group => group.id)
+    @employees.each do |employee|
+      if Time.now.month == 12
+				attendance_next_month = Attendance.where(employee_id: employee.id, year: (Time.now.year + 1), month: 1)
+        if !attendance_next_month.present?
+					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year + 1), month: 1)
+        end
+      else
+        attendance_next_month = Attendance.where(employee_id: employee.id, year: (Time.now.year + 1), month: (Time.now.month + 1))
+        if !attendance_next_month.present?
+					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year + 1), month: (Time.now.month + 1))
+        end
+      end
+      attendance_this_month = Attendance.where(employee_id: employee.id, year: Time.now.year, month: Time.now.month)
+      if !attendance_this_month.present?
+        Attendance.create(employee_id: employee.id, group_id: employee.group, year: Time.now.year, month: Time.now.month)
+      end
+    end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		# 导出考勤表
@@ -310,9 +327,9 @@ class AttendancesController < ApplicationController
 					attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
 			else
-				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month)
+				attendance = Attendance.where(employee_id: i, year: Time.now.year, month: Time.now.month + 1)
 				if !attendance.present?
-					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year, month: Time.now.month)
+					Attendance.create(employee_id: i, group_id: Employee.find(i).group, year: Time.now.year, month: Time.now.month+1)
 					# attendance_status = AttendanceStatus.find_by(group_id: Employee.find(i).group) || AttendanceStatus.new
 					# attendance_status.update(group_id: Employee.find(i).group, status: "班组/科室填写中")
 				end
@@ -393,13 +410,15 @@ class AttendancesController < ApplicationController
 			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
       if current_user.has_role? :groupadmin
         @group = Group.current.find(current_user.group_id)
-        if !AttendanceStatus.find_by(:group_id => @group.id).present?
-          AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
+        if !AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).present?
+          AttendanceStatus.create(:group_id => @group.id,:year => params[:year],:month => params[:month], :status => "班组/科室填写中")
         end
       elsif current_user.has_role? :organsadmin
         @group = Group.current.find(current_user.group_id)
-        if !AttendanceStatus.find_by(:group_id => @group.id).present?
-            AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
+        if !AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).present?
+          AttendanceStatus.create(:group_id => @group.id,:year => params[:year],:month => params[:month], :status => "车间已审核", :workshop_id => @group.workshop.id)
+        else
+          AttendanceStatus.update(:status => "车间已审核",:year => params[:year],:month => params[:month], :workshop_id => @group.workshop.id)
         end
       end
 
@@ -565,7 +584,7 @@ class AttendancesController < ApplicationController
 		if params[:authority] == "workshop"
 			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = Group.current.where(:workshop_id => @workshop.id)
-			AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month]).update(:status => "车间已审核", :workshop_id => @workshop.id)
+			AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "班组/科室填写中").update(:status => "车间已审核", :workshop_id => @workshop.id)
 			flash[:notice] = "审核完毕"
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
 		elsif params[:authority] == "duan"
@@ -645,7 +664,13 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
-
+    if params[:year].present? && params[:month].present?
+      @year = params[:year]
+      @month = params[:month]
+    else
+      @year = Time.now.year
+      @month = Time.now.month
+    end
     @group = params[:group]
 		@workshop = params[:workshop]
     @duan = params[:duan]
@@ -659,11 +684,13 @@ class AttendancesController < ApplicationController
     @workshops_not_varify = Workshop.current.where.not(id: status_workshop)
 
     if current_user.has_role? :attendance_admin
+      @shenhe_day = 1..7
       group_ids = Group.current.pluck(:id)
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => "段已审核",:group_id => group_ids).count < group_ids.count
         @attendance_marquee = 1
       end
     elsif current_user.has_role? :workshopadmin
+      @shenhe_day = 1..3
       group_ids = Group.current.where(:workshop_id => current_user.workshop_id).pluck(:id)
       if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year, :month => @shenhe_month,:status => "车间已审核").count < group_ids.count
         @attendance_marquee = 1
@@ -688,6 +715,12 @@ class AttendancesController < ApplicationController
       end
 			   @employees = Employee.current.where(:workshop => params[:workshop]).order('employees.group ASC,employees.id ASC')
 		elsif params[:group].present?
+      if AttendanceStatus.find_by(:year => Time.now.year, :month => Time.now.month,:group_id => params[:group]).blank?
+        AttendanceStatus.create(:year => Time.now.year, :month => Time.now.month,:group_id => params[:group],:status => "班组/科室填写中")
+      end
+      if AttendanceStatus.find_by(:year => @shenhe_year, :month => @shenhe_month,:group_id => params[:group]).blank?
+        AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => params[:group],:status => "班组/科室填写中")
+      end
 			@employees = Employee.current.where(:group => params[:group]).order('employees.group ASC,employees.id ASC')
 		else
       if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)

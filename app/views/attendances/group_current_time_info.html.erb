@@ -32,93 +32,40 @@
       <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
         <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
       <% end %>
+    <% elsif @group.present? %>
+      <% if AttendanceStatus.find_by(:group_id => @group).present? %>
+        <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+      <% end %>
     <% end %>
 
-
-    <!-- 审核功能-开始 -->
-        <!-- <div class="btn_group_top-1sKKU_0">
-          <div>
-            <div class="btn_group-2MSRh_0">
-              <div class="ivu-tooltip">
-                <% if (@workshop.present?) && (AttendanceStatus.find_by(:workshop_id => @workshop).present?) && (AttendanceStatus.find_by(:workshop_id => @workshop).status == "车间已审核") %>
-                  <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                      <%= link_to verify_attendances_path(authority: "duan", workshop: @workshop), method: :post do %>
-                         <span style="color: #269Eff;">审核</span>
-                      <% end %>
-                    </button>
-                  </div>
-                <% end %>
-                <% if (@duan.present?) && (Workshop.current.where.not(id: @workshops.pluck("id")) == 0) %>
-                  <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                      <%= link_to batch_verify_attendances_path(authority: "duan"), method: :post do  %>
-                         <span style="color: #269Eff;">一键审核</span>
-                      <% end %>
-                    </button>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div> -->
   </div>
 
-  <!-- 审核功能-结束 -->
   <% if @workshop.present? %>
-    <h4><%= Workshop.current.find(@workshop).name %>考勤情况</h4>
+    <h4><%= Workshop.current.find(@workshop).name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% elsif @group.present? %>
-    <h4><%= Group.current.find(@group).name %>考勤情况</h4>
+    <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% else @duan.present? %>
-    <h4>供电段考勤情况</h4>
+    <h4>供电段<%= @year %>年<%= @month %>月考勤情况</h4>
   <% end %>
 <% end %>
 
 <% if current_user.has_role? :workshopadmin %>
-  <!-- 审核功能-开始 -->
-  <br><br><br>
-    <!-- <div class="btn_group_top-1sKKU_0">
-      <div>
-        <div class="btn_group-2MSRh_0">
-          <div class="ivu-tooltip">
-            <% if (@group.present?) && (AttendanceStatus.find_by(:group_id => @group).present?) && (AttendanceStatus.find_by(:group_id => @group).status == "班组/科室填写中") %>
-              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to verify_attendances_path(authority: "workshop", group: @group), method: :post do %>
-                     <span style="color: #269Eff;">审核</span>
-                  <% end %>
-                </button>
-              </div>
-            <% end %>
-            <% if !AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
-              <div class="ivu-tooltip-rel" style="margin-top:-80px;">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to batch_verify_attendances_path(authority: "workshop"), method: :post do  %>
-                     <span style="color: #269Eff;">一键审核</span>
-                  <% end %>
-                </button>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div> -->
-  <!-- 审核功能-结束 -->
+
   <% if @workshop.present? %>
     <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
     <% end %>
-    <h4><%= current_user.name %>考勤情况</h4>
+    <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% elsif @group.present? %>
     <% if AttendanceStatus.find_by(:group_id => @group).present? %>
-      <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+      <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
     <% end %>
-      <h4><%= Group.current.find(@group).name %>考勤情况</h4>
+      <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% else %>
     <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).status %></h4>
     <% end %>
-    <h4><%= current_user.name %>考勤情况</h4>
+    <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% end %>
 <% end %>
 
@@ -283,9 +230,9 @@
             <% if @employees.present? %>
               <% @employees.each do |employee| %>
                 <% if params[:year].present? %>
-                  <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month } %>
+                  <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
                 <% else %>
-                  <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month } %>
+                  <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
                 <% end %>
 
               <% end %>
@@ -294,7 +241,7 @@
             <% end %>
           </tbody>
         </table>
-        <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month) %>
+        <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
           <div class="" style = "margin-bottom: 50px;">
             <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
               <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
