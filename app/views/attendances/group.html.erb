@@ -89,7 +89,7 @@
             <tr style= "height:55px;">
               <td><%= employee.sal_number %></td>
               <td>
-                <%if @year.present? && @month.present? %>
+                <!-- <%if @year.present? && @month.present? %>
                   <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: @month, year: @year) do %>
                     <%= employee.name %>
                   <% end %>
@@ -97,7 +97,8 @@
                   <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
                     <%= employee.name %>
                   <% end %>
-                <% end %>
+                <% end %> -->
+                <%= employee.name %>
               </td>
 
               <td><%= employee.duty %></td>

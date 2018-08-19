@@ -186,7 +186,7 @@
                 <tr style= "height:55px;">
                   <td><%= employee.sal_number %></td>
                   <td>
-                    <%if params[:year].present? && params[:month].present? %>
+                    <!-- <%if params[:year].present? && params[:month].present? %>
                       <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
                         <%= employee.name %>
                       <% end %>
@@ -194,7 +194,8 @@
                       <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
                         <%= employee.name %>
                       <% end %>
-                    <% end %>
+                    <% end %> -->
+                    <%= employee.name %>
                   </td>
                   <td><%= employee.duty %></td>
                   <td><%= Workshop.current.find(employee.workshop).name %></td>

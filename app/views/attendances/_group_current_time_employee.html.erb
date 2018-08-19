@@ -14,17 +14,25 @@
     <% attendance_ary.each do |day_attendance| %>
       <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
     <td>
-      <% if params_year.present? %>
-        <% if day_attendance == "x" %>
-          <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+      <% if current_user.has_role? :attendance_admin %>
+        <% if params_year.present? %>
+          <% if day_attendance == "x" %>
+            <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <% else %>
+            <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <% end %>
         <% else %>
-          <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <% if day_attendance == "x" %>
+            <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <% else %>
+            <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <% end %>
         <% end %>
       <% else %>
         <% if day_attendance == "x" %>
-          <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          -
         <% else %>
-          <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+          <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
         <% end %>
       <% end %>
     </td>
