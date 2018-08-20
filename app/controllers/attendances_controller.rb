@@ -684,13 +684,13 @@ class AttendancesController < ApplicationController
     @workshops_not_varify = Workshop.current.where.not(id: status_workshop)
 
     if current_user.has_role? :attendance_admin
-      @shenhe_day = 1..7
+      @shenhe_day = 1..30
       group_ids = Group.current.pluck(:id)
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => "段已审核",:group_id => group_ids).count < group_ids.count
         @attendance_marquee = 1
       end
     elsif current_user.has_role? :workshopadmin
-      @shenhe_day = 1..3
+      @shenhe_day = 1..30
       group_ids = Group.current.where(:workshop_id => current_user.workshop_id).pluck(:id)
       if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year, :month => @shenhe_month,:status => "车间已审核").count < group_ids.count
         @attendance_marquee = 1

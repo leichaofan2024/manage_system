@@ -1,5 +1,5 @@
 <%= render "attendance_sidebar"%>
-<% if current_user.has_role? :attendance_admin %>
+<% if (current_user.has_role? :attendance_admin)  && (@shenhe_day === Time.now.day)%>
   <!-- 进度条部分-开始 -->
   <!-- 总数统计，呼叫弹窗 -->
   <div class="col-md-12">
@@ -28,16 +28,17 @@
         </div>
     </div>
     <!-- 进度条部分-结束 -->
-    <% if @workshop.present? %>
-      <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
-        <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
-      <% end %>
-    <% elsif @group.present? %>
-      <% if AttendanceStatus.find_by(:group_id => @group).present? %>
-        <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+    <% if @shenhe_day === Time.now.day%>
+      <% if @workshop.present? %>
+        <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+          <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
+        <% end %>
+      <% elsif @group.present? %>
+        <% if AttendanceStatus.find_by(:group_id => @group).present? %>
+          <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+        <% end %>
       <% end %>
     <% end %>
-
   </div>
 
   <% if @workshop.present? %>
@@ -52,17 +53,17 @@
 <% if current_user.has_role? :workshopadmin %>
 
   <% if @workshop.present? %>
-    <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
+    <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? && (@shenhe_day === Time.now.day)%>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
     <% end %>
     <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% elsif @group.present? %>
-    <% if AttendanceStatus.find_by(:group_id => @group).present? %>
+    <% if AttendanceStatus.find_by(:group_id => @group).present? && (@shenhe_day === Time.now.day)%>
       <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
     <% end %>
       <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
   <% else %>
-    <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? %>
+    <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? && (@shenhe_day === Time.now.day) %>
       <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).status %></h4>
     <% end %>
     <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
@@ -201,6 +202,17 @@
                   <td><%= Workshop.current.find(employee.workshop).name %></td>
                   <td><%= Group.current.find(employee.group).name %></td>
                 </tr>
+                <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
+                  <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
+                    <tr style= "height:40px;">
+                      <td colspan=36>
+                        <span >
+
+                        </span>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
               <% end %>
 
             <% end %>

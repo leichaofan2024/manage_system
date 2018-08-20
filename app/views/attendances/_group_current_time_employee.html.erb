@@ -42,7 +42,7 @@
 </tr>
 <% if params_year.present? && (params_year.to_i == shenhe_year) && (params_month.to_i == shenhe_month) && (shenhe_day === Time.now.day) %>
   <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
-    <tr>
+    <tr style= "height:40px;">
       <td colspan=36>
         <span id = "shenhe-<%= employee.group %>">
           <%= render :partial => "shenhe_button", :locals => { :params_year => params_year,:params_month => params_month,:employee => employee, :shenhe_year => shenhe_year,:shenhe_month => shenhe_month } %>
