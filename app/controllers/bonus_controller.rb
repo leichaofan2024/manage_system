@@ -16,8 +16,12 @@ class BonusController < ApplicationController
       if !params[:file].present?
         flash[:alert] = "您还没有选择文件哦"
       else
-        Bonu.import_table(params[:file])
-        flash[:notice] = "上传成功"
+        import_message = Bonu.import_table(params[:file],params[:year],params[:month])
+				if import_message["head"].present?
+	        flash[:alert] = import_message["head"]
+				else
+        	flash[:notice] = "上传成功"
+				end
       end
       redirect_to import_bonus_bonus_path
     end

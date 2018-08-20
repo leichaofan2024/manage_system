@@ -18,8 +18,11 @@ class WagesController < ApplicationController
       import_message = Wage.import_table(params[:file],params[:year],params[:month])
       if import_message["head"].present?
         flash[:alert] = import_message["head"]
+			else
+				flash[:notice] = "上传成功"
 			end
     end
+
     redirect_to import_wage_wages_path
   end
 

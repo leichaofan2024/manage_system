@@ -84,9 +84,9 @@
 <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
   <div class="pull-right" style= "margin-bottom:20px;margin-right:20px;">
     <% if params[:type] == "duan" %>
-      <%= link_to("一键审核", update_application_attendances_path(:type => params[:type],:yijian => "duan",:status => "段通过申请"),method: :post,class: "btn btn-primary")%>
+      <%= link_to("一键通过", update_application_attendances_path(:type => params[:type],:yijian => "duan",:status => "段通过申请"),method: :post,class: "btn btn-primary")%>
     <% else %>
-      <%= link_to("一键审核", update_application_attendances_path(:type => params[:type],:yijian => "workshop",:status => "车间通过申请"),method: :post,class: "btn btn-primary")%>
+      <%= link_to("一键通过", update_application_attendances_path(:type => params[:type],:yijian => "workshop",:status => "车间通过申请"),method: :post,class: "btn btn-primary")%>
     <% end %>
   </div>
 <% end %>
