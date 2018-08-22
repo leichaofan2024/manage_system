@@ -1,13 +1,39 @@
 class WagesController < ApplicationController
 	layout 'home'
+  def index 
+	end
+
+
 	def import_wage
-		@wages = Wage.page(params[:page]).per(20)
+		if params[:year].present? && params[:month].present?
+			@year = params[:year].to_i
+			@month = params[:month].to_i
+		else
+			wage_year_month_array = Wage.pluck(:year,:month).uniq.last
+			if wage_year_month_array.present?
+				@year = wage_year_month_array[0]
+				@month = wage_year_month_array[1]
+			else
+				@year = Time.now.year
+				@month = Time.now.month
+			end
+		end
+		@wages = Wage.where(:year => @year, :month => @month).page(params[:page]).per(20)
     #下载表格配置
-    @export_wages = Wage.all
+    @export_wages = Wage.where(:year => @year, :month => @month)
     respond_to do |format|
       format.html
       format.xls
     end
+	end
+
+
+  # 删除工资表
+  def delete_wage
+		@wages = Wage.where(:year => params[:year], :month => params[:month])
+		@wages.delete_all
+		redirect_to import_wage_wages_path
+		flash[:notice] = "已成功删除#{params[:year]}年#{params[:month]}月工资表！"
 	end
 
 	#上传表格

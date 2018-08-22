@@ -190,6 +190,7 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get :import_wage
+      delete :delete_wage
       post :create_header
       post :edit_header
       get :divide_level_wage
@@ -203,6 +204,7 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get :import_bonus
+      delete :delete_bonus
       post :create_header
       post :edit_header
     end
