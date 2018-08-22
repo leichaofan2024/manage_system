@@ -151,9 +151,9 @@
                   <td><%= workshop.name %></td>
                   <% @vacation_name_hash.keys.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count)  %></td>
                     <% else %>
-                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
+                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count)%></td>
                     <% end %>
                   <% end %>
                   <% employees = Employee.current.where(:workshop => workshop.id).pluck("id") %>
