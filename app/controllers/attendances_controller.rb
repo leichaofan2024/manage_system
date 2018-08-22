@@ -3,18 +3,10 @@ class AttendancesController < ApplicationController
 
 	##班组页面--开始
 	def group
-    if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
-       if Time.now.day >= 4
-         @time_range = (Time.now.day - 3)..(Time.now.day)
-       else
-         @time_range = 1..(Time.now.day)
-       end
-    elsif current_user.has_role? :organsadmin
-       if Time.now.day >= 8
-         @time_range = (Time.now.day - 7)..(Time.now.day)
-       else
-         @time_range = 1..(Time.now.day)
-       end
+    if Time.now.day >= 8
+      @time_range = (Time.now.day - 7)..(Time.now.day)
+    else
+      @time_range = 1..(Time.now.day)
     end
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
@@ -86,17 +78,18 @@ class AttendancesController < ApplicationController
 
   #班组一键填写考勤：
   def group_yijian_create
-      @group = Group.current.find(current_user.group_id)
+
+        @group = Group.current.find(params[:group_id])
+
       @employees = Employee.current.where(:group => @group.id)
       @attendances = Attendance.where(:employee_id => @employees.pluck(:id), :month => params[:month], :year => params[:year])
-      @vacation_name_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
+      @vacation_name_hash = VacationCategory.pluck("vacation_shortening","vacation_code").to_h
       @attendances.each do |attendance|
         month_attendances = attendance.month_attendances
         month_attendances[params[:day].to_i] = @vacation_name_hash[params[:code]]
         attendance.update(:month_attendances => month_attendances)
         attendance_ary_after = attendance.month_attendances.split("")
         attendance_hash= {}
-
         #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
         @vacation_name_hash.values.each do |code|
           attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
@@ -120,7 +113,7 @@ class AttendancesController < ApplicationController
         end
 
       end
-
+      flash[:notice] = "一键考勤填写成功！"
 
       if current_user.has_role? :groupadmin
         @group = Group.current.find(current_user.group_id)
@@ -450,19 +443,12 @@ class AttendancesController < ApplicationController
 	##使用ajax动态呼叫弹框功能--结束
 
 	def filter
-    if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
-       if Time.now.day >= 4
-         @time_range = (Time.now.day - 3)..(Time.now.day)
-       else
-         @time_range = 1..(Time.now.day)
-       end
-    elsif current_user.has_role? :organsadmin
-       if Time.now.day >= 8
-         @time_range = (Time.now.day - 7)..(Time.now.day)
-       else
-         @time_range = 1..(Time.now.day)
-       end
+    if Time.now.day >= 8
+      @time_range = (Time.now.day - 7)..(Time.now.day)
+    else
+      @time_range = 1..(Time.now.day)
     end
+
 		@year = params[:year]
 		@month = params[:month]
 		@years = Attendance.pluck("year").uniq
@@ -653,6 +639,11 @@ class AttendancesController < ApplicationController
 
 
 	def group_current_time_info
+    if Time.now.day >= 8
+      @time_range = (Time.now.day - 7)..(Time.now.day)
+    else
+      @time_range = 1..(Time.now.day)
+    end
     @shenhe_year = if Time.now.month == 1
                     (Time.now.year) - 1
                   else
@@ -684,14 +675,23 @@ class AttendancesController < ApplicationController
     @workshops_not_varify = Workshop.current.where.not(id: status_workshop)
 
     if current_user.has_role? :attendance_admin
-      @shenhe_day = 1..30
+      if (Time.now.month == 2) || (Time.now.month == 10)
+        @shenhe_day = 1..8
+      else
+        @shenhe_day = 1..7
+      end
       group_ids = Group.current.pluck(:id)
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => "段已审核",:group_id => group_ids).count < group_ids.count
         @attendance_marquee = 1
       end
     elsif current_user.has_role? :workshopadmin
-      @shenhe_day = 1..30
-      group_ids = Group.current.where(:workshop_id => current_user.workshop_id).pluck(:id)
+      if (Time.now.month == 2) || (Time.now.month == 10)
+        @shenhe_day = 1..8
+      else
+        @shenhe_day = 1..3
+      end
+      @groups = Group.current.where(:workshop_id => current_user.workshop_id)
+      group_ids = @groups.pluck(:id)
       if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year, :month => @shenhe_month,:status => "车间已审核").count < group_ids.count
         @attendance_marquee = 1
       end

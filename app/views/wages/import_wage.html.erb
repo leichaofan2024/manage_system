@@ -63,8 +63,16 @@
 <h5>上传工资表</h5>
 
 <%= form_tag import_table_wages_path, multipart: true do %>
-  <%= select_tag "year",options_for_select([2018,2019,2020,2021,2022,2023]),required: true %>
-  <%= select_tag "month",options_for_select([1,2,3,4,5,6,7,8,9,10,11,12]),required: true %>
+  <select class="" name="year">
+    <option value="<%= (Time.now.year)-1 %>"><%= (Time.now.year)-1 %></option>
+    <option value="<%= Time.now.year%>" selected><%= Time.now.year %></option>
+    <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
+  </select>
+  <select class="" name="month">
+    <option value="<%= (Time.now.month)-1 %>"><%= (Time.now.month)-1 %></option>
+    <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
+    <option value="<%= (Time.now.month) +1 %>"><%= (Time.now.month) +1 %></option>
+  </select>
   <%= file_field_tag :file%>
   <%= submit_tag "上传"%>
 <% end %>

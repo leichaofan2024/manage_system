@@ -27,11 +27,16 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
         n += 1
         if !wage_headers.include?(fh)
           wage_import_message["head"] = "您上传的工资表第#{n}列表头名‘#{fh}’与系统不匹配，请前往修改！"
-
         end
       end
-      if !wage_import_message["head"].present?
-  	    header_ids = WageHeader.pluck("id").map{|m| "col"+ m.to_s}
+
+      wage_year_month_array = Wage.pluck("year","month").uniq
+			if wage_year_month_array.include?([year.to_i,month.to_i])
+				wage_import_message["year_month"] = "#{year}年#{month}月工资表已上传过，请勿重复上传！"
+			end
+
+      if !wage_import_message["head"].present? && !wage_import_message["year_month"].present?
+  	    header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
   	    header_hash = [wage_headers,header_ids].transpose.to_h
         # bonus_headers = BonusHeader.pluck("header")
         # bonus_ids = BonusHeader.pluck("id").map{|m| "col"+ m.to_s}
@@ -40,57 +45,13 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
 
   	    (2..spreadsheet.last_row).each do |j|
   	        row = Hash[[header, spreadsheet.row(j)].transpose]
-
             wage = Wage.new
   	        if Employee.find_by(:sal_number => row[header_hash["工资号"]]).present?
   	        	employee_id = Employee.find_by(:sal_number => row[header_hash["工资号"]]).id
   	        	wage.employee_id = employee_id
-  	        end
+						end
             wage.year = year.to_i
             wage.month = month.to_i
-            # bonus_month = Bonu.find_by(:year => year,:month => month)
-            #
-            # if bonus_month.blank?
-            #   wage_import_message["bonus_blank"] = "要先上传奖金表哦！"
-            #   redirect_to import_bonus_bonus_path
-            # end
-            # bonus_find_by = Bonu.find_by(:year => year,:month => month,:sal_number => row[header_hash["工资号"]])
-            #
-            # wage_not_in_bonus = []
-            # if bonus_find_by.blank?
-            #   row[header_hash["奖金"]] = 0
-            #   wage_not_in_bonus << row[header_hash["工资号"]]
-            # else
-            #   bonus = bonus_find_by.attributes
-            #   row[header_hash["奖金"]] = bonus[bonus_header_hash["挂钩工资"]]
-            #                            + bonus[bonus_header_hash["工费"]]
-            #                            + bonus[bonus_header_hash["安质工资"]]
-            #                            + bonus[bonus_header_hash["工质工资"]]
-            #                            + bonus[bonus_header_hash["行车考核"]]
-            #                            + bonus[bonus_header_hash["一体化奖"]]
-            #                            + bonus[bonus_header_hash["兼职兼岗"]]
-            #                            + bonus[bonus_header_hash["其他"]]
-            #                            + bonus[bonus_header_hash["管理"]]
-            #                            + bonus[bonus_header_hash["星级考核"]]
-            #                            + bonus[bonus_header_hash["标考奖"]]
-            #                            + bonus[bonus_header_hash["局先奖"]]
-            #                            + bonus[bonus_header_hash["一次性"]]
-            #                            - bonus[bonus_header_hash["考核扣款"]]
-            # end
-
-
-            # row[header_hash["工资总额"]] = row[header_hash["应发工资"]]
-            #                            - row[header_hash["独补"]]
-            #                            - row[header_hash["托补"]]
-            #                            - row[header_hash["奶补"]]
-            #                            - row[header_hash["扣捆绑"]]
-            #                            - row[header_hash["扣捆挂"]]
-            #                            + row[header_hash["奖金"]]
-
-            # row[header_hash["绩效工资"]] = row[header_hash["岗安考核"]]
-            #                            + row[header_hash["加班费"]]
-            #                            + row[header_hash["奖金"]]
-
             row[header_hash["基本工资"]] = (row[header_hash["技能"]]).to_i
                                        - (row[header_hash["岗位"]]).to_i
                                        - (row[header_hash["增资"]]).to_i
@@ -117,7 +78,7 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
   	        wage.save!
   	    end
       end
-      
+
       return wage_import_message
 	end
 end
