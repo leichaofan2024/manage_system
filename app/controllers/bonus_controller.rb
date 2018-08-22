@@ -2,7 +2,10 @@ class BonusController < ApplicationController
 	layout 'home'
 
   def import_bonus
-    @bonus = Bonu.page(params[:page]).per(20)
+		if params[:year].present? && params[:month].present? 
+		else
+    	@bonus = Bonu.page(params[:page]).per(20)
+		end
     #下载表格配置
     @export_bonus = Bonu.all
     respond_to do |format|

@@ -88,18 +88,19 @@
             <% if @workshop.present? %>
               <% Group.current.where(:workshop_id => @workshop).each do |group| %>
                 <tr>
-                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
+
                   <td><%= group.name %></td>
                   <% @vacation_name_hash.keys.each do |code| %>
                     <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
+                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
                       <% if count == 0 %>
                         <td><%= count %></td>
                       <% else %>
                         <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id, :month => Time.now.month, :year => Time.now.year), class: "btn btn-primary2" %></td>
                       <% end %>
                     <% else %>
-                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %>
+                      <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
+                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
                       <% if count == 0 %>
                         <td><%= count %></td>
                       <% else %>

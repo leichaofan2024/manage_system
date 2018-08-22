@@ -41,74 +41,40 @@ class Bonu < ApplicationRecord
 
 						wage_headers = WageHeader.pluck("header")
 						wage_header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
-		  	    wage_header_hash = [wage_headers,header_ids].transpose.to_h
+		  	    wage_header_hash = [wage_headers,wage_header_ids].transpose.to_h
             wage = Wage.find_by("#{wage_header_hash["工资号"]}" => row[header_hash["工资号"]],:year => year,:month => month)
             if wage.present?
-							wage_jiangjin = (row[header_hash["挂钩工资"]]).t_i
-                            + (row[header_hash["工费"]]).t_i
-                            + (row[header_hash["安质工资"]]).t_i
-                            + (row[header_hash["工质工资"]]).t_i
-                            + (row[header_hash["行车考核"]]).t_i
-                            + (row[header_hash["一体化奖"]]).t_i
-                            + (row[header_hash["兼职兼岗"]]).t_i
-                            + (row[header_hash["其他"]]).t_i
-                            + (row[header_hash["管理"]]).t_i
-                            + (row[header_hash["星级考核"]]).t_i
-                            + (row[header_hash["标考奖"]]).t_i
-                            + (row[header_hash["局先奖"]]).t_i
-                            + (row[header_hash["一次性"]]).t_i
-                            - (row[header_hash["考核扣款"]]).t_i
+							wage_attributes = wage.attributes
+							# 工资表奖金：
+							wage_jiangjin = (row[header_hash["挂钩工资"]]).to_i
+                            + (row[header_hash["工费"]]).to_i
+                            + (row[header_hash["安质工资"]]).to_i
+                            + (row[header_hash["工质工资"]]).to_i
+                            + (row[header_hash["行车考核"]]).to_i
+                            + (row[header_hash["一体化奖"]]).to_i
+                            + (row[header_hash["兼职兼岗"]]).to_i
+                            + (row[header_hash["其他"]]).to_i
+                            + (row[header_hash["管理"]]).to_i
+                            + (row[header_hash["星级考核"]]).to_i
+                            + (row[header_hash["标考奖"]]).to_i
+                            + (row[header_hash["局先奖"]]).to_i
+                            + (row[header_hash["一次性"]]).to_i
+                            - (row[header_hash["考核扣款"]]).to_i
+           # 工资表工资总额
+           wage_gongzizonge = (wage_attributes[wage_header_hash["应发工资"]]).to_i
+                            - (wage_attributes[wage_header_hash["独补"]]).to_i
+                            - (wage_attributes[wage_header_hash["托补"]]).to_i
+                            - (wage_attributes[wage_header_hash["奶补"]]).to_i
+                            - (wage_attributes[wage_header_hash["扣捆绑"]]).to_i
+                            - (wage_attributes[wage_header_hash["扣捆挂"]]).to_i
+                            + wage_jiangjin
+           # 工资表绩效工资
+           wage_jixiaogongzi = wage_attributes[wage_header_hash["岗安考核"]]
+                             + wage_attributes[wage_header_hash["加班费"]]
+                             + wage_jiangjin
 
-							row[header_hash["工资总额"]] = row[header_hash["应发工资"]]
-	            #                            - row[header_hash["独补"]]
-	            #                            - row[header_hash["托补"]]
-	            #                            - row[header_hash["奶补"]]
-	            #                            - row[header_hash["扣捆绑"]]
-	            #                            - row[header_hash["扣捆挂"]]
-	            #                            + row[header_hash["奖金"]]
-							wage.update(wage_header_hash["奖金"] => wage_jiangjin)
-
+					wage.update(wage_header_hash["奖金"] => wage_jiangjin,wage_header_hash["工资总额"] => wage_gongzizonge,wage_header_hash["绩效工资"] => wage_jixiaogongzi )
 						end
-            # if bonus_month.blank?
-            #   wage_import_message["bonus_blank"] = "要先上传奖金表哦！"
-            #   redirect_to import_bonus_bonus_path
-            # end
-            # bonus_find_by = Bonu.find_by(:year => year,:month => month,:sal_number => row[header_hash["工资号"]])
-            #
-            # wage_not_in_bonus = []
-            # if bonus_find_by.blank?
-            #   row[header_hash["奖金"]] = 0
-            #   wage_not_in_bonus << row[header_hash["工资号"]]
-            # else
-            #   bonus = bonus_find_by.attributes
-            #   row[header_hash["奖金"]] = bonus[bonus_header_hash["挂钩工资"]]
-            #                            + bonus[bonus_header_hash["工费"]]
-            #                            + bonus[bonus_header_hash["安质工资"]]
-            #                            + bonus[bonus_header_hash["工质工资"]]
-            #                            + bonus[bonus_header_hash["行车考核"]]
-            #                            + bonus[bonus_header_hash["一体化奖"]]
-            #                            + bonus[bonus_header_hash["兼职兼岗"]]
-            #                            + bonus[bonus_header_hash["其他"]]
-            #                            + bonus[bonus_header_hash["管理"]]
-            #                            + bonus[bonus_header_hash["星级考核"]]
-            #                            + bonus[bonus_header_hash["标考奖"]]
-            #                            + bonus[bonus_header_hash["局先奖"]]
-            #                            + bonus[bonus_header_hash["一次性"]]
-            #                            - bonus[bonus_header_hash["考核扣款"]]
-            # end
-
-
-            # row[header_hash["工资总额"]] = row[header_hash["应发工资"]]
-            #                            - row[header_hash["独补"]]
-            #                            - row[header_hash["托补"]]
-            #                            - row[header_hash["奶补"]]
-            #                            - row[header_hash["扣捆绑"]]
-            #                            - row[header_hash["扣捆挂"]]
-            #                            + row[header_hash["奖金"]]
-
-            # row[header_hash["绩效工资"]] = row[header_hash["岗安考核"]]
-            #                            + row[header_hash["加班费"]]
-            #                            + row[header_hash["奖金"]]
 
 		    end
       end
