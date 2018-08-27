@@ -115,91 +115,91 @@
             <th>修改次数</th>
           </tr>
         </thead>
-          <tbody data-behavior='sortable'>
-            <% if @workshop.present? %>
-              <% Group.current.where(:workshop_id => @workshop).each do |group| %>
-                <tr>
-                  <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
-                  <td><%= group.name %></td>
-                  <% @vacation_name_hash.keys.each do |code| %>
-                    <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
-                      <% if count == 0 %>
-                        <td><%= count %></td>
-                      <% else %>
-                        <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id, :month => Time.now.month, :year => Time.now.year), class: "btn btn-primary2" %></td>
-                      <% end %>
-                    <% else %>
-                      <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %>
-                      <% if count == 0 %>
-                        <td><%= count %></td>
-                      <% else %>
-                        <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id, month: @month, year: @year), class: "btn btn-primary2" %></td>
-                      <% end %>
-                    <% end %>
-                  <% end %>
-                  <% employees = Employee.current.where(:group => group.id).pluck("id") %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: 'btn btn-primary2' %></td>
-                  <% else %>
-                    <% attendances = Attendance.where(:employee_id => employees, :month => @month, :year => @year).pluck("id") %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year), class: 'btn btn-primary2' %></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            <% elsif @group.present? %>
-              <% @employees.each do |employee| %>
-                <tr>
-                  <td><%= employee.name %></td>
-                  <td><%= employee.sal_number %></td>
-                  <td><%= Workshop.current.find(employee.workshop).name %></td>
-                  <td><%= Group.current.find(employee.group).name %></td>
-                  <% @vacation_name_hash.keys.each do |code| %>
-                    <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: Time.now.month, year: Time.now.year).sum(:count) %></td>
-                    <% else %>
-                      <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: @month, year: @year).sum(:count) %></td>
-                    <% end %>
-                  <% end %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) , class: 'btn btn-primary2'%></td>
-                  <% else %>
-                    <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            <% else %>
-              <% Workshop.current.each do |workshop| %>
-                <tr>
-                  <% if @leaving_employees.nil? %>
-                    <% transfer_employees = nil %>
-                  <% else %>
-                    <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
-                  <% end %>
+                      <tbody data-behavior='sortable'>
+                        <% if @workshop.present? %>
+                          <% Group.current.where(:workshop_id => @workshop).each do |group| %>
+                            <tr>
+                              <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group).pluck("employee_id") %>
+                              <td><%= group.name %></td>
+                              <% @vacation_name_hash.keys.each do |code| %>
+                                <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                  <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %>
+                                  <% if count == 0 %>
+                                    <td><%= count %></td>
+                                  <% else %>
+                                    <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id, :month => Time.now.month, :year => Time.now.year), class: "btn btn-primary2" %></td>
+                                  <% end %>
+                                <% else %>
+                                  <% count = AttendanceCount.where(:group_id => group.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %>
+                                  <% if count == 0 %>
+                                    <td><%= count %></td>
+                                  <% else %>
+                                    <td><%= link_to count, duan_detail_attendances_path(code: code, group: group.id, month: @month, year: @year), class: "btn btn-primary2" %></td>
+                                  <% end %>
+                                <% end %>
+                              <% end %>
+                              <% employees = Employee.current.where(:group => group.id).pluck("id") %>
+                              <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                <% attendances = Attendance.where(:employee_id => employees, :month => Time.now.month, :year => Time.now.year).pluck("id") %>
+                                <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: 'btn btn-primary2' %></td>
+                              <% else %>
+                                <% attendances = Attendance.where(:employee_id => employees, :month => @month, :year => @year).pluck("id") %>
+                                <td><%= link_to AttendanceRecord.where(:attendance_id => attendances).count, show_record_attendances_path(employee: employees, month: @month, year: @year), class: 'btn btn-primary2' %></td>
+                              <% end %>
+                            </tr>
+                          <% end %>
+                        <% elsif @group.present? %>
+                          <% @employees.each do |employee| %>
+                            <tr>
+                              <td><%= employee.name %></td>
+                              <td><%= employee.sal_number %></td>
+                              <td><%= Workshop.current.find(employee.workshop).name %></td>
+                              <td><%= Group.current.find(employee.group).name %></td>
+                              <% @vacation_name_hash.keys.each do |code| %>
+                                <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                  <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: Time.now.month, year: Time.now.year).sum(:count) %></td>
+                                <% else %>
+                                  <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, month: @month, year: @year).sum(:count) %></td>
+                                <% end %>
+                              <% end %>
+                              <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id}").count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) , class: 'btn btn-primary2'%></td>
+                              <% else %>
+                                <td><%= link_to AttendanceRecord.where(:attendance_id => "#{Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id}").count, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
+                              <% end %>
+                            </tr>
+                          <% end %>
+                        <% else %>
+                          <% Workshop.current.each do |workshop| %>
+                            <tr>
+                              <% if @leaving_employees.nil? %>
+                                <% transfer_employees = nil %>
+                              <% else %>
+                                <% transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: workshop).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: workshop).pluck("employee_id") %>
+                              <% end %>
 
-                  <td><%= workshop.name %></td>
-                  <% @vacation_name_hash.keys.each do |code| %>
-                    <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
-                    <% else %>
-                      <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
-                    <% end %>
-                  <% end %>
-                  <% employees = Employee.current.where(:workshop => workshop.id).pluck("id") %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <% attendances = Attendance.where(:employee_id => employees, year: Time.now.year, month: Time.now.month).pluck("id") %>
-                    <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
-                      <td><%= link_to records, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: "btn btn-primary2" %></td>
-                  <% else %>
-                    <% attendances = Attendance.where(:employee_id => employees, year: @year, month: @month).pluck("id") %>
-                    <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
-                      <td><%= link_to records, show_record_attendances_path(employee: employees, month: @month, year: @year), class: "btn btn-primary2" %></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            <% end %>
-         </tbody>
+                              <td><%= workshop.name %></td>
+                              <% @vacation_name_hash.keys.each do |code| %>
+                                <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                  <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) + AttendanceCount.where(:employee_id => transfer_employees, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+                                <% else %>
+                                  <td><%= AttendanceCount.where(:workshop_id => workshop.id, :vacation_code => code, :month => @month, :year => @year).sum(:count) %></td>
+                                <% end %>
+                              <% end %>
+                              <% employees = Employee.current.where(:workshop => workshop.id).pluck("id") %>
+                              <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
+                                <% attendances = Attendance.where(:employee_id => employees, year: Time.now.year, month: Time.now.month).pluck("id") %>
+                                <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
+                                  <td><%= link_to records, show_record_attendances_path(employee: employees, month: Time.now.month, year: Time.now.year), class: "btn btn-primary2" %></td>
+                              <% else %>
+                                <% attendances = Attendance.where(:employee_id => employees, year: @year, month: @month).pluck("id") %>
+                                <% records = AttendanceRecord.where(:attendance_id => attendances).count %>
+                                  <td><%= link_to records, show_record_attendances_path(employee: employees, month: @month, year: @year), class: "btn btn-primary2" %></td>
+                              <% end %>
+                            </tr>
+                          <% end %>
+                        <% end %>
+                     </tbody>
       </table>
     </div>
   </div>

@@ -39,7 +39,10 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def duan_holiday_plan
+		useless_columns = ["id", "workshop_id", "work_type","created_at", "updated_at", "year", "status"]
+		@columns = AnnualHolidayPlan.column_names - useless_columns
 		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
+		@worktypes = AnnualHolidayWorkType.all
 		@duan = params[:duan]
 		if params[:workshop].present?
 			@workshop = params[:workshop]
@@ -70,10 +73,12 @@ class AnnualHolidaysController < ApplicationController
 	    end
 	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
+		@workshop_names = Workshop.current.pluck("name","id")
 	end
 
 	def filter
 		@workshops = Workshop.current
+		@workshop_names = @workshops.pluck("name","id")
 		@groups = Group.current
 		@years = AnnualHoliday.pluck("year").uniq
 		if !params[:workshop].present? && !params[:group].present? && !params[:year].present?

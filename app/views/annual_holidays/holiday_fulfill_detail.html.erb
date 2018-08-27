@@ -3,40 +3,20 @@
 	<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) %>
 		<div class="col-md-12" style="margin-bottom: 10px;">
 			<%= form_tag filter_annual_holidays_path, method: 'get' do %>
-				<script type="text/javascript">
-		            function selCity()
-		            {
-		                var arr = gon.group_name;
 
-		                var selNode = document.getElementById("selid");
-		                var subselNode = document.getElementById("subselid");
-		                var index = selNode.selectedIndex;
-		                var citys = arr[index];
-
-		                subselNode.options.length = 0;
-
-		                for(var i=0; i<citys.length; i++)
-		                {
-		                    var optionNode = document.createElement("option");
-		                    optionNode.value = citys[i][1];
-		                    optionNode.innerText = citys[i][0];
-		                    subselNode.appendChild(optionNode);
-		                }
-		            }
-		        </script>
 		        <select name="workshop" id="selid" onchange="selCity(this)">
 	                <option>--选择车间--</option>
-	                <% Workshop.current.pluck("name","id").each do |name| %>
-	                    <option value="<%=name[1]%>"><%= name[0]%></option>
+	                <% @workshop_names.each do |name| %>
+	                    <option value="<%= name[1] %>"><%= name[0] %></option>
 	                <% end %>
 	            </select>
 	            <select name="group" id="subselid">
 	                <option>--选择班组--</option>
 	            </select>
-				
+
 				<%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择年份"}) %>
 				<%= submit_tag :点击筛选 %>
-			<% end %> 
+			<% end %>
 		</div>
 		<div class="card">
 	    <div style="overflow: auto;" class="col-md-12">
@@ -55,7 +35,7 @@
 	        		<th>实休</th>
 	        	</tr>
 	        </thead>
-	        <tbody>
+						<tbody>
         		<% @employees.each do |employee| %>
         			<tr>
         				<td><%= employee.name %></td>
@@ -65,28 +45,14 @@
 
         				<% (1..12).each do |i| %>
         					<% if @params_year.present? %>
-	        					<% if AnnualHoliday.find_by(month: i, year: @params_year, employee_id: employee.id).present? %>
-	        						<td><%= AnnualHoliday.find_by(month: i, year: @params_year, employee_id: employee.id).holiday_days %></td>
-	        					<% else %>
-	        						<td></td>
-	        					<% end %>
+										<td><%= holiday_params_year(i,@params_year)%></td>
 	        				<% else %>
-	        					<% if AnnualHoliday.find_by(month: i, year: Time.now.year, employee_id: employee.id).present? %>
-	        						<td><%= AnnualHoliday.find_by(month: i, year: Time.now.year, employee_id: employee.id).holiday_days %></td>
-	        					<% else %>
-	        						<td></td>
-	        					<% end %>
+	        					<td><%= holiday_params_year(i,Time.now.year)%></td>
 	        				<% end %>
         				<% end %>
 
         				<td><%= employee.working_years %></td>
-        				<% if employee.working_years <= 10 %>
-        					<td><%= 5 %></td>
-        				<% elsif employee.working_years >= 11 && employee.working_years <= 20 %>
-        					<td><%= 10 %></td>
-        				<% elsif employee.working_years >= 21 %>
-        					<td><%= 15 %></td>
-        				<% end %>
+        				<td><%= group_holiday_year(employee)%></td>
         				<td><%= AnnualHoliday.where(:employee_id => employee.id, :year => Time.now.year).sum(:holiday_days) %></td>
         			</tr>
         		<% end %>
@@ -99,3 +65,24 @@
 		</div>
 	<% end %>
 </div>
+<script type="text/javascript">
+				function selCity()
+				{
+						var arr = gon.group_name;
+
+						var selNode = document.getElementById("selid");
+						var subselNode = document.getElementById("subselid");
+						var index = selNode.selectedIndex;
+						var citys = arr[index];
+
+						subselNode.options.length = 0;
+
+						for(var i=0; i<citys.length; i++)
+						{
+								var optionNode = document.createElement("option");
+								optionNode.value = citys[i][1];
+								optionNode.innerText = citys[i][0];
+								subselNode.appendChild(optionNode);
+						}
+				}
+		</script>

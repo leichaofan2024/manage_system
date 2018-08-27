@@ -24,7 +24,7 @@
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
 
       <div class="btn_group-2MSRh_0">
-        <div class="ivu-tooltip">
+              <div class="ivu-tooltip">
             <div class="ivu-tooltip-rel" style="margin-right: 5px;">
               <% if @year.present? && @month.present? %>
                 <%= link_to "点击申请",group_application_attendances_path(:year => @year,:month => @month),class:"btn btn-primary" %>
@@ -116,7 +116,7 @@
 
   <div  class ="col-md-9 col-lg-9 col-sm-9" style="margin-left:-16px;overflow: auto; ">
     <table id="example" class="table table-bordered" style="width:100%;">
-      <thead>
+            <thead>
         <tr style= "height:35px;">
 
           <!-- 生成每月1-31号的数字-开始 -->
