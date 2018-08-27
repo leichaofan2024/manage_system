@@ -1,4 +1,11 @@
 class Bonu < ApplicationRecord
+	def self.head_transfer
+    bonus_headers = BonusHeader.pluck("header")
+    header_ids = (1..BonusHeader.count).map{|m| "col"+ m.to_s}
+    header_hash = [bonus_headers,header_ids].transpose.to_h
+		return header_hash
+	end
+
 	def self.import_table(file,year,month)
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
 	    # header = spreadsheet.row(1)
@@ -17,12 +24,18 @@ class Bonu < ApplicationRecord
         end
       end
 
+			# 同月是否上传对应工资表：
+			wage_duiying = Wage.find_by(:year => year, :month => month)
+			if wage_duiying.blank?
+				bonus_import_message["wage_not_import"] ="请先上传#{year}年#{month}月工资表！"
+			end
+
 			bonus_year_month_array = Bonu.pluck("year","month").uniq
 			if bonus_year_month_array.include?([year.to_i,month.to_i])
 				bonus_import_message["year_month"] = "#{year}年#{month}月奖金表已上传过，请勿重复上传！"
 			end
 
-			if !bonus_import_message["head"].present? && !bonus_import_message["year_month"].present?
+			if !bonus_import_message["head"].present? && !bonus_import_message["year_month"].present? && bonus_import_message["wage_not_import"].blank?
 				(1..(BonusHeader.count))
 		    header_ids = (1..(BonusHeader.count)).map{|h| "col"+ h.to_s}
 		    header_hash = Hash[[bonus_headers,header_ids].transpose]

@@ -2,12 +2,10 @@ class Wage < ApplicationRecord
 
 scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => "调离").pluck("employee_id"))}
   def self.head_transfer
-    wage_header_hash = Hash.new
-     WageHeader.all.each do |wage_header|
-       key = "col"+wage_header.id.to_s
-       wage_header_hash[key] = wage_header.header
-     end
-		 return wage_header_hash
+    wage_headers = WageHeader.pluck("header")
+    header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
+    header_hash = [wage_headers,header_ids].transpose.to_h
+		return header_hash
 	end
 
 
@@ -15,7 +13,7 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
       wage_import_message = Hash.new
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
 	    # header_name = spreadsheet.row(1)
-      # header_name += ["工资总额","奖金","基本工资","绩效工资","津贴补贴"]
+      # header_name += ["工资总额","基本工资","绩效工资","津贴补贴"]
 	    # header_name.each do |i|
 	    # 	WageHeader.create(:header => i)
 	    # end

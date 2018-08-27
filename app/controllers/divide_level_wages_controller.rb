@@ -3,6 +3,16 @@ class DivideLevelWagesController < ApplicationController
 
 
   def index
+    if params[:year].present? && params[:month].present?
+			@year = params[:year].to_i
+			@month = params[:month].to_i
+		else
+			wage_year_month_array = Wage.pluck(:year,:month).uniq.last
+			if wage_year_month_array.present?
+				@year = wage_year_month_array[0]
+				@month = wage_year_month_array[1]
+			end
+		end
     @years = Wage.pluck("year").uniq
     @months = [["选择月份"]]
 
@@ -23,6 +33,7 @@ class DivideLevelWagesController < ApplicationController
     if params[:name].present?
       @name = params[:name]
       @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","name","_method"].include?(key) || (value =="")}
+
       @divide_level_wage = DivideLevelWage.new(:name => @name, :formula => @params_hash)
       if @divide_level_wage.save
         flash[:notice] = "项目新增成功！"
@@ -88,6 +99,14 @@ class DivideLevelWagesController < ApplicationController
       divide_head_name= params[:divide_head_name]
       @name = params[:head_name]
       @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","divide_head_name","_method"].include?(key) || (value =="")}
+
+      if @params_hash.keys.include?("age")
+        age_range = []
+        @params_hash["age"].each do |value|
+          age_range<< value.to_i
+        end
+        @params_hash["age"] = (age_range.min..age_range.max)
+      end
       @divide_level_wage_head = DivideLevelWageHead.new(:head_name => @name, :divide_head_name => divide_head_name,:formula => @params_hash)
       if @divide_level_wage_head.save
         redirect_to divide_level_wages_path
@@ -136,8 +155,7 @@ class DivideLevelWagesController < ApplicationController
     @divide_level_wage_head.delete
 
     (divide_head_id..head_count).each do |divide_head|
-
-        @divide_level_wage_heads[divide_head-1].update(:divide_head_name => ("col" + divide_head.to_s))
+      @divide_level_wage_heads[divide_head-1].update(:divide_head_name => ("col" + divide_head.to_s))
     end
 
     flash[:notice] = "已删除'#{name}'!"

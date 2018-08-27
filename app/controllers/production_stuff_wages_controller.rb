@@ -3,6 +3,16 @@ class ProductionStuffWagesController < ApplicationController
 
 
   def index
+    if params[:year].present? && params[:month].present?
+			@year = params[:year]
+			@month = params[:month]
+		else
+			wage_year_month_array = Wage.pluck(:year,:month).uniq.last
+			if wage_year_month_array.present?
+				@year = wage_year_month_array[0]
+				@month = wage_year_month_array[1]
+			end
+		end
     @years = Wage.pluck("year").uniq
     @months = [["选择月份"]]
 

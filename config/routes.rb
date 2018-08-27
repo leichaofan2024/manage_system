@@ -193,6 +193,8 @@ Rails.application.routes.draw do
       delete :delete_wage
       post :create_header
       post :edit_header
+      post :create_kuaizhao
+      get :kuaizhao_index
       get :divide_level_wage
       get :production_stuff_wage
       get :high_speed_rail_stuff

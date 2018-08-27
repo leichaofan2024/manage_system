@@ -42,6 +42,8 @@ class BonusController < ApplicationController
         flash[:alert] = import_message["head"]
 			elsif import_message["year_month"].present?
 				flash[:alert] = import_message["year_month"]
+			elsif import_message["wage_not_import"].present?
+				flash[:alert] =import_message["wage_not_import"]
 			else
       	flash[:notice] = "上传成功"
 			end
