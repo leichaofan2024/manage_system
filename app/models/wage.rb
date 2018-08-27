@@ -4,7 +4,7 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
   def self.head_transfer
     wage_headers = WageHeader.pluck("header")
     header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
-    header_hash = [wage_headers,header_ids].transpose.to_h
+    header_hash = [header_ids,wage_headers].transpose.to_h
 		return header_hash
 	end
 

@@ -136,6 +136,7 @@ class Employee < ActiveRecord::Base
                      "班组类别" => "group_category",
                      "姓名" => "name",
                      "性别" => "sex",
+                     "电话号" => "phone_number",
                      "出生日期" => "birth_date",
                      "出生年份" => "birth_year",
                      "年龄" => "age",
@@ -205,14 +206,15 @@ class Employee < ActiveRecord::Base
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
     (2..spreadsheet.last_row).each do |j|
       row = Hash[[header, spreadsheet.row(j)].transpose]
-      employee = find_by(job_number: row["job_number"]) || new
+      employee = find_by(sal_number: row["sal_number"]) || new
       employee.attributes = row
-      employee.sal_number = '41' + employee.job_number
+      employee.save!
+      # employee.sal_number = '41' + employee.job_number
       employee.birth_year = employee.birth_date[0..3]
       employee.age = Time.now.year - employee.birth_year.to_i
-      working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
+      # working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
       rali_years_transfer = (Time.now - employee.railway_time.to_datetime)/60/60/24/365
-      employee.working_years = working_years_transfer.to_i
+      # employee.working_years = working_years_transfer.to_i
       employee.rali_years = rali_years_transfer.to_i
 
       # 更新Workshop数据
@@ -233,7 +235,7 @@ class Employee < ActiveRecord::Base
         end
         employee.workshop = workshop.id
       end
-      employee.save!
+
     end
 
 

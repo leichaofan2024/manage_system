@@ -128,7 +128,7 @@ class WagesController < ApplicationController
 					  level_formula["age"] = (level_age_range.min..level_age_range.max)
 				  end
 					@employee_people = Employee.current.where(level_formula)
-			    wage_people = Wage.where(Wage.head_transfer["工资号"] => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
+			    wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
 					kuaizhao_names = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month).pluck(:header_name)
@@ -186,7 +186,7 @@ class WagesController < ApplicationController
 					  level_formula["age"] = (level_age_range.min..level_age_range.max)
 				  end
 					@employee_people = Employee.current.where(level_formula)
-			    wage_people = Wage.where(Wage.head_transfer["工资号"] => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
+			    wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
 					kuaizhao_names = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month).pluck(:header_name)
@@ -244,7 +244,7 @@ class WagesController < ApplicationController
 						level_formula["age"] = (level_age_range.min..level_age_range.max)
 					end
 					@employee_people = Employee.current.where(level_formula)
-					wage_people = Wage.where(Wage.head_transfer["工资号"] => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
+					wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
 					kuaizhao_names = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month).pluck(:header_name)
@@ -301,7 +301,7 @@ class WagesController < ApplicationController
 						level_formula["age"] = (level_age_range.min..level_age_range.max)
 					end
 					@employee_people = Employee.current.where(level_formula)
-					wage_people = Wage.where(Wage.head_transfer["工资号"] => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
+					wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
 					kuaizhao_names = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month).pluck(:header_name)
