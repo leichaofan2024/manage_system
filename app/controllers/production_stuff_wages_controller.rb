@@ -4,8 +4,8 @@ class ProductionStuffWagesController < ApplicationController
 
   def index
     if params[:year].present? && params[:month].present?
-			@year = params[:year]
-			@month = params[:month]
+			@year = params[:year].to_i
+			@month = params[:month].to_i
 		else
 			wage_year_month_array = Wage.pluck(:year,:month).uniq.last
 			if wage_year_month_array.present?

@@ -66,7 +66,7 @@
               </td>
 
               <% DivideLevelWageHead.all.each do |head| %>
-                <% head_formula = head.formula.delete_if{|key,value| key=="average"||key=="final_period"} %>
+                <% head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) } %>
                 <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
                   <% if head_formula.keys.include?("age") %>
                     <% age_range = []%>
@@ -104,6 +104,6 @@
 
 
   <div class="col-md-12">
-    <%= link_to("生成快照", create_kuaizhao_wages_path(request.query_parameters,:category => "divide"),method: :post,:data => {disable_with: "正在生成快照..."})%>
+    <%= link_to("生成快照", create_kuaizhao_wages_path(:year => @year,:month => @month,:category => "divide"),method: :post,:data => {disable_with: "正在生成快照..."})%>
   </div>
 </div>

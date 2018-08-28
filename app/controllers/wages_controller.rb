@@ -104,19 +104,21 @@ class WagesController < ApplicationController
 
 # 快照功能
 	def create_kuaizhao
-		wage_year_month_array = Wage.pluck(:year,:month).uniq
-		if wage_year_month_array.present?
-			if params[:year].present? && params[:month].present?
-				if wage_year_month_array.include?([params[:year].to_i,params[:month].to_i])
-					@year = params[:year]
-					@month = params[:month]
-				end
-			else
-				wage_year_month_last = wage_year_month_array.last
-				@year = wage_year_month_last[0]
-				@month = wage_year_month_last[1]
-			end
-		end
+		# wage_year_month_array = Wage.pluck(:year,:month).uniq
+		# if wage_year_month_array.present?
+		# 	if params[:year].present? && params[:month].present?
+		# 		if wage_year_month_array.include?([params[:year].to_i,params[:month].to_i])
+		# 			@year = params[:year]
+		# 			@month = params[:month]
+		# 		end
+		# 	else
+		# 		wage_year_month_last = wage_year_month_array.last
+		# 		@year = wage_year_month_last[0]
+		# 		@month = wage_year_month_last[1]
+		# 	end
+		# end
+    @year = params[:year].to_i
+		@month = params[:month].to_i 
 
     @kuaizhao = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month)
     if !@kuaizhao.present?
@@ -143,7 +145,7 @@ class WagesController < ApplicationController
 							KuaizhaoHeader.create( :content_name => head.divide_head_name , :header_name => head.head_name,
 								                     :formula => head.formula,:category => params[:category],:year => @year,:month => @month)
 						end
-						head_formula = head.formula
+						head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) }
 						if !head_formula.values.include?("1") && !head_formula.values.include?("2")
 						  if head_formula.keys.include?("age")
 							  age_range = []
@@ -179,7 +181,7 @@ class WagesController < ApplicationController
 	      flash[:notice] = "#{@year}年#{@month}月‘铁路企业分层次人员工资情况统计表’快照已生成！"
 
 			elsif params[:category] == "production" && @year.present? && @month.present?
-				divide_head_hash = ProductionStuffWageHead.pluck(:head_name,:divide_head_name).to_h
+				divide_head_hash = ProductionStuffWageHead.pluck(:head_name,:production_head_name).to_h
 				#统计记录循环：
 		    ProductionStuffWage.all.each do |level|
 				  level_formula = level.formula
@@ -198,10 +200,10 @@ class WagesController < ApplicationController
 	        #计算每一行的数据：
 					ProductionStuffWageHead.all.each do |head|
 						if !kuaizhao_names.include?(head.head_name)
-							KuaizhaoHeader.create( :content_name => head.divide_head_name , :header_name => head.head_name,
+							KuaizhaoHeader.create( :content_name => head.production_head_name , :header_name => head.head_name,
 								                     :formula => head.formula,:category => params[:category],:year => @year,:month => @month)
 						end
-						head_formula = head.formula
+						head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) }
 						if !head_formula.values.include?("1") && !head_formula.values.include?("2")
 						  if head_formula.keys.include?("age")
 							  age_range = []
@@ -210,7 +212,7 @@ class WagesController < ApplicationController
 							  end
 							  head_formula["age"] = (age_range.min..age_range.max)
 						  end
-						  kuaizhao_content_hash[head.divide_head_name]= @employee_people.where(head_formula).count
+						  kuaizhao_content_hash[head.production_head_name]= @employee_people.where(head_formula).count
 						else
 							form_cel_value = 0
 							head_formula.keys.each do |key|
@@ -220,7 +222,7 @@ class WagesController < ApplicationController
 									 form_cel_value -= wage_people.sum(key).to_i
 								end
 							end
-							kuaizhao_content_hash[head.divide_head_name] = form_cel_value
+							kuaizhao_content_hash[head.production_head_name] = form_cel_value
 						end
 					end
 					#一行的数据计算完毕/
@@ -237,7 +239,7 @@ class WagesController < ApplicationController
 	      flash[:notice] = "#{@year}年#{@month}月‘运输站段生产人员人数和报酬统计表’快照已生成！"
 
 			elsif params[:category] == "main" && @year.present? && @month.present?
-				divide_head_hash = MainDrivingStuffHead.pluck(:head_name,:divide_head_name).to_h
+				divide_head_hash = MainDrivingStuffHead.pluck(:head_name,:main_head_name).to_h
 				#统计记录循环：
 				MainDrivingStuff.all.each do |level|
 					level_formula = level.formula
@@ -256,10 +258,10 @@ class WagesController < ApplicationController
 					#计算每一行的数据：
 					MainDrivingStuffHead.all.each do |head|
 						if !kuaizhao_names.include?(head.head_name)
-							KuaizhaoHeader.create( :content_name => head.divide_head_name , :header_name => head.head_name,
+							KuaizhaoHeader.create( :content_name => head.main_head_name , :header_name => head.head_name,
 																		 :formula => head.formula,:category => params[:category],:year => @year,:month => @month)
 						end
-						head_formula = head.formula
+						head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) }
 						if !head_formula.values.include?("1") && !head_formula.values.include?("2")
 							if head_formula.keys.include?("age")
 								age_range = []
@@ -268,7 +270,7 @@ class WagesController < ApplicationController
 								end
 								head_formula["age"] = (age_range.min..age_range.max)
 							end
-							kuaizhao_content_hash[head.divide_head_name]= @employee_people.where(head_formula).count
+							kuaizhao_content_hash[head.main_head_name]= @employee_people.where(head_formula).count
 						else
 							form_cel_value = 0
 							head_formula.keys.each do |key|
@@ -278,7 +280,7 @@ class WagesController < ApplicationController
 									 form_cel_value -= wage_people.sum(key).to_i
 								end
 							end
-							kuaizhao_content_hash[head.divide_head_name] = form_cel_value
+							kuaizhao_content_hash[head.main_head_name] = form_cel_value
 						end
 					end
 					#一行的数据计算完毕/
@@ -294,7 +296,7 @@ class WagesController < ApplicationController
 				#统计记录循环结束
 				flash[:notice] = "#{@year}年#{@month}月‘主要行车工种情况统计表’快照已生成！"
 			elsif params[:category] == "high" && @year.present? && @month.present?
-				divide_head_hash = HighSpeedRailStuffHead.pluck(:head_name,:divide_head_name).to_h
+				divide_head_hash = HighSpeedRailStuffHead.pluck(:head_name,:high_head_name).to_h
 				#统计记录循环：
 				HighSpeedRailStuff.all.each do |level|
 					level_formula = level.formula
@@ -313,10 +315,10 @@ class WagesController < ApplicationController
 					#计算每一行的数据：
 					HighSpeedRailStuffHead.all.each do |head|
 						if !kuaizhao_names.include?(head.head_name)
-							KuaizhaoHeader.create( :content_name => head.divide_head_name , :header_name => head.head_name,
+							KuaizhaoHeader.create( :content_name => head.high_head_name , :header_name => head.head_name,
 																		 :formula => head.formula,:category => params[:category],:year => @year,:month => @month)
 						end
-						head_formula = head.formula
+						head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) }
 						if !head_formula.values.include?("1") && !head_formula.values.include?("2")
 							if head_formula.keys.include?("age")
 								age_range = []
@@ -325,7 +327,7 @@ class WagesController < ApplicationController
 								end
 								head_formula["age"] = (age_range.min..age_range.max)
 							end
-							kuaizhao_content_hash[head.divide_head_name]= @employee_people.where(head_formula).count
+							kuaizhao_content_hash[head.high_head_name]= @employee_people.where(head_formula).count
 						else
 							form_cel_value = 0
 							head_formula.keys.each do |key|
@@ -335,7 +337,7 @@ class WagesController < ApplicationController
 									 form_cel_value -= wage_people.sum(key).to_i
 								end
 							end
-							kuaizhao_content_hash[head.divide_head_name] = form_cel_value
+							kuaizhao_content_hash[head.high_head_name] = form_cel_value
 						end
 					end
 					#一行的数据计算完毕/
