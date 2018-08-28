@@ -54,7 +54,6 @@
                 <% form_cel_value = 0 %>
                 <% last_month = months.max%>
                 <% last_month_header = @kuaizhao_headers.find_by(:header_name => head,:month =>last_month) %>
-
                 <% if last_month_header.formula.keys.include?("final_period")%>
                   <% form_cel_value = contents.find_by(:month => last_month).attributes[last_month_header.content_name]%>
                 <% else %>
@@ -63,7 +62,11 @@
                       <% form_cel_value += contents.find_by(:month => month).attributes[column] %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("per_capita") %>
-                      <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
+                      <% if line_content_hash[last_month_header.formula["per_capita"]] == 0 %>
+                        <% form_cel_value = 0%>
+                      <% else %>
+                        <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
+                      <% end %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("average")%>
                       <% form_cel_value = form_cel_value/(months.count)%>
