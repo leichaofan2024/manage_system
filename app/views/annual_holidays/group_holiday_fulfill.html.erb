@@ -1,3 +1,7 @@
+<div class="pageheader">
+  <h2>返回<span> 休假计划页 </span></h2>
+</div>
+<div class="contentpanel">
 <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :leaderadmin)%>
  <div class="card">
 			 <div style="overflow: auto;" class="col-md-10">
@@ -28,3 +32,4 @@
 		 </div>
   </div>
 <% end %>
+</div>

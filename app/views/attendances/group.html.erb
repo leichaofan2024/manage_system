@@ -1,4 +1,11 @@
-<%= render "attendance_sidebar"%>
+<div class="pageheader">
+<h2>返回 <span> 段考勤统计 </span></h2>
+</div>
+
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
+  </div>
 
 <div class="col-md-12" style="margin-top: -10px;">
 
@@ -108,8 +115,6 @@
           <!-- 配置表格数据-结束 -->
        </tbody>
     </table>
-
-
    </div>
 
   <!-- 考勤填写部分： -->
@@ -224,5 +229,5 @@
   </div>
  </div>
 </div>
-</div>
+
 <%= render 'application_modal' %>

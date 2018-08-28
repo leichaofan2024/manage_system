@@ -1,54 +1,61 @@
-<%= render "attendance_sidebar"%>
-<div class="col-md-12">
-  <div class="ivu-tooltip-rel" style="margin-left: 15px; margin-bottom: 10px">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to caiwu_attendances_path(format: "xls") do  %>
-         <span style="color: #269Eff;">导出记录</span>
-      <% end %>
-    </button>
+<div class="pageheader">
+  <h2>返回<span> 财务报表[1] </span></h2>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
   </div>
+  <div class="col-md-12">
+    <div class="ivu-tooltip-rel" style="margin-left: 15px; margin-bottom: 10px">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to caiwu_attendances_path(format: "xls") do  %>
+           <span style="color: #269Eff;">导出记录</span>
+        <% end %>
+      </button>
+    </div>
 
-  <div class="card">
-    <div style="overflow: auto;" class="col-md-12">
-      <table id="example" class="table table-bordered">
-        <thead>
-        	<tr>
-            <th>车间</th>
-            <th>班组</th>
-            <th>姓名</th>
-            <th>工资号</th>
-            <th>职务</th>
-	          <th>病假</th>
-	          <th>事假</th>
-	          <th>婚假</th>
-	          <th>产假</th>
-	          <th>探亲假</th>
-	          <th>丧假</th>
-	          <th>育儿假</th>
-	          <th>陪产假</th>
-	          <th>工伤假</th>
-	          <th>旷工</th>
-        	</tr>
-        </thead>
-        <tbody>
-        	<% @employees.each do |employee| %>
-				<tr>
-          <td><%= Workshop.current.find(employee.workshop).name %></td>
-          <td><%= Group.current.find(employee.group).name %></td>
-				  <td><%= employee.name %></td>
-          <td><%= employee.sal_number %></td>
-          <td><%= employee.duty %></td>
-				  <% @vacation_codes.each do |code| %>
-				    <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
-				  <% end %>
-				</tr>
-			<% end %>
-        </tbody>
-      </table>
+    <div class="card">
+      <div style="overflow: auto;" class="col-md-12">
+        <table id="example" class="table table-bordered">
+          <thead>
+          	<tr>
+              <th>车间</th>
+              <th>班组</th>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>职务</th>
+  	          <th>病假</th>
+  	          <th>事假</th>
+  	          <th>婚假</th>
+  	          <th>产假</th>
+  	          <th>探亲假</th>
+  	          <th>丧假</th>
+  	          <th>育儿假</th>
+  	          <th>陪产假</th>
+  	          <th>工伤假</th>
+  	          <th>旷工</th>
+          	</tr>
+          </thead>
+          <tbody>
+          	<% @employees.each do |employee| %>
+  				<tr>
+            <td><%= Workshop.current.find(employee.workshop).name %></td>
+            <td><%= Group.current.find(employee.group).name %></td>
+  				  <td><%= employee.name %></td>
+            <td><%= employee.sal_number %></td>
+            <td><%= employee.duty %></td>
+  				  <% @vacation_codes.each do |code| %>
+  				    <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+  				  <% end %>
+  				</tr>
+  			<% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="text-center">
-  <%= paginate @employees %>
+  <div class="text-center">
+    <%= paginate @employees %>
+  </div>
 </div>

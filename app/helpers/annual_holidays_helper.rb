@@ -47,7 +47,7 @@ module AnnualHolidaysHelper
     AnnualHoliday.where(employee_id: employee.id, year: Time.now.year).sum(:holiday_days)
   end
 
-  def holiday_params_year(i,params_year)
+  def holiday_params_year(i,params_year,employee)
     holiday = AnnualHoliday.find_by(month: i, year: params_year, employee_id: employee.id)
     if holiday.present?
       holiday.holiday_days

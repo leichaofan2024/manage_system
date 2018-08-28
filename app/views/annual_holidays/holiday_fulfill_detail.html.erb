@@ -1,70 +1,79 @@
-<%= render 'annual_holiday_sidebar' %>
-<div class="col-md-12">
-	<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) %>
-		<div class="col-md-12" style="margin-bottom: 10px;">
-			<%= form_tag filter_annual_holidays_path, method: 'get' do %>
-
-		        <select name="workshop" id="selid" onchange="selCity(this)">
-	                <option>--选择车间--</option>
-	                <% @workshop_names.each do |name| %>
-	                    <option value="<%= name[1] %>"><%= name[0] %></option>
-	                <% end %>
-	            </select>
-	            <select name="group" id="subselid">
-	                <option>--选择班组--</option>
-	            </select>
-
-				<%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择年份"}) %>
-				<%= submit_tag :点击筛选 %>
-			<% end %>
-		</div>
-		<div class="card">
-	    <div style="overflow: auto;" class="col-md-12">
-	      <table id="example" class="table table-bordered">
-	        <thead>
-	        	<tr>
-	        		<th>姓名</th>
-	        		<th>工资号</th>
-	        		<th>车间</th>
-	        		<th>班组</th>
-	        		<% (1..12).each do |i| %>
-	        			<th><%= i %></th>
-	        		<% end %>
-	        		<th>工龄</th>
-	        		<th>应休</th>
-	        		<th>实休</th>
-	        	</tr>
-	        </thead>
-						<tbody>
-        		<% @employees.each do |employee| %>
-        			<tr>
-        				<td><%= employee.name %></td>
-        				<td><%= employee.sal_number %></td>
-        				<td><%= Workshop.current.find_by(:id => Employee.current.find_by(:id => employee.id).workshop).name %></td>
-        				<td><%= Group.current.find_by(:id => Employee.current.find_by(:id => employee.id).group).name %></td>
-
-        				<% (1..12).each do |i| %>
-        					<% if @params_year.present? %>
-										<td><%= holiday_params_year(i,@params_year)%></td>
-	        				<% else %>
-	        					<td><%= holiday_params_year(i,Time.now.year)%></td>
-	        				<% end %>
-        				<% end %>
-
-        				<td><%= employee.working_years %></td>
-        				<td><%= group_holiday_year(employee)%></td>
-        				<td><%= AnnualHoliday.where(:employee_id => employee.id, :year => Time.now.year).sum(:holiday_days) %></td>
-        			</tr>
-        		<% end %>
-        	</tbody>
-        </table>
-        <div class="text-center">
-        	<%= paginate @employees %>
-        </div>
-      </div>
-		</div>
-	<% end %>
+<div class="pageheader">
+  <h2>返回<span> 休假统计 </span></h2>
 </div>
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<%= render 'annual_holiday_sidebar' %>
+	</div>
+	<div class="col-md-12">
+		<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) %>
+			<div class="col-md-12" style="margin-bottom: 10px;">
+				<%= form_tag filter_annual_holidays_path, method: 'get' do %>
+
+			        <select name="workshop" id="selid" onchange="selCity(this)">
+		                <option>--选择车间--</option>
+		                <% @workshop_names.each do |name| %>
+		                    <option value="<%= name[1] %>"><%= name[0] %></option>
+		                <% end %>
+		            </select>
+		            <select name="group" id="subselid">
+		                <option>--选择班组--</option>
+		            </select>
+
+					<%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择年份"}) %>
+					<%= submit_tag :点击筛选 %>
+				<% end %>
+			</div>
+			<div class="card">
+		    <div style="overflow: auto;" class="col-md-12">
+		      <table id="example" class="table table-bordered">
+		        <thead>
+		        	<tr>
+		        		<th>姓名</th>
+		        		<th>工资号</th>
+		        		<th>车间</th>
+		        		<th>班组</th>
+		        		<% (1..12).each do |i| %>
+		        			<th><%= i %></th>
+		        		<% end %>
+		        		<th>工龄</th>
+		        		<th>应休</th>
+		        		<th>实休</th>
+		        	</tr>
+		        </thead>
+							<tbody>
+	        		<% @employees.each do |employee| %>
+	        			<tr>
+	        				<td><%= employee.name %></td>
+	        				<td><%= employee.sal_number %></td>
+	        				<td><%= Workshop.current.find_by(:id => Employee.current.find_by(:id => employee.id).workshop).name %></td>
+	        				<td><%= Group.current.find_by(:id => Employee.current.find_by(:id => employee.id).group).name %></td>
+
+	        				<% (1..12).each do |i| %>
+	        					<% if @params_year.present? %>
+											<td><%= holiday_params_year(i,@params_year,employee)%></td>
+		        				<% else %>
+		        					<td><%= holiday_params_year(i,Time.now.year,employee)%></td>
+		        				<% end %>
+	        				<% end %>
+
+	        				<td><%= employee.working_years %></td>
+	        				<td><%= group_holiday_year(employee)%></td>
+	        				<td><%= AnnualHoliday.where(:employee_id => employee.id, :year => Time.now.year).sum(:holiday_days) %></td>
+	        			</tr>
+	        		<% end %>
+	        	</tbody>
+	        </table>
+	        <div class="text-center">
+	        	<%= paginate @employees %>
+	        </div>
+	      </div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+
 <script type="text/javascript">
 				function selCity()
 				{

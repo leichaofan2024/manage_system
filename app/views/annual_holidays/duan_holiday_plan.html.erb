@@ -1,4 +1,11 @@
-<%= render 'annual_holiday_sidebar' %>
+<div class="pageheader">
+  <h2>返回<span> 年休假计划页 </span></h2>
+</div>
+<div class="contentpanel">
+	<div class="panel panel-default">
+		<%= render 'annual_holiday_sidebar' %>
+	</div>
+
 <% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) %>
 	<div class="col-md-12" style="height: 100%">
 	    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
@@ -48,3 +55,4 @@
 		</div>
 	</div>
 <% end %>
+</div>

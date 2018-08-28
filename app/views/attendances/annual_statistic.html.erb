@@ -1,27 +1,34 @@
-<%= render "attendance_sidebar"%>
-<div class="col-md-12">
-  <div class="card">
-    <div style="overflow: auto;" class="col-md-12">
-      <table id="example" class="table table-bordered">
-        <thead>
-          <tr>
-            <th>车间</th>
-            <% @vacation_codes.each do |code| %>
-              <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+<div class="pageheader">
+  <h2>返回<span> 年考勤统计 </span></h2>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
+  </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div style="overflow: auto;" class="col-md-12">
+        <table id="example" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>车间</th>
+              <% @vacation_codes.each do |code| %>
+                <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+              <% end %>
+            </tr>
+          </thead>
+            <tbody data-behavior='sortable'>
+    	      <% @workshops.each do |workshop| %>
+            <tr>
+    	        <td><%= workshop.name %></td>
+              <% @vacation_codes.each do |code| %>
+                <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>
+              <% end %>
+    	      </tr>
             <% end %>
-          </tr>
-        </thead>
-          <tbody data-behavior='sortable'>
-  	      <% @workshops.each do |workshop| %>
-          <tr>
-  	        <td><%= workshop.name %></td>
-            <% @vacation_codes.each do |code| %>
-              <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>
-            <% end %>
-  	      </tr>
-          <% end %>
-         </tbody>
-      </table>
+           </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
