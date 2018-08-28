@@ -1,19 +1,20 @@
-
-<%= render 'employee_navbar'%>
-<div class="col-md-12">
+<div class="pageheader">
   <% if params[:age].present? %>
-    <%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %>
+    <h2><%= link_to "返回", age_statistical_analysis_employees_path(data_source: "全员") %><span> 分析 </span></h2>
   <% elsif params[:education].present? %>
-    <%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %>
+    <h2><%= link_to "返回", education_statistical_analysis_employees_path(data_source: "全员") %><span> 分析 </span></h2>
   <% elsif params[:working_years].present? %>
-    <%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %>
+    <h2><%= link_to "返回", working_years_statistical_analysis_employees_path(data_source: "全员") %><span> 分析 </span></h2>
   <% elsif params[:rali_years].present? %>
-    <%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %>
+    <h2><%= link_to "返回", rali_years_statistical_analysis_employees_path(data_source: "全员") %><span> 分析 </span></h2>
   <% elsif params[:work_type].present? %>
-    <%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %>
+    <h2><%= link_to "返回", worktype_statistical_analysis_employees_path(data_source: "全员") %><span> 分析 </span></h2>
   <% end %>
 </div>
-<br><br>
+<div class="contentpanel">
+<div class="panel panel-default">
+<%= render 'employee_navbar'%>
+</div>
 
 <h4>
   <% if params[:data_source].present? %>
@@ -108,4 +109,5 @@
           <% end %>
        </tbody>
   </table>
+</div>
 </div>

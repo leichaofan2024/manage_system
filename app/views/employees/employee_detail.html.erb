@@ -1,5 +1,13 @@
 
-<%= render "employee_navbar"%>
+<div class="pageheader">
+  <h2>当前位置 <span> 现员管理-详情页面 </span></h2>
+</div>
+
+<div class="contentpanel">
+<div class="panel panel-default">
+<%= render 'employee_navbar' %>
+</div>
+
 <%= link_to "返回", :back %>
 <%= @duty %>
 <div class="card" style="margin-top: 20px;">
@@ -142,4 +150,5 @@
 
 <div class="text-center">
   <%= paginate @employees %>
+</div>
 </div>
