@@ -34,7 +34,7 @@
   </h4>
 <% end %>
 
-<div class="col-md-12" style="height: 100%; margin-top:20px;">
+        <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
       <% if @year.present? && @month.present? %>
         <h5><%= link_to @workshop.name, filter_attendances_path(type: "workshop", month: @month, year: @year)%></h5>

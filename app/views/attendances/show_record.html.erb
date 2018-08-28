@@ -14,7 +14,7 @@
 	    		<th>有无申请</th>
 	    	</tr>
 	    </thead>
-	    <tbody>
+	    					<tbody>
 	    	<% attendances = Attendance.where(:employee_id => params[:employee], :month => params[:month], :year => params[:year]).pluck("id") %>
 	    	<% attendance_records = AttendanceRecord.where(:attendance_id => attendances) %>
 
