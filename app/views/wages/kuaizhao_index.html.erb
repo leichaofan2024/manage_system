@@ -56,7 +56,7 @@
                 <% last_month_header = @kuaizhao_headers.find_by(:header_name => head,:month =>last_month) %>
 
                 <% if last_month_header.formula.keys.include?("final_period")%>
-                  <% form_cel_value = contents.find_by(:month => month).attributes[last_month_header.content_name]%>
+                  <% form_cel_value = contents.find_by(:month => last_month).attributes[last_month_header.content_name]%>
                 <% else %>
                     <% months.each do |month| %>
                       <% column = @kuaizhao_headers.find_by(:header_name => head,:month => month).content_name %>

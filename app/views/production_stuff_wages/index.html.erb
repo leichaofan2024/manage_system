@@ -107,6 +107,6 @@
   </div>
 
   <div class="col-md-12">
-    <%= link_to("生成快照", create_kuaizhao_wages_path(request.query_parameters,:category => "production"),method: :post,:data => {disable_with: "正在生成快照..."})%>
+    <%= link_to("生成快照", create_kuaizhao_wages_path(:year => @year,:month => @month,:category => "production"),method: :post,:data => {disable_with: "正在生成快照..."})%>
   </div>
 </div>
