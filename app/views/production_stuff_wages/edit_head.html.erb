@@ -35,7 +35,13 @@
               <% end %>
               <%= age_range.min %>   ~   <%= age_range.max %>
               <br>
-            <% else %>
+            <% elsif key == "per_capita"%>
+              <span style="color:red;">计算结果除以：<%= @production_wage_head.formula["per_capita"]%></span>
+            <% elsif key == "final_period"%>
+              <span style="color:red;">求期末人数</span>
+            <% elsif key == "average"%>
+              <span style="color:red;">每月平均数</span>
+            <% elsif %>
             <%= Employee.head_transfer[key] %>: <%= @production_wage_head.formula[key] %><br>
             <% end %>
         </p>

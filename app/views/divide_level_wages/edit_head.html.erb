@@ -27,7 +27,20 @@
               <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @divide_head.formula[key]).pluck("name") %><br>
             <% elsif key == "group" %>
               <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @divide_head.formula[key]).pluck("name") %><br>
-
+            <% elsif key == "age" %>
+              <%= Employee.head_transfer[key] %>范围:
+              <% age_range = []%>
+              <%  @divide_head.formula[key].each do |value| %>
+                <% age_range<< value.to_i %>
+              <% end %>
+              <%= age_range.min %>   ~   <%= age_range.max %>
+              <br>
+            <% elsif key == "per_capita"%>
+              <span style="color:red;">计算结果除以：<%= @divide_head.formula["per_capita"]%></span>
+            <% elsif key == "final_period"%>
+              <span style="color:red;">求期末人数</span>
+            <% elsif key == "average"%>
+              <span style="color:red;">每月平均数</span>
             <% else %>
             <%= Employee.head_transfer[key] %>: <%= @divide_head.formula[key] %><br>
             <% end %>
