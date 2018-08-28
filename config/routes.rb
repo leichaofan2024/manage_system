@@ -195,6 +195,7 @@ Rails.application.routes.draw do
       post :edit_header
       post :create_kuaizhao
       get :kuaizhao_index
+      get :employees_wage_show
       get :divide_level_wage
       get :production_stuff_wage
       get :high_speed_rail_stuff

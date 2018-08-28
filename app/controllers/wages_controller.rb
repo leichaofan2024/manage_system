@@ -70,6 +70,11 @@ class WagesController < ApplicationController
     redirect_to import_wage_wages_path
   end
 
+	#每项具体人员信息
+  def employees_wage_show
+	end
+
+  #统计表方法：
   def kuaizhao_index
 		if params[:year].present? && params[:month].present?
 			@year = params[:year].to_i
