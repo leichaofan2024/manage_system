@@ -1,4 +1,11 @@
+<div class="pageheader">
+	<h2>返回<span> XX页 </span></h2>
+</div>
+<div class="contentpanel">
+	<div class="panel panel-default">
 		<%= render "attendance_sidebar"%>
+	</div>
+
 		<% if current_user.has_role? :attendance_admin %>
 			<%= form_tag create_holiday_time_attendances_path do %>
 				<%= label_tag :请输入休假员工姓名 %>
@@ -38,3 +45,4 @@
 				<% end %>
 			<% end %>
 		<% end %>
+	</div>

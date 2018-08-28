@@ -1,9 +1,14 @@
-<%= render "attendance_sidebar" %>
-
+<div class="pageheader">
+  <h2>返回<span> 考勤汇总 </span></h2>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
+  </div>
 
 
 <div class="col-md-12">
-  
+
 
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
@@ -86,6 +91,7 @@
        </tbody>
     </table>
   </div>
+</div>
 </div>
 </div>
 
