@@ -9,73 +9,13 @@
   </head>
 
   <body>
-    <%= Gon::Base.render_data({}) %>
-    <div style="height:70px;">
       <%= render 'common/navbar'%>
+      <%= render "common/flashes"%>
+
+    <div class="mainpanel">
+      <%= render 'common/headbar'%>
+      <%= yield %>
     </div>
-    <div class="sidebar data-background-color="white" data-active-color="danger" " >
-      <div class="logo">
-        <a style="color: #269EFF" class="simple-text logo-normal" href="/">北京供电段人力资源管理系统</a>
-      </div>
-
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="nav-item" onclick="openModule(event, 'Employee')">
-            <a class="nav-link" href="/employees">
-              <i  class="fa fa-address-card  material-icons"></i>
-              <p>现员管理</p>
-            </a>
-          </li>
-          <li class="nav-item" onclick="openModule(event, 'Attendance')">
-            <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-              <a class="nav-link" href="/attendances/group">
-                <i  class="fa fa-calendar-check-o material-icons"></i>
-                <p>考勤管理</p>
-              </a>
-            <% elsif current_user.has_role? :workshopadmin%>
-              <a class="nav-link" href="/attendances/group_current_time_info">
-                <i  class="fa fa-calendar-check-o material-icons"></i>
-                <p>考勤管理</p>
-              </a>
-            <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) %>
-              <a class="nav-link" href="/attendances/group_current_time_info">
-                <i  class="fa fa-calendar-check-o material-icons"></i>
-                <p>考勤管理</p>
-              </a>
-            <% end %>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i  class="fa fa-trophy  material-icons"></i>
-              <p>奖惩管理</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i  class="fa fa-balance-scale  material-icons"></i>
-              <p>定额管理</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i  class="fa fa-credit-card  material-icons"></i>
-              <p>工资管理</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i  class="fa fa-usd material-icons"></i>
-              <p>收入管理</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-  <div class="main_content fold-main has-content">
-    <%= render "common/flashes"%>
-    <%= yield %>
-  </div>
-
+    <%= Gon::Base.render_data({}) %>
 </body>
 </html>

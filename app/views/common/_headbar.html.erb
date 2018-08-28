@@ -1,0 +1,29 @@
+<div class="headerbar">
+  <a class="menutoggle"><i class="fa fa-bars"></i></a>
+    <div class="header-right">
+      <ul class="headermenu">
+        <li>
+          <% if !current_user %>
+            <li><%= link_to("注册", new_user_registration_path) %> </li>
+            <li><%= link_to("登入", new_user_session_path) %></li>
+          <% else %>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <%= current_user.name %>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+              <% if current_user.has_role? :awardadmin %>
+                <!-- <li><%= link_to '用户管理', users_path %></li> -->
+                <li><%= link_to "公告系统", announcements_path %></li>
+              <% end %>
+              <li><%= link_to "修改密码", edit_user_registration_path %></li>
+              <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> 帮助 </a></li>
+              <li><%= link_to "退出", destroy_user_session_path, method: :delete %></li>
+            </ul>
+          </div>
+          <% end %>
+        </li>
+      </ul>
+    </div><!-- header-right -->
+  </div><!-- headerbar -->
