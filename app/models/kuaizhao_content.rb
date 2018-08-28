@@ -1,0 +1,2 @@
+class KuaizhaoContent < ApplicationRecord
+end

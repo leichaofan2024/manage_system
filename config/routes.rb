@@ -190,8 +190,12 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get :import_wage
+      delete :delete_wage
       post :create_header
       post :edit_header
+      post :create_kuaizhao
+      get :kuaizhao_index
+      get :employees_wage_show
       get :divide_level_wage
       get :production_stuff_wage
       get :high_speed_rail_stuff
@@ -203,6 +207,7 @@ Rails.application.routes.draw do
     collection do
       post :import_table
       get :import_bonus
+      delete :delete_bonus
       post :create_header
       post :edit_header
     end

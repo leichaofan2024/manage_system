@@ -14,6 +14,10 @@
     <br>
     <%= label_tag "资金计算公式："%>
     <br>
+    <span style = "margin:20px;display:inline-block;width:150px;">
+      &nbsp;&nbsp;<%= label_tag "除以人数：" %>
+      <%=  select_tag "per_capita",options_for_select(MainDrivingStuffHead.pluck(:head_name).uniq),class: "form-control",style:"height:25px;" %>
+    </span>
     <br>
     <% (Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]).each do |key| %>
       <span style = "margin-left:20px;display:inline-block;width:200px">
@@ -36,7 +40,16 @@
     <br>
     <br>
 
-
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;<%= label_tag "期末人数" %>
+      <%= check_box_tag "final_period","yes" %>
+    </span>
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;<%= label_tag "平均人数" %>
+      <%= check_box_tag "average","yes" %>
+    </span>
+    <br>
+    <br>
     <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
       <span style = "margin-left:20px;display:inline-block;width:200px">
         &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>

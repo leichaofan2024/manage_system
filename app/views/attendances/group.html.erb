@@ -66,7 +66,7 @@
 <% else %>
   <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>月考勤数据</h3>
 <% end %>
-<a href="#">考勤汇总统计 >></a>
+<!-- <a href="#">考勤汇总统计 >></a> -->
 <div class="col-md-12 col-lg-12 col-sm-12 card" style="margin-top: 20px;">
   <!-- 固定前三列： -->
 
@@ -136,6 +136,9 @@
                             <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
                             <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
                             <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                            <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                            <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                            <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
                         </ul>
                     </a>
                   </li>

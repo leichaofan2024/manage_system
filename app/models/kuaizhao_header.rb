@@ -1,0 +1,2 @@
+class KuaizhaoHeader < ApplicationRecord
+end

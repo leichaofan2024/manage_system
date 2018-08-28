@@ -1,11 +1,34 @@
 <div class="col-md-12" style="margin-top: -50px;">
   <a href="/wages/import_wage" ><< 返回 </a>
-  <div class="col-md-12" style="margin-top: 15px;margin-bottom: 15px;">
-    <%= form_tag main_driving_stuffs_path, method: 'get' do %>
-      <%= render "wages/customize_form_partial"%>
+  <div class="pull-right">
+    <a href="wages/kuaizhao_index?category=main">主要行车工种情况统计表<span style="color:red;">(累计) </a>
+  </div>
+
+  <h5 style="text-align: center;"><%=@year%>年<%=@month%>月主要行车工种情况统计表</h5>
+  <div class="col-md-12 col-lg-12 col-ms-12" style = "padding-left: 20px;">
+    <%= form_tag main_driving_stuffs_path,method: :get  do %>
+      <%= label_tag :请输入时间段搜索 %>
+      <select class="" name="year">
+        <% Wage.pluck(:year).uniq.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year %>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year %>"><%= year %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <select class="" name="month">
+        <% Wage.pluck(:month).uniq.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month %>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month %>"><%= month %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%= submit_tag :筛选 %>
     <% end %>
   </div>
-  <h5 style="text-align: center;">主要行车工种情况统计表</h5>
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
       <table id="example" class="table table-bordered">
@@ -14,10 +37,7 @@
             <th>序号</th>
             <th>项目</th>
             <% MainDrivingStuffHead.all.each do |head| %>
-
-
               <th><%= link_to(head.head_name,edit_head_main_driving_stuffs_path(:id => head.id),style: "color: black;") %></th>
-
             <% end %>
             <th><%= link_to("+",new_head_main_driving_stuffs_path,style: "color: blue;") %></th>
         	</tr>
@@ -26,14 +46,16 @@
           <% n = 0 %>
           <% MainDrivingStuff.all.each do |level| %>
             <% n = n+1%>
-            <% employee_people = Employee.where(level.formula)%>
-            <% if params[:year].present? && params[:year]!= "全部" && params[:month].present?%>
-              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year],:month => params[:month]) %>
-            <% elsif params[:year].present? && params[:year]!= "全部" && params[:month].blank?%>
-              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number"),:year => params[:year]) %>
-            <% else %>
-              <% wage_people = Wage.where(:col3 => employee_people.pluck("sal_number")) %>
+            <% level_formula = level.formula %>
+            <% if level_formula.keys.include?("age") %>
+              <% level_age_range = []%>
+              <%  level_formula["age"].each do |value| %>
+                <% level_age_range<< value.to_i %>
+              <% end %>
+              <% level_formula["age"] = (level_age_range.min..level_age_range.max)%>
             <% end %>
+            <% employee_people = Employee.current.where(level_formula)%>
+            <% wage_people = Wage.where(Wage.head_transfer.index("工资号") => employee_people.pluck("sal_number"),:year => @year,:month => @month) %>
             <tr>
               <td><%= n %></td>
               <td>
@@ -79,5 +101,9 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  <div class="col-md-12">
+    <%= link_to("生成快照", create_kuaizhao_wages_path(request.query_parameters,:category => "main"),method: :post,:data => {disable_with: "正在生成快照..."})%>
   </div>
 </div>
