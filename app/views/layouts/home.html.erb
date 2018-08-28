@@ -10,10 +10,9 @@
 
   <body>
       <%= render 'common/navbar'%>
-      <%= render "common/flashes"%>
-
     <div class="mainpanel">
       <%= render 'common/headbar'%>
+      <%= render "common/flashes"%>
       <%= yield %>
     </div>
     <%= Gon::Base.render_data({}) %>

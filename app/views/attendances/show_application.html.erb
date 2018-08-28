@@ -1,10 +1,12 @@
-<%= render "attendance_sidebar"%>
-
+<div class="pageheader">
+  <h2><%= link_to '<< 返回', group_current_time_info_attendances_path %><span> 考勤申请详情页 </span></h2>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
+  </div>
 <div class="card">
   <div class="col-md-10" style="overflow: auto">
-    <div class="back-btn">
-      <%= link_to '<< 返回', group_current_time_info_attendances_path %>
-    </div>
     <table id="example" class="table table-bordered">
       <thead>
       	<tr>
@@ -90,5 +92,6 @@
     <% end %>
   </div>
 <% end %>
+</div>
 </div>
 </div>
