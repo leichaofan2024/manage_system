@@ -68,7 +68,7 @@
                       <% form_cel_value += contents.find_by(:month => month).attributes[column] %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("per_capita") %>
-                      <% form_cel_value =  form_cel_value/line_content_hash["per_capita"]%>
+                      <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("average")%>
                       <% form_cel_value = form_cel_value/(months.count)%>
