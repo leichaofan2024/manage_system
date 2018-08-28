@@ -87,14 +87,9 @@ class WagesController < ApplicationController
 			@month = KuaizhaoContent.where(:year => @year).pluck(:month).uniq
 		end
     @years = KuaizhaoContent.pluck("year").uniq
-    @months = [["选择月份"]]
+    @months = KuaizhaoContent.pluck("month").uniq
 
-    if @years.present?
-      @years.each do |year|
-        @months<< KuaizhaoContent.where(:year => year).pluck("month").uniq.compact
-      end
-    end
-    gon.month = @months
+    
 
 	  @kuaizhao_contents = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>@month)
 		@kuaizhao_headers = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>@month)
@@ -118,7 +113,7 @@ class WagesController < ApplicationController
 		# 	end
 		# end
     @year = params[:year].to_i
-		@month = params[:month].to_i 
+		@month = params[:month].to_i
 
     @kuaizhao = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month)
     if !@kuaizhao.present?

@@ -1,24 +1,4 @@
-<script type="text/javascript">
-        function selCity()
-        {
-            var arr = gon.month;
-            var selNode = document.getElementById("selid");
-            var subselNode = document.getElementById("subselid");
-            var index = selNode.selectedIndex;
-            var citys = arr[index];
 
-            subselNode.options.length = 0;
-
-            for(var i=0; i<citys.length; i++)
-            {
-                var optionNode = document.createElement("option");
-                optionNode.value = citys[i];
-                optionNode.innerText = citys[i];
-                subselNode.appendChild(optionNode);
-            }
-        }
-
-        </script>
   <%= hidden_field_tag :category, params[:category] %>
   <%= label_tag :请输入时间段搜索 %>
   <select class="" name="year" id= "selid" onchange="selCity(this)" required = "true">
@@ -33,7 +13,14 @@
   </select> 年
   <span style="width: 200px;display: inline-block;">
     <select class= "form-control"  multiple="multiple" name="month[]" id="subselid">
-      <option disabled value></option>
+      <option disabled value>选择月份</option>
+      <% @months.each do |month|%>
+        <% if [month.to_s] == params[:month] %>
+          <option selected value="<%= month%>"><%= month%></option>
+        <% else %>
+          <option  value="<%= month%>"><%= month%></option>
+        <% end %>
+      <% end %>
     </select>
   </span> 月
 

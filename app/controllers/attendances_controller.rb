@@ -798,4 +798,9 @@ class AttendancesController < ApplicationController
 	      format.xls
 	    end
 	end
+
+  def show_record
+    @category_name_hash = VacationCategory.pluck(:vacation_code, :vacation_name).to_h
+  end
+
 end
