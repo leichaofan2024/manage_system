@@ -38,6 +38,7 @@
         </thead>
         <tbody>
           <% n = 0 %>
+          <% line_content_hash = Hash.new %>
           <% @line_name_array.each do |content_name| %>
             <% n = n+1 %>
             <tr>
@@ -51,16 +52,31 @@
               <% months = contents.pluck(:month) %>
               <% @column_array.each do |head| %>
                 <% form_cel_value = 0 %>
-                <% months.each do |month| %>
-                  <% column = @kuaizhao_headers.find_by(:header_name => head,:month => month).content_name %>
-                  <% form_cel_value += contents.find_by(:month => month).attributes[column] %>
+                <% last_month = months.max%>
+                <% last_month_header = @kuaizhao_headers.find_by(:header_name => head,:month =>last_month) %>
+
+                <% if last_month_header.formula.keys.include?("final_period")%>
+                  <% form_cel_value = contents.find_by(:month => month).attributes[last_month_header.content_name]%>
+                <% else %>
+                    <% months.each do |month| %>
+                      <% column = @kuaizhao_headers.find_by(:header_name => head,:month => month).content_name %>
+                      <% form_cel_value += contents.find_by(:month => month).attributes[column] %>
+                    <% end %>
+                    <% if last_month_header.formula.keys.include?("per_capita") %>
+                      <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
+                    <% end %>
+                    <% if last_month_header.formula.keys.include?("average")%>
+                      <% form_cel_value = form_cel_value/(months.count)%>
+                    <% end %>
+
                 <% end %>
                 <td>
                   <%= form_cel_value %>
+                  <% line_content_hash[head] = form_cel_value %>
                 </td>
               <% end %>
             </tr>
-
+            <% line_content_hash.clear %>
           <% end %>
 
         </tbody>
