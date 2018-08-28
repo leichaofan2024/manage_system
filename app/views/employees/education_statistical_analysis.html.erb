@@ -1,7 +1,14 @@
- <%= render 'employee_navbar'%>
+<div class="pageheader">
+  <h2>当前位置 <span> 学历分析 </span></h2>
+</div>
+
+<div class="contentpanel">
+<div class="panel panel-default">
+<%= render 'employee_navbar' %>
+</div>
  <!-- 学历分析饼图-开始  -->
-<%= form_tag education_statistical_analysis_employees_path, method: 'get' do %> 
-  <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>  
+<%= form_tag education_statistical_analysis_employees_path, method: 'get' do %>
+  <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>
   <%= submit_tag :点击筛选 %>
 <% end %>
  <div id="sa-main">
@@ -236,6 +243,7 @@
     </div>
    </div>
  </div>
+</div>
 
 <!-- 引入highcharts库  -->
 <script src="/assets/javascripts/highcharts.js"></script>

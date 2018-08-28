@@ -1113,7 +1113,7 @@ table th{
 table td{
     white-space: nowrap; //表格元素不撑开，不落字
 }
-body,table{
+table{
     font-size: 12px;
 }
 
@@ -1871,7 +1871,6 @@ h4 {
 
 #dashboard .bd {
     padding: 0 10px;
-    background-color: #F7F9FA;
 }
 
 
@@ -1879,15 +1878,15 @@ h4 {
     padding: 10px;
 }
 
-[data-size=normal] {
-    float: left;
-    width: 50%;
-    position: relative;
-    min-height: 1px;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 364px;
-}
+// [data-size=normal] {
+//     float: left;
+//     width: 50%;
+//     position: relative;
+//     min-height: 1px;
+//     padding-left: 10px;
+//     padding-right: 10px;
+//     height: 364px;
+// }
 
 .widget-container .widget-content-container {
     background: #FFF;
