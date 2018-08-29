@@ -20,7 +20,7 @@ class BonusController < ApplicationController
     @export_bonus = Bonu.where(:year => @year, :month => @month)
     respond_to do |format|
       format.html
-      format.xls
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="表格配置下载.xls"'}
     end
   end
 

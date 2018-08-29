@@ -23,7 +23,7 @@ class WagesController < ApplicationController
     @export_wages = Wage.where(:year => @year, :month => @month)
     respond_to do |format|
       format.html
-      format.xls
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="工资表.xls"'}
     end
 	end
 

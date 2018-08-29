@@ -53,7 +53,7 @@ class EmployeesController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.xls
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
     end
   end
 
@@ -1303,7 +1303,7 @@ class EmployeesController < ApplicationController
     @export_employees = Employee.where(id: params[:employees])
     respond_to do |format|
       format.html
-      format.xls
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
     end
   end
 ###点击图表详情页面数据配置---结束
@@ -1326,7 +1326,7 @@ class EmployeesController < ApplicationController
       @export_employees = Employee.where(id: params[:employees])
     end
     respond_to do |format|
-      format.html
+      format.html { headers["Content-Disposition"] = 'attachment; filename="组织结构表.xls"'}
       format.xls
     end
   end

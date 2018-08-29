@@ -9,7 +9,7 @@ class RelativeSalersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data @relative_salers.to_csv}
-      format.xls
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="工挂工资明细表.xls"'}
     end
   end
 

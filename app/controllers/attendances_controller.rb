@@ -35,7 +35,7 @@ class AttendancesController < ApplicationController
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @employees.to_csv }
-	      format.xls
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="考勤表.xls"'}
 	    end
 	end
   #班组个人考勤统计
@@ -758,7 +758,7 @@ class AttendancesController < ApplicationController
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @export_employees.to_csv }
-	      format.xls
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="考勤表.xls"'}
 	    end
 	end
 
@@ -795,7 +795,7 @@ class AttendancesController < ApplicationController
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @export_employees.to_csv }
-	      format.xls
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="考勤表.xls"'}
 	    end
 	end
 
