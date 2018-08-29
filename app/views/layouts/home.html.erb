@@ -45,10 +45,17 @@
             <% end %>
           </li>
            <li class="nav-item">
-            <a class="nav-link" href="/relative_salers">
-              <i  class="fa fa-trophy  material-icons"></i>
-              <p>奖惩管理</p>
-            </a>
+             <% if current_user.has_role? :awardadmin%>
+              <a class="nav-link" href="/relative_salers">
+                <i  class="fa fa-trophy  material-icons"></i>
+                <p>奖惩管理</p>
+              </a>
+            <% else %>
+              <a class="nav-link" href="/home/notfound">
+                <i  class="fa fa-trophy  material-icons"></i>
+                <p>奖惩管理</p>
+              </a>
+            <% end %>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
@@ -57,13 +64,20 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/wages">
-              <i  class="fa fa-credit-card  material-icons"></i>
-              <p>工资管理</p>
-            </a>
+            <% if current_user.has_role? :saleradmin%>
+              <a class="nav-link" href="/wages">
+                <i  class="fa fa-credit-card  material-icons"></i>
+                <p>工资管理</p>
+              </a>
+            <% else %>
+              <a class="nav-link" href="/home/notfound">
+                <i  class="fa fa-credit-card  material-icons"></i>
+                <p>工资管理</p>
+              </a>
+            <% end %>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/home/notfound">
               <i  class="fa fa-usd material-icons"></i>
               <p>收入管理</p>
             </a>

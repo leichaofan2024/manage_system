@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions"}
-
+  get "home/notfound"
   root "home#index"
   resources :employees do
     collection do
