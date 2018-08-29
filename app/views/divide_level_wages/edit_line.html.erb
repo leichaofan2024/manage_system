@@ -27,6 +27,9 @@
   <%= form_tag update_line_divide_level_wages_path(:id => @dividelevelwage.id),method: :patch do |f| %>
     <%= label_tag "项目名称：" %>
     <%= text_field_tag "name"  %>
+    <div class="pull-right" style = "margin-right:40px;">
+      <%= link_to "查看人员详情 >>",employees_wage_show_wages_path(:category => "divide",content_id: @dividelevelwage.id) %>
+    </div>
     <br>
     <%= label_tag "筛选条件："%>
     <br>

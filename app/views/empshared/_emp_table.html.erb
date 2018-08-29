@@ -46,7 +46,7 @@
        <tbody data-behavior='sortable'>
         <% @employees.each do |employee| %>
           <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-            <td><%= employee.sal_number %></td>
+            <td><%= employee.sal_number.to_i %></td>
             <td><%= employee.job_number %></td>
             <td><%= employee.record_number %></td>
             <td><%= Workshop.current.find(employee.workshop).name %></td>
@@ -71,7 +71,7 @@
             <td><%= employee.native_place %></td>
             <td><%= employee.working_time %></td>
             <td><%= employee.working_years %></td>
-            <td><%= employee.railway_time %></td>
+            <td><%= employee.railway_time.to_i %></td>
             <td><%= employee.rali_years %></td>
             <td><%= employee.phone_number %></td>
           </tr>

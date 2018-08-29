@@ -72,6 +72,22 @@ class WagesController < ApplicationController
 
 	#每项具体人员信息
   def employees_wage_show
+		if params[:category] = "divide"
+      @divide_level_wage = DivideLevelWage.find(params[:content_id])
+			@formula = @divide_level_wage.formula
+		elsif params[:category] = "high"
+			@high_speed_rail_stuff = HighSpeedRailStuff.find(params[:content_id])
+			@formula = @high_speed_rail_stuff.formula
+		elsif params[:category] = "main"
+			@main_driving_stuff = MainDrivingStuff.find(params[:content_id])
+			@formula = @main_driving_stuff.formula
+		elsif params[:category] = "production"
+			@production_stuff_wage = ProductionStuffWage.find(params[:content_id])
+			@formula = @production_stuff_wage.formula
+		end
+
+		  @employees = Employee.current.where(@formula)
+
 	end
 
   #统计表方法：
@@ -87,19 +103,15 @@ class WagesController < ApplicationController
 			@month = KuaizhaoContent.where(:year => @year).pluck(:month).uniq
 		end
     @years = KuaizhaoContent.pluck("year").uniq
-    @months = [["选择月份"]]
+    @months = KuaizhaoContent.pluck("month").uniq
 
-    if @years.present?
-      @years.each do |year|
-        @months<< KuaizhaoContent.where(:year => year).pluck("month").uniq.compact
-      end
-    end
-    gon.month = @months
+
 
 	  @kuaizhao_contents = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>@month)
 		@kuaizhao_headers = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>@month)
-    @column_array = @kuaizhao_headers.pluck(:header_name).uniq
-		@line_name_array = @kuaizhao_contents.pluck(:name).uniq
+		max_month = @kuaizhao_contents.pluck(:month).max
+    @column_array = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:header_name).uniq
+		@line_name_array = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:name).uniq
 	end
 
 # 快照功能
@@ -118,7 +130,7 @@ class WagesController < ApplicationController
 		# 	end
 		# end
     @year = params[:year].to_i
-		@month = params[:month].to_i 
+		@month = params[:month].to_i
 
     @kuaizhao = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month => @month)
     if !@kuaizhao.present?
