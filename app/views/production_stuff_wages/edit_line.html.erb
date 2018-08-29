@@ -16,6 +16,10 @@
         <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @production_wage.formula[key]).pluck("name") %><br>
       <% elsif key == "group" %>
         <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @production_wage.formula[key]).pluck("name") %><br>
+      <% elsif key == "add_people" %>
+        手动增加人员: <%= @production_wage.formula[key] %><br>
+      <% elsif key == "reduce_people" %>
+        手动删除人员: <%= @production_wage.formula[key] %><br>
       <% else %>
       <%= Employee.head_transfer[key] %>: <%= @production_wage.formula[key] %><br>
       <% end %>
@@ -27,28 +31,80 @@
   <%= form_tag update_line_production_stuff_wages_path(:id => @production_wage.id),method: :patch do |f| %>
     <%= label_tag "项目名称：" %>
     <%= text_field_tag "name"  %>
+    <div class="pull-right" style = "margin-right:40px;">
+      <%= link_to "查看人员详情 >>",employees_wage_show_wages_path(:category => "production",content_name: @production_wage.name, content_id: @production_wage.id) %>
+    </div>
     <br>
     <%= label_tag "筛选条件："%>
     <br>
-
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;<%= label_tag "手动增加人员" %>
+      <span >
+        <select multiple="multiple" class="form-control" name="add_people[]" id="add_people">
+          <% Employee.current.pluck(:sal_number).each do |sal_number| %>
+            <% if @production_wage.formula["add_people"].present? && @production_wage.formula["add_people"].include?(sal_number) %>
+              <option value="<%= sal_number %>" selected><%= sal_number %></option>
+            <% else %>
+              <option value="<%= sal_number %>"><%= sal_number %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </span>
+    </span>
+    <script>
+      $("#add_people").select2( { theme: "bootstrap"} );
+    </script>
+    <span style = "margin-left:20px;display:inline-block;width:200px">
+      &nbsp;&nbsp;<%= label_tag "手动删除人员" %>
+      <span >
+        <select multiple="multiple" class="form-control" name="reduce_people[]" id="reduce_people">
+          <% Employee.current.pluck(:sal_number).each do |sal_number| %>
+            <% if @production_wage.formula["reduce_people"].present? && @production_wage.formula["reduce_people"].include?(sal_number) %>
+              <option value="<%= sal_number %>" selected><%= sal_number %></option>
+            <% else %>
+              <option value="<%= sal_number %>"><%= sal_number %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </span>
+    </span>
+    <script>
+      $("#reduce_people").select2( { theme: "bootstrap"} );
+    </script>
     <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
       <span style = "margin-left:20px;display:inline-block;width:200px">
         &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>
         <span >
           <% if key == "workshop" %>
-            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+            <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
               <% Workshop.current.each do |workshop| %>
-                <option value="<%= workshop.id %>"><%= workshop.name %></option>
+                <% if @production_wage.formula[key].present? && @production_wage.formula[key].include?((workshop.id).to_s) %>
+                  <option value="<%= workshop.id %>" selected><%= workshop.name  %></option>
+                <% else %>
+                  <option value="<%= workshop.id %>"><%= workshop.name  %></option>
+                <% end %>
               <% end %>
             </select>
           <% elsif key == "group"%>
-            <select multiple="multiple" class="form-control" name="<%= key + "[]"%>" id="<%= key%>">
+            <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
               <% Group.current.each do |group| %>
-                <option value="<%= group.id %>"><%= group.name %></option>
+                <% if @production_wage.formula[key].present? && @production_wage.formula[key].include?((group.id).to_s) %>
+                  <option value="<%= group.id %>" selected><%= group.name  %></option>
+                <% else %>
+                  <option value="<%= group.id %>"><%= group.name  %></option>
+                <% end %>
               <% end %>
             </select>
           <% else %>
-            <%=  select_tag key,options_for_select(Employee.pluck(key).uniq),multiple: true,class:"form-control" %>
+            <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
+              <% Employee.pluck(key).uniq.each do |content| %>
+                <% if @production_wage.formula[key].present? && @production_wage.formula[key].include?(content) %>
+                  <option value="<%= content %>" selected><%= content  %></option>
+                <% else %>
+                  <option value="<%= content %>"><%= content %></option>
+                <% end %>
+              <% end %>
+            </select>
           <% end %>
           <!-- <%= check_box_tag key,"yes",false %> -->
         </span>

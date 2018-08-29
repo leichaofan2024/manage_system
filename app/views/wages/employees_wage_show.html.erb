@@ -1,61 +1,100 @@
-<div class="col-md-10" style="overflow: auto;">
-  <table id="example" class="table table-bordered">
-    <thead>
-      <tr>
-        <th>工资号</th>
-        <th>工号</th>
-        <th>档案号</th>
-        <th>车间</th>
-        <th>班组</th>
-        <th>工种</th>
-        <th>姓名</th>
-        <th>职务</th>
-        <th>电话号</th>
-        <th>性别</th>
-        <th>年龄</th>
-        <th>文化程度</th>
-        <th>民族</th>
-        <th>籍贯</th>
-        <th>工作时间</th>
-        <th>工龄</th>
-        <th>入路时间</th>
-        <th>路龄</th>
-        <th>联系电话</th>
-      </tr>
-    </thead>
-     <tbody data-behavior='sortable'>
-      <% @employees.each do |employee| %>
-        <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-          <td><%= employee.sal_number.to_i %></td>
-          <td><%= employee.job_number %></td>
-          <td><%= employee.record_number %></td>
-          <td><%= Workshop.current.find(employee.workshop).name %></td>
-          <td><%= Group.current.find(employee.group).name %></td>
-          <td><%= employee.work_type %></td>
-          <td>
-            <%=  employee.name %>
-            <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
-              <span class="label label-danger">已调离</span>
-            <% end %>
+<% if params[:category] == "divide" %>
+  <a href="/divide_level_wages/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
+<% elsif params[:category] == "production" %>
+  <a href="/production_stuff_wages/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
+<% elsif params[:category] == "main" %>
+  <a href="/main_driving_stuffs/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
+<% elsif params[:category] == "high" %>
+  <a href="/high_speed_rail_stuffs/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
+<% end %>
+<h3 style="text-align:center;"><%= params[:content_name]%></h3>
+<div class="card">
+  <div style="width: 100%;">
 
-            <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
-                <span class="label label-warning">一月内有调动</span>
+    <div  style="height: 100%; margin-top: 20px;">
+      <div class="col-md-11" style="overflow: auto;">
+        <table id="example" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>工资号</th>
+              <th>工号</th>
+              <th>档案号</th>
+              <th>车间</th>
+              <th>班组</th>
+              <th>工种</th>
+              <th>姓名</th>
+              <th>职务</th>
+              <th>电话号</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>文化程度</th>
+              <th>民族</th>
+              <th>籍贯</th>
+              <th>工作时间</th>
+              <th>工龄</th>
+              <th>入路时间</th>
+              <th>路龄</th>
+              <th>联系电话</th>
+            </tr>
+          </thead>
+           <tbody data-behavior='sortable'>
+            <% @employees.each do |employee| %>
+            <% if @formula.keys.include?("add_people") && @formula.keys.include?("reduce_people")%>
+               <% if @formula["reduce_people"].include?(employee.sal_number) %>
+                 <tr class="row-click-able" style = "background-color: red;" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=add_people">
+               <% elsif @formula["add_people"].include?(employee.sal_number)%>
+                 <tr class="row-click-able" style = "background-color:green;" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
+               <% else %>
+                 <tr class="row-click-able" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
+               <% end %>
+            <% elsif @formula.keys.include?("reduce_people") %>
+              <% if @formula["reduce_people"].include?(employee.sal_number)%>
+                <tr class="row-click-able" style = "background-color:red;" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=add_people">
+              <% else %>
+                <tr class="row-click-able" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
+              <% end %>
+            <% elsif @formula.keys.include?("add_people") %>
+              <% if @formula["add_people"].include?(employee.sal_number)%>
+                <tr class="row-click-able" style = "background-color:green;" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
+              <% else %>
+                <tr class="row-click-able" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
+              <% end %>
+            <% else %>
+              <tr class="row-click-able"  data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=reduce_people">
             <% end %>
-          </td>
-          <td><%= employee.duty %></td>
-          <td><%= employee.phone_number %></td>
-          <td><%= employee.sex %></td>
-          <td><%= employee.age %></td>
-          <td><%= employee.education_background %></td>
-          <td><%= employee.nation %></td>
-          <td><%= employee.native_place %></td>
-          <td><%= employee.working_time %></td>
-          <td><%= employee.working_years %></td>
-          <td><%= employee.railway_time.to_i %></td>
-          <td><%= employee.rali_years %></td>
-          <td><%= employee.phone_number %></td>
-        </tr>
-      <% end %>
-   </tbody>
-  </table>
+                <td><%= employee.sal_number.to_i %></td>
+                <td><%= employee.job_number %></td>
+                <td><%= employee.record_number %></td>
+                <td><%= Workshop.current.find(employee.workshop).name %></td>
+                <td><%= Group.current.find(employee.group).name %></td>
+                <td><%= employee.work_type %></td>
+                <td>
+                  <%=  employee.name %>
+                  <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+                    <span class="label label-danger">已调离</span>
+                  <% end %>
+
+                  <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+                      <span class="label label-warning">一月内有调动</span>
+                  <% end %>
+                </td>
+                <td><%= employee.duty %></td>
+                <td><%= employee.phone_number %></td>
+                <td><%= employee.sex %></td>
+                <td><%= employee.age %></td>
+                <td><%= employee.education_background %></td>
+                <td><%= employee.nation %></td>
+                <td><%= employee.native_place %></td>
+                <td><%= employee.working_time %></td>
+                <td><%= employee.working_years %></td>
+                <td><%= employee.railway_time.to_i %></td>
+                <td><%= employee.rali_years %></td>
+                <td><%= employee.phone_number %></td>
+              </tr>
+            <% end %>
+         </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

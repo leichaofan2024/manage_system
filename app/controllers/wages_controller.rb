@@ -73,21 +73,78 @@ class WagesController < ApplicationController
 	#每项具体人员信息
   def employees_wage_show
 		if params[:category] = "divide"
-      @divide_level_wage = DivideLevelWage.find(params[:content_id])
-			@formula = @divide_level_wage.formula
+      @line_content = DivideLevelWage.find(params[:content_id])
+			@formula = @line_content.formula
 		elsif params[:category] = "high"
-			@high_speed_rail_stuff = HighSpeedRailStuff.find(params[:content_id])
-			@formula = @high_speed_rail_stuff.formula
+			@line_content = HighSpeedRailStuff.find(params[:content_id])
+			@formula = @line_content.formula
 		elsif params[:category] = "main"
-			@main_driving_stuff = MainDrivingStuff.find(params[:content_id])
-			@formula = @main_driving_stuff.formula
+			@line_content = MainDrivingStuff.find(params[:content_id])
+			@formula = @line_content.formula
 		elsif params[:category] = "production"
-			@production_stuff_wage = ProductionStuffWage.find(params[:content_id])
-			@formula = @production_stuff_wage.formula
+			@line_content = ProductionStuffWage.find(params[:content_id])
+			@formula = @line_content.formula
 		end
+    if params[:sal_number].present? && params[:type].present?
+			if params[:type] == "add_people"
 
-		  @employees = Employee.current.where(@formula)
-
+				if @formula["reduce_people"].present?
+					if @formula["reduce_people"].include?(params[:sal_number])
+            @formula["reduce_people"] -= [params[:sal_number]]
+				  else
+						if !@formula["add_people"].present?
+							@formula["add_people"] = []
+						end
+						@formula["add_people"] = (@formula["add_people"] + [params[:sal_number]]).uniq
+					end
+				else
+					if !@formula["add_people"].present?
+						@formula["add_people"] = []
+					end
+					@formula["add_people"] = (@formula["add_people"] + [params[:sal_number]]).uniq
+				end
+			elsif params[:type] == "reduce_people"
+				if @formula["add_people"].present?
+					if @formula["add_people"].include?(params[:sal_number])
+          	@formula["add_people"] -= [params[:sal_number]]
+					else
+						if !@formula["reduce_people"].present?
+							@formula["reduce_people"] = []
+						end
+						@formula["reduce_people"] = (@formula["reduce_people"] + [params[:sal_number]]).uniq
+					end
+				else
+					if !@formula["reduce_people"].present?
+						@formula["reduce_people"] = []
+					end
+          @formula["reduce_people"] = (@formula["reduce_people"] + [params[:sal_number]]).uniq
+				end
+			end
+			@line_content.update(:formula => @formula)
+			add_people = Employee.current.where(:sal_number => @formula["add_people"])
+			@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
+			if params[:category] = "divide"
+				@formula = DivideLevelWage.find(params[:content_id]).formula
+			elsif params[:category] = "high"
+				@formula = HighSpeedRailStuff.find(params[:content_id]).formula
+			elsif params[:category] = "main"
+				@formula = MainDrivingStuff.find(params[:content_id]).formula
+			elsif params[:category] = "production"
+				@formula = ProductionStuffWage.find(params[:content_id]).formula
+			end
+			redirect_to employees_wage_show_wages_path(:category => params[:category],:content_id => params[:content_id],:content_name => params[:content_name])
+		end
+    add_people = Employee.current.where(:sal_number => @formula["add_people"])
+		@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
+		if params[:category] = "divide"
+			@formula = DivideLevelWage.find(params[:content_id]).formula
+		elsif params[:category] = "high"
+			@formula = HighSpeedRailStuff.find(params[:content_id]).formula
+		elsif params[:category] = "main"
+			@formula = MainDrivingStuff.find(params[:content_id]).formula
+		elsif params[:category] = "production"
+			@formula = ProductionStuffWage.find(params[:content_id]).formula
+		end
 	end
 
   #统计表方法：
