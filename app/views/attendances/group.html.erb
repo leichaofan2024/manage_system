@@ -181,7 +181,7 @@
                     <% if @time_range === day_number %>
                       <td>
                         <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: Time.now.month, year: Time.now.year, day_number: day_number), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
                             <% if attendance[day] == "x" %>
                               <%= day_number %>
                             <% else %>
