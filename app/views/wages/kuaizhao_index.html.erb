@@ -58,8 +58,12 @@
                   <% form_cel_value = contents.find_by(:month => last_month).attributes[last_month_header.content_name]%>
                 <% else %>
                     <% months.each do |month| %>
-                      <% column = @kuaizhao_headers.find_by(:header_name => head,:month => month).content_name %>
-                      <% form_cel_value += contents.find_by(:month => month).attributes[column] %>
+                      <% kuaizhao_header = @kuaizhao_headers.find_by(:header_name => head,:month => month) %>
+                      <% kuaizhao_content = contents.find_by(:month => month)%>
+                      <% if kuaizhao_header.present? && kuaizhao_content.present? %>
+                        <% column = kuaizhao_header.content_name %>
+                        <% form_cel_value += kuaizhao_content.attributes[column] %>
+                      <% end  %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("per_capita") %>
                       <% if line_content_hash[last_month_header.formula["per_capita"]] == 0 %>

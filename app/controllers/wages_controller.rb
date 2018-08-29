@@ -89,12 +89,13 @@ class WagesController < ApplicationController
     @years = KuaizhaoContent.pluck("year").uniq
     @months = KuaizhaoContent.pluck("month").uniq
 
-    
+
 
 	  @kuaizhao_contents = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>@month)
 		@kuaizhao_headers = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>@month)
-    @column_array = @kuaizhao_headers.pluck(:header_name).uniq
-		@line_name_array = @kuaizhao_contents.pluck(:name).uniq
+		max_month = @kuaizhao_contents.pluck(:month).max
+    @column_array = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:header_name).uniq
+		@line_name_array = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:name).uniq
 	end
 
 # 快照功能
