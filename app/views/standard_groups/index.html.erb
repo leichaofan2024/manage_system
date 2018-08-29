@@ -1,5 +1,11 @@
-<%= render 'relative_salers/saler_navbar'%>
+<div class="pageheader">
+  <h2>当前页面<span>标准化班组表</span></h2>
+</div>
 
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render 'relative_salers/saler_navbar'%>
+  </div>
 <div class="head-btn col-md-12">
   <div class="col-md-6">
     <h4 style="text-align: left; margin-left: -15px;">2018年7月 标准化班组表</h4>
@@ -45,4 +51,5 @@
   <div class="text-center">
     <%= paginate @standard_groups %>
   </div>
+</div>
 </div>

@@ -1,5 +1,11 @@
-<%= render 'relative_salers/saler_navbar'%>
+<div class="pageheader">
+  <h2>当前页面<span>工资挂钩汇总表</span></h2>
+</div>
 
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render 'relative_salers/saler_navbar'%>
+  </div>
 
 <div class="head-btn col-md-12">
   <div class="col-md-6">
@@ -58,4 +64,5 @@
   <div class="text-center">
     <%= paginate @totals %>
   </div>
+</div>
 </div>

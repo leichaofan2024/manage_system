@@ -1,142 +1,144 @@
-<div class="col-md-6 col-lg-6 col-ms-6" style = "z-index: 100;margin-top:-50px;">
-  <a href="/wages"> <<  首页 </a>
+<div class="pageheader">
+  <h2><a href="/wages"> 返回 </a> <span>工资详情表</span></h2>
 </div>
 
-<div class="col-md-6 col-lg-6 col-ms-6 pull-right" style="z-index: 100;text-align: right;padding-right:50px;margin-top:-50px;">
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
-        自定义统计表
-        <b class="caret"></b>
-          <ul class="dropdown-menu pull-right" style = "width:300px;overflow:auto;">
-            <li><%= link_to "铁路企业分层次人员工资情况统计表", divide_level_wages_path %></li>
-            <li><%= link_to "运输站段生产人员人数和报酬统计表", production_stuff_wages_path %></li>
-            <li><%= link_to "主要行车工种情况统计表", main_driving_stuffs_path %></li>
-            <li><%= link_to "高铁岗位人员情况统计表", high_speed_rail_stuffs_path %></li>
-          </ul>
-    </a>
-  </li>
-</div>
+<div class="contentpanel">
+  <div class="col-md-6 col-lg-6 col-ms-6 pull-right" style="z-index: 100;text-align: right;padding-right:50px;">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+          自定义统计表
+          <b class="caret"></b>
+            <ul class="dropdown-menu pull-right" style = "width:300px;overflow:auto;">
+              <li><%= link_to "铁路企业分层次人员工资情况统计表", divide_level_wages_path %></li>
+              <li><%= link_to "运输站段生产人员人数和报酬统计表", production_stuff_wages_path %></li>
+              <li><%= link_to "主要行车工种情况统计表", main_driving_stuffs_path %></li>
+              <li><%= link_to "高铁岗位人员情况统计表", high_speed_rail_stuffs_path %></li>
+            </ul>
+      </a>
+    </li>
+  </div>
 
-<h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;margin-top:-50px;"><%= @year %>年<%= @month %>月工资情况</h3>
-<div class="ivu-tooltip-rel pull-right col-md-6 col-lg-6 col-ms-6" style = "padding-right:20px;">
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-        <%= link_to import_wage_wages_path(format: "xls") do %>
-           <span style="color: #269Eff;">导出表格</span>
-        <% end %>
-    </button>
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWageHeader" do  %>
-          <span style="color: #269Eff;">新增表头</span>
-        <% end %>
-    </button>
-    <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWageHeader" do  %>
-          <span style="color: #269Eff;">修改表头</span>
-        <% end %>
-    </button>
-</div>
+  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月工资情况</h3>
+  <div class="ivu-tooltip-rel pull-right col-md-6 col-lg-6 col-ms-6" style = "padding-right:20px;">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
+          <%= link_to import_wage_wages_path(format: "xls") do %>
+             <span style="color: #269Eff;">导出表格</span>
+          <% end %>
+      </button>
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWageHeader" do  %>
+            <span style="color: #269Eff;">新增表头</span>
+          <% end %>
+      </button>
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWageHeader" do  %>
+            <span style="color: #269Eff;">修改表头</span>
+          <% end %>
+      </button>
+  </div>
 
-<div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left: 20px;">
-  <%= form_tag import_wage_wages_path,method: :get  do %>
-    <%= label_tag :请输入时间段搜索 %>
-    <select class="" name="year">
-      <% Wage.pluck(:year).uniq.each do |year| %>
-        <% if year == @year %>
-          <option value="<%= year %>" selected><%= year %></option>
-        <% else %>
-          <option value="<%= year %>"><%= year %></option>
+  <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left: 20px;">
+    <%= form_tag import_wage_wages_path,method: :get  do %>
+      <%= label_tag :请输入时间段搜索 %>
+      <select class="" name="year">
+        <% Wage.pluck(:year).uniq.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year %>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year %>"><%= year %></option>
+          <% end %>
         <% end %>
-      <% end %>
-    </select>
-    <select class="" name="month">
-      <% Wage.pluck(:month).uniq.each do |month| %>
-        <% if month == @month %>
-          <option value="<%= month %>" selected><%= month %></option>
-        <% else %>
-          <option value="<%= month %>"><%= month %></option>
+      </select>
+      <select class="" name="month">
+        <% Wage.pluck(:month).uniq.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month %>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month %>"><%= month %></option>
+          <% end %>
         <% end %>
-      <% end %>
-    </select>
-    <%= submit_tag :筛选 %>
-  <% end %>
-</div>
+      </select>
+      <%= submit_tag :筛选 %>
+    <% end %>
+  </div>
 
 
-<div class="col-md-12 col-lg-12 col-ms-12">
-  <div class="card">
-    <div style="overflow: auto;" class="col-md-12">
-      <table id="example" class="table table-bordered">
-        <thead>
-        	<tr>
-        		<% WageHeader.pluck("header").each do |i| %>
-        			<th><%= i %></th>
-        		<% end %>
-        	</tr>
-        </thead>
-        <tbody>
-        	<% @wages.each do |wage| %>
-	        	<tr>
-	        		<% (1..WageHeader.count).each do |i| %>
-	        			<td><%= wage.send("col" + i.to_s) %></td>
-	        		<% end %>
-	        	</tr>
-        	<% end %>
-        </tbody>
-      </table>
+  <div class="col-md-12 col-lg-12 col-ms-12">
+    <div class="card">
+      <div style="overflow: auto;" class="col-md-12">
+        <table id="example" class="table table-bordered">
+          <thead>
+          	<tr>
+          		<% WageHeader.pluck("header").each do |i| %>
+          			<th><%= i %></th>
+          		<% end %>
+          	</tr>
+          </thead>
+          <tbody>
+          	<% @wages.each do |wage| %>
+  	        	<tr>
+  	        		<% (1..WageHeader.count).each do |i| %>
+  	        			<td><%= wage.send("col" + i.to_s) %></td>
+  	        		<% end %>
+  	        	</tr>
+          	<% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="col-md-12 col-lg-12 col-ms-12 text-center">
-	<% if params[:filter_type].blank? && params[:q].blank? %>
-	  <%= paginate @wages %>
-	<% end %>
-</div>
+  <div class="col-md-12 col-lg-12 col-ms-12 text-center">
+  	<% if params[:filter_type].blank? && params[:q].blank? %>
+  	  <%= paginate @wages %>
+  	<% end %>
+  </div>
 
-<div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left:20px;margin-bottom: 30px;">
-  <h5>上传工资表:</h5>
+  <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left:20px;margin-bottom: 30px;">
+    <h5>上传工资表:</h5>
 
-  <%= form_tag import_table_wages_path, multipart: true do %>
-    <select class="" name="year">
-      <option value="<%= (Time.now.year)-1 %>"><%= (Time.now.year)-1 %></option>
-      <option value="<%= Time.now.year%>" selected><%= Time.now.year %></option>
-      <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
-    </select>
-    <select class="" name="month">
-      <option value="<%= (Time.now.month)-1 %>"><%= (Time.now.month)-1 %></option>
-      <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
-      <option value="<%= (Time.now.month) +1 %>"><%= (Time.now.month) +1 %></option>
-    </select>
-    <%= file_field_tag :file%>
-    <%= submit_tag "上传", data: { disable_with: "上传中..." }%>
-  <% end %>
-</div>
+    <%= form_tag import_table_wages_path, multipart: true do %>
+      <select class="" name="year">
+        <option value="<%= (Time.now.year)-1 %>"><%= (Time.now.year)-1 %></option>
+        <option value="<%= Time.now.year%>" selected><%= Time.now.year %></option>
+        <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
+      </select>
+      <select class="" name="month">
+        <option value="<%= (Time.now.month)-1 %>"><%= (Time.now.month)-1 %></option>
+        <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
+        <option value="<%= (Time.now.month) +1 %>"><%= (Time.now.month) +1 %></option>
+      </select>
+      <%= file_field_tag :file%>
+      <%= submit_tag "上传", data: { disable_with: "上传中..." }%>
+    <% end %>
+  </div>
 
-<div class="col-md-6 col-lg-6 col-ms-6" style = "text-align: right;padding-right:20px;margin-bottom: 30px;">
-  <h5 style="margin-right:120px;">删除已上传工资表:</h5>
-  <%= form_tag delete_wage_wages_path,method: :delete  do %>
-    <%= label_tag :请输入时间段搜索 %>
-    <select class="" name="year">
-      <% Wage.pluck(:year).uniq.each do |year| %>
-        <% if year == @year %>
-          <option value="<%= year %>" selected><%= year %></option>
-        <% else %>
-          <option value="<%= year %>"><%= year %></option>
+  <div class="col-md-6 col-lg-6 col-ms-6" style = "text-align: right;padding-right:20px;margin-bottom: 30px;">
+    <h5 style="margin-right:120px;">删除已上传工资表:</h5>
+    <%= form_tag delete_wage_wages_path,method: :delete  do %>
+      <%= label_tag :请输入时间段搜索 %>
+      <select class="" name="year">
+        <% Wage.pluck(:year).uniq.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year %>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year %>"><%= year %></option>
+          <% end %>
         <% end %>
-      <% end %>
-    </select>
-    <select class="" name="month">
-      <% Wage.pluck(:month).uniq.each do |month| %>
-        <% if month == @month %>
-          <option value="<%= month %>" selected><%= month %></option>
-        <% else %>
-          <option value="<%= month %>"><%= month %></option>
+      </select>
+      <select class="" name="month">
+        <% Wage.pluck(:month).uniq.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month %>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month %>"><%= month %></option>
+          <% end %>
         <% end %>
-      <% end %>
-    </select>
-    <%= submit_tag :删除, data: { confirm: "您确定要删除工资表吗？" }%>
-  <% end %>
-</div>
+      </select>
+      <%= submit_tag :删除, data: { confirm: "您确定要删除工资表吗？" }%>
+    <% end %>
+  </div>
 
-<%= render "show_create_header" %>
-<%= render "show_edit_header" %>
+  <%= render "show_create_header" %>
+  <%= render "show_edit_header" %>
+</div>

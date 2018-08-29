@@ -1,19 +1,27 @@
-<%= render 'saler_navbar'%>
-
-<%= render 'import_relative_saler_table'%>
-
-<% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
-
-
-  <div class="col-md-12">
-    <h5>上传工效挂钩明细表</h5>
-    <%= form_tag import_relative_salers_path, multipart: true do %>
-      <%= file_field_tag :file%>
-      <%= submit_tag "上传"%>
-    <% end %>
+<div class="pageheader">
+  <h2>当前页面 <span>奖惩管理</span></h2>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-default">
+    <%= render 'saler_navbar'%>
   </div>
-<% end %>
 
-<% if current_user.has_role? :awardadmin %>
-  <%= link_to "表格导出", relative_salers_path(format: "xls"), class: "btn"%>
-<% end %>
+  <%= render 'import_relative_saler_table'%>
+
+  <% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
+
+
+    <div class="col-md-12">
+      <h5>上传工效挂钩明细表</h5>
+      <%= form_tag import_relative_salers_path, multipart: true do %>
+        <%= file_field_tag :file%>
+        <%= submit_tag "上传"%>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if current_user.has_role? :awardadmin %>
+    <%= link_to "表格导出", relative_salers_path(format: "xls"), class: "btn"%>
+  <% end %>
+
+</div>
