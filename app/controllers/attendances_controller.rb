@@ -76,6 +76,10 @@ class AttendancesController < ApplicationController
 
   end
 
+  #便捷填写考勤：
+  def simple_input_attendance
+  end 
+  #便捷填写考勤结束
   #班组一键填写考勤：
   def group_yijian_create
 

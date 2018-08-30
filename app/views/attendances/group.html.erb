@@ -127,7 +127,8 @@
                 <%if @year.present? && @month.present? &&  (@month.to_i != Time.now.month) %>
                   <%= i %>
                 <% else %>
-                  <li class="dropdown">
+                
+                  <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
                         <%= i %>
                         <b class="caret"></b>
@@ -141,7 +142,7 @@
                             <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
                         </ul>
                     </a>
-                  </li>
+                  </li> -->
                 <% end %>
               </th>
             <% else %>
