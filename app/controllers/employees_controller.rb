@@ -1326,8 +1326,8 @@ class EmployeesController < ApplicationController
       @export_employees = Employee.where(id: params[:employees])
     end
     respond_to do |format|
-      format.html { headers["Content-Disposition"] = 'attachment; filename="组织结构表.xls"'}
-      format.xls
+      format.html
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="组织结构表.xls"'}
     end
   end
 
