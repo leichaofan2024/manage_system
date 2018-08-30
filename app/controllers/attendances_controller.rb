@@ -78,44 +78,85 @@ class AttendancesController < ApplicationController
 
   #便捷填写考勤：
   def simple_input_attendance
-  end 
+    @group = Group.find_by(:id => params[:group_id])
+    @employees = Employee.current.where(:group => params[:group_id])
+    @vacation_short_code_hash = VacationCategory.pluck(:vacation_shortening,:vacation_code).to_h
+  end
   #便捷填写考勤结束
   #班组一键填写考勤：
   def group_yijian_create
 
-        @group = Group.current.find(params[:group_id])
-
-      @employees = Employee.current.where(:group => @group.id)
-      @attendances = Attendance.where(:employee_id => @employees.pluck(:id), :month => params[:month], :year => params[:year])
+      @group = Group.find(params[:group_id])
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+      @day = params[:day].to_i
+      @workshop = Workshop.find(@group.workshop_id)
       @vacation_name_hash = VacationCategory.pluck("vacation_shortening","vacation_code").to_h
-      @attendances.each do |attendance|
-        month_attendances = attendance.month_attendances
-        month_attendances[params[:day].to_i] = @vacation_name_hash[params[:code]]
-        attendance.update(:month_attendances => month_attendances)
-        attendance_ary_after = attendance.month_attendances.split("")
-        attendance_hash= {}
-        #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
-        @vacation_name_hash.values.each do |code|
-          attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
-        end
-        #每次更新考勤数据，都更新一次总数(attendance_count)--开始
-        #每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
-        sum = 0
-        attendance_hash.each do |i|
-          @attendance_count = AttendanceCount.find_by(:employee_id => attendance.employee_id, :vacation_code => i[0], :month => params[:month], :year => params[:year])
-          @attendance_count ||= AttendanceCount.new
-          @attendance_count.update(:employee_id =>attendance.employee_id, :vacation_code => i[0], :count => i[1], :group_id => params[:group_id], :workshop_id => params[:workshop_id], :month => params[:month], :year => params[:year])
-          @attendance_count.save
-          if (i[0] == "f") && (i[1] > 0)
-            sum += i[1]
+      if params[:code].present?
+        @employees = Employee.current.where(:group => @group.id)
+        @attendances = Attendance.where(:employee_id => @employees.pluck(:id), :month => params[:month], :year => params[:year])
+        @attendances.each do |attendance|
+          month_attendances = attendance.month_attendances
+          month_attendances[params[:day].to_i] = @vacation_name_hash[params[:code]]
+          attendance.update(:month_attendances => month_attendances)
+          attendance_ary_after = attendance.month_attendances.split("")
+          attendance_hash= {}
+          #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
+          @vacation_name_hash.values.each do |code|
+            attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
           end
-          if (i[0] == "g") && (i[1] > 0)
-            sum += i[1]
+          #每次更新考勤数据，都更新一次总数(attendance_count)--开始
+          #每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
+          sum = 0
+          attendance_hash.each do |i|
+            @attendance_count = AttendanceCount.find_by(:employee_id => attendance.employee_id, :vacation_code => i[0], :month => params[:month], :year => params[:year])
+            @attendance_count ||= AttendanceCount.new
+            @attendance_count.update(:employee_id =>attendance.employee_id, :vacation_code => i[0], :count => i[1], :group_id => params[:group_id], :workshop_id => @workshop.id, :month => params[:month], :year => params[:year])
+            @attendance_count.save
+            if (i[0] == "f") && (i[1] > 0)
+              sum += i[1]
+            end
+            if (i[0] == "g") && (i[1] > 0)
+              sum += i[1]
+            end
+            annual_holiday = AnnualHoliday.find_by(employee_id: attendance.employee_id, month: params[:month], year: params[:year]) || AnnualHoliday.new
+            annual_holiday.update(employee_id: attendance.employee_id, month: params[:month], year: params[:year], holiday_days: sum)
           end
-          annual_holiday = AnnualHoliday.find_by(employee_id: attendance.employee_id, month: params[:month], year: params[:year]) || AnnualHoliday.new
-          annual_holiday.update(employee_id: attendance.employee_id, month: params[:month], year: params[:year], holiday_days: sum)
-        end
 
+        end
+      else
+        @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method","group_id","year","month","day"].include?(key) || (value =="")}
+        @employees = Employee.current.where(:id => @params_hash.keys)
+        @employees.each do |employee|
+          attendance = Attendance.find_by(:employee_id => employee.id,:year => @year,:month => @month)
+          month_attendances = attendance.month_attendances
+          month_attendances[@day] = @params_hash[(employee.id).to_s]
+          attendance.update!(:month_attendances => month_attendances)
+          attendance_ary_after = attendance.month_attendances.split("")
+          attendance_hash= {}
+          #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
+          @vacation_name_hash.values.each do |code|
+            attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
+          end
+
+          #每次更新考勤数据，都更新一次总数(attendance_count)--开始
+          #每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
+          sum = 0
+          attendance_hash.each do |i|
+            @attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :vacation_code => i[0], :month => @month, :year => @year)
+            @attendance_count ||= AttendanceCount.new
+            @attendance_count.update(:employee_id => employee.id, :vacation_code => i[0], :count => i[1], :group_id => @group.id, :workshop_id => @workshop.id, :month => @month, :year => @year)
+            @attendance_count.save
+            if (i[0] == "f") && (i[1] > 0)
+              sum += i[1]
+            end
+            if (i[0] == "g") && (i[1] > 0)
+              sum += i[1]
+            end
+            annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
+            annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: sum)
+          end
+        end
       end
       flash[:notice] = "一键考勤填写成功！"
 
@@ -132,9 +173,9 @@ class AttendancesController < ApplicationController
       end
 
       if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
-        redirect_back(fallback_location: group_attendances_path)
+        redirect_to group_attendances_path
       elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
-        redirect_back(fallback_location: group_current_time_info_attendances_path)
+        redirect_to group_current_time_info_attendances_path
       end
   end
 

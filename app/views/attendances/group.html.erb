@@ -127,22 +127,23 @@
                 <%if @year.present? && @month.present? &&  (@month.to_i != Time.now.month) %>
                   <%= i %>
                 <% else %>
-                
+
                   <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
                         <%= i %>
                         <b class="caret"></b>
                         <ul class="dropdown-menu">
                           <li><%= link_to "一键设置考勤：", "#" %></li>
-                            <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
-                            <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
-                            <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
-                            <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
-                            <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
-                            <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
+                            <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
+                            <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
+                            <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                            <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                            <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                            <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
                         </ul>
                     </a>
                   </li> -->
+                  <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year =>Time.now.year , :month =>Time.now.month,:day => i-1),style: "color: #00D396"%>
                 <% end %>
               </th>
             <% else %>
