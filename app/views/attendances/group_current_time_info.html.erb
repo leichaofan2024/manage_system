@@ -276,155 +276,153 @@
             <% end %>
           <!-- 组织结构树状图-结束 -->
 
-          <div class="col-md-10 col-lg-10 col-sm-10 pull-right" style = "margin-bottom: 5px;-webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);background-color: #fff;">
-            <div class ="col-md-6 col-lg-5 col-sm-6" style="margin-right:-16px;margin-left:-5px;">
-              <table class="table table-bordered">
-                <thead>
-                  <tr style= "height:35px;">
-                    <th>工资号</th>
-                    <th>姓名</th>
-                    <th>职名</th>
-                    <th>车间</th>
-                    <th>班组</th>
+      <div class="col-md-10 col-lg-10 col-sm-10 pull-right" style = "margin-bottom: 5px;-webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);background-color: #fff;">
+        <div class ="col-md-6 col-lg-5 col-sm-6" style="margin-right:-16px;margin-left:-5px;">
+          <table class="table table-bordered">
+            <thead>
+              <tr style= "height:35px;">
+                <th>工资号</th>
+                <th>姓名</th>
+                <th>职名</th>
+                <th>车间</th>
+                <th>班组</th>
 
+              </tr>
+            </thead>
+            <tbody>
+            <!-- 配置表格数据-开始 -->
+                <% @employees.each do |employee| %>
+                  <tr style= "height:55px;">
+                    <td><%= employee.sal_number %></td>
+                    <td>
+                      <!-- <%if params[:year].present? && params[:month].present? %>
+                        <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
+                          <%= employee.name %>
+                        <% end %>
+                      <% else %>
+                        <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
+                          <%= employee.name %>
+                        <% end %>
+                      <% end %> -->
+                      <%= employee.name %>
+                    </td>
+                    <td><%= employee.duty %></td>
+                    <td><%= Workshop.current.find(employee.workshop).name %></td>
+                    <td><%= Group.current.find(employee.group).name %></td>
                   </tr>
-                </thead>
-                  <tbody>
-                  <!-- 配置表格数据-开始 -->
-                    <% if @employees.present? %>
-                      <% @employees.each do |employee| %>
-                        <tr style= "height:55px;">
-                          <td><%= employee.sal_number %></td>
-                          <td>
-                            <!-- <%if params[:year].present? && params[:month].present? %>
-                              <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
-                                <%= employee.name %>
-                              <% end %>
-                            <% else %>
-                              <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
-                                <%= employee.name %>
-                              <% end %>
-                            <% end %> -->
-                            <%= employee.name %>
-                          </td>
-                          <td><%= employee.duty %></td>
-                          <td><%= Workshop.current.find(employee.workshop).name %></td>
-                          <td><%= Group.current.find(employee.group).name %></td>
-                        </tr>
-                        <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
-                          <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
-                            <tr style= "height:40px;">
-                              <td colspan=36>
-                                <span >
+                  <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
+                    <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
+                      <tr style= "height:40px;">
+                        <td colspan=36>
+                          <span >
 
-                                </span>
-                              </td>
-                            </tr>
-                          <% end %>
-                        <% end %>
-                      <% end %>
-
+                          </span>
+                        </td>
+                      </tr>
                     <% end %>
-                  </tbody>
-                </table>
-
-
-            </div>
-
-
-            <div  class ="col-md-6 col-lg-7 col-sm-6" style="margin-left:-16px;overflow: auto; ">
-              <table id="example" class="table table-bordered">
-                <thead>
-                  <tr style= "height:35px;">
-
-                    <!-- 生成每月1-31号的数字-开始 -->
-                    <% (1..31).each do |i| %>
-                      <th>
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
-                            <%= i %>
-                            <% if params[:year].present? && params[:month].present? && params[:group].present?  %>
-                              <b class="caret"></b>
-                              <ul class="dropdown-menu">
-                                <li><%= link_to "一键设置考勤：", "#" %></li>
-                                <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year =>params[:year] , :month =>params[:month],:day => i-1,:code => "日"),method: :post  %></li>
-                                <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"星" ),method: :post  %></li>
-                                <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"节" ),method: :post  %></li>
-                                <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
-                                <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
-                                <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"休" ),method: :post  %></li>
-                              </ul>
-                            <% elsif params[:group].present? %>
-                              <b class="caret"></b>
-                              <ul class="dropdown-menu">
-                                <li><%= link_to "一键设置考勤：", "#" %></li>
-                                <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
-                                <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
-                                <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
-                                <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
-                                <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
-                                <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
-                              </ul>
-                            <% end %>
-                          </a>
-                        </li>
-                      </th>
-                    <% end %>
-                    <!-- 生成每月1-31号的数字-结束 -->
-                  <!--   <% @vacation_codes.each do |code| %>
-                      <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
-                    <% end %> -->
-                  </tr>
-                </thead>
-                  <tbody>
-                  <!-- 配置表格数据-开始 -->
-                    <% if @employees.present? %>
-                      <% @employees.each do |employee| %>
-                        <% if params[:year].present? %>
-                          <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
-                        <% else %>
-                          <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
-                        <% end %>
-
-                      <% end %>
-
-                    <!-- 配置表格数据-开始 -->
-                    <% end %>
-                  </tbody>
-                </table>
-                <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
-                  <div class="" style = "margin-bottom: 50px;">
-                    <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
-                      <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
-                         <span style="color: #269Eff;">一键审核</span>
-                      <% end %>
-
-                    <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
-                      <div class="pull-right">
-                        <% if @workshops_not_varify.present? %>
-                          <%= link_to("前往下一个未审完车间  >>",group_current_time_info_attendances_path(:workshop => @workshops_not_varify.first.id,:year =>params[:year] ,:month => params[:month]))%>
-                        <% else %>
-                          <span style= "color: green;">车间全部审核完毕！</span>
-                        <% end %>
-                      </div>
-                      <% if @duan_yijian_permission == 1%>
-                        <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
-                           <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
-                        <% end %>
-                      <% end %>
-                    <% end %>
-                  </div>
-
+                  <% end %>
                 <% end %>
-                <div id="showModal">
+
+            </tbody>
+          </table>
+
+
+        </div>
+
+
+        <div  class ="col-md-6 col-lg-7 col-sm-6" style="margin-left:-16px;overflow: auto; ">
+          <table id="example" class="table table-bordered">
+            <thead>
+              <tr style= "height:35px;">
+
+                <!-- 生成每月1-31号的数字-开始 -->
+                <% (1..31).each do |i| %>
+                  <th>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+                        <%= i %>
+                        <% if params[:year].present? && params[:month].present? && params[:group].present?  %>
+                          <b class="caret"></b>
+                          <ul class="dropdown-menu">
+                            <li><%= link_to "一键设置考勤：", "#" %></li>
+                            <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year =>params[:year] , :month =>params[:month],:day => i-1,:code => "日"),method: :post  %></li>
+                            <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"星" ),method: :post  %></li>
+                            <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                            <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                            <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                            <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"休" ),method: :post  %></li>
+                          </ul>
+                        <% elsif params[:group].present? %>
+                          <b class="caret"></b>
+                          <ul class="dropdown-menu">
+                            <li><%= link_to "一键设置考勤：", "#" %></li>
+                            <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
+                            <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
+                            <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                            <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                            <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                            <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
+                          </ul>
+                        <% end %>
+                      </a>
+                    </li>
+                  </th>
+                <% end %>
+                        <!-- 生成每月1-31号的数字-结束 -->
+                      <!--   <% @vacation_codes.each do |code| %>
+                          <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+                        <% end %> -->
+                </tr>
+              </thead>
+                <tbody>
+                <!-- 配置表格数据-开始 -->
+                  <% if @employees.present? %>
+                    <% @employees.each do |employee| %>
+                      <% if params[:year].present? %>
+                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                      <% else %>
+                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                      <% end %>
+
+                    <% end %>
+
+                  <!-- 配置表格数据-开始 -->
+                  <% end %>
+                </tbody>
+              </table>
+              <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
+                <div class="" style = "margin-bottom: 50px;">
+                  <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
+                    <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                       <span style="color: #269Eff;">一键审核</span>
+                    <% end %>
+
+                  <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
+                    <div class="pull-right">
+                      <% if @workshops_not_varify.present? %>
+                        <%= link_to("前往下一个未审完车间  >>",group_current_time_info_attendances_path(:workshop => @workshops_not_varify.first.id,:year =>params[:year] ,:month => params[:month]))%>
+                      <% else %>
+                        <span style= "color: green;">车间全部审核完毕！</span>
+                      <% end %>
+                    </div>
+                    <% if @duan_yijian_permission == 1%>
+                      <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
+                         <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
+                      <% end %>
+                    <% end %>
+                  <% end %>
                 </div>
-            </div>
+
+              <% end %>
+              <div id="showModal">
+              </div>
           </div>
         </div>
+      </div>
 
 
-        <div id="show_processbar_detail">
-        </div>
+  <div id="show_processbar_detail">
+  </div>
 </div>
 
 
