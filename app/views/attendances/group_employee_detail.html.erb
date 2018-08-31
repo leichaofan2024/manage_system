@@ -25,3 +25,30 @@
 
 <h3>这是统计：</h3>
 <%= @attendance_statistics %>
+
+
+
+                <div id="datetimepicker12">
+                </div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+    var SelectedDates = {};
+    SelectedDates[new Date('08/08/2018')] = new Date('08/08/2018');
+    SelectedDates[new Date('08/04/2018')] = new Date('08/04/2018');
+    SelectedDates[new Date('08/06/2018')] = new Date('08/06/2018');
+
+    $('div#datetimepicker12').datepicker({
+      inline: true,
+        beforeShowDay: function(date) {
+            var Highlight = SelectedDates[date];
+            if (Highlight) {
+                return [true, "Highlighted", Highlight];
+            }
+            else {
+                return [true, '', ''];
+            }
+        }
+    });
+});
+    </script>

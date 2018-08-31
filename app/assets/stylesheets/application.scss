@@ -1395,10 +1395,6 @@ button {
     -webkit-writing-mode: horizontal-tb !important;
 }
 
-span {
-    vertical-align: middle;
-    color: black;
-}
 
 
 
@@ -2435,4 +2431,12 @@ button.close {
 
 .head-btn a:hover {
   color: white;
+}
+.Highlighted a {
+ background-color : Green !important;
+ background-image :none !important;
+ color: White !important;
+ font-weight:bold !important;
+
+ font-size: 12pt;
 }
