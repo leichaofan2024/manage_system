@@ -16,39 +16,87 @@
 </div>
 
 
-
+<!--
 <h3>这是日历列表：</h3>
 <% (0..30).each do |day| %>
   <%= day + 1 %>天
   （<%= @vacation_name_hash[@attendance.month_attendances[day]] %>） &nbsp &nbsp
 <% end %>
 
+
+
 <h3>这是统计：</h3>
-<%= @attendance_statistics %>
+<%= @attendance_statistics %> -->
 
 
 
-                <div id="datetimepicker12">
-                </div>
+<div class="" style="width:80%;margin-left:10%;background-color: white;">
+  <p class="col-md-12" style = "text-align:center;margin-top:15px;font-size:20px;"><%= @year %>年<%= @month %>月考勤</p>
+  <table class="table table-striped  table-hover" style="text-align:center;">
+    <thead>
+      <tr style="background-color: rgb(244,248,250); height:30px;font-size:20px;">
+        <th style="text-align:center;">日</th>
+        <th style="text-align:center;">一</th>
+        <th style="text-align:center;">二</th>
+        <th style="text-align:center;">三</th>
+        <th style="text-align:center;">四</th>
+        <th style="text-align:center;">五</th>
+        <th style="text-align:center;">六</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (1..("#{@year}-#{@month}-15".to_time.end_of_month.day)).each do |day| %>
+        <% day_week = ("#{@year}-#{@month}-#{day}".to_time.strftime("%w")).to_i %>
+        <% if day == 1 %>
+          <tr>
+          <% [0,1,2,3,4,5,6].each do |week_day| %>
+            <% if week_day < day_week %>
+              <td></td>
+            <% elsif week_day == day_week %>
+              <% if day_week == 0 || day_week== 6 %>
+                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+              <% else %>
+                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% elsif day == ("#{@year}-#{@month}-15".to_time.end_of_month.day) %>
+          <% [0,1,2,3,4,5,6].each do |week_day| %>
+            <% if week_day > day_week %>
+              <td></td>
+            <% elsif week_day == day_week %>
+              <% if day_week == 0 || day_week== 6 %>
+                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+              <% else %>
+                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+              <% end %>
+            <% end %>
+          <% end %>
+          </tr>
+        <% elsif day_week == 6 %>
+          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+          </tr>
+        <% elsif day_week == 0 %>
+          <tr>
+          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+        <% else %>
+          <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+        <% end %>
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-    var SelectedDates = {};
-    SelectedDates[new Date('08/08/2018')] = new Date('08/08/2018');
-    SelectedDates[new Date('08/04/2018')] = new Date('08/04/2018');
-    SelectedDates[new Date('08/06/2018')] = new Date('08/06/2018');
 
-    $('div#datetimepicker12').datepicker({
-      inline: true,
-        beforeShowDay: function(date) {
-            var Highlight = SelectedDates[date];
-            if (Highlight) {
-                return [true, "Highlighted", Highlight];
-            }
-            else {
-                return [true, '', ''];
-            }
-        }
-    });
-});
-    </script>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="col-md-12 col-lg-12 col-sm-12" style="margin-bottom:20px;">
+    <% @attendance_statistics.delete_if{|key,value| value == 0} %>
+    <% @attendance_statistics.each do |statistic|%>
+      <div class="col-md-3 col-lg-3 col-sm-3" style="margin-bottom:20px;height:30px;">
+
+        <%= render :partial => "calendar_partial",:locals => {statistic: statistic}%>
+        </button>
+        <%= statistic[0]%>：<%= statistic[1] %>
+      </div>
+    <% end %>
+  </div>
+</div>

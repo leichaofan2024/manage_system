@@ -46,11 +46,13 @@
               </button> -->
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
+              <%= link_to group_attendances_path(format: "xls") do  %>
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to group_attendances_path(format: "xls") do  %>
+
                    <span style="color: #269Eff;">导出记录</span>
-                <% end %>
+
               </button>
+              <% end %>
             </div>
         </div>
       </div>

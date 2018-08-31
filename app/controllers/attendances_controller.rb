@@ -43,28 +43,16 @@ class AttendancesController < ApplicationController
     @employee = Employee.current.find(params[:id])
     @group = Group.current.find(@employee.group)
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
-
-
-    # @yi_jian = Hash.new
     if params[:year].present? && params[:month].present?
-      @attendance = Attendance.find_by(employee_id: @employee.id, month: params[:month], year: params[:year])
-      @attendance_count = AttendanceCount.where(employee_id: @employee.id, month: params[:month], year: params[:year])
+      @year = params[:year]
+      @month = params[:month]
     else
-      @attendance = Attendance.find_by( employee_id: @employee.id, month: Time.now.month, year: Time.now.year)
-      @attendance_count = AttendanceCount.where( employee_id: @employee.id, month: Time.now.month, year: Time.now.year)
-      # if @yi_jian.present?
-      #
-      #   @employees = Employee.current.where(:group => @group.id)
-      #   @day = @yi_jian["day"].to_i
-      #   @name = @yi_jian["name"]
-      #   @employees.each do |employee|
-      #     month_attendances =
-      #   end
-      #
-      #
-      #
-      # end
+      @year = Time.now.year
+      @month = Time.now.month
     end
+    @attendance = Attendance.find_by(employee_id: @employee.id, month: @month, year: @year)
+    @attendance_count = AttendanceCount.where(employee_id: @employee.id, month: @month, year: @year)
+
     @attendance_statistics = Hash.new
     @vacation_name_hash.keys.each do |name|
       if @attendance_count.find_by(:vacation_code => name ).present?
