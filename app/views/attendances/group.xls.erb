@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding='UTF-8'?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:o="urn:schemas-microsoft-com:office:office"
-  xmlns:x="urn:schemas-microsoft-com:office:excel"
-  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:html="http://www.w3.org/TR/REC-html40">
-
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
   <Styles>
     <Style ss:ID="Title">
       <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
@@ -46,7 +45,7 @@
       <Font ss:FontName="SimSun" ss:Size="16"/>
     </Style>
     <Style ss:ID="Description">
-      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
       <Borders>
       <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
       <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
@@ -73,9 +72,9 @@
         <Cell ss:StyleID="Title" ss:MergeAcross="58"><Data ss:Type="String">北京供电段考勤表</Data></Cell>
       </Row>
       <Row ss:AutoFitHeight="0" ss:Height="30.0">
-        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">车间：</Data></Cell>
-        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">班组：</Data></Cell>
-        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="16"><Data ss:Type="String">年 月份</Data></Cell>
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">车间：<%= @workshop.name %> </Data></Cell>
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="20"><Data ss:Type="String">班组：<%= @group.name %></Data></Cell>
+        <Cell ss:StyleID="Titlelittle" ss:MergeAcross="16"><Data ss:Type="String"><%= @year %>年 <%= @month %>月份</Data></Cell>
       </Row>
       <Row>
         <Cell ss:StyleID="Description" ss:MergeDown="1"><Data ss:Type="String">顺号</Data></Cell>
@@ -137,5 +136,22 @@
       <Cell ss:StyleID="End" ss:MergeAcross="36"><Data ss:Type="String">填报人：</Data></Cell>
     </Row>
     </Table>
+
+    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+      <PageSetup>
+        <Layout x:Orientation="Landscape"/>
+        <Header x:Margin="0.3"/>
+        <Footer x:Margin="0.3"/>
+        <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+      </PageSetup>
+      <FitToPage/>
+      <Print>
+        <ValidPrinterInfo/>
+        <HorizontalResolution>600</HorizontalResolution>
+        <VerticalResolution>600</VerticalResolution>
+      </Print>
+      <Selected/>
+    </WorksheetOptions>
+
   </Worksheet>
 </Workbook>

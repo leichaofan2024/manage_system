@@ -8,6 +8,10 @@ class AttendancesController < ApplicationController
     else
       @time_range = 1..(Time.now.day)
     end
+    @year = Time.now.year
+    @month = Time.now.month
+    @group = Group.find_by(:id => current_user.group_id)
+    @workshop = Workshop.find_by(:id => @group.workshop_id)
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		group = Group.current.find(current_user.group_id)
