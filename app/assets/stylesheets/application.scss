@@ -24,7 +24,7 @@
 /********** 2. RESET STYLES **********/
 /*************************************/
 body {
-    background: #1d2939;
+    background: #333F50;
     font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
     line-height: 21px;
     color: #636e7b;
@@ -263,14 +263,13 @@ strong {
 
 .logopanel {
     padding: 10px;
-    margin-bottom: 20px;
 }
 
 .logopanel h5 {
-    font-size: 25px;
+    font-size: 18px;
     font-family: 'LatoBold', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
     letter-spacing: -1.5px;
-    color: #E9EAEB;
+    color: #FFFFFF;
     line-height: 30px;
     margin: 0;
     text-align: center;
@@ -283,16 +282,10 @@ strong {
 .leftpanelinner {
     padding: 5px 15px;
 }
-
-/***** 4.1 NAVIGATION STYLES *****/
-
-
-.sidebartitle {
-    font-size: 16px;
-    text-transform: uppercase;
-    color: #E9EAEB;
-    margin-bottom: 10px;
+.leftpanel-collapsed .leftpanelinner .sidebartitle {
+    display: none;
 }
+/***** 4.1 NAVIGATION STYLES *****/
 
 .nav-bracket {
     margin-bottom: 30px;
@@ -300,17 +293,17 @@ strong {
 }
 
 .nav-bracket > li > a > span{
-    color: #E9EAEB;
+    color: #8292A6;
     padding: 7px 10px;
 }
 
-.nav-bracket > li > a:hover {
-    background-color: #1caf9a;
-    color: #fff;
-    -moz-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
-    -webkit-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
-    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
-}
+// .nav-bracket > li > a:hover {
+//     background-color: #1caf9a;
+//     color: #fff;
+//     -moz-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+//     -webkit-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+//     box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+// }
 
 
 
@@ -321,7 +314,7 @@ strong {
     margin-right: 10px;
     width: 16px;
     text-align: center;
-    color: #fff;
+    color: #8292A6;
 }
 
 .nav-bracket > li > a > .badge {
@@ -383,6 +376,7 @@ strong {
 .contentpanel {
     padding: 20px;
     position: relative;
+    background: #F7F9FA;
 }
 
 .contentpanel::after {
@@ -512,10 +506,6 @@ strong {
 
 .leftpanel-collapsed .leftpanelinner {
     padding: 0;
-}
-
-.leftpanel-collapsed .leftpanelinner .sidebartitle {
-    display: none;
 }
 
 .leftpanel-collapsed .nav-bracket {
@@ -1206,21 +1196,10 @@ div.pagination ul {
 
 /*--------------组织架构页面样式---------*/
 
- body,ul,h3 {
-  margin: 0px;
-  padding: 0px;
-}
 
 li {
   list-style-type: none;
 }
-
-// body {
-//   font-size: 12px;
-//   color: #333;
-//   font-family: Simsun;
-//   line-height: 15px;
-// }
 
 a {
   text-decoration: none;

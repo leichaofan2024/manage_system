@@ -1,17 +1,14 @@
-        <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
+        <!-- <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
          <h4>【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month),style:"color:red;" %></h4>
-          <!-- <marquee loop="" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month) %></marquee> -->
         <% elsif Announcement.last.present? %>
           <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
-        <% end %>
+        <% end %> -->
             <div class="leftpanel" >
                 <div class="logopanel">
-                  <h5><span>[</span> 人力资源管理系统 <span>]</span></h5>
+                  <h5>北京供电段人力资源管理系统</h5>
                 </div><!-- logopanel -->
 
               <div class="leftpanelinner">
-                <h3 class="sidebartitle">工作台</h3>
-
                 <ul class="nav nav-pills nav-stacked nav-bracket">
                   <li><a href="/employees"><i class="fa fa-home"></i> <span>现员管理</span></a></li>
 
