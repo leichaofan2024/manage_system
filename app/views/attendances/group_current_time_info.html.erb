@@ -393,10 +393,7 @@
               <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
                 <div class="" style = "margin-bottom: 50px;">
                   <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
-                    <%= link_to batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post do %>
-                       <span style="color: #269Eff;">一键审核</span>
-                    <% end %>
-
+                       <span style="color: #269Eff;"><%= link_to "一键审核",batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
                   <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
                     <div class="pull-right">
                       <% if @workshops_not_varify.present? %>
@@ -406,9 +403,7 @@
                       <% end %>
                     </div>
                     <% if @duan_yijian_permission == 1%>
-                      <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post do %>
-                         <span style="color: #269Eff;">一键审核(<%= Workshop.current.find(@workshop).name%>)</span>
-                      <% end %>
+                         <span style="color: #269Eff;"><%= link_to "一键审核(#{Workshop.current.find(@workshop).name})",batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
                     <% end %>
                   <% end %>
                 </div>

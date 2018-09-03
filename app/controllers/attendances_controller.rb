@@ -616,14 +616,16 @@ class AttendancesController < ApplicationController
 			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = Group.current.where(:workshop_id => @workshop.id)
 			AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "班组/科室填写中").update(:status => "车间已审核", :workshop_id => @workshop.id)
-			flash[:notice] = "审核完毕"
+
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
+      flash[:notice] = "审核完毕"
 		elsif params[:authority] == "duan"
 			@workshop = Workshop.current.find(params[:workshop_id])
 			@groups = Group.current.where(:workshop_id => @workshop.id)
       AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month]).update(:status => "段已审核", :workshop_id => @workshop.id)
-			flash[:notice] = "审核完毕"
+
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
+      flash[:notice] = "审核完毕"
 		end
 	end
 	##一键审核功能--结束
