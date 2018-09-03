@@ -296,6 +296,16 @@ strong {
     padding: 7px 10px;
 }
 
+.nav-bracket > li > a:hover,
+.nav-bracket > li > a:active,
+.nav-bracket > li > a:focus {
+    background-color: #fff;
+    color: #1d2939;
+    -moz-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+}
+
 /*****  nav parent *****/
 .nav-bracket > li.nav-parent > a:focus {
     background-color: none;
@@ -317,10 +327,6 @@ strong {
     -moz-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 3px 0 rgba(0,0,0,0.2);
     box-shadow: 0 3px 0 rgba(0,0,0,0.2);
-}
-
-.nav-bracket > li.nav-active > a:hover {
-    background-repeat: no-repeat;
 }
 
 .nav-bracket > li.nav-active > a:focus {

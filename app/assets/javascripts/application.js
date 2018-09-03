@@ -78,29 +78,46 @@ jQuery(document).ready(function() {
          }
       }
    });
-   // jQuery('.leftpanel .nav-parent > a').live('click', function() {
-   //
-   //     var parent = jQuery(this).parent();
-   //     var sub = parent.find('> ul');
-   //
-   //     // Dropdown works only when leftpanel is not collapsed
-   //     if(!jQuery('body').hasClass('leftpanel-collapsed')) {
-   //        if(sub.is(':visible')) {
-   //           sub.slideUp(200, function(){
-   //              parent.removeClass('nav-active');
-   //              jQuery('.mainpanel').css({height: ''});
-   //              adjustmainpanelheight();
-   //           });
-   //        } else {
-   //           closeVisibleSubMenu();
-   //           parent.addClass('nav-active');
-   //           sub.slideDown(200, function(){
-   //              adjustmainpanelheight();
-   //           });
-   //        }
-   //     }
-   //     return false;
-   //  })
+   jQuery('.leftpanel .nav-parent > a').on('click', function() {
+
+       var parent = jQuery(this).parent();
+       var sub = parent.find('> ul');
+
+       // Dropdown works only when leftpanel is not collapsed
+       if(!jQuery('body').hasClass('leftpanel-collapsed')) {
+          if(sub.is(':visible')) {
+             sub.slideUp(200, function(){
+                parent.removeClass('nav-active');
+                jQuery('.mainpanel').css({height: ''});
+                adjustmainpanelheight();
+             });
+          } else {
+             closeVisibleSubMenu();
+             parent.addClass('nav-active');
+             sub.slideDown(200, function(){
+                adjustmainpanelheight();
+             });
+          }
+       }
+       return false;
+    });
+    function closeVisibleSubMenu() {
+      jQuery('.leftpanel .nav-parent').each(function() {
+         var t = jQuery(this);
+         if(t.hasClass('nav-active')) {
+            t.find('> ul').slideUp(200, function(){
+               t.removeClass('nav-active');
+            });
+         }
+      });
+   }
+   function adjustmainpanelheight() {
+      // Adjust mainpanel height
+      var docHeight = jQuery(document).height();
+      if(docHeight > jQuery('.mainpanel').height())
+         jQuery('.mainpanel').height(docHeight);
+   }
+   adjustmainpanelheight();
 
  });
 
