@@ -31,6 +31,7 @@ $(document).ready(function($) {
 });
 /*结束*/
 jQuery(document).ready(function() {
+  "use strict";
 // Minimize Button in Panels
    jQuery('.minimize').click(function(){
       var t = jQuery(this);
@@ -45,6 +46,12 @@ jQuery(document).ready(function() {
          t.html('&minus;');
       }
       return false;
+   });
+   // Add class everytime a mouse pointer hover over it
+   jQuery('.nav-bracket > li').hover(function(){
+      jQuery(this).addClass('nav-hover');
+   }, function(){
+      jQuery(this).removeClass('nav-hover');
    });
 
    // Tooltip
@@ -71,7 +78,32 @@ jQuery(document).ready(function() {
          }
       }
    });
+   // jQuery('.leftpanel .nav-parent > a').live('click', function() {
+   //
+   //     var parent = jQuery(this).parent();
+   //     var sub = parent.find('> ul');
+   //
+   //     // Dropdown works only when leftpanel is not collapsed
+   //     if(!jQuery('body').hasClass('leftpanel-collapsed')) {
+   //        if(sub.is(':visible')) {
+   //           sub.slideUp(200, function(){
+   //              parent.removeClass('nav-active');
+   //              jQuery('.mainpanel').css({height: ''});
+   //              adjustmainpanelheight();
+   //           });
+   //        } else {
+   //           closeVisibleSubMenu();
+   //           parent.addClass('nav-active');
+   //           sub.slideDown(200, function(){
+   //              adjustmainpanelheight();
+   //           });
+   //        }
+   //     }
+   //     return false;
+   //  })
+
  });
+
 
  $(function () {
    $('[data-toggle="tooltip"]').tooltip()
