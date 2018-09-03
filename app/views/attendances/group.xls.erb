@@ -106,11 +106,8 @@
         <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= i %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
-        <% if @year.present? && @month.present? %>
-          <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
-        <% else %>
-          <% attendance = Attendance.find_by(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
-        <% end %>
+        <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
+
         <% attendance_ary = attendance.month_attendances.split('') %>
         <% attendance_ary.each do |day_attendance| %>
           <Cell ss:StyleID="Description"><Data ss:Type="String">
@@ -124,7 +121,7 @@
 
           <% @vacation_name_hash.keys.each do |code| %>
             <Cell ss:StyleID="Description"><Data ss:Type="String">
-              <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id).sum(:count) %>
+              <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id,:year => @year,:month => @month).sum(:count) %>
             </Data></Cell>
           <% end %>
       </Row>
@@ -148,7 +145,7 @@
       <Print>
         <ValidPrinterInfo/>
         <FitWidth>1</FitWidth>
-        <FitHeight>1000</FitHeight> 
+        <FitHeight>1000</FitHeight>
         <HorizontalResolution>600</HorizontalResolution>
         <VerticalResolution>600</VerticalResolution>
       </Print>

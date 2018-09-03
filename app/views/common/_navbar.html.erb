@@ -1,12 +1,8 @@
-        <!-- <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
-         <h4>【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month),style:"color:red;" %></h4>
-        <% elsif Announcement.last.present? %>
-          <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
-        <% end %> -->
+
             <div class="leftpanel" >
                 <div class="logopanel">
                   <h5>北京供电段人力资源管理系统</h5>
-                </div><!-- logopanel -->
+                </div>
 
               <div class="leftpanelinner">
                 <ul class="nav nav-pills nav-stacked nav-bracket">
@@ -22,28 +18,26 @@
                       <% end %>
                     </li>
 
-                   <li>
-                     <% if current_user.has_role? :limitadmin%>
+
+                   <% if current_user.has_role? :limitadmin%>
+                     <li>
                        <a href="/home/notfound">
                          <i class="fa fa-edit"></i> <span>定额管理</span>
                        </a>
-                     <% else%>
-                       <a href="/home/notfound">
-                         <i class="fa fa-edit"></i> <span>定额管理</span>
-                       </a>
-                     <% end %>
-                   </li>
-                   <li>
-                     <% if current_user.has_role? :saleradmin%>
+
+                    </li>
+                   <% end %>
+
+
+                   <% if current_user.has_role? :saleradmin%>
+                     <li>
                        <a href="/wages">
                          <i class="fa fa-suitcase"></i> <span>工资管理</span>
                        </a>
-                     <% else %>
-                       <a href="/home/notfound">
-                         <i class="fa fa-suitcase"></i> <span>工资管理</span>
-                       </a>
-                     <% end %>
-                     </li>
+
+                       </li>
+                   <% end %>
+
                      <!-- <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理</span></a>
                       <ul class="children">
                         <li><a href=""> 工资表</a></li>
@@ -55,29 +49,27 @@
                         <li><a href=""> 工资图表分析</a></li>
                       </ul>
                     </li> -->
-                   <li>
-                     <% if current_user.has_role? :awardadmin%>
+
+                   <% if current_user.has_role? :awardadmin%>
+                     <li>
                       <a  href="/relative_salers">
                         <i class="fa fa-th-list"></i> <span>奖惩管理</span>
                       </a>
-                    <% else %>
-                      <a href="/home/notfound">
-                        <i class="fa fa-th-list"></i> <span>奖惩管理</span>
-                      </a>
-                    <% end %>
-                  </li>
+
+                    </li>
+                  <% end %>
+
+
+                 <% if current_user.has_role? :limitadmin%>
                    <li>
-                     <% if current_user.has_role? :limitadmin%>
-                       <a href="/home/notfound">
-                         <i class="fa fa-edit"></i> <span>收入管理</span>
-                       </a>
-                     <% else%>
-                       <a  href="/home/notfound">
-                         <i class="fa fa-file-text"></i> <span>收入管理</span>
-                       </a>
-                     <% end %>
+                     <a href="/home/notfound">
+                       <i class="fa fa-edit"></i> <span>收入管理</span>
+                     </a>
 
                    </li>
+                 <% end %>
+
+
                 </ul>
-              </div><!-- leftpanelinner -->
-            </div><!-- leftpanel -->
+              </div>
+            </div>

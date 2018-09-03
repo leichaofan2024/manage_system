@@ -54,9 +54,9 @@
               <td></td>
             <% elsif week_day == day_week %>
               <% if day_week == 0 || day_week== 6 %>
-                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
               <% else %>
-                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
               <% end %>
             <% end %>
           <% end %>
@@ -66,21 +66,21 @@
               <td></td>
             <% elsif week_day == day_week %>
               <% if day_week == 0 || day_week== 6 %>
-                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+                <td style = "color:blue;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
               <% else %>
-                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+                <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
               <% end %>
             <% end %>
           <% end %>
           </tr>
         <% elsif day_week == 6 %>
-          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
           </tr>
         <% elsif day_week == 0 %>
           <tr>
-          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+          <td style="color:blue"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
         <% else %>
-          <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day]],1]}%><%= day %></button></td>
+          <td style = "color:black;"><%= render :partial => "calendar_statistics_partial",:locals => {statistic: [@vacation_name_hash[@attendance.month_attendances[day-1]],1]}%><%= day %></button></td>
         <% end %>
 
 

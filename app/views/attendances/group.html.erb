@@ -25,8 +25,8 @@
       </tbody>
     </table>
 
-  <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
-    <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
+  <% if AttendanceStatus.find_by(:group_id => @group.id).present? %>
+    <h5>考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group.id,:year => @year,:month => @month).status %></h5>
   <% end %>
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
 
@@ -46,7 +46,7 @@
               </button> -->
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
-              <%= link_to group_attendances_path(format: "xls") do  %>
+              <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
 
                    <span style="color: #269Eff;">导出记录</span>
@@ -59,10 +59,27 @@
 
   <!-- <h5><%= link_to "导出表格", group_attendances_path(format: "xls")%></h5> -->
   <!-- <%= link_to "点击申请", "#", "data-toggle" => "modal", "data-target" => "#applicationModal" %> -->
-    <%= form_tag filter_attendances_path, method: 'get' do %>
+    <%= form_tag group_attendances_path, method: 'get' do %>
       <%= label_tag :请输入时间段搜索 %>
-      <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
-      <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
+      <select class="" name="year">
+        <% @years.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year%>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year%>"><%= year %></option>
+          <% end %>
+        <% end %>
+      </select>年～
+      <select class="" name="month">
+        <% @months.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month%>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month%>"><%= month %></option>
+          <% end %>
+        <% end %>
+      </select>月
+
       <%= hidden_field_tag :type, "group" %>
       <%= submit_tag :筛选 %>
      <% end %>
@@ -76,6 +93,7 @@
   <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>月考勤数据</h3>
 <% end %>
 <!-- <a href="#">考勤汇总统计 >></a> -->
+<p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
 <div class="col-md-12 col-lg-12 col-sm-12 card" style="margin-top: 20px;">
   <!-- 固定前三列： -->
 
@@ -134,7 +152,7 @@
                 <%if @year.present? && @month.present? &&  (@month.to_i != Time.now.month) %>
                   <%= i %>
                 <% else %>
-                  <li class="dropdown">
+                  <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
                         <%= i %>
                         <b class="caret"></b>
@@ -148,7 +166,10 @@
                             <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>current_user.group_id ,:workshop_id =>current_user.workshop_id ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
                         </ul>
                     </a>
-                  </li>
+                  </li>  -->
+
+
+                  <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year =>Time.now.year , :month =>Time.now.month,:day => i-1),style: "font-weight:900;color: #00D396"%>
                 <% end %>
               </th>
             <% else %>
@@ -227,7 +248,9 @@
 
 
   <div class="pull-right" style= "margin:20px;">
-    <button type="button" name="button">上报考勤</button>
+    <%= link_to "#",data: {confirm: "确定要上报考勤吗？"} do %>
+        <button type="button" name="button">上报考勤</button>
+    <% end %>
   </div>
  </div>
 </div>
