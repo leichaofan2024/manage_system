@@ -28,19 +28,10 @@
                     </li>
                    <% end %>
 
-
                    <% if current_user.has_role? :saleradmin%>
-                     <li>
-                       <a href="/wages">
-                         <i class="fa fa-suitcase"></i> <span>工资管理</span>
-                       </a>
-
-                       </li>
-                   <% end %>
-
-                     <!-- <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理</span></a>
+                     <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理</span></a>
                       <ul class="children">
-                        <li><a href=""> 工资表</a></li>
+                        <li><a href="/wages"> 工资表</a></li>
                         <li><a href=""> 奖金表</a></li>
                         <li><a href=""> 高铁岗位人员情况统计 </a></li>
                         <li><a href=""> 主要行车工种情况统计 </a></li>
@@ -48,7 +39,8 @@
                         <li><a href=""> 铁路企业分层次人员工资情况 </a></li>
                         <li><a href=""> 工资图表分析</a></li>
                       </ul>
-                    </li> -->
+                    </li>
+                    <% end %>
 
                    <% if current_user.has_role? :awardadmin%>
                      <li>
