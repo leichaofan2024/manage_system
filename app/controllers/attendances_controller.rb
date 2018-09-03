@@ -8,14 +8,21 @@ class AttendancesController < ApplicationController
     else
       @time_range = 1..(Time.now.day)
     end
-    @year = Time.now.year
-    @month = Time.now.month
+    if params[:year].present? && params[:month].present?
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+    else
+      @year = Time.now.year
+      @month = Time.now.month
+    end
     @group = Group.find_by(:id => current_user.group_id)
+    if AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id).blank?
+      AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
+    end
     @workshop = Workshop.find_by(:id => @group.workshop_id)
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		group = Group.current.find(current_user.group_id)
-		@employees = Employee.current.where(:group => group.id)
+		@employees = Employee.current.where(:group => @group.id)
     @employees.each do |employee|
       if Time.now.month == 12
 				attendance_next_month = Attendance.where(employee_id: employee.id, year: (Time.now.year + 1), month: 1)
@@ -23,9 +30,9 @@ class AttendancesController < ApplicationController
 					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year + 1), month: 1)
         end
       else
-        attendance_next_month = Attendance.where(employee_id: employee.id, year: (Time.now.year + 1), month: (Time.now.month + 1))
+        attendance_next_month = Attendance.where(employee_id: employee.id, year: (Time.now.year), month: (Time.now.month + 1))
         if !attendance_next_month.present?
-					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year + 1), month: (Time.now.month + 1))
+					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year), month: (Time.now.month + 1))
         end
       end
       attendance_this_month = Attendance.where(employee_id: employee.id, year: Time.now.year, month: Time.now.month)
@@ -35,6 +42,7 @@ class AttendancesController < ApplicationController
     end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
+
 		# 导出考勤表
 		respond_to do |format|
 	      format.html
@@ -493,11 +501,11 @@ class AttendancesController < ApplicationController
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 		if params[:type] == "group"
-			group = Group.current.find(current_user.group_id)
+			@group = Group.current.find(current_user.group_id)
 
 			@leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
-			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: group.id).pluck("employee_id")
-			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => group.id)
+			transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group.id).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group.id).pluck("employee_id")
+			@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => @group.id)
 			render action: "group"
 		elsif params[:type] == "workshop"
 			@workshop = Workshop.current.find(current_user.workshop_id)

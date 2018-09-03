@@ -25,8 +25,8 @@
       </tbody>
     </table>
 
-  <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
-    <h5>考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h5>
+  <% if AttendanceStatus.find_by(:group_id => @group.id).present? %>
+    <h5>考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group.id,:year => @year,:month => @month).status %></h5>
   <% end %>
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
 
@@ -46,7 +46,7 @@
               </button> -->
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
-              <%= link_to group_attendances_path(format: "xls") do  %>
+              <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
 
                    <span style="color: #269Eff;">导出记录</span>
@@ -59,10 +59,27 @@
 
   <!-- <h5><%= link_to "导出表格", group_attendances_path(format: "xls")%></h5> -->
   <!-- <%= link_to "点击申请", "#", "data-toggle" => "modal", "data-target" => "#applicationModal" %> -->
-    <%= form_tag filter_attendances_path, method: 'get' do %>
+    <%= form_tag group_attendances_path, method: 'get' do %>
       <%= label_tag :请输入时间段搜索 %>
-      <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
-      <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
+      <select class="" name="year">
+        <% @years.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year%>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year%>"><%= year %></option>
+          <% end %>
+        <% end %>
+      </select>年～
+      <select class="" name="month">
+        <% @months.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month%>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month%>"><%= month %></option>
+          <% end %>
+        <% end %>
+      </select>月
+
       <%= hidden_field_tag :type, "group" %>
       <%= submit_tag :筛选 %>
      <% end %>
