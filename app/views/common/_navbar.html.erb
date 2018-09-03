@@ -1,17 +1,14 @@
-        <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
+        <!-- <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
          <h4>【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month),style:"color:red;" %></h4>
-          <!-- <marquee loop="" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month) %></marquee> -->
         <% elsif Announcement.last.present? %>
           <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
-        <% end %>
+        <% end %> -->
             <div class="leftpanel" >
                 <div class="logopanel">
-                  <h5><span>[</span> 人力资源管理系统 <span>]</span></h5>
+                  <h5>北京供电段人力资源管理系统</h5>
                 </div><!-- logopanel -->
 
               <div class="leftpanelinner">
-                <h3 class="sidebartitle">工作台</h3>
-
                 <ul class="nav nav-pills nav-stacked nav-bracket">
                   <li><a href="/employees"><i class="fa fa-home"></i> <span>现员管理</span></a></li>
 
@@ -27,44 +24,55 @@
 
                    <li>
                      <% if current_user.has_role? :limitadmin%>
-                       <a class="nav-link" href="/home/notfound">
+                       <a href="/home/notfound">
                          <i class="fa fa-edit"></i> <span>定额管理</span>
                        </a>
                      <% else%>
-                       <a class="nav-link" href="/home/notfound">
+                       <a href="/home/notfound">
                          <i class="fa fa-edit"></i> <span>定额管理</span>
                        </a>
                      <% end %>
                    </li>
                    <li>
                      <% if current_user.has_role? :saleradmin%>
-                       <a class="nav-link" href="/wages">
+                       <a href="/wages">
                          <i class="fa fa-suitcase"></i> <span>工资管理</span>
                        </a>
                      <% else %>
-                       <a class="nav-link" href="/home/notfound">
+                       <a href="/home/notfound">
                          <i class="fa fa-suitcase"></i> <span>工资管理</span>
                        </a>
                      <% end %>
-                   </li>
+                     </li>
+                     <!-- <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理</span></a>
+                      <ul class="children">
+                        <li><a href=""> 工资表</a></li>
+                        <li><a href=""> 奖金表</a></li>
+                        <li><a href=""> 高铁岗位人员情况统计 </a></li>
+                        <li><a href=""> 主要行车工种情况统计 </a></li>
+                        <li><a href=""> 运输站段生产人员人数和报酬 </a></li>
+                        <li><a href=""> 铁路企业分层次人员工资情况 </a></li>
+                        <li><a href=""> 工资图表分析</a></li>
+                      </ul>
+                    </li> -->
                    <li>
                      <% if current_user.has_role? :awardadmin%>
-                      <a class="nav-link" href="/relative_salers">
+                      <a  href="/relative_salers">
                         <i class="fa fa-th-list"></i> <span>奖惩管理</span>
                       </a>
                     <% else %>
-                      <a class="nav-link" href="/home/notfound">
+                      <a href="/home/notfound">
                         <i class="fa fa-th-list"></i> <span>奖惩管理</span>
                       </a>
                     <% end %>
                   </li>
                    <li>
                      <% if current_user.has_role? :limitadmin%>
-                       <a class="nav-link" href="/home/notfound">
+                       <a href="/home/notfound">
                          <i class="fa fa-edit"></i> <span>收入管理</span>
                        </a>
                      <% else%>
-                       <a class="nav-link" href="/home/notfound">
+                       <a  href="/home/notfound">
                          <i class="fa fa-file-text"></i> <span>收入管理</span>
                        </a>
                      <% end %>
