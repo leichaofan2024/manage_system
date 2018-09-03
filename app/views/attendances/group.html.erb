@@ -93,7 +93,7 @@
   <h3 class="text-center"><%= Time.now.year %>年<%= Time.now.month %>月考勤数据</h3>
 <% end %>
 <!-- <a href="#">考勤汇总统计 >></a> -->
-<p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>多选填写入口：点击表头首行的绿色日期 </p>
+<p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
 <div class="col-md-12 col-lg-12 col-sm-12 card" style="margin-top: 20px;">
   <!-- 固定前三列： -->
 
@@ -248,7 +248,9 @@
 
 
   <div class="pull-right" style= "margin:20px;">
-    <button type="button" name="button">上报考勤</button>
+    <%= link_to "#",data: {confirm: "确定要上报考勤吗？"} do %>
+        <button type="button" name="button">上报考勤</button>
+    <% end %>
   </div>
  </div>
 </div>
