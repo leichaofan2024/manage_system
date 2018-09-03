@@ -392,7 +392,7 @@
               </table>
               <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
                 <div class="" style = "margin-bottom: 50px;">
-                  <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) %>
+                  <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) && @workshop_yijian_permission ==1 %>
                        <span style="color: #269Eff;"><%= link_to "一键审核",batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
                   <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
                     <div class="pull-right">

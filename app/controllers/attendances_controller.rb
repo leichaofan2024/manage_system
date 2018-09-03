@@ -787,6 +787,11 @@ class AttendancesController < ApplicationController
             AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id,:status => "班组/科室填写中")
           end
         end
+        if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)
+          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => "车间已审核").count < group_ids.count
+            @workshop_yijian_permission = 1
+          end
+        end
 				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).order('employees.group ASC,employees.id ASC')
       end
 		end
