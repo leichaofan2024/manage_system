@@ -314,6 +314,18 @@ class AttendancesController < ApplicationController
             month_attendances = attendance.month_attendances
             month_attendances[(application.day - 1)] = application.application_after
             attendance.update(:month_attendances => month_attendances)
+            attendance_count_after = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_after)
+            if attendance_count_after.present?
+              attendance_count_after.update(:count => (attendance_count_after.attributes["count"] +1))
+            else
+              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_after,:count => 1)
+            end
+          end
+          if application.application_before.present?
+            attendance_count_before = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_before)
+            if attendance_count_before.present?
+              attendance_count_before.update(:count => (attendance_count_before.attributes["count"] -1))
+            end
           end
         end
       else
@@ -324,6 +336,18 @@ class AttendancesController < ApplicationController
           month_attendances = attendance.month_attendances
           month_attendances[(@application.day - 1)] = @application.application_after
           attendance.update(:month_attendances => month_attendances)
+          attendance_count_after = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_after)
+          if attendance_count_after.present?
+            attendance_count_after.update(:count => (attendance_count_after.attributes["count"] +1))
+          else
+            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_after,:count => 1)
+          end
+        end
+        if @application.application_before.present?
+          attendance_count_before = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_before)
+          if attendance_count_before.present?
+            attendance_count_before.update(:count => (attendance_count_before.attributes["count"] -1))
+          end
         end
       end
     else
