@@ -616,14 +616,16 @@ class AttendancesController < ApplicationController
 			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = Group.current.where(:workshop_id => @workshop.id)
 			AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "班组/科室填写中").update(:status => "车间已审核", :workshop_id => @workshop.id)
-			flash[:notice] = "审核完毕"
+
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
+      flash[:notice] = "审核完毕"
 		elsif params[:authority] == "duan"
 			@workshop = Workshop.current.find(params[:workshop_id])
 			@groups = Group.current.where(:workshop_id => @workshop.id)
       AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month]).update(:status => "段已审核", :workshop_id => @workshop.id)
-			flash[:notice] = "审核完毕"
+
 			redirect_back(fallback_location: group_current_time_info_attendances_path)
+      flash[:notice] = "审核完毕"
 		end
 	end
 	##一键审核功能--结束
@@ -783,6 +785,11 @@ class AttendancesController < ApplicationController
           end
           if AttendanceStatus.find_by(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id).blank?
             AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id,:status => "班组/科室填写中")
+          end
+        end
+        if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)
+          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => "车间已审核").count < group_ids.count
+            @workshop_yijian_permission = 1
           end
         end
 				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).order('employees.group ASC,employees.id ASC')
