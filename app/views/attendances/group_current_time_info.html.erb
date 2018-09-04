@@ -184,7 +184,7 @@
 
 
 
-        <div class="col-md-12 col-lg-12 col-sm-12"  style="height: 100%">
+        <div class="col-md-12 col-lg-12 col-sm-12">
             <!-- 组织结构树状图-开始 -->
             <% if current_user.has_role? :workshopadmin %>
               <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
@@ -300,15 +300,6 @@
                   <tr style= "height:55px;">
                     <td><%= employee.sal_number %></td>
                     <td>
-                      <!-- <%if params[:year].present? && params[:month].present? %>
-                        <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: params[:month], year: params[:year]) do %>
-                          <%= employee.name %>
-                        <% end %>
-                      <% else %>
-                        <%= link_to group_employee_detail_attendances_path(:id => employee.id) do %>
-                          <%= employee.name %>
-                        <% end %>
-                      <% end %> -->
                       <%= employee.name %>
                     </td>
                     <td><%= employee.duty %></td>
@@ -327,11 +318,8 @@
                     <% end %>
                   <% end %>
                 <% end %>
-
             </tbody>
           </table>
-
-
         </div>
 
 
@@ -373,10 +361,6 @@
                     </li>
                   </th>
                 <% end %>
-                        <!-- 生成每月1-31号的数字-结束 -->
-                      <!--   <% @vacation_codes.each do |code| %>
-                          <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
-                        <% end %> -->
                 </tr>
               </thead>
                 <tbody>
@@ -421,8 +405,7 @@
       </div>
 
 
-  <div id="show_processbar_detail">
-  </div>
+  <div id="show_processbar_detail"></div>
 </div>
 
 
