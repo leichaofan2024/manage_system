@@ -404,29 +404,34 @@ class AttendancesController < ApplicationController
 			if current_user.has_role? :workshopadmin
 				Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day].to_i+1}的考勤数据")
 			end
-      month_attendances_before = @attendance.month_attendances
-      month_attendances_after = month_attendances_before
-      month_attendances_after[params[:day].to_i] = params[:code]
-			@attendance.update(:month_attendances => month_attendances_after)
-			@attendance.save
+      @month_attendances_before = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year]).month_attendances
+      @month_attendances_after = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year]).month_attendances
+      @month_attendances_after[params[:day].to_i] = params[:code]
 
-			attendance_ary_after = month_attendances_after.split("")
+			attendance_ary_after = @month_attendances_after.split("")
 
-			sum = 0
       employee = Employee.find_by(:id => params[:employee_id])
 
 			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
-      @attendance_count_attributes = @attendance_count.attributes
+
       if @attendance_count.present?
-        if month_attendances_before[params[:day].to_i] == "x"
+        @attendance_count_attributes = @attendance_count.attributes
+        if @month_attendances_before[params[:day].to_i] == "x"
           @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
+          @attendance_count.save
         else
           @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
-          @attendance_count.update(month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[month_attendances_before[params[:day].to_i]].to_i) -1))
+          @attendance_count.save
+          @attendance_count_attributes = @attendance_count.attributes
+          @attendance_count.update(@month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[@month_attendances_before[params[:day].to_i]].to_i) -1))
+          @attendance_count.save
         end
+
       else
 				@attendance_count = Attendance.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year])
       end
+      @attendance.update(:month_attendances => @month_attendances_after)
+      @attendance.save
       attendance_count_attributes = @attendance_count.attributes
 			annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
 			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["f"].to_i) + (attendance_count_attributes["g"].to_i)))
