@@ -118,12 +118,17 @@
             <% end %>
           </Data></Cell>
         <% end %>
-
+          <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id,:year => @year,:month => @month)%>
           <% @vacation_name_hash.keys.each do |code| %>
             <Cell ss:StyleID="Description"><Data ss:Type="String">
-              <%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id,:year => @year,:month => @month).sum(:count) %>
+              <% if attendance_count.present? %>
+              <%= attendance_count.attributes[code] %>
+              <% else %>
+               0
+              <% end %>
             </Data></Cell>
           <% end %>
+
       </Row>
       <% i += 1 %>
     <% end %>

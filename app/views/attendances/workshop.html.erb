@@ -74,16 +74,25 @@
       </thead>
         <tbody data-behavior='sortable'>
           <% @employees.each do |employee| %>
+            <% if @year.present? && @month.present?  %>
+            <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+            <% else %>
+            <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year)%>
+            <% end %>
             <tr>
               <td><%= employee.sal_number %></td>
               <td><%= Group.current.find_by(:id => employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.age %></td>
               <% @vacation_code_hash.keys.each do |code| %>
-                <% if @year.present? && @month.present? %>
-                  <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id, :month => @month, :year => @year).sum(:count) %></td>
+                <% if attendance_count.present? %>
+                  <% if attendance_count.attributes[code] == 0%>
+                    <td></td>
+                  <% else %>
+                    <td><%= attendance_count.attributes[code]%></td>
+                  <% end %>
                 <% else %>
-                  <td><%= AttendanceCount.where(:vacation_code => code, :employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
+                 <td></td>
                 <% end %>
               <% end %>
             </tr>

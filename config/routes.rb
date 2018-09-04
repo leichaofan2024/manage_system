@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   resources :attendances do
     collection do
+      post :attendance_count_compute
       get :group
       get :group_statistics
       get :group_employee_detail

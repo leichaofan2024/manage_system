@@ -1,5 +1,5 @@
 <div class="pageheader">
-<h2>当前位置 <span> 段考勤统计 </span></h2>
+<h2>当前位置 <span> 班组考勤统计 </span></h2>
 </div>
 
 <div class="contentpanel">
@@ -39,11 +39,7 @@
                 <%= link_to "点击申请",group_application_attendances_path,class:"btn btn-primary" %>
               <% end %>
 
-              <!-- <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#applicationModal" do %>
-                   <span style="color: #269Eff;">点击申请</span>
-                <% end %>
-              </button> -->
+
             </div>
             <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
               <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
@@ -57,8 +53,6 @@
         </div>
       </div>
 
-  <!-- <h5><%= link_to "导出表格", group_attendances_path(format: "xls")%></h5> -->
-  <!-- <%= link_to "点击申请", "#", "data-toggle" => "modal", "data-target" => "#applicationModal" %> -->
     <%= form_tag group_attendances_path, method: 'get' do %>
       <%= label_tag :请输入时间段搜索 %>
       <select class="" name="year">
@@ -84,7 +78,11 @@
       <%= submit_tag :筛选 %>
      <% end %>
    <% end %>
+   <div class="" style = "padding-top:10px;">
+     <%= link_to(' << 查看考勤统计',group_statistics_attendances_path(:year => @year ,:month => @month))%>
+   </div>
 </div>
+
 
 <div class="col-md-12 col-lg-12 col-sm-12" style="margin-top: 20px;">
 <% if @year.present? && @month.present?%>
@@ -253,6 +251,11 @@
     <% end %>
   </div>
  </div>
+</div>
+
+<!-- 一键计算本月所有考勤统计： -->
+<div class="">
+  <%=  link_to("一键计算考勤统计", attendance_count_compute_attendances_path(:year => @year,:month => @month),method: :post,data: {confirm: "确定计算吗？"})%>
 </div>
 
 <%= render 'application_modal' %>

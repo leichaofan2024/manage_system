@@ -63,17 +63,15 @@ class AttendancesController < ApplicationController
       @month = Time.now.month
     end
     @attendance = Attendance.find_by(employee_id: @employee.id, month: @month, year: @year)
-    @attendance_count = AttendanceCount.where(employee_id: @employee.id, month: @month, year: @year)
-
+    @attendance_count = AttendanceCount.find_by(employee_id: @employee.id, month: @month, year: @year)
     @attendance_statistics = Hash.new
-    @vacation_name_hash.keys.each do |name|
-      if @attendance_count.find_by(:vacation_code => name ).present?
-        @attendance_statistics[@vacation_name_hash[name]] = @attendance_count.find_by(:vacation_code => name ).count
+    @attendance_count.attributes.each do |key,value|
+      if value.present?
+        @attendance_statistics[@vacation_name_hash[key]] = value
       else
-        @attendance_statistics[@vacation_name_hash[name]] = 0
+        @attendance_statistics[@vacation_name_hash[key]] = 0
       end
     end
-
   end
 
   #便捷填写考勤：
@@ -96,6 +94,7 @@ class AttendancesController < ApplicationController
         @employees = Employee.current.where(:group => @group.id)
         @attendances = Attendance.where(:employee_id => @employees.pluck(:id), :month => params[:month], :year => params[:year])
         @attendances.each do |attendance|
+          employee = Employee.find_by(:id => attendance.employee_id)
           month_attendances = attendance.month_attendances
           month_attendances[params[:day].to_i] = @vacation_name_hash[params[:code]]
           attendance.update(:month_attendances => month_attendances)
@@ -107,22 +106,13 @@ class AttendancesController < ApplicationController
           end
           #每次更新考勤数据，都更新一次总数(attendance_count)--开始
           #每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
-          sum = 0
-          attendance_hash.each do |i|
-            @attendance_count = AttendanceCount.find_by(:employee_id => attendance.employee_id, :vacation_code => i[0], :month => params[:month], :year => params[:year])
-            @attendance_count ||= AttendanceCount.new
-            @attendance_count.update(:employee_id =>attendance.employee_id, :vacation_code => i[0], :count => i[1], :group_id => params[:group_id], :workshop_id => @workshop.id, :month => params[:month], :year => params[:year])
-            @attendance_count.save
-            if (i[0] == "f") && (i[1] > 0)
-              sum += i[1]
-            end
-            if (i[0] == "g") && (i[1] > 0)
-              sum += i[1]
-            end
-            annual_holiday = AnnualHoliday.find_by(employee_id: attendance.employee_id, month: params[:month], year: params[:year]) || AnnualHoliday.new
-            annual_holiday.update(employee_id: attendance.employee_id, month: params[:month], year: params[:year], holiday_days: sum)
+          @attendance_count = AttendanceCount.find_by(:employee_id => employee.id,  :month => @month, :year => @year)
+          if !@attendance_count.present?
+             AttendanceCount.create(:employee_id => employee.id, :group_id => @group.id, :workshop_id => @workshop.id, :month => @month, :year => @year)
           end
-
+          @attendance_count.update(attendance_hash)
+          annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
+          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["f"].to_i) +(@attendance_count.attributes["g"].to_i)))
         end
       else
         @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method","group_id","year","month","day"].include?(key) || (value =="")}
@@ -134,28 +124,17 @@ class AttendancesController < ApplicationController
           attendance.update!(:month_attendances => month_attendances)
           attendance_ary_after = attendance.month_attendances.split("")
           attendance_hash= {}
-          #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
           @vacation_name_hash.values.each do |code|
             attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
           end
 
-          #每次更新考勤数据，都更新一次总数(attendance_count)--开始
-          #每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
-          sum = 0
-          attendance_hash.each do |i|
-            @attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :vacation_code => i[0], :month => @month, :year => @year)
-            @attendance_count ||= AttendanceCount.new
-            @attendance_count.update(:employee_id => employee.id, :vacation_code => i[0], :count => i[1], :group_id => @group.id, :workshop_id => @workshop.id, :month => @month, :year => @year)
-            @attendance_count.save
-            if (i[0] == "f") && (i[1] > 0)
-              sum += i[1]
-            end
-            if (i[0] == "g") && (i[1] > 0)
-              sum += i[1]
-            end
-            annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
-            annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: sum)
+          @attendance_count = AttendanceCount.find_by(:employee_id => employee.id,  :month => @month, :year => @year)
+          if !@attendance_count.present?
+             @attendance_count = AttendanceCount.create(:employee_id => employee.id, :group_id => @group.id, :workshop_id => @workshop.id, :month => @month, :year => @year)
           end
+          @attendance_count.update(attendance_hash)
+          annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
+          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["f"].to_i) + (@attendance_count.attributes["g"].to_i)))
         end
       end
       flash[:notice] = "一键考勤填写成功！"
@@ -181,6 +160,8 @@ class AttendancesController < ApplicationController
 
   #班组考勤统计
   def group_statistics
+    @year = params[:year].to_i
+    @month = params[:month].to_i
     @years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		group = Group.current.find(current_user.group_id)
@@ -204,7 +185,7 @@ class AttendancesController < ApplicationController
           @year = params[:year].to_i
           @month = params[:month].to_i
         else
-          redirect_to filter_attendances_path(:type => "group",:year => params[:year],:month=> params[:month])
+          redirect_to group_attendances_path(:year => params[:year],:month=> params[:month])
           flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
         end
       else
@@ -212,7 +193,7 @@ class AttendancesController < ApplicationController
           @year = params[:year].to_i
           @month = params[:month].to_i
         else
-          redirect_to filter_attendances_path(:type => "group",:year => params[:year],:month=> params[:month])
+          redirect_to group_attendances_path(:year => params[:year],:month=> params[:month])
           flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
         end
       end
@@ -310,21 +291,22 @@ class AttendancesController < ApplicationController
         @applications.update(:status => params[:status])
         @applications.each do |application|
           if application.application_after.present?
+            employee = Employee.find_by(:id => application.employee_id)
             attendance = Attendance.find_by(:employee_id => application.employee_id,:year => application.year, :month => application.month)
             month_attendances = attendance.month_attendances
             month_attendances[(application.day - 1)] = application.application_after
             attendance.update(:month_attendances => month_attendances)
-            attendance_count_after = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_after)
+            attendance_count_after = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
             if attendance_count_after.present?
-              attendance_count_after.update(:count => (attendance_count_after.attributes["count"] +1))
+              attendance_count_after.update(application.application_after => ((attendance_count_after.attributes[application.application_after].to_i) +1))
             else
-              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_after,:count => 1)
+              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,:group_id => employee.group,:workshop_id => employee.workshop,application.application_after => ((attendance_count_after.attributes[application.application_after].to_i) +1))
             end
           end
-          if application.application_before.present?
-            attendance_count_before = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month,vacation_code: application.application_before)
+          if application.application_before.present? && (application.application_before != "x")
+            attendance_count_before = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
             if attendance_count_before.present?
-              attendance_count_before.update(:count => (attendance_count_before.attributes["count"] -1))
+              attendance_count_before.update(application.application_before => ((attendance_count_before.attributes[application.application_before].to_i) -1))
             end
           end
         end
@@ -332,21 +314,22 @@ class AttendancesController < ApplicationController
         @application = Application.find(params[:application_id])
      		@application.update(:status => params[:status])
         if @application.application_after.present?
+          employee = Employee.find_by(:id => @application.employee_id)
           attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
           month_attendances = attendance.month_attendances
           month_attendances[(@application.day - 1)] = @application.application_after
           attendance.update(:month_attendances => month_attendances)
-          attendance_count_after = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_after)
+          attendance_count_after = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
           if attendance_count_after.present?
-            attendance_count_after.update(:count => (attendance_count_after.attributes["count"] +1))
+            attendance_count_after.update(@application.application_after => ((attendance_count_after.attributes[@application.application_after].to_i) +1))
           else
-            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_after,:count => 1)
+            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,:workshop_id => employee.workshop,:group_id =>employee.group ,@application.application_after => ((attendance_count_after.attributes[@application.application_after].to_i) +1))
           end
         end
-        if @application.application_before.present?
-          attendance_count_before = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,vacation_code: @application.application_before)
+        if @application.application_before.present? || (@application.application_before != "x")
+          attendance_count_before = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
           if attendance_count_before.present?
-            attendance_count_before.update(:count => (attendance_count_before.attributes["count"] -1))
+            attendance_count_before.update(@application.application_before => ((attendance_count_before.attributes[@application.application_before].to_i) -1))
           end
         end
       end
@@ -414,10 +397,6 @@ class AttendancesController < ApplicationController
 			end
 		else
 			@attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
-			#把记录考勤的字符串分割成数组，赋值给attendance_ary
-			attendance_ary = @attendance.month_attendances.split('')
-			#day参数表示修改的是哪一天(由于数组index从0开始，所以在传参数之前就减了1)，code参数表示用户在表单上选择的什么假期，把这两个替换
-			#若当前用户是考勤管理员时，则存下修改记录--开始
 			if (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin)
 				AttendanceRecord.create(edit_before: attendance_ary[params[:day].to_i], edit_after: params[:code], modify_person: current_user.name, day: (params[:day].to_i + 1), attendance_id: @attendance.id)
 			end
@@ -425,51 +404,33 @@ class AttendancesController < ApplicationController
 			if current_user.has_role? :workshopadmin
 				Message.create(user_id: "3", message_type: "修改考勤", have_read: "0", remind_time: Time.now, message: "#{current_user.name}修改了#{Employee.find(params[:employee_id]).name}#{params[:year]}年#{params[:month]}月#{params[:day].to_i+1}的考勤数据")
 			end
-			attendance_ary[params[:day].to_i] = params[:code]
-			#将替换过的新的数组变成字符串，赋值给attendance_string
-			attendance_string = attendance_ary.join('')
-			@attendance.update(:month_attendances => attendance_string)
+      month_attendances_before = @attendance.month_attendances
+      month_attendances_after = month_attendances_before
+      month_attendances_after[params[:day].to_i] = params[:code]
+			@attendance.update(:month_attendances => month_attendances_after)
 			@attendance.save
-			#选择假期确定后存入attendance表中--结束
-			#每次更新考勤数据，都更新一次总数(attendance_count)--开始
-			#将上面更新过的表示考勤的数组赋值给attendance_ary_after
-			attendance_ary_after = @attendance.month_attendances.split("")
-			#定义下面需要使用的空hash
-			@vacation = {}
-			attendance_hash= {}
-			#做出一个所有的假期缩写和假期code对应的hash，供下面使用--开始
-			@categories = VacationCategory.all
-			@categories.each do |category|
-				@vacation[category.vacation_shortening] = category.vacation_code
-			end
-			#做出一个所有的假期缩写和假期code对应的hash，供下面使用--结束
-			#通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
-			@vacation.values.each do |code|
-				attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
-			end
-			#将上面得到的attendance_hash存入数据库
+
+			attendance_ary_after = month_attendances_after.split("")
+
 			sum = 0
-			attendance_hash.each do |i|
-				@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :vacation_code => i[0], :month => params[:month], :year => params[:year])
-				@attendance_count ||= AttendanceCount.new
-				group_id = Employee.current.find(params[:employee_id]).group
-				workshop_id = Employee.current.find(params[:employee_id]).workshop
-				@attendance_count.update(:employee_id => params[:employee_id], :vacation_code => i[0], :count => i[1], :group_id => group_id, :workshop_id => workshop_id, :month => params[:month], :year => params[:year])
+      employee = Employee.find_by(:id => params[:employee_id])
 
-				if (i[0] == "f") && (i[1] > 0)
-					sum += i[1]
-				end
-				if (i[0] == "g") && (i[1] > 0)
-					sum += i[1]
-				end
-			end
+			@attendance_count = AttendanceCount.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
+      @attendance_count_attributes = @attendance_count.attributes
+      if @attendance_count.present?
+        if month_attendances_before[params[:day].to_i] == "x"
+          @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
+        else
+          @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
+          @attendance_count.update(month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[month_attendances_before[params[:day].to_i]].to_i) -1))
+        end
+      else
+				@attendance_count = Attendance.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year])
+      end
+      attendance_count_attributes = @attendance_count.attributes
 			annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
-			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: sum)
-			#每次更新考勤数据，都更新一次总数(attendance_count)--结束
+			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["f"].to_i) + (attendance_count_attributes["g"].to_i)))
 
-			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--开始
-
-			#每次更新考勤数据，都更新一次年休假总数(annual_holiday)--结束
       if current_user.has_role? :groupadmin
         @group = Group.current.find(current_user.group_id)
         if !AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).present?
@@ -491,7 +452,6 @@ class AttendancesController < ApplicationController
 			end
 		end
 	end
-	##弹窗内选择假期的表单功能--结束
 
 	##使用ajax动态呼叫弹框功能--开始
 	def show_modal
@@ -543,11 +503,20 @@ class AttendancesController < ApplicationController
 		elsif params[:type] == "duan"
 			@workshops = Workshop.current
       @duan = params[:duan]
-  		@workshop = params[:workshop]
-  		@group = params[:group]
+      @workshop = params[:workshop]
+      @group = params[:workshop]
       @leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
-  		transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+
   		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
+      if params[:workshop].present?
+        transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:workshop]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:workshop]).pluck("employee_id")
+        @employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop])
+      elsif params[:group].present?
+        transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+        @employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
+      else
+        @employees = []
+      end
 			render action: "duan"
 		end
 	end
@@ -658,26 +627,26 @@ class AttendancesController < ApplicationController
 	def duan
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-
-		@workshops = Workshop.current
-		@duan = params[:duan]
-		@workshop = params[:workshop]
-		@group = params[:group]
-
+    @workshops = Workshop.current
+    if params[:workshop].present?
+      @employees = Employee.current.where(:worshop => params[:workshop])
+    elsif params[:group].present?
+      @employees = Employee.current.where(:group => params[:group])
+    else
+      @employees = []
+    end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
-		#配置班组的现员数据（当前人员+调动人员）
-		@employees = Employee.current.where(:group => params[:group])
 	end
 	##段管理员页面--结束
 
 	##点击段页面的表格数字后显示的详情页面--开始
 	def duan_detail
 		@duan_detail = {}
-		attendance_counts = AttendanceCount.where(:vacation_code => params[:code], :group_id => params[:group], month: params[:month], year: params[:year])
+		attendance_counts = AttendanceCount.where(:group_id => params[:group], month: params[:month], year: params[:year])
 		attendance_counts.each do |attendance_count|
 			employee_name = Employee.current.find_by(:id => attendance_count.employee_id).name
-			employee_count = AttendanceCount.find_by(:employee_id => attendance_count.employee_id, :vacation_code => params[:code], month: params[:month], year: params[:year]).count
+			employee_count = attendance_count.attributes[params[:code]]
 			@duan_detail[employee_name] = employee_count
 		end
 	end
@@ -878,5 +847,30 @@ class AttendancesController < ApplicationController
   def show_record
     @category_name_hash = VacationCategory.pluck(:vacation_code, :vacation_name).to_h
   end
+
+#一键计算所有当月所有考勤统计
+  def attendance_count_compute
+    @employees = Employee.current
+    @vacation_name_hash = VacationCategory.pluck("vacation_shortening","vacation_code").to_h
+    @employees.each do |employee|
+      @attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :year => params[:year],:month => params[:month])
+      @attendance = Attendance.find_by(:employee_id => employee.id, :year => params[:year],:month => params[:month])
+      if @attendance.present?
+        month_attendances =  @attendance.month_attendances
+        attendance_ary_after = month_attendances.split("")
+        attendance_hash= {}
+        #通过将所有的假期code和attendance_ary_after这个数组比对，做出一个所有的假期code和其出现次数的hash
+        @vacation_name_hash.values.each do |code|
+          attendance_hash[code] = attendance_ary_after.map{|x| x if x==code}.compact.count
+        end
+        if !@attendance_count.present?
+          @attendance_count =AttendanceCount.create(:employee_id => employee.id, :year => params[:year],:month => params[:month],:group_id => employee.group,:workshop_id => employee.workshop)
+        end
+        @attendance_count.update(attendance_hash)
+      end
+    end
+  end
+
+
 
 end

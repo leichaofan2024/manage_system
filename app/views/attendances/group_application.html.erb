@@ -1,7 +1,7 @@
 <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
   <div class="pageheader">
       <% if params[:year].present? %>
-        <h2><a href="/attendances/filter?type=group&year=<%= @year%>&month=<%= @month %>">返回 <span> 考勤修改申请 </span></a></h2>
+        <h2><a href="/attendances/group?type=group&year=<%= @year%>&month=<%= @month %>">返回 <span> 考勤修改申请 </span></a></h2>
       <% else %>
         <h2><a href="/attendances/group">返回 <span> 考勤修改申请 </span></a></h2>
       <% end %>

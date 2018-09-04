@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180823013031) do
+ActiveRecord::Schema.define(version: 20180903111307) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -92,14 +92,37 @@ ActiveRecord::Schema.define(version: 20180823013031) do
 
   create_table "attendance_counts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id", null: false
-    t.string "vacation_code", null: false
-    t.integer "count", default: 0, null: false
+    t.integer "a", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "year"
     t.integer "month"
     t.integer "group_id"
     t.integer "workshop_id"
+    t.integer "b"
+    t.integer "c"
+    t.integer "d"
+    t.integer "e"
+    t.integer "f"
+    t.integer "g"
+    t.integer "h"
+    t.integer "i"
+    t.integer "j"
+    t.integer "k"
+    t.integer "l"
+    t.integer "m"
+    t.integer "n"
+    t.integer "o"
+    t.integer "p"
+    t.integer "q"
+    t.integer "r"
+    t.integer "s"
+    t.integer "t"
+    t.integer "u"
+    t.integer "v"
+    t.integer "w"
+    t.integer "y"
+    t.integer "z"
   end
 
   create_table "attendance_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
