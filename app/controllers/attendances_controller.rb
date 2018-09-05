@@ -141,13 +141,13 @@ class AttendancesController < ApplicationController
 
       if current_user.has_role? :groupadmin
         @group = Group.current.find(current_user.group_id)
-        if !AttendanceStatus.find_by(:group_id => @group.id).present?
-          AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中")
+        if !AttendanceStatus.find_by(:group_id => @group.id,:year => @year,:month => @month).present?
+          AttendanceStatus.create(:group_id => @group.id,:year => @year,:month => @month, :status => "班组/科室填写中")
         end
       elsif current_user.has_role? :organsadmin
         @group = Group.current.find(current_user.group_id)
-        if !AttendanceStatus.find_by(:group_id => @group.id).present?
-            AttendanceStatus.create(:group_id => @group.id, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
+        if !AttendanceStatus.find_by(:group_id => @group.id,:year => @year,:month => @month).present?
+            AttendanceStatus.create(:group_id => @group.id,:year => @year,:month => @month, :status => "班组/科室填写中", :workshop_id => @group.workshop.id)
         end
       end
 
@@ -446,7 +446,7 @@ class AttendancesController < ApplicationController
         if !AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).present?
           AttendanceStatus.create(:group_id => @group.id,:year => params[:year],:month => params[:month], :status => "车间已审核", :workshop_id => @group.workshop.id)
         else
-          AttendanceStatus.update(:status => "车间已审核",:year => params[:year],:month => params[:month], :workshop_id => @group.workshop.id)
+          AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).update(:status => "车间已审核", :workshop_id => @group.workshop.id)
         end
       end
 
@@ -733,7 +733,7 @@ class AttendancesController < ApplicationController
       if (Time.now.month == 2) || (Time.now.month == 10)
         @shenhe_day = 1..8
       else
-        @shenhe_day = 1..5
+        @shenhe_day = 1..6
       end
       @groups = Group.current.where(:workshop_id => current_user.workshop_id)
       group_ids = @groups.pluck(:id)
