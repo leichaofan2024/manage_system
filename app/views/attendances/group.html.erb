@@ -74,7 +74,6 @@
         <% end %>
       </select>月
 
-      <%= hidden_field_tag :type, "group" %>
       <%= submit_tag :筛选 %>
      <% end %>
    <% end %>
@@ -190,7 +189,7 @@
 
 
   <div class="pull-right" style= "margin:20px;">
-    <%= link_to "#",data: {confirm: "确定要上报考勤吗？"} do %>
+    <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"} do %>
         <button type="button" name="button">上报考勤</button>
     <% end %>
   </div>
