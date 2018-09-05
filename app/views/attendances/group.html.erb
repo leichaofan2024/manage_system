@@ -1,5 +1,5 @@
 <div class="pageheader">
-<h2>当前位置 <span> 班组考勤统计 </span></h2>
+  <h2>当前位置 <span> 班组考勤统计 </span></h2>
 </div>
 
 <div class="contentpanel">
@@ -121,8 +121,8 @@
           <% @employees.each do |employee| %>
             <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
             <tr>
-              <td><%= employee.sal_number %></td>
-              <td>
+              <th><%= employee.sal_number %></th>
+              <th>
                 <%if @year.present? && @month.present? %>
                   <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: @month, year: @year) do %>
                     <%= employee.name %>
@@ -132,8 +132,8 @@
                     <%= employee.name %>
                   <% end %>
                 <% end %>
-              </td>
-              <td><%= employee.duty %></td>
+              </th>
+              <th><%= employee.duty %></th>
               <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
               <% if @year.present? && @month.present? %>
                 <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>

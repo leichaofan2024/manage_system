@@ -1,5 +1,4 @@
 
-<tr style= "height:55px;">
   <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
   <% if params[:year].present? %>
     <% attendance = Attendance.find_by(employee_id: employee.id, year: params_year, month: params_month) %>
@@ -39,15 +38,13 @@
       <% day_number += 1%>
     <% end %>
   <% end %>
-</tr>
+
 <% if params_year.present? && (params_year.to_i == shenhe_year) && (params_month.to_i == shenhe_month) && (shenhe_day === Time.now.day) %>
   <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
-    <tr style= "height:40px;">
       <td colspan=36>
         <span id = "shenhe-<%= employee.group %>">
           <%= render :partial => "shenhe_button", :locals => { :params_year => params_year,:params_month => params_month,:employee => employee, :shenhe_year => shenhe_year,:shenhe_month => shenhe_month } %>
         </span>
       </td>
-    </tr>
   <% end %>
 <% end %>

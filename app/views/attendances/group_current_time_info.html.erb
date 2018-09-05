@@ -2,14 +2,13 @@
 <div id="preloader">
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
-
-      <div class="pageheader">
-        <h2>当前位置 <span> 考勤统计 </span></h2>
-      </div>
+<div class="pageheader">
+  <h2>当前位置 <span> 考勤统计 </span></h2>
+</div>
 
       <div class="contentpanel">
         <div class="panel panel-default">
-            <%= render "attendance_sidebar"%>
+          <%= render "attendance_sidebar"%>
         </div>
 
         <% if current_user.has_role? :attendance_admin %>
@@ -180,10 +179,6 @@
             <% end %>
           </div>
         <% end %>
-
-
-
-
         <div class="col-md-12 col-lg-12 col-sm-12">
             <!-- 组织结构树状图-开始 -->
             <% if current_user.has_role? :workshopadmin %>
@@ -281,53 +276,20 @@
             <% end %>
           <!-- 组织结构树状图-结束 -->
 
+
+
+
+
       <div class="col-md-10 col-lg-10 col-sm-10 pull-right" style = "margin-bottom: 5px;-webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);background-color: #fff;">
-        <div class ="col-md-6 col-lg-5 col-sm-6" style="margin-right:-16px;margin-left:-5px;">
-          <table class="table table-bordered">
+        <div class ="table-responsive" style="margin-right:-16px;margin-left:-5px;">
+          <table class="table overflow-y">
             <thead>
-              <tr style= "height:35px;">
+              <tr>
                 <th>工资号</th>
                 <th>姓名</th>
                 <th>职名</th>
                 <th>车间</th>
                 <th>班组</th>
-
-              </tr>
-            </thead>
-            <tbody>
-            <!-- 配置表格数据-开始 -->
-                <% @employees.each do |employee| %>
-                  <tr style= "height:55px;">
-                    <td><%= employee.sal_number %></td>
-                    <td>
-                      <%= employee.name %>
-                    </td>
-                    <td><%= employee.duty %></td>
-                    <td><%= Workshop.current.find(employee.workshop).name %></td>
-                    <td><%= Group.current.find(employee.group).name %></td>
-                  </tr>
-                  <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
-                    <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
-                      <tr style= "height:40px;">
-                        <td colspan=36>
-                          <span >
-
-                          </span>
-                        </td>
-                      </tr>
-                    <% end %>
-                  <% end %>
-                <% end %>
-            </tbody>
-          </table>
-        </div>
-
-
-        <div  class ="col-md-6 col-lg-7 col-sm-6" style="margin-left:-16px;overflow: auto; ">
-          <table id="example" class="table table-bordered">
-            <thead>
-              <tr style= "height:35px;">
-
                 <!-- 生成每月1-31号的数字-开始 -->
                 <% (1..31).each do |i| %>
                   <th>
@@ -361,24 +323,43 @@
                     </li>
                   </th>
                 <% end %>
-                </tr>
-              </thead>
-                <tbody>
-                <!-- 配置表格数据-开始 -->
-                  <% if @employees.present? %>
-                    <% @employees.each do |employee| %>
-                      <% if params[:year].present? %>
-                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
-                      <% else %>
-                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
-                      <% end %>
+              </tr>
+            </thead>
+            <tbody>
+            <!-- 配置表格数据-开始 -->
+                <% @employees.each do |employee| %>
+                  <tr>
+                    <th><%= employee.sal_number %></th>
+                    <th>
+                      <%= employee.name %>
+                    </th>
+                    <th><%= employee.duty %></th>
+                    <th><%= Workshop.current.find(employee.workshop).name %></th>
+                    <th><%= Group.current.find(employee.group).name %></th>
 
+                  <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
+                    <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
+                        <td colspan=36>
+                          <span >
+
+                          </span>
+                        </td>
                     <% end %>
-
-                  <!-- 配置表格数据-开始 -->
                   <% end %>
-                </tbody>
-              </table>
+                  <!-- 配置表格数据-开始 -->
+                    <% if @employees.present? %>
+                        <% if params[:year].present? %>
+                          <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                        <% else %>
+                          <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                        <% end %>
+                    <!-- 配置表格数据-开始 -->
+                    <% end %>
+                  </tr>
+                <% end %>
+            </tbody>
+          </table>
+        </div>
               <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
                 <div class="" style = "margin-bottom: 50px;">
                   <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) && @workshop_yijian_permission ==1 %>
@@ -398,8 +379,7 @@
                 </div>
 
               <% end %>
-              <div id="showModal">
-              </div>
+              <div id="showModal"></div>
           </div>
         </div>
       </div>
