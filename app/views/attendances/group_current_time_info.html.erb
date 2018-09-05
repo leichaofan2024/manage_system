@@ -77,72 +77,73 @@
           <% else %>
           <span class= "pull-right btn btn-primary2">  <%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "" %><i href="#" style = "color:red;">(<%= applications.count%>条)</i></span>
           <% end %>
-
         </div>
       </div>
     </div>
   <% end %>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <% if current_user.has_role? :workshopadmin %>
   <!-- 查看申请开始 -->
   <% groups = [] %>
   <% application_id = [] %>
-
   <% @groups.each do |group| %>
     <% groups << group.id %>
   <% end %>
-
   <% applications = Application.where(:group_id => groups,:status => "班组发起申请") %>
   <% applications.each do |application| %>
     <% application_id << application.id %>
   <% end %>
   <% application_count = Application.where(:group_id => groups, :status => "班组发起申请").count %>
-  <% unless application_count == 0 %>
-  <span class="pull-right btn btn-primary2"><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: current_user.workshop_id), class: "" %><i href="#" style= "color:red"><%= application_count%>条</i> </span>
-  <% end %>
 
   <!-- 查看申请结束 -->
+  <div class="content-head">
+    <header>
+      <% if @workshop.present? %>
+        <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% elsif @group.present? %>
+        <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% else %>
+        <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% end %>
+    </header>
+  </div>
 
-
-
+  <div class="subhead">
+    <div class="searchform">
       <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
         <%= label_tag :请输入时间段搜索 %>
-        <select class="" name="year">
-          <% Attendance.pluck(:year).uniq.each do |year| %>
-            <% if year == Time.now.year %>
-              <option value="<%= year %>" selected ><%= year %></option>
-            <% else %>
-              <option value="<%= year %>" ><%= year %> </option>
+          <select class="" name="year">
+            <% Attendance.pluck(:year).uniq.each do |year| %>
+              <% if year == Time.now.year %>
+                <option value="<%= year %>" selected ><%= year %></option>
+              <% else %>
+                <option value="<%= year %>" ><%= year %> </option>
+              <% end %>
             <% end %>
-          <% end %>
-        </select>
-        ～
-        <select class="" name="month">
-          <% Attendance.pluck(:month).uniq.each do |month| %>
-            <% if month == Time.now.month %>
-              <option value="<%= month%>" selected ><%= month%></option>
-            <% else %>
-              <option value="<%= month%>" ><%= month %></option>
+          </select>
+      ～
+          <select class="" name="month">
+            <% Attendance.pluck(:month).uniq.each do |month| %>
+              <% if month == Time.now.month %>
+                <option value="<%= month%>" selected ><%= month%></option>
+              <% else %>
+                <option value="<%= month%>" ><%= month %></option>
+              <% end %>
             <% end %>
+          </select>
+          <%= submit_tag :筛选 %>
+        <% end %>
+      </div>
+
+      <div class="head-right">
+        <div class="button-group">
+          <% unless application_count == 0 %>
+            <span class="pull-right btn btn-primary2"><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: current_user.workshop_id), class: "" %><i href="#" style= "color:red"><%= application_count%>条</i> </span>
           <% end %>
-        </select>
-        <%= submit_tag :筛选 %>
-      <% end %>
+        </div>
+      </div>
+  </div>
   <% end %>
 
 
