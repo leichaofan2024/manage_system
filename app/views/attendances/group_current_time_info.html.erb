@@ -2,11 +2,77 @@
 <div id="preloader">
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
+<div class="pageheader">
+  <h2>当前位置 <span> 考勤统计 </span></h2>
+</div>
 
-      <div class="pageheader">
-        <h2>当前位置 <span> 考勤统计 </span></h2>
+<div class="contentpanel">
+  <!-- <div class="panel panel-default">
+    <%= render "attendance_sidebar"%>
+  </div> -->
+
+  <% if current_user.has_role? :attendance_admin %>
+  <!-- 查看申请开始 -->
+    <% application_id = [] %>
+    <% all_application_id = [] %>
+    <% applications = (Application.where(:status => "车间通过申请")) + (Application.where(:status => "科室发起申请")) %>
+    <% all_applications = (Application.where(:status => "段通过申请")) %>
+    <% applications.each do |application| %>
+      <% application_id << application.id %>
+    <% end %>
+    <% all_applications.each do |application| %>
+      <% all_application_id << application.id %>
+    <% end %>
+  <!-- 查看申请结束 -->
+    <!-- 总数统计，呼叫弹窗 -->
+
+    <div class="content-head">
+      <header>
+        <% if @workshop.present? %>
+          <h4><%= Workshop.current.find(@workshop).name %><%= @year %>年<%= @month %>月考勤情况</h4>
+        <% elsif @group.present? %>
+          <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
+        <% else %>
+          <h4>供电段<%= @year %>年<%= @month %>月考勤情况</h4>
+        <% end %>
+      </header>
+    </div>
+    <div class="subhead">
+      <div class="searchform">
+        <!-- 时间搜索 -->
+        <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
+          <%= label_tag :请输入时间段搜索 %>
+          <select class="" name="year">
+            <% Attendance.pluck(:year).uniq.each do |year| %>
+              <% if year == Time.now.year %>
+                <option value="<%= year %>" selected ><%= year %></option>
+              <% else %>
+                <option value="<%= year %>" ><%= year %> </option>
+              <% end %>
+            <% end %>
+          </select>
+          ～
+          <select class="" name="month">
+            <% Attendance.pluck(:month).uniq.each do |month| %>
+              <% if month == Time.now.month %>
+                <option value="<%= month%>" selected ><%= month%></option>
+              <% else %>
+                <option value="<%= month%>" ><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+          <%= submit_tag :筛选 %>
+        <% end %>
       </div>
+      <div class="header-right">
+        <ul class="headermenu">
+          <div class="button-group">
+            <% if @shenhe_day === Time.now.day%>
+            <%= link_to "点击查看(未审核)", processbar_detail_attendances_path(workshops: @workshops), remote: true, "data-toggle" => "modal", "data-target" => "#verifyModal" %>
+            <!-- <%= "#{Workshop.current.count.to_i - @workshops.count.to_i}" %> -->
+            <% end %>
 
+<<<<<<< HEAD
       <div class="contentpanel">
         <div class="panel panel-default">
             <%= render "attendance_sidebar"%>
@@ -83,38 +149,16 @@
         <!-- 查看申请结束 -->
 
           <div class="col-md-12 col-lg-12 col-sm-12">
+=======
+>>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
             <!-- 处理申请 -->
             <% if applications.count == 0 %>
             <span class="pull-right btn btn-primary2">  <%= link_to "查看往期申请", show_application_attendances_path(applications: all_application_id, type: "duan"), class: ""  %> </span>
             <% else %>
             <span class= "pull-right btn btn-primary2">  <%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "" %><i href="#" style = "color:red;">(<%= applications.count%>条)</i></span>
             <% end %>
-
-            <!-- 时间搜索 -->
-            <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
-              <%= label_tag :请输入时间段搜索 %>
-              <select class="" name="year">
-                <% Attendance.pluck(:year).uniq.each do |year| %>
-                  <% if year == Time.now.year %>
-                    <option value="<%= year %>" selected ><%= year %></option>
-                  <% else %>
-                    <option value="<%= year %>" ><%= year %> </option>
-                  <% end %>
-                <% end %>
-              </select>
-              ～
-              <select class="" name="month">
-                <% Attendance.pluck(:month).uniq.each do |month| %>
-                  <% if month == Time.now.month %>
-                    <option value="<%= month%>" selected ><%= month%></option>
-                  <% else %>
-                    <option value="<%= month%>" ><%= month %></option>
-                  <% end %>
-                <% end %>
-              </select>
-              <%= submit_tag :筛选 %>
-            <% end %>
           </div>
+<<<<<<< HEAD
         <% end %>
 
 
@@ -137,192 +181,230 @@
               <h4>当前车间考勤表状态：<span style = "color:green;">有班组待审核</span></h4>
             <% else %>
               <h4>当前车间考勤表状态：<span style = "color:red;">暂时没有可以审核的班组</span> </h4>
-            <% end %>
-            <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
-          <% end %>
-          <div class="col-md-12 col-lg-12 col-sm-12">
+=======
+        </ul>
+      </div>
+    </div>
+  <% end %>
 
-            <!-- 查看申请开始 -->
-            <% groups = [] %>
-            <% application_id = [] %>
 
-            <% @groups.each do |group| %>
-              <% groups << group.id %>
-            <% end %>
+  <% if current_user.has_role? :workshopadmin %>
+  <!-- 查看申请开始 -->
+  <% groups = [] %>
+  <% application_id = [] %>
+  <% @groups.each do |group| %>
+    <% groups << group.id %>
+  <% end %>
+  <% applications = Application.where(:group_id => groups,:status => "班组发起申请") %>
+  <% applications.each do |application| %>
+    <% application_id << application.id %>
+  <% end %>
+  <% application_count = Application.where(:group_id => groups, :status => "班组发起申请").count %>
 
-            <% applications = Application.where(:group_id => groups,:status => "班组发起申请") %>
-            <% applications.each do |application| %>
-              <% application_id << application.id %>
+  <!-- 查看申请结束 -->
+  <div class="content-head">
+    <header>
+      <% if @workshop.present? %>
+        <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% elsif @group.present? %>
+        <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% else %>
+        <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
+      <% end %>
+    </header>
+  </div>
+
+  <div class="subhead">
+    <div class="searchform">
+      <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
+        <%= label_tag :请输入时间段搜索 %>
+          <select class="" name="year">
+            <% Attendance.pluck(:year).uniq.each do |year| %>
+              <% if year == Time.now.year %>
+                <option value="<%= year %>" selected ><%= year %></option>
+              <% else %>
+                <option value="<%= year %>" ><%= year %> </option>
+              <% end %>
             <% end %>
-            <% application_count = Application.where(:group_id => groups, :status => "班组发起申请").count %>
-            <% unless application_count == 0 %>
+          </select>
+      ～
+          <select class="" name="month">
+            <% Attendance.pluck(:month).uniq.each do |month| %>
+              <% if month == Time.now.month %>
+                <option value="<%= month%>" selected ><%= month%></option>
+              <% else %>
+                <option value="<%= month%>" ><%= month %></option>
+              <% end %>
+>>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
+            <% end %>
+          </select>
+          <%= submit_tag :筛选 %>
+        <% end %>
+      </div>
+
+      <div class="head-right">
+        <div class="button-group">
+          <% unless application_count == 0 %>
             <span class="pull-right btn btn-primary2"><%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: current_user.workshop_id), class: "" %><i href="#" style= "color:red"><%= application_count%>条</i> </span>
-            <% end %>
+          <% end %>
+        </div>
+      </div>
+  </div>
+  <% end %>
 
-            <!-- 查看申请结束 -->
 
-            <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
-              <%= label_tag :请输入时间段搜索 %>
-              <select class="" name="year">
-                <% Attendance.pluck(:year).uniq.each do |year| %>
-                  <% if year == Time.now.year %>
-                    <option value="<%= year %>" selected ><%= year %></option>
-                  <% else %>
-                    <option value="<%= year %>" ><%= year %> </option>
-                  <% end %>
-                <% end %>
-              </select>
-              ～
-              <select class="" name="month">
-                <% Attendance.pluck(:month).uniq.each do |month| %>
-                  <% if month == Time.now.month %>
-                    <option value="<%= month%>" selected ><%= month%></option>
-                  <% else %>
-                    <option value="<%= month%>" ><%= month %></option>
-                  <% end %>
-                <% end %>
-              </select>
-              <%= submit_tag :筛选 %>
+
+
+
+
+
+
+
+  <div class="content-body">
+    <div class="row">
+      <div class="col-md-3">
+        <!-- 组织结构树状图-开始 -->
+        <% if current_user.has_role? :workshopadmin %>
+          <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
+            <% workshop = Workshop.current.find_by(name: current_user.name) %>
+            <% if params[:year].present? %>
+              <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= workshop.name %></a></h5>
+            <% else %>
+              <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
             <% end %>
+            <ul>
+              <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
+                <% if params[:year].present? %>
+                  <li><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= group.name %></a></li>
+                <% else%>
+                  <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        <% else %>
+          <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
+            <h5>
+              <% if params[:year].present? %>
+                <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: params[:year],month: params[:month]) %>
+              <% else %>
+                <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %>
+              <% end %>
+            </h5>
+            <ul>
+              <% @workshops.each do |verify_workshop| %>
+                <li>
+
+                  <% if params[:year].present? %>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                      <%= verify_workshop.name %>
+                    </a>
+                  <% else %>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
+                      <%= verify_workshop.name %>
+                    </a>
+                  <% end %>
+                  <ul>
+                    <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
+                    <% groups.each do |group| %>
+
+                      <% if params[:year].present? %>
+                        <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                          <%= group.name %>
+                        </a></li>
+                      <% else %>
+                        <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'>
+                          <%= group.name %>
+                        </a></li>
+                      <% end %>
+
+                    <% end %>
+                  </ul>
+                </li>
+              <% end %>
+              <% @workshops_not_varify.each do |no_verify_workshop| %>
+                <li>
+
+                  <% if params[:year].present? %>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                      <%= no_verify_workshop.name %>
+                    </a>
+                  <% else %>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
+                      <%= no_verify_workshop.name %>
+                    </a>
+                  <% end %>
+                  <ul>
+                    <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
+                    <% no_verify_groups.each do |group| %>
+                      <li>
+                        <% if params[:year].present? %>
+                          <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
+                            <%= group.name %>
+                          </a>
+                        <% else %>
+                          <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>'>
+                            <%= group.name %>
+                          </a>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+            <br>
+            <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
           </div>
         <% end %>
+      <!-- 组织结构树状图-结束 -->
+      </div>
+      <div class="col-md-9">
 
-
-
-
-        <div class="col-md-12 col-lg-12 col-sm-12">
-            <!-- 组织结构树状图-开始 -->
-            <% if current_user.has_role? :workshopadmin %>
-              <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
-                <% workshop = Workshop.current.find_by(name: current_user.name) %>
-                <% if params[:year].present? %>
-                  <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= workshop.name %></a></h5>
-                <% else %>
-                  <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>'><%= workshop.name %></a></h5>
-                <% end %>
-                <ul>
-                  <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
-                    <% if params[:year].present? %>
-                      <li><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'><%= group.name %></a></li>
-                    <% else%>
-                      <li><a href='/attendances/group_current_time_info?group=<%= group.id %>'><%= group.name %></a></li>
-                    <% end %>
-                  <% end %>
-                </ul>
-              </div>
-            <% else %>
-              <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
-                <h5>
-                  <% if params[:year].present? %>
-                    <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: params[:year],month: params[:month]) %>
-                  <% else %>
-                    <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段") %>
-                  <% end %>
-                </h5>
-                <ul>
-                  <% @workshops.each do |verify_workshop| %>
-                    <li>
-
-                      <% if params[:year].present? %>
-                        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
-                          <%= verify_workshop.name %>
-                        </a>
-                      <% else %>
-                        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>'>
-                          <%= verify_workshop.name %>
-                        </a>
-                      <% end %>
-                      <ul>
-                        <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
-                        <% groups.each do |group| %>
-
-                          <% if params[:year].present? %>
-                            <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
-                              <%= group.name %>
-                            </a></li>
-                          <% else %>
-                            <li><a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>'>
-                              <%= group.name %>
-                            </a></li>
+        <div class="panel">
+          <div class ="table-responsive">
+            <table class="table overflow-y">
+              <thead>
+                <tr>
+                  <th>工资号</th>
+                  <th>姓名</th>
+                  <th>职名</th>
+                  <th>车间</th>
+                  <th>班组</th>
+                  <!-- 生成每月1-31号的数字-开始 -->
+                  <% (1..31).each do |i| %>
+                    <th>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
+                          <%= i %>
+                          <% if params[:year].present? && params[:month].present? && params[:group].present?  %>
+                            <b class="caret"></b>
+                            <ul class="dropdown-menu">
+                              <li><%= link_to "一键设置考勤：", "#" %></li>
+                              <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year =>params[:year] , :month =>params[:month],:day => i-1,:code => "日"),method: :post  %></li>
+                              <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"星" ),method: :post  %></li>
+                              <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                              <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                              <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                              <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"休" ),method: :post  %></li>
+                            </ul>
+                          <% elsif params[:group].present? %>
+                            <b class="caret"></b>
+                            <ul class="dropdown-menu">
+                              <li><%= link_to "一键设置考勤：", "#" %></li>
+                              <li><%= link_to "日", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year =>Time.now.year , :month =>Time.now.month,:day => i-1,:code => "日"),method: :post  %></li>
+                              <li><%= link_to "星", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"星" ),method: :post  %></li>
+                              <li><%= link_to "节", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group] ,:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"节" ),method: :post  %></li>
+                              <li><%= link_to "日夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"日夜" ),method: :post  %></li>
+                              <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
+                              <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => Time.now.year, :month =>Time.now.month,:day =>i-1 ,:code =>"休" ),method: :post  %></li>
+                            </ul>
                           <% end %>
-
-                        <% end %>
-                      </ul>
-                    </li>
-                  <% end %>
-                  <% @workshops_not_varify.each do |no_verify_workshop| %>
-                    <li>
-
-                      <% if params[:year].present? %>
-                        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
-                          <%= no_verify_workshop.name %>
                         </a>
-                      <% else %>
-                        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>'>
-                          <%= no_verify_workshop.name %>
-                        </a>
-                      <% end %>
-                      <ul>
-                        <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
-                        <% no_verify_groups.each do |group| %>
-                          <li>
-                            <% if params[:year].present? %>
-                              <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=params[:year]%>&month=<%=params[:month]%>'>
-                                <%= group.name %>
-                              </a>
-                            <% else %>
-                              <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>'>
-                                <%= group.name %>
-                              </a>
-                            <% end %>
-                          </li>
-                        <% end %>
-                      </ul>
-                    </li>
+                      </li>
+                    </th>
                   <% end %>
-                </ul>
-                <br>
-                <p>注意：绿色字体为已审核车间，红色为未审核车间</p>
-              </div>
-            <% end %>
-          <!-- 组织结构树状图-结束 -->
-
-      <div class="col-md-10 col-lg-10 col-sm-10 pull-right" style = "margin-bottom: 5px;-webkit-box-shadow: 0 1px 15px 1px rgba(39,39,39,.1);box-shadow: 1px 1px 15px 1px rgba(39,39,39,.1);background-color: #fff;">
-        <div class ="col-md-6 col-lg-5 col-sm-6" style="margin-right:-16px;margin-left:-5px;">
-          <table class="table table-bordered">
-            <thead>
-              <tr style= "height:35px;">
-                <th>工资号</th>
-                <th>姓名</th>
-                <th>职名</th>
-                <th>车间</th>
-                <th>班组</th>
-
-              </tr>
-            </thead>
-            <tbody>
-            <!-- 配置表格数据-开始 -->
-                <% @employees.each do |employee| %>
-                  <tr style= "height:55px;">
-                    <td><%= employee.sal_number %></td>
-                    <td>
-                      <%= employee.name %>
-                    </td>
-                    <td><%= employee.duty %></td>
-                    <td><%= Workshop.current.find(employee.workshop).name %></td>
-                    <td><%= Group.current.find(employee.group).name %></td>
-                  </tr>
-                  <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
-                    <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
-                      <tr style= "height:40px;">
-                        <td colspan=36>
-                          <span >
-
-                          </span>
-                        </td>
-                      </tr>
-                    <% end %>
-                  <% end %>
+<<<<<<< HEAD
                 <% end %>
             </tbody>
           </table>
@@ -367,52 +449,71 @@
                     </li>
                   </th>
                 <% end %>
+=======
+>>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
                 </tr>
               </thead>
-                <tbody>
-                <!-- 配置表格数据-开始 -->
-                  <% if @employees.present? %>
-                    <% @employees.each do |employee| %>
-                      <% if params[:year].present? %>
-                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
-                      <% else %>
-                        <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+              <tbody>
+              <!-- 配置表格数据-开始 -->
+                  <% @employees.each do |employee| %>
+                    <tr>
+                      <th><%= employee.sal_number %></th>
+                      <th>
+                        <%= employee.name %>
+                      </th>
+                      <th><%= employee.duty %></th>
+                      <th><%= Workshop.current.find(employee.workshop).name %></th>
+                      <th><%= Group.current.find(employee.group).name %></th>
+
+                    <% if params[:year].present? && (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) && (@shenhe_day === Time.now.day) %>
+                      <% if Employee.current.where(:group => employee.group).last.id == employee.id %>
+                          <td colspan=36>
+                            <span >
+
+                            </span>
+                          </td>
                       <% end %>
-
                     <% end %>
-
-                  <!-- 配置表格数据-开始 -->
-                  <% end %>
-                </tbody>
-              </table>
-              <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
-                <div class="" style = "margin-bottom: 50px;">
-                  <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) && @workshop_yijian_permission ==1 %>
-                       <span style="color: #269Eff;"><%= link_to "一键审核",batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
-                  <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
-                    <div class="pull-right">
-                      <% if @workshops_not_varify.present? %>
-                        <%= link_to("前往下一个未审完车间  >>",group_current_time_info_attendances_path(:workshop => @workshops_not_varify.first.id,:year =>params[:year] ,:month => params[:month]))%>
-                      <% else %>
-                        <span style= "color: green;">车间全部审核完毕！</span>
+                    <!-- 配置表格数据-开始 -->
+                      <% if @employees.present? %>
+                          <% if params[:year].present? %>
+                            <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => params[:year],:params_month =>params[:month],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                          <% else %>
+                            <%= render :partial => "group_current_time_employee", :locals => {:employee => employee,:params_year => [],:params_month => [],:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day } %>
+                          <% end %>
+                      <!-- 配置表格数据-开始 -->
                       <% end %>
-                    </div>
-                    <% if @duan_yijian_permission == 1%>
-                         <span style="color: #269Eff;"><%= link_to "一键审核(#{Workshop.current.find(@workshop).name})",batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
-                    <% end %>
+                    </tr>
                   <% end %>
-                </div>
-
-              <% end %>
-              <div id="showModal">
-              </div>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
+        <div id="showModal"></div>
+    </div>
+  </div>
+  </div>
+  <div class="content-footer">
+    <% if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)&&(@shenhe_day === Time.now.day) %>
+        <% if (current_user.has_role? :workshopadmin) && (!params[:group].present?) && @workshop_yijian_permission ==1 %>
+             <span style="color: #269Eff;"><%= link_to "一键审核",batch_verify_attendances_path(authority: "workshop",year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
+        <% elsif (current_user.has_role? :attendance_admin) && (@workshop.present?)  %>
+            <% if @workshops_not_varify.present? %>
+              <%= link_to("前往下一个未审完车间  >>",group_current_time_info_attendances_path(:workshop => @workshops_not_varify.first.id,:year =>params[:year] ,:month => params[:month]))%>
+            <% else %>
+              <span style= "color: green;">车间全部审核完毕！</span>
+            <% end %>
+          <% if @duan_yijian_permission == 1%>
+               <span style="color: #269Eff;"><%= link_to "一键审核(#{Workshop.current.find(@workshop).name})",batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop, year: @shenhe_year,month: @shenhe_month), method: :post,:data => {disable_with: "正在审核中 ..."} %></span>
+          <% end %>
+        <% end %>
+    <% end %>
+</div>
+
+</div>
 
 
   <div id="show_processbar_detail"></div>
-</div>
 
 
 <!-- 组织结构树状图的js代码-开始 -->

@@ -9,8 +9,10 @@
                   <li><a href="/employees"><i class="fa fa-home"></i> <span>现员管理</span></a></li>
 
                     <li onclick="openModule(event, 'Attendance')">
+                      <!--班组管理员、科室管理员、班组重名管理员-->
                       <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
                         <a href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                        <!--车间管理员-->
                       <% elsif current_user.has_role? :workshopadmin%>
                         <% groups = Group.current.where(:workshop_id => current_user.workshop_id)%>
                         <a href="/attendances/group_current_time_info?group=<%=groups.first.id%>"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
