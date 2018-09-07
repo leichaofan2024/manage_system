@@ -5,7 +5,7 @@
 	<div class="panel panel-default">
 		<%= render 'annual_holiday_sidebar' %>
 	</div>
-<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin)%>
+<% if (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin)|| (current_user.has_role? :depudy_leaderadmin)%>
 	<div class="card">
 		    <div style="overflow: auto;" class="col-md-12">
 		      <table id="example" class="table table-bordered">

@@ -12,37 +12,38 @@
                       <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
                         <a href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
                       <% elsif current_user.has_role? :workshopadmin%>
-                        <a href="/attendances/group_current_time_info"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
-                      <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) %>
-                        <a href="/attendances/group_current_time_info"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                        <% groups = Group.current.where(:workshop_id => current_user.workshop_id)%>
+                        <a href="/attendances/group_current_time_info?group=<%=groups.first.id%>"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                      <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) %>
+                        <a href="/attendances/group_current_time_info?group=593"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
                       <% end %>
                     </li>
 
 
-                   <% if current_user.has_role? :limitadmin%>
+                   <% if (current_user.has_role? :limitadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
                      <li>
                        <a href="/home/notfound">
                          <i class="fa fa-edit"></i> <span>定额管理</span>
                        </a>
 
-                    </li>
+                     </li>
                    <% end %>
 
-                   <% if current_user.has_role? :saleradmin%>
+                   <% if (current_user.has_role? :saleradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
                      <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
                       <ul class="children">
                         <li><a href="/wages/import_wage"> 工资表</a></li>
                         <li><a href="/bonus/import_bonus"> 奖金表</a></li>
-                        <li><a href=""> 高铁岗位人员情况统计 </a></li>
-                        <li><a href=""> 主要行车工种情况统计 </a></li>
-                        <li><a href=""> 运输站段生产人员人数和报酬 </a></li>
-                        <li><a href=""> 铁路企业分层次人员工资情况 </a></li>
-                        <li><a href=""> 工资图表分析</a></li>
+                        <li><a href="/high_speed_rail_stuffs"> 高铁岗位人员情况统计 </a></li>
+                        <li><a href="/main_driving_stuffs"> 主要行车工种情况统计 </a></li>
+                        <li><a href="/production_stuff_wages"> 运输站段生产人员人数和报酬 </a></li>
+                        <li><a href="/divide_level_wages"> 铁路企业分层次人员工资情况 </a></li>
+                        <li><a href="/home/notfound"> 工资图表分析</a></li>
                       </ul>
                     </li>
                     <% end %>
 
-                   <% if current_user.has_role? :awardadmin%>
+                   <% if (current_user.has_role? :awardadmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
                      <li>
                       <a  href="/relative_salers">
                         <i class="fa fa-th-list"></i> <span>奖惩管理</span>
@@ -52,7 +53,7 @@
                   <% end %>
 
 
-                 <% if current_user.has_role? :limitadmin%>
+                 <% if (current_user.has_role? :limitadmin )  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
                    <li>
                      <a href="/home/notfound">
                        <i class="fa fa-edit"></i> <span>收入管理</span>

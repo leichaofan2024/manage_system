@@ -1,10 +1,10 @@
 class RelativeSalersController < ApplicationController
   layout 'home'
   def index
-    if (current_user.has_role? :awardadmin) || (current_user.has_role? :superadmin)
+    if (current_user.has_role? :awardadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
       @relative_salers = RelativeSaler.page(params[:page]).per(20)
     else
-      @relative_salers = RelativeSaler.where(:科室车间 => Workshop.current.find(current_user.workshop_id).name ).page(params[:page]).per(20)
+      @relative_salers = RelativeSaler.where(:科室车间 => Workshop.find(current_user.workshop_id).name ).page(params[:page]).per(20)
     end
     respond_to do |format|
       format.html

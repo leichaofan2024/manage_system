@@ -3,6 +3,8 @@ class AttendancesController < ApplicationController
 
 	##班组页面--开始
 	def group
+    @group = Group.find_by(:id => current_user.group_id)
+    @workshop = Workshop.find_by(:id => @group.workshop_id)
     if params[:year].present? && params[:month].present?
       @year = params[:year].to_i
       @month = params[:month].to_i
@@ -21,18 +23,43 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
-    if AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id).blank?
+    @attendance_status = AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id)
+    if @attendance_status.blank?
       AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
     end
-    if Time.now.day >= 8
-      @time_range = (Time.now.day - 7)..(Time.now.day)
+
+    if @attendance_status.status == "班组/科室填写中"
+      if (@year == Time.now.year) && (@month == Time.now.month)
+        if Time.now.day >= 8
+          @time_range = (Time.now.day - 7)..(Time.now.day)
+        else
+          @time_range = 1..(Time.now.day)
+        end
+      elsif (@year == @shenhe_year) && (@month == @shenhe_month)
+        if Time.now.day < 8
+          day_end = "#{@year}-#{@month}-15".to_time.end_of_month.day
+          day_begin = day_end - (7 - Time.now.day)
+          @time_range = (day_begin..day_end)
+        else
+          @time_range = (0..0)
+        end
+      else
+        @time_range = (0..0)
+      end
     else
-      @time_range = 1..(Time.now.day)
+      if (@year == Time.now.year) && (@month == Time.now.month)
+        if Time.now.day >= 8
+          @time_range = (Time.now.day - 7)..(Time.now.day)
+        else
+          @time_range = 1..(Time.now.day)
+        end
+      else
+        @time_range = (0..0)
+      end
     end
 
-    @group = Group.find_by(:id => current_user.group_id)
 
-    @workshop = Workshop.find_by(:id => @group.workshop_id)
+
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		@employees = Employee.current.where(:group => @group.id)
@@ -191,6 +218,7 @@ class AttendancesController < ApplicationController
     @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
+    @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => params[:year],:month => params[:month])
     # 只获取当前月和上个月的信息，否则返回填写考勤页
     if (params[:year].present? && params[:month].present?) && (params[:month].to_i != Time.now.month)
       if Time.now.month == 1
@@ -525,15 +553,16 @@ class AttendancesController < ApplicationController
       @group = params[:workshop]
       @leaving_employees = Employee.transfer_search("#{params[:year]}-#{params[:month]}-01".to_datetime.beginning_of_month, "#{params[:year]}-#{params[:month]}-01".to_datetime.end_of_month)
 
-  		@employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
+  		@employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
       if params[:workshop].present?
         transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:workshop]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:workshop]).pluck("employee_id")
-        @employees = Employee.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop])
+        @employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop])
       elsif params[:group].present?
         transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
-        @employees = Employee.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
+        @employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
       else
-        @employees = []
+        transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: 593).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: 593).pluck("employee_id")
+        @employees = Employee.current.where(group: 593)
       end
 			render action: "duan"
 		end
@@ -677,11 +706,11 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
     @workshops = Workshop.current
     if params[:workshop].present?
-      @employees = Employee.current.where(:worshop => params[:workshop])
+      @employees = Employee.current.where(:workshop => params[:workshop])
     elsif params[:group].present?
       @employees = Employee.current.where(:group => params[:group])
     else
-      @employees = []
+      @employees = Employee.current.where(:group => 593)
     end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
@@ -744,8 +773,8 @@ class AttendancesController < ApplicationController
                       (Time.now.month) -1
                     end
     if params[:year].present? && params[:month].present?
-      @year = params[:year]
-      @month = params[:month]
+      @year = params[:year].to_i
+      @month = params[:month].to_i
     else
       @year = Time.now.year
       @month = Time.now.month
@@ -764,72 +793,78 @@ class AttendancesController < ApplicationController
 
     if current_user.has_role? :attendance_admin
       if (Time.now.month == 2) || (Time.now.month == 10)
-        @shenhe_day = 1..8
+        @shenhe_day = 1..31
       else
-        @shenhe_day = 1..7
+        @shenhe_day = 1..31
       end
-      group_ids = Group.current.pluck(:id)
-      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => "段已审核",:group_id => group_ids).count < group_ids.count
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present?
         @attendance_marquee = 1
       end
     elsif current_user.has_role? :workshopadmin
       if (Time.now.month == 2) || (Time.now.month == 10)
-        @shenhe_day = 1..8
+        @shenhe_day = 1..10
       else
         @shenhe_day = 1..6
       end
-      @groups = Group.current.where(:workshop_id => current_user.workshop_id)
-      group_ids = @groups.pluck(:id)
-      if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year, :month => @shenhe_month,:status => "车间已审核").count < group_ids.count
+      groups = Group.current.where(:workshop_id => current_user.workshop_id)
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => groups.ids,:status => "班组已上报").present?
         @attendance_marquee = 1
       end
     end
 
 
 		if params[:workshop].present?
-      group_ids = Group.current.where(:workshop_id => params[:workshop]).pluck(:id)
+      @groups = Group.current.where(:workshop_id => params[:workshop])
+      group_ids = @groups.ids
       group_ids.each do |group_id|
-        if AttendanceStatus.find_by(:year => Time.now.year, :month => Time.now.month,:group_id => group_id).blank?
-          AttendanceStatus.create(:year => Time.now.year, :month => Time.now.month,:group_id => group_id,:status => "班组/科室填写中")
+        if AttendanceStatus.find_by(:year => @year, :month => @month,:group_id => group_id).blank?
+          AttendanceStatus.create(:year => @year, :month => @month,:group_id => group_id,:status => "班组/科室填写中")
         end
         if AttendanceStatus.find_by(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id).blank?
           AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id,:status => "班组/科室填写中")
         end
       end
-      if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)
-        if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids).where.not(:status => "班组/科室填写中").count == group_ids.count
-          @duan_yijian_permission = 1
+      if (@year ==@shenhe_year) && (@month == @shenhe_month)
+        if current_user.has_role? :attendance_admin
+          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => ["车间已审核","科室已上报"]).present?
+            @duan_yijian_permission = 1
+          end
+        elsif current_user.has_role? :workshopadmin
+          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => "班组已上报").present?
+            @duan_yijian_permission = 1
+          end
         end
       end
 			   @employees = Employee.current.where(:workshop => params[:workshop]).order('employees.group ASC,employees.id ASC')
 		elsif params[:group].present?
-      if AttendanceStatus.find_by(:year => Time.now.year, :month => Time.now.month,:group_id => params[:group]).blank?
-        AttendanceStatus.create(:year => Time.now.year, :month => Time.now.month,:group_id => params[:group],:status => "班组/科室填写中")
+      if AttendanceStatus.find_by(:year => @year, :month => @month,:group_id => params[:group]).blank?
+        AttendanceStatus.create(:year => @year, :month => @month,:group_id => params[:group],:status => "班组/科室填写中")
       end
       if AttendanceStatus.find_by(:year => @shenhe_year, :month => @shenhe_month,:group_id => params[:group]).blank?
         AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => params[:group],:status => "班组/科室填写中")
       end
 			@employees = Employee.current.where(:group => params[:group]).order('employees.group ASC,employees.id ASC')
 		else
-      if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)
+      if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
         if @workshops_not_varify.present?
       	  @employees = Employee.current.where(:workshop => @workshops_not_varify.first.id).order('employees.group ASC,employees.id ASC')
         else
           @employees = Employee.current.where(:workshop => Workshop.first.id).order('employees.group ASC,employees.id ASC')
         end
       elsif current_user.has_role? :workshopadmin
-        group_ids = Group.current.where(:workshop_id => current_user.workshop_id).pluck(:id)
+        @groups = Group.current.where(:workshop_id => current_user.workshop_id)
+        group_ids = @groups.ids
 
         group_ids.each do |group_id|
-          if AttendanceStatus.find_by(:year => Time.now.year, :month => Time.now.month,:group_id => group_id).blank?
-            AttendanceStatus.create(:year => Time.now.year, :month => Time.now.month,:group_id => group_id,:status => "班组/科室填写中")
+          if AttendanceStatus.find_by(:year => @year, :month => @month,:group_id => group_id).blank?
+            AttendanceStatus.create(:year => @year, :month => @month,:group_id => group_id,:status => "班组/科室填写中")
           end
           if AttendanceStatus.find_by(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id).blank?
             AttendanceStatus.create(:year => @shenhe_year, :month => @shenhe_month,:group_id => group_id,:status => "班组/科室填写中")
           end
         end
-        if params[:year].present? && (params[:year].to_i ==@shenhe_year) && (params[:month].to_i == @shenhe_month)
-          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => "车间已审核").count < group_ids.count
+        if (@year ==@shenhe_year) && (@month == @shenhe_month)
+          if AttendanceStatus.where(:year => params[:year], :month => params[:month],:group_id => group_ids,:status => "班组已上报").present?
             @workshop_yijian_permission = 1
           end
         end
@@ -841,17 +876,24 @@ class AttendancesController < ApplicationController
 	end
 
 	def caiwu
+    if params[:year].present? && params[:month].present?
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+    else
+      @year = Time.now.year
+      @month = Time.now.month
+    end
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
-		@employees = Employee.page(params[:page]).per(20)
+		@employees = Employee.current.order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
 
 		# 导出考勤表
-		@export_employees = Employee.all
+		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @export_employees.to_csv }
-	      format.xls { headers["Content-Disposition"] = 'attachment; filename="考勤表.xls"'}
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="给财务的表-1.xls"'}
 	    end
 	end
 
@@ -882,13 +924,20 @@ class AttendancesController < ApplicationController
 	end
 
 	def caiwu2
-		@employees = Employee.current.order('id ASC').page(params[:page]).per(20)
-		@export_employees = Employee.current
+    if params[:year].present? && params[:month].present?
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+    else
+      @year = Time.now.year
+      @month = Time.now.month
+    end
+		@employees = Employee.current.order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
+		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
 		# 导出考勤表
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @export_employees.to_csv }
-	      format.xls { headers["Content-Disposition"] = 'attachment; filename="考勤表.xls"'}
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="给财务的表-2.xls"'}
 	    end
 	end
 

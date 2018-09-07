@@ -22,7 +22,7 @@
 
 <div id="Employee" class="main-18rau_0 tabcontent">
     <!-- 总数统计-开始 -->
-    <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
+    <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)%>
       <div class="switchTab-3pFw5_0">
         <div class="queryTop-26iSU_0">
           <div class="condition-19RSN_0">
@@ -190,7 +190,7 @@
     <!--- 搜索-开始  -->
     <div class="card">
       <div style="width: 100%;">
-        <% if (can? :manage, Employee) || (can? :leader_read, Employee) %>
+        <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)  %>
           <%= render 'empshared/emp_table' %>
         <% elsif current_user.has_role? :attendance_admin %>
           <%= render 'empshared/other_duanadmin' %>

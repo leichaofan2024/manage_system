@@ -39,9 +39,9 @@
                     <% @vacation_short_code_hash.values.each do |vacation_code| %>
                       <td>
                         <% if params[:yijian_code].present? && params[:yijian_code]== vacation_code %>
-                          <input type="checkbox" checked="checked" id="checkboxPrimary" name="<%=employee.id%>" value="<%=vacation_code%>" />
+                          <input type="radio" checked="checked" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
                         <% else %>
-                          <input type="checkbox" id="checkboxPrimary" name="<%=employee.id%>" value="<%=vacation_code%>" />
+                          <input type="radio" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
                         <% end %>
                       </td>
                     <% end %>

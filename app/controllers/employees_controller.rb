@@ -31,7 +31,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
+    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
       @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(15)
@@ -136,7 +136,7 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    if current_user.has_role? :empadmin or current_user.has_role? :attendance_admin or current_user.has_role? :superadmin or current_user.has_role? :leaderadmin
+    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"

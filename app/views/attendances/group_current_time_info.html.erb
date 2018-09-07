@@ -12,7 +12,7 @@
             <%= render "attendance_sidebar"%>
         </div>
 
-        <% if current_user.has_role? :attendance_admin %>
+        <% if  (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
           <!-- 进度条部分-开始 -->
           <!-- 总数统计，呼叫弹窗 -->
           <% if @shenhe_day === Time.now.day%>
@@ -45,13 +45,15 @@
               </div> -->
               <!-- 进度条部分-结束 -->
 
-                    <% if @workshop.present? %>
-                  <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? %>
-                    <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
+                <% if @workshop.present? %>
+                  <% if AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present? %>
+                    <h4>当前车间考勤表状态：<span style = "color:green;">有班组待审核</span> </h4>
+                  <% else %>
+                    <h4>当前车间考勤表状态：<span style = "color:red;">暂时没有可以审核的班组</span> </h4>
                   <% end %>
                 <% elsif @group.present? %>
-                  <% if AttendanceStatus.find_by(:group_id => @group).present? %>
-                    <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group).status %></h4>
+                  <% if AttendanceStatus.find_by(:group_id => @group,:year => @year ,:month => @month).present? %>
+                    <h4>当前班组考勤表状态：<%= AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month).status %></h4>
                   <% end %>
                 <% end %>
 
@@ -119,8 +121,10 @@
         <% if current_user.has_role? :workshopadmin %>
 
           <% if @workshop.present? %>
-            <% if AttendanceStatus.find_by(:workshop_id => @workshop).present? && (@shenhe_day === Time.now.day)%>
-              <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => @workshop).status %></h4>
+            <% if AttendanceStatus.find_by(:group_id => @groups.ids,:year => @year,:month => @month,:status => "班组已上报").present? && (@shenhe_day === Time.now.day)%>
+              <h4>当前车间考勤表状态：<span style = "color:green;">有班组待审核</span></h4>
+            <% else %>
+              <h4>当前车间考勤表状态：<span style = "color:red;">暂时没有可以审核的班组</span> </h4>
             <% end %>
             <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
           <% elsif @group.present? %>
@@ -129,8 +133,10 @@
             <% end %>
               <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况</h4>
           <% else %>
-            <% if AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).present? && (@shenhe_day === Time.now.day) %>
-              <h4>当前车间考勤表状态：<%= AttendanceStatus.find_by(:workshop_id => Workshop.current.find_by(name: current_user.name).id).status %></h4>
+            <% if AttendanceStatus.find_by(:group_id => @groups.ids,:year => @year,:month => @month,:status => "班组已上报").present? && (@shenhe_day === Time.now.day)%>
+              <h4>当前车间考勤表状态：<span style = "color:green;">有班组待审核</span></h4>
+            <% else %>
+              <h4>当前车间考勤表状态：<span style = "color:red;">暂时没有可以审核的班组</span> </h4>
             <% end %>
             <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况</h4>
           <% end %>
@@ -334,7 +340,7 @@
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-no-turbolink="true">
                         <%= i %>
-                        <% if params[:year].present? && params[:month].present? && params[:group].present?  %>
+                        <% if params[:year].present? && params[:month].present? && params[:group].present? && (current_user.has_role? :attendance_admin) %>
                           <b class="caret"></b>
                           <ul class="dropdown-menu">
                             <li><%= link_to "一键设置考勤：", "#" %></li>
@@ -345,7 +351,7 @@
                             <li><%= link_to "轮夜", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"轮夜" ),method: :post  %></li>
                             <li><%= link_to "休", group_yijian_create_attendances_path(:type => "yijian",:group_id =>params[:group],:year => params[:year], :month =>params[:month],:day =>i-1 ,:code =>"休" ),method: :post  %></li>
                           </ul>
-                        <% elsif params[:group].present? %>
+                        <% elsif params[:group].present? && (current_user.has_role? :attendance_admin) %>
                           <b class="caret"></b>
                           <ul class="dropdown-menu">
                             <li><%= link_to "一键设置考勤：", "#" %></li>

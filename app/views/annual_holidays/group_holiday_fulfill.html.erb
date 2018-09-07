@@ -2,7 +2,7 @@
   <h2>当前位置<span> 休假计划页 </span></h2>
 </div>
 <div class="contentpanel">
-<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :leaderadmin)%>
+<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :leaderadmin)|| (current_user.has_role? :depudy_leaderadmin)%>
  <div class="card">
 			 <div style="overflow: auto;" class="col-md-10">
 				 <table id="example" class="table table-bordered">

@@ -22,7 +22,7 @@
             <tr>
     	        <td><%= workshop.name %></td>
               <% @vacation_codes.each do |code| %>
-                <td><%= AttendanceCount.where(:vacation_code => code, :workshop_id => workshop.id).sum(:count) %></td>
+                <td><%= AttendanceCount.where(:workshop_id => workshop.id).sum(code) %></td>
               <% end %>
     	      </tr>
             <% end %>

@@ -62,10 +62,16 @@
                                       <li><%= link_to "日", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日"],:status => "班组发起申请" )  %></li>
                                       <li><%= link_to "星", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["星"],:status => "班组发起申请" )  %></li>
                                       <li><%= link_to "节", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["节"],:status => "班组发起申请" )  %></li>
+                                      <li><%= link_to "日勤夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日勤夜班"],:status => "班组发起申请" )  %></li>
+                                      <li><%= link_to "轮流夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["轮流夜班"],:status => "班组发起申请" )  %></li>
+                                      <li><%= link_to "休", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["休"],:status => "班组发起申请" )  %></li>
                                     <% elsif current_user.has_role? :organsadmin %>
                                       <li><%= link_to "日", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日"],:status => "科室发起申请" )  %></li>
                                       <li><%= link_to "星", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["星"],:status => "科室发起申请" )  %></li>
                                       <li><%= link_to "节", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["节"],:status => "科室发起申请" )  %></li>
+                                      <li><%= link_to "日勤夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日勤夜班"],:status => "科室发起申请" )  %></li>
+                                      <li><%= link_to "轮流夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["轮流夜班"],:status => "科室发起申请" )  %></li>
+                                      <li><%= link_to "休", group_application_form_attendances_path(:type => "一键申请",:group_id =>current_user.group_id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["休"],:status => "科室发起申请" )  %></li>
                                     <% end %>
                                   </ul>
                               </a>

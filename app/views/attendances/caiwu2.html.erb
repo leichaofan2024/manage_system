@@ -8,7 +8,7 @@
 <div class="col-md-12">
   <div class="ivu-tooltip-rel" style="margin-left: 15px; margin-bottom: 10px">
     <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-      <%= link_to caiwu2_attendances_path(format: "xls") do  %>
+      <%= link_to caiwu2_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
          <span style="color: #269Eff;">导出记录</span>
       <% end %>
     </button>
@@ -16,6 +16,7 @@
 
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
+      <h4 style = "text-align:center"><%= @year%>年<%= @month%>月财务表-2</h4>
       <table id="example" class="table table-bordered">
         <thead>
         	<tr>
@@ -37,21 +38,11 @@
               <td><%= employee.name %></td>
 	        		<td><%= employee.sal_number %></td>
               <td><%= employee.duty %></td>
-	        		<% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
-              <% if attendance_counts.find_by(vacation_code: "a").present? %>
-  	        		<td><%= attendance_counts.find_by(vacation_code: "a").count %></td>
-              <% else %>
-                <td>0</td>
-              <% end %>
-              <% if attendance_counts.find_by(vacation_code: "c").present? %>
-  	        		<td><%= attendance_counts.find_by(vacation_code: "c").count %></td>
-              <% else %>
-                <td>0</td>
-              <% end %>
-              <% if attendance_counts.find_by(vacation_code: "b").present? %>
-  	        		<td><%= attendance_counts.find_by(vacation_code: "b").count %></td>
-              <% else %>
-                <td>0</td>
+	        		<% attendance_count = AttendanceCount.find_by(employee_id: employee.id, month: @month, year: @year) %>
+              <% if attendance_count.present? %>
+                <td><%= attendance_count.attributes["a"]%></td>
+                <td><%= attendance_count.attributes["c"]%></td>
+                <td><%= attendance_count.attributes["b"]%></td>
               <% end %>
 	        	</tr>
         	<% end %>

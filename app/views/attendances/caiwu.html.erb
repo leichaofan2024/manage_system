@@ -8,7 +8,7 @@
   <div class="col-md-12">
     <div class="ivu-tooltip-rel" style="margin-left: 15px; margin-bottom: 10px">
       <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-        <%= link_to caiwu_attendances_path(format: "xls") do  %>
+        <%= link_to caiwu_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
            <span style="color: #269Eff;">导出记录</span>
         <% end %>
       </button>
@@ -16,6 +16,7 @@
 
     <div class="card">
       <div style="overflow: auto;" class="col-md-12">
+        <h4 style = "text-align:center"><%= @year%>年<%= @month%>月财务表-1</h4>
         <table id="example" class="table table-bordered">
           <thead>
           	<tr>
@@ -44,9 +45,12 @@
   				  <td><%= employee.name %></td>
             <td><%= employee.sal_number %></td>
             <td><%= employee.duty %></td>
-  				  <% @vacation_codes.each do |code| %>
-  				    <td><%= AttendanceCount.where(:employee_id => employee.id, :vacation_code => code, :month => Time.now.month, :year => Time.now.year).sum(:count) %></td>
-  				  <% end %>
+            <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+            <% if attendance_count.present? %>
+    				  <% @vacation_codes.each do |code| %>
+    				    <td><%= attendance_count.attributes[code] %></td>
+    				  <% end %>
+            <% end %>
   				</tr>
   			<% end %>
           </tbody>
