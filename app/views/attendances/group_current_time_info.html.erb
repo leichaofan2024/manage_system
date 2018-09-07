@@ -72,7 +72,6 @@
             <!-- <%= "#{Workshop.current.count.to_i - @workshops.count.to_i}" %> -->
             <% end %>
 
-<<<<<<< HEAD
       <div class="contentpanel">
         <div class="panel panel-default">
             <%= render "attendance_sidebar"%>
@@ -149,8 +148,7 @@
         <!-- 查看申请结束 -->
 
           <div class="col-md-12 col-lg-12 col-sm-12">
-=======
->>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
+
             <!-- 处理申请 -->
             <% if applications.count == 0 %>
             <span class="pull-right btn btn-primary2">  <%= link_to "查看往期申请", show_application_attendances_path(applications: all_application_id, type: "duan"), class: ""  %> </span>
@@ -158,7 +156,6 @@
             <span class= "pull-right btn btn-primary2">  <%= link_to "查看申请", show_application_attendances_path(applications: application_id, type: "duan"), class: "" %><i href="#" style = "color:red;">(<%= applications.count%>条)</i></span>
             <% end %>
           </div>
-<<<<<<< HEAD
         <% end %>
 
 
@@ -181,7 +178,6 @@
               <h4>当前车间考勤表状态：<span style = "color:green;">有班组待审核</span></h4>
             <% else %>
               <h4>当前车间考勤表状态：<span style = "color:red;">暂时没有可以审核的班组</span> </h4>
-=======
         </ul>
       </div>
     </div>
@@ -235,7 +231,6 @@
               <% else %>
                 <option value="<%= month%>" ><%= month %></option>
               <% end %>
->>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
             <% end %>
           </select>
           <%= submit_tag :筛选 %>
@@ -404,7 +399,6 @@
                       </li>
                     </th>
                   <% end %>
-<<<<<<< HEAD
                 <% end %>
             </tbody>
           </table>
@@ -449,8 +443,7 @@
                     </li>
                   </th>
                 <% end %>
-=======
->>>>>>> 15cea2f8698a68e82d2781cbecd24b3905f0664d
+
                 </tr>
               </thead>
               <tbody>
