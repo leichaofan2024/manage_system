@@ -5,6 +5,7 @@ class AttendancesController < ApplicationController
 	def group
     @group = Group.find_by(:id => current_user.group_id)
     @workshop = Workshop.find_by(:id => @group.workshop_id)
+    @applications = Application.where(group_id: current_user.group_id)
     if params[:year].present? && params[:month].present?
       @year = params[:year].to_i
       @month = params[:month].to_i
@@ -25,7 +26,7 @@ class AttendancesController < ApplicationController
                     end
     @attendance_status = AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id)
     if @attendance_status.blank?
-      AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
+      @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
     end
 
     if @attendance_status.status == "班组/科室填写中"
@@ -192,9 +193,10 @@ class AttendancesController < ApplicationController
       end
 
       if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
-        redirect_to group_attendances_path
+        redirect_to group_attendances_path(:year => @year,:month => @month)
       elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
-        redirect_to group_current_time_info_attendances_path
+
+        redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month,:group => @group_id )
       end
   end
 
@@ -492,9 +494,10 @@ class AttendancesController < ApplicationController
       end
 
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
-				redirect_back(fallback_location: group_attendances_path)
+				redirect_to group_attendances_path(:year => params[:year],:month => params[:month])
 			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
-				redirect_back(fallback_location: group_current_time_info_attendances_path)
+        group_id = Employee.current.find_by(:id => params[:employee_id]).group
+				redirect_to group_current_time_info_attendances_path(:year => params[:year],:month => params[:month],:group => group_id )
 			end
 		end
 	end
