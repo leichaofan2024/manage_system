@@ -24,11 +24,20 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
+    @shenhe_attdendance_status = AttendanceStatus.find_by(:year => @shenhe_year , :month => @shenhe_month,:group_id => @group.id)
+    if (Time.now.day >3) && @shenhe_attdendance_status.present?
+      if @workshop.id == 1
+        @shenhe_attdendance_status.update(:status => "科室已上报")
+      else
+        @shenhe_attdendance_status.update(:status => "班组已上报")
+      end
+    end
     @attendance_status = AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id)
     if @attendance_status.blank?
       @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
     end
 
+#班组能填写考勤的时间段：
     if @attendance_status.status == "班组/科室填写中"
       if (@year == Time.now.year) && (@month == Time.now.month)
         if Time.now.day >= 8
@@ -58,6 +67,7 @@ class AttendancesController < ApplicationController
         @time_range = (0..0)
       end
     end
+# 结束
 
 
 
@@ -196,7 +206,7 @@ class AttendancesController < ApplicationController
         redirect_to group_attendances_path(:year => @year,:month => @month)
       elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
 
-        redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month,:group => @group_id )
+        redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month,:group => params[:group_id])
       end
   end
 
@@ -471,7 +481,7 @@ class AttendancesController < ApplicationController
         end
 
       else
-				@attendance_count = Attendance.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year])
+				@attendance_count = AttendanceCount.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year])
       end
       @attendance.update(:month_attendances => @month_attendances_after)
       @attendance.save
@@ -492,9 +502,10 @@ class AttendancesController < ApplicationController
           AttendanceStatus.find_by(:group_id => @group.id,:year => params[:year],:month => params[:month]).update(:status => "车间已审核", :workshop_id => @group.workshop.id)
         end
       end
-
+      group_id = Employee.current.find_by(:id => params[:employee_id]).group
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
-				redirect_to group_attendances_path(:year => params[:year],:month => params[:month])
+
+				redirect_to group_attendances_path(:year => params[:year],:month => params[:month],:group => group_id)
 			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
         group_id = Employee.current.find_by(:id => params[:employee_id]).group
 				redirect_to group_current_time_info_attendances_path(:year => params[:year],:month => params[:month],:group => group_id )
@@ -759,11 +770,7 @@ class AttendancesController < ApplicationController
 
 
 	def group_current_time_info
-    if Time.now.day >= 8
-      @time_range = (Time.now.day - 7)..(Time.now.day)
-    else
-      @time_range = 1..(Time.now.day)
-    end
+
     @shenhe_year = if Time.now.month == 1
                     (Time.now.year) - 1
                   else
@@ -803,6 +810,11 @@ class AttendancesController < ApplicationController
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present?
         @attendance_marquee = 1
       end
+      groups = Group.current.where(:workshop_id => 1)
+      @shenhe_attdendance_status = AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => groups.ids,:status => "班组/科室填写中")
+      if (Time.now.day >3) && @shenhe_attdendance_status.present?
+          @shenhe_attdendance_status.update(:status => "科室已上报")
+      end
     elsif current_user.has_role? :workshopadmin
       if (Time.now.month == 2) || (Time.now.month == 10)
         @shenhe_day = 1..10
@@ -812,6 +824,11 @@ class AttendancesController < ApplicationController
       groups = Group.current.where(:workshop_id => current_user.workshop_id)
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => groups.ids,:status => "班组已上报").present?
         @attendance_marquee = 1
+      end
+
+      @shenhe_attdendance_status = AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => groups.ids,:status => "班组/科室填写中")
+      if (Time.now.day >3) && @shenhe_attdendance_status.present?
+          @shenhe_attdendance_status.update(:status => "班组已上报")
       end
     end
 
@@ -888,10 +905,12 @@ class AttendancesController < ApplicationController
     end
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@vacation_codes = ["d","e","h","i","n","m","j","k","q", "r"]
+		@vacation_codes = ["e","f","i","j","o","n","k","l","s","r"]
+
 		@employees = Employee.current.order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
 
 		# 导出考勤表
+
 		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
 		respond_to do |format|
 	      format.html

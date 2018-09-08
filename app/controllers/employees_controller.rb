@@ -80,14 +80,16 @@ class EmployeesController < ApplicationController
       rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
       @employee.working_years = working_years_transfer.to_i
       @employee.rali_years = rali_years_transfer.to_i
-      Attendance.create(employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
+
       if @employee.save
+        Attendance.create(:group_id => @employee.group,employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
         flash[:notice] = "创建成功"
         redirect_to employee_path(@employee)
       else
         flash[:alert] = "创建失败"
         render :new
       end
+
     end
 
   end

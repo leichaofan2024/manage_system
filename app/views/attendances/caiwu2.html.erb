@@ -40,9 +40,9 @@
               <td><%= employee.duty %></td>
 	        		<% attendance_count = AttendanceCount.find_by(employee_id: employee.id, month: @month, year: @year) %>
               <% if attendance_count.present? %>
-                <td><%= attendance_count.attributes["a"]%></td>
-                <td><%= attendance_count.attributes["c"]%></td>
                 <td><%= attendance_count.attributes["b"]%></td>
+                <td><%= attendance_count.attributes["d"]%></td>
+                <td><%= attendance_count.attributes["c"]%></td>
               <% end %>
 	        	</tr>
         	<% end %>
