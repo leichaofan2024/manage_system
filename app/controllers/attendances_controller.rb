@@ -24,8 +24,12 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
+    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15)
+      redirect_to group_attendances_path
+      flash[:alert] = "当月15号前可查看上月考勤，当前为#{Time.now.day}号，不能查看！"
+    end
     @shenhe_attdendance_status = AttendanceStatus.find_by(:year => @shenhe_year , :month => @shenhe_month,:group_id => @group.id)
-    if (Time.now.day >3) && @shenhe_attdendance_status.present?
+    if (Time.now.day >3) && @shenhe_attdendance_status.present? && (@shenhe_attdendance_status.status == "班组/科室填写中")
       if @workshop.id == 1
         @shenhe_attdendance_status.update(:status => "科室已上报")
       else
@@ -35,6 +39,13 @@ class AttendancesController < ApplicationController
     @attendance_status = AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group.id)
     if @attendance_status.blank?
       @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
+    end
+    #什么时候可以导出考勤：
+    if params[:format] == "xls"
+      if @attendance_status.status != "段已审核"
+        redirect_to group_attendances_path
+        flash[:alert] = "本月考勤还未被段管理员审核，不能导出，请等待段管理员审核完成后，再进行导出！"
+      end
     end
 
 #班组能填写考勤的时间段：
@@ -69,10 +80,6 @@ class AttendancesController < ApplicationController
     end
 # 结束
 
-
-
-		@years = Attendance.pluck("year").uniq
-		@months = Attendance.pluck("month").uniq.reverse
 		@employees = Employee.current.where(:group => @group.id)
     @employees.each do |employee|
       if Time.now.month == 12
@@ -86,9 +93,13 @@ class AttendancesController < ApplicationController
 					Attendance.create(employee_id: employee.id, group_id: employee.group, year: (Time.now.year), month: (Time.now.month + 1))
         end
       end
-      attendance_this_month = Attendance.where(employee_id: employee.id, year: Time.now.year, month: Time.now.month)
+      attendance_this_month = Attendance.where(employee_id: employee.id, year: @year, month: @month)
+      attendance_count_this_month = AttendanceCount.find_by(employee_id: employee.id, year: @year, month: @month)
+      if !attendance_count_this_month.present?
+        AttendanceCount.create(employee_id: employee.id, group_id: employee.group,:workshop_id =>employee.workshop , year: @year, month: @month)
+      end
       if !attendance_this_month.present?
-        Attendance.create(employee_id: employee.id, group_id: employee.group, year: Time.now.year, month: Time.now.month)
+        Attendance.create(employee_id: employee.id, group_id: employee.group, year: @year, month: @month)
       end
     end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
@@ -226,38 +237,19 @@ class AttendancesController < ApplicationController
 
   # 班组申请页面
   def group_application
-    @group = Group.current.find_by(:id => current_user.group_id)
+    @year = params[:year]
+    @month = params[:month]
+    @group = Group.find_by(:id => params[:group_id])
     @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
-    @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => params[:year],:month => params[:month])
-    # 只获取当前月和上个月的信息，否则返回填写考勤页
-    if (params[:year].present? && params[:month].present?) && (params[:month].to_i != Time.now.month)
-      if Time.now.month == 1
-        if (params[:year].to_i == (Time.now.year - 1)) && (params[:month].to_i == 12)
-          @year = params[:year].to_i
-          @month = params[:month].to_i
-        else
-          redirect_to group_attendances_path(:year => params[:year],:month=> params[:month])
-          flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
-        end
-      else
-        if (params[:year].to_i == Time.now.year) && (params[:month].to_i == (Time.now.month - 1))
-          @year = params[:year].to_i
-          @month = params[:month].to_i
-        else
-          redirect_to group_attendances_path(:year => params[:year],:month=> params[:month])
-          flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
-        end
+    @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
+    if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
+      if (@attendance_status.status == "车间已审核") || (@attendance_status.status == "段已审核")
+        redirect_to group_attendances_path(:year => @year,:month => @month)
+        flash[:alert] = "#{@month}月考勤#{@attendance_status.status}，不能再申请修改，如有问题请联系车间！"
       end
-    elsif (!params[:year].present? && !params[:month].present?) || (params[:year].to_i == Time.now.year && params[:month].to_i == Time.now.month)
-      @year = Time.now.year
-      @month = Time.now.month
-    else
-      redirect_to group_attendances_path
-      flash[:alert] = "对不起，您只能申请修改本月或上月考勤！"
     end
-
   end
   # 班组申请页面结束
 
@@ -298,8 +290,6 @@ class AttendancesController < ApplicationController
       end
     end
 
-
-
   end
   # 班组提交申请结束
 
@@ -307,8 +297,9 @@ class AttendancesController < ApplicationController
     # 申请未被审核前，班组重复申请时：
     if params[:type] == "更新"
       @application = Application.find(params[:application_id])
+      employee = Employee.find_by(:id => @application.employee_id)
       @application.update( :cause => params[:cause],:application_after => params[:application_after])
-      flash[:notice] = "已发起申请"
+      flash[:notice] = "#{employee.name}#{@application.month}月#{@application.day}日考勤修改申请已重新发出！"
     elsif params[:type] == "一键申请"
       @group = Group.find(params[:group_id])
       @employees = Employee.current.where(:group => @group.id)
@@ -323,25 +314,26 @@ class AttendancesController < ApplicationController
         end
       end
       if !yijian_array.include?("true")
-        flash[:alert] = "#{params[:month]}月#{params[:day]}所有人均已发送过申请，无法使用一键功能，如需修改，请逐一申请！"
+        flash[:alert] = "#{params[:month]}月#{params[:day]}日所有人均已发送过申请，无法使用一键功能，如需修改，请逐一申请！"
       else
-        flash[:notice] = "已发起申请"
+        flash[:notice] = "#{@group.name}于#{params[:month]}月#{params[:day]}日成功为所有人发起考勤修改申请！"
       end
     else
+      employee = Employee.find_by(:id => params[:employee_id])
    		Application.create(:group_id => params[:group_id], :employee_id => params[:employee_id], :year => params[:year], :month => params[:month], :day => params[:day], :cause => params[:cause],
                          :apply_person => params[:apply_person], :status => params[:status],:application_before => params[:application_before],:application_after => params[:application_after])
-      flash[:notice] = "已发起申请"
+      flash[:notice] = "#{employee.name}#{params[:month]}月#{params[:day]}日考勤修改申请已成功发出！"
     end
 
- 		redirect_to group_application_attendances_path(:year => params[:year],:month => params[:month] )
+ 		redirect_to group_application_attendances_path(:year => params[:year],:month => params[:month],:group_id => params[:group_id] )
  	end
 
   def update_application
     # 申请未被审核前，班组重复申请时：
     if params[:type] == "duan"
       if params[:yijian] == "duan"
-        @applications = Application.where(:status => ["科室发起申请","车间通过申请"])
-        @applications.update(:status => params[:status])
+        @applications = Application.where(:status => ["科室发起申请","车间发起申请"])
+        @applications.update(:status => params[:status],application_pass: 1)
         @applications.each do |application|
           if application.application_after.present?
             employee = Employee.find_by(:id => application.employee_id)
@@ -353,7 +345,7 @@ class AttendancesController < ApplicationController
             if attendance_count_after.present?
               attendance_count_after.update(application.application_after => ((attendance_count_after.attributes[application.application_after].to_i) +1))
             else
-              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,:group_id => employee.group,:workshop_id => employee.workshop,application.application_after => ((attendance_count_after.attributes[application.application_after].to_i) +1))
+              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,:group_id => employee.group,:workshop_id => employee.workshop,application.application_after => 1)
             end
           end
           if application.application_before.present? && (application.application_before != "x")
@@ -365,7 +357,7 @@ class AttendancesController < ApplicationController
         end
       else
         @application = Application.find(params[:application_id])
-     		@application.update(:status => params[:status])
+     		@application.update(:status => params[:status],application_pass: 1)
         if @application.application_after.present?
           employee = Employee.find_by(:id => @application.employee_id)
           attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
@@ -376,10 +368,10 @@ class AttendancesController < ApplicationController
           if attendance_count_after.present?
             attendance_count_after.update(@application.application_after => ((attendance_count_after.attributes[@application.application_after].to_i) +1))
           else
-            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,:workshop_id => employee.workshop,:group_id =>employee.group ,@application.application_after => ((attendance_count_after.attributes[@application.application_after].to_i) +1))
+            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,:workshop_id => employee.workshop,:group_id =>employee.group ,@application.application_after => 1)
           end
         end
-        if @application.application_before.present? || (@application.application_before != "x")
+        if @application.application_before.present? && (@application.application_before != "x")
           attendance_count_before = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
           if attendance_count_before.present?
             attendance_count_before.update(@application.application_before => ((attendance_count_before.attributes[@application.application_before].to_i) -1))
@@ -390,13 +382,53 @@ class AttendancesController < ApplicationController
       if params[:yijian] == "workshop"
         groups = Group.current.where(:workshop_id => params[:type])
         @applications = Application.where(:group_id => groups.ids,:status => "班组发起申请")
-        @applications.update(:status => params[:status])
+        @applications.update(:status => params[:status],application_pass: 1)
+        @applications.each do |application|
+          if application.application_after.present?
+            employee = Employee.find_by(:id => application.employee_id)
+            attendance = Attendance.find_by(:employee_id => application.employee_id,:year => application.year, :month => application.month)
+            month_attendances = attendance.month_attendances
+            month_attendances[(application.day - 1)] = application.application_after
+            attendance.update(:month_attendances => month_attendances)
+            attendance_count_after = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
+            if attendance_count_after.present?
+              attendance_count_after.update(application.application_after => ((attendance_count_after.attributes[application.application_after].to_i) +1))
+            else
+              AttendanceCount.create(employee_id: application.employee_id,:year => application.year, :month => application.month,:group_id => employee.group,:workshop_id => employee.workshop,application.application_after => 1)
+            end
+          end
+          if application.application_before.present? && (application.application_before != "x")
+            attendance_count_before = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
+            if attendance_count_before.present?
+              attendance_count_before.update(application.application_before => ((attendance_count_before.attributes[application.application_before].to_i) -1))
+            end
+          end
+        end
       else
-        @application = Application.find_by(:id => params[:application_id],:status => "班组发起申请")
-     		@application.update(:status => params[:status])
+        @application = Application.find_by(:id => params[:application_id])
+     		@application.update(:status => params[:status],application_pass: 1)
+        if @application.application_after.present?
+          employee = Employee.find_by(:id => @application.employee_id)
+          attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
+          month_attendances = attendance.month_attendances
+          month_attendances[(@application.day - 1)] = @application.application_after
+          attendance.update(:month_attendances => month_attendances)
+          attendance_count_after = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
+          if attendance_count_after.present?
+            attendance_count_after.update(@application.application_after => ((attendance_count_after.attributes[@application.application_after].to_i) +1))
+          else
+            AttendanceCount.create(employee_id: @application.employee_id,:year => @application.year, :month => @application.month,:workshop_id => employee.workshop,:group_id =>employee.group ,@application.application_after => 1)
+          end
+        end
+        if @application.application_before.present? && (@application.application_before != "x")
+          attendance_count_before = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
+          if attendance_count_before.present?
+            attendance_count_before.update(@application.application_before => ((attendance_count_before.attributes[@application.application_before].to_i) -1))
+          end
+        end
       end
     end
-		flash[:notice] = "已通过申请"
+		flash[:notice] = "已通过申请!"
  		redirect_back(fallback_location: show_application_attendances_path)
  	end
 

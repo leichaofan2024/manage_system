@@ -6,9 +6,7 @@
   <div class="panel panel-default">
     <%= render "attendance_sidebar"%>
   </div>
-
-
-  <a href="/attendances/group_application?month=<%= params[:month]%>&year=<%= params[:year]%>"> << 返回 </a>
+  <a href="/attendances/group_application?month=<%= params[:month]%>&year=<%= params[:year]%>&group_id=<%=params[:group_id]%>"> << 返回 </a>
   <div class="">
     <h4 class="modal-title">填写申请表</h4>
   </div>
@@ -33,6 +31,8 @@
               <%= hidden_field_tag :status, "班组发起申请" %>
             <% elsif current_user.has_role? :organsadmin %>
               <%= hidden_field_tag :status, "科室发起申请" %>
+            <% elsif current_user.has_role? :workshopadmin %>
+              <%= hidden_field_tag :status, "车间发起申请" %>
             <% end %>
             <%= hidden_field_tag :application_after, params[:code] %>
             <p><%= label_tag "统一申请修改为：" %></p>
@@ -40,9 +40,6 @@
               <%= @vacation_name_hash[params[:code]] %>
             </p>
 
-            <script>
-              $("#application-select").select2( { theme: "bootstrap"} );
-            </script>
             <p><%= label_tag :请输入修改原因 %></p>
             <p style = "width:500px;"><%= text_field_tag :cause, nil, :required => "true", class: "form-control" %></p>
             <%= submit_tag :发送申请 %>
@@ -76,6 +73,8 @@
             <%= hidden_field_tag :status, "班组发起申请" %>
           <% elsif current_user.has_role? :organsadmin %>
             <%= hidden_field_tag :status, "科室发起申请" %>
+          <% elsif current_user.has_role? :workshopadmin %>
+            <%= hidden_field_tag :status, "车间发起申请" %>
           <% end %>
           <p><%= label_tag "申请修改为：" %></p>
           <p style = "width:100px;">
