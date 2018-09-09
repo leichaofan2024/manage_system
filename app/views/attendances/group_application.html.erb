@@ -4,7 +4,7 @@
           <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
             <a href="/attendances/group?year=<%= @year%>&month=<%= @month %>">返回 <span> 考勤修改申请 </span></a>
           <% else %>
-            <a href="/attendances/group_current_time_info?year=<%= @year%>&month=<%= @month %>">返回 <span> 考勤修改申请 </span></a>
+            <a href="/attendances/group_current_time_info?group=<%= @group%>&year=<%= @year%>&month=<%= @month %>">返回 <span> 考勤修改申请 </span></a>
           <% end %>
         </h2>
   </div>

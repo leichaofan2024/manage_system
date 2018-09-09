@@ -230,15 +230,25 @@ class AttendancesController < ApplicationController
   def group_application
     @year = params[:year]
     @month = params[:month]
-    @group = Group.find_by(:id => params[:group_id])
-    @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
-    @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
+    @group = Group.find_by(:id => params[:group_id])
+    if @group.present?
+      @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
+      @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
+    end
     if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
       if (@attendance_status.status == "车间已审核") || (@attendance_status.status == "段已审核")
         redirect_to group_attendances_path(:year => @year,:month => @month)
         flash[:alert] = "#{@month}月考勤#{@attendance_status.status}，不能再申请修改，如有问题请联系车间！"
+      end
+    elsif current_user.has_role? :workshopadmin
+      if !@group.present?
+        redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month)
+        flash[:alert] = "必须选择一个班组进行考勤修改申请！"
+      elsif (!@attendance_status.present?) || (@attendance_status.status == "班组/科室填写中") || (@attendance_status.status == "班组已上报")
+        redirect_to group_current_time_info_attendances_path(:group => @group,:year => @year,:month => @month)
+        flash[:warning] = "本月考勤尚未上报到段管理员，您可以直接修改考勤！无需申请！"
       end
     end
   end
