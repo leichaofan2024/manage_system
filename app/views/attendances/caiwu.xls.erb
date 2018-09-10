@@ -7,6 +7,7 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
+        <Cell><Data ss:Type="String">序号</Data></Cell>
         <Cell><Data ss:Type="String">车间</Data></Cell>
         <Cell><Data ss:Type="String">班组</Data></Cell>
         <Cell><Data ss:Type="String">姓名</Data></Cell>
@@ -37,8 +38,11 @@
           <%  end%>
         <%  end%>
     <%  end%>
+    <% n = 0%>
     <% @export_employees.where(:id => employee_ids).each do |employee| %>
+    <% n += 1%>
       <Row>
+        <Cell><Data ss:Type="String"><%= n %></Data></Cell>
         <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>

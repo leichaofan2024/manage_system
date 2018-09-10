@@ -20,6 +20,7 @@
         <table id="example" class="table table-bordered">
           <thead>
           	<tr>
+              <th>序号</th>
               <th>车间</th>
               <th>班组</th>
               <th>姓名</th>
@@ -38,8 +39,11 @@
           	</tr>
           </thead>
           <tbody>
+            <% n = 0%>
           	<% @employees.each do |employee| %>
+            <% n += 1%>
   				<tr>
+            <td><%= n%></td>
             <td><%= Workshop.current.find(employee.workshop).name %></td>
             <td><%= Group.current.find(employee.group).name %></td>
   				  <td><%= employee.name %></td>

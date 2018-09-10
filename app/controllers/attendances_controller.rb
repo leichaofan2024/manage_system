@@ -713,14 +713,26 @@ class AttendancesController < ApplicationController
 		elsif  params[:authority] == "workshop"
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
 			@workshop = Workshop.find(current_user.workshop_id)
-			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
-			flash[:notice] = "审核完成"
+      group = Group.find_by(:id => params[:group_id])
+      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
+      if application.include?(0)
+        flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+      else
+  			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
+  			flash[:notice] = "审核完成"
+      end
 			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--结束
 
 			#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--结束
 		elsif params[:authority] == "duan"
-      AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "段已审核")
-			flash[:notice] = "审核完成"
+      group = Group.find_by(:id => params[:group_id])
+      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
+      if application.include?(0)
+        flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+      else
+        AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "段已审核")
+		  	flash[:notice] = "审核完成"
+      end
 		end
 	end
 	##审核功能--结束
