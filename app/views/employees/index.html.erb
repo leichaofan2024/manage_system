@@ -120,7 +120,7 @@
       <div>
         <div class="btn_group-2MSRh_0">
           <div class="ivu-tooltip">
-            <% if can? :import, Employee || (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) || (current_user.has_role? :workshopadmin)%>
+            <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
               <div class="ivu-tooltip-rel">
                 <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                   <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
@@ -134,13 +134,15 @@
                   <% end %>
                 </button>
               </div>
-              <div class="ivu-tooltip-rel" style="text-align: right">
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <%= link_to new_employee_path do  %>
-                     <span style="color: #269Eff;">新增人员</span>
-                  <% end %>
-                </button>
-              </div>
+              <% if current_user.has_role? :empadmin %>
+                <div class="ivu-tooltip-rel" style="text-align: right">
+                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+                    <%= link_to new_employee_path do  %>
+                       <span style="color: #269Eff;">新增人员</span>
+                    <% end %>
+                  </button>
+                </div>
+              <% end %>
             <% end %>
           </div>
         </div>
