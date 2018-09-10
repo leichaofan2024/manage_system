@@ -171,7 +171,7 @@
               <% @workshops_all_varified.each do |all_verified_workshop| %>
                 <% all_verified_groups = Group.current.where(:workshop_id => all_verified_workshop.id) %>
                 <li>
-                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:black;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
                       <%= all_verified_workshop.name %>
                     </a>
                   <ul>
