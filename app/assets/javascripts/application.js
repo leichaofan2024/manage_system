@@ -167,7 +167,7 @@ jQuery(document).ready(function() {
 
 			$stickyCol
 			.append($col)
-				.find('thead th:gt(0)').remove()
+				.find('thead th:gt(1)').remove()
 				.end()
 				.find('tbody td').remove();
 

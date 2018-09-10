@@ -1013,6 +1013,9 @@ th {
     color: #fff;
     white-space: nowrap;
 }
+th > li {
+  z-index: 110;
+}
 tbody th {
 	background-color: #2ea879;
 }
@@ -1061,14 +1064,7 @@ tbody tr:hover {
 	box-sizing: border-box;
 }
 
-/* Not needed for sticky header/column functionality */
-td.user-name {
-	text-transform: capitalize;
-}
-.sticky-wrap.overflow-y {
-	overflow-y: auto;
-	max-height: 50vh;
-}
+
 /*--- 结束 ---*/
 
 
