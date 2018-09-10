@@ -144,7 +144,7 @@
       <div class="col-md-3">
         <!-- 组织结构树状图-开始 -->
         <% if current_user.has_role? :workshopadmin %>
-          <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
+          <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
             <% workshop = Workshop.current.find_by(name: current_user.name) %>
             <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=@year%>&month=<%=@month%>'><%= workshop.name %></a></h5>
             <ul>
@@ -163,7 +163,7 @@
             <p>注意：黑色字体为已经审核完毕的班组，绿色字体为可以审核的班组，红色为不能审核的班组</p>
           </div>
         <% else %>
-          <div class="col-md-2 col-lg-2 col-sm-2" id="menu" style="background-color: white;height: 100%;">
+          <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
             <h5>
                 <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %>
             </h5>
