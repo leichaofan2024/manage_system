@@ -412,7 +412,7 @@ strong {
 
 .mainpanel {
     margin-left: 240px;
-    background: #F7F9FA;
+    background: #e4e7ea;
     min-height: 1000px;
 }
 
@@ -461,7 +461,6 @@ strong {
 .contentpanel {
     padding: 20px;
     position: relative;
-    background: #F7F9FA;
 }
 
 .contentpanel::after {
@@ -1013,6 +1012,9 @@ th {
     color: #fff;
     white-space: nowrap;
 }
+th > li {
+  z-index: 110;
+}
 tbody th {
 	background-color: #2ea879;
 }
@@ -1028,7 +1030,6 @@ tbody tr:hover {
 	overflow-x: auto;
 	overflow-y: hidden;
 	position: relative;
-	margin: 3em 0;
 	width: 100%;
 }
 .sticky-wrap .sticky-thead,
@@ -1060,15 +1061,14 @@ tbody tr:hover {
 .sticky-wrap th {
 	box-sizing: border-box;
 }
-
-/* Not needed for sticky header/column functionality */
-td.user-name {
-	text-transform: capitalize;
-}
 .sticky-wrap.overflow-y {
 	overflow-y: auto;
 	max-height: 50vh;
 }
+.fixed{
+  table-layout: fixed;
+}
+
 /*--- 结束 ---*/
 
 

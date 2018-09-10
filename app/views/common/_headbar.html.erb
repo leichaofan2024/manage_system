@@ -15,14 +15,14 @@
       </span>
     <% end %>
 
-  <% if @group_export_permission == 1 %>
-    <div style="padding-left: 40px;line-height: 40px;height: 40px;width:50%;margin-left:20%;margin-top:5px;font-size:14px;color:white;background-color:#FF6600;display:inline-block;">
-       <%= @shenhe_month%>月考勤可以导出了，请于15日前完成导出并上交给劳资！
-       <%= link_to group_attendances_path(:year => @shenhe_year,:month => @shenhe_month,format: "xls") do  %>
-         <span style="color:blue;"> 点击导出 > > </span>
-       <% end %>
-    </div>
-  <% end %>
+    <% if @group_export_permission == 1 %>
+      <div style="padding-left: 40px;line-height: 40px;height: 40px;width:50%;margin-left:20%;margin-top:5px;font-size:14px;color:white;background-color:#FF6600;display:inline-block;">
+         <%= @shenhe_month%>月考勤可以导出了，请于15日前完成导出并上交给劳资！
+         <%= link_to group_attendances_path(:year => @shenhe_year,:month => @shenhe_month,format: "xls") do  %>
+           <span style="color:blue;"> 点击导出 > > </span>
+         <% end %>
+      </div>
+    <% end %>
     <div class="header-right">
       <ul class="headermenu">
 

@@ -2,19 +2,19 @@
   <div class="panel-heading">
     <ul class="d-flex pl-2 flex-items-center text-bold list-style-none" role="navigation">
       <li>
-        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 20px;" href="/attendances/workshop">
+        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 50px;" href="/attendances/workshop">
           考勤管理
         </a>
       </li>
       <li>
-        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 20px;" href="/annual_holidays/workshop_holiday_plan">
+        <a class="js-selected-navigation-item HeaderNavlink px-2" style="margin-left: 50px;" href="/annual_holidays/workshop_holiday_plan">
           休假管理
         </a>
       </li>
+      <li style="margin-left: 50px;"><%= link_to "考勤概况", workshop_attendances_path%></li>
+      <li style="margin-left: 50px;"><%= link_to "考勤审核", group_current_time_info_attendances_path%></li>
     </ul>
 
-    <span class="link-second-navbar"><%= link_to "考勤概况", workshop_attendances_path%></span>
-    <span class="link-second-navbar"><%= link_to "考勤审核", group_current_time_info_attendances_path%></span>
   </div>
 
 <% elsif current_user.has_role? :organsadmin %>
