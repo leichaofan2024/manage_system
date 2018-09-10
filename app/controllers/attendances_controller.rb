@@ -40,6 +40,12 @@ class AttendancesController < ApplicationController
     if @attendance_status.blank?
       @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:status => "班组/科室填写中")
     end
+    #提醒班组导出考勤表
+    if (@shenhe_attdendance_status.status == "段已审核") && (Time.now.day < 16)
+      @group_export_permission = 1
+    else
+      @group_export_permission = 0
+    end
     #什么时候可以导出考勤：
     if params[:format] == "xls"
       if @attendance_status.status != "段已审核"
@@ -539,6 +545,7 @@ class AttendancesController < ApplicationController
 			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["f"].to_i) + (attendance_count_attributes["g"].to_i)))
 
       group_id = Employee.current.find_by(:id => params[:employee_id]).group
+      flash[:notice] = "考勤修改成功！"
 			if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
 
 				redirect_to group_attendances_path(:year => params[:year],:month => params[:month],:group => group_id)

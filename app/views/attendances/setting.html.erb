@@ -26,7 +26,7 @@
               <div style="color: #0366d6;">人数控制设置</div><br>
             </div>
             <%= form_tag create_setting_attendances_path, method: 'post' do %>
-              <%= select_tag(:vacation, options_for_select(["加班", "轮夜"]), {:prompt => "请选择", :required => true})  %>
+              <%= select_tag(:vacation, options_for_select(["加班", "夜班"]), {:prompt => "请选择", :required => true})  %>
               <%= text_field_tag :count, nil, :required => true  %>
               <%= submit_tag :点击确定 %>
             <% end %>
