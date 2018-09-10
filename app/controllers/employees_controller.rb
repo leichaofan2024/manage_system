@@ -31,7 +31,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
+    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
       @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(15)
@@ -80,14 +80,16 @@ class EmployeesController < ApplicationController
       rali_years_transfer = (Time.now - @employee.railway_time.to_datetime)/60/60/24/365
       @employee.working_years = working_years_transfer.to_i
       @employee.rali_years = rali_years_transfer.to_i
-      Attendance.create(employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
+
       if @employee.save
+        Attendance.create(:group_id => @employee.group,employee_id: @employee.id, year: Time.now.year, month: Time.now.month)
         flash[:notice] = "创建成功"
         redirect_to employee_path(@employee)
       else
         flash[:alert] = "创建失败"
         render :new
       end
+
     end
 
   end
@@ -136,7 +138,7 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    if current_user.has_role? :empadmin or current_user.has_role? :attendance_admin or current_user.has_role? :superadmin or current_user.has_role? :leaderadmin
+    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"

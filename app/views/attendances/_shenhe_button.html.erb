@@ -2,21 +2,31 @@
 
       <% attendance_status = AttendanceStatus.find_by(:year => shenhe_year,:month => shenhe_month,:group_id => employee.group)%>
       <% if (attendance_status.present?) && (attendance_status.status == "班组/科室填写中") %>
-        <% if current_user.has_role? :workshopadmin %>
-            <%= link_to verify_attendances_path(authority: "workshop", group_id: employee.group,year: shenhe_year,month: shenhe_month,:employee => employee.id), method: :post, :remote => true do %>
-               <span style="color: #269Eff;">审核(<%= Group.current.find(employee.group).name%>)</span>
+        <span style= "color:red;">班组/科室未上报！</span>
+      <% elsif (attendance_status.present?) && (attendance_status.status == "科室已上报")%>
+        <% if current_user.has_role? :attendance_admin %>
+            <%= link_to verify_attendances_path(authority: "duan", group_id: employee.group,year: shenhe_year,month: shenhe_month,:employee => employee.id), method: :post, :remote => true do %>
+               <span style="color: #269Eff;">审核(<%= Group.find(employee.group).name%>)</span>
             <% end %>
         <% else %>
-          <span style= "color:red;">车间未审核！(<%= Group.current.find(employee.group).name%>)</span>
+          <span style="color: green;"><%= Group.find(employee.group).name%>(科室已上报)</span>
+        <% end %>
+      <% elsif (attendance_status.present?) && (attendance_status.status == "班组已上报")%>
+        <% if current_user.has_role? :workshopadmin %>
+            <%= link_to verify_attendances_path(authority: "workshop", group_id: employee.group,year: shenhe_year,month: shenhe_month,:employee => employee.id), method: :post, :remote => true do %>
+               <span style="color: #269Eff;">审核(<%= Group.find(employee.group).name%>)</span>
+            <% end %>
+        <% else %>
+          <span style= "color:red;">车间未审核！(<%= Group.find(employee.group).name%>)</span>
         <% end %>
       <% elsif (attendance_status.present? )&& (attendance_status.status == "车间已审核")%>
         <% if current_user.has_role? :attendance_admin %>
             <%= link_to verify_attendances_path(authority: "duan", group_id: employee.group,year: shenhe_year,month: shenhe_month,:employee => employee.id), method: :post, :remote => true do %>
-               <span style="color: #269Eff;">审核(<%= Group.current.find(employee.group).name%>)</span>
+               <span style="color: #269Eff;">审核(<%= Group.find(employee.group).name%>)</span>
             <% end %>
         <% else %>
-          <span style="color: green;"><%= Group.current.find(employee.group).name%>(车间已审核)</span>
+          <span style="color: green;"><%= Group.find(employee.group).name%>(车间已审核)</span>
         <% end %>
       <% elsif (attendance_status.present?) && (attendance_status.status == "段已审核")%>
-          <span style="color: green;"><%= Group.current.find(employee.group).name%>(段已审核)</span>
+          <span style="color: green;"><%= Group.find(employee.group).name%>(段已审核)</span>
       <% end %>

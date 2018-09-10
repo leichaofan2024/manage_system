@@ -23,23 +23,12 @@
         <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
-        <% attendance_counts = AttendanceCount.where(employee_id: employee.id, month: Time.now.month, year: Time.now.year) %>
-        <% if attendance_counts.find_by(vacation_code: "a").present? %>
-          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "a").count %></Data></Cell>
-        <% else %>
-          <Cell><Data ss:Type="String"><%= "0" %></Data></Cell>
+        <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+        <% if attendance_count.present? %>
+            <Cell><Data ss:Type="String"><%= attendance_count.attributes["b"]%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= attendance_count.attributes["d"]%></Data></Cell>
+            <Cell><Data ss:Type="String"><%= attendance_count.attributes["c"]%></Data></Cell>
         <% end %>
-        <% if attendance_counts.find_by(vacation_code: "c").present? %>
-          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "c").count %></Data></Cell>
-        <% else %>
-          <Cell><Data ss:Type="String"><%= "0" %></Data></Cell>
-        <% end %>
-        <% if attendance_counts.find_by(vacation_code: "b").present? %>
-          <Cell><Data ss:Type="String"><%= attendance_counts.find_by(vacation_code: "b").count %></Data></Cell>
-        <% else %>
-          <Cell><Data ss:Type="String"><%= "0" %></Data></Cell>
-        <% end %>
-
       </Row>
     <% end %>
     </Table>
