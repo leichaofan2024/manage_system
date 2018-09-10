@@ -134,8 +134,8 @@
 
 
     <div class="pull-right" style= "margin:20px;">
-      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"} do %>
-          <button type="button" name="button">上报考勤</button>
+      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"},class: "btn btn-primary" do %>
+          上报考勤
       <% end %>
     </div>
   </div>
