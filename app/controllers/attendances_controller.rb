@@ -457,7 +457,13 @@ class AttendancesController < ApplicationController
       if @applications.blank?
         @applications = Application.where(:group_id => groups.ids,:status => "车间通过申请").order("created_at DESC")
       end
+    elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
+      @applications = Application.where(:group_id => current_user.group_id,:status => "班组发起申请").order("created_at DESC")
+      if @applications.blank?
+        @applications = Application.where(:group_id => current_user.group_id).order("created_at DESC")
+      end
     end
+
  	end
 
 

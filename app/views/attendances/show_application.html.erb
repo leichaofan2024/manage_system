@@ -67,7 +67,7 @@
               </td>
 
   	      		<td><%= application.apply_person %></td>
-  	      		<td><%= application.created_at %></td>
+  	      		<td><%= application.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
               <td><%= application.status %></td>
               <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
                 <% if params[:type] == "duan" %>
