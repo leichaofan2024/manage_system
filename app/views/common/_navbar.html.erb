@@ -132,7 +132,7 @@
                         <% groups = Group.current.where(:workshop_id => current_user.workshop_id)%>
 
                           <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                            <% if url_for.split("/").second == "attendances" %>
+                            <% if (url_for.split("/").second == "attendances") || (url_for.split("/").second == "annual_holidays") %>
                               <ul class="children" style="display:block;">
                             <% else %>
                               <ul class="children">
@@ -144,7 +144,7 @@
                               <% end %>
                                 <%= link_to "考勤审核", group_current_time_info_attendances_path%>
                               </li>
-                              <% if url_for.split("?").first == "/attendances/workshop" %>
+                              <% if url_for.split("?").first == "/attendances/workshop"  ||  url_for.split("?").first == "/attendances/filter" %>
                                <li style="background-color:white;">
                               <% else %>
                                 <li>
