@@ -8,14 +8,25 @@
                 <ul class="nav nav-pills nav-stacked nav-bracket">
 
                   <% if (current_user.has_role? :empadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) %>
+
+
                     <li class="nav-parent"><a href="/"><i class="fa fa-home"></i> <span>现员管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
                        <ul class="children">
-                         <li>
+
+                         <% if url_for.split("/").second == "employees" %>
+                          <li style="background-color:white;">
+                         <% else %>
+                          <li>
+                         <% end %>
                            <a  href="/employees">
                              员工信息
                            </a>
                          </li>
-                         <li>
+                         <% if url_for == "/employees/organization_structure" %>
+                          <li style="background-color:white;">
+                         <% else %>
+                          <li>
+                         <% end %>
                            <a href="/employees/organization_structure">
                              组织架构
                            </a>
@@ -25,13 +36,43 @@
                              统计分析
                              <b class="caret"></b>
                            </a>
-                           <ul class="dropdown-menu">
-                             <li><%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员") %></li>
-                             <li><%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员") %></li>
-                             <li><%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员") %></li>
-                             <li><%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员") %></li>
-                             <li><%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员") %></li>
-                             <li><%= link_to "综合分析", compsite_statistical_analysis_employees_path(data_source: "全员") %></li>
+                           <ul class="dropdown-menu"  style="display:block;">
+                             <% if url_for == "/employees/age_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <% if url_for == "/employees/working_years_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <% if url_for == "/employees/rali_years_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <% if url_for == "/employees/education_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <% if url_for == "/employees/worktype_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <% if url_for == "/employees/compsite_statistical_analysis" %>
+                              <li style="background-color:white;">
+                             <% else %>
+                              <li>
+                             <% end %>
+                             <%= link_to "综合分析", compsite_statistical_analysis_employees_path(data_source: "全员") %></li>
 
                            </ul>
                          </li>
@@ -39,7 +80,9 @@
                      </li>
                   <% else %>
                     <% if url_for.split("/").second == "employees" %>
-                    <li><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
+                      <li style="background-color:white;"><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
+                    <% else %>
+                      <li><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
                     <% end %>
                   <% end %>
 
