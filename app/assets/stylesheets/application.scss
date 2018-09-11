@@ -193,10 +193,10 @@ strong {
     transition: all 0.2s ease-out 0s;
 }
 
-.headermenu .dropdown-menu li a:hover {
-    background: #1caf9a;
-    color: #fff;
-}
+// .headermenu .dropdown-menu li a:hover {
+//     // background: #1caf9a;
+//     color: #fff;
+// }
 
 .headermenu .dropdown-menu li i {
     font-size: 11px;
@@ -414,6 +414,7 @@ strong {
 .mainpanel {
     margin-left: 240px;
     background: #e4e7ea;
+    min-height: 1000px;
 }
 
 .pageheader {
@@ -756,128 +757,6 @@ strong {
     }
 }
 /*-----------------end--------------------*/
-/*------------------sidebar------------*/
-.sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 200;
-    width: 260px;
-    background: #fff;
-}
-
-.sidebar .logo {
-    padding: 15px 0;
-    margin: 0;
-    display: block;
-    position: relative;
-    z-index: 4;
-}
-
-.sidebar .logo:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 15px;
-    height: 1px;
-    width: calc(100% - 30px);
-    background-color: rgba(180,180,180,.3);
-}
-
-.sidebar .logo .simple-text {
-    text-transform: uppercase;
-    padding: 5px 0;
-    font-size: 18px;
-    color: #3C4858;
-    white-space: nowrap;
-    font-weight: 400;
-    line-height: 30px;
-    overflow: hidden;
-    text-align: center;
-    display: block;
-    text-decoration: none
-}
-
-
-.sidebar .sidebar-wrapper {
-    position: relative;
-    height: calc(100vh - 75px);
-    overflow: auto;
-    width: 260px;
-    z-index: 4;
-    padding-bottom: 30px;
-    box-shadow: 0 16px 38px -12px rgba(0,0,0,.56), 0 4px 25px 0 rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
-}
-
-.sidebar .nav {
-    margin-top: 20px;
-    display: block;
-}
-
-.sidebar .nav li:first-child>a {
-    margin: 0 15px;
-}
-
-.sidebar .nav li a {
-    margin: 10px 15px 0;
-    border-radius: 3px;
-    color: #3C4858;
-    text-transform: capitalize;
-    font-size: 13px;
-    padding: 10px 15px;
-}
-
-.sidebar .nav i {
-    font-size: 24px;
-    float: left;
-    margin-right: 15px;
-    line-height: 30px;
-    width: 30px;
-    text-align: center;
-    color: #a9afbb;
-}
-
-
-a .material-icons {
-    vertical-align: middle;
-}
-
-.material-icons {
-    font-weight: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-}
-
-.sidebar .nav p {
-    margin: 0;
-    line-height: 30px;
-    font-size: 14px;
-    position: relative;
-    display: block;
-    height: auto;
-    white-space: nowrap;
-}
-
-.nav {
-    flex-wrap: wrap;
-    padding-left: 0;
-}
-
-ul {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 40px;
-}
-/*-----------------------结束------------------*/
 
 // 现员表导航栏
 .header_info {
@@ -999,12 +878,18 @@ table {
     background: #fff;
 }
 td, th {
-  color:black;
-    padding: 8px;
+    color:black;
     text-align: center;
+    padding: 8px;
+    width: 80px;
+}
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 th {
-  color:black;
+    color:black;
     // background-color: #31bc86;
     background-color: #EAEEF3;
     font-weight: bold;
