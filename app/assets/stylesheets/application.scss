@@ -1011,6 +1011,7 @@ td, th {
 th {
   color:black;
     // background-color: #31bc86;
+    background-color: #EAEEF3;
     font-weight: bold;
     // color: #fff;
     white-space: nowrap;
@@ -1020,10 +1021,12 @@ th > li {
 }
 tbody th {
   color:black;
+  background-color: #EAEEF3;
 	// background-color: #2ea879;
 }
 tbody tr:nth-child(2n-1) {
   color:black;
+   background-color: #F7F9FA;
     // background-color: #f5f5f5;
     transition: all .125s ease-in-out;
 }
@@ -1068,7 +1071,7 @@ tbody tr:hover {
 }
 .sticky-wrap.overflow-y {
 	overflow-y: auto;
-	max-height: 50vh;
+	max-height: 60vh;
 }
 .fixed{
   table-layout: fixed;
