@@ -87,13 +87,31 @@
                   <% end %>
 
 
+
+
+
+
+
                     <li onclick="openModule(event, 'Attendance')">
                       <!--班组管理员、科室管理员、班组重名管理员-->
-                      <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+                      <% if current_user.has_role? :organsadmin %>
                         <% if url_for.split("/").second == "attendances" %>
                           <a style="background-color:white;" href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
                         <% else %>
-                          <a href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                          <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                            <ul class="children">
+                              <li>
+                                <a href="/attendances/group">
+                                  考勤管理
+                                </a>
+                              </li>
+                              <li>
+                                <a href="/annual_holidays/workshop_holiday_plan">
+                                  休假管理
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
                         <% end %>
                         <!--车间管理员-->
                       <% elsif current_user.has_role? :workshopadmin%>
@@ -101,14 +119,60 @@
                         <% if url_for.split("/").second == "attendances" %>
                           <a style="background-color:white;" href="/attendances/group_current_time_info?group=<%=groups.first.id%>"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
                         <% else %>
-                          <a href="/attendances/group_current_time_info?group=<%=groups.first.id%>"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                          <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                            <ul class="children">
+                              <li>
+                                <a href="/attendances/workshop">
+                                  考勤管理
+                                </a>
+                              </li>
+                              <li>
+                                <a href="/annual_holidays/workshop_holiday_plan">
+                                  休假管理
+                                </a>
+                              </li>
+                              <li><%= link_to "考勤概况", workshop_attendances_path%></li>
+                              <li><%= link_to "考勤审核", group_current_time_info_attendances_path%></li>
+                            </ul>
+                          </li>
                         <% end %>
+
                       <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) %>
                         <% if url_for.split("/").second == "attendances" %>
                           <a style="background-color:white;" href="/attendances/group_current_time_info?group=593"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
                         <% else %>
-                          <a href="/attendances/group_current_time_info?group=593"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a>
+                          <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                            <ul class="children">
+                              <li>
+                                <a href="/attendances/duan">
+                                  考勤统计
+                                </a>
+                              </li>
+                              <li>
+                                <a href="/annual_holidays/holiday_fulfill_detail">
+                                  休假统计
+                                </a>
+                              </li>
+
+                              <li class="link-second-navbar"><%= link_to "段考勤统计", duan_attendances_path(:year => @year,:month => @month)%></li>
+                              <li class="link-second-navbar"><%= link_to "年考勤统计", annual_statistic_attendances_path(:year => @year,:month => @month)%></li>
+                              <% if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin)%>
+                                <li class="link-second-navbar"><%= link_to "考勤权限设置", setting_attendances_path%></li>
+                              <% end %>
+                              <li class="link-second-navbar"><%= link_to "班组考勤", group_current_time_info_attendances_path(:year => @year,:month => @month)%></li>
+                              <% if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin)%>
+                                <li class="link-second-navbar"><%= link_to "给财务的表-1", caiwu_attendances_path(:year => @year,:month => @month),data: {disable_with: "正在加载 ..."} %></li>
+                                <li class="link-second-navbar"><%= link_to "给财务的表-2", caiwu2_attendances_path(:year => @year,:month => @month) %></li>
+                              <% end %>
+                            </ul>
+                          </li>
                         <% end %>
+                        <% elsif current_user.has_role? :groupadmin %>
+                            <% if url_for.split("/").second == "attendances" %>
+                              <a style="background-color:white;" href=" "><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a >
+                            <% else %>
+                              <a href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a >
+                            <% end %>
                       <% end %>
                     </li>
 
