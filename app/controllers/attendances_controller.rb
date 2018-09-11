@@ -854,7 +854,7 @@ class AttendancesController < ApplicationController
 		@workshop = params[:workshop]
     @duan = params[:duan]
     @vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		status_workshop = AttendanceStatus.where(:year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间通过审核"]).pluck("workshop_id").uniq
+		status_workshop = AttendanceStatus.where(:year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间已审核"]).pluck("workshop_id").uniq
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []
 		else
