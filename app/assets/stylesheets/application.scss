@@ -21,6 +21,7 @@
 @import "select2";
 @import "select2-bootstrap";
 
+
 /********** 2. RESET STYLES **********/
 /*************************************/
 body {
@@ -1298,7 +1299,14 @@ button {
     -webkit-writing-mode: horizontal-tb !important;
 }
 
-
+.button-group{
+  float: right;
+}
+.button-group::after{
+  clear: both;
+  display: block;
+  content: '';
+}
 
 
 .ivu-btn>.ivu-icon+span:hover {
@@ -2101,6 +2109,9 @@ h4 {
   background-color: white;
   color: black;
 }
+.btn-success{
+  background-color: #00D396;
+}
 .btn-text-green{
   background-color: #ffff;
   font-size: 14px;
@@ -2353,4 +2364,12 @@ button.close {
     top: 50%;
     margin: -15px 0 0 -15px;
     font-size: 32px;
+}
+.content-body,
+.content-table,
+.content-footer{
+  margin-top: 30px;
+}
+.content-footer{
+  float: right;
 }
