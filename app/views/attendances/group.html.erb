@@ -3,136 +3,105 @@
 </div>
 
 <div class="contentpanel">
-  <div class="panel panel-default">
-    <%= render "attendance_sidebar"%>
-  </div>
+  <div class="panel panel-body">
+    <header>
+      <h3 class="text-center"><%= @year %>年<%= @month %>月考勤数据 (<%= @attendance_status.status %>)</h3>
+    </header>
 
-  <div class="col-md-12" style="margin-top: -10px;">
+    <div class="content-body">
+        <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+          <div class="button-group">
+             <% if (@year != Time.now.year) || (@month != Time.now.month) %>
+               <%= link_to("返回本月", group_attendances_path(:year => Time.now.year,:month => Time.now.month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary")%>
+             <% else %>
+               <%= link_to("查看上月考勤", group_attendances_path(:year => @shenhe_year,:month => @shenhe_month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary")%>
+             <% end %>
 
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>我的申请</th>
-            <th>详情</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><%= @applications.count %></td>
-            <td><%= link_to "查看详情", show_application_attendances_path(applications: @applications.pluck("id")), class: "btn btn-primary2" %></td>
-          </tr>
-        </tbody>
-      </table>
-
-     <h5>考勤表状态：<span style="color:blue;"><%= @attendance_status.status %></span></h5>
-     <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-
-        <div class="btn_group-2MSRh_0">
-          <div class="ivu-tooltip">
-            <% if (@year != Time.now.year) || (@month != Time.now.month) %>
-              <%= link_to("返回本月", group_attendances_path(:year => Time.now.year,:month => Time.now.month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary")%>
-            <% else %>
-              <%= link_to("查看上月考勤", group_attendances_path(:year => @shenhe_year,:month => @shenhe_month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary")%>
-            <% end %>
-            <div class="ivu-tooltip-rel" style="margin-right: 5px;">
-              <%= link_to "申请修改考勤",group_application_attendances_path(:year => @year,:month => @month,:group_id => current_user.group_id),:data => {disable_with: "加载中 ... "},class:"btn btn-primary" %>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -18px;">
-              <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                   <span style="color: #269Eff;">导出记录</span>
-              </button>
+             <%= link_to "申请修改考勤",group_application_attendances_path(:year => @year,:month => @month,:group_id => current_user.group_id),:data => {disable_with: "加载中 ... "},class:"btn btn-success" %>
+             <%= link_to "查看申请", show_application_attendances_path(applications: @applications.pluck("id")), class: "btn btn-success" %>
+             <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
+               <button type="button" class="btn btn-success">
+                 <span>导出记录</span>
+               </button>
               <% end %>
-            </div>
           </div>
-        </div>
+        <% end %>
 
-     <% end %>
-     <div class="" style = "padding-top:10px;">
-       <%= link_to(' << 查看考勤统计',group_statistics_attendances_path(:year => @year ,:month => @month))%>
-     </div>
-
-
-  </div>
-
-
-  <div class="col-md-12 col-lg-12 col-sm-12" style="margin-top: 20px;">
-  <h3 class="text-center"><%= @year %>年<%= @month %>月考勤数据</h3>
-  <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
-
-
-      <table class="table overflow-y">
-        <thead>
-          <tr>
-            <th>工资号</th>
-            <th>姓名 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="点击查看统计"></span> </th>
-            <th>职名</th>
-            <!-- 生成每月1-31号的数字-开始 -->
-            <% (1..31).each do |i| %>
-              <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
-                <th style="width:40px;">
-                    <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
-                </th>
-              <% else %>
-                <th><%= i %></th>
-              <% end %>
-            <% end %>
-            <!-- 生成每月1-31号的数字-结束 -->
-          </tr>
-        </thead>
-          <tbody>
-          <!-- 配置表格数据-开始 -->
-            <% @employees.each do |employee| %>
-              <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
-              <tr>
-                <th><%= employee.sal_number %></th>
-                <th>
-                    <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: @month, year: @year) do %>
-                      <%= employee.name %>
-                    <% end %>
-                </th>
-                <td><%= employee.duty %></td>
-                <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
-                <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
-                <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
-                <% if attendance.present? %>
-                  <% attendance = attendance.month_attendances %>
-                  <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
-                  <% day_number = 1 %>
-                  <% (0..30).each do |day| %>
-                    <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
-                      <% if (@time_range === (day+1)) && @attendance_status.status == "班组/科室填写中"%>
-                        <td style="width:40px;">
-                            <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                              <% if attendance[day] == "x" %>
-                                <%= day_number %>
-                              <% else %>
-                                <%= @vacation_code_hash[attendance[day]] %>
-                              <% end %>
-                            <% end %>
-                        </td>
-                      <% else %>
-                        <td>
-                          <% if attendance[day] == "x" %>
-                            <%= "-"%>
-                          <% else %>
-                            <%= @vacation_code_hash[attendance[day]] %>
-                          <% end %>
-                        </td>
-                      <% end %>
-                    <% day_number += 1%>
-                  <% end %>
+      <div class="content-table">
+        <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
+        <table class="table overflow-y">
+          <thead>
+            <tr>
+              <th>工资号</th>
+              <th>姓名 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="点击查看统计"></span> </th>
+              <th>职名</th>
+              <!-- 生成每月1-31号的数字-开始 -->
+              <% (1..31).each do |i| %>
+                <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
+                  <th style="width:40px;">
+                      <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                  </th>
+                <% else %>
+                  <th><%= i %></th>
                 <% end %>
-              </tr>
-            <% end %>
-            <!-- 配置表格数据-结束 -->
-         </tbody>
-      </table>
+              <% end %>
+              <!-- 生成每月1-31号的数字-结束 -->
+            </tr>
+          </thead>
+            <tbody>
+            <!-- 配置表格数据-开始 -->
+              <% @employees.each do |employee| %>
+                <!-- 将维表中存放的代表每种考勤名称的字母赋值给attendance_codes -->
+                <tr>
+                  <th><%= employee.sal_number %></th>
+                  <th>
+                      <%= link_to group_employee_detail_attendances_path(:id => employee.id, month: @month, year: @year) do %>
+                        <%= employee.name %>
+                      <% end %>
+                  </th>
+                  <td><%= employee.duty %></td>
+                  <!-- 捞出当前员工的考勤数据，数据可以为多个，可以为空 -->
+                  <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
+                  <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
+                  <% if attendance.present? %>
+                    <% attendance = attendance.month_attendances %>
+                    <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
+                    <% day_number = 1 %>
+                    <% (0..30).each do |day| %>
+                      <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
+                        <% if (@time_range === (day+1)) && @attendance_status.status == "班组/科室填写中"%>
+                          <td style="width:40px;">
+                              <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                                <% if attendance[day] == "x" %>
+                                  <%= day_number %>
+                                <% else %>
+                                  <%= @vacation_code_hash[attendance[day]] %>
+                                <% end %>
+                              <% end %>
+                          </td>
+                        <% else %>
+                          <td>
+                            <% if attendance[day] == "x" %>
+                              <%= "-"%>
+                            <% else %>
+                              <%= @vacation_code_hash[attendance[day]] %>
+                            <% end %>
+                          </td>
+                        <% end %>
+                      <% day_number += 1%>
+                    <% end %>
+                  <% end %>
+                </tr>
+              <% end %>
+              <!-- 配置表格数据-结束 -->
+           </tbody>
+        </table>
+      </div>
       <div id="showModal"></div>
+    </div>
 
-
-    <div class="pull-right" style= "margin:20px;">
-      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"},class: "btn btn-primary" do %>
+    <div class="content-footer">
+      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"},class: "btn btn-success" do %>
           上报考勤
       <% end %>
     </div>
