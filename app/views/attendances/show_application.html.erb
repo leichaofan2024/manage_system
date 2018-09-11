@@ -1,3 +1,7 @@
+<!-- Preloader -->
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
 <div class="pageheader">
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
     <h2><%= link_to '<< 返回', group_attendances_path %><span> 考勤申请详情页 </span></h2>
@@ -9,9 +13,8 @@
   <div class="panel panel-default">
     <%= render "attendance_sidebar"%>
   </div>
-<div class="card">
-  <div class="col-md-10" style="overflow: auto">
-    <table id="example" class="table table-bordered">
+
+    <table class="table">
       <thead>
       	<tr>
       		<% if params[:type] == "duan" %>
@@ -44,7 +47,7 @@
               <% if Group.find(application.group_id).present? %>
   	      		  <td><%= Group.find(application.group_id).name %></td>
               <% end %>
-              <td><%= Employee.current.find_by(:id => application.employee_id).name %></td>
+              <td><%= Employee.find_by(:id => application.employee_id).name %></td>
               <td><%= application.month %>月<%= application.day %>日</td>
 
   	      		<td><%= application.cause %></td>
@@ -86,7 +89,7 @@
       </tbody>
   </table>
 <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
-  <div class="pull-right" style= "margin-bottom:20px;margin-right:20px;">
+  <div class="pull-right" style= "margin-top:20px;">
     <% if params[:type] == "duan" %>
       <%= link_to("一键通过", update_application_attendances_path(:type => params[:type],:yijian => "duan",:status => "段通过申请"),method: :post,class: "btn btn-primary")%>
     <% else %>
@@ -94,6 +97,5 @@
     <% end %>
   </div>
 <% end %>
-</div>
-</div>
+
 </div>

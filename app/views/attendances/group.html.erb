@@ -1,3 +1,7 @@
+<!-- Preloader -->
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
 <div class="pageheader">
   <h2>当前位置 <span> 班组考勤统计 </span></h2>
 </div>
@@ -38,7 +42,7 @@
               <!-- 生成每月1-31号的数字-开始 -->
               <% (1..31).each do |i| %>
                 <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
-                  <th style="width:40px;">
+                  <th>
                       <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
                   </th>
                 <% else %>
@@ -70,7 +74,7 @@
                     <% (0..30).each do |day| %>
                       <!-- 在维表VacationCategory中通过vacation_code找到对应的考勤简写名称，放入表格 -->
                         <% if (@time_range === (day+1)) && @attendance_status.status == "班组/科室填写中"%>
-                          <td style="width:40px;">
+                          <td>
                               <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
                                 <% if attendance[day] == "x" %>
                                   <%= day_number %>
