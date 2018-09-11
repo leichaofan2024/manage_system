@@ -6,7 +6,41 @@
 
               <div class="leftpanelinner">
                 <ul class="nav nav-pills nav-stacked nav-bracket">
-                  <li><a href="/employees"><i class="fa fa-home"></i> <span>现员管理</span></a></li>
+
+                  <% if (current_user.has_role? :empadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) %>
+                    <li class="nav-parent"><a href="/"><i class="fa fa-home"></i> <span>现员管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                       <ul class="children">
+                         <li>
+                           <a  href="/employees">
+                             员工信息
+                           </a>
+                         </li>
+                         <li>
+                           <a href="/employees/organization_structure">
+                             组织架构
+                           </a>
+                         </li>
+                         <li class="dropdown">
+                           <a class="dropdown-toggle" data-toggle="dropdown">
+                             统计分析
+                             <b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu">
+                             <li><%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <li><%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <li><%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <li><%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <li><%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员") %></li>
+                             <li><%= link_to "综合分析", compsite_statistical_analysis_employees_path(data_source: "全员") %></li>
+
+                           </ul>
+                         </li>
+                       </ul>
+                     </li>
+                  <% else %>
+                    <li><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
+                  <% end %>
+
 
                     <li onclick="openModule(event, 'Attendance')">
                       <!--班组管理员、科室管理员、班组重名管理员-->
