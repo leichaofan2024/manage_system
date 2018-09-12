@@ -136,15 +136,39 @@
             <% end %>
           </ul>
     <% else %>
-      <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
-        <h5>
-            <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %>
-        </h5>
-        <ul>
-          <% @workshops_all_varified.each do |all_verified_workshop| %>
+
+
+
+
+
+          <li><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %></li>
+          <div class="searchform">
+            <%= form_tag group_current_time_info_attendances_path,method: :get do %>
+            <div class="select" style="float:left;">
+              <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="workshop" id= "workshop_id">
+                <% Workshop.all.each do |workshop| %>
+                  <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                <% end %>
+              </select>
+            </div>
+              <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
+            <% end %>
+          </div>
+          <ul class="nav nav-tabs" style="background-color: #FFFFFF">
+            <% if params[:group].blank? %>
+              <% @groups.each do |group| %>
+                <li role="presentation"><%= link_to(group.name,group_current_time_info_attendances_path(:group => group.id))%></li>
+              <% end %>
+            <% else %>
+              <% groups = Group.where(:workshop_id => Group.find(params[:group]).workshop_id) %>
+              <% groups.each do |group| %>
+                <li role="presentation"><%= link_to(group.name,group_current_time_info_attendances_path(:group => group.id))%></li>
+              <% end %>
+            <% end %>
+          <!-- <% @workshops_all_varified.each do |all_verified_workshop| %>
             <% all_verified_groups = Group.current.where(:workshop_id => all_verified_workshop.id) %>
-            <li>
-                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:black;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+            <li role="presentation">
+                <a style="color:black;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
                   <%= all_verified_workshop.name %>
                 </a>
               <ul>
@@ -157,12 +181,12 @@
                 <% end %>
               </ul>
             </li>
-          <% end %>
+          <% end %> -->
 
-          <% @workshops.each do |verify_workshop| %>
+          <!-- <% @workshops.each do |verify_workshop| %>
             <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
             <li>
-                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                <a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
                   <%= verify_workshop.name %>
                 </a>
             <ul>
@@ -180,13 +204,13 @@
                 <% end %>
               </ul>
             </li>
-          <% end %>
+          <% end %> -->
 
 
-          <% @workshops_not_varify.each do |no_verify_workshop| %>
+          <!-- <% @workshops_not_varify.each do |no_verify_workshop| %>
             <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
             <li>
-                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red;" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                <a style="color:red;" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
                   <%= no_verify_workshop.name %>
                 </a>
               <ul>
@@ -200,11 +224,8 @@
                 <% end %>
               </ul>
             </li>
-          <% end %>
+          <% end %> -->
         </ul>
-        <br>
-        <p>注意：黑色字体为已经审核完毕的车间，绿色字体为可以审核的车间，红色为不能审核的车间</p>
-      </div>
     <% end %>
 
         <div class="panel panel-body">
@@ -260,3 +281,6 @@
 
 
 <div id="show_processbar_detail"></div>
+<script>
+  $("#workshop_id").select2( { theme: "bootstrap"} );
+</script>

@@ -1615,11 +1615,6 @@ h4 {
     padding-left: 10px;
 }
 
-
-.pull-right {
-    float: right!important;
-}
-
 .widget-container .customer-menu {
     display: inline-block;
 }
@@ -2133,4 +2128,7 @@ button.close {
 }
 .content-footer{
   float: right;
+}
+.searchform{
+  min-width: 300px;
 }
