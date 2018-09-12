@@ -417,48 +417,6 @@ strong {
     min-height: 1000px;
 }
 
-.pageheader {
-    padding: 15px;
-    border-bottom: 1px solid #d3d7db;
-    border-top: 1px solid #eee;
-    background: #f7f7f7;
-    position: relative;
-}
-
-.pageheader h2 {
-    font-size: 18px;
-    color: #1D2939;
-    letter-spacing: -0.5px;
-    margin: 0;
-}
-
-.pageheader .glyphicon,
-.pageheader .fa {
-    font-size: 24px;
-    margin-right: 5px;
-    padding: 6px 7px;
-    border: 2px solid #1D2939;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px;
-}
-
-.pageheader h2 span {
-    font-size: 13px;
-    text-transform: none;
-    color: #999;
-    font-style: italic;
-    vertical-align: middle;
-    letter-spacing: 0;
-}
-
-.pageheader h2 span::before {
-    content: '/';
-    margin: 0 10px 0 5px;
-    color: #ccc;
-}
-
-
 .contentpanel {
     padding: 20px;
     position: relative;
@@ -469,16 +427,6 @@ strong {
     display: block;
     content: '';
 }
-
-.subtitle {
-    font-size: 13px;
-    text-transform: uppercase;
-    color: #333;
-    font-family: 'LatoBold';
-    margin-bottom: 15px;
-    margin-top: 0;
-}
-
 
 .panel {
      -moz-border-radius: 3px;
@@ -757,73 +705,6 @@ strong {
     }
 }
 /*-----------------end--------------------*/
-
-// 现员表导航栏
-.header_info {
-  font-size: 14px !important;
-  display: block;
-  z-index: 1;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  height: 50px;
-  margin-top: -70px;
-  margin-left: -18px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  // border-bottom: 1px solid black;
-  position: relative;
-}
-
-.d-flex {
-  display: flex !important;
-}
-
-.list-style-none {
-  list-style: none !important;
-}
-
-.text_bold {
-  font-weight: 600 !important;
-}
-
-.pl-2 {
-  padding-left: 8px !important;
-}
-
-.flex-items-center {
-  align-items: center !important;
-}
-
-.header_info ul{
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.HeaderNavlink {
-    display: block;
-}
-
-.px-2 {
-    padding-right: 8px !important;
-    padding-left: 8px !important;
-}
-
-.header_info ul li>a {
-    color: #0366d6;
-    text-decoration: none;
-    margin-top: 8px;
-    background-color: transparent;
-}
-
-.header_info:after{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 15px;
-    height: 1px;
-    width: calc(100% - 30px);
-    background-color: rgba(180,180,180,.3);
-}
 
 
 /*-------------------内容主体----------------------*/
@@ -1734,9 +1615,6 @@ h4 {
     padding-left: 10px;
 }
 
-// .widget-container .widget-content-container .widget-topbar>div {
-//     display: inline-block;
-// }
 
 .pull-right {
     float: right!important;

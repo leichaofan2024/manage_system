@@ -3,10 +3,6 @@
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
 <div class="contentpanel">
-  <!-- <div class="panel panel-default">
-      <%= render "attendance_sidebar"%>
-  </div> -->
-
 
   <% if  (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
 
@@ -28,17 +24,6 @@
                 </tr>
               </tbody>
             </table>
-
-
-            <!-- 进度条 -->
-            <!-- <% percent = (@workshops.count.to_f) / (Workshop.current.count.to_f) * 100 %>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="60"
-                    aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
-                    <span class="sr-only">40% 完成</span>
-                </div>
-            </div> -->
-            <!-- 进度条部分-结束 -->
 
             <% if @workshop.present? %>
               <% if AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present? %>
@@ -133,107 +118,96 @@
 
 
   <div class="content-body">
-    <div class="row">
-      <div class="col-md-3">
-        <!-- 组织结构树状图-开始 -->
-        <% if current_user.has_role? :workshopadmin %>
-          <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
-            <% workshop = Workshop.current.find_by(name: current_user.name) %>
-            <h5><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=@year%>&month=<%=@month%>'><%= workshop.name %></a></h5>
-            <ul>
+
+    <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名;</p>
+    <% if current_user.has_role? :workshopadmin %>
+          <ul class="nav nav-tabs" style="background-color: #FFFFFF">
+              <% workshop = Workshop.current.find_by(name: current_user.name) %>
+            <li role="presentation"><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=@year%>&month=<%=@month%>'><%= workshop.name %></a></li>
               <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
-                <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "车间已审核")%>
-                  <li><a style="color:black;" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组已上班")%>
-                  <li><a style="color:green;" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                <% else AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组/科室填写中")%>
-                  <li><a style="color:red;" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+              <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "车间已审核")%>
+            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+              <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组已上班")%>
+            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+              <% else AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组/科室填写中")%>
+            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+              <% end %>
+              <%= group.name %></a></li>
+            <% end %>
+          </ul>
+    <% else %>
+      <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
+        <h5>
+            <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %>
+        </h5>
+        <ul>
+          <% @workshops_all_varified.each do |all_verified_workshop| %>
+            <% all_verified_groups = Group.current.where(:workshop_id => all_verified_workshop.id) %>
+            <li>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:black;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                  <%= all_verified_workshop.name %>
+                </a>
+              <ul>
+                <% all_verified_groups.each do |group| %>
+                  <li>
+                      <a style="color:black;" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                        <%= group.name %>
+                      </a>
+                  </li>
                 <% end %>
-                <%= group.name %></a></li>
-              <% end %>
-            </ul>
-            <br>
-            <p>注意：黑色字体为已经审核完毕的班组，绿色字体为可以审核的班组，红色为不能审核的班组</p>
-          </div>
-        <% else %>
-          <div class="col-md-12 col-lg-12 col-sm-12" id="menu" style="background-color: white;height: 100%;">
-            <h5>
-                <%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %>
-            </h5>
+              </ul>
+            </li>
+          <% end %>
+
+          <% @workshops.each do |verify_workshop| %>
+            <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
+            <li>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                  <%= verify_workshop.name %>
+                </a>
             <ul>
-              <% @workshops_all_varified.each do |all_verified_workshop| %>
-                <% all_verified_groups = Group.current.where(:workshop_id => all_verified_workshop.id) %>
-                <li>
-                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:black;" href='/attendances/group_current_time_info?workshop=<%= all_verified_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
-                      <%= all_verified_workshop.name %>
-                    </a>
-                  <ul>
-                    <% all_verified_groups.each do |group| %>
-                      <li>
-                          <a style="color:black;" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                            <%= group.name %>
-                          </a>
-                      </li>
-                    <% end %>
-                  </ul>
-                </li>
-              <% end %>
-
-              <% @workshops.each do |verify_workshop| %>
-                <% groups = Group.current.where(:workshop_id => verify_workshop.id) %>
-                <li>
-                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:green" href='/attendances/group_current_time_info?workshop=<%= verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
-                      <%= verify_workshop.name %>
-                    </a>
-                <ul>
-                    <% groups.each do |group| %>
-                      <li>
-                      <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => ["车间已审核","科室已上报"]).present? %>
-                        <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                      <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "段已审核").present? %>
-                        <a style="color:black;" href='/attendances/group_current_time_info?group=<%= group.id %>year=<%=@year%>&month=<%=@month%>'>
-                      <% else %>
-                        <a style="color:red;" href='/attendances/group_current_time_info?group=<%= group.id %>year=<%=@year%>&month=<%=@month%>'>
-                      <% end %>
-                          <%= group.name %>
-                        </a></li>
-                    <% end %>
-                  </ul>
-                </li>
-              <% end %>
+                <% groups.each do |group| %>
+                  <li>
+                  <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => ["车间已审核","科室已上报"]).present? %>
+                    <a style="color:green" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                  <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "段已审核").present? %>
+                    <a style="color:black;" href='/attendances/group_current_time_info?group=<%= group.id %>year=<%=@year%>&month=<%=@month%>'>
+                  <% else %>
+                    <a style="color:red;" href='/attendances/group_current_time_info?group=<%= group.id %>year=<%=@year%>&month=<%=@month%>'>
+                  <% end %>
+                      <%= group.name %>
+                    </a></li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
 
 
-              <% @workshops_not_varify.each do |no_verify_workshop| %>
-                <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
-                <li>
-                    <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red;" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
-                      <%= no_verify_workshop.name %>
-                    </a>
-                  <ul>
+          <% @workshops_not_varify.each do |no_verify_workshop| %>
+            <% no_verify_groups = Group.current.where(:workshop_id => no_verify_workshop.id) %>
+            <li>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red;" href='/attendances/group_current_time_info?workshop=<%= no_verify_workshop.id %>&year=<%=@year%>&month=<%=@month%>'>
+                  <%= no_verify_workshop.name %>
+                </a>
+              <ul>
 
-                    <% no_verify_groups.each do |group| %>
-                      <li>
-                          <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                            <%= group.name %>
-                          </a>
-                      </li>
-                    <% end %>
-                  </ul>
-                </li>
-              <% end %>
-            </ul>
-            <br>
-            <p>注意：黑色字体为已经审核完毕的车间，绿色字体为可以审核的车间，红色为不能审核的车间</p>
-          </div>
-        <% end %>
+                <% no_verify_groups.each do |group| %>
+                  <li>
+                      <a style="color:red" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                        <%= group.name %>
+                      </a>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+        <br>
+        <p>注意：黑色字体为已经审核完毕的车间，绿色字体为可以审核的车间，红色为不能审核的车间</p>
       </div>
+    <% end %>
 
-
-      <div class="col-md-9">
-
-        <div class="panel">
-          <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
-
+        <div class="panel panel-body">
             <table class="table overflow-y table-bordered table-striped">
               <thead>
                 <tr>
@@ -256,20 +230,13 @@
                   <% end %>
                 </tr>
               </thead>
-
-
-
               <tbody>
               <!-- 配置表格数据-开始 -->
                   <%= render :partial => "group_current_time_employee", :collection => @employees, :as => :employee, :locals => {:params_year => @year,:params_month => @month,:shenhe_year =>@shenhe_year,:shenhe_month => @shenhe_month,:shenhe_day => @shenhe_day}%>
               </tbody>
             </table>
             <div id="showModal"></div>
-
         </div>
-      </div>
-
-    </div>
   </div>
 
   <div class="content-footer">
@@ -293,41 +260,3 @@
 
 
 <div id="show_processbar_detail"></div>
-
-
-<!-- 组织结构树状图的js代码-开始 -->
-<script type="text/javascript">
-  (function(e) {
-    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
-      em.onclick = function(){ //onmouseover
-        var ul = this.nextSibling;
-        if(!ul){
-          return false;
-        }
-        ul = ul.nextSibling;
-        if(!ul) {
-          return false;
-        }
-        if(e.tag != 'a') {
-          ul = ul.nextSibling;
-          if(!ul){
-            return false;
-          }
-        } //a 标签控制 隐藏或删除该行
-        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
-          if(li.tagName=="LI"){
-            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
-              switch($ul.tagName){
-                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
-                break;
-                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-  })({id:'menu',tag:'i'});
-</script>
-<!-- 组织结构树状图的js代码-结束 -->

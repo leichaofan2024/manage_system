@@ -1,9 +1,4 @@
 <div class="contentpanel">
-  <!-- <div class="panel panel-default">
-    <%= render "attendance_sidebar"%>
-  </div> -->
-
-
 <div class="col-md-12">
 
   <% if (@choose_workshop.present?) && (@choose_group.present?)  %>
@@ -26,7 +21,7 @@
     </h4>
   <% end %>
 
-  
+
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
     <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
@@ -59,7 +54,7 @@
 
 <div class="card">
   <div class="col-md-10" style="overflow: auto">
-    <table id="example" class="table table-bordered">
+    <table class="table table-bordered overflow-y">
       <thead>
         <tr>
           <th>工资号</th>
