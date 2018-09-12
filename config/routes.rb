@@ -68,8 +68,8 @@ Rails.application.routes.draw do
       post :batch_verify
       get :annual_statistic
       get :filter
-
-
+      get :duan_verify_index
+      get :workshop_verify_index
       get :show_record
       get :caiwu
       get :caiwu2

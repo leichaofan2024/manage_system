@@ -179,7 +179,15 @@
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/group_current_time_info?group=593">考勤审核</a>
+                                <a href="/attendances/group_current_time_info?group=593">考勤填写情况</a>
+                              </li>
+
+                              <% if url_for.split("?").first == "/attendances/duan_verify_index" %>
+                               <li style="background-color:white;">
+                              <% else %>
+                                <li>
+                              <% end %>
+                                <a href="/attendances/duan_verify_index">考勤审核</a>
                               </li>
 
                               <% if url_for == "/attendances/duan"%>

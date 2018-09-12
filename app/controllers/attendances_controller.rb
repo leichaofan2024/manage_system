@@ -1055,5 +1055,57 @@ class AttendancesController < ApplicationController
   end
 
 
+  # 段审核首页
+  def duan_verify_index
+    @shenhe_year = if Time.now.month == 1
+                    (Time.now.year) - 1
+                  else
+                    Time.now.year
+                  end
+
+    @shenhe_month = if Time.now.month ==1
+                      12
+                    else
+                      (Time.now.month) -1
+                    end
+
+    @vacation_codes = VacationCategory.pluck("vacation_code").uniq
+		can_verified_workshop_id = AttendanceStatus.where(:year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间已审核"]).pluck("workshop_id").uniq
+		if can_verified_workshop_id.all?{|x| x.nil?}
+			@duan_can_varify = []
+		else
+			@duan_can_varify = Workshop.current.where(:id => can_verified_workshop_id)
+		end
+    workshop_all_verify = []
+    @duan_can_varify.each do |workshop|
+      group_ids = Group.current.where(:workshop_id => workshop.id).ids
+      if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year,:month => @shenhe_month,:status => ["车间已审核","科室已上报"]).count == group_ids.count
+         workshop_all_verify << workshop.id
+      end
+    end
+    @workshop_all_verify = Workshop.current.where(:id => workshop_all_verify)
+    if @duan_can_varify.present?
+      @workshop_partial_verify = @duan_can_varify.where.not(:id => @workshop_all_verify.pluck(:id))
+    else
+      @workshop_partial_verify = []
+    end
+    duan_cannot_varify = Workshop.current.where.not(id: can_verified_workshop_id)
+    duan_all_varified = []
+    duan_cannot_varify.each do |workshop|
+      group_ids = Group.current.where(:workshop_id => workshop.id).ids
+      if AttendanceStatus.where(:group_id => group_ids,:year => @shenhe_year,:month => @shenhe_month,:status => "段已审核").count == group_ids.count
+        duan_all_varified << workshop.id
+      end
+    end
+    # 段完全审核完的
+    @duan_all_varified = Workshop.current.where(id: duan_all_varified)
+    # 车间还没开始审核的
+    @workshops_no_varify = Workshop.current.where.not(id: (can_verified_workshop_id + duan_all_varified))
+
+  end
+
+  # 车间审核首页
+  def workshop_verify_index
+  end
 
 end
