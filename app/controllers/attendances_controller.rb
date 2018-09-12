@@ -1101,11 +1101,25 @@ class AttendancesController < ApplicationController
     @duan_all_varified = Workshop.current.where(id: duan_all_varified)
     # 车间还没开始审核的
     @workshops_no_varify = Workshop.current.where.not(id: (can_verified_workshop_id + duan_all_varified))
-
+    @applications = Application.where(:status => ["车间发起申请","科室发起申请"])
   end
 
   # 车间审核首页
   def workshop_verify_index
+    @shenhe_year = if Time.now.month == 1
+                    (Time.now.year) - 1
+                  else
+                    Time.now.year
+                  end
+
+    @shenhe_month = if Time.now.month ==1
+                      12
+                    else
+                      (Time.now.month) -1
+                    end
+
+    @vacation_codes = VacationCategory.pluck("vacation_code").uniq
+
   end
 
 end

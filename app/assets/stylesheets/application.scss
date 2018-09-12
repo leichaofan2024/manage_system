@@ -2134,3 +2134,36 @@ button.close {
 .content-footer{
   float: right;
 }
+
+
+// 考勤段审核首页
+.duan-verify-index{
+  background-color: white;
+  margin-left:4%;
+  margin-top:20px;
+  .duan-verify-index-button{
+     background-color: #00D396;
+     margin-right:4%;
+     margin-bottom:10px;
+  }
+  .duan-verify-index-label{
+     width:92%;
+     margin-left:4%;
+     height:40px;
+     background-color: #F7F9FA;
+     text-align:center;
+     clear:both;
+  }
+  .duan-verify-index-car{
+    height:80px;width:80%;
+    margin-left:10%;margin-top: 10px;
+    margin-bottom: 10px;text-align:center;
+    padding:10px;
+    span{
+      color:white;
+      font-size:15px;
+      height:15px;
+      line-height:15px;
+    }
+  }
+}
