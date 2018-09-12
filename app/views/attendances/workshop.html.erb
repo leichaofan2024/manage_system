@@ -1,12 +1,32 @@
 <div class="contentpanel">
-  <div class="panel panel-default">
+  <!-- <div class="panel panel-default">
     <%= render "attendance_sidebar"%>
-  </div>
+  </div> -->
 
 
 <div class="col-md-12">
 
+  <% if (@choose_workshop.present?) && (@choose_group.present?)  %>
+    <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp
+      <% if @year.present? && @month.present? %>
+        <%= @month %>
+      <% else %>
+        <%= Time.now.month %>
+      <% end %>月
+      考勤汇总
+    </h4>
+  <% else %>
+    <h4><%= @workshop.name %>
+      <% if @year.present? && @month.present? %>
+        <%= @month %>
+      <% else %>
+        <%= Time.now.month %>
+      <% end %>月
+      考勤汇总
+    </h4>
+  <% end %>
 
+  
   <%= form_tag filter_attendances_path, method: 'get' do %>
     <%= label_tag :请输入时间段搜索 %>
     <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
@@ -16,25 +36,7 @@
   <% end %>
 </div>
 
-<% if (@choose_workshop.present?) && (@choose_group.present?)  %>
-  <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp
-    <% if @year.present? && @month.present? %>
-      <%= @month %>
-    <% else %>
-      <%= Time.now.month %>
-    <% end %>月
-    考勤汇总
-  </h4>
-<% else %>
-  <h4><%= @workshop.name %>
-    <% if @year.present? && @month.present? %>
-      <%= @month %>
-    <% else %>
-      <%= Time.now.month %>
-    <% end %>月
-    考勤汇总
-  </h4>
-<% end %>
+
 
         <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">

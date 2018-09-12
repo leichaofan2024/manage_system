@@ -1,7 +1,7 @@
 <div class="contentpanel">
-	<div class="panel panel-default">
+	<!-- <div class="panel panel-default">
 		<%= render "attendance_sidebar"%>
-	</div>
+	</div> -->
 
 		<% if current_user.has_role? :attendance_admin %>
 			<%= form_tag create_holiday_time_attendances_path do %>

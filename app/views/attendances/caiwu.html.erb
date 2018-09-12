@@ -1,9 +1,33 @@
 <div class="contentpanel">
-  <div class="panel panel-default">
+  <!-- <div class="panel panel-default">
     <%= render "attendance_sidebar"%>
-  </div>
+  </div> -->
   <div class="col-md-12">
-    <div class="ivu-tooltip-rel" style="margin-left: 15px; margin-bottom: 10px">
+    <div class="pulll-left" style="display:inline-block;">
+      <%= form_tag caiwu_attendances_path,method: :get do %>
+        <%= label_tag "时间搜索"%>
+        <select class="" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year%>" selected><%=year%></option>
+            <% else %>
+              <option value="<%= year%>"><%=year%></option>
+            <% end %>
+          <% end %>
+        </select>年 ～
+        <select class="" name="month">
+          <% @months.each do |month| %>
+            <% if @month == month %>
+              <option value="<%= month%>" selected><%=month%></option>
+            <% else %>
+              <option value="<%= month%>"><%=month%></option>
+            <% end %>
+          <% end %>
+        </select>月
+        <%= submit_tag "搜索",:data => {:disable_with => "搜索中 ..."}%>
+      <% end %>
+    </div>
+    <div class="ivu-tooltip-rel pull-right" style="margin-left: 15px">
       <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
         <%= link_to caiwu_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
            <span style="color: #269Eff;">导出记录</span>

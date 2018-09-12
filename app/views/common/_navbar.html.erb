@@ -181,13 +181,24 @@
                               <% end %>
                                 <a href="/attendances/group_current_time_info?group=593">考勤审核</a>
                               </li>
+
                               <% if url_for == "/attendances/duan"%>
                                <li style="background-color:white;">
                               <% else %>
                                 <li>
                               <% end %>
                                 <a href="/attendances/duan">
-                                  考勤统计
+                                  段考勤统计
+                                </a>
+                              </li>
+
+                              <% if url_for == "/attendances/annual_statistic"%>
+                               <li style="background-color:white;">
+                              <% else %>
+                                <li>
+                              <% end %>
+                                <a href="/attendances/annual_statistic">
+                                  年考勤统计
                                 </a>
                               </li>
 
@@ -223,7 +234,7 @@
 
 
                               <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>年休假管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                              <% if ["holiday_fulfill_detail","holiday_fulfillment_rate","duan_holiday_plan_annual","holiday_fulfill"].include?(url_for.split("/").last) %>
+                              <% if ["holiday_fulfill_detail","holiday_fulfillment_rate","duan_holiday_plan","holiday_fulfill"].include?(url_for.split("/").last) %>
                                 <ul class="children" style="display:block;">
                               <% else %>
                                 <ul class="children">
@@ -248,12 +259,12 @@
                                   </a>
                                 </li>
 
-                                <% if url_for == "/annual_holidays/duan_holiday_plan_annual"%>
+                                <% if url_for == "/annual_holidays/duan_holiday_plan"%>
                                  <li style="background-color:white;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/annual_holidays/duan_holiday_plan_annual">
+                                  <a href="/annual_holidays/duan_holiday_plan">
                                     年休假计划页
                                   </a>
                                 </li>

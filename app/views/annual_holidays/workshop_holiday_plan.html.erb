@@ -1,11 +1,9 @@
 <% if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin)  %>
-<div class="pageheader">
-  <h2>当前位置<span> XXX页 </span></h2>
-</div>
+
 <div class="contentpanel">
-	<div class="panel panel-default">
+	<!-- <div class="panel panel-default">
 		<%= render 'annual_holiday_sidebar' %>
-	</div>
+	</div> -->
 	<div class="col-md-12">
 	  <%= link_to "确认完成", create_holiday_plan_annual_holidays_path(status: "true"), method: :post, class: "btn btn-primary" %>
 	</div>

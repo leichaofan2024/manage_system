@@ -6,19 +6,15 @@
         <h4 class="modal-title" id="myModalLabel">各车间审核状态</h4>
       </div>
       <div class="modal-body">
-        <h5>通过审核的车间：</h5>
-        <% if @workshops.present? %>
-          <% @workshops.each do |workshop| %>
-            <%= Workshop.current.find_by(:id => workshop).name %>
-          <% end %>
-
-          <h5>未通过审核的车间：</h5>
-          <% ary = @workshops.pluck("id") %>
-          <% Workshop.current.where.not(:id => ary).each do |workshop| %>
+        <h5>已审核车间：</h5>
+          <% @workshops_varified.each do |workshop| %>
             <%= workshop.name %>
           <% end %>
-        <% end %>
+        <h5>未审核车间：</h5>
+          <% @workshops_not_varified.each do |workshop| %>
+            <%= workshop.name %>
+          <% end %>
       </div>
-    </div> 
+    </div>
   </div>
 </div>

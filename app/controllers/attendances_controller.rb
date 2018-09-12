@@ -806,7 +806,9 @@ class AttendancesController < ApplicationController
 
 	##使用ajax呼叫modal弹框的方法--开始
 	def processbar_detail
-		@workshops = params[:workshops]
+
+		@workshops_varified = Workshop.find(params[:workshops])
+    @workshops_not_varified = Workshop.where.not(:id => @workshops_varified.pluck(:id))
 		respond_to do |format|
 			format.js
 		end
@@ -1013,6 +1015,8 @@ class AttendancesController < ApplicationController
       @year = Time.now.year
       @month = Time.now.month
     end
+    @years = Attendance.pluck("year").uniq
+		@months = Attendance.pluck("month").uniq.reverse
 		@employees = Employee.current.order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
 		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
 		# 导出考勤表
