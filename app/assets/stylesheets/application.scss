@@ -1615,11 +1615,6 @@ h4 {
     padding-left: 10px;
 }
 
-
-.pull-right {
-    float: right!important;
-}
-
 .widget-container .customer-menu {
     display: inline-block;
 }
@@ -2166,4 +2161,8 @@ button.close {
       line-height:15px;
     }
   }
-}
+
+
+  .searchform{
+    min-width: 300px;
+  }
