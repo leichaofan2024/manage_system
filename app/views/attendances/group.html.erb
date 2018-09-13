@@ -32,28 +32,25 @@
         <table class="table overflow-y table-bordered">
           <thead>
             <tr>
-              <th rowspan="2">工资号</th>
-              <th rowspan="2">姓名 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="点击查看统计"></span> </th>
-              <th rowspan="2">职名</th>
+              <th>工资号</th>
+              <th>姓名 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="点击查看统计"></span> </th>
+              <th>职名</th>
               <!-- 生成每月1-31号的数字-开始 -->
+              <% arry = ["日","一","二","三","四","五","六"]%>
               <% (1..31).each do |i| %>
+              <th>
                 <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
-                  <th>
-                      <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%> <br>二
-                  </th>
+                  <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
                 <% else %>
-                  <th><%= i %></th>
+                  <%= i %>
                 <% end %>
+                <br><%= arry[Time.local(@year, @month, i).wday]%>
+              </th>
               <% end %>
               <th>额外加班</th>
               <!-- 生成每月1-31号的数字-结束 -->
             </tr>
-            <tr>
-              <% (1..31).each do |i| %>
-              <% arry = ["日","一","二","三","四","五","六"]%>
-              <th><%= arry[Time.local(@year, @month, i).wday]%></th>
-              <% end %>
-            </tr>
+
           </thead>
             <tbody>
             <!-- 配置表格数据-开始 -->
