@@ -665,6 +665,13 @@ class AttendancesController < ApplicationController
     ##车间页面--开始
 	def workshop
 		#为展示组织架构的树状图配置数据
+    if params[:year].present? && params[:month].present?
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+    else
+      @year = Time.now.year
+      @month = Time.now.month 
+    end
 		if current_user.has_role? :workshopadmin
 			@workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = Group.current.where(workshop_id: @workshop.id)

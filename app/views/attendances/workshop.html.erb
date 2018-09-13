@@ -1,101 +1,103 @@
 <div class="contentpanel">
-<div class="col-md-12">
+  <div class="col-md-12">
 
-  <% if (@choose_workshop.present?) && (@choose_group.present?)  %>
-    <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp
-      <% if @year.present? && @month.present? %>
-        <%= @month %>
-      <% else %>
-        <%= Time.now.month %>
-      <% end %>月
-      考勤汇总
-    </h4>
-  <% else %>
-    <h4><%= @workshop.name %>
-      <% if @year.present? && @month.present? %>
-        <%= @month %>
-      <% else %>
-        <%= Time.now.month %>
-      <% end %>月
-      考勤汇总
-    </h4>
-  <% end %>
+    <% if (@choose_workshop.present?) && (@choose_group.present?)  %>
+      <h4><%= Workshop.current.find(@choose_workshop).name %>&nbsp<%= Group.current.find(@choose_group).name %>&nbsp
+          <%= @month %>月考勤汇总
+      </h4>
+    <% else %>
+      <h4><%= @workshop.name %>
+          <%= @month %>月考勤汇总
+      </h4>
+    <% end %>
+
+    <%= form_tag workshop_attendances_path, method: 'get' do %>
+      <%= label_tag :请输入时间段搜索 %>
+        <select class="" name="year">
+          <% @years.each do |year| %>
+            <% if year == @year %>
+              <option value="<%= year %>" selected ><%= year %></option>
+            <% else %>
+              <option value="<%= year %>" ><%= year %> </option>
+            <% end %>
+          <% end %>
+        </select>
+    ～
+        <select class="" name="month">
+          <% @months.each do |month| %>
+            <% if month == @month %>
+              <option value="<%= month%>" selected ><%= month%></option>
+            <% else %>
+              <option value="<%= month%>" ><%= month %></option>
+            <% end %>
+          <% end %>
+        </select>
+      <%= submit_tag :筛选 %>
+    <% end %>
+  </div>
 
 
-  <%= form_tag filter_attendances_path, method: 'get' do %>
-    <%= label_tag :请输入时间段搜索 %>
-    <%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:required => "true"}) %> ~
-    <%= select_tag(:month, options_for_select(@months.collect{ |u| u }), {:required => "true"}) %>
-    <%= hidden_field_tag :type, "workshop" %>
-    <%= submit_tag :筛选 %>
-  <% end %>
-</div>
 
-
-
-        <div class="col-md-12" style="height: 100%; margin-top:20px;">
+  <div class="col-md-12" style="height: 100%; margin-top:20px;">
     <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-      <% if @year.present? && @month.present? %>
-        <h5><%= link_to @workshop.name, filter_attendances_path(type: "workshop", month: @month, year: @year)%></h5>
+        <h5><%= link_to @workshop.name, workshop_attendances_path(type: "workshop", month: @month, year: @year)%></h5>
         <ul>
           <% @groups.each do |group| %>
-            <li><a href='/attendances/filter?type=workshop&group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+            <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
           <% end %>
         </ul>
-      <% else %>
-        <h5><%= link_to @workshop.name, workshop_attendances_path(type: "duan")%></h5>
-        <ul>
-          <% @groups.each do |group| %>
-            <li><a href='/attendances/workshop?group=<%= group.id %>&workshop=<%= @workshop.id %>'><%= group.name %></a></li>
-          <% end %>
-        </ul>
-      <% end %>
+
     </div>
 
-<div class="card">
-  <div class="col-md-10" style="overflow: auto">
-    <table class="table table-bordered overflow-y">
-      <thead>
-        <tr>
-          <th>工资号</th>
-          <th>班组</th>
-          <th>姓名</th>
-          <th>年龄</th>
-          <% @vacation_name_hash.values.each do |name| %>
-            <th><%= name %></th>
-          <% end %>
-        </tr>
-      </thead>
-        <tbody data-behavior='sortable'>
-          <% @employees.each do |employee| %>
-            <% if @year.present? && @month.present?  %>
-            <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
-            <% else %>
-            <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year)%>
-            <% end %>
+    <div class="card">
+      <div class="col-md-10" style="overflow: auto">
+        <table class="table table-bordered overflow-y">
+          <thead>
             <tr>
-              <td><%= employee.sal_number %></td>
-              <td><%= Group.current.find_by(:id => employee.group).name %></td>
-              <td><%= employee.name %></td>
-              <td><%= employee.age %></td>
-              <% @vacation_code_hash.keys.each do |code| %>
-                <% if attendance_count.present? %>
-                  <% if attendance_count.attributes[code] == 0%>
-                    <td></td>
-                  <% else %>
-                    <td><%= attendance_count.attributes[code]%></td>
-                  <% end %>
-                <% else %>
-                 <td></td>
-                <% end %>
+              <th>工资号</th>
+              <th>班组</th>
+              <th>姓名</th>
+              <th>年龄</th>
+              <% @vacation_name_hash.values.each do |name| %>
+                <th><%= name %></th>
               <% end %>
             </tr>
-          <% end %>
-       </tbody>
-    </table>
+          </thead>
+            <tbody data-behavior='sortable'>
+              <% @employees.each do |employee| %>
+                <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+                <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+                <tr>
+                  <td><%= employee.sal_number %></td>
+                  <td><%= Group.current.find_by(:id => employee.group).name %></td>
+                  <td><%= employee.name %></td>
+                  <td><%= employee.age %></td>
+                  <% @vacation_code_hash.keys.each do |code| %>
+                    <% if attendance_count.present? %>
+                      <% if attendance_count.attributes[code] == 0%>
+                        <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                          <td><%= attendance.add_overtime.to_i%> </td>
+                        <% elsif %>
+                          <td></td>
+                        <% end %>
+                      <% else %>
+                        <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                          <td><%= attendance.add_overtime.to_i + attendance_count.attributes[code]%> </td>
+                        <% elsif %>
+                          <td><%= attendance_count.attributes[code]%></td>
+                        <% end %>
+                      <% end %>
+                    <% else %>
+                     <td></td>
+                    <% end %>
+                  <% end %>
+                </tr>
+              <% end %>
+           </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
-</div>
 </div>
 
 <script type="text/javascript">
