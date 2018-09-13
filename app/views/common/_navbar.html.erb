@@ -293,11 +293,33 @@
                           </li>
 
                       <% elsif current_user.has_role? :groupadmin %>
-                            <% if url_for.split("/").second == "attendances" %>
-                              <a style="background-color:white;" href=" "><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a >
-                            <% else %>
-                              <a href="/attendances/group"><i class="fa fa-envelope-o"></i> <span>考勤管理</span></a >
-                            <% end %>
+
+                            <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                              <% if url_for.split("/").second == "attendances" %>
+                                <ul class="children" style="display:block;">
+                              <% else %>
+                                <ul class="children">
+                              <% end %>
+                                <% if url_for.split("?").first == "/attendances/group" %>
+                                 <li style="background-color:white;">
+                                <% else %>
+                                  <li>
+                                <% end %>
+                                  <a href="/attendances/group">
+                                    填写考勤
+                                  </a>
+                                </li>
+                                <% if url_for.split("?").first == "/attendances/group_statistics" %>
+                                 <li style="background-color:white;">
+                                <% else %>
+                                  <li>
+                                <% end %>
+                                  <a href="/attendances/group_statistics?year=<%=Time.now.year%>&month=<%=Time.now.month%>">
+                                    考勤统计
+                                  </a>
+                                </li>
+                              </ul>
+                            </li>
                       <% end %>
                     </li>
 

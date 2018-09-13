@@ -23,7 +23,7 @@
                <button type="button" class="btn btn-success">
                  <span>导出记录</span>
                </button>
-              <% end %>
+             <% end %>
           </div>
         <% end %>
 
@@ -45,6 +45,7 @@
                   <th><%= i %></th>
                 <% end %>
               <% end %>
+              <th>额外加班</th>
               <!-- 生成每月1-31号的数字-结束 -->
             </tr>
           </thead>
@@ -64,7 +65,7 @@
                   <% attendance = Attendance.find_by(employee_id: employee.id, month: @month, year: @year) %>
                   <!-- 将现员的考勤数据（字符串格式）拆分成数组，赋值给attendance_ary -->
                   <% if attendance.present? %>
-                    <% attendance = attendance.month_attendances %>
+                    <% attendance_month_attendances = attendance.month_attendances %>
                     <!-- 将attendance_ary进行迭代，每一个就是一个员工每天的考勤数据 -->
                     <% day_number = 1 %>
                     <% (0..30).each do |day| %>
@@ -72,25 +73,42 @@
                         <% if (@time_range === (day+1)) && @attendance_status.status == "班组/科室填写中"%>
                           <td>
                               <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, day_number: day_number), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
-                                <% if attendance[day] == "x" %>
+                                <% if attendance_month_attendances[day] == "x" %>
                                   <%= day_number %>
                                 <% else %>
-                                  <%= @vacation_code_hash[attendance[day]] %>
+                                  <%= @vacation_code_hash[attendance_month_attendances[day]] %>
                                 <% end %>
                               <% end %>
                           </td>
                         <% else %>
                           <td>
-                            <% if attendance[day] == "x" %>
+                            <% if attendance_month_attendances[day] == "x" %>
                               <%= "-"%>
                             <% else %>
-                              <%= @vacation_code_hash[attendance[day]] %>
+                              <%= @vacation_code_hash[attendance_month_attendances[day]] %>
                             <% end %>
                           </td>
                         <% end %>
                       <% day_number += 1%>
                     <% end %>
                   <% end %>
+                  <td>
+                    <% if @attendance_status.status == "班组/科室填写中" %>
+                      <%= link_to show_modal_attendances_path(employee_id: employee.id, month: @month, year: @year, overtime: "yes"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+                        <% if attendance.add_overtime.present? %>
+                          <%= attendance.add_overtime%>
+                        <% else %>
+                          +
+                        <% end %>
+                      <% end %>
+                    <% else %>
+                      <% if attendance.add_overtime.present? %>
+                        <%= attendance.add_overtime%>
+                      <% else %>
+
+                      <% end %>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
               <!-- 配置表格数据-结束 -->

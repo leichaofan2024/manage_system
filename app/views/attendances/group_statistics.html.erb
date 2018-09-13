@@ -1,12 +1,20 @@
 <div style = "margin-top:20px;">
-  <div class="col-md-12" style = "margin-bottom:20px;">
+  <!-- <div class="col-md-12" style = "margin-bottom:20px;">
     <% if params[:year].present? %>
       <%= link_to("<< 返回",group_attendances_path(:year => params[:year],:month => params[:month]))%>
     <% else %>
       <%= link_to("<< 返回",group_attendances_path) %>
     <% end %>
-  </div>
+  </div> -->
 
+  <h4><%= @month %>考勤统计</h4>
+  <div>
+    <% if (@year != Time.now.year) || (@month != Time.now.month) %>
+      <%= link_to("返回本月", group_statistics_attendances_path(:year => Time.now.year,:month => Time.now.month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary pull-right",style: "margin-right:18px;margin-bottom:15px;")%>
+    <% else %>
+      <%= link_to("查看上月统计", group_statistics_attendances_path(:year => @shenhe_year,:month => @shenhe_month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary pull-right",style: "margin-right:18px;margin-bottom:15px;")%>
+    <% end %>
+  </div>
   <div class="card">
     <div class="col-md-12" style="overflow: auto">
       <table id="example" class="table table-bordered table-strip">
@@ -15,22 +23,17 @@
             <th>工资号</th>
 
             <th>姓名</th>
-            <th>班组</th>
-            <th>车间</th>
             <% @vacation_code_hash.values.each do |name| %>
               <th><%= name %></th>
             <% end %>
           </tr>
         </thead>
-          <tbody data-behavior='sortable'>
+        <tbody data-behavior='sortable'>
             <% @employees.each do |employee| %>
               <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
               <tr>
                 <td><%= employee.sal_number %></td>
-
                 <td><%= employee.name %></td>
-                <td><%= Group.current.find_by(:id => employee.group).name %></td>
-                <td><%= Workshop.current.find_by(:id => employee.workshop).name %></td>
                 <% @vacation_code_hash.keys.each do |code| %>
                   <% if attendance_count.present? %>
                     <% if attendance_count.attributes[code] == 0%>
@@ -44,7 +47,7 @@
                 <% end %>
               </tr>
             <% end %>
-         </tbody>
+        </tbody>
       </table>
     </div>
   </div>

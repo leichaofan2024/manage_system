@@ -140,6 +140,11 @@ class AttendancesController < ApplicationController
         @attendance_statistics[@vacation_name_hash[key]] = 0
       end
     end
+    if @attendance_statistics["加班"].present?
+      @attendance_statistics["加班"] += @attendance.add_overtime.to_i
+    elsif @attendance.add_overtime.to_i > 0
+      @attendance_statistics["加班"] = @attendance.add_overtime.to_i
+    end
   end
 
   #便捷填写考勤：
@@ -222,8 +227,21 @@ class AttendancesController < ApplicationController
   def group_statistics
     @year = params[:year].to_i
     @month = params[:month].to_i
-    @years = Attendance.pluck("year").uniq
-		@months = Attendance.pluck("month").uniq.reverse
+    @shenhe_year = if Time.now.month == 1
+                    (Time.now.year) - 1
+                  else
+                    Time.now.year
+                  end
+
+    @shenhe_month = if Time.now.month ==1
+                      12
+                    else
+                      (Time.now.month) -1
+                    end
+    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15)
+      redirect_to group_statistics_attendances_path(:year => Time.now.year,:month => Time.now.month)
+      flash[:alert] = "当月15号前可查看上月考勤统计，当前为#{Time.now.day}号，不能查看！"
+    end
 		group = Group.current.find(current_user.group_id)
 		@employees = Employee.current.where(:group => group.id)
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
@@ -502,7 +520,19 @@ class AttendancesController < ApplicationController
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始
 		#根据表单传来的employee_id参数，找到要更新的考勤数据
-		if !params[:code].present?
+    if params[:overtime].present?
+      @employee = Employee.find(params[:employee_id])
+      @attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
+      @attendance.update(:add_overtime => params[:overtime])
+      flash[:notice] = "#{@employee.name}#{params[:year]}年#{params[:month]}月额外加班数更新成功！"
+      if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
+        group_id = @employee.group
+				redirect_to group_attendances_path(:year => params[:year],:month => params[:month],:group => group_id)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
+        group_id = Employee.current.find_by(:id => params[:employee_id]).group
+				redirect_to group_current_time_info_attendances_path(:year => params[:year],:month => params[:month],:group => group_id )
+			end
+		elsif !params[:code].present?
 			flash[:alert] = "请先选择考勤"
 			if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
 				redirect_back(fallback_location: group_attendances_path)
@@ -569,6 +599,7 @@ class AttendancesController < ApplicationController
 		@year = params[:year]
 		@month = params[:month]
 		@type = params[:type]
+    @overtime = params[:overtime]
 		@categories = VacationCategory.all
 		@vacation = {}
 		@categories.each do |category|
