@@ -762,19 +762,26 @@ class AttendancesController < ApplicationController
       end
       redirect_to group_attendances_path(:year => @year,:month => @month)
 		elsif  params[:authority] == "workshop"
-			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--开始
+      if (Time.now.month == 2) || (Time.now.month == 10)
+        @shenhe_day = 1..8
+      else
+        @shenhe_day = 1..6
+      end
 			@workshop = Workshop.find(current_user.workshop_id)
       group = Group.find_by(:id => params[:group_id])
       application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
-      if application.include?(0)
-        flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+      if @shenhe_day === Time.now.day
+        if application.include?(0)
+          flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+        else
+    			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
+    			flash[:notice] = "#{group.name}审核完成!"
+        end
       else
-  			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
-  			flash[:notice] = "审核完成"
+        flash[:alert] = "您已过了考勤审核时间，审核时间为：#{@shenhe_day.first}～#{@shenhe_day.last}号"
       end
-			#通过获取树形结构图的group参数，将其对应的attendance_status数据状态更新为"车间已审核"--结束
+      redirect_to workshop_verify_index_attendances_path(:group_id => group.id)
 
-			#每次更新之后都判断是不是全部班组都已通过审核，若是，则插入车间id，表示整个车间已通过审核--结束
 		elsif params[:authority] == "duan"
       group = Group.find_by(:id => params[:group_id])
       application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
@@ -782,33 +789,54 @@ class AttendancesController < ApplicationController
         flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
       else
         AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "段已审核")
-		  	flash[:notice] = "审核完成"
+		  	flash[:notice] = "#{group.name}审核完成!"
       end
+      redirect_to workshop_verify_index_attendances_path(:group_id => group.id)
 		end
 	end
 	##审核功能--结束
 
     ##一键审核功能--开始
 	def batch_verify
+    @shenhe_year = if Time.now.month == 1
+                    (Time.now.year) - 1
+                  else
+                    Time.now.year
+                  end
+
+    @shenhe_month = if Time.now.month ==1
+                      12
+                    else
+                      (Time.now.month) -1
+                    end
 		if params[:authority] == "workshop"
 			@workshop = Workshop.find(current_user.workshop_id)
 			@groups = Group.current.where(:workshop_id => @workshop.id)
-			AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "班组已上报").update(:status => "车间已审核", :workshop_id => @workshop.id)
-
-			redirect_back(fallback_location: group_current_time_info_attendances_path)
-      flash[:notice] = "一键审核完毕"
+      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => @groups.ids).pluck(:application_pass)
+      if application.include?(0)
+        flash[:warning] = "#{@workshop.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+        redirect_to workshop_verify_index_attendances_path
+      else
+	      AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "班组已上报").update(:status => "车间已审核", :workshop_id => @workshop.id)
+        flash[:notice] = "#{@workshop.name}一键审核完毕"
+        redirect_to workshop_verify_index_attendances_path
+      end
 		elsif params[:authority] == "duan"
 			@workshop = Workshop.find(params[:workshop_id])
 			@groups = Group.current.where(:workshop_id => @workshop.id)
-      if @workshop.id == 1
-        AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "科室已上报").update(:status => "段已审核", :workshop_id => @workshop.id)
+      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => @groups.ids).pluck(:application_pass)
+      if application.include?(0)
+        flash[:warning] = "#{@workshop.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
+        redirect_to workshop_verify_index_attendances_path
       else
-        AttendanceStatus.where(:group_id => @groups.ids,:year => params[:year],:month => params[:month],:status => "车间已审核").update(:status => "段已审核", :workshop_id => @workshop.id)
+        if @workshop.id == 1
+          AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "科室已上报").update(:status => "段已审核", :workshop_id => @workshop.id)
+        else
+          AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "车间已审核").update(:status => "段已审核", :workshop_id => @workshop.id)
+        end
+        flash[:notice] = "#{@workshop.name}一键审核完毕"
+        redirect_to workshop_verify_index_attendances_path(:group_id => @groups.first.id)
       end
-
-
-			redirect_back(fallback_location: group_current_time_info_attendances_path)
-      flash[:notice] = "一键审核完毕"
 		end
 	end
 	##一键审核功能--结束
@@ -1168,9 +1196,64 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
+    @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
+    if params[:group_id].present?
+      @group = Group.find(params[:group_id])
+      @employees = Employee.current.where(:group => @group.id)
+      @workshop = Workshop.find_by(:id => @group.workshop_id)
+    elsif params[:workshop_id].present?
+      @workshop = Workshop.find(params[:workshop_id])
+      @employees = Employee.current.where(:workshop => @workshop.id)
+      @group = Group.current.find_by(:workshop => @workshop.id)
+    end
 
-    @vacation_codes = VacationCategory.pluck("vacation_code").uniq
-
+    if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
+      @groups = Group.current.where(:workshop_id => @workshop.id)
+      @shenhe_day = 1..31
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present?
+        @attendance_marquee = 1
+      end
+      @shenhe_attdendance_status = AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => @groups.ids,:status => "班组/科室填写中")
+      if (Time.now.day >3) && @shenhe_attdendance_status.present?
+          @shenhe_attdendance_status.update(:status => "科室已上报",:workshop_id => 1)
+      end
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => @groups.ids,:status => ["车间已审核","科室已上报"]).present?
+        @duan_yijian_permission = 1
+      end
+      @applications = Application.where(:status => ["车间发起申请","科室发起申请"])
+      attendance_statuses = AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year, :month => @shenhe_month)
+      @groups_can = @groups.where(:id => attendance_statuses.where(:status => ["车间已审核","科室已上报"]).pluck(:group_id))
+      @groups_already = @groups.where(:id => attendance_statuses.where(:status => "段已审核").pluck(:group_id))
+      @groups_cannot = @groups.where.not(:id => (@groups_can.pluck(:id) + @groups_already.pluck(:id)) )
+    elsif current_user.has_role? :workshopadmin
+      if params[:group_id].blank? && params[:workshop_id].blank?
+        @workshop = Workshop.find_by(:id => current_user.workshop_id)
+        @group = Group.current.find_by(:workshop_id => @workshop.id)
+        @employees = Employee.current.where(:group => @group.id)
+      end
+      @groups = Group.current.where(:workshop_id => @workshop.id)
+      if (Time.now.month == 2) || (Time.now.month == 10)
+        @shenhe_day = 1..8
+      else
+        @shenhe_day = 1..6
+      end
+      @shenhe_attdendance_status = AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => @groups.ids,:status => "班组/科室填写中")
+      if (Time.now.day >3) && @shenhe_attdendance_status.present?
+          @shenhe_attdendance_status.update(:status => "班组已上报")
+      end
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => @groups.ids,:status => "班组已上报").present?
+        @duan_yijian_permission = 1
+      end
+      if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => @groups.ids,:status => "班组已上报").present? && (@shenhe_day === Time.now.day)
+        @attendance_marquee = 1
+      end
+      @applications = Application.where(:group_id => @groups.ids,:status => "班组发起申请")
+      attendance_statuses = AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year, :month => @shenhe_month)
+      @groups_can = @groups.where(:id => attendance_statuses.where(:status => "班组已上报").pluck(:group_id))
+      @groups_already = @groups.where(:id => attendance_statuses.where(:status => "车间已审核").pluck(:group_id))
+      @groups_cannot = @groups.where.not(:id => (@groups_can.pluck(:id) + @groups_already.pluck(:id)) )
+    end
+    @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
   end
 
 end

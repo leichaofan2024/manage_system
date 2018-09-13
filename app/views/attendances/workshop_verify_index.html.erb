@@ -1,0 +1,149 @@
+<div class="workshop_verify_index">
+  <% if current_user.has_role? :attendance_admin%>
+    <div class="pull-left workshop_verify_head" style="margin-left:3%;">
+      << 返回
+    </div>
+    <div class="pull-right workshop_verify_head" style="margin-right:3%;">
+      <% if @workshops_not_varify.present? %>
+        <%= link_to("前往下一个未审完车间  >>",group_current_time_info_attendances_path(:workshop => @workshops_not_varify.first.id,:year =>@year ,:month => @month))%>
+      <% else %>
+        <span style= "color: green;">车间全部审核完毕！</span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="workshop_verify_label">
+    <p>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%</p>
+  </div>
+
+  <div class="workshop_verify_card">
+    <%= link_to workshop_verify_index_attendances_path(:workshop_id => @workshop.id) do %>
+      <% if params[:workshop_id].present? %>
+        <div class= "group_button" style= "background-color: white;"><%= @workshop.name%></div>
+      <% else %>
+        <div class= "group_button" style= "background-color: rgb(0,221,154)"><%= @workshop.name%></div>
+      <% end %>
+    <% end %>
+    <% @groups_can.each do |group| %>
+      <%= link_to workshop_verify_index_attendances_path(:group_id => group.id) do %>
+        <% if params[:workshop_id].blank? && (@group.id == group.id)%>
+          <div class= "group_button" style= "background-color: white;"><%= group.name%></div>
+        <% else %>
+          <div class= "group_button" style= "background-color: rgb(0,221,154)"><%= group.name%></div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% @groups_cannot.each do |group| %>
+      <%= link_to workshop_verify_index_attendances_path(:group_id => group.id) do %>
+        <% if params[:workshop_id].blank? && (@group.id == group.id)%>
+          <div class= "group_button" style= "background-color: white;"><%= group.name%></div>
+        <% else %>
+          <div class= "group_button" style= "background-color: rgb(255,149,0)"><%= group.name%></div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% @groups_already.each do |group| %>
+      <%= link_to workshop_verify_index_attendances_path(:group_id => group.id) do %>
+        <% if params[:workshop_id].blank? && (@group.id == group.id)%>
+          <div class= "group_button" style= "background-color: white;"><%= group.name%></div>
+        <% else %>
+          <div class ="group_button" style ="background-color: rgb(233,238,243)"><%= group.name%></div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+
+
+  <h4>
+    <% if params[:workshop_id].present? %>
+      <%= @workshop.name%><%= @shenhe_month %>月考勤
+    <% else %>
+      <%= @group.name%><%= @shenhe_month %>月考勤(<%= @attendance_status.status %>)
+    <% end %>
+  </h4>
+
+
+
+  <div class="workshop_verify_option">
+    <% if (current_user.has_role? :attendance_admin)  %>
+      <% if (@duan_yijian_permission == 1)%>
+        <%= link_to batch_verify_attendances_path(authority: "duan",:workshop_id =>@workshop.id, year: @shenhe_year,month: @shenhe_month), method: :post,:data => {confirm: "您确定要一键审核本车间吗？"} do %>
+          <span class="pull-right btn btn-primary">一键审核车间</span>
+        <% end %>
+      <% end %>
+
+      <%= link_to verify_attendances_path(authority: "duan", group_id: @group.id,year: @shenhe_year,month: @shenhe_month), method: :post  do %>
+        <span class="pull-right btn btn-primary" style="margin-right:10px;">审核班组</span>
+      <% end %>
+
+      <%= link_to show_application_attendances_path(type: "duan"),data: {disable_with: "加载中... "} do %>
+        <span class="pull-right btn btn-primary2" style="margin-right:10px;">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
+      <% end %>
+
+    <% elsif (current_user.has_role? :workshopadmin)%>
+      <% if (@workshop_yijian_permission == 1) %>
+        <%= link_to batch_verify_attendances_path(authority: "workshop", year: @shenhe_year,month: @shenhe_month), method: :post,:data => {confirm: "您确定要一键审核本车间吗？"} do %>
+          <span class="pull-right btn btn-primary">一键审核车间</span>
+        <% end %>
+      <% end %>
+
+      <%= link_to verify_attendances_path(authority: "workshop", group_id: @group.id,year: @shenhe_year,month: @shenhe_month), method: :post  do %>
+        <span class="pull-right btn btn-primary" style="margin-right:10px;">审核班组</span>
+      <% end %>
+
+      <%= link_to show_application_attendances_path(type: current_user.workshop_id),data: {disable_with: "加载中... "} do %>
+        <span class="pull-right btn btn-primary2" style="margin-right:10px;">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
+      <% end %>
+
+      <%= link_to group_application_attendances_path(:year => @shenhe_year,:month => @shenhe_month,:group_id => params[:group]),:data => {disable_with: "加载中 ... "} do %>
+        <span class="pull-right btn btn-primary2" style="margin-right:10px;">点击申请</span>
+      <% end %>
+    <% end %>
+
+
+  </div>
+
+  <div class="content-table" style="clear:both;width:94%;margin-left:3%;overflow:auto;">
+    <table class="table overflow-y table-bordered">
+      <thead>
+        <tr>
+          <th>姓名</th>
+          <th>工资号</th>
+          <% arry = ["日","一","二","三","四","五","六"]%>
+          <% (1..31).each do |i| %>
+            <th>
+              <%= i %>
+              <br><%= arry[Time.local(@shenhe_year, @shenhe_month, i).wday]%>
+            </th>
+          <% end %>
+        </tr>
+
+      </thead>
+        <tbody>
+          <% @employees.each do |employee| %>
+            <tr>
+              <th><%= employee.name %></th>
+              <th><%= employee.sal_number %></th>
+              <% attendance = Attendance.find_by(employee_id: employee.id, month: @shenhe_month, year: @shenhe_year) %>
+              <% if attendance.present? %>
+                <% attendance_month_attendances = attendance.month_attendances %>
+                <% day_number = 1 %>
+                <% (0..30).each do |day| %>
+
+                      <td>
+                        <% if attendance_month_attendances[day] == "x" %>
+                          <%= "-"%>
+                        <% else %>
+                          <%= @vacation_code_hash[attendance_month_attendances[day]] %>
+                        <% end %>
+                      </td>
+                  <% day_number += 1%>
+                <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+       </tbody>
+    </table>
+  </div>
+</div>

@@ -2113,6 +2113,9 @@ button.close {
   background-color: white;
   margin-left:4%;
   margin-top:20px;
+  a{
+    text-decoration: none;
+  }
   .duan-verify-index-button{
      background-color: #00D396;
      margin-right:4%;
@@ -2131,6 +2134,7 @@ button.close {
     margin-left:10%;margin-top: 10px;
     margin-bottom: 10px;text-align:center;
     padding:10px;
+
     span{
       color:white;
       font-size:15px;
@@ -2142,4 +2146,51 @@ button.close {
 
 .searchform{
   min-width: 300px;
+}
+
+.workshop_verify_index{
+  width:94%;
+  margin-left: 3%;
+  margin-top: 20px;
+  padding-top:20px;
+  padding-bottom: 30px;
+  background-color: white;
+}
+.workshop_verify_label{
+  clear:both;
+  height:50px;
+  line-height: 50px;
+  width:94%;
+  margin-left: 3%;
+  padding-left: 4%;
+  background-color: rgb(229,242,255);
+}
+.workshop_verify_card{
+  width:94%;
+  margin-left: 3%;
+  margin-top: 6px;
+  .group_button{
+    display: inline-block;
+    height:30px;
+    line-height: 30px;
+    width:150px;
+    font-size:13px;
+    text-align: center;
+    margin-left:5px;
+    margin-bottom:5px;
+  }
+  a{
+    text-decoration: none;
+  }
+}
+.workshop_verify_option{
+  width:94%;
+  margin-left: 3%;
+  padding-bottom:10px;
+  span{
+    width:120px;
+  }
+}
+.workshop_verify_head{
+  margin-bottom:10px;
 }

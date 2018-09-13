@@ -335,16 +335,6 @@
 
 
 
-
-
-                   <% if (current_user.has_role? :limitadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
-                      <li>
-                       <a href="/home/notfound">
-                         <i class="fa fa-edit"></i> <span>定额管理</span>
-                       </a>
-                     </li>
-                   <% end %>
-
                    <% if (current_user.has_role? :saleradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
                      <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
                         <% if ["wages","bonus","high_speed_rail_stuffs","main_driving_stuffs","production_stuff_wages","divide_level_wages"].include?(url_for.split("/").second) %>
@@ -406,6 +396,14 @@
                        <i class="fa fa-edit"></i> <span>收入管理</span>
                      </a>
 
+                   </li>
+                 <% end %>
+
+                 <% if (current_user.has_role? :limitadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
+                    <li>
+                     <a href="/home/notfound">
+                       <i class="fa fa-edit"></i> <span>定额管理</span>
+                     </a>
                    </li>
                  <% end %>
 

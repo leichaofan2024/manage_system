@@ -3,10 +3,10 @@
 
     <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
       <span style="line-height: 50px;height: 50px;width:50%;margin-left:20%;">
-        <% if (params[:year].to_i == @shenhe_year) && (params[:month].to_i == @shenhe_month) %>
-          <span style="font-size:16px;color:green;"> 当前为审核页面，往下翻即可开始审核 </span>
-        <% else %>
-           <span style="font-size:16px;">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", group_current_time_info_attendances_path(:year => @shenhe_year,:month => @shenhe_month),data: {disable_with: "正在前往，请稍候... "},style:"color:red;" %></span>
+        <% if (current_user.has_role? :attendance_admin) %>
+           <span style="font-size:16px;">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", duan_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "},style:"color:red;" %></span>
+        <% elsif current_user.has_role? :workshopadmin %>
+           <span style="font-size:16px;">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", workshop_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "},style:"color:red;" %></span>
         <% end %>
       </span>
     <% elsif Announcement.last.present? %>
