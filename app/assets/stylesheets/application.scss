@@ -794,9 +794,8 @@ tbody tr:nth-child(2n-1) {
 tbody tr:hover {
     background-color: rgba(129,208,177,.3);
 }
-
-thead [rowspan] {
-  text-align: center;
+.table > thead > tr > th {
+  vertical-align: middle;
 }
 /* For appearance */
 .sticky-wrap {
