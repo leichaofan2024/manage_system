@@ -126,28 +126,27 @@
             <li role="presentation"><a href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=@year%>&month=<%=@month%>'><%= workshop.name %></a></li>
               <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
               <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "车间已审核")%>
-            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
               <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组已上班")%>
-            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
               <% else AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组/科室填写中")%>
-            <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
+                <li role="presentation" ><a href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
               <% end %>
               <%= group.name %></a></li>
             <% end %>
           </ul>
     <% else %>
 
-
-
-
-
-          <li><%= link_to "北京供电段", group_current_time_info_attendances_path(duan: "北京供电段",year: @year,month: @month) %></li>
           <div class="searchform">
             <%= form_tag group_current_time_info_attendances_path,method: :get do %>
             <div class="select" style="float:left;">
               <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="workshop" id= "workshop_id">
                 <% Workshop.all.each do |workshop| %>
-                  <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                  <% if workshop.id == @select_workshop %>
+                    <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                  <% else %>
+                    <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                  <% end %>
                 <% end %>
               </select>
             </div>
@@ -155,12 +154,17 @@
             <% end %>
           </div>
           <ul class="nav nav-tabs" style="background-color: #FFFFFF">
-            <% if params[:group].blank? %>
+            <% if params[:workshop].present? %>
               <% @groups.each do |group| %>
                 <li role="presentation"><%= link_to(group.name,group_current_time_info_attendances_path(:group => group.id))%></li>
               <% end %>
-            <% else %>
+            <% elsif params[:group].present? %>
               <% groups = Group.where(:workshop_id => Group.find(params[:group]).workshop_id) %>
+              <% groups.each do |group| %>
+                <li role="presentation"><%= link_to(group.name,group_current_time_info_attendances_path(:group => group.id))%></li>
+              <% end %>
+            <% else %>
+              <% groups = Group.current.where(:workshop_id => 1) %>
               <% groups.each do |group| %>
                 <li role="presentation"><%= link_to(group.name,group_current_time_info_attendances_path(:group => group.id))%></li>
               <% end %>
@@ -241,10 +245,10 @@
                   <% arry = ["日","一","二","三","四","五","六"]%>
                   <% (1..31).each do |i| %>
                     <th>
-                      <% if params[:group].present? && (current_user.has_role? :attendance_admin)%>
-                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => params[:group],:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
-                      <% elsif params[:group].present? && (current_user.has_role? :workshopadmin) && AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => params[:group],:status => ["班组已上报","班组/科室填写中"]).present?%>
-                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => params[:group],:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                      <% if @group.present? && (current_user.has_role? :attendance_admin)%>
+                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                      <% elsif @group.present? && (current_user.has_role? :workshopadmin) && AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group,:status => ["班组已上报","班组/科室填写中"]).present?%>
+                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
                       <% else %>
                         <%= i %>
                       <% end %>

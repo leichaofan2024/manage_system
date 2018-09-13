@@ -649,7 +649,7 @@ class AttendancesController < ApplicationController
 
   		@employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
       if params[:workshop].present?
-        transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: params[:workshop]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: params[:workshop]).pluck("employee_id")
+        transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: params[:workshop]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: params[:workshop]).pluck("employee_id")
         @employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop])
       elsif params[:group].present?
         transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
@@ -670,7 +670,7 @@ class AttendancesController < ApplicationController
       @month = params[:month].to_i
     else
       @year = Time.now.year
-      @month = Time.now.month 
+      @month = Time.now.month
     end
 		if current_user.has_role? :workshopadmin
 			@workshop = Workshop.current.find(current_user.workshop_id)
@@ -815,16 +815,28 @@ class AttendancesController < ApplicationController
 
 	##段管理员页面--开始
 	def duan
+    if params[:year].present? && params[:month].present?
+      @year = params[:year].to_i
+      @month = params[:month].to_i
+    else
+      @year = Time.now.year
+      @month = Time.now.month
+    end
 		@years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
     @workshops = Workshop.current
+    @leaving_employees = Employee.transfer_search("#{@year}-#{@month}-01".to_datetime.beginning_of_month, "#{@year}-#{@month}-01".to_datetime.end_of_month)
     if params[:workshop].present?
-      @employees = Employee.current.where(:workshop => params[:workshop])
+      transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_workshop: params[:workshop]).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_workshop: params[:workshop]).pluck("employee_id")
+      @employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:workshop => params[:workshop])
     elsif params[:group].present?
-      @employees = Employee.current.where(:group => params[:group])
+      transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: @group).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: @group).pluck("employee_id")
+      @employees = Employee.current.where(id: transfer_employees) | Employee.current.where(:group => params[:group])
     else
-      @employees = Employee.current.where(:group => 593)
+      transfer_employees = LeavingEmployee.where(id: @leaving_employees["to"]).where(transfer_to_group: 593).pluck("employee_id") + LeavingEmployee.where(id: @leaving_employees["from"]).where(transfer_from_group: 593).pluck("employee_id")
+      @employees = Employee.current.where(group: 593)
     end
+
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
 	end
@@ -945,6 +957,7 @@ class AttendancesController < ApplicationController
 
 
 		if params[:workshop].present?
+      @select_workshop = params[:workshop].to_i
       @groups = Group.current.where(:workshop_id => params[:workshop])
       if (@year ==@shenhe_year) && (@month == @shenhe_month)
         if current_user.has_role? :attendance_admin
@@ -960,6 +973,7 @@ class AttendancesController < ApplicationController
 			   @employees = Employee.current.where(:workshop => params[:workshop]).order('employees.group ASC,employees.id ASC')
 		elsif params[:group].present?
       group = Group.find(params[:group])
+      @select_workshop = group.workshop_id
       if AttendanceStatus.where(:year => @year, :month => @month,:group_id => params[:group]).blank?
         AttendanceStatus.create(:year => @year, :month => @month,:group_id => params[:group],:workshop_id => group.workshop_id,:status => "班组/科室填写中")
       end
@@ -976,19 +990,18 @@ class AttendancesController < ApplicationController
       end
 		else
       if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
-        if @workshops_not_varify.present?
-      	  @employees = Employee.current.where(:workshop => @workshops_not_varify.first.id).order('employees.group ASC,employees.id ASC')
-        else
-          @employees = Employee.current.where(:workshop => Workshop.first.id).order('employees.group ASC,employees.id ASC')
-        end
+        @group = 593
+        @select_workshop = 1
+        @employees = Employee.current.where(:group => @group).order('employees.group ASC,employees.id ASC')
       elsif current_user.has_role? :workshopadmin
         @groups = Group.current.where(:workshop_id => current_user.workshop_id)
+        @group = @groups.first.id
         if (@year ==@shenhe_year) && (@month == @shenhe_month)
           if AttendanceStatus.where(:year => @year, :month => @month,:group_id => @groups.ids,:status => "班组已上报").present? && (@shenhe_day === Time.now.day)
             @workshop_yijian_permission = 1
           end
         end
-				@employees = Employee.current.where(:workshop => Workshop.current.find_by(:name => current_user.name).id).order('employees.group ASC,employees.id ASC')
+				@employees = Employee.current.where(:group => @group).order('employees.group ASC,employees.id ASC')
       end
 		end
 

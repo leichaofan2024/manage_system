@@ -142,7 +142,14 @@
                               <% else %>
                                 <li>
                               <% end %>
-                                <%= link_to "考勤审核", group_current_time_info_attendances_path%>
+                                <%= link_to "考勤填写情况", group_current_time_info_attendances_path%>
+                              </li>
+                              <% if url_for.split("?").first == "/attendances/workshop_verify_index" %>
+                               <li style="background-color:white;">
+                              <% else %>
+                                <li>
+                              <% end %>
+                                <%= link_to "考勤审核", workshop_verify_index_attendances_path%>
                               </li>
                               <% if url_for.split("?").first == "/attendances/workshop"  ||  url_for.split("?").first == "/attendances/filter" %>
                                <li style="background-color:white;">

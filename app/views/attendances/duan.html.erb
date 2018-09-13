@@ -36,45 +36,23 @@
   <!-- 主体部分-开始 -->
   <div class="col-md-12" style="height: 100%">
     <!-- 组织结构树状图-开始 -->
-    <% if @year.present? && @month.present? %>
-      <h4><%= @year %>年<%= @month %>月考勤表</h4>
+      <h4><%= @year %>年<%= @month %>月考勤统计表</h4>
       <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-        <h5><%= link_to "北京供电段", filter_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
+        <h5><%= link_to "北京供电段", duan_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
         <ul>
           <% @workshops.each do |workshop| %>
             <li>
-              <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/filter?type=duan&workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
+              <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
               <ul>
                 <% groups = Group.current.where(:workshop_id => workshop.id) %>
                 <% groups.each do |group| %>
-                  <li><a style="color:green" href='/attendances/filter?type=duan&group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                  <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
                 <% end %>
               </ul>
             </li>
           <% end %>
-
         </ul><br>
       </div>
-    <% else %>
-      <h4><%= Time.now.year %>年<%= Time.now.month %>月考勤表</h4>
-      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-        <h5><%= link_to "北京供电段", duan_attendances_path %></h5>
-        <ul>
-          <% @workshops.each do |workshop| %>
-          <li>
-            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-            <ul>
-              <% groups = Group.current.where(:workshop_id => workshop.id) %>
-              <% groups.each do |group| %>
-                <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>'><%= group.name %></a></li>
-              <% end %>
-            </ul>
-          </li>
-          <% end %>
-        </ul><br>
-      </div>
-    <% end %>
-
     <!-- 组织结构树状图-结束 -->
     <!-- 表格-开始 -->
     <div class="card">
@@ -96,11 +74,8 @@
              <tbody data-behavior='sortable'>
 
                 <% @employees.each do |employee| %>
-                  <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                    <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: Time.now.month, year: Time.now.year)%>
-                  <% else %>
-                    <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: @month, year: @year)%>
-                  <% end %>
+                  <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: @month, year: @year)%>
+                  <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
                   <tr>
                     <td><%= employee.name %></td>
                     <td><%= employee.sal_number %></td>
@@ -109,26 +84,27 @@
                     <% @vacation_name_hash.keys.each do |code| %>
                       <% if attendance_count.present? %>
                         <% if attendance_count.attributes[code] == 0%>
-                          <td></td>
+                          <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                            <td><%= attendance.add_overtime.to_i%> </td>
+                          <% elsif %>
+                            <td></td>
+                          <% end %>
                         <% else %>
-                          <td><%= attendance_count.attributes[code]%></td>
+                          <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                            <td><%= attendance.add_overtime.to_i + attendance_count.attributes[code]%> </td>
+                          <% elsif %>
+                            <td><%= attendance_count.attributes[code]%></td>
+                          <% end %>
                         <% end %>
                       <% else %>
                        <td></td>
                       <% end %>
                     <% end %>
-                    <% if (@year.nil? && @month.nil?) or (@year.to_i == Time.now.year && @month.to_i == Time.now.month) %>
-                      <% if Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).present? %>
-                        <td><%= link_to AttendanceRecord.where(:attendance_id => Attendance.find_by(:employee_id => employee.id, :month => Time.now.month, :year => Time.now.year).id).count, show_record_attendances_path(employee: employee, month: Time.now.month, year: Time.now.year) , class: 'btn btn-primary2'%></td>
-                      <% else %>
-                        <td>0</td>
-                      <% end %>
+                    <% attendancerecords = AttendanceRecord.where(:attendance_id => attendance.id).count%>
+                    <% if attendance.present? && (attendancerecords > 0) %>
+                      <td><%= link_to attendancerecords, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
                     <% else %>
-                      <% if Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).present? %>
-                        <td><%= link_to AttendanceRecord.where(:attendance_id => Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year).id).count, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
-                      <% else %>
-                        <td>0</td>
-                      <% end %>
+                      <td>0</td>
                     <% end %>
                   </tr>
                 <% end %>
