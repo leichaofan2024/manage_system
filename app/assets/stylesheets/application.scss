@@ -794,6 +794,10 @@ tbody tr:nth-child(2n-1) {
 tbody tr:hover {
     background-color: rgba(129,208,177,.3);
 }
+
+thead [rowspan] {
+  text-align: center;
+}
 /* For appearance */
 .sticky-wrap {
 	overflow-x: auto;
@@ -884,22 +888,6 @@ div.pagination ul {
 /*---------------end----------------*/
 
 /*--------------组织架构页面样式---------*/
-
-
-li {
-  list-style-type: none;
-}
-
-a {
-  text-decoration: none;
-  color: #004285;
-  border: none;
-}
-
-a:hover {
-  text-decoration: none;
-  color: #C33;
-}
 
 #menu {
   margin-left: 0px;
@@ -1923,16 +1911,6 @@ h4 {
 //人数控制和假期控制的样式
 
 /*----------------end--------------------*/
-
-/*----------------a标签------------------*/
-a:focus{
-  color: black;
-  text-decoration: none;
-  outline: 0px auto;
-  outline-offset: -2px;
-}
-/*----------------end-------------------*/
-
 
 /*---------------- flash提示信息 --------------*/
 .alert-success {
