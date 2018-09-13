@@ -232,12 +232,13 @@
             <table class="table overflow-y table-bordered table-striped">
               <thead>
                 <tr>
-                  <th rowspan="2">工资号</th>
-                  <th rowspan="2">姓名</th>
-                  <th rowspan="2">职名</th>
-                  <th rowspan="2">车间</th>
-                  <th rowspan="2">班组</th>
+                  <th>工资号</th>
+                  <th>姓名</th>
+                  <th>职名</th>
+                  <th>车间</th>
+                  <th>班组</th>
                   <!-- 生成每月1-31号的数字-开始 -->
+                  <% arry = ["日","一","二","三","四","五","六"]%>
                   <% (1..31).each do |i| %>
                     <th>
                       <% if params[:group].present? && (current_user.has_role? :attendance_admin)%>
@@ -247,13 +248,9 @@
                       <% else %>
                         <%= i %>
                       <% end %>
+                      <br>
+                      <%= arry[Time.local(@year,@month,i).wday]%>
                     </th>
-                  <% end %>
-                </tr>
-                <tr>
-                  <% (1..31).each do |i| %>
-                  <% arry = ["日","一","二","三","四","五","六"]%>
-                  <th><%= arry[Time.local(@year,@month,i).wday]%></th>
                   <% end %>
                 </tr>
               </thead>
