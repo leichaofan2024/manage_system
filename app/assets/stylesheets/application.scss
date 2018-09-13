@@ -454,7 +454,7 @@ strong {
 }
 .panel-btns a {
    margin-left: 8px;
-   float: right;
+   float: left;
    color: #000;
    display: inline-block;
    font-weight: bold;
@@ -466,7 +466,7 @@ strong {
 }
 
 .panel-btns a.minimize {
-   font-size: 18px;
+   font-size: 20px;
 }
 
 .panel-btns a:hover {
@@ -480,10 +480,23 @@ strong {
    text-decoration: none;
 }
 
+.panel-btns span {
+  margin-left: 5px;
+  line-height: normal;
+  font-size: 16px;
+}
+
 .panel-title {
-   font-size: 18px;
+   font-size: 16px;
    color: #111;
+   margin-left: 10px;
+   float: left;
    /*font-family: 'LatoBold'; */
+}
+.panel-title::after{
+  clear: both;
+  display: block;
+  content: '';
 }
 
 
@@ -1852,6 +1865,10 @@ h4 {
   background-color: white;
   color: black;
 }
+.btn-default{
+  min-width: 180px;
+  font-size: 12px;
+}
 .btn-success{
   background-color: #00D396;
 }
@@ -2142,4 +2159,5 @@ button.close {
 
 .searchform{
   min-width: 300px;
+  margin-bottom: 10px;
 }
