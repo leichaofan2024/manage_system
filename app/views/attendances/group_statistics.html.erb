@@ -31,15 +31,24 @@
         <tbody data-behavior='sortable'>
             <% @employees.each do |employee| %>
               <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+              <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
               <tr>
                 <td><%= employee.sal_number %></td>
                 <td><%= employee.name %></td>
                 <% @vacation_code_hash.keys.each do |code| %>
                   <% if attendance_count.present? %>
                     <% if attendance_count.attributes[code] == 0%>
-                      <td></td>
+                      <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                        <td><%= attendance.add_overtime.to_i%> </td>
+                      <% elsif %>
+                        <td></td>
+                      <% end %>
                     <% else %>
-                      <td><%= attendance_count.attributes[code]%></td>
+                      <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                        <td><%= attendance.add_overtime.to_i + attendance_count.attributes[code]%> </td>
+                      <% elsif %>
+                        <td><%= attendance_count.attributes[code]%></td>
+                      <% end %>
                     <% end %>
                   <% else %>
                    <td></td>

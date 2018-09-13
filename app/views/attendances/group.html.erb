@@ -39,7 +39,7 @@
               <% (1..31).each do |i| %>
                 <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
                   <th>
-                      <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                      <%= link_to i,simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%> <br>二
                   </th>
                 <% else %>
                   <th><%= i %></th>
