@@ -18,7 +18,7 @@
       <%= hidden_field_tag "day", params[:day] %>
       <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>一键勾选：点击表头首行的考勤名称 </p>
       <div class="panel panel-default">
-          <div class="table-responsive">
+          <div class="table">
             <table class="table">
               <thead>
                 <tr>
@@ -58,7 +58,7 @@
           </div>
 
       </div>
-      <div class="">
+      <div class="button-group">
         <%= submit_tag "提交考勤",data: {disable_with: "考勤提交中..."} %>
       </div>
     <% end %>
