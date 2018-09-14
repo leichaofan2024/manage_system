@@ -10,9 +10,9 @@
     <div class="workshop_verify_card">
       <%= link_to workshop_verify_index_attendances_path(:workshop_id => @workshop.id) do %>
         <% if params[:workshop_id].present? %>
-          <div class= "group_button" style= "background-color: white;"><%= @workshop.name%></div>
+          <div class= "group_button" style= "background-color: white;color:black;"><%= @workshop.name%></div>
         <% else %>
-          <div class= "group_button" style= "background-color: rgb(0,221,154)"><%= @workshop.name%></div>
+          <div class= "group_button" style= "background-color: black;color:white;"><%= @workshop.name%></div>
         <% end %>
       <% end %>
       <% @groups_can.each do |group| %>
@@ -99,7 +99,7 @@
         <span class="pull-right btn btn-primary2" style="margin-right:10px;">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
       <% end %>
 
-      <%= link_to group_application_attendances_path(:year => @shenhe_year,:month => @shenhe_month,:group_id => params[:group]),:data => {disable_with: "加载中 ... "} do %>
+      <%= link_to group_application_attendances_path(:year => @shenhe_year,:month => @shenhe_month,:group_id => @group.id),:data => {disable_with: "加载中 ... "} do %>
         <span class="pull-right btn btn-primary2" style="margin-right:10px;">点击申请</span>
       <% end %>
     <% end %>
