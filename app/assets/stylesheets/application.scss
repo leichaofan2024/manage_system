@@ -2166,14 +2166,24 @@ button.close {
   margin-bottom: 10px;
 }
 
-.workshop_verify_index{
+.workshop_verify_index1{
   width:94%;
   margin-left: 3%;
   margin-top: 20px;
   padding-top:20px;
+  padding-bottom:10px;
+  background-color: white;
+}
+
+.workshop_verify_index2{
+  width:94%;
+  margin-left: 3%;
+  margin-top: 20px;
+  padding-top:2px;
   padding-bottom: 30px;
   background-color: white;
 }
+
 .workshop_verify_label{
   clear:both;
   height:50px;
@@ -2191,11 +2201,12 @@ button.close {
     display: inline-block;
     height:30px;
     line-height: 30px;
-    width:150px;
+    width:160px;
     font-size:13px;
     text-align: center;
     margin-left:5px;
     margin-bottom:5px;
+    border-radius:5px;
   }
   a{
     text-decoration: none;
@@ -2210,5 +2221,6 @@ button.close {
   }
 }
 .workshop_verify_head{
+  margin-top:10px;
   margin-bottom:10px;
 }
