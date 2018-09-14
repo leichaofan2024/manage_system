@@ -774,6 +774,15 @@ class AttendancesController < ApplicationController
         if application.include?(0)
           flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
         else
+          attendance_status = AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id])
+          if attendance_status.status == "班组已上报"
+            attendance_status.update(:status => "段已审核",:workshop_id => group.workshop_id)
+            flash[:notice] = "#{group.name}审核完成!"
+          elsif ["段已审核","车间已审核"].include?(attendance_status.status)
+            flash[:warning] = "#{group.name}已完成审核，无需再审!"
+          else
+            flash[:warning] = "班组还未上报，请耐心等待!"
+          end
     			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
     			flash[:notice] = "#{group.name}审核完成!"
         end
@@ -788,8 +797,16 @@ class AttendancesController < ApplicationController
       if application.include?(0)
         flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
       else
-        AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "段已审核")
-		  	flash[:notice] = "#{group.name}审核完成!"
+        attendance_status = AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id])
+        if ["科室已上报","车间已审核"].include?(attendance_status.status)
+          attendance_status.update(:status => "段已审核",:workshop_id => group.workshop_id)
+          flash[:notice] = "#{group.name}审核完成!"
+        elsif attendance_status.status == "段已审核"
+          flash[:warning] = "#{group.name}已完成审核，无需再审!"
+        else
+          flash[:warning] = "车间还未审核，请耐心等待!"
+        end
+
       end
       redirect_to workshop_verify_index_attendances_path(:group_id => group.id)
 		end
@@ -1250,10 +1267,14 @@ class AttendancesController < ApplicationController
       @applications = Application.where(:group_id => @groups.ids,:status => "班组发起申请")
       attendance_statuses = AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year, :month => @shenhe_month)
       @groups_can = @groups.where(:id => attendance_statuses.where(:status => "班组已上报").pluck(:group_id))
-      @groups_already = @groups.where(:id => attendance_statuses.where(:status => "车间已审核").pluck(:group_id))
+      @groups_already = @groups.where(:id => attendance_statuses.where(:status => ["车间已审核","段已审核"]).pluck(:group_id))
       @groups_cannot = @groups.where.not(:id => (@groups_can.pluck(:id) + @groups_already.pluck(:id)) )
     end
+
     @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
+    if @attendance_status.blank?
+      @attendance_status = AttendanceStatus.create(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month,:status => "班组/科室填写中")
+    end
   end
 
 end
