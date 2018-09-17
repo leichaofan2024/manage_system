@@ -26,22 +26,29 @@
               <% end %>
             </div>
       <% else %>
-            <div class="searchform">
+
               <%= form_tag group_current_time_info_attendances_path,method: :get do %>
-              <div class="select" style="float:left;">
-                <select class="form-control mb-4" name="workshop" id= "workshop_id">
-                  <% Workshop.all.each do |workshop| %>
-                    <% if workshop.id == @select_workshop %>
-                      <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
-                    <% else %>
-                      <option value="<%= workshop.id%>"><%= workshop.name%></option>
-                    <% end %>
-                  <% end %>
-                </select>
-              </div>
-                <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
+              <form>
+                <div class="row" style="margin-bottom: 10px;">
+                  <div class="col-md-5">
+                    <select name="workshop" id= "workshop_id">
+                      <% Workshop.all.each do |workshop| %>
+                        <% if workshop.id == @select_workshop %>
+                          <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                        <% else %>
+                          <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                        <% end %>
+                      <% end %>
+                    </select>
+
+                  </div>
+
+                    <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
+                
+                </div>
+              </form>
               <% end %>
-            </div>
+
             <div class="group-btns">
               <% if params[:workshop].present? %>
                 <% @groups.each do |group| %>
