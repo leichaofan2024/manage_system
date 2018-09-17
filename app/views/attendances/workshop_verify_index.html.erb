@@ -12,7 +12,7 @@
         <span>车间未上报</span>
         <div style ="background-color: rgb(233,238,243)"></div>
         <span>段已审核</span>
-      <% elsif %>
+      <% elsif current_user.has_role? :workshopadmin %>
         <div style="margin-left:20%;background-color: rgb(0,221,154);"></div>
         <span>班组已上报</span>
         <div style= "background-color: rgb(255,149,0)"></div>

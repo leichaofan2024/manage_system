@@ -2158,7 +2158,7 @@ button.close {
      width:92%;
      margin-left:4%;
      height:40px;
-     background-color: #F7F9FA;
+     background-color: white;
      text-align:center;
      clear:both;
   }
@@ -2207,7 +2207,7 @@ button.close {
   width:94%;
   margin-left: 3%;
   padding-left: 4%;
-  background-color: rgb(229,242,255);
+  background-color: white;
   div{
     display: inline-block;
     height:16px;
@@ -2227,9 +2227,11 @@ button.close {
 
 }
 .workshop_verify_card{
-  width:94%;
-  margin-left: 3%;
-  margin-top: 6px;
+  width:100%;
+  padding-left: 3%;
+  padding-top:20px;
+  // margin-top: 6px;
+  background-color: rgb(252,252,252);
   .group_button{
     display: inline-block;
     height:30px;
