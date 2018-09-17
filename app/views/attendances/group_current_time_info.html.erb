@@ -100,15 +100,15 @@
                 <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@shenhe_day,@group,@year,@month)%></span>)</h4>
             <% else %>
 
-              <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month)%></span>)</h4>
+              <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,"班组已上报")%></span>)</h4>
             <% end %>
 
 
             <%= link_to show_application_attendances_path(type: current_user.workshop_id),data: {disable_with: "加载中... "} do %>
-              <span class="pull-right btn btn-primary2">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
+              <span class="pull-right btn btn-primary">查看申请<i>(<%= @applications.count%>条)</i> </span>
             <% end %>
             <div class="ivu-tooltip-rel pull-right" style="margin-right: 5px;">
-              <%= link_to "申请修改考勤",group_application_attendances_path(:year => @year,:month => @month,:group_id => params[:group],:workshop_id => params[:workshop]),:data => {disable_with: "加载中 ... "},class:"btn btn-primary" %>
+              <%= link_to "点击申请",group_application_attendances_path(:year => @year,:month => @month,:group_id => params[:group],:workshop_id => params[:workshop]),:data => {disable_with: "加载中 ... "},class:"btn btn-primary" %>
             </div>
           <% end %>
 
@@ -137,7 +137,7 @@
                     <% end %>
                   <% end %>
                 </select>
-                <%= submit_tag :筛选 %>
+                <%= submit_tag :筛选%>
             <% end %>
           </div>
 

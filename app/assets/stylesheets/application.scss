@@ -445,6 +445,9 @@ strong {
 .panel-heading {
    padding: 20px;
 }
+.panel-heading li {
+  list-style-type: none;
+}
 .panel-body {
    padding: 20px;
 }
@@ -798,6 +801,7 @@ th {
 }
 th > li {
   z-index: 110;
+  list-style-type: none;
 }
 tbody th {
   color:black;
