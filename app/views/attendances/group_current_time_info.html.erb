@@ -106,7 +106,7 @@
 
 
             <%= link_to show_application_attendances_path(type: current_user.workshop_id),data: {disable_with: "加载中... "} do %>
-              <span class="pull-right btn btn-primary2">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
+              <span class="pull-right btn btn-primary">查看申请<i>(<%= @applications.count%>条)</i> </span>
             <% end %>
             <div class="ivu-tooltip-rel pull-right" style="margin-right: 5px;">
               <%= link_to "点击申请",group_application_attendances_path(:year => @year,:month => @month,:group_id => params[:group],:workshop_id => params[:workshop]),:data => {disable_with: "加载中 ... "},class:"btn btn-primary" %>
@@ -138,7 +138,7 @@
                     <% end %>
                   <% end %>
                 </select>
-                <%= submit_tag :筛选 %>
+                <%= submit_tag :筛选%>
             <% end %>
           </div>
 
