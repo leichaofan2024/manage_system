@@ -15,10 +15,7 @@
 
       <div class="col-md-12 col-lg-12 col-sm-12">
         <h3 class="text-center"><%= @year %>年<%= @month %>月考勤修改申请</h3>
-
-
-
-              <table class="table overflow-y">
+              <table class="table overflow-y table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>工资号</th>
@@ -70,7 +67,7 @@
                             <% application = Application.where(:employee_id => employee.id,:year => @year,:month => @month,:day => (day+1)) %>
                             <% if !application.present? %>
                               <td>
-                                <span style = "background-color:#E8F5E9;">
+                                <span>
                                   <%= link_to group_application_form_attendances_path(:group_id =>params[:group_id] ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
                                     <% if attendance[day] == "x" %>
                                       <%= day_number %>
