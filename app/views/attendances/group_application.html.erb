@@ -34,12 +34,12 @@
                                   <b class="caret"></b>
                                   <ul class="dropdown-menu">
                                     <li><%= link_to "一键考勤申请：", "#" %></li>
-                                      <li><%= link_to "日", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日"])  %></li>
-                                      <li><%= link_to "星", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["星"])  %></li>
-                                      <li><%= link_to "节", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["节"])  %></li>
-                                      <li><%= link_to "日勤夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日勤夜班"])  %></li>
-                                      <li><%= link_to "轮流夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["轮流夜班"])  %></li>
-                                      <li><%= link_to "休", group_application_form_attendances_path(:type => "一键申请",:group_id =>params[:group_id] ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["休"])  %></li>
+                                      <li><%= link_to "日", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日"])  %></li>
+                                      <li><%= link_to "星", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["星"])  %></li>
+                                      <li><%= link_to "节", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["节"])  %></li>
+                                      <li><%= link_to "日勤夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日勤夜班"])  %></li>
+                                      <li><%= link_to "轮流夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["轮流夜班"])  %></li>
+                                      <li><%= link_to "休", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["休"])  %></li>
                                   </ul>
                               </a>
                             </li>
@@ -71,7 +71,7 @@
                             <% if !application.present? %>
                               <td>
                                 <span style = "background-color:#E8F5E9;">
-                                  <%= link_to group_application_form_attendances_path(:group_id =>params[:group_id] ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
+                                  <%= link_to group_application_form_attendances_path(:group_id =>@group.id ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
                                     <% if attendance[day] == "x" %>
                                       <%= day_number %>
                                     <% else %>
@@ -82,7 +82,7 @@
                               </td>
                             <% elsif application.present? && (application.last.application_pass == 1) %>
                               <td style = "background-color: #2196F3;">
-                                <%= link_to group_application_form_attendances_path(:group_id =>params[:group_id] ,employee_id: employee.id, year: @year, month: @month, day: day) do %>
+                                <%= link_to group_application_form_attendances_path(:group_id =>@group.id ,employee_id: employee.id, year: @year, month: @month, day: day) do %>
                                   <% if attendance[day] == "x" %>
                                     <%= day_number %>
                                   <% else %>
@@ -92,7 +92,7 @@
                               </td>
                             <% elsif application.present? && ((application.last.status == "班组发起申请") || (application.last.status == "科室发起申请") || (application.last.status == "车间发起申请")) %>
                               <td style = "background-color:#FFD54F;">
-                                  <%= link_to group_application_form_attendances_path(:type => "更新",:group_id =>params[:group_id] ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
+                                  <%= link_to group_application_form_attendances_path(:type => "更新",:group_id =>@group.id ,employee_id: employee.id, year: @year, month: @month, day: day)  do %>
                                       <%= @vacation_code_hash[application.last.application_after] %>
                                   <% end %>
                               </td>

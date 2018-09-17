@@ -102,7 +102,7 @@
                       <!--班组管理员、科室管理员、班组重名管理员-->
                       <% if current_user.has_role? :organsadmin %>
                           <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                            <% if url_for.split("/").second == "attendances" %>
+                            <% if (url_for.split("/").second == "attendances") || (url_for == "/annual_holidays/workshop_holiday_plan") %>
                               <ul class="children" style="display:block;">
                             <% else %>
                               <ul class="children">
