@@ -2138,6 +2138,22 @@ button.close {
      margin-right:4%;
      margin-bottom:10px;
   }
+  .duan-verify-index-notice{
+    margin-left:4%;
+    position:relative;
+    top:9px;
+    span {
+      margin-right:8px;
+    }
+    div{
+      display: inline-block;
+      height:16px;
+      width:20px;
+      margin-right: 5px;
+      position: relative;
+      top:4px;
+    }
+  }
   .duan-verify-index-label{
      width:92%;
      margin-left:4%;
@@ -2192,6 +2208,23 @@ button.close {
   margin-left: 3%;
   padding-left: 4%;
   background-color: rgb(229,242,255);
+  div{
+    display: inline-block;
+    height:16px;
+    width:20px;
+    margin-left: 10px;
+    background-color: red;
+  }
+
+  // div{
+  //   display: inline-block;
+    // height:16px;
+    // width:20px;
+    // margin-right: 5px;
+    // position: relative;
+  //   top:4px;
+  // }
+
 }
 .workshop_verify_card{
   width:94%;

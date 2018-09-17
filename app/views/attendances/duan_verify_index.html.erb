@@ -1,9 +1,17 @@
 <div class="col-md-11 col-lg-11 col-sm-11 duan-verify-index">
   <h4 style="text-align:center;">北京供电段<%= @shenhe_year%>年<%=@shenhe_month%>月考勤审核</h4>
-  <%= link_to show_application_attendances_path(type: "duan"),data: {disable_with: "加载中... "} do %>
-    <span class="pull-right btn duan-verify-index-button">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
-  <% end %>
-  <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名;</p>
+  <div class="pull-left duan-verify-index-notice">
+    <span class=""><div style="background-color:#00D396"></div> 车间已上报全部</span>
+    <span class=""><div style="background-color:#FF9900"></div>车间未上报全部</span>
+    <span class=""><div style="background-color:#999999"></div>段已审核全部</span>
+  </div>
+  <span class="pull-right btn duan-verify-index-button">
+    <%= link_to show_application_attendances_path(type: "duan"),data: {disable_with: "加载中... "} do %>
+      查看申请<i style = "color:red;">(<%= @applications.count%>条)</i>
+    <% end %>
+  </span>
+
+
   <div class="duan-verify-index-label">
     <p style="height:40px;line-height:40px;">当前车间审核情况：已审核<%= @duan_all_varified.count %>，未审核<%= Workshop.current.count -  @duan_all_varified.count %>，审核进度<%= (@duan_all_varified.count.to_f*100/Workshop.current.count).round(2)%> % </p>
   </div>

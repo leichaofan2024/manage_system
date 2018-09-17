@@ -1,10 +1,25 @@
 <div class="workshop_verify_index1">
   <div class="workshop_verify_label" id="my-open-click">
-    <p><span style="font-size:20px;margin-left:-30px;margin-right:30px;">+</span>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%</p>
+    <b style="font-size:20px;margin-left:-30px;margin-right:30px;">+</b>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%
   </div>
   <div class="" id="foo">
     <div class="workshop_verify_label" id="my-hide-click">
-      <p><span style="font-size:20px;margin-left:-30px;margin-right:30px;">-</span>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%</p>
+      <b style="font-size:20px;margin-left:-30px;margin-right:30px;">-</b>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%
+      <% if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) %>
+        <div style="margin-left:20%;background-color: rgb(0,221,154);"></div>
+        <span>车间已上报</span>
+        <div style= "background-color: rgb(255,149,0)"></div>
+        <span>车间未上报</span>
+        <div style ="background-color: rgb(233,238,243)"></div>
+        <span>段已审核</span>
+      <% elsif %>
+        <div style="margin-left:20%;background-color: rgb(0,221,154);"></div>
+        <span>班组已上报</span>
+        <div style= "background-color: rgb(255,149,0)"></div>
+        <span>班组未上报</span>
+        <div style ="background-color: rgb(233,238,243)"></div>
+        <span>车间已审核</span>
+      <% end %>
     </div>
 
     <div class="workshop_verify_card">
