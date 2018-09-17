@@ -299,7 +299,7 @@
                             </ul>
                           </li>
 
-                      <% elsif current_user.has_role? :groupadmin %>
+                      <% elsif (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin) %>
 
                             <li class="nav-parent"><a href=""><i class="fa fa-envelope-o"></i> <span>考勤管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
                               <% if url_for.split("/").second == "attendances" %>
