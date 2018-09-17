@@ -177,14 +177,12 @@
                   <% (1..31).each do |i| %>
                     <th>
                       <% if @group.present? && (current_user.has_role? :attendance_admin)%>
-                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn",style: "font-weight:900;color: #00D396"%>
                       <% elsif @group.present? && (current_user.has_role? :workshopadmin) && AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group,:status => ["班组已上报","班组/科室填写中"]).present?%>
-                        <%= link_to i,simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),style: "font-weight:900;color: #00D396"%>
+                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn",style: "font-weight:900;color: #00D396"%>
                       <% else %>
-                        <%= i %>
+                        <%= i %> | <%= arry[Time.local(@year,@month,i).wday]%>
                       <% end %>
-                      <br>
-                      <%= arry[Time.local(@year,@month,i).wday]%>
                     </th>
                   <% end %>
                 </tr>
