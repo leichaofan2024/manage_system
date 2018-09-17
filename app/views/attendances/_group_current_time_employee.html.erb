@@ -31,16 +31,16 @@
       <td>
         <% if current_user.has_role? :attendance_admin %>
             <% if day_attendance == "x" %>
-              <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+              <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" %>
             <% else %>
-              <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+              <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "duan"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" %>
             <% end %>
 
         <% elsif (current_user.has_role? :workshopadmin) && attendance_status.present? %>
           <% if day_attendance == "x" %>
-            <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "workshop"), remote: true, class: "btn btn-primary2", "data-toggle" => "modal", "data-target" => "#myModal" %>
+            <%= link_to "-", show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "workshop"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" %>
           <% else %>
-            <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "workshop"), remote: true, class: "btn btn-primary1", "data-toggle" => "modal", "data-target" => "#myModal" %>
+            <%= link_to VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening, show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, day_number: day_number, type: "workshop"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" %>
           <% end %>
         <% else %>
           <% if day_attendance == "x" %>
