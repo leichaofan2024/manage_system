@@ -2,11 +2,18 @@
 <div id="preloader">
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
-<% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-  <p style="margin-top:20px;margin-left:20px;"><%= link_to '<< 返回', group_attendances_path %></p>
-<% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) %>
-  <p style="margin-top:20px;margin-left:20px;"><%= link_to '<< 返回', group_current_time_info_attendances_path %></p>
-<% end %>
+<div class="pageheader">
+  <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+    <h4><span class="glyphicon glyphicon-share-alt"></span>
+    <%= link_to '返回', group_attendances_path %>
+    </h4>
+  <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) %>
+  <h4>
+    <span class="glyphicon glyphicon-share-alt"></span><%= link_to '返回', group_current_time_info_attendances_path %>
+  </h4>
+  <% end %>
+</div>
+
 <div class="contentpanel">
   <h4> 考勤申请详情页 </h4>
     <table class="table">
@@ -84,13 +91,13 @@
       </tbody>
   </table>
 <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
-  <div class="pull-right" style= "margin-top:20px;">
+
     <% if params[:type] == "duan" %>
       <%= link_to("一键通过", update_application_attendances_path(:type => params[:type],:yijian => "duan",:status => "段通过申请"),method: :post,class: "btn btn-primary")%>
     <% else %>
       <%= link_to("一键通过", update_application_attendances_path(:type => params[:type],:yijian => "workshop",:status => "车间通过申请"),method: :post,class: "btn btn-primary")%>
     <% end %>
-  </div>
+  
 <% end %>
 
 </div>

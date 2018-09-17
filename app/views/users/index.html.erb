@@ -27,7 +27,7 @@
           <td><%= user.roles.first.translate_role if user.roles.first != nil %></td>
           <td><%= user.created_at.strftime("%Y-%m-%d")%></td>
           <td><%= link_to "编辑", edit_user_path(user) %></td>
-          <td><%= link_to "删除", user_path(user), method: :delete, class: "btn btn-sm btn-default", data: { confirm: "确定要删除该用户么"} %></td>
+          <td><%= link_to "删除", user_path(user), method: :delete, class: "btn btn-sm btn-primary", data: { confirm: "确定要删除该用户么"} %></td>
         </tr>
       <% end %>
    </tbody>

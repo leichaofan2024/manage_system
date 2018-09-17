@@ -34,7 +34,7 @@
             <li><%= link_to("登入", new_user_session_path) %></li>
           <% else %>
           <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
               <%= current_user.name %>
               <span class="caret"></span>
             </button>

@@ -5,7 +5,7 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h3 class="text-center"><%= @year %>年<%= @month %>月考勤数据 (<%= @attendance_status.status %>)</h3>
+      <h4 class="text-center"><%= @year %>年<%= @month %>月考勤数据 (<span><%= @attendance_status.status %></span>)</h4>
     </header>
 
     <div class="content-body">
@@ -17,10 +17,10 @@
                <%= link_to("查看上月考勤", group_attendances_path(:year => @shenhe_year,:month => @shenhe_month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary")%>
              <% end %>
 
-             <%= link_to "申请修改考勤",group_application_attendances_path(:year => @year,:month => @month,:group_id => current_user.group_id),:data => {disable_with: "加载中 ... "},class:"btn btn-success" %>
-             <%= link_to "查看申请", show_application_attendances_path(applications: @applications.pluck("id")), class: "btn btn-success" %>
+             <%= link_to "点击申请",group_application_attendances_path(:year => @year,:month => @month,:group_id => current_user.group_id),:data => {disable_with: "加载中 ... "},class:"btn button-success" %>
+             <%= link_to "查看申请", show_application_attendances_path(applications: @applications.pluck("id")), class: "btn button-success" %>
              <%= link_to group_attendances_path(:year => @year,:month => @month,format: "xls") do  %>
-               <button type="button" class="btn btn-success">
+               <button type="button" class="btn button-success">
                  <span>导出记录</span>
                </button>
              <% end %>
@@ -28,8 +28,8 @@
         <% end %>
 
       <div class="content-table" style="clear:both;">
-        <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名</p>
-        <table class="table overflow-y table-bordered">
+        <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的蓝色日期；2、查看个人考勤统计：点击人员姓名</p>
+        <table class="table overflow-y table-bordered table-striped">
           <thead>
             <tr>
               <th>工资号</th>
@@ -40,7 +40,7 @@
               <% (1..31).each do |i| %>
               <th>
                 <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
-                  <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),class: "btn",style: "font-weight:900;color: #00D396"%>
+                  <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),class: "btn btn-text-green"%>
                 <% else %>
                   <%= i %> | <%= arry[Time.local(@year,@month,i).wday]%>
                 <% end %>
@@ -121,7 +121,7 @@
     </div>
 
     <div class="content-footer">
-      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"},class: "btn btn-success" do %>
+      <%= link_to verify_attendances_path(:authority => "group",:group_id => current_user.group_id,:year => @year,:month => @month),method: :post,data: {confirm: "确定要上报考勤吗？"},class: "btn button-success" do %>
           上报考勤
       <% end %>
     </div>

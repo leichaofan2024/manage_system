@@ -774,6 +774,9 @@ table {
     margin-bottom: 3em;
     background: #fff;
 }
+table .btn{
+  display: inline;
+}
 td, th {
     color:black;
     text-align: center;
@@ -1047,7 +1050,6 @@ li.active > a:hover{
 button, select {
     text-transform: none;
 }
-
 button, input{
     overflow: visible;
 }
@@ -1865,25 +1867,31 @@ h4 {
 
 /*-----------end-------------------*/
 .btn .btn-primary {
-  background-color: white;
-  color: black;
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
 }
 .btn-default{
   min-width: 180px;
   font-size: 12px;
 }
-.btn-success{
+.button-success{
   background-color: #00D396;
+  border-color: #00D396;
+  color: #fff;
+}
+.button-success:hover{
+  text-decoration: none;
+  opacity: 0.8;
+  cursor: pointer;
 }
 .btn-text-green{
-  background-color: #ffff;
   font-size: 14px;
-  color: #00D396 !important;
+  color: #4779B2 !important;
 }
 .table-bordered a:link {
     color: black;
 }
-
 
 /*-------------段管理员考勤设置页面----------*/
 .wraper-7TeiU_0 {
@@ -2181,7 +2189,6 @@ button.close {
 }
 
 .searchform{
-  min-width: 300px;
   margin-bottom: 10px;
 }
 
@@ -2272,4 +2279,31 @@ button.close {
 .workshop_verify_head{
   margin-top:10px;
   margin-bottom:10px;
+}
+.pageheader{
+  padding: 15px;
+  position: relative;
+  border-bottom: 1px solid #d3d7db;
+  border-top: 1px solid #eee;
+  background: #f7f7f7;
+}
+.pageheader h4 {
+    font-size: 14px;
+    text-align: left;
+    color: #1D2939;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+.pageheader a {
+  text-decoration: none;
+}
+
+.pageheader .glyphicon{
+    font-size: 14px;
+    margin-right: 5px;
+    padding: 6px 7px;
+    border: 2px solid #1D2939;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
 }

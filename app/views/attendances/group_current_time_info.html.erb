@@ -26,22 +26,29 @@
               <% end %>
             </div>
       <% else %>
-            <div class="searchform">
+
               <%= form_tag group_current_time_info_attendances_path,method: :get do %>
-              <div class="select" style="float:left;">
-                <select class="form-control mb-4" name="workshop" id= "workshop_id">
-                  <% Workshop.all.each do |workshop| %>
-                    <% if workshop.id == @select_workshop %>
-                      <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
-                    <% else %>
-                      <option value="<%= workshop.id%>"><%= workshop.name%></option>
-                    <% end %>
-                  <% end %>
-                </select>
-              </div>
-                <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
+              <form>
+                <div class="row" style="margin-bottom: 10px;">
+                  <div class="col-md-5">
+                    <select name="workshop" id= "workshop_id">
+                      <% Workshop.all.each do |workshop| %>
+                        <% if workshop.id == @select_workshop %>
+                          <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                        <% else %>
+                          <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                        <% end %>
+                      <% end %>
+                    </select>
+
+                  </div>
+
+                    <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
+                
+                </div>
+              </form>
               <% end %>
-            </div>
+
             <div class="group-btns">
               <% if params[:workshop].present? %>
                 <% @groups.each do |group| %>
@@ -135,7 +142,7 @@
             <% end %>
           </div>
 
-          <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名;</p>
+          <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的蓝色日期；2、查看个人考勤统计：点击人员姓名;</p>
             <table class="table overflow-y table-bordered table-striped">
               <thead>
                 <tr>
@@ -149,9 +156,9 @@
                   <% (1..31).each do |i| %>
                     <th>
                       <% if @group.present? && (current_user.has_role? :attendance_admin)%>
-                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn",style: "font-weight:900;color: #00D396"%>
+                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn btn-text-green"%>
                       <% elsif @group.present? && (current_user.has_role? :workshopadmin) && AttendanceStatus.find_by(:year => @year , :month => @month,:group_id => @group,:status => ["班组已上报","班组/科室填写中"]).present?%>
-                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn",style: "font-weight:900;color: #00D396"%>
+                        <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => @group,:year => @year , :month => @month,:day => i-1),class: "btn btn-text-green"%>
                       <% else %>
                         <%= i %> | <%= arry[Time.local(@year,@month,i).wday]%>
                       <% end %>
