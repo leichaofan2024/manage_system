@@ -774,6 +774,9 @@ table {
     margin-bottom: 3em;
     background: #fff;
 }
+table .btn{
+  display: inline;
+}
 td, th {
     color:black;
     text-align: center;
@@ -1865,24 +1868,31 @@ h4 {
 
 /*-----------end-------------------*/
 .btn .btn-primary {
-  background-color: white;
-  color: black;
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
 }
 .btn-default{
   min-width: 180px;
   font-size: 12px;
 }
-.btn-success{
+.button-success{
   background-color: #00D396;
+  border-color: #00D396;
+  color: #fff;
+}
+.button-success:hover{
+  text-decoration: none;
+  opacity: 0.8;
+  cursor: pointer;
 }
 .btn-text-green{
   font-size: 14px;
-  color: #00D396 !important;
+  color: #4779B2 !important;
 }
 .table-bordered a:link {
     color: black;
 }
-
 
 /*-------------段管理员考勤设置页面----------*/
 .wraper-7TeiU_0 {
@@ -2274,6 +2284,9 @@ button.close {
     color: #1D2939;
     letter-spacing: -0.5px;
     margin: 0;
+}
+.pageheader a {
+  text-decoration: none;
 }
 
 .pageheader .glyphicon{
