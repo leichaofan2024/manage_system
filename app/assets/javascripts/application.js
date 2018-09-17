@@ -51,17 +51,17 @@ jQuery(document).ready(function() {
    // Tooltip
    jQuery('.tooltips').tooltip({ container: 'body'});
 
-   jQuery('.minimize').click(function(){
+   jQuery('.panel-btns').click(function(){
       var t = jQuery(this);
       var p = t.closest('.panel');
-      if(!jQuery(this).hasClass('maximize')) {
+      if(!jQuery(this).hasClass('panel-btns')) {
          p.find('.panel-body, .panel-footer').slideUp(200);
-         t.addClass('maximize');
-         t.html('&plus;');
+         t.addClass('panel-btns');
+         t.html('&plus;筛选');
       } else {
          p.find('.panel-body, .panel-footer').slideDown(200);
-         t.removeClass('maximize');
-         t.html('&minus;');
+         t.removeClass('panel-btns');
+         t.html('&minus;筛选');
       }
       return false;
    });
