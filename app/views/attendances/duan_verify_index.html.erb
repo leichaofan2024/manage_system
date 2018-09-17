@@ -3,6 +3,7 @@
   <%= link_to show_application_attendances_path(type: "duan"),data: {disable_with: "加载中... "} do %>
     <span class="pull-right btn duan-verify-index-button">查看申请<i style = "color:red;">(<%= @applications.count%>条)</i> </span>
   <% end %>
+  <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、多选填写入口：点击表头首行的绿色日期；2、查看个人考勤统计：点击人员姓名;</p>
   <div class="duan-verify-index-label">
     <p style="height:40px;line-height:40px;">当前车间审核情况：已审核<%= @duan_all_varified.count %>，未审核<%= Workshop.current.count -  @duan_all_varified.count %>，审核进度<%= (@duan_all_varified.count.to_f*100/Workshop.current.count).round(2)%> % </p>
   </div>
