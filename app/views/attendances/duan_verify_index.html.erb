@@ -13,7 +13,7 @@
 
 
   <div class="duan-verify-index-label">
-    <p style="height:40px;line-height:40px;">当前车间审核情况：已审核<%= @duan_all_varified.count %>，未审核<%= Workshop.current.count -  @duan_all_varified.count %>，审核进度<%= (@duan_all_varified.count.to_f*100/Workshop.current.count).round(2)%> % </p>
+    <p style="height:40px;line-height:40px;">当前您的审核情况：已审核<%= @duan_all_varified.count %>个车间，未审核<%= Workshop.current.count -  @duan_all_varified.count %>个车间，审核进度<%= (@duan_all_varified.count.to_f*100/Workshop.current.count).round(2)%> % </p>
   </div>
   <% @workshop_all_verify.each do |workshop| %>
     <% groups = Group.where(:workshop_id => workshop.id) %>

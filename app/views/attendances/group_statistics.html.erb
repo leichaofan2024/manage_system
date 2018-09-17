@@ -7,7 +7,7 @@
     <% end %>
   </div> -->
 
-  <h4><%= @month %>考勤统计</h4>
+  <h4><%= @month %>月考勤统计</h4>
   <div>
     <% if (@year != Time.now.year) || (@month != Time.now.month) %>
       <%= link_to("返回本月", group_statistics_attendances_path(:year => Time.now.year,:month => Time.now.month),:data => {disable_with: "加载中 ... "},class: "btn btn-primary pull-right",style: "margin-right:18px;margin-bottom:15px;")%>

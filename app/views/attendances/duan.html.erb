@@ -86,13 +86,13 @@
                         <% if attendance_count.attributes[code] == 0%>
                           <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
                             <td><%= attendance.add_overtime.to_i%> </td>
-                          <% elsif %>
+                          <% else %>
                             <td></td>
                           <% end %>
                         <% else %>
                           <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
                             <td><%= attendance.add_overtime.to_i + attendance_count.attributes[code]%> </td>
-                          <% elsif %>
+                          <% else %>
                             <td><%= attendance_count.attributes[code]%></td>
                           <% end %>
                         <% end %>

@@ -256,17 +256,28 @@ class AttendancesController < ApplicationController
     @month = params[:month]
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_hash = VacationCategory.pluck("vacation_name","vacation_code").to_h
-    @group = Group.find_by(:id => params[:group_id])
-    if @group.present?
+    @group_id = params[:group_id]
+
+    if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
+      @group = Group.find_by(:id => current_user.group_id)
       @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
       @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
-    end
-    if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)
       if (@attendance_status.status == "车间已审核") || (@attendance_status.status == "段已审核")
         redirect_to group_attendances_path(:year => @year,:month => @month)
         flash[:alert] = "#{@month}月考勤#{@attendance_status.status}，不能再申请修改，如有问题请联系车间！"
       end
+    elsif current_user.has_role? :organsadmin
+      @group = Group.find_by(:id => current_user.group_id)
+      @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
+      @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
     elsif current_user.has_role? :workshopadmin
+      if params[:workshop_id].blank? && params[:group_id].blank?
+        @groups = Group.current.where(:workshop_id => current_user.workshop_id)
+        @group_id = @groups.first.id
+      end
+      @group = Group.find_by(:id => @group_id)
+      @employees = Employee.current.where(:group=> @group.id).order("employees.id ASC")
+      @attendance_status = AttendanceStatus.find_by(:group_id => @group,:year => @year,:month => @month)
       if !@group.present?
         redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month)
         flash[:alert] = "必须选择一个班组进行考勤修改申请！"
@@ -1281,7 +1292,8 @@ class AttendancesController < ApplicationController
       @groups_already = @groups.where(:id => attendance_statuses.where(:status => ["车间已审核","段已审核"]).pluck(:group_id))
       @groups_cannot = @groups.where.not(:id => (@groups_can.pluck(:id) + @groups_already.pluck(:id)) )
     end
-
+    @attendances = Attendance.where(:employee_id => @employees.ids,:year => @shenhe_year,:month => @shenhe_month)
+    @attendance_counts = AttendanceCount.where(:employee_id => @employees.ids,:year => @shenhe_year,:month => @shenhe_month)
     @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
     if @attendance_status.blank?
       @attendance_status = AttendanceStatus.create(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month,:status => "班组/科室填写中")

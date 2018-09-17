@@ -3,12 +3,18 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">选择考勤</h4>
+        <h4 class="modal-title" id="myModalLabel">
+          <% if @overtime == "yes" %>
+            填写额外加班
+          <% else %>
+            选择考勤
+          <% end %>
+        </h4>
       </div>
       <div class="modal-body">
         <%= form_tag create_attendance_attendances_path, method: 'post' do %>
           <% if @overtime == "yes" %>
-              <%= label_tag :"请输入额外加班数：" %>
+              <%= label_tag :"请输入额外的加班天数：" %>
               <span class="" style= "display:inline-block;width:90px;height: 30px;">
                 <%= text_field_tag :overtime %>
                 <%= hidden_field_tag :employee_id , @employee_id %>
