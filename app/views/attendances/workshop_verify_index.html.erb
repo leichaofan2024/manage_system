@@ -135,6 +135,9 @@
               <br><%= arry[Time.local(@shenhe_year, @shenhe_month, i).wday]%>
             </th>
           <% end %>
+          <% @vacation_code_hash.values.each do |short_name| %>
+            <th><%= short_name%></th>
+          <% end %>
         </tr>
 
       </thead>
@@ -144,20 +147,41 @@
               <th><%= employee.name %></th>
               <th><%= employee.sal_number %></th>
               <% attendance = Attendance.find_by(employee_id: employee.id, month: @shenhe_month, year: @shenhe_year) %>
+              <% attendance_count = AttendanceCount.find_by(employee_id: employee.id, month: @shenhe_month, year: @shenhe_year )%>
               <% if attendance.present? %>
                 <% attendance_month_attendances = attendance.month_attendances %>
                 <% day_number = 1 %>
                 <% (0..30).each do |day| %>
-
-                      <td>
-                        <% if attendance_month_attendances[day] == "x" %>
-                          <%= "-"%>
-                        <% else %>
-                          <%= @vacation_code_hash[attendance_month_attendances[day]] %>
-                        <% end %>
-                      </td>
+                  <td>
+                    <% if attendance_month_attendances[day] == "x" %>
+                      <%= "-"%>
+                    <% else %>
+                      <%= @vacation_code_hash[attendance_month_attendances[day]] %>
+                    <% end %>
+                  </td>
                   <% day_number += 1%>
                 <% end %>
+              <% else %>
+                <td></td>
+              <% end %>
+              <% if attendance_count.present? %>
+                <% @vacation_code_hash.keys.each do |code| %>
+                  <% if attendance_count.attributes[code] == 0%>
+                    <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                      <td><%= attendance.add_overtime.to_i%> </td>
+                    <% elsif %>
+                      <td></td>
+                    <% end %>
+                  <% else %>
+                    <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                      <td><%= attendance.add_overtime.to_i + attendance_count.attributes[code]%> </td>
+                    <% elsif %>
+                      <td><%= attendance_count.attributes[code]%></td>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <td></td>
               <% end %>
             </tr>
           <% end %>
