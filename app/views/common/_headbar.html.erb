@@ -40,7 +40,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
               <% if current_user.has_role? :awardadmin %>
-                <!-- <li><%= link_to '用户管理', users_path %></li> -->
+                <li><%= link_to '用户管理', users_path %></li>
                 <li><%= link_to "公告系统", announcements_path %></li>
                 <li><%= link_to "模板下载",download_table_template_announcements_path%></li>
               <% end %>

@@ -4,7 +4,7 @@
     <a href="wages/kuaizhao_index?category=main">主要行车工种情况统计表<span style="color:red;">(累计) </a>
   </div>
 
-  <h5 style="text-align: center;"><%=@year%>年<%=@month%>月主要行车工种情况统计表</h5>
+  <h5 style="text-align: center;"><%=@year%>年<%=@month%>月（<span style="color:red;">单月</span> ）主要行车工种情况统计表</h5>
   <div class="col-md-12 col-lg-12 col-ms-12" style = "padding-left: 20px;">
     <%= form_tag main_driving_stuffs_path,method: :get  do %>
       <%= label_tag :请输入时间段搜索 %>
