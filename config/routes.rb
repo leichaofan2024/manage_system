@@ -202,6 +202,8 @@ Rails.application.routes.draw do
       get :production_stuff_wage
       get :high_speed_rail_stuff
       get :main_driving_stuff
+      get :edit_header_formula
+      post :update_header_formula
     end
   end
 

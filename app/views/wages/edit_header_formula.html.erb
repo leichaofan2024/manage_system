@@ -1,0 +1,93 @@
+<div class="">
+  <%= link_to("<<  返回",import_wage_wages_path(:year => @year,:month => @month)) %>
+</div>
+<div style="padding-bottom:30px;">
+  <h4>表头公式编辑</h4>
+
+  <p style = "font-size= 30px;font-weight:900">当前项目名称：</p>
+  <p> <%= @header_name %> </p>
+  <p style = "font-size= 30px;font-weight:900">当前公式：</p>
+  <p>
+    <% n = 0 %>
+    <% if @formula.present? %>
+      <% @formula.keys.each do |key| %>
+        <% if @formula[key]=="1" %>
+          <% if n == 0 %>
+            "<%= Wage.head_transfer[key] %>"
+          <% else %>
+          +  "<%= Wage.head_transfer[key] %>"
+          <% end %>
+        <% elsif @formula[key]=="2" %>
+          -  "<%= Wage.head_transfer[key] %>"
+        <% end %>
+        <% n += 1%>
+      <% end %>
+    <% end %>
+  </p>
+  <br>
+
+
+
+
+<%= form_tag update_header_formula_wages_path,method: :post do |f| %>
+  <%= hidden_field_tag :year, @year %>
+  <%= hidden_field_tag :month, @month %>
+  <%= hidden_field_tag :header_name, @header_name %>
+  <%= label_tag "#{@header_name}计算公式："%>
+  <br>
+  <br>
+  <% if @header_name == "奖金二"%>
+    <% (Bonu.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7"]).each do |key| %>
+      <span style = "margin-left:20px;display:inline-block;width:200px">
+        &nbsp;&nbsp;
+        <span >
+          <select class="" name= "<%= key%>">
+            <% if @formula.present? && (@formula[key].to_i == 1) %>
+              <option>--请选择--</option>
+              <option value="1" selected>+</option>
+              <option value="2">-</option>
+            <% elsif @formula.present? && (@formula[key].to_i == 2) %>
+              <option>--请选择--</option>
+              <option value="1">+</option>
+              <option value="2" selected>-</option>
+            <% else %>
+              <option disabled selected value>--请选择--</option>
+              <option value="1">+</option>
+              <option value="2">-</option>
+            <% end %>
+          </select>
+        </span>
+        <%= label_tag Bonu.head_transfer[key]%>
+      </span>
+    <% end %>
+  <% else %>
+    <% (Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]).each do |key| %>
+      <span style = "margin-left:20px;display:inline-block;width:200px">
+        &nbsp;&nbsp;
+        <span >
+          <select class="" name= "<%= key%>">
+            <% if @formula.present? && (@formula[key].to_i == 1) %>
+              <option>--请选择--</option>
+              <option value="1" selected>+</option>
+              <option value="2">-</option>
+            <% elsif @formula.present? && (@formula[key].to_i == 2) %>
+              <option>--请选择--</option>
+              <option value="1">+</option>
+              <option value="2" selected>-</option>
+            <% else %>
+              <option disabled selected value>--请选择--</option>
+              <option value="1">+</option>
+              <option value="2">-</option>
+            <% end %>
+          </select>
+        </span>
+        <%= label_tag Wage.head_transfer[key]%>
+      </span>
+    <% end %>
+  <% end %>
+
+  <br>
+  <br>
+
+  <%= submit_tag :提交,:data => {:disable_with => "计算中，请稍等... ..."} %>
+<% end %>

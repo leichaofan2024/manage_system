@@ -66,7 +66,11 @@
           <thead>
           	<tr>
           		<% WageHeader.pluck("header").each do |i| %>
-          			<th><%= i %></th>
+                <% if ["奖金二","工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].include?(i) %>
+          			   <th><%= link_to(i,edit_header_formula_wages_path(:header_name => i,:year => @year,:month => @month),class: "btn btn-primary wage-header-button") %></th>
+                <% else %>
+                  <th><%= i %></th>
+                <% end %>
           		<% end %>
           	</tr>
           </thead>

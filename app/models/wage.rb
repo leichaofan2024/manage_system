@@ -13,7 +13,7 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
       wage_import_message = Hash.new
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
 	    # header_name = spreadsheet.row(1)
-      # header_name += ["工资总额","基本工资","绩效工资","津贴补贴"]
+      # header_name += ["奖金二","工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"]
 	    # header_name.each do |i|
 	    # 	WageHeader.create(:header => i)
 	    # end
@@ -50,28 +50,19 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
 						end
             wage.year = year.to_i
             wage.month = month.to_i
-            row[header_hash["基本工资"]] = (row[header_hash["技能"]]).to_i
-                                       - (row[header_hash["岗位"]]).to_i
-                                       - (row[header_hash["增资"]]).to_i
-
-            row[header_hash["津贴补贴"]] = (row[header_hash["工龄"]]).to_i
-                                       + (row[header_hash["夜班费"]]).to_i
-                                       + (row[header_hash["生活补贴"]]).to_i
-                                       + (row[header_hash["增效"]]).to_i
-                                       + (row[header_hash["交通费"]]).to_i
-                                       + (row[header_hash["卫生费"]]).to_i
-                                       + (row[header_hash["房补"]]).to_i
-                                       + (row[header_hash["回民补贴"]]).to_i
-                                       + (row[header_hash["干部职贴"]]).to_i
-                                       + (row[header_hash["工人津贴"]]).to_i
-                                       + (row[header_hash["一线津贴"]]).to_i
-                                       + (row[header_hash["特种工资"]]).to_i
-                                       + (row[header_hash["工伤待遇"]]).to_i
-                                       + (row[header_hash["最低工资"]]).to_i
-                                       + (row[header_hash["它补1"]]).to_i
-                                       + (row[header_hash["它补2"]]).to_i
-                                       + (row[header_hash["高温津贴"]]).to_i
-
+            ["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
+              formula = WageHeader.find_by(:header => name).formula
+              row[hearder_hash[name]] = 0
+              if formula.present?
+                formula.keys.each do |key|
+                  if formula[key].to_i == 1
+                    row[hearder_hash[name]] = (row[hearder_hash[name]].to_i + row[key].to_i)
+                  elsif formula[key].to_i == 2
+                    row[hearder_hash[name]] = (row[hearder_hash[name]].to_i - row[key].to_i)
+                  end
+                end
+              end
+            end
             wage.attributes = row
   	        wage.save!
   	    end

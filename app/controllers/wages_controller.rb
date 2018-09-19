@@ -36,6 +36,86 @@ class WagesController < ApplicationController
 		flash[:notice] = "已成功删除#{params[:year]}年#{params[:month]}月工资表！"
 	end
 
+	#工资表表头公式表单
+	def edit_header_formula
+		@year = params[:year]
+		@month = params[:month]
+		@header_name = params[:header_name]
+		@formula = WageHeader.find_by(:header => @header_name).formula
+		@wage_headers = WageHeader.pluck(:header)
+		@bonus_headers = BonusHeader.pluck(:header)
+
+	end
+
+#生成工资表头公式及更新带公式的列数据
+	def update_header_formula
+		@year = params[:year]
+		@month = params[:month]
+		@header_name = params[:header_name]
+    @params_hash = params.delete_if{|key,value| ["year","month","header_name","utf8","authenticity_token","commit","controller","action","name","id","_method"].include?(key) || (value =="")}
+		@wages = Wage.where(:year => @year,:month => @month)
+		@bonus = Bonu.where(:year => @year,:month => @month)
+		wage_headers = WageHeader.pluck("header")
+    header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
+    header_hash = [wage_headers,header_ids].transpose.to_h
+		if @params_hash.present? && (@header_name == "奖金二")
+			WageHeader.find_by(:header => @header_name).update(:forluma => @params_hash)
+			if @bonus.present?
+				bonus_attributes = @bonus.attributes
+	      @wages.each do |wage|
+					wage_attributes = wage.attributes
+          bonus_value = 0
+					@params_hash.keys.each do |key|
+						if @params_hash[key].to_i == 1
+							bonus_value = (bonus_value + bonus_attributes[key].to_i)
+						elsif @params_hash[key].to_i == 2
+							bonus_value = (bonus_value - bonus_attributes[key].to_i)
+						end
+					end
+					wage.update(header_hash[@header_name] => bonus_value)
+
+					["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
+						forluma = WageHeader.find_by(:header => name).formula
+						value = 0
+						if formula.present?
+							formula.keys.each do |key|
+								if forluma[key].to_i == 1
+									value = (value + wage_attributes[key].to_i)
+								elsif formula[key].to_i == 2
+									value = (value - wage_attributes[key].to_i)
+								end
+							end
+							wage.update(header_hash[name] => value)
+						end
+					end
+				end
+				flash[:notice] = "奖金二、工资总额、基本工资、绩效工资、津贴补贴、岗位工资、技能工资、加班工资等八项数据更新成功！"
+			else
+				flash[:warngin] = "公式更新成功！但由于#{@year}年#{@month}月奖金表尚未上传，‘奖金二’栏位暂无数据，数据在奖金表上传后自动更新！"
+				redirect_to import_wage_wages_path(:year => @year ,:month => @month)
+			end
+		elsif @params_hash.present?
+      WageHeader.find_by(:header => @header_name).update(:formula => @params_hash)
+			@wages.each do |wage|
+				wage_attributes = wage.attributes
+				wage_value = 0
+				@params_hash.keys.each do |key|
+					if @params_hash[key].to_i == 1
+						wage_value = (wage_value + wage_attributes[key].to_i)
+					elsif @params_hash[key].to_i == 2
+						wage_value = (wage_value - wage_attributes[key].to_i)
+					end
+				end
+				wage.update(header_hash[@header_name] => wage_value)
+			end
+			flash[:notice] = "#{@header_name}公式及数据更新成功！"
+			redirect_to import_wage_wages_path(:year => @year ,:month => @month)
+		else
+			redirect_to import_wage_wages_path(:year => @year ,:month => @month)
+		end
+
+	end
+
 	#上传表格
   def import_table
     if !params[:file].present?

@@ -58,35 +58,33 @@ class Bonu < ApplicationRecord
             wage = Wage.find_by("#{wage_header_hash["工资号"]}" => row[header_hash["工资号"]],:year => year,:month => month)
             if wage.present?
 							wage_attributes = wage.attributes
-							# 工资表奖金：
-							wage_jiangjin = (row[header_hash["挂钩工资"]]).to_i
-                            + (row[header_hash["工费"]]).to_i
-                            + (row[header_hash["安质工资"]]).to_i
-                            + (row[header_hash["工质工资"]]).to_i
-                            + (row[header_hash["行车考核"]]).to_i
-                            + (row[header_hash["一体化奖"]]).to_i
-                            + (row[header_hash["兼职兼岗"]]).to_i
-                            + (row[header_hash["其他"]]).to_i
-                            + (row[header_hash["管理"]]).to_i
-                            + (row[header_hash["星级考核"]]).to_i
-                            + (row[header_hash["标考奖"]]).to_i
-                            + (row[header_hash["局先奖"]]).to_i
-                            + (row[header_hash["一次性"]]).to_i
-                            - (row[header_hash["考核扣款"]]).to_i
-           # 工资表工资总额
-           wage_gongzizonge = (wage_attributes[wage_header_hash["应发工资"]]).to_i
-                            - (wage_attributes[wage_header_hash["独补"]]).to_i
-                            - (wage_attributes[wage_header_hash["托补"]]).to_i
-                            - (wage_attributes[wage_header_hash["奶补"]]).to_i
-                            - (wage_attributes[wage_header_hash["扣捆绑"]]).to_i
-                            - (wage_attributes[wage_header_hash["扣捆挂"]]).to_i
-                            + wage_jiangjin
-           # 工资表绩效工资
-           wage_jixiaogongzi = wage_attributes[wage_header_hash["岗安考核"]]
-                             + wage_attributes[wage_header_hash["加班费"]]
-                             + wage_jiangjin
-
-					wage.update(wage_header_hash["奖金"] => wage_jiangjin,wage_header_hash["工资总额"] => wage_gongzizonge,wage_header_hash["绩效工资"] => wage_jixiaogongzi )
+							bonus_formula = WageHeader.find_by(:header => "奖金二").formula
+							bonus_value = 0
+							if bonus_formula.present?
+								bonus_formula.keys.each do |key|
+									if bonus_formula[key].to_i == 1
+										bonus_value = (bonus_value + bonu.attributes[key].to_i)
+									elsif bonus_formula[key].to_i == 2
+										bonus_value = (bonus_value - bonu.attributes[key].to_i)
+									end
+								end
+							end
+							wage.update(wage_header_hash["奖金二"] => bonus_value)
+              wage_attributes = wage.attributes
+							["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
+                forluma = WageHeader.find_by(:header => name).formula
+								value = 0
+								if formula.present?
+									formula.keys.each do |key|
+	                  if forluma[key].to_i == 1
+											value = (value + wage_attributes[key].to_i)
+										elsif formula[key].to_i == 2
+											value = (value - wage_attributes[key].to_i)
+										end
+									end
+									wage.update(wage_header_hash[key] => value)
+								end
+              end
 						end
 
 		    end
