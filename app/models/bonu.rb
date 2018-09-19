@@ -2,13 +2,13 @@ class Bonu < ApplicationRecord
 	def self.head_transfer
     bonus_headers = BonusHeader.pluck("header")
     header_ids = (1..BonusHeader.count).map{|m| "col"+ m.to_s}
-    header_hash = [bonus_headers,header_ids].transpose.to_h
+    header_hash = [header_ids,bonus_headers].transpose.to_h
 		return header_hash
 	end
 
 	def self.import_table(file,year,month)
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
-	    # header = spreadsheet.row(1)
+	    header = spreadsheet.row(1)
 	    # header.each do |i|
 	    # 	BonusHeader.create(:header => i)
 	    # end
@@ -72,17 +72,17 @@ class Bonu < ApplicationRecord
 							wage.update(wage_header_hash["奖金二"] => bonus_value)
               wage_attributes = wage.attributes
 							["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
-                forluma = WageHeader.find_by(:header => name).formula
+                formula = WageHeader.find_by(:header => name).formula
 								value = 0
 								if formula.present?
 									formula.keys.each do |key|
-	                  if forluma[key].to_i == 1
+	                  if formula[key].to_i == 1
 											value = (value + wage_attributes[key].to_i)
 										elsif formula[key].to_i == 2
 											value = (value - wage_attributes[key].to_i)
 										end
 									end
-									wage.update(wage_header_hash[key] => value)
+									wage.update(wage_header_hash[name] => value)
 								end
               end
 						end

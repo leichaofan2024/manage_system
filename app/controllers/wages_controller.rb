@@ -58,28 +58,35 @@ class WagesController < ApplicationController
 		wage_headers = WageHeader.pluck("header")
     header_ids = (1..WageHeader.count).map{|m| "col"+ m.to_s}
     header_hash = [wage_headers,header_ids].transpose.to_h
+		bonus_headers = BonusHeader.pluck("header")
+		bonu_header_ids = (1..(BonusHeader.count)).map{|h| "col"+ h.to_s}
+		bonu_header_hash = [bonus_headers,bonu_header_ids].transpose.to_h
 		if @params_hash.present? && (@header_name == "奖金二")
-			WageHeader.find_by(:header => @header_name).update(:forluma => @params_hash)
+			WageHeader.find_by(:header => @header_name).update(:formula => @params_hash)
+
 			if @bonus.present?
-				bonus_attributes = @bonus.attributes
 	      @wages.each do |wage|
 					wage_attributes = wage.attributes
-          bonus_value = 0
-					@params_hash.keys.each do |key|
-						if @params_hash[key].to_i == 1
-							bonus_value = (bonus_value + bonus_attributes[key].to_i)
-						elsif @params_hash[key].to_i == 2
-							bonus_value = (bonus_value - bonus_attributes[key].to_i)
+					@bonu = Bonu.find_by(:year => @year,:month => @month,bonu_header_hash["工资号"] => wage_attributes[header_hash["工资号"]])
+					if @bonu.present?
+						bonus_attributes = @bonu.attributes
+	          bonus_value = 0
+						@params_hash.keys.each do |key|
+							if @params_hash[key].to_i == 1
+								bonus_value = (bonus_value + bonus_attributes[key].to_i)
+							elsif @params_hash[key].to_i == 2
+								bonus_value = (bonus_value - bonus_attributes[key].to_i)
+							end
 						end
-					end
-					wage.update(header_hash[@header_name] => bonus_value)
+						wage.update(header_hash[@header_name] => bonus_value)
+          end
 
 					["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
-						forluma = WageHeader.find_by(:header => name).formula
+						formula = WageHeader.find_by(:header => name).formula
 						value = 0
 						if formula.present?
 							formula.keys.each do |key|
-								if forluma[key].to_i == 1
+								if formula[key].to_i == 1
 									value = (value + wage_attributes[key].to_i)
 								elsif formula[key].to_i == 2
 									value = (value - wage_attributes[key].to_i)
@@ -90,6 +97,7 @@ class WagesController < ApplicationController
 					end
 				end
 				flash[:notice] = "奖金二、工资总额、基本工资、绩效工资、津贴补贴、岗位工资、技能工资、加班工资等八项数据更新成功！"
+				redirect_to import_wage_wages_path(:year => @year ,:month => @month)
 			else
 				flash[:warngin] = "公式更新成功！但由于#{@year}年#{@month}月奖金表尚未上传，‘奖金二’栏位暂无数据，数据在奖金表上传后自动更新！"
 				redirect_to import_wage_wages_path(:year => @year ,:month => @month)
