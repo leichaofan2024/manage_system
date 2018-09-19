@@ -7,13 +7,6 @@
       </div>
       <div class="modal-body">
           <%= form_tag merge_group_employees_path, method: 'post' do %>
-            <% Workshop.current.each do |workshop| %>
-              <h5><%= label_tag :q, "#{workshop.name}"%><br></h5>   
-              <% workshop.groups.each do |group| %>   
-                &nbsp; &nbsp;<%= check_box_tag "groups[]", group.id %>
-                <%= label_tag :q, "#{group.name}"%><br>      
-              <% end %>  
-            <% end %>
             <%= label_tag :请输入合并后的班组名称 %>
             <%= text_field_tag :merge_group, nil, required: true %>
             <%= label_tag :请输入该班组所属的车间名称 %>
@@ -21,8 +14,8 @@
             <%= submit_tag :确定 %>
             <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
           <% end %>
-          
+
       </div>
-    </div> 
+    </div>
   </div>
 </div>

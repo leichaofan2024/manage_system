@@ -7,153 +7,110 @@
   <% employee_ids += @employees.page(i).per(16).pluck("id") %>
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
-<div class="col-md-12" style="width:100%">
- <div>
-  <div class="btn_group_top-1sKKU_0">
-    <div>
-      <div class="btn_group-2MSRh_0">
-        <div class="ivu-tooltip">
-          <% if can? :import, Employee%>
-            <div class="ivu-tooltip-rel">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <% if @workshop.present? or @group.present? %>
-                  <%= link_to organization_structure_employees_path(format: "xls", employees: employee_ids) do %>
-                    <span style="color: #269Eff;">导出表格</span>
-                  <% end %>
-                <% else %>
-                  <%= link_to organization_structure_employees_path(format: "xls", employees: "全部") do %>
-                    <span style="color: #269Eff;">导出表格</span>
-                  <% end %>
-                <% end %>
+<div class="panel panel-body">
+  <% if can? :import, Employee%>
 
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right;">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
-                   <span style="color: #269Eff;">新增车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
-                   <span style="color: #269Eff;">新增班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
-                   <span style="color: #269Eff;">合并车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
-                   <span style="color: #269Eff;">合并班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
-                   <span style="color: #269Eff;">删除车间/班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
-                   <span style="color: #269Eff;">修改车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editGroupModal" do  %>
-                   <span style="color: #269Eff;">修改班组</span>
-                <% end %>
-              </button>
-            </div>
+      <!-- <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <% if @workshop.present? or @group.present? %>
+          <%= link_to organization_structure_employees_path(format: "xls", employees: employee_ids) do %>
+            <span style="color: #269Eff;">导出表格</span>
           <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
- </div>
-</div>
-<h5>人数：<%= @employees.total_count %></h5>
-<div class="col-md-12" style="height: 100%; margin-top: 40px;">
-  <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-
-    <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
-    <ul>
-      <% @workshops.each do |workshop| %>
-      <li>
-        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-
-        <ul>
-          <% @groups = Group.current.where(:workshop_id => workshop.id) %>
-          <% @groups.each do |group| %>
-            <li><a href='/employees/organization_structure?group=<%= group.id %>'><%= group.name %></a></li>
+        <% else %>
+          <%= link_to organization_structure_employees_path(format: "xls", employees: "全部") do %>
+            <span style="color: #269Eff;">导出表格</span>
           <% end %>
-        </ul>
-      </li>
-      <% end %>
-    </ul>
-  </div>
-
-  <div class="col-md-10" style="overflow: auto;">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>工资号</th>
-          <th>工号</th>
-          <th>档案号</th>
-          <th>车间</th>
-          <th>班组</th>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>年龄</th>
-          <th>文化程度</th>
-          <th>民族</th>
-          <th>籍贯</th>
-          <th>工作时间</th>
-          <th>工龄</th>
-          <th>入路时间</th>
-          <th>路龄</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <% @employees.each do |employee| %>
-          <tr>
-            <td><%= employee.sal_number %></td>
-            <td><%= employee.job_number %></td>
-            <td><%= employee.record_number %></td>
-            <td><%= Workshop.current.find(employee.workshop).name %></td>
-            <td><%= Group.current.find(employee.group).name %></td>
-            <td><%= employee.name %></td>
-            <td><%= employee.sex %></td>
-            <td><%= employee.age %></td>
-            <td><%= employee.education_background %></td>
-            <td><%= employee.nation %></td>
-            <td><%= employee.native_place %></td>
-            <td><%= employee.working_time %></td>
-            <td><%= employee.working_years %></td>
-            <td><%= employee.railway_time %></td>
-            <td><%= employee.rali_years %></td>
-          </tr>
         <% end %>
-     </tbody>
-    </table>
-   </div>
-   <div class="text-center">
-     <%= paginate @employees %>
-   </div>
+
+      </button> -->
+    <div class="btn margin-right-10" >
+        <%= link_to "#",class:"btn btn-success-alt", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
+           合并车间
+        <% end %>
+        <%= link_to "#", class:"btn btn-success-alt","data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
+           合并班组
+        <% end %>
+    </div>
+
+
+    <!-- <div class="ivu-tooltip-rel" style="text-align: right">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
+           <span style="color: #269Eff;">删除车间/班组</span>
+        <% end %>
+      </button>
+    </div>
+    <div class="ivu-tooltip-rel" style="text-align: right">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
+           <span style="color: #269Eff;">修改车间</span>
+        <% end %>
+      </button>
+    </div>
+    <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editGroupModal" do  %>
+           <span style="color: #269Eff;">修改班组</span>
+        <% end %>
+      </button>
+    </div> -->
+  <% end %>
+
+<div class="table-organization">
+  <ul class="table-title">
+    <li>
+      组织名称
+    </li>
+    <li class="filter-type">操作</li>
+  </ul>
+  <ul class="table-body">
+    <li>北京供电段</li>
+    <li class="filter-type">
+        <%= link_to "#", class:"btn btn-success-alt","data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
+           <i class="fa fa-pencil"></i> 新增车间
+        <% end %>
+    </li>
+  </ul>
+  <% @workshops.each do |workshop| %>
+  <ul class="table-body">
+    <li class="font">
+        <span class="glyphicon glyphicon-play" style="margin: 0 5px;"></span>
+        <%= workshop.name %>
+    </li>
+    <li class="filter-type">
+      <div class="btn-group">
+          <%= link_to "#", class:"btn btn-success-alt","data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
+             新增班组
+          <% end %>
+        <button type="button" name="button" class="btn btn-success-alt"><i class="fa fa-pencil"></i>编辑</button>
+        <button type="button" name="button" class="btn btn-success-alt"><i class="fa fa-trash-o"></i>删除</button>
+      </div>
+    </li>
+
+
+    <% workshop.groups.each do |group| %>
+      <ul class="children"  style="display: none;">
+        <li>
+          <%= form_tag merge_group_employees_path, method: 'post' do %>
+          <%= check_box_tag "groups[]", group.id %>
+          <%= label_tag :q, "#{group.name}"%>
+          <%= submit_tag "确定"%>
+          <% end %>
+        </li>
+        <li class="filter-type">
+          <a href="" class="itemopt disabled"><i class="fa fa-pencil"></i> 编辑</a>
+          <a href="" class="itemopt disabled"><i class="fa fa-trash-o"></i> 删除</a>
+        </li>
+      </ul>
+    <% end %>
+  </ul>
+  <% end %>
+
 </div>
+
+
+
+
+
 
 
 <div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -199,38 +156,3 @@
 <%= render "show_edit_workshop" %>
 <%= render "show_edit_group" %>
 </div>
-
-<script type="text/javascript">
-  (function(e) {
-    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
-      em.onclick = function(){ //onmouseover
-        var ul = this.nextSibling;
-        if(!ul){
-          return false;
-        }
-        ul = ul.nextSibling;
-        if(!ul) {
-          return false;
-        }
-        if(e.tag != 'a') {
-          ul = ul.nextSibling;
-          if(!ul){
-            return false;
-          }
-        } //a 标签控制 隐藏或删除该行
-        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
-          if(li.tagName=="LI"){
-            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
-              switch($ul.tagName){
-                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
-                break;
-                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-  })({id:'menu',tag:'i'});
-</script>
