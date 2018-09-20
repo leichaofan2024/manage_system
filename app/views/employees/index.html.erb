@@ -13,68 +13,68 @@
 
       <!-- 总数统计-开始 -->
         <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)%>
-        <ul class="employee-title">
-          <li>
-            <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span><br>
-            <span>合计</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(aa: request.query_parameters, default: "男") %></span>
-            <br>
-            <span>男</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(aa: request.query_parameters, default: "女") %></span>
-            <br>
-            <span>女</span>
-          </li>
-          <li>
-            <% if Employee.where(id: employee_ids).count == 0 %>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF">0</span>
-            <% else %>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).sum("age") / Employee.where(id: employee_ids).count %></span>
-            <% end %>
-            <br>
-            <span>平均年龄</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
-            <br>
-            <span>调离</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0"><%= link_to Employee.retire.count, employee_detail_employees_path(type: "退休")%></span>
-            <br>
-            <span>退休</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
-            <br>
-            <span>最近一月调动</span>
-          </li>
-        </ul>
+          <ul class="employee-title">
+            <li>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span><br>
+              <span>合计</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(aa: request.query_parameters, default: "男") %></span>
+              <br>
+              <span>男</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(aa: request.query_parameters, default: "女") %></span>
+              <br>
+              <span>女</span>
+            </li>
+            <li>
+              <% if Employee.where(id: employee_ids).count == 0 %>
+                <span class="highlight-1iKYJ_0" style="color: #269EFF">0</span>
+              <% else %>
+                <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).sum("age") / Employee.where(id: employee_ids).count %></span>
+              <% end %>
+              <br>
+              <span>平均年龄</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
+              <br>
+              <span>调离</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0"><%= link_to Employee.retire.count, employee_detail_employees_path(type: "退休")%></span>
+              <br>
+              <span>退休</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
+              <br>
+              <span>最近一月调动</span>
+            </li>
+          </ul>
         <% elsif current_user.has_role? :awardadmin%>
-        <ul class="employee-title">
-          <li>
-            <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count%></span><br>
-            <span>合计</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "男").count%></span><br>
-            <span>男</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "女").count%></span><br>
-            <span>女</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span><br>
-            <span>调离</span>
-          </li>
-          <li>
-            <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span><br>
-            <span>最近一月调动</span>
-          </li>
+          <ul class="employee-title">
+            <li>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count%></span><br>
+              <span>合计</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "男").count%></span><br>
+              <span>男</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "女").count%></span><br>
+              <span>女</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span><br>
+              <span>调离</span>
+            </li>
+            <li>
+              <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span><br>
+              <span>最近一月调动</span>
+            </li>
         </ul>
         <% else %>
           <ul class="employee-title">
@@ -90,93 +90,110 @@
 
 
 
-<div class="panel panel-default">
-  <div class="panel-body">
-
-    <!-- 导出与新增-开始 -->
-
-
-            <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
-
-                <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                  <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
-                    <%= link_to employees_path(format: "xls", employees: employee_ids) do %>
-                       <span style="color: #269Eff;">导出表格</span>
-                    <% end %>
-                  <% else %>
-                    <%= link_to employees_path(format: "xls", employees: "全部") do %>
-                       <span style="color: #269Eff;">导出表格</span>
-                    <% end %>
-                  <% end %>
-                </button>
-
-              <% if current_user.has_role? :empadmin %>
-
-                  <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                    <%= link_to new_employee_path do  %>
-                       <span style="color: #269Eff;">新增人员</span>
-                    <% end %>
+        <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="panel">
+                <div class="panel-heading" style="background-color: #fff;">
+        <!-- 导出与新增-开始 -->
+                  <button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
+                    <span class="glyphicon glyphicon-filter"></span>搜索/筛选
                   </button>
+                    <div class="btn margin-right-10" style="float: right;">
+                      <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
+                            <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
+                              <%= link_to employees_path(format: "xls", employees: employee_ids),class:"btn btn-success-alt" do %>
+                                 导出表格
+                              <% end %>
+                            <% else %>
+                              <%= link_to employees_path(format: "xls", employees: "全部"),class:"btn btn-success-alt" do %>
+                                导出表格
+                              <% end %>
+                            <% end %>
 
-              <% end %>
-            <% end %>
+                        <% if current_user.has_role? :empadmin %>
 
+                              <%= link_to new_employee_path,class:"btn btn-success-alt" do  %>
+                                 新增人员
+                              <% end %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  <!-- 导出与新增-结束 -->
+                </div>
+                <div class="panel-body" id="employee-btn" style="display: none;">
+                    <ul class="employee-search">
+                      <li style="padding: 20 0px; margin: 0; margin-bottom: 10px;">
+                        <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
+                          <div class="input-group" style="width: 20%;">
+                            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
+                            <span class="input-group-btn">
+                              <button type="submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-search"></span>
+                              </button>
+                            </span>
+                          </div>
+                        <% end %>
+                      </li>
+                      <li>车间：
+                          <select name="workshop" id= "workshop_id">
+                            <% Workshop.all.each do |workshop| %>
+                              <% if workshop.id == @select_workshop %>
+                                <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                              <% else %>
+                                <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                              <% end %>
+                            <% end %>
+                          </select>
+                      </li>
+                      <li>
+                        <%= form_tag filter_employees_path, method: 'get' do %>
+                          <%= label_tag :按男女： %>
+                          <%= select_tag(:sex, options_for_select(["男","女"]), {:prompt => "请选择"}) %>
+                          <%= label_tag :按职务： %>
+                          <%= select_tag(:duty, options_for_select(Employee.pluck("duty").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+                          <%= label_tag :按技术职称： %>
+                          <%= select_tag(:work_type, options_for_select(Employee.pluck("work_type").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+                          <%= label_tag :按时间段： %>
+                          <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择"})%>
+                          <%= text_field_tag :start_time %> ~
+                          <%= text_field_tag :end_time %>
+                          <% if params[:workshop].present? %>
+                            <%= hidden_field_tag :workshop, params[:workshop] %>
+                          <% elsif params[:group].present? %>
+                            <%= hidden_field_tag :group, params[:group] %>
+                          <% end %>
+                          <%= submit_tag :筛选 %>
+                        <% end %>
+                      </li>
+                    </ul>
+                  </div>
+              </div><!--panel-->
 
-    <!-- 导出与新增-结束 -->
+              <!--- 搜索-开始  -->
 
+                    <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)  %>
+                      <%= render 'empshared/emp_table' %>
+                    <% elsif current_user.has_role? :attendance_admin %>
+                      <%= render 'empshared/other_duanadmin' %>
+                    <% elsif (current_user.has_role? :workshopadmin) %>
+                      <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
+                    <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :awardadmin)%>
+                      <%= render 'empshared/emp_table_not_empadmin'%>
+                    <% end %>
+                <div class="text-center">
+                  <%= paginate @employees %>
+                </div>
 
-        <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
-          <div class="input-group">
-            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">
-                <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
+              </div><!--panel-body-->
           </div>
-        <% end %>
-
-    <%= form_tag filter_employees_path, method: 'get' do %>
-      <%= label_tag :按男女： %>
-      <%= select_tag(:sex, options_for_select(["男","女"]), {:prompt => "请选择"}) %>
-      <%= label_tag :按职务： %>
-      <%= select_tag(:duty, options_for_select(Employee.pluck("duty").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
-      <%= label_tag :按技术职称： %>
-      <%= select_tag(:work_type, options_for_select(Employee.pluck("work_type").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
-      <%= label_tag :按时间段： %>
-      <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择"})%>
-      <%= text_field_tag :start_time %> ~
-      <%= text_field_tag :end_time %>
-      <% if params[:workshop].present? %>
-        <%= hidden_field_tag :workshop, params[:workshop] %>
-      <% elsif params[:group].present? %>
-        <%= hidden_field_tag :group, params[:group] %>
-      <% end %>
-      <%= submit_tag :筛选 %>
-    <% end %>
-
-    <!--- 搜索-开始  -->
-    <div class="card">
-      <div style="width: 100%;">
-        <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)  %>
-          <%= render 'empshared/emp_table' %>
-        <% elsif current_user.has_role? :attendance_admin %>
-          <%= render 'empshared/other_duanadmin' %>
-        <% elsif (current_user.has_role? :workshopadmin) %>
-          <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
-        <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :awardadmin)%>
-          <%= render 'empshared/emp_table_not_empadmin'%>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="text-center">
-      <%= paginate @employees %>
-    </div>
-
-
-  </div>
-  </div>
 
 </div>
-</div>
+<script type="text/javascript">
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    }
+</script>
