@@ -12,14 +12,26 @@
       <% n = 0 %>
       <% if @formula.present? %>
         <% @formula.keys.each do |key| %>
-          <% if @formula[key]=="1" %>
-            <% if n == 0 %>
-              "<%= Wage.head_transfer[key] %>"
-            <% else %>
-            +  "<%= Wage.head_transfer[key] %>"
+         <% if @header_name == "奖金二"%>
+            <% if @formula[key]=="1" %>
+              <% if n == 0 %>
+                "<%= Bonu.head_transfer[key] %>"
+              <% else %>
+              +  "<%= Bonu.head_transfer[key] %>"
+              <% end %>
+            <% elsif @formula[key]=="2" %>
+              -  "<%= Bonu.head_transfer[key] %>"
             <% end %>
-          <% elsif @formula[key]=="2" %>
-            -  "<%= Wage.head_transfer[key] %>"
+          <% else %>
+            <% if @formula[key]=="1" %>
+              <% if n == 0 %>
+                "<%= Wage.head_transfer[key] %>"
+              <% else %>
+              +  "<%= Wage.head_transfer[key] %>"
+              <% end %>
+            <% elsif @formula[key]=="2" %>
+              -  "<%= Wage.head_transfer[key] %>"
+            <% end %>
           <% end %>
           <% n += 1%>
         <% end %>

@@ -160,16 +160,16 @@ class WagesController < ApplicationController
 
 	#每项具体人员信息
   def employees_wage_show
-		if params[:category] = "divide"
+		if params[:category] == "divide"
       @line_content = DivideLevelWage.find(params[:content_id])
 			@formula = @line_content.formula
-		elsif params[:category] = "high"
+		elsif params[:category] == "high"
 			@line_content = HighSpeedRailStuff.find(params[:content_id])
 			@formula = @line_content.formula
-		elsif params[:category] = "main"
+		elsif params[:category] == "main"
 			@line_content = MainDrivingStuff.find(params[:content_id])
 			@formula = @line_content.formula
-		elsif params[:category] = "production"
+		elsif params[:category] == "production"
 			@line_content = ProductionStuffWage.find(params[:content_id])
 			@formula = @line_content.formula
 		end
@@ -211,26 +211,26 @@ class WagesController < ApplicationController
 			@line_content.update(:formula => @formula)
 			add_people = Employee.current.where(:sal_number => @formula["add_people"])
 			@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
-			if params[:category] = "divide"
+			if params[:category] == "divide"
 				@formula = DivideLevelWage.find(params[:content_id]).formula
-			elsif params[:category] = "high"
+			elsif params[:category] == "high"
 				@formula = HighSpeedRailStuff.find(params[:content_id]).formula
-			elsif params[:category] = "main"
+			elsif params[:category] == "main"
 				@formula = MainDrivingStuff.find(params[:content_id]).formula
-			elsif params[:category] = "production"
+			elsif params[:category] == "production"
 				@formula = ProductionStuffWage.find(params[:content_id]).formula
 			end
 			redirect_to employees_wage_show_wages_path(:category => params[:category],:content_id => params[:content_id],:content_name => params[:content_name])
 		end
     add_people = Employee.current.where(:sal_number => @formula["add_people"])
 		@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
-		if params[:category] = "divide"
+		if params[:category] == "divide"
 			@formula = DivideLevelWage.find(params[:content_id]).formula
-		elsif params[:category] = "high"
+		elsif params[:category] == "high"
 			@formula = HighSpeedRailStuff.find(params[:content_id]).formula
-		elsif params[:category] = "main"
+		elsif params[:category] == "main"
 			@formula = MainDrivingStuff.find(params[:content_id]).formula
-		elsif params[:category] = "production"
+		elsif params[:category] == "production"
 			@formula = ProductionStuffWage.find(params[:content_id]).formula
 		end
 	end
