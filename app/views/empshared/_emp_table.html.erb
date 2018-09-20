@@ -1,25 +1,4 @@
-<div  style="height: 100%; margin-top: 20px;">
-  <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-
-    <h5><%= link_to "北京供电段", filter_employees_path(duan: "北京供电段") %></h5>
-    <ul>
-      <% Workshop.current.each do |workshop| %>
-      <li>
-        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/filter?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-
-        <ul>
-          <% @groups = Group.current.where(:workshop_id => workshop.id) %>
-          <% @groups.each do |group| %>
-            <li><a href='/employees/filter?group=<%= group.id %>'><%= group.name %></a></li>
-          <% end %>
-        </ul>
-      </li>
-      <% end %>
-    </ul>
-  </div>
-
-  <div class="col-md-10" style="overflow: auto;">
-    <table id="example" class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
       <thead>
         <tr>
           <th>工资号</th>
@@ -78,5 +57,3 @@
         <% end %>
      </tbody>
     </table>
-  </div>
-</div>
