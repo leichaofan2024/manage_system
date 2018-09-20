@@ -1697,6 +1697,30 @@ h4 {
 
 //合计
 
+.employee-title, .employee-search{
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ background-color: #EAEEF3;
+
+}
+
+.employee-title li{
+ padding: 20px 50px;
+ display: inline-block;
+ border-right: 1px solid #ddd;
+ text-align: center;
+}
+
+.employee-title li > span {
+ vertical-align: middle;
+}
+.employee-search li {
+ padding: 10px 5px;
+}
+
+
+
 .switchTab-3pFw5_0 {
     font-size: 14px;
 }
