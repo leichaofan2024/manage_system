@@ -1,243 +1,251 @@
 <div class="contentpanel">
-  <!-- 路龄分析饼图-开始  -->
-  <!-- 给饼图准备一个合适大小的dom  -->
-  <%= form_tag rali_years_statistical_analysis_employees_path, method: 'get' do %>
-    <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>
-    <%= submit_tag :点击筛选 %>
-  <% end %>
-  <div id="sa-main">
-   <div id="dashboard">
-    <div class="dashboard-toolbar">
-      <span contenteditable="false" class="dashboard-name" data-originname="年龄分析"><%= @data_source %>路龄分析</span>
-      <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
-    </div>
+ <%= render "employees/employee_navbar"%>
+  <div class="panel panel-default" style="clear:both;">
+    <div class="panel-body">
 
-
-   <div class="bd" style="width: 98%;">
-      <div class="widget-container" data-widgetid="1" data-size="normal">
-        <div class="widget-content-container">
-          <div class="mark-contend"></div>
-             <div class="widget-topbar" style="cursor: auto;">
-               <div class="widget-title">
-                 <div class="title" data-method="nav" style="padding-top: 10px;">
-                    路龄分析饼图
-                 </div>
-                 <div class="range">
-                   <%= Time.now.strftime(("%Y年%m月%d日") )%>
-                 </div>
-               </div>
-               <div class="pull-right widget-setting">
-                 <div class="customer-menu"></div>
-               </div>
-             </div>
-
-             <div class="widget-chart-container container">
-               <div class="col-md-12" data-container="side"></div>
-               <div id="container7" style="height: 354px"></div>
-             </div>
-         </div>
-       </div>
-
-
-       <div class="widget-container" data-widgetid="1" data-size="normal">
-         <div class="widget-content-container">
-           <div class="mark-contend"></div>
-              <div class="widget-topbar" style="cursor: auto;">
-                <div class="widget-title">
-                  <div class="title" data-method="nav" style="margin-top: 10px;">
-                     全段路龄分析表格
-                  </div>
-                  <div class="range">
-                    <%= Time.now.strftime(("%Y年%m月%d日") )%>
-                  </div>
-                </div>
-                <div class="pull-right widget-setting">
-                  <div class="customer-menu"></div>
-                </div>
-              </div>
-
-              <div class="widget-chart-container container">
-                <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:15px ;overflow: auto">
-                  <table class="table table-bordered" >
-                    <thead>
-                      <tr>
-                        <th style="color: blue; font-size:17px;">年龄段</th>
-                        <td style="color: blue; font-size:17px;">人数</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=5年以下&data_source=<%= @data_source %>">
-                        <th>5年以下</th>
-                        <td><%= @rali_years_5_below %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=6-10年&data_source=<%= @data_source %>">
-                        <th>6-10年</th>
-                        <td><%= @rali_years_6 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=11-15年&data_source=<%= @data_source %>">
-                        <th>11-15年</th>
-                        <td><%= @rali_years_11 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=16-20年&data_source=<%= @data_source %>">
-                        <th>16-20年</th>
-                        <td><%= @rali_years_16 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=21-25年&data_source=<%= @data_source %>">
-                        <th>21-25年</th>
-                        <td><%= @rali_years_21 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=26-30年&data_source=<%= @data_source %>">
-                        <th>26-30年</th>
-                        <td><%= @rali_years_26 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=31-35年&data_source=<%= @data_source %>">
-                        <th>31-35年</th>
-                        <td><%= @rali_years_31 %></td>
-                      </tr>
-                      <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=36年以上&data_source=<%= @data_source %>">
-                        <th>36年以上</th>
-                        <td><%= @rali_years_36_up %></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-          </div>
+      <div id="sa-main">
+       <div id="dashboard">
+        <div class="dashboard-toolbar">
+          <span contenteditable="false" class="dashboard-name" data-originname="年龄分析"><%= @data_source %>路龄分析</span>
+          <span class="icon-edit not-match-authority" data-method="edit-focus" style="display: none;"></span>
         </div>
 
-
-        <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px; width:100%; height: 600px;">
-          <div class="widget-content-container">
-            <div class="mark-contend"></div>
-               <div class="widget-topbar" style="cursor: auto;">
-                 <div class="widget-title">
-                   <div class="title" data-method="nav" style="padding-top:10px">
-                      路龄分析条形图
+        <div class="employee-form" style="padding-left: 20px;">
+          <%= form_tag rali_years_statistical_analysis_employees_path, method: 'get' do %>
+            <%= select_tag(:data_source, options_for_select(["全员", "干部", "工人"]), {:prompt => "请选择", :required => "true"}) %>
+            <%= submit_tag :点击筛选 %>
+          <% end %>
+        </div>
+       <div class="bd" style="width: 98%;">
+          <div class="widget-container" data-widgetid="1" data-size="normal">
+            <div class="widget-content-container">
+              <div class="mark-contend"></div>
+                 <div class="widget-topbar" style="cursor: auto;">
+                   <div class="widget-title">
+                     <div class="title" data-method="nav" style="padding-top: 10px;">
+                        路龄分析饼图
+                     </div>
+                     <div class="range">
+                       <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                     </div>
                    </div>
-                   <div class="range">
-                     <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                   <div class="pull-right widget-setting">
+                     <div class="customer-menu"></div>
                    </div>
                  </div>
-                 <div class="pull-right widget-setting">
-                   <div class="customer-menu"></div>
-                 </div>
-               </div>
 
-               <div class="widget-chart-container container">
-                 <div class="col-md-12" data-container="side"></div>
-                 <!-- 年龄分析条形图-开始  -->
-                 <!-- 给条形图准备一个合适大小的dom  -->
-                 <div id="container8" style="height: 600px"></div>
-               </div>
+                 <div class="widget-chart-container container">
+                   <div class="col-md-12" data-container="side"></div>
+                   <div id="container7" style="height: 354px"></div>
+                 </div>
+             </div>
            </div>
-         </div>
 
 
-         <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 10px; margin-bottom: 50px; width:100%; height: 400px;">
-           <div class="widget-content-container">
-             <div class="mark-contend"></div>
-                <div class="widget-topbar" style="cursor: auto;">
-                  <div class="widget-title">
-                    <div class="title" data-method="nav" style="margin-top: 10px;">
-                       各车间路龄分析表格
+           <div class="widget-container" data-widgetid="1" data-size="normal">
+             <div class="widget-content-container">
+               <div class="mark-contend"></div>
+                  <div class="widget-topbar" style="cursor: auto;">
+                    <div class="widget-title">
+                      <div class="title" data-method="nav" style="margin-top: 10px;">
+                         全段路龄分析表格
+                      </div>
+                      <div class="range">
+                        <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                      </div>
                     </div>
-                    <div class="range" style="margin-bottom: 0px;">
-                      <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                    <div class="pull-right widget-setting">
+                      <div class="customer-menu"></div>
                     </div>
                   </div>
-                  <div class="pull-right widget-setting">
-                    <div class="customer-menu"></div>
-                  </div>
-                </div>
 
-                <div class="widget-chart-container container">
-                  <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
-                    <table id="chart_table" class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <% @workshops.each do |workshop| %>
-                              <th><%= Workshop.current.find(workshop).name %></th>
-                          <% end %>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>5年以下</td>
-                          <% n = 0 %>
-                          <% @rali_5_below_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "5年以下", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+ 1%>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>6-10年</td>
-                          <% n = 0 %>
-                          <% @rali_6_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "6-10年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>11-15年</td>
-                          <% n = 0 %>
-                          <% @rali_11_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "11-15年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>16-20年</td>
-                          <% n = 0 %>
-                          <% @rali_16_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "16-20年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>21-25年</td>
-                          <% n = 0 %>
-                          <% @rali_21_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "21-25年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>26-30年</td>
-                          <% n = 0 %>
-                          <% @rali_26_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "26-30年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>31-35年</td>
-                          <% n = 0 %>
-                          <% @rali_31_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "31-35年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                        <tr>
-                          <td>36年以上</td>
-                          <% n = 0 %>
-                          <% @rali_36_up_bar.each do |i| %>
-                            <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "36年以上", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
-                            <% n = n+1 %>
-                          <% end %>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div class="widget-chart-container container">
+                    <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:15px ;overflow: auto">
+                      <table class="table table-bordered" >
+                        <thead>
+                          <tr>
+                            <th style="color: blue; font-size:17px;">年龄段</th>
+                            <td style="color: blue; font-size:17px;">人数</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=5年以下&data_source=<%= @data_source %>">
+                            <th>5年以下</th>
+                            <td><%= @rali_years_5_below %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=6-10年&data_source=<%= @data_source %>">
+                            <th>6-10年</th>
+                            <td><%= @rali_years_6 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=11-15年&data_source=<%= @data_source %>">
+                            <th>11-15年</th>
+                            <td><%= @rali_years_11 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=16-20年&data_source=<%= @data_source %>">
+                            <th>16-20年</th>
+                            <td><%= @rali_years_16 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=21-25年&data_source=<%= @data_source %>">
+                            <th>21-25年</th>
+                            <td><%= @rali_years_21 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=26-30年&data_source=<%= @data_source %>">
+                            <th>26-30年</th>
+                            <td><%= @rali_years_26 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=31-35年&data_source=<%= @data_source %>">
+                            <th>31-35年</th>
+                            <td><%= @rali_years_31 %></td>
+                          </tr>
+                          <tr class="row-click-able" data-url="/employees/statistical_analysis_data?rali_years=36年以上&data_source=<%= @data_source %>">
+                            <th>36年以上</th>
+                            <td><%= @rali_years_36_up %></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
+              </div>
             </div>
-          </div>
 
 
-     </div>
+            <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 50px; margin-bottom: 50px; width:100%; height: 600px;">
+              <div class="widget-content-container">
+                <div class="mark-contend"></div>
+                   <div class="widget-topbar" style="cursor: auto;">
+                     <div class="widget-title">
+                       <div class="title" data-method="nav" style="padding-top:10px">
+                          路龄分析条形图
+                       </div>
+                       <div class="range">
+                         <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                       </div>
+                     </div>
+                     <div class="pull-right widget-setting">
+                       <div class="customer-menu"></div>
+                     </div>
+                   </div>
+
+                   <div class="widget-chart-container container">
+                     <div class="col-md-12" data-container="side"></div>
+                     <!-- 年龄分析条形图-开始  -->
+                     <!-- 给条形图准备一个合适大小的dom  -->
+                     <div id="container8" style="height: 600px"></div>
+                   </div>
+               </div>
+             </div>
+
+
+             <div class="widget-container" data-widgetid="1" data-size="normal" style="margin-top: 10px; margin-bottom: 50px; width:100%; height: 400px;">
+               <div class="widget-content-container">
+                 <div class="mark-contend"></div>
+                    <div class="widget-topbar" style="cursor: auto;">
+                      <div class="widget-title">
+                        <div class="title" data-method="nav" style="margin-top: 10px;">
+                           各车间路龄分析表格
+                        </div>
+                        <div class="range" style="margin-bottom: 0px;">
+                          <%= Time.now.strftime(("%Y年%m月%d日") )%>
+                        </div>
+                      </div>
+                      <div class="pull-right widget-setting">
+                        <div class="customer-menu"></div>
+                      </div>
+                    </div>
+
+                    <div class="widget-chart-container container">
+                      <div style="background-color: white; height: 354px;padding-left:10px; padding-right: 10px; padding-top:20px ;overflow: auto">
+                        <table id="chart_table" class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <% @workshops.each do |workshop| %>
+                                  <th><%= Workshop.current.find(workshop).name %></th>
+                              <% end %>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>5年以下</td>
+                              <% n = 0 %>
+                              <% @rali_5_below_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "5年以下", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+ 1%>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>6-10年</td>
+                              <% n = 0 %>
+                              <% @rali_6_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "6-10年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>11-15年</td>
+                              <% n = 0 %>
+                              <% @rali_11_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "11-15年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>16-20年</td>
+                              <% n = 0 %>
+                              <% @rali_16_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "16-20年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>21-25年</td>
+                              <% n = 0 %>
+                              <% @rali_21_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "21-25年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>26-30年</td>
+                              <% n = 0 %>
+                              <% @rali_26_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "26-30年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>31-35年</td>
+                              <% n = 0 %>
+                              <% @rali_31_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "31-35年", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                            <tr>
+                              <td>36年以上</td>
+                              <% n = 0 %>
+                              <% @rali_36_up_bar.each do |i| %>
+                                <td><%= link_to i, statistical_analysis_data_employees_path(:rali_years => "36年以上", data_source: @data_source, workshop: @workshops[n]), style: "color: black" %></td>
+                                <% n = n+1 %>
+                              <% end %>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+         </div>
+        </div>
+      </div>
+    </div>
+
     </div>
   </div>
-</div>
+  <!-- 路龄分析饼图-开始  -->
+  <!-- 给饼图准备一个合适大小的dom  -->
 
 
 <!-- 引入highcharts库  -->
