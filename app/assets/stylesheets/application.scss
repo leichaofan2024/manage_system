@@ -1502,6 +1502,7 @@ h4 {
     position: relative;
     z-index: 0;
     padding: 20px 23px 10px;
+    text-align: center;
 }
 
 .dashboard-toolbar .dashboard-name {
@@ -1509,23 +1510,11 @@ h4 {
     font-size: 20px;
     font-weight: 700;
     line-height: 36px;
-    padding: 0 6px;
     outline: 0;
-    float: left;
-    max-width: 300px;
-    overflow-x: auto;
     white-space: nowrap;
-    margin-left: -10px;
+    position: relative;
+    vertical-align: middle;
 }
-
-.dashboard-name {
-    color: #475669;
-    font-size: 20px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-
 
 
 .sa-main>div:nth-child(2) {
@@ -1718,6 +1707,41 @@ h4 {
 }
 .employee-search li {
  padding: 10px 5px;
+}
+
+.nav-btn-group{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-btn-group li {
+  display: inline;
+  border: 1px solid rgba(0, 211, 150, 1);
+  float: left;
+  border-width: 1px 1px 0 1px;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 20px 30px;
+  background: rgba(0, 211, 150, 1);
+}
+
+.nav-btn-group .nav-btn{
+  padding: 0 20px;
+  color: #ffff;
+  text-decoration: none;
+}
+
+#select-btn{
+  border-bottom: 1px;
+  border: #fcfcfc;
+  background: white;
+  top: 2px;
+  position: relative;
+}
+
+#select-btn a {
+  color: black;
 }
 
 
