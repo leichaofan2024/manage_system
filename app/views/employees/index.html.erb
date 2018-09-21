@@ -176,7 +176,7 @@
                           <%= label_tag :按职务： %>
                           <select class="" name="duty">
                             <option value>请选择</option>
-                            <% Employee.pluck("duty").uniq.each do |duty| %>
+                            <% Employee.pluck("duty").uniq.compact.each do |duty| %>
                               <% if params[:duty] == duty %>
                                 <option value="<%= duty %>" selected><%= duty %></option>
                               <% else %>
@@ -187,7 +187,7 @@
                           <%= label_tag :按技术职称： %>
                           <select class="" name="work_type">
                             <option value>请选择</option>
-                            <% Employee.pluck("work_type").uniq.each do |work_type| %>
+                            <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
                               <% if params[:work_type] == work_type %>
                                 <option value="<%= work_type %>" selected><%= work_type %></option>
                               <% else %>
@@ -218,6 +218,8 @@
                           <% elsif params[:group].present? %>
                             <%= hidden_field_tag :group, params[:group] %>
                           <% end %> -->
+                          <br>
+                          <br>
                           <%= submit_tag :筛选 %>
                         <% end %>
                       </li>
