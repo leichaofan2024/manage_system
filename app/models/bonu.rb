@@ -63,9 +63,17 @@ class Bonu < ApplicationRecord
 							if bonus_formula.present?
 								bonus_formula.keys.each do |key|
 									if bonus_formula[key].to_i == 1
-										bonus_value = (bonus_value + bonu.attributes[key].to_i)
+										if key.split("-")[0] == "wage"
+											bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_i)
+										else
+											bonus_value = (bonus_value + bonu.attributes[key].to_i)
+										end
 									elsif bonus_formula[key].to_i == 2
-										bonus_value = (bonus_value - bonu.attributes[key].to_i)
+										if key.split("-")[0] == "wage"
+											bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_i)
+										else
+											bonus_value = (bonus_value - bonu.attributes[key].to_i)
+										end
 									end
 								end
 							end

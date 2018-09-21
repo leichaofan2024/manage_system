@@ -73,9 +73,17 @@ class WagesController < ApplicationController
 	          bonus_value = 0
 						@params_hash.keys.each do |key|
 							if @params_hash[key].to_i == 1
-								bonus_value = (bonus_value + bonus_attributes[key].to_i)
+								if key.split("-")[0] == "wage"
+									bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_i)
+								else
+									bonus_value = (bonus_value + bonus_attributes[key].to_i)
+								end
 							elsif @params_hash[key].to_i == 2
-								bonus_value = (bonus_value - bonus_attributes[key].to_i)
+								if key.split("-")[0] == "wage"
+									bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_i)
+								else
+									bonus_value = (bonus_value - bonus_attributes[key].to_i)
+								end
 							end
 						end
 						wage.update(header_hash[@header_name] => bonus_value)
