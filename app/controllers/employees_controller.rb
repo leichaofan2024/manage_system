@@ -51,6 +51,12 @@ class EmployeesController < ApplicationController
     else
       @export_employees = Employee.where(id: params[:employees])
     end
+    workshop = Workshop.current.pluck("name")
+    group = []
+    workshop.each do |name|
+      group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+    end
+    gon.group_name = group
     respond_to do |format|
       format.html
       format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
@@ -183,6 +189,12 @@ class EmployeesController < ApplicationController
     @filter_type = params[:filter_type]
     @workshop = params[:workshop]
     @group = params[:group]
+    workshop = Workshop.current.pluck("name")
+    group = []
+    workshop.each do |name|
+      group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+    end
+    gon.group_name = group
     render action: "index"
   end
   #搜索和筛选--结束

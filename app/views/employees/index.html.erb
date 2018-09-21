@@ -122,9 +122,9 @@
                 </div>
                 <div class="panel-body" id="employee-btn" style="display: none;">
                     <ul class="employee-search">
-                      <li style="padding: 20 0px; margin: 0; margin-bottom: 10px;">
+                      <li style="padding-top: 20px;">
                         <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
-                          <div class="input-group" style="width: 20%;">
+                          <div class="input-group" style="width: 80%;">
                             <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
                             <span class="input-group-btn">
                               <button type="submit" class="btn btn-primary">
@@ -134,34 +134,90 @@
                           </div>
                         <% end %>
                       </li>
-                      <li>车间：
-                          <select name="workshop" id= "workshop_id">
-                            <% Workshop.all.each do |workshop| %>
-                              <% if workshop.id == @select_workshop %>
-                                <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+
+                      <li>
+                        <%= form_tag filter_employees_path, method: 'get' do %>
+
+                          <li style="display: inline-block;">车间：
+                              <select name="workshop"  id="selid" onchange="selCity(this)">
+                                <% Workshop.current.each do |workshop| %>
+                                  <% if workshop.id == params[:workshop].to_i %>
+                                    <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                                  <% else %>
+                                    <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                                  <% end %>
+                                <% end %>
+                              </select>
+                          </li>
+                          <li style="display: inline-block;">班组：
+                              <select name="group"  id="subselid">
+                                <% Group.current.each do |group| %>
+                                  <% if group.id == params[:group].to_i %>
+                                    <option value="<%= group.id%>" selected><%= group.name%></option>
+                                  <% else %>
+                                    <option value="<%= group.id%>"><%= group.name%></option>
+                                  <% end %>
+                                <% end %>
+                              </select>
+                          </li>
+                          <br>
+
+                          <%= label_tag :按男女： %>
+                          <select class="" name="sex">
+                            <option value>请选择</option>
+                            <% ["男","女"].each do |sex| %>
+                              <% if params[:sex] == sex %>
+                                <option value="<%= sex %>" selected><%= sex %></option>
                               <% else %>
-                                <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                                <option value="<%= sex %>"><%= sex %></option>
                               <% end %>
                             <% end %>
                           </select>
-                      </li>
-                      <li>
-                        <%= form_tag filter_employees_path, method: 'get' do %>
-                          <%= label_tag :按男女： %>
-                          <%= select_tag(:sex, options_for_select(["男","女"]), {:prompt => "请选择"}) %>
                           <%= label_tag :按职务： %>
-                          <%= select_tag(:duty, options_for_select(Employee.pluck("duty").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+                          <select class="" name="duty">
+                            <option value>请选择</option>
+                            <% Employee.pluck("duty").uniq.each do |duty| %>
+                              <% if params[:duty] == duty %>
+                                <option value="<%= duty %>" selected><%= duty %></option>
+                              <% else %>
+                                <option value="<%= duty %>"><%= duty %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
                           <%= label_tag :按技术职称： %>
-                          <%= select_tag(:work_type, options_for_select(Employee.pluck("work_type").uniq.collect{ |u| u }), {:prompt => "请选择"}) %>
+                          <select class="" name="work_type">
+                            <option value>请选择</option>
+                            <% Employee.pluck("work_type").uniq.each do |work_type| %>
+                              <% if params[:work_type] == work_type %>
+                                <option value="<%= work_type %>" selected><%= work_type %></option>
+                              <% else %>
+                                <option value="<%= work_type %>"><%= work_type %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
                           <%= label_tag :按时间段： %>
-                          <%= select_tag(:filter_type, options_for_select(["年龄","工龄","路龄"]), {:prompt => "请选择"})%>
-                          <%= text_field_tag :start_time %> ~
-                          <%= text_field_tag :end_time %>
-                          <% if params[:workshop].present? %>
+                          <select class="" name="filter_type">
+                            <option value>请选择</option>
+                            <% ["年龄","工龄","路龄"].each do |filter_type| %>
+                              <% if params[:filter_type] == filter_type %>
+                                <option value="<%= filter_type %>" selected><%= filter_type %></option>
+                              <% else %>
+                                <option value="<%= filter_type %>"><%= filter_type %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
+                          <% if params[:start_time].present? && params[:end_time].present? %>
+                            <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
+                            <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
+                          <% else %>
+                            <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
+                            <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
+                          <% end %>
+                          <!-- <% if params[:workshop].present? %>
                             <%= hidden_field_tag :workshop, params[:workshop] %>
                           <% elsif params[:group].present? %>
                             <%= hidden_field_tag :group, params[:group] %>
-                          <% end %>
+                          <% end %> -->
                           <%= submit_tag :筛选 %>
                         <% end %>
                       </li>
@@ -189,6 +245,26 @@
 
 </div>
 <script type="text/javascript">
+    function selCity()
+    {
+        var arr = gon.group_name;
+
+        var selNode = document.getElementById("selid");
+        var subselNode = document.getElementById("subselid");
+        var index = selNode.selectedIndex;
+        var citys = arr[index];
+
+        subselNode.options.length = 0;
+
+        for(var i=0; i<citys.length; i++)
+        {
+            var optionNode = document.createElement("option");
+            optionNode.value = citys[i][1];
+            optionNode.innerText = citys[i][0];
+            subselNode.appendChild(optionNode);
+        }
+    };
+
     function toggle_visibility(id) {
        var e = document.getElementById(id);
        if(e.style.display == 'block')
