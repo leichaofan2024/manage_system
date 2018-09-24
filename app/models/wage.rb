@@ -50,7 +50,7 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
 						end
             wage.year = year.to_i
             wage.month = month.to_i
-            ["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
+            ["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资","主业工资"].each do |name|
               formula = WageHeader.find_by(:header => name).formula
               row[header_hash[name]] = 0
               if formula.present?

@@ -1,4 +1,4 @@
-<div class="wage_layout">
+<div class="wage_layout"  style="overflow: auto;">
   <% if params[:category] == "divide" %>
     <a href="/divide_level_wages/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
   <% elsif params[:category] == "production" %>
@@ -9,12 +9,11 @@
     <a href="/high_speed_rail_stuffs/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
   <% end %>
   <h3 style="text-align:center;"><%= params[:content_name]%></h3>
-  <div class="card">
-    <div style="width: 100%;">
 
-      <div  style="height: 100%; margin-top: 20px;">
-        <div class="col-md-11" style="overflow: auto;">
-          <table id="example" class="table table-bordered">
+
+      <div>
+        <div>
+          <table id="example" class="table  overflow-y table-bordered table-striped">
             <thead>
               <tr>
                 <th>工资号</th>
@@ -97,6 +96,5 @@
           </table>
         </div>
       </div>
-    </div>
-  </div>
+
 </div>

@@ -49,6 +49,19 @@ class Bonu < ApplicationRecord
 						end
             bonu.year = year.to_i
             bonu.month = month.to_i
+
+            formula = BonusHeader.find_by(:header => "主业奖金").formula
+            row[header_hash[name]] = 0
+            if formula.present?
+              formula.keys.each do |key|
+                if formula[key].to_i == 1
+                  row[header_hash[name]] = (row[header_hash[name]].to_i + row[key].to_i)
+                elsif formula[key].to_i == 2
+                  row[header_hash[name]] = (row[header_hash[name]].to_i - row[key].to_i)
+                end
+              end
+            end
+
 		        bonu.attributes = row
 		        bonu.save!
 

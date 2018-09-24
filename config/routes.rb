@@ -214,6 +214,8 @@ Rails.application.routes.draw do
       delete :delete_bonus
       post :create_header
       post :edit_header
+      get :edit_header_formula
+      post :update_header_formula
     end
   end
 

@@ -390,12 +390,39 @@
                    <% end %>
 
 
-                 <% if (current_user.has_role? :limitadmin )  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
-                   <li>
-                     <a href="/home/notfound">
-                       <i class="fa fa-edit"></i> <span>收入管理</span>
-                     </a>
-
+                 <% if (current_user.has_role? :incomeadmin )  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
+                   <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>收入管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                      <% if ["wages","bonus"].include?(url_for.split("/").second) %>
+                        <ul class="children" style="display:block;">
+                      <% else %>
+                        <ul class="children">
+                      <% end %>
+                      <% if ["wages"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/wages/import_wage"> 主业工资 </a></li>
+                      <% else %>
+                        <li><a href="/wages/import_wage"> 主业工资</a></li>
+                      <% end %>
+                      <% if ["bonus"].include?(url_for.split("/").second) %>
+                        <li  style="background-color:white;"><a href="/bonus/import_bonus"> 主业奖金</a></li>
+                      <% else %>
+                        <li><a href="/bonus/import_bonus"> 主业奖金</a></li>
+                      <% end %>
+                      <% if ["high_speed_rail_stuffs"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/high_speed_rail_stuffs"> 多经工资 </a></li>
+                      <% else %>
+                        <li><a href="/high_speed_rail_stuffs"> 多经工资 </a></li>
+                      <% end %>
+                      <% if ["main_driving_stuffs"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/main_driving_stuffs"> 多经奖金 </a></li>
+                      <% else %>
+                        <li><a href="/main_driving_stuffs"> 多经奖金 </a></li>
+                      <% end %>
+                      <% if ["production_stuff_wages"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/production_stuff_wages"> 图表展示 </a></li>
+                      <% else %>
+                        <li><a href="/production_stuff_wages"> 图表展示 </a></li>
+                      <% end %>
+                    </ul>
                    </li>
                  <% end %>
 

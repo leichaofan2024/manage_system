@@ -68,4 +68,43 @@ class BonusController < ApplicationController
     redirect_to import_bonus_bonus_path
   end
 
+	def edit_header_formula
+		@year = params[:year]
+		@month = params[:month]
+		@header_name = params[:header_name]
+		@formula = BonusHeader.find_by(:header => @header_name).formula
+		@bonus_headers = BonusHeader.pluck(:header)
+	end
+
+  def update_header_formula
+		@year = params[:year]
+		@month = params[:month]
+		@header_name = params[:header_name]
+    @params_hash = params.delete_if{|key,value| ["year","month","header_name","utf8","authenticity_token","commit","controller","action","name","id","_method"].include?(key) || (value =="")}
+		@bonus = Bonu.where(:year => @year,:month => @month)
+
+		bonus_headers = BonusHeader.pluck("header")
+		bonu_header_ids = (1..(BonusHeader.count)).map{|h| "col"+ h.to_s}
+		header_hash = [bonus_headers,bonu_header_ids].transpose.to_h
+
+		if @params_hash.present?
+      BonusHeader.find_by(:header => @header_name).update(:formula => @params_hash)
+			@bonus.each do |bonus|
+				bonus_attributes = bonus.attributes
+				bonus_value = 0
+				@params_hash.keys.each do |key|
+					if @params_hash[key].to_i == 1
+						bonus_value = (bonus_value + bonus_attributes[key].to_i)
+					elsif @params_hash[key].to_i == 2
+						bonus_value = (bonus_value - bonus_attributes[key].to_i)
+					end
+				end
+				bonus.update(header_hash[@header_name] => bonus_value)
+			end
+			flash[:notice] = "#{@header_name}公式及数据更新成功！"
+			redirect_to import_bonus_bonus_path(:year => @year ,:month => @month)
+		else
+			redirect_to import_bonus_bonus_path(:year => @year ,:month => @month)
+		end
+	end
 end

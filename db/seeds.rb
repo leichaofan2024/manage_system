@@ -18,6 +18,7 @@ User.create(name: "考勤管理员", password: "123456", password_confirmation: 
 User.create(name: "定额管理员", password: "123456", password_confirmation: "123456").add_role :limitadmin
 User.create(name: "财务管理员", password: "123456", password_confirmation: "123456").add_role :saleradmin
 User.create(name: "奖惩管理员", password: "123456", password_confirmation: "123456").add_role :awardadmin
+User.create(name: "收入管理员", password: "123456", password_confirmation: "123456").add_role :incomeadmin
 
 User.create(name: "段长", password: "123456", password_confirmation: "123456").add_role :leaderadmin
 User.create(name: "书记", password: "123456", password_confirmation: "123456").add_role :leaderadmin
