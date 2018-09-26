@@ -98,7 +98,7 @@
                   <button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
                     <span class="glyphicon glyphicon-filter"></span>搜索/筛选
                   </button>
-                    <div class="btn margin-right-10" style="float: right;">
+                    <div class="margin-right-10" style="float: right;">
                       <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
                             <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
                               <%= link_to employees_path(format: "xls", employees: employee_ids),class:"btn btn-success-alt" do %>
