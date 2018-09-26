@@ -9,6 +9,7 @@ class Bonu < ApplicationRecord
 	def self.import_table(file,year,month)
 	    spreadsheet = Roo::Spreadsheet.open(file.path)
 	    header = spreadsheet.row(1)
+			# header += ["主业奖金"]
 	    # header.each do |i|
 	    # 	BonusHeader.create(:header => i)
 	    # end
@@ -51,13 +52,13 @@ class Bonu < ApplicationRecord
             bonu.month = month.to_i
 
             formula = BonusHeader.find_by(:header => "主业奖金").formula
-            row[header_hash[name]] = 0
+            row[header_hash["主业奖金"]] = 0
             if formula.present?
               formula.keys.each do |key|
                 if formula[key].to_i == 1
-                  row[header_hash[name]] = (row[header_hash[name]].to_i + row[key].to_i)
+                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_i + row[key].to_i)
                 elsif formula[key].to_i == 2
-                  row[header_hash[name]] = (row[header_hash[name]].to_i - row[key].to_i)
+                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_i - row[key].to_i)
                 end
               end
             end
