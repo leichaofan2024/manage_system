@@ -1,0 +1,2 @@
+module DjwagesHelper
+end

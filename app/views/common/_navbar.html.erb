@@ -335,7 +335,7 @@
 
 
 
-                   <% if (current_user.has_role? :saleradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
+                   <% if (current_user.has_role? :saleradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
                      <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>工资管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
                         <% if ["wages","bonus","high_speed_rail_stuffs","main_driving_stuffs","production_stuff_wages","divide_level_wages"].include?(url_for.split("/").second) %>
                           <ul class="children" style="display:block;">
@@ -390,14 +390,19 @@
                    <% end %>
 
 
-                 <% if (current_user.has_role? :incomeadmin )  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin)%>
+                 <% if (current_user.has_role? :incomeadmin )  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
                    <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>收入管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                      <% if ["wages","bonus"].include?(url_for.split("/").second) %>
+                      <% if ["wages","bonus","djwages","djbonus"].include?(url_for.split("/").second) %>
                         <ul class="children" style="display:block;">
                       <% else %>
                         <ul class="children">
                       <% end %>
-                      <% if ["wages"].include?(url_for.split("/").second) %>
+                      <% if url_for == "/wages/income" %>
+                        <li style="background-color:white;"><a href="/wages/income"> 收入表 </a></li>
+                      <% else %>
+                        <li><a href="/wages/income"> 收入表 </a></li>
+                      <% end %>
+                      <% if ["wages"].include?(url_for.split("/").second) && (url_for != "/wages/income") %>
                         <li style="background-color:white;"><a href="/wages/import_wage"> 主业工资 </a></li>
                       <% else %>
                         <li><a href="/wages/import_wage"> 主业工资</a></li>
@@ -407,21 +412,17 @@
                       <% else %>
                         <li><a href="/bonus/import_bonus"> 主业奖金</a></li>
                       <% end %>
-                      <% if ["high_speed_rail_stuffs"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/high_speed_rail_stuffs"> 多经工资 </a></li>
+                      <% if ["djwages"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/djwages/import_djwage"> 多经工资 </a></li>
                       <% else %>
-                        <li><a href="/high_speed_rail_stuffs"> 多经工资 </a></li>
+                        <li><a href="/djwages/import_djwage"> 多经工资 </a></li>
                       <% end %>
-                      <% if ["main_driving_stuffs"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/main_driving_stuffs"> 多经奖金 </a></li>
+                      <% if ["djbonus"].include?(url_for.split("/").second) %>
+                        <li style="background-color:white;"><a href="/djbonus/import_djbonus"> 多经奖金 </a></li>
                       <% else %>
-                        <li><a href="/main_driving_stuffs"> 多经奖金 </a></li>
+                        <li><a href="/djbonus/import_djbonus"> 多经奖金 </a></li>
                       <% end %>
-                      <% if ["production_stuff_wages"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/production_stuff_wages"> 图表展示 </a></li>
-                      <% else %>
-                        <li><a href="/production_stuff_wages"> 图表展示 </a></li>
-                      <% end %>
+
                     </ul>
                    </li>
                  <% end %>

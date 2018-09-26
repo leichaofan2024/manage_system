@@ -1,0 +1,2 @@
+class DjwageHeader < ApplicationRecord
+end

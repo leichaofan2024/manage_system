@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180924085914) do
+ActiveRecord::Schema.define(version: 20180924095846) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -382,6 +382,234 @@ ActiveRecord::Schema.define(version: 20180924085914) do
     t.integer "col78"
     t.integer "col79"
     t.integer "col80"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "djbonus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "employee_id"
+    t.integer "month"
+    t.integer "year"
+    t.string "col1"
+    t.string "col2"
+    t.string "col3"
+    t.float "col4", limit: 24
+    t.float "col5", limit: 24
+    t.float "col6", limit: 24
+    t.float "col7", limit: 24
+    t.float "col8", limit: 24
+    t.float "col9", limit: 24
+    t.float "col10", limit: 24
+    t.float "col11", limit: 24
+    t.float "col12", limit: 24
+    t.float "col13", limit: 24
+    t.float "col14", limit: 24
+    t.float "col15", limit: 24
+    t.float "col16", limit: 24
+    t.float "col17", limit: 24
+    t.float "col18", limit: 24
+    t.float "col19", limit: 24
+    t.float "col20", limit: 24
+    t.float "col21", limit: 24
+    t.float "col22", limit: 24
+    t.float "col23", limit: 24
+    t.float "col24", limit: 24
+    t.float "col25", limit: 24
+    t.float "col26", limit: 24
+    t.float "col27", limit: 24
+    t.float "col28", limit: 24
+    t.float "col29", limit: 24
+    t.float "col30", limit: 24
+    t.float "col31", limit: 24
+    t.float "col32", limit: 24
+    t.float "col33", limit: 24
+    t.float "col34", limit: 24
+    t.float "col35", limit: 24
+    t.float "col36", limit: 24
+    t.float "col37", limit: 24
+    t.float "col38", limit: 24
+    t.float "col39", limit: 24
+    t.float "col40", limit: 24
+    t.float "col41", limit: 24
+    t.float "col42", limit: 24
+    t.float "col43", limit: 24
+    t.float "col44", limit: 24
+    t.float "col45", limit: 24
+    t.float "col46", limit: 24
+    t.float "col47", limit: 24
+    t.float "col48", limit: 24
+    t.float "col49", limit: 24
+    t.float "col50", limit: 24
+    t.float "col51", limit: 24
+    t.float "col52", limit: 24
+    t.float "col53", limit: 24
+    t.float "col54", limit: 24
+    t.float "col55", limit: 24
+    t.float "col56", limit: 24
+    t.float "col57", limit: 24
+    t.float "col58", limit: 24
+    t.float "col59", limit: 24
+    t.float "col60", limit: 24
+    t.float "col61", limit: 24
+    t.float "col62", limit: 24
+    t.float "col63", limit: 24
+    t.float "col64", limit: 24
+    t.float "col65", limit: 24
+    t.float "col66", limit: 24
+    t.float "col67", limit: 24
+    t.float "col68", limit: 24
+    t.float "col69", limit: 24
+    t.float "col70", limit: 24
+    t.float "col71", limit: 24
+    t.float "col72", limit: 24
+    t.float "col73", limit: 24
+    t.float "col74", limit: 24
+    t.float "col75", limit: 24
+    t.float "col76", limit: 24
+    t.float "col77", limit: 24
+    t.float "col78", limit: 24
+    t.float "col79", limit: 24
+    t.float "col80", limit: 24
+    t.float "col81", limit: 24
+    t.float "col82", limit: 24
+    t.float "col83", limit: 24
+    t.float "col84", limit: 24
+    t.float "col85", limit: 24
+    t.float "col86", limit: 24
+    t.float "col87", limit: 24
+    t.float "col88", limit: 24
+    t.float "col89", limit: 24
+    t.float "col90", limit: 24
+    t.float "col91", limit: 24
+    t.float "col92", limit: 24
+    t.float "col93", limit: 24
+    t.float "col94", limit: 24
+    t.float "col95", limit: 24
+    t.float "col96", limit: 24
+    t.float "col97", limit: 24
+    t.float "col98", limit: 24
+    t.float "col99", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "djbonus_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "header"
+    t.json "formula"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "djwage_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "header"
+    t.json "formula"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "djwages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "employee_id"
+    t.integer "month"
+    t.integer "year"
+    t.string "col1"
+    t.string "col2"
+    t.float "col3", limit: 24
+    t.float "col4", limit: 24
+    t.float "col5", limit: 24
+    t.float "col6", limit: 24
+    t.float "col7", limit: 24
+    t.float "col8", limit: 24
+    t.float "col9", limit: 24
+    t.float "col10", limit: 24
+    t.float "col11", limit: 24
+    t.float "col12", limit: 24
+    t.float "col13", limit: 24
+    t.float "col14", limit: 24
+    t.float "col15", limit: 24
+    t.float "col16", limit: 24
+    t.float "col17", limit: 24
+    t.float "col18", limit: 24
+    t.float "col19", limit: 24
+    t.float "col20", limit: 24
+    t.float "col21", limit: 24
+    t.float "col22", limit: 24
+    t.float "col23", limit: 24
+    t.float "col24", limit: 24
+    t.float "col25", limit: 24
+    t.float "col26", limit: 24
+    t.float "col27", limit: 24
+    t.float "col28", limit: 24
+    t.float "col29", limit: 24
+    t.float "col30", limit: 24
+    t.float "col31", limit: 24
+    t.float "col32", limit: 24
+    t.float "col33", limit: 24
+    t.float "col34", limit: 24
+    t.float "col35", limit: 24
+    t.float "col36", limit: 24
+    t.float "col37", limit: 24
+    t.float "col38", limit: 24
+    t.float "col39", limit: 24
+    t.float "col40", limit: 24
+    t.float "col41", limit: 24
+    t.float "col42", limit: 24
+    t.float "col43", limit: 24
+    t.float "col44", limit: 24
+    t.float "col45", limit: 24
+    t.float "col46", limit: 24
+    t.float "col47", limit: 24
+    t.float "col48", limit: 24
+    t.float "col49", limit: 24
+    t.float "col50", limit: 24
+    t.float "col51", limit: 24
+    t.float "col52", limit: 24
+    t.float "col53", limit: 24
+    t.float "col54", limit: 24
+    t.float "col55", limit: 24
+    t.float "col56", limit: 24
+    t.float "col57", limit: 24
+    t.float "col58", limit: 24
+    t.float "col59", limit: 24
+    t.float "col60", limit: 24
+    t.float "col61", limit: 24
+    t.float "col62", limit: 24
+    t.float "col63", limit: 24
+    t.float "col64", limit: 24
+    t.float "col65", limit: 24
+    t.float "col66", limit: 24
+    t.float "col67", limit: 24
+    t.float "col68", limit: 24
+    t.float "col69", limit: 24
+    t.float "col70", limit: 24
+    t.float "col71", limit: 24
+    t.float "col72", limit: 24
+    t.float "col73", limit: 24
+    t.float "col74", limit: 24
+    t.float "col75", limit: 24
+    t.float "col76", limit: 24
+    t.float "col77", limit: 24
+    t.float "col78", limit: 24
+    t.float "col79", limit: 24
+    t.float "col80", limit: 24
+    t.float "col81", limit: 24
+    t.float "col82", limit: 24
+    t.float "col83", limit: 24
+    t.float "col84", limit: 24
+    t.float "col85", limit: 24
+    t.float "col86", limit: 24
+    t.float "col87", limit: 24
+    t.float "col88", limit: 24
+    t.float "col89", limit: 24
+    t.float "col90", limit: 24
+    t.float "col91", limit: 24
+    t.float "col92", limit: 24
+    t.float "col93", limit: 24
+    t.float "col94", limit: 24
+    t.float "col95", limit: 24
+    t.float "col96", limit: 24
+    t.float "col97", limit: 24
+    t.float "col98", limit: 24
+    t.float "col99", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

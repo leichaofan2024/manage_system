@@ -1,0 +1,341 @@
+<div class="contentpanel">
+
+  <div class="panel">
+    <div class="panel-heading" style="background-color: #fff;">
+  <!-- 导出与新增-开始 -->
+      <button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
+        <span class="glyphicon glyphicon-filter"></span>搜索/筛选
+      </button>
+
+      <!-- 导出与新增-结束 -->
+    </div>
+    <div class="panel-body" id="employee-btn" style="display: none;">
+        <ul class="employee-search">
+
+          <li>
+            <%= form_tag income_wages_path, method: 'get' do %>
+            <%= label_tag :姓名： %>
+            <select class= "form-control"  multiple="multiple" name="name[]" id="name_select">
+              <option disabled value>请选择</option>
+              <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
+                <% if params[:name].present? && params[:name].include?(name) %>
+                  <option selected value="<%= name%>"><%= name%></option>
+                <% else %>
+                  <option  value="<%= name%>"><%= name%></option>
+                <% end %>
+              <% end %>
+            </select>
+            <%= label_tag :工资号： %>
+            <select class= "form-control"  multiple="multiple" name="sal_number[]" id="sal_number_select">
+              <option disabled value>请选择</option>
+              <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
+                <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
+                  <option selected value="<%= sal_number%>"><%= sal_number%></option>
+                <% else %>
+                  <option  value="<%= sal_number%>"><%= sal_number%></option>
+                <% end %>
+              <% end %>
+            </select>
+
+            <%= label_tag :部门： %>
+
+            <span style="width: 300px;height:25px;display: inline-block;">
+              <select class= "form-control"  multiple="multiple" name="department[]" id="department_select">
+                <option disabled value>请选择</option>
+                <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
+                  <% if params[:department].present? && params[:department].include?(department) %>
+                    <option selected value="<%= department%>"><%= department%></option>
+                  <% else %>
+                    <option  value="<%= department%>"><%= department%></option>
+                  <% end %>
+                <% end %>
+              </select>
+            </span>
+
+              <%= label_tag :男女： %>
+              <select class="" name="sex">
+                <option value>请选择</option>
+                <% ["男","女"].each do |sex| %>
+                  <% if params[:sex] == sex %>
+                    <option value="<%= sex %>" selected><%= sex %></option>
+                  <% else %>
+                    <option value="<%= sex %>"><%= sex %></option>
+                  <% end %>
+                <% end %>
+              </select>
+              <%= label_tag :按职务： %>
+              <select class="" name="duty">
+                <option value>请选择</option>
+                <% Employee.pluck("duty").uniq.compact.each do |duty| %>
+                  <% if params[:duty] == duty %>
+                    <option value="<%= duty %>" selected><%= duty %></option>
+                  <% else %>
+                    <option value="<%= duty %>"><%= duty %></option>
+                  <% end %>
+                <% end %>
+              </select>
+              <%= label_tag :工种： %>
+              <select class="" name="work_type">
+                <option value>请选择</option>
+                <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
+                  <% if params[:work_type] == work_type %>
+                    <option value="<%= work_type %>" selected><%= work_type %></option>
+                  <% else %>
+                    <option value="<%= work_type %>"><%= work_type %></option>
+                  <% end %>
+                <% end %>
+              </select>
+              <%= label_tag :按时间段： %>
+              <select class="" name="filter_type">
+                <option value>请选择</option>
+                <% ["年龄","工龄","路龄"].each do |filter_type| %>
+                  <% if params[:filter_type] == filter_type %>
+                    <option value="<%= filter_type %>" selected><%= filter_type %></option>
+                  <% else %>
+                    <option value="<%= filter_type %>"><%= filter_type %></option>
+                  <% end %>
+                <% end %>
+              </select>
+              <% if params[:start_time].present? && params[:end_time].present? %>
+                <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
+                <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
+              <% else %>
+                <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
+                <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
+              <% end %>
+
+              <br>
+              <br>
+              <%= submit_tag :筛选 %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+  </div>
+
+  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年
+    <% if @month.count > 1 %>
+      <% @month.each do |month| %>
+        <%= month.to_i %>、
+      <% end %>
+    <% else %>
+      <%= @month.first%>
+    <% end %>
+    月收入情况</h3>
+  <div class="col-md-12" style="margin-top: 15px;margin-bottom: 15px;">
+    <%= form_tag income_wages_path, method: 'get' do %>
+      <%= render "wages/customize_form_partial"%>
+    <% end %>
+  </div>
+  <div class="col-md-12 col-lg-12 col-ms-12">
+    <div class="card">
+      <div style="overflow: auto;" class="col-md-12">
+        <table id="example" class="table table-bordered">
+          <thead>
+          	<tr>
+          		<th>姓名</th>
+              <th>工资号</th>
+              <th>性别</th>
+              <th>部门</th>
+              <th>工种</th>
+              <th>职务</th>
+              <th>年龄</th>
+              <th>工龄</th>
+              <th>路龄</th>
+              <th>去年
+                <% if @month.count > 1 %>
+                  <% @month.each do |month| %>
+                    <%= month.to_i %>、
+                  <% end %>
+                <% else %>
+                  <%= @month.first%>
+                <% end %>
+                月收入</th>
+              <th>今年
+                <% if @month.count > 1 %>
+                  <% @month.each do |month| %>
+                    <%= month.to_i %>、
+                  <% end %>
+                <% else %>
+                  <%= @month.first%>
+                <% end %>
+                月收入</th>
+              <th>收入增幅</th>
+              <th>实发数</th>
+              <th>税</th>
+          	</tr>
+          </thead>
+          <tbody>
+          	<% @sal_numbers.each do |sal_number| %>
+              <% employee = Employee.find_by(:sal_number => sal_number) %>
+              <% wage_member = Wage.find_by(:year => @year,:month => @month, @wage_hash["工资号"] => sal_number) %>
+              <% bonus_member = Bonu.find_by(:year => @year,:month => @month, @bonus_hash["工资号"] => sal_number) %>
+              <% djwage_member = Djwage.find_by(:year => @year,:month => @month, @djwage_hash["工资号"] => sal_number)%>
+              <% djbonus_member = Djbonu.find_by(:year => @year,:month => @month, @djbonus_hash["工资号"] => sal_number)%>
+              <% last_wage_member = Wage.find_by(:year => (@year-1),:month => @month, @wage_hash["工资号"] => sal_number) %>
+              <% last_bonus_member = Bonu.find_by(:year => (@year-1),:month => @month, @bonus_hash["工资号"] => sal_number) %>
+              <% last_djwage_member = Djwage.find_by(:year => (@year-1),:month => @month, @djwage_hash["工资号"] => sal_number)%>
+              <% last_djbonus_member = Djbonu.find_by(:year => (@year-1),:month => @month, @djbonus_hash["工资号"] => sal_number)%>
+  	        	<tr>
+  	        		<td>
+                  <% if wage_member.present? %>
+                    <%= wage_member.attributes[@wage_hash["姓名"]] %>
+                  <% elsif bonus_member.present? %>
+                    <%= bonus_member.attributes[@bonus_hash["姓名"]] %>
+                  <% elsif djwage_member.present? %>
+                    <%= djwage_member.attributes[@djwage_hash["人员名称"]]%>
+                  <% elsif djbonus_member.present? %>
+                    <%= djbonus_member.attributes[@djbonus_hash["人员名称"]] %>
+                  <% end %>
+                </td>
+                <td><%= sal_number %></td>
+                <td>
+                  <% if bonus_member.present? %>
+                    <%= bonus_member.attributes[@bonus_hash["性别"]] %>
+                  <% elsif wage_member.present? %>
+                    <%= wage_member.attributes[@wage_hash["性别"]] %>
+                  <% elsif employee.present? %>
+                    <%= employee.sex %>
+                  <% else %>
+                    <span style="color:red;">无信息！</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if bonus_member.present? %>
+                    <%= bonus_member.attributes[@bonus_hash["部门名称"]] %>
+                  <% elsif employee.present? %>
+                    <%= Group.find_by(:id => employee.group).name %>
+                  <% else %>
+                    <span style="color:red;">无部门信息！</span>
+                  <% end %>
+                </td>
+                <% if employee.present? %>
+                  <td><%= employee.work_type %></td>
+                  <td><%= employee.duty %></td>
+                  <td><%= employee.age %></td>
+                  <td><%= employee.working_years %></td>
+                  <td><%= employee.rali_years %></td>
+                <% else %>
+                  <% 5.times do %>
+                    <td><span style="color:red;">无信息！</span></td>
+                  <% end %>
+                <% end %>
+                <td>
+                  <% last_wage = 0 %>
+                  <% last_bonu = 0 %>
+                  <% last_djbonu = 0 %>
+                  <% if last_djwage_member.present? %>
+                    <% if last_bonus_member.present? %>
+                      <% last_bonu = last_bonus_member.attributes[@bonus_hash["主业奖金"]].to_f%>
+                    <% end %>
+                    <% if last_djbonus_member.present? %>
+                      <% last_djbonu = last_djbonus_member.attributes[@djbonus_hash["多经奖金"]].to_f%>
+                    <% end %>
+                    <% last_income = last_djwage_member.attributes[@djwage_hash["多经工资"]].to_f + last_bonu + last_djbonu%>
+                  <% else %>
+                    <% if last_wage_member.present? %>
+                      <% last_wage = last_wage_member.attributes[@wage_hash["主业工资"]].to_f%>
+                    <% end %>
+                    <% if last_bonus_member.present? %>
+                      <% last_bonu = last_bonus_member.attributes[@bonus_hash["主业奖金"]].to_f%>
+                    <% end %>
+                    <% last_income = last_wage + last_bonu %>
+                  <% end %>
+                  <%= last_income %>
+                </td>
+                <td>
+                  <% wage = 0 %>
+                  <% bonu = 0 %>
+                  <% djbonu = 0 %>
+                  <% if djwage_member.present? %>
+                    <% if bonus_member.present? %>
+                      <% bonu = bonus_member.attributes[@bonus_hash["主业奖金"]].to_f%>
+                    <% end %>
+                    <% if djbonus_member.present? %>
+                      <% djbonu = djbonus_member.attributes[@djbonus_hash["多经奖金"]].to_f%>
+                    <% end %>
+                    <% now_income = (djwage_member.attributes[@djwage_hash["多经工资"]]).to_f + bonu + djbonu %>
+                  <% else %>
+                    <% if wage_member.present? %>
+                      <% wage = wage_member.attributes[@wage_hash["主业工资"]].to_f%>
+                    <% end %>
+                    <% if bonus_member.present? %>
+                      <% bonu = bonus_member.attributes[@bonus_hash["主业奖金"]].to_f%>
+                    <% end %>
+                    <% now_income = wage + bonu %>
+                  <% end %>
+                  <%= now_income %>
+                </td>
+                <td>
+                  <% if last_income == 0 %>
+                     <span>去年无数据 </span>
+                  <% else %>
+                    <% increase_percent = (now_income.to_f/last_income).round(2) - 1 %>
+                    <% if increase_percent > 0 %>
+                      <%= increase_percent %>
+                    <% else %>
+                      <span style="color:red;"><%= increase_percent %></span>
+                    <% end %>
+                  <% end %>
+                </td>
+                <td>
+                  <% wage = 0 %>
+                  <% bonu = 0 %>
+                  <% djbonu = 0 %>
+                  <% tax = 0 %>
+                  <% if djwage_member.present? %>
+                    <% if bonus_member.present? %>
+                      <% bonu = (bonus_member.attributes[@bonus_hash["主业奖金"]]).to_f %>
+                    <% end %>
+                    <% if djbonus_member.present? %>
+                      <% djbonu = (djbonus_member.attributes[@djbonus_hash["多经奖金"]]).to_f %>
+                      <% tax = (djbonus_member.attributes[@djbonus_hash["税金"]]).to_f %>
+                    <% end %>
+                    <% actually_income = (djwage_member.attributes[@djwage_hash["实发工资"]]).to_f + bonu + djbonu - tax %>
+                  <% else %>
+                    <% if wage_member.present? %>
+                      <% wage = (wage_member.attributes[@wage_hash["实发工资"]]).to_f %>
+                    <% end %>
+                    <% if bonus_member.present? %>
+                      <% bonu = (bonus_member.attributes[@bonus_hash["主业奖金"]]).to_f %>
+                      <% tax = (bonus_member.attributes[@bonus_hash["扣税款"]]).to_f %>
+                    <% end %>
+                    <% actually_income = (wage + bonu - tax) %>
+                  <% end %>
+                  <%= actually_income %>
+                </td>
+                <td>
+                  <% if djbonus_member.present? %>
+                    <%= (djbonus_member.attributes[@djbonus_hash["税金"]]).to_f %>
+                  <% elsif bonus_member.present? %>
+                    <%= (bonus_member.attributes[@bonus_hash["扣税款"]]).to_f %>
+                  <% else %>
+                    <span style = "color:red;">无信息</span>
+                  <% end %>
+                </td>
+  	        	</tr>
+          	<% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    };
+
+    $("#department_select").select2( { theme: "bootstrap"} );
+    $("#name_select").select2( { theme: "bootstrap"} );
+    $("#sal_number_select").select2( { theme: "bootstrap"} );
+</script>

@@ -1,0 +1,21 @@
+<div class="modal fade" id="editWageHeader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">新增表头</h4>
+      </div>
+      <div class="modal-body">
+          <%= form_tag edit_header_djwages_path, method: 'post' do %>
+            <%= label_tag :请选择要修改的表头名称 %>
+            <% headers = DjwageHeader.where("djwage_headers.created_at > ?", Time.now.to_date - 1) %>
+            <%= select_tag(:before_header, options_for_select(headers.collect{ |u| [u.header] }), {:prompt => "请选择"}) %><br>
+            <%= label_tag :请填写修改后的表头名称 %>
+            <%= text_field_tag :after_header, nil, required: true %><br>
+            <%= submit_tag :确定 %>
+          <% end %><br>
+          <span>注：只有当天新增的表头才可修改，如要修改历史表头，请联系管理员</span>
+      </div>
+    </div>
+  </div>
+</div>

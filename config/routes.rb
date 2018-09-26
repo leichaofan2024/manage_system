@@ -188,6 +188,7 @@ Rails.application.routes.draw do
 
   resources :users
 
+
   resources :wages do
     collection do
       post :import_table
@@ -204,6 +205,20 @@ Rails.application.routes.draw do
       get :main_driving_stuff
       get :edit_header_formula
       post :update_header_formula
+      get :income
+    end
+  end
+
+  resources :djwages do
+    collection do
+      post :import_table
+      get :import_djwage
+      delete :delete_djwage
+      post :create_header
+      post :edit_header
+      get :employees_djwage_show
+      get :edit_header_formula
+      post :update_header_formula
     end
   end
 
@@ -212,6 +227,18 @@ Rails.application.routes.draw do
       post :import_table
       get :import_bonus
       delete :delete_bonus
+      post :create_header
+      post :edit_header
+      get :edit_header_formula
+      post :update_header_formula
+    end
+  end
+
+  resources :djbonus do
+    collection do
+      post :import_table
+      get :import_djbonus
+      delete :delete_djbonus
       post :create_header
       post :edit_header
       get :edit_header_formula

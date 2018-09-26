@@ -536,5 +536,116 @@ class WagesController < ApplicationController
 	end
 #快照功能结束
 
+	def income
+		if params[:year].present? && params[:month].present?
+			@year = params[:year].to_i
+			@month = params[:month]
+		elsif params[:year].present? && !params[:month].present?
+			@year = params[:year].to_i
+			@month = Wage.where(:year => @year).pluck(:month).uniq
+		else
+			@year = Time.now.year
+			@month = [Wage.where(:year => @year).pluck(:month).max]
+		end
+    @years = Wage.pluck("year").uniq
+    @months = Wage.pluck("month").uniq
+		@wage_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
+		@bonus_hash = [BonusHeader.pluck(:header),(1..BonusHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
+		@djwage_hash = [DjwageHeader.pluck(:header),(1..DjwageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
+		@djbonus_hash = [DjbonusHeader.pluck(:header),(1..DjbonusHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
+		all_wage_salnumber = Wage.where(:year => @year,:month => @month).pluck(@wage_hash["工资号"])
+		all_bonu_salnumber = Bonu.where(:year => @year,:month => @month).pluck(@bonus_hash["工资号"])
+		all_djwage_salnumber = Djwage.where(:year => @year,:month => @month).pluck(@djwage_hash["工资号"])
+		all_djbonu_salnumber = Djbonu.where(:year => @year,:month => @month).pluck(@djbonus_hash["工资号"])
+		@sal_numbers = (all_wage_salnumber + all_bonu_salnumber + all_djwage_salnumber + all_djbonu_salnumber).uniq
+		@employees = Employee.where(:sal_number => @sal_numbers)
+		if @sal_numbers.present?
+			@sal_numbers = (all_wage_salnumber + all_bonu_salnumber + all_djwage_salnumber + all_djbonu_salnumber).uniq.first(20)
+		else
+			@sal_numbers = []
+		end
+		wage_condition = Hash.new
+		bonus_condition = Hash.new
+		djwage_condition = Hash.new
+		djbonus_condition = Hash.new
+		employee_condition = Hash.new
+		@params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method"].include?(key) || (value =="")}
+    name_salnumber = []
+		sal_number_salnumber = []
+		department_salnumber = []
+		sex_salnumber = []
+		duty_salnumber = []
+		filter_type_salnumber = []
+
+		if params[:name].present?
+			wage_condition[@wage_hash["姓名"]] = params[:name]
+			bonus_condition[@bonus_hash["姓名"]] = params[:name]
+			djwage_condition[@djwage_hash["人员名称"]] = params[:name]
+			djbonus_condition[@djbonus_hash["人员名称"]] = params[:name]
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
+			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(djwage_condition).pluck(@djwage_hash["工资号"])
+			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(djbonus_condition).pluck(@djbonus_hash["工资号"])
+			name_salnumber = wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber
+    end
+		if params[:sal_number].present?
+			wage_condition[@wage_hash["工资号"]] = params[:sal_number]
+			bonus_condition[@bonus_hash["工资号"]] = params[:sal_number]
+			djwage_condition[@djwage_hash["工资号"]] = params[:sal_number]
+			djbonus_condition[@djbonus_hash["工资号"]] = params[:sal_number]
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
+			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(djwage_condition).pluck(@djwage_hash["工资号"])
+			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(djbonus_condition).pluck(@djbonus_hash["工资号"])
+			sal_number_salnumber = wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber
+    end
+		if params[:department].present?
+			bonus_condition[@bonus_hash["部门名称"]] = params[:department]
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
+			department_salnumber = bonus_salnumber
+    end
+		if params[:sex].present?
+			wage_condition[@wage_hash["性别"]] = params[:sex]
+			bonus_condition[@bonus_hash["性别"]] = params[:sex]
+			employee_condition["sex"] = params[:sex]
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
+			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+			sex_salnumber = wage_salnumber | bonus_salnumber | employee_salnumber
+    end
+		if params[:duty].present?
+			employee_condition["duty"]  = params[:duty]
+			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+			duty_salnumber = employee_salnumber
+    end
+
+	  if params[:work_type].present?
+			employee_condition["work_type"]  = params[:work_type]
+			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+			work_type_salnumber = employee_salnumber
+		end
+    if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
+			if params[:filter_type] == "年龄"
+				employee_condition["age"]  = (params[:start_time]..params[:end_time])
+			elsif params[:filter_type] == "工龄"
+				employee_condition["working_years"]  = (params[:start_time]..params[:end_time])
+			elsif params[:filter_type] == "路龄"
+				employee_condition["rali_years"]  = (params[:start_time]..params[:end_time])
+			end
+			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+			filter_type_salnumber = employee_salnumber
+		end
+		sal_numbers = []
+		[name_salnumber,sal_number_salnumber,department_salnumber,sex_salnumber,duty_salnumber,work_type_salnumber,filter_type_salnumber].each do |n|
+      if n.present? && sal_numbers.present?
+				 sal_numbers =  sal_numbers & n.uniq
+			elsif n.present?
+				sal_numbers = n.uniq
+			end
+	  end
+		if
+	  	@sal_numbers = sal_numbers.first(20)
+	  end
+	end
 
 end

@@ -1,0 +1,2 @@
+class DjbonusHeader < ApplicationRecord
+end
