@@ -643,7 +643,7 @@ class WagesController < ApplicationController
 				sal_numbers = n.uniq
 			end
 	  end
-		if
+		if sal_numbers.present?
 	  	@sal_numbers = sal_numbers.first(20)
 	  end
 	end

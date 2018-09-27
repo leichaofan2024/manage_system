@@ -15,32 +15,35 @@
           <li>
             <%= form_tag income_wages_path, method: 'get' do %>
             <%= label_tag :姓名： %>
-            <select class= "form-control"  multiple="multiple" name="name[]" id="name_select">
-              <option disabled value>请选择</option>
-              <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
-                <% if params[:name].present? && params[:name].include?(name) %>
-                  <option selected value="<%= name%>"><%= name%></option>
-                <% else %>
-                  <option  value="<%= name%>"><%= name%></option>
+            <span style = "display:inline-block;margin-right:10px;">
+              <select class= "form-control income-filter-select2" multiple="multiple" name="name[]" id="name_select">
+                <option disabled value>请选择</option>
+                <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
+                  <% if params[:name].present? && params[:name].include?(name) %>
+                    <option selected value="<%= name%>"><%= name%></option>
+                  <% else %>
+                    <option  value="<%= name%>"><%= name%></option>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </select>
+              </select>
+            </span>
             <%= label_tag :工资号： %>
-            <select class= "form-control"  multiple="multiple" name="sal_number[]" id="sal_number_select">
-              <option disabled value>请选择</option>
-              <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
-                <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
-                  <option selected value="<%= sal_number%>"><%= sal_number%></option>
-                <% else %>
-                  <option  value="<%= sal_number%>"><%= sal_number%></option>
+            <span style = "display:inline-block;margin-right:10px;">
+              <select class= "form-control income-filter-select2" multiple="multiple" name="sal_number[]" id="sal_number_select">
+                <option disabled value>请选择</option>
+                <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
+                  <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
+                    <option selected value="<%= sal_number%>"><%= sal_number%></option>
+                  <% else %>
+                    <option  value="<%= sal_number%>"><%= sal_number%></option>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </select>
+              </select>
+            </span>
 
             <%= label_tag :部门： %>
-
-            <span style="width: 300px;height:25px;display: inline-block;">
-              <select class= "form-control"  multiple="multiple" name="department[]" id="department_select">
+            <span style = "display:inline-block;">
+              <select class= "form-control income-filter-select2" style = "height:20px;line-height:20px;"  multiple="multiple" name="department[]" id="department_select">
                 <option disabled value>请选择</option>
                 <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
                   <% if params[:department].present? && params[:department].include?(department) %>
@@ -51,9 +54,9 @@
                 <% end %>
               </select>
             </span>
-
+            <br>
               <%= label_tag :男女： %>
-              <select class="" name="sex">
+              <select class="income-filter-select" name="sex">
                 <option value>请选择</option>
                 <% ["男","女"].each do |sex| %>
                   <% if params[:sex] == sex %>
@@ -64,7 +67,7 @@
                 <% end %>
               </select>
               <%= label_tag :按职务： %>
-              <select class="" name="duty">
+              <select class="income-filter-select" name="duty">
                 <option value>请选择</option>
                 <% Employee.pluck("duty").uniq.compact.each do |duty| %>
                   <% if params[:duty] == duty %>
@@ -75,7 +78,7 @@
                 <% end %>
               </select>
               <%= label_tag :工种： %>
-              <select class="" name="work_type">
+              <select class="income-filter-select" name="work_type">
                 <option value>请选择</option>
                 <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
                   <% if params[:work_type] == work_type %>

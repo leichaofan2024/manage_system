@@ -2381,3 +2381,28 @@ button.close {
 .employee-start-time{
   width:50px;
 }
+
+.income-filter-select2{
+  width:280px;
+
+  input{
+    height:15px;
+    line-height:15px;
+  }
+}
+
+.income-filter-select{
+  margin-right:10px;
+}
+// .select2-selection__rendered{
+//   height: 1;
+//   box-sizing: border-box;
+//   display: block;
+//   list-style: none;
+//   margin: 0;
+//   overflow: hidden;
+//   padding: 0;
+//   width: 100%;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
