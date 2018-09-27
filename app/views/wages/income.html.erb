@@ -1,5 +1,4 @@
 <div class="contentpanel">
-
   <div class="panel">
     <div class="panel-heading" style="background-color: #fff;">
   <!-- 导出与新增-开始 -->
@@ -14,6 +13,15 @@
 
           <li>
             <%= form_tag income_wages_path, method: 'get' do %>
+            <%= hidden_field_tag :year,@year %>
+            <span hidden="hidden">
+              <select class=""  multiple="multiple" name="month[]">
+               <% @month.each do |month| %>
+                 <option value="<%= month.to_i %>" selected><%= month.to_i %></option>
+               <% end %>
+              </select>
+            </span>
+
             <%= label_tag :姓名： %>
             <span style = "display:inline-block;margin-right:10px;">
               <select class= "form-control income-filter-select2" multiple="multiple" name="name[]" id="name_select">
@@ -193,12 +201,18 @@
                 </td>
                 <td><%= sal_number %></td>
                 <td>
+                  <% sex = [] %>
                   <% if bonus_member.present? %>
-                    <%= bonus_member.attributes[@bonus_hash["性别"]] %>
-                  <% elsif wage_member.present? %>
-                    <%= wage_member.attributes[@wage_hash["性别"]] %>
-                  <% elsif employee.present? %>
-                    <%= employee.sex %>
+                    <% sex << bonus_member.attributes[@bonus_hash["性别"]] %>
+                  <% end %>
+                  <% if wage_member.present? %>
+                    <% sex << wage_member.attributes[@wage_hash["性别"]] %>
+                  <% end %>
+                  <% if employee.present? %>
+                    <% sex << employee.sex %>
+                  <% end %>
+                  <% if sex.present? %>
+                    <%= sex.compact.first %>
                   <% else %>
                     <span style="color:red;">无信息！</span>
                   <% end %>
