@@ -576,52 +576,42 @@ class WagesController < ApplicationController
 		sex_salnumber = []
 		duty_salnumber = []
 		filter_type_salnumber = []
-
+    employee_salnumber = []
 		if params[:name].present?
-			wage_condition[@wage_hash["姓名"]] = params[:name]
-			bonus_condition[@bonus_hash["姓名"]] = params[:name]
-			djwage_condition[@djwage_hash["人员名称"]] = params[:name]
-			djbonus_condition[@djbonus_hash["人员名称"]] = params[:name]
-			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
-			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
-			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(djwage_condition).pluck(@djwage_hash["工资号"])
-			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(djbonus_condition).pluck(@djbonus_hash["工资号"])
+
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["姓名"] => params[:name]).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["姓名"] => params[:name]).pluck(@bonus_hash["工资号"])
+			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(@djwage_hash["人员名称"] => params[:name]).pluck(@djwage_hash["工资号"])
+			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["人员名称"] => params[:name]).pluck(@djbonus_hash["工资号"])
 			name_salnumber = wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber
     end
 		if params[:sal_number].present?
-			wage_condition[@wage_hash["工资号"]] = params[:sal_number]
-			bonus_condition[@bonus_hash["工资号"]] = params[:sal_number]
-			djwage_condition[@djwage_hash["工资号"]] = params[:sal_number]
-			djbonus_condition[@djbonus_hash["工资号"]] = params[:sal_number]
-			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
-			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
-			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(djwage_condition).pluck(@djwage_hash["工资号"])
-			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(djbonus_condition).pluck(@djbonus_hash["工资号"])
+
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["工资号"] => params[:sal_number]).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["工资号"] => params[:sal_number]).pluck(@bonus_hash["工资号"])
+			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(@djwage_hash["工资号"] => params[:sal_number]).pluck(@djwage_hash["工资号"])
+			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["工资号"] => params[:sal_number]).pluck(@djbonus_hash["工资号"])
 			sal_number_salnumber = wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber
     end
 		if params[:department].present?
-			bonus_condition[@bonus_hash["部门名称"]] = params[:department]
-			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
+
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["部门名称"] => params[:department]).pluck(@bonus_hash["工资号"])
 			department_salnumber = bonus_salnumber
     end
 		if params[:sex].present?
-			wage_condition[@wage_hash["性别"]] = params[:sex]
-			bonus_condition[@bonus_hash["性别"]] = params[:sex]
-			employee_condition["sex"] = params[:sex]
-			wage_salnumber = Wage.where(:year => @year,:month => @month).where(wage_condition).pluck(@wage_hash["工资号"])
-			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(bonus_condition).pluck(@bonus_hash["工资号"])
-			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+
+			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["性别"] => params[:sex]).pluck(@wage_hash["工资号"])
+			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["性别"] => params[:sex]).pluck(@bonus_hash["工资号"])
+			employee_salnumber = @employees.where(:sex => params[:sex]).pluck(:sal_number)
 			sex_salnumber = wage_salnumber | bonus_salnumber | employee_salnumber
     end
 		if params[:duty].present?
-			employee_condition["duty"]  = params[:duty]
-			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+		  employee_salnumber = @employees.where(:duty => params[:duty]).pluck(:sal_number)
 			duty_salnumber = employee_salnumber
     end
 
 	  if params[:work_type].present?
-			employee_condition["work_type"]  = params[:work_type]
-			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+			employee_salnumber = @employees.where(:work_type => params[:work_type]).pluck(:sal_number)
 			work_type_salnumber = employee_salnumber
 		end
     if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
@@ -632,7 +622,7 @@ class WagesController < ApplicationController
 			elsif params[:filter_type] == "路龄"
 				employee_condition["rali_years"]  = (params[:start_time]..params[:end_time])
 			end
-			employee_salnumber = employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
+		  employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
 			filter_type_salnumber = employee_salnumber
 		end
 		sal_numbers = []
@@ -643,7 +633,7 @@ class WagesController < ApplicationController
 				sal_numbers = n.uniq
 			end
 	  end
-		if sal_numbers.present?
+		if params[:name].present? || params[:sal_number].present? || params[:department].present? || params[:sex].present? || params[:duty].present? || params[:work_type].present? || (params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?)
 	  	@sal_numbers = sal_numbers.first(20)
 	  end
 	end
