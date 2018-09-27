@@ -1710,17 +1710,26 @@ h4 {
  padding: 10px 5px;
 }
 
+
+
 .employee-list {
   display: block;
   list-style: none;
-  padding: 0;
+  padding: 0px;
   margin: 0;
   font-size: 16px;
 }
 
 .employee-list li {
   padding: 10px 20px;
+  text-align: center;
 
+}
+
+.employee-list input,select {
+  display: block;
+  float: right;
+  width: 200px;
 }
 
 .employee-list .glyphicon-asterisk{

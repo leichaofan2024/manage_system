@@ -97,10 +97,12 @@
   <div class="col-md-6">
     <ul class="employee-list">
       <li>
-      <span class="glyphicon glyphicon-asterisk"></span>工资号
+      <span class="glyphicon glyphicon-asterisk"></span>
+      <span>工资号</span>
+
       <%= f.text_field :sal_number, required: true %>
       </li>
-      <li><span class="glyphicon glyphicon-asterisk"></span>性别
+      <li><span class="glyphicon glyphicon-asterisk"></span><span>性别</span>
       <%= f.select :sex, options_for_select([["男", "1"], ["女", "2"]]), required: true%>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>车间
