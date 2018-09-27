@@ -1401,11 +1401,9 @@ h4 {
 }
 
 .ivu-form  .ivu-form-item-label {
-    padding: 10px 24px 10px 0;
-}
-
-.ivu-form  .ivu-form-item-label {
+    width: 150px;
     text-align: right;
+    padding: 10px 24px 10px 0;
     vertical-align: middle;
     float: left;
     font-size: 12px;
@@ -1711,6 +1709,27 @@ h4 {
 .employee-search li {
  padding: 10px 5px;
 }
+
+.employee-list {
+  display: block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+}
+
+.employee-list li {
+  padding: 10px 20px;
+
+}
+
+.employee-list .glyphicon-asterisk{
+  color: #ff8345;
+  margin-right: 5px;
+  font-size: 0.75em;
+}
+
+
 
 .nav-btn-group{
   list-style: none;
