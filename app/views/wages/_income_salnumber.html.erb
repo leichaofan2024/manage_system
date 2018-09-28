@@ -1,0 +1,153 @@
+<% employee = Employee.find_by(:sal_number => sal_number) %>
+<% wage_member = Wage.find_by(:year => year,:month => month, wage_hash["工资号"] => sal_number) %>
+<% bonus_member = Bonu.find_by(:year => year,:month => month, bonus_hash["工资号"] => sal_number) %>
+<% djwage_member = Djwage.find_by(:year => year,:month => month, djwage_hash["工资号"] => sal_number)%>
+<% djbonus_member = Djbonu.find_by(:year => year,:month => month, djbonus_hash["工资号"] => sal_number)%>
+<% last_wage_member = Wage.find_by(:year => (year-1),:month => month, wage_hash["工资号"] => sal_number) %>
+<% last_bonus_member = Bonu.find_by(:year => (year-1),:month => month, bonus_hash["工资号"] => sal_number) %>
+<% last_djwage_member = Djwage.find_by(:year => (year-1),:month => month, djwage_hash["工资号"] => sal_number)%>
+<% last_djbonus_member = Djbonu.find_by(:year => (year-1),:month => month, djbonus_hash["工资号"] => sal_number)%>
+<tr>
+  <td>
+    <% if wage_member.present? %>
+      <%= wage_member.attributes[wage_hash["姓名"]] %>
+    <% elsif bonus_member.present? %>
+      <%= bonus_member.attributes[bonus_hash["姓名"]] %>
+    <% elsif djwage_member.present? %>
+      <%= djwage_member.attributes[djwage_hash["人员名称"]]%>
+    <% elsif djbonus_member.present? %>
+      <%= djbonus_member.attributes[djbonus_hash["人员名称"]] %>
+    <% end %>
+  </td>
+  <td><%= sal_number %></td>
+  <td>
+    <% sex = [] %>
+    <% if bonus_member.present? %>
+      <% sex << bonus_member.attributes[bonus_hash["性别"]] %>
+    <% end %>
+    <% if wage_member.present? %>
+      <% sex << wage_member.attributes[wage_hash["性别"]] %>
+    <% end %>
+    <% if employee.present? %>
+      <% sex << employee.sex %>
+    <% end %>
+    <% if sex.present? %>
+      <%= sex.compact.first %>
+    <% else %>
+      <span style="color:red;">无信息！</span>
+    <% end %>
+  </td>
+  <td>
+    <% if bonus_member.present? %>
+      <%= bonus_member.attributes[bonus_hash["部门名称"]] %>
+    <% elsif employee.present? %>
+      <%= Group.find_by(:id => employee.group).name %>
+    <% else %>
+      <span style="color:red;">无部门信息！</span>
+    <% end %>
+  </td>
+  <% if employee.present? %>
+    <td><%= employee.work_type %></td>
+    <td><%= employee.duty %></td>
+    <td><%= employee.age %></td>
+    <td><%= employee.working_years %></td>
+    <td><%= employee.rali_years %></td>
+  <% else %>
+    <% 5.times do %>
+      <td><span style="color:red;">无信息！</span></td>
+    <% end %>
+  <% end %>
+  <td>
+    <% last_wage = 0 %>
+    <% last_bonu = 0 %>
+    <% last_djbonu = 0 %>
+    <% if last_djwage_member.present? %>
+      <% if last_bonus_member.present? %>
+        <% last_bonu = last_bonus_member.attributes[bonus_hash["主业奖金"]].to_f%>
+      <% end %>
+      <% if last_djbonus_member.present? %>
+        <% last_djbonu = last_djbonus_member.attributes[djbonus_hash["多经奖金"]].to_f%>
+      <% end %>
+      <% last_income = last_djwage_member.attributes[djwage_hash["多经工资"]].to_f + last_bonu + last_djbonu%>
+    <% else %>
+      <% if last_wage_member.present? %>
+        <% last_wage = last_wage_member.attributes[wage_hash["主业工资"]].to_f%>
+      <% end %>
+      <% if last_bonus_member.present? %>
+        <% last_bonu = last_bonus_member.attributes[bonus_hash["主业奖金"]].to_f%>
+      <% end %>
+      <% last_income = last_wage + last_bonu %>
+    <% end %>
+    <%= last_income %>
+  </td>
+  <td>
+    <% wage = 0 %>
+    <% bonu = 0 %>
+    <% djbonu = 0 %>
+    <% if djwage_member.present? %>
+      <% if bonus_member.present? %>
+        <% bonu = bonus_member.attributes[bonus_hash["主业奖金"]].to_f%>
+      <% end %>
+      <% if djbonus_member.present? %>
+        <% djbonu = djbonus_member.attributes[djbonus_hash["多经奖金"]].to_f%>
+      <% end %>
+      <% now_income = (djwage_member.attributes[djwage_hash["多经工资"]]).to_f + bonu + djbonu %>
+    <% else %>
+      <% if wage_member.present? %>
+        <% wage = wage_member.attributes[wage_hash["主业工资"]].to_f%>
+      <% end %>
+      <% if bonus_member.present? %>
+        <% bonu = bonus_member.attributes[bonus_hash["主业奖金"]].to_f%>
+      <% end %>
+      <% now_income = wage + bonu %>
+    <% end %>
+    <%= now_income %>
+  </td>
+  <td>
+    <% if last_income == 0 %>
+       <span>去年无数据 </span>
+    <% else %>
+      <% increase_percent = (now_income.to_f/last_income).round(2) - 1 %>
+      <% if increase_percent > 0 %>
+        <%= increase_percent %>
+      <% else %>
+        <span style="color:red;"><%= increase_percent %></span>
+      <% end %>
+    <% end %>
+  </td>
+  <td>
+    <% wage = 0 %>
+    <% bonu = 0 %>
+    <% djbonu = 0 %>
+    <% tax = 0 %>
+    <% if djwage_member.present? %>
+      <% if bonus_member.present? %>
+        <% bonu = (bonus_member.attributes[bonus_hash["主业奖金"]]).to_f %>
+      <% end %>
+      <% if djbonus_member.present? %>
+        <% djbonu = (djbonus_member.attributes[djbonus_hash["多经奖金"]]).to_f %>
+        <% tax = (djbonus_member.attributes[djbonus_hash["税金"]]).to_f %>
+      <% end %>
+      <% actually_income = (djwage_member.attributes[djwage_hash["实发工资"]]).to_f + bonu + djbonu - tax %>
+    <% else %>
+      <% if wage_member.present? %>
+        <% wage = (wage_member.attributes[wage_hash["实发工资"]]).to_f %>
+      <% end %>
+      <% if bonus_member.present? %>
+        <% bonu = (bonus_member.attributes[bonus_hash["主业奖金"]]).to_f %>
+        <% tax = (bonus_member.attributes[bonus_hash["扣税款"]]).to_f %>
+      <% end %>
+      <% actually_income = (wage + bonu - tax) %>
+    <% end %>
+    <%= actually_income %>
+  </td>
+  <td>
+    <% if djbonus_member.present? %>
+      <%= (djbonus_member.attributes[djbonus_hash["税金"]]).to_f %>
+    <% elsif bonus_member.present? %>
+      <%= (bonus_member.attributes[bonus_hash["扣税款"]]).to_f %>
+    <% else %>
+      <span style = "color:red;">无信息</span>
+    <% end %>
+  </td>
+</tr>

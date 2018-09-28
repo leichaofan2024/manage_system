@@ -600,7 +600,7 @@ class WagesController < ApplicationController
 
 		@sal_numbers = (all_wage_salnumber + all_bonu_salnumber + all_djwage_salnumber + all_djbonu_salnumber).uniq
 		@employees = Employee.where(:sal_number => @sal_numbers)
-    @sal_numbers = @sal_numbers.first(20)
+
 		employee_condition = Hash.new
 		@params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method"].include?(key) || (value =="")}
     @name_salnumber = []
@@ -624,30 +624,30 @@ class WagesController < ApplicationController
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["工资号"] => params[:sal_number]).pluck(@bonus_hash["工资号"])
 			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(@djwage_hash["工资号"] => params[:sal_number]).pluck(@djwage_hash["工资号"])
 			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["工资号"] => params[:sal_number]).pluck(@djbonus_hash["工资号"])
-			@sal_number_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
+			@sal_number_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber).uniq
 			sal_numbers_array << @sal_number_salnumber
     end
 		if params[:department].present?
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["部门名称"] => params[:department]).pluck(@bonus_hash["工资号"])
-			@department_salnumber = bonus_salnumber
+			@department_salnumber = bonus_salnumber.uniq
 			sal_numbers_array << @department_salnumber
     end
 		if params[:sex].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["性别"] => params[:sex]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["性别"] => params[:sex]).pluck(@bonus_hash["工资号"])
 			employee_salnumber = @employees.where(:sex => params[:sex]).pluck(:sal_number)
-			@sex_salnumber = (wage_salnumber | bonus_salnumber | employee_salnumber)
+			@sex_salnumber = (wage_salnumber | bonus_salnumber | employee_salnumber).uniq
 			sal_numbers_array << @sex_salnumber
     end
 		if params[:duty].present?
 		  employee_salnumber = @employees.where(:duty => params[:duty]).pluck(:sal_number)
-			@duty_salnumber = employee_salnumber
+			@duty_salnumber = employee_salnumber.uniq
 			sal_numbers_array << @duty_salnumber
     end
 
 	  if params[:work_type].present?
 			employee_salnumber = @employees.where(:work_type => params[:work_type]).pluck(:sal_number)
-			@work_type_salnumber = employee_salnumber
+			@work_type_salnumber = employee_salnumber.uniq
 			sal_numbers_array << @work_type_salnumber
 		end
     if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
@@ -659,7 +659,7 @@ class WagesController < ApplicationController
 				employee_condition["rali_years"]  = (params[:start_time]..params[:end_time])
 			end
 		  employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
-			@filter_type_salnumber = employee_salnumber
+			@filter_type_salnumber = employee_salnumber.uniq
 			sal_numbers_array << @filter_type_salnumber
 		end
 
@@ -676,8 +676,29 @@ class WagesController < ApplicationController
 			sal_numbers_array.each do |m|
 				sal_numbers = (sal_numbers & m)
 			end
-	  	@sal_numbers = sal_numbers.first(20)
+	  	@sal_numbers = sal_numbers
 	  end
+    gon.url_parameter = ""
+		if params[:max_id]
+			index = @sal_numbers.index(params[:max_id])
+      @sal_numbers = @sal_numbers[index+1,20]
+    else
+			@sal_numbers = @sal_numbers.first(20)
+		end
+		request.query_parameters.each do |key,value|
+			if key != "max_id"
+        gon.url_parameter = (gon.url_parameter + "&#{key}=#{value}")
+			end
+		end
+		if request.original_url.split("?").count == 2
+    	gon.url_parameter = request.original_url.split("?").last.sub("max_id=","")
+		else
+			gon.url_parameter = ""
+		end
+    respond_to do |format|
+      format.html  # 如果客户端要求 HTML，则回传 index.html.erb
+      format.js    # 如果客户端要求 JavaScript，回传 index.js.erb
+    end
 	end
 
 end

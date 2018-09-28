@@ -1,0 +1,7 @@
+<% @sal_numbers.each do |sal_number| %>
+  $("#sal-number-list").append("<%=j render :partial => "income_salnumber", :locals => {:sal_number => sal_number,:year => @year,:month => @month,:wage_hash => @wage_hash,:bonus_hash => @bonus_hash,:djwage_hash => @djwage_hash,:djbonus_hash => @djbonus_hash } %>");
+<% end %>
+
+<% if @sal_numbers.any? %>
+  var current_post_id = <%= @sal_numbers.last %>;
+<% end %>
