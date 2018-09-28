@@ -94,7 +94,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-5">
     <ul class="employee-list">
       <li>
       <span class="glyphicon glyphicon-asterisk"></span>
@@ -140,7 +140,7 @@
       </li>
     </ul>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-5">
     <ul class="employee-list">
       <li><span class="glyphicon glyphicon-asterisk"></span>姓名
       <%= f.text_field :name, required: true %>
@@ -197,7 +197,7 @@
 <% station_info_columns_other = ["three_one", "people_source" , "people_category" ,"where_place", "employment_form", "contract_period", "conclude_contract_time", "skilledness_authenticate", "station_now", "station_now_time", "retire_condition", "visit_family", "employee_card_number", "trade_code", "produce_group"]%>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-5">
       <ul class="employee-list">
         <% station_info_columns.each do |emp| %>
         <li><%= transfer_columns[emp] %>
@@ -206,7 +206,7 @@
         <% end %>
       </ul>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-5">
     <ul class="employee-list">
       <% station_info_columns_other.each do |emp| %>
       <li>
@@ -231,9 +231,8 @@
 </div>
 
   <% saler_info_columns = ["record_saler","skilledness_saler", "station_saler", "seniority_saler"]%>
-
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <ul class="employee-list">
             <% saler_info_columns.each do |emp| %>
               <li>

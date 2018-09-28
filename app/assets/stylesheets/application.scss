@@ -1722,14 +1722,16 @@ h4 {
 
 .employee-list li {
   padding: 10px 20px;
-  text-align: center;
+  text-align: right;
 
 }
 
-.employee-list input,select {
+.employee-list > li > input,
+.employee-list > li > select {
   display: block;
   float: right;
   width: 200px;
+  margin: 0 20px;
 }
 
 .employee-list .glyphicon-asterisk{
