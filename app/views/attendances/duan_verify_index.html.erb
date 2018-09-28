@@ -30,35 +30,41 @@
   <% @workshop_partial_verify.each do |workshop| %>
     <% groups = Group.where(:workshop_id => workshop.id) %>
     <% complete_groups = AttendanceStatus.where(:group_id => groups.ids,:status => ["车间已审核","科室已上报","段已审核"]) %>
-    <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
-      <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
-        <div class="duan-verify-index-car" style="background-color:#FF9900;">
-          <span><%= workshop.name %>(已上报<%= complete_groups.count%> 全部<%= groups.count %>)</span>
-        </div>
-      <% end %>
-    </div>
+    <% if groups.present? %>
+      <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+        <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
+          <div class="duan-verify-index-car" style="background-color:#FF9900;">
+            <span><%= workshop.name %>(已上报<%= complete_groups.count%> 全部<%= groups.count %>)</span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 
   <% @workshops_no_varify.each do |workshop| %>
     <% groups = Group.where(:workshop_id => workshop.id) %>
     <% complete_groups = AttendanceStatus.where(:group_id => groups.ids,:status => ["车间已审核","科室已上报","段已审核"]) %>
-    <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
-      <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
-        <div class="duan-verify-index-car" style="background-color:#FF9900;">
-          <span><%= workshop.name %>(已上报<%= complete_groups.count%> 全部<%= groups.count %>)</span>
-        </div>
-      <% end %>
-    </div>
+    <% if groups.present? %>
+      <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+        <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
+          <div class="duan-verify-index-car" style="background-color:#FF9900;">
+            <span><%= workshop.name %>(已上报<%= complete_groups.count%> 全部<%= groups.count %>)</span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 
   <% @duan_all_varified.each do |workshop| %>
     <% groups = Group.where(:workshop_id => workshop.id) %>
-    <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
-      <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
-        <div class="duan-verify-index-car" style="background-color:#999999;">
-          <span><%= workshop.name %>(段已审核完毕)</span>
-        </div>
-      <% end %>
-    </div>
+    <% if groups.present? %>
+      <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+        <%= link_to workshop_verify_index_attendances_path(:group_id => groups.first.id),data: {disable_with: "加载中..."} do %>
+          <div class="duan-verify-index-car" style="background-color:#999999;">
+            <span><%= workshop.name %>(段已审核完毕)</span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
