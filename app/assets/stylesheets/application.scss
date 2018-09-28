@@ -1122,7 +1122,6 @@ h4 {
     -webkit-margin-after: 1.33em;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
-    text-align: center;
 }
 
 //部门信息
@@ -1740,6 +1739,71 @@ h4 {
   font-size: 0.75em;
 }
 
+.employee_show_head{
+    background: #fcfcfc;
+    padding: 20px;
+    font-size: 13px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    margin-bottom: 20px;
+}
+
+.placeholder {
+    width: 110px;
+    height: 110px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    margin-right: 10px;
+    background-color: #bad9ff;
+    text-align: center;
+    line-height: 120px;
+
+}
+.placeholder span {
+  font-size: 36px;
+  color: #ffff;
+}
+
+.person-name{
+  margin: 0 0 5px 0;
+}
+
+.employee_show_head .social-list{
+  margin-top: 10px;
+  margin-bottom: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.employee_show_head .social-list::after {
+    clear: both;
+    display: block;
+    content: '';
+}
+.employee_show_head .social-list li {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.employee_show_head .social-list li a {
+    border: 1px solid #1CAF9A;
+    padding: 3px 5px;
+    display: block;
+    text-align: center;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+.employee_show_head .social-list li a:hover{
+  background-color: #eee;
+  color: #333;
+}
 
 
 .nav-btn-group{
@@ -2312,15 +2376,6 @@ button.close {
     background-color: red;
   }
 
-  // div{
-  //   display: inline-block;
-    // height:16px;
-    // width:20px;
-    // margin-right: 5px;
-    // position: relative;
-  //   top:4px;
-  // }
-
 }
 .workshop_verify_card{
   width:100%;
@@ -2408,9 +2463,7 @@ button.close {
   padding:10px;
 }
 
-.search-bar-input{
-  width:500px;
-}
+
 .employee-start-time{
   width:50px;
 }
@@ -2427,15 +2480,3 @@ button.close {
 .income-filter-select{
   margin-right:10px;
 }
-// .select2-selection__rendered{
-//   height: 1;
-//   box-sizing: border-box;
-//   display: block;
-//   list-style: none;
-//   margin: 0;
-//   overflow: hidden;
-//   padding: 0;
-//   width: 100%;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-// }
