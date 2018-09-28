@@ -299,7 +299,13 @@ class WagesController < ApplicationController
 					  end
 					  level_formula["age"] = (level_age_range.min..level_age_range.max)
 				  end
-					@employee_people = Employee.current.where(level_formula)
+					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
+					reduce_people = level_formula["reduce_people"]
+					if add_people.present?
+						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+					else
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
+					end
 			    wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
@@ -357,7 +363,13 @@ class WagesController < ApplicationController
 					  end
 					  level_formula["age"] = (level_age_range.min..level_age_range.max)
 				  end
-					@employee_people = Employee.current.where(level_formula)
+					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
+					reduce_people = level_formula["reduce_people"]
+					if add_people.present?
+						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+					else
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
+					end
 			    wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
@@ -415,7 +427,13 @@ class WagesController < ApplicationController
 						end
 						level_formula["age"] = (level_age_range.min..level_age_range.max)
 					end
-					@employee_people = Employee.current.where(level_formula)
+					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
+					reduce_people = level_formula["reduce_people"]
+					if add_people.present?
+						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+					else
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
+					end
 					wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
@@ -472,7 +490,13 @@ class WagesController < ApplicationController
 						end
 						level_formula["age"] = (level_age_range.min..level_age_range.max)
 					end
-					@employee_people = Employee.current.where(level_formula)
+					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
+					reduce_people = level_formula["reduce_people"]
+					if add_people.present?
+						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+					else
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
+					end
 					wage_people = Wage.where(Wage.head_transfer.index("工资号") => @employee_people.pluck("sal_number"),:year => @year, :month => @month)
 
 					kuaizhao_content_hash = Hash.new
