@@ -603,45 +603,52 @@ class WagesController < ApplicationController
     @sal_numbers = @sal_numbers.first(20)
 		employee_condition = Hash.new
 		@params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method"].include?(key) || (value =="")}
-    name_salnumber = []
-		sal_number_salnumber = []
-		department_salnumber = []
-		sex_salnumber = []
-		duty_salnumber = []
-		work_type_salnumber = []
-		filter_type_salnumber = []
+    @name_salnumber = []
+		@sal_number_salnumber = []
+		@department_salnumber = []
+		@sex_salnumber = []
+		@duty_salnumber = []
+		@work_type_salnumber = []
+		@filter_type_salnumber = []
+		sal_numbers_array = []
 		if params[:name].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["姓名"] => params[:name]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["姓名"] => params[:name]).pluck(@bonus_hash["工资号"])
 			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(@djwage_hash["人员名称"] => params[:name]).pluck(@djwage_hash["工资号"])
 			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["人员名称"] => params[:name]).pluck(@djbonus_hash["工资号"])
-			name_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
+			@name_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
+			sal_numbers_array << @name_salnumber
     end
 		if params[:sal_number].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["工资号"] => params[:sal_number]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["工资号"] => params[:sal_number]).pluck(@bonus_hash["工资号"])
 			djwage_salnumber = Djwage.where(:year => @year,:month => @month).where(@djwage_hash["工资号"] => params[:sal_number]).pluck(@djwage_hash["工资号"])
 			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["工资号"] => params[:sal_number]).pluck(@djbonus_hash["工资号"])
-			sal_number_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
+			@sal_number_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
+			sal_numbers_array << @sal_number_salnumber
     end
 		if params[:department].present?
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["部门名称"] => params[:department]).pluck(@bonus_hash["工资号"])
-			department_salnumber = bonus_salnumber
+			@department_salnumber = bonus_salnumber
+			sal_numbers_array << @department_salnumber
     end
 		if params[:sex].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["性别"] => params[:sex]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["性别"] => params[:sex]).pluck(@bonus_hash["工资号"])
 			employee_salnumber = @employees.where(:sex => params[:sex]).pluck(:sal_number)
-			sex_salnumber = (wage_salnumber | bonus_salnumber | employee_salnumber)
+			@sex_salnumber = (wage_salnumber | bonus_salnumber | employee_salnumber)
+			sal_numbers_array << @sex_salnumber
     end
 		if params[:duty].present?
 		  employee_salnumber = @employees.where(:duty => params[:duty]).pluck(:sal_number)
-			duty_salnumber = employee_salnumber
+			@duty_salnumber = employee_salnumber
+			sal_numbers_array << @duty_salnumber
     end
 
 	  if params[:work_type].present?
 			employee_salnumber = @employees.where(:work_type => params[:work_type]).pluck(:sal_number)
-			work_type_salnumber = employee_salnumber
+			@work_type_salnumber = employee_salnumber
+			sal_numbers_array << @work_type_salnumber
 		end
     if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
 			if params[:filter_type] == "年龄"
@@ -652,17 +659,23 @@ class WagesController < ApplicationController
 				employee_condition["rali_years"]  = (params[:start_time]..params[:end_time])
 			end
 		  employee_salnumber = @employees.where(employee_condition).pluck(:sal_number)
-			filter_type_salnumber = employee_salnumber
+			@filter_type_salnumber = employee_salnumber
+			sal_numbers_array << @filter_type_salnumber
 		end
+
 		sal_numbers = []
-		[name_salnumber,sal_number_salnumber,department_salnumber,sex_salnumber,duty_salnumber,work_type_salnumber,filter_type_salnumber].each do |n|
-      if n.present? && sal_numbers.present?
-				 sal_numbers =  (sal_numbers & n.uniq)
-			elsif n.present?
-				sal_numbers = n.uniq
+		if sal_numbers_array.present?
+			sal_numbers = sal_numbers_array.first
+			sal_numbers_array.each do |m|
+				sal_numbers = (sal_numbers & m)
 			end
 	  end
 		if params[:name].present? || params[:sal_number].present? || params[:department].present? || params[:sex].present? || params[:duty].present? || params[:work_type].present? || (params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?)
+			sal_numbers = []
+			sal_numbers = sal_numbers_array.first
+			sal_numbers_array.each do |m|
+				sal_numbers = (sal_numbers & m)
+			end
 	  	@sal_numbers = sal_numbers.first(20)
 	  end
 	end
