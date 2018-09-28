@@ -72,7 +72,6 @@
 
   <div class="panel-body">
     <!--下边-->
-    <div class="main-1XSRW_0">
       <div>
         <div>
           <!--基本信息-->
@@ -85,14 +84,14 @@
               <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
                 <div class="right-Qtwf2_0">
                   <div class="edit-2kYy__0">
-                    <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                    <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                    <i class="fa fa-edit ivu-icon  icon-nUnTL_0"></i>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
                   </div>
                 </div>
               <% end %>
             </div>
 
-            <div class>
+            <div>
               <div class="info-2UJx6_0">
                 <div class="ivu-row-flex">
 
@@ -307,7 +306,7 @@
                 <div class="right-Qtwf2_0">
                   <div class="edit-2kYy__0">
                     <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                    <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
                   </div>
                 </div>
               <% end %>
@@ -729,7 +728,7 @@
                 <div class="right-Qtwf2_0">
                   <div class="edit-2kYy__0">
                     <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                    <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
                   </div>
                 </div>
               <% end %>
@@ -794,7 +793,7 @@
           </div>
         </div>
       </div>
-    </div>
+
   </div>
 </div>
 
