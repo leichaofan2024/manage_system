@@ -24,7 +24,7 @@
     <h5 style="text-align: center;"><%=@year%>年<%=@month%>月高铁岗位人员情况统计表</h5>
   <% end %>
   <%= link_to kuaizhao_index_wages_path(:year => @year,:month => @month ,:category => params[:category],format: "xls") do  %>
-    <button type="button" class="btn button-success">
+    <button type="button" class="btn button-success pull-right" style="margin-right:20px;">
       <span>导出记录</span>
     </button>
   <% end %>
