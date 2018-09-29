@@ -23,7 +23,11 @@
   <% elsif params[:category] == "high" %>
     <h5 style="text-align: center;"><%=@year%>年<%=@month%>月高铁岗位人员情况统计表</h5>
   <% end %>
-
+  <%= link_to kuaizhao_index_wages_path(:year => @year,:month => @month ,:category => params[:category],format: "xls") do  %>
+    <button type="button" class="btn button-success">
+      <span>导出记录</span>
+    </button>
+  <% end %>
   <div class="card">
     <div style="overflow: auto;" class="col-md-12">
       <table id="example" class="table table-bordered">
@@ -32,7 +36,8 @@
             <th>序号</th>
             <th>项目</th>
             <% @column_array.each do |head| %>
-              <th><%= link_to(head,edit_head_divide_level_wages_path(:header_name => head),style: "color: black;") %></th>
+              <!-- <th><%= link_to(head,edit_head_divide_level_wages_path(:header_name => head),style: "color: black;") %></th> -->
+              <th><%= head %></th>
             <% end %>
         	</tr>
         </thead>
@@ -44,9 +49,9 @@
             <tr>
               <td><%= n %></td>
               <td>
-                <%= link_to edit_line_divide_level_wages_path(:name => content_name),style: "color: black;" do %>
+                <!-- <%= link_to edit_line_divide_level_wages_path(:name => content_name),style: "color: black;" do %> -->
                   <%= content_name %>
-                <% end %>
+                <!-- <% end %> -->
               </td>
               <% contents = @kuaizhao_contents.where(:name => content_name)%>
               <% months = contents.pluck(:month) %>

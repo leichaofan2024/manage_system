@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Title">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:Bold="1" ss:FontName="sans-serif" ss:Size="36"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="End">
+      <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+      <Font ss:FontName="sans-serif" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titlelittle">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titleright">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Borders>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+    </Style>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">项目</Data></Cell>
+        <% @column_array.each do |head| %>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= head %></Data></Cell>
+        <% end %>
+      </Row>
+      <% n = 0 %>
+      <% line_content_hash = Hash.new %>
+      <% @line_name_array.each do |content_name| %>
+        <% n = n+1 %>
+        <Row>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
+              <%= content_name %>
+          </Data></Cell>
+          <% contents = @kuaizhao_contents.where(:name => content_name)%>
+          <% months = contents.pluck(:month) %>
+          <% @column_array.each do |head| %>
+            <% form_cel_value = 0 %>
+            <% last_month = months.max%>
+            <% last_month_header = @kuaizhao_headers.find_by(:header_name => head,:month =>last_month) %>
+            <% if last_month_header.formula.keys.include?("final_period")%>
+              <% form_cel_value = contents.find_by(:month => last_month).attributes[last_month_header.content_name]%>
+            <% else %>
+                <% months.each do |month| %>
+                  <% kuaizhao_header = @kuaizhao_headers.find_by(:header_name => head,:month => month) %>
+                  <% kuaizhao_content = contents.find_by(:month => month)%>
+                  <% if kuaizhao_header.present? && kuaizhao_content.present? %>
+                    <% column = kuaizhao_header.content_name %>
+                    <% form_cel_value += kuaizhao_content.attributes[column] %>
+                  <% end  %>
+                <% end %>
+                <% if last_month_header.formula.keys.include?("per_capita") %>
+                  <% if line_content_hash[last_month_header.formula["per_capita"]] == 0 %>
+                    <% form_cel_value = 0%>
+                  <% else %>
+                    <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
+                  <% end %>
+                <% end %>
+                <% if last_month_header.formula.keys.include?("average")%>
+                  <% form_cel_value = form_cel_value/(months.count)%>
+                <% end %>
+
+            <% end %>
+            <Cell ss:StyleID="Description"><Data ss:Type="String">
+              <%= form_cel_value %>
+              <% line_content_hash[head] = form_cel_value %>
+            </Data></Cell>
+          <% end %>
+        </Row>
+        <% line_content_hash.clear %>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

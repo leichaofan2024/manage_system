@@ -9,7 +9,11 @@
     <a href="/high_speed_rail_stuffs/edit_line?id=<%= params[:content_id]%>" ><< 返回 </a>
   <% end %>
   <h3 style="text-align:center;"><%= params[:content_name]%></h3>
-
+  <%= link_to employees_wage_show_wages_path(:category => params[:category],:content_id => params[:content_id],:content_name => params[:content_name],format: "xls") do  %>
+    <button type="button" class="btn button-success">
+      <span>导出记录</span>
+    </button>
+  <% end %>
 
       <div>
         <div>

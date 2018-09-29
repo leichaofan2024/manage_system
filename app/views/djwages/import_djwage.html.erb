@@ -92,9 +92,13 @@
           <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
         </select>
         <select class="" name="month">
-          <option value="<%= (Time.now.month)-1 %>"><%= (Time.now.month)-1 %></option>
-          <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
-          <option value="<%= (Time.now.month) +1 %>"><%= (Time.now.month) +1 %></option>
+          <% (1..12).each do |month| %>
+            <% if month == Time.now.month %>
+              <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
+            <% else %>
+              <option value="<%= month%>"><%= month%></option>
+            <% end %>
+          <% end %>
         </select>
         <%= file_field_tag :file%>
         <%= submit_tag "上传", data: { disable_with: "上传中..." }%>

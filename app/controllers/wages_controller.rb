@@ -231,7 +231,12 @@ class WagesController < ApplicationController
 			redirect_to employees_wage_show_wages_path(:category => params[:category],:content_id => params[:content_id],:content_name => params[:content_name])
 		end
     add_people = Employee.current.where(:sal_number => @formula["add_people"])
-		@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
+		reduce_people = Employee.current.where(:sal_number => @formula["reduce_people"])
+		if params[:format] == "xls"
+      @employees = (Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people) - reduce_people
+    else
+			@employees = Employee.current.where(@formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key) }) | add_people
+	  end
 		if params[:category] == "divide"
 			@formula = DivideLevelWage.find(params[:content_id]).formula
 		elsif params[:category] == "high"
@@ -241,6 +246,12 @@ class WagesController < ApplicationController
 		elsif params[:category] == "production"
 			@formula = ProductionStuffWage.find(params[:content_id]).formula
 		end
+
+		respond_to do |format|
+	      format.html
+	      format.csv { send_data @employees.to_csv }
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="人员详情表.xls"'}
+	  end
 	end
 
   #统计表方法：
@@ -265,6 +276,11 @@ class WagesController < ApplicationController
 		max_month = @kuaizhao_contents.pluck(:month).max
     @column_array = KuaizhaoHeader.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:header_name).uniq
 		@line_name_array = KuaizhaoContent.where(:category => params[:category],:year => @year, :month =>max_month).pluck(:name).uniq
+		respond_to do |format|
+	      format.html
+	      format.csv { send_data @column_array.to_csv }
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="快照统计表.xls"'}
+	  end
 	end
 
 # 快照功能

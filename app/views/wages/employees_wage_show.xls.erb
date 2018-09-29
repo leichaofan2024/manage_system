@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">工资号</Data></Cell>
+        <Cell><Data ss:Type="String">工号</Data></Cell>
+        <Cell><Data ss:Type="String">档案号</Data></Cell>
+        <Cell><Data ss:Type="String">车间</Data></Cell>
+        <Cell><Data ss:Type="String">班组</Data></Cell>
+        <Cell><Data ss:Type="String">工种</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">职务</Data></Cell>
+        <Cell><Data ss:Type="String">电话号</Data></Cell>
+        <Cell><Data ss:Type="String">性别</Data></Cell>
+        <Cell><Data ss:Type="String">年龄</Data></Cell>
+        <Cell><Data ss:Type="String">文化程度</Data></Cell>
+        <Cell><Data ss:Type="String">民族</Data></Cell>
+        <Cell><Data ss:Type="String">籍贯</Data></Cell>
+        <Cell><Data ss:Type="String">工作时间</Data></Cell>
+        <Cell><Data ss:Type="String">工龄</Data></Cell>
+        <Cell><Data ss:Type="String">入路时间</Data></Cell>
+        <Cell><Data ss:Type="String">路龄</Data></Cell>
+        <Cell><Data ss:Type="String">联系电话</Data></Cell>
+      </Row>
+    <% @employees.each do |employee| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= employee.sal_number.to_i %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.work_type %></Data></Cell>
+        <Cell><Data ss:Type="String">
+          <%=  employee.name %>
+          <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+            <span class="label label-danger">已调离</span>
+          <% end %>
+
+          <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+              <span class="label label-warning">一月内有调动</span>
+          <% end %>
+        </Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.age %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.education_background %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.nation %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.native_place %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.working_time %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.working_years %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.railway_time.to_i %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.rali_years %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
