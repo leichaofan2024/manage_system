@@ -7,7 +7,7 @@
   <% employee_ids += @employees.page(i).per(16).pluck("id") %>
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
-<div class="col-md-12" style="width:100%">
+<!-- <div class="col-md-12" style="width:100%">
  <div>
   <div class="btn_group_top-1sKKU_0">
     <div>
@@ -83,77 +83,68 @@
     </div>
   </div>
  </div>
-</div>
-<h5>人数：<%= @employees.total_count %></h5>
-<div class="col-md-12" style="height: 100%; margin-top: 40px;">
-  <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+</div> -->
+<!-- <h5>人数：<%= @employees.total_count %></h5> -->
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <!-- <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
 
-    <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
-    <ul>
-      <% @workshops.each do |workshop| %>
-      <li>
-        <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-
+        <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
         <ul>
-          <% @groups = Group.current.where(:workshop_id => workshop.id) %>
-          <% @groups.each do |group| %>
-            <li><a href='/employees/organization_structure?group=<%= group.id %>'><%= group.name %></a></li>
+          <% @workshops.each do |workshop| %>
+          <li>
+            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+
+            <ul>
+              <% @groups = Group.current.where(:workshop_id => workshop.id) %>
+              <% @groups.each do |group| %>
+                <li><a href='/employees/organization_structure?group=<%= group.id %>'><%= group.name %></a></li>
+              <% end %>
+            </ul>
+          </li>
           <% end %>
         </ul>
-      </li>
-      <% end %>
-    </ul>
+      </div> -->
+
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>组织名称</th>
+              <th>组织人数</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% Workshop.current.each do |workshop| %>
+              <tr class="parent" id="<%= workshop.id%>">
+                <td style="text-align: left"><%= workshop.name %></td>
+                <td><%= Employee.current.where(workshop: workshop).count%></td>
+                <td>
+                  <%= link_to "新增班组" %>
+                  <%= link_to "编辑" %>
+                  <%= link_to "删除" %>
+                </td>
+              </tr>
+              <% Group.current.where(workshop: workshop).each do |group| %>
+              <tr class="child-<%= workshop.id %>" style="display:none;">
+                <td><%= group.name %></td>
+                <td><%= Employee.current.where(group: group).count%></td>
+                <td>
+                  <%= link_to "编辑" %>
+                  <%= link_to "删除" %>
+                </td>
+              </tr>
+              <% end %>
+            <% end %>
+         </tbody>
+        </table>
+    </div>
   </div>
-
-  <div class="col-md-10" style="overflow: auto;">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>工资号</th>
-          <th>工号</th>
-          <th>档案号</th>
-          <th>车间</th>
-          <th>班组</th>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>年龄</th>
-          <th>文化程度</th>
-          <th>民族</th>
-          <th>籍贯</th>
-          <th>工作时间</th>
-          <th>工龄</th>
-          <th>入路时间</th>
-          <th>路龄</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <% @employees.each do |employee| %>
-          <tr>
-            <td><%= employee.sal_number %></td>
-            <td><%= employee.job_number %></td>
-            <td><%= employee.record_number %></td>
-            <td><%= Workshop.current.find(employee.workshop).name %></td>
-            <td><%= Group.current.find(employee.group).name %></td>
-            <td><%= employee.name %></td>
-            <td><%= employee.sex %></td>
-            <td><%= employee.age %></td>
-            <td><%= employee.education_background %></td>
-            <td><%= employee.nation %></td>
-            <td><%= employee.native_place %></td>
-            <td><%= employee.working_time %></td>
-            <td><%= employee.working_years %></td>
-            <td><%= employee.railway_time %></td>
-            <td><%= employee.rali_years %></td>
-          </tr>
-        <% end %>
-     </tbody>
-    </table>
-   </div>
-   <div class="text-center">
-     <%= paginate @employees %>
-   </div>
 </div>
+
 
 
 <div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -201,36 +192,14 @@
 </div>
 
 <script type="text/javascript">
-  (function(e) {
-    for(var _obj=document.getElementById(e.id).getElementsByTagName(e.tag),i=-1,em;em=_obj[++i];){
-      em.onclick = function(){ //onmouseover
-        var ul = this.nextSibling;
-        if(!ul){
-          return false;
-        }
-        ul = ul.nextSibling;
-        if(!ul) {
-          return false;
-        }
-        if(e.tag != 'a') {
-          ul = ul.nextSibling;
-          if(!ul){
-            return false;
-          }
-        } //a 标签控制 隐藏或删除该行
-        for(var _li=this.parentNode.parentNode.childNodes,n=-1,li;li=_li[++n];) {
-          if(li.tagName=="LI"){
-            for(var _ul=li.childNodes,t=-1,$ul;$ul=_ul[++t];){
-              switch($ul.tagName){
-                case "UL": $ul.className = $ul!=ul?"" : ul.className?"":"off";
-                break;
-                case "EM": $ul.className = $ul!=this?"" : this.className?"":"off";
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-  })({id:'menu',tag:'i'});
+  $(document).ready(function () {
+      $(function() {
+        $('tr.parent')
+              .css("cursor","pointer")
+              .attr("title","点击这里展开/关闭")
+              .click(function(){
+                $(this).siblings('.child-'+ this.id).toggle();
+              });
+            });
+})
 </script>
