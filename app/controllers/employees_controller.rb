@@ -66,7 +66,7 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
     workshop = Workshop.current.pluck("name")
-      @group = [["--选择省份--"]]
+      @group = []
       workshop.each do |name|
         @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
       end

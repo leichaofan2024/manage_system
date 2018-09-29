@@ -106,7 +106,7 @@
       <%= f.select :sex, options_for_select([["男", "1"], ["女", "2"]]), required: true%>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>车间
-      <%= f.select(:workshop, options_for_select(Workshop.current.collect{ |u| [u.name, u.id] }), {include_blank: '请选择' ,required: true}, id: "selid",  :onchange => "selCity(this)") %>
+      <%= f.select(:workshop, options_for_select(Workshop.current.collect{ |u| [u.name, u.id] }), {required: true}, id: "selid",  :onchange => "selCity(this)") %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>出生日期
       <%= f.text_field :birth_date, required: true %>
@@ -115,7 +115,7 @@
       <%= f.text_field :railway_time, required: true %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>文化程度
-      <%= f.select :education_background,options_for_select(["大学本科","研究生","大专","中专","初中","小学"]), required: true %>
+      <%= f.select :education_background,options_for_select(Employee.pluck(:education_background).uniq.compact), required: true %>
       </li>
       <li>籍贯
       <%= f.select :native_place, options_for_select((Employee.pluck(:native_place).uniq.compact.take 25) + ["重庆","贵州","宁夏"]) %>
@@ -146,22 +146,22 @@
       <%= f.text_field :name, required: true %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>职务
-      <%= f.select :duty,options_for_select(["业务指导","干部协理","干事","工程师","助理工程师"]), required: true %>
+      <%= f.select :duty,options_for_select(Employee.pluck(:duty).uniq.compact), required: true %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>班组
-      <%= f.select(:group, options_for_select(Group.current.collect{ |u| [u.name] }), {include_blank: '请选择' ,required: true}, id: "subselid") %>
+      <%= f.select(:group, options_for_select(Group.current.where(:workshop_id => 1).collect{ |u| [u.name] }), {required: true}, id: "subselid") %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>工作时间
       <%= f.text_field :working_time, required: true %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>工种分类
-      <%= f.select :work_type,options_for_select(["高级工","中级工","初级工","学徒工"]), required: true %>
+      <%= f.select :work_type,options_for_select(Employee.pluck(:work_type).uniq.compact), required: true %>
       </li>
       <li>民族
       <%= f.text_field :nation %>
       </li>
       <li>政治面目
-      <%= f.select :political_role,options_for_select(["党员","共青团员","人民群众"]) %>
+      <%= f.select :political_role,options_for_select(Employee.pluck(:political_role).uniq.compact) %>
       </li>
       <li>毕业时间
       <%= f.text_field :graduation_time %>
