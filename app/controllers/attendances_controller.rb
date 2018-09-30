@@ -531,7 +531,23 @@ class AttendancesController < ApplicationController
 	def create_attendance
 		#选择假期确定后存入attendance表中--开始
 		#根据表单传来的employee_id参数，找到要更新的考勤数据
-    if params[:overtime].present?
+    if params[:yijian].present?
+      @year = params[:year]
+      @month = params[:month]
+      @group = Group.find(params[:group_id])
+      @employee_hash = params[:employee].delete_if{|key,value| value == ""  || value == nil}
+      @employee_hash.each do |key,value|
+        attendance = Attendance.find_by(:employee_id => key,:year => @year,:month => @month)
+        attendance.update(:add_overtime => value)
+      end
+      @employee_name = Employee.where(:id => @employee_hash.keys).pluck(:name)
+      flash[:notice] = "成功更新#{@employee_name}的额外加班数！"
+      if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
+				redirect_to group_attendances_path(:year => @year,:month => @month,:group => @group.id)
+			elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :superadmin)
+				redirect_to group_current_time_info_attendances_path(:year => @year,:month => @month,:group => @group.id )
+			end
+    elsif params[:overtime].present?
       @employee = Employee.find(params[:employee_id])
       @attendance = Attendance.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year])
       @attendance.update(:add_overtime => params[:overtime])
@@ -1300,4 +1316,15 @@ class AttendancesController < ApplicationController
     end
   end
 
+  def add_overtime_form
+    @year = params[:year]
+    @month = params[:month]
+    if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
+      @group = Group.find(current_user.group_id)
+    elsif params[:group_id].present?
+      @group = Group.find(params[:group_id])
+    end
+    @employees = Employee.current.where(:group => @group.id)
+
+  end
 end

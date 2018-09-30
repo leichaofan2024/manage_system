@@ -163,6 +163,20 @@
                       <% end %>
                     </th>
                   <% end %>
+                  <% if @group.present? %>
+                    <% attendance_status = AttendanceStatus.find_by(:year => @year,:month => @month,:group_id => @group )%>
+                    <% if (current_user.has_role? :workshopadmin) %>
+                      <% if attendance_status.present? && ["班组已上报","班组/科室填写中"].include?(attendance_status.status)%>
+                        <th><%= link_to("额外加班",add_overtime_form_attendances_path(group_id: @group,month: @month, year: @year, overtime: "yijian"))%></th>
+                      <% else %>
+                        <th>额外加班</th>
+                      <% end %>
+                    <% elsif (current_user.has_role? :attendance_admin)%>
+                      <th><%= link_to("额外加班",add_overtime_form_attendances_path(group_id: @group,month: @month, year: @year, overtime: "yijian"))%></th>
+                    <% end %>
+                  <% else %>
+                    <th>额外加班</th>
+                  <% end %>
                 </tr>
               </thead>
               <tbody>

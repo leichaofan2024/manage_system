@@ -38,15 +38,19 @@
               <!-- 生成每月1-31号的数字-开始 -->
               <% arry = ["日","一","二","三","四","五","六"]%>
               <% (1..31).each do |i| %>
-              <th>
-                <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
-                  <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),class: "btn btn-text-green"%>
-                <% else %>
-                  <%= i %> | <%= arry[Time.local(@year,@month,i).wday]%>
-                <% end %>
-              </th>
+                <th>
+                  <% if (@time_range === i) && @attendance_status.status == "班组/科室填写中"%>
+                    <%= link_to "#{i} | #{arry[Time.local(@year,@month,i).wday]}",simple_input_attendance_attendances_path(:group_id => current_user.group_id,:year => @year , :month => @month,:day => i-1),class: "btn btn-text-green"%>
+                  <% else %>
+                    <%= i %> | <%= arry[Time.local(@year,@month,i).wday]%>
+                  <% end %>
+                </th>
               <% end %>
-              <th>额外加班</th>
+              <% if @attendance_status.status == "班组/科室填写中"%>
+                <th><%= link_to("额外加班",add_overtime_form_attendances_path(group_id: current_user.group_id,month: @month, year: @year, overtime: "yijian"))%></th>
+              <% else %>
+                <th>额外加班</th>
+              <% end %>
               <!-- 生成每月1-31号的数字-结束 -->
             </tr>
 

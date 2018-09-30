@@ -13,7 +13,7 @@
   <header>
     <h4 style = "text-align:center;"><%= @group.name%><%= params[:year]%>年<%= params[:month]%>月<%= params[:day].to_i + 1 %>日填写考勤</h4>
   </header>
-    <%= form_tag group_yijian_create_attendances_path,method: :post do |f|%>
+    <%= form_tag group_yijian_create_attendances_path,method: :post do %>
       <%= hidden_field_tag "group_id", params[:group_id] %>
       <%= hidden_field_tag "year", params[:year] %>
       <%= hidden_field_tag "month", params[:month] %>
@@ -21,7 +21,7 @@
       <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>一键勾选：点击表头首行的考勤名称 </p>
       <div class="panel panel-default">
           <div class="table">
-            <table class="table">
+            <table class="table  overflow-y table-bordered table-striped">
               <thead>
                 <tr>
                   <th>序号</th>
@@ -40,16 +40,21 @@
                 <% n = 0 %>
                 <% @employees.each do |employee| %>
                   <% n += 1 %>
+                  <% month_attendances = Attendance.find_by(:employee_id => employee.id,:year => params[:year],:month => params[:month]).month_attendances%>
                   <tr>
                     <td><%= n %></td>
                     <td><%= employee.name %></td>
                     <td><%= employee.sal_number %></td>
                     <% @vacation_short_code_hash.values.each do |vacation_code| %>
-                      <td>
+                        <td>
                         <% if params[:yijian_code].present? && params[:yijian_code]== vacation_code %>
                           <input type="radio" checked="checked" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
                         <% else %>
-                          <input type="radio" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
+                          <% if month_attendances[params[:day].to_i] == vacation_code%>
+                            <input type="radio" checked="checked" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
+                          <% else %>
+                            <input type="radio" id="rock" name="<%=employee.id%>" value="<%=vacation_code%>" />
+                          <% end %>
                         <% end %>
                       </td>
                     <% end %>

@@ -52,6 +52,32 @@
       </td>
       <% day_number += 1%>
     <% end %>
+    <td>
+      <% attendance_status = AttendanceStatus.find_by(:year => params_year,:month => params_month,:group_id => employee.group )%>
+      <% if (current_user.has_role? :workshopadmin) %>
+        <% if attendance_status.present? && ["班组已上报","班组/科室填写中"].include?(attendance_status.status)%>
+          <%= link_to show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, overtime: "yes"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+            <% if attendance.add_overtime.present? %>
+              <%= attendance.add_overtime%>
+            <% else %>
+              +
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= attendance.add_overtime%>
+        <% end %>
+      <% elsif (current_user.has_role? :attendance_admin)%>
+        <%= link_to show_modal_attendances_path(employee_id: employee.id, month: params_month, year: params_year, overtime: "yes"), remote: true, class: "btn btn-text-green", "data-toggle" => "modal", "data-target" => "#myModal" do %>
+          <% if attendance.add_overtime.present? %>
+            <%= attendance.add_overtime%>
+          <% else %>
+            +
+          <% end %>
+        <% end %>
+      <% end %>
+
+
+    </td>
   <% end %>
 </tr>
 <% @employee_group = employee %>

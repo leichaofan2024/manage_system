@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get :show_application_detail
       post :group_yijian_create
       get :simple_input_attendance
+      get :add_overtime_form
       get :workshop
       get :duan
       get :duan_detail
