@@ -750,12 +750,12 @@ class AttendancesController < ApplicationController
                     end
     if  params[:authority] == "group"
       @group = Group.find_by(:id => @group_id)
-      @employees = Employee.where(:group => @group_id)
+      @employees = Employee.current.where(:group => @group_id)
       last_day_of_month = "#{@year}-#{@month}-15".to_time.end_of_month.day
       day_range = (1..last_day_of_month)
       @message = Hash.new
       @employees.each do |employee|
-        attendance = Attendance.find_by(:year => @year,:month => @month,:group_id => @group_id)
+        attendance = Attendance.find_by(:year => @year,:month => @month,:employee_id => employee.id)
         month_attendances = attendance.month_attendances
         (0..(last_day_of_month-1)).each do |day|
           if month_attendances[day] == "x"
