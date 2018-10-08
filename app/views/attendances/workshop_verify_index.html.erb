@@ -143,8 +143,10 @@
     <table class="table overflow-y table-bordered">
       <thead>
         <tr>
+          <th>序列号</th>
           <th>姓名</th>
           <th>工资号</th>
+          <th>职名</th>
           <% arry = ["日","一","二","三","四","五","六"]%>
           <% (1..31).each do |i| %>
             <th>
@@ -159,10 +161,13 @@
 
       </thead>
         <tbody>
+          <% n = 1 %>
           <% @employees.each do |employee| %>
             <tr>
+              <th><%= n %></th>
               <th><%= employee.name %></th>
               <th><%= employee.sal_number %></th>
+              <th><%= employee.duty %></th>
               <% attendance = Attendance.find_by(employee_id: employee.id, month: @shenhe_month, year: @shenhe_year) %>
               <% attendance_count = AttendanceCount.find_by(employee_id: employee.id, month: @shenhe_month, year: @shenhe_year )%>
               <% if attendance.present? %>
@@ -201,6 +206,7 @@
                 <td></td>
               <% end %>
             </tr>
+            <% n += 1 %>
           <% end %>
        </tbody>
     </table>
