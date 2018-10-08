@@ -35,17 +35,36 @@
                 <th>姓名</th>
                 <th>工资号</th>
                 <th>额外加班数</th>
+                <th>本月加班总数</th>
               </tr>
             </thead>
             <tbody>
               <% n = 1 %>
               <% @employees.each do |employee| %>
                 <% attendance = Attendance.find_by(:employee_id => employee.id, :year => @year,:month => @month)%>
+                <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: @month, year: @year)%>
                 <tr>
                   <th><%= n %></th>
                   <th><%= employee.name %></th>
                   <th><%= employee.sal_number %></th>
                   <td><input class="form-control" type="text" name="employee[<%=employee.id%>]" placeholder="<%= attendance.add_overtime%>" > </td>
+                  <% if attendance_count.present? %>
+                    <% if attendance_count.attributes["d"] == 0%>
+                      <% if (attendance.add_overtime.to_i > 0) %>
+                        <td><%= attendance.add_overtime.to_i%> </td>
+                      <% else %>
+                        <td></td>
+                      <% end %>
+                    <% else %>
+                      <% if (attendance.add_overtime.to_i > 0) %>
+                        <td><%= attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i%> </td>
+                      <% else %>
+                        <td><%= attendance_count.attributes["d"].to_i%></td>
+                      <% end %>
+                    <% end %>
+                  <% else %>
+                   <td></td>
+                  <% end %>
                 </tr>
                 <% n += 1 %>
               <% end %>
