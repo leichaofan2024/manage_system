@@ -140,7 +140,7 @@
     </div>
   <% end %>
   <div class="content-table" style="clear:both;width:94%;margin-left:3%;overflow:auto;">
-    <table class="table overflow-y table-bordered">
+    <table class="table overflow-y table-bordered table-4">
       <thead>
         <tr>
           <th>姓名</th>
@@ -149,7 +149,7 @@
           <% (1..31).each do |i| %>
             <th>
               <%= i %>
-              <br><%= arry[Time.local(@shenhe_year, @shenhe_month, i).wday]%>
+              | <%= arry[Time.local(@shenhe_year, @shenhe_month, i).wday]%>
             </th>
           <% end %>
           <% @vacation_code_hash.values.each do |short_name| %>

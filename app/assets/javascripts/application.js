@@ -171,8 +171,17 @@ jQuery(document).ready(function() {
 				.find('thead th:gt(1)').remove()
 				.end()
 				.find('tbody td').remove();
-
-			$stickyInsct.html('<thead>'+'<tr>'+'<th>'+$t.find('thead th:first-child').html()+'</th>'+'<th>'+$t.find('thead th:nth-child(2)').html()+'</th>'+'</tr>'+'</thead>');
+      if($t.hasClass('table-4')){
+        $stickyInsct.html('<thead>'+'<tr>'+
+                          '<th>'+$t.find('thead th:first-child').html()+'</th>'+
+                          '<th>'+$t.find('thead th:nth-child(2)').html()+'</th>'+
+                          '<th>'+$t.find('thead th:nth-child(3)').html()+'</th>'+
+                          '<th>'+$t.find('thead th:nth-child(4)').html()+'</th>'+
+                          '</tr>'+'</thead>');
+      }
+      else{
+        $stickyInsct.html('<thead>'+'<tr>'+'<th>'+$t.find('thead th:first-child').html()+'</th>'+'<th>'+$t.find('thead th:nth-child(2)').html()+'</th>'+'</tr>'+'</thead>');
+      }
 			// Set widths
 			var setWidths = function () {
 					$t
