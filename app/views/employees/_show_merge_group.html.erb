@@ -17,7 +17,7 @@
         </tr>
         <% Group.current.where(workshop: workshop).each do |group| %>
         <tr class="child-<%= workshop.id %>" style="display:none;">
-          <td>
+          <td style="text-align: left;padding: 10px 20px; font-size: 16px;">
             <%= check_box_tag "groups[]", group.id %>
             <%= label_tag :q, "#{group.name}"%>
           </td>

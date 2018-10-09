@@ -11,7 +11,7 @@
         <tr class="parent" id="<%= workshop.id%>">
           <td style="text-align: left; font-size: 18px;">
             <%= check_box_tag "workshops[]", workshop.id %>
-            <%= label_tag :q, "#{workshop.name}"%>
+            <%= label_tag :q, "#{workshop.name}", style:"font-weight: normal"%>
           </td>
           <td><%= Employee.current.where(workshop: workshop).count%></td>
         </tr>

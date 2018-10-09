@@ -8,8 +8,8 @@
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
 
-
-            <!-- <div class="ivu-tooltip-rel" style="text-align: right">
+<!--
+            <div class="ivu-tooltip-rel" style="text-align: right">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
                    <span style="color: #269Eff;">删除车间/班组</span>
@@ -29,8 +29,8 @@
                    <span style="color: #269Eff;">修改班组</span>
                 <% end %>
               </button>
-            </div>
-           -->
+            </div> -->
+
 
 
 
@@ -38,15 +38,15 @@
   <div class="panel">
     <div class="panel-body">
       <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active btn btn-success-alt"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">组织结构</a></li>
+      <ul class="organization_structure" role="tablist">
         <% if can? :import, Employee%>
-        <li role="presentation" class="btn btn-success-alt"><a href="#workshop" aria-controls="workshop" role="tab" data-toggle="tab">合并车间</a></li>
-        <li role="presentation" class="btn btn-success-alt"><a href="#group" aria-controls="group" role="tab" data-toggle="tab">合并班组</a></li>
+        <li class="btn btn-success-alt active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">组织结构</a></li>
+        <li class="btn btn-success-alt"><a href="#workshop" aria-controls="workshop" role="tab" data-toggle="tab">合并车间</a></li>
+        <li class="btn btn-success-alt"><a href="#group" aria-controls="group" role="tab" data-toggle="tab">合并班组</a></li>
         <% end %>
       </ul>
       <!-- Tab panes -->
-      <div class="tab-content" style="margin-top: 20px;">
+      <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="home"><%= render partial:"show_organization" %></div>
         <div role="tabpanel" class="tab-pane" id="workshop"><%= render partial:"show_merge_workshop" %></div>
         <div role="tabpanel" class="tab-pane" id="group"><%= render partial:"show_merge_group" %></div>
@@ -57,7 +57,7 @@
 
 
 
-<!-- <div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -73,7 +73,7 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 <!-- <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

@@ -1844,6 +1844,32 @@ h4 {
   color: black;
 }
 
+.organization_structure {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  float: right;
+  margin-bottom: 10px;
+}
+.organization_structure::after{
+  clear: both;
+  content: '';
+  display: block;
+
+}
+
+.organization_structure > li {
+  display: inline-block;
+}
+.organization_structure > li > a {
+  color: #1CAF9A;
+}
+.organization_structure li.active > a  {
+  background-color:#fcfcfc;
+  box-shadow: none !important;
+}
+
+
 
 
 .switchTab-3pFw5_0 {
