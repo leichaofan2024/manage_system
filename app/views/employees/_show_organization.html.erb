@@ -1,0 +1,42 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>组织名称</th>
+      <th>组织人数</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>北京供电段</td>
+      <td><%= @employees.total_count%></td>
+      <td><%= link_to "新增车间"%></td>
+    </tr>
+    <% Workshop.current.each do |workshop| %>
+      <tr class="parent" id="<%= workshop.id%>">
+        <td style="text-align: left; font-size: 18px;">
+          <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
+          <%= workshop.name %>
+        </td>
+        <td><%= Employee.current.where(workshop: workshop).count%></td>
+        <td>
+          <%= link_to "新增班组" %>
+          <%= link_to "编辑" %>
+          <%= link_to "删除" %>
+        </td>
+      </tr>
+      <% Group.current.where(workshop: workshop).each do |group| %>
+      <tr class="child-<%= workshop.id %>" style="display:none;">
+        <td>
+          <%= group.name %>
+        </td>
+        <td><%= Employee.current.where(group: group).count%></td>
+        <td>
+          <%= link_to "编辑" %>
+          <%= link_to "删除" %>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+ </tbody>
+</table>

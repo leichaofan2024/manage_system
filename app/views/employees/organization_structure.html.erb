@@ -7,56 +7,9 @@
   <% employee_ids += @employees.page(i).per(16).pluck("id") %>
 <% end %>
 <!-- 通过@employees的总页数，找出所有的id-结束 -->
-<!-- <div class="col-md-12" style="width:100%">
- <div>
-  <div class="btn_group_top-1sKKU_0">
-    <div>
-      <div class="btn_group-2MSRh_0">
-        <div class="ivu-tooltip">
-          <% if can? :import, Employee%>
-            <div class="ivu-tooltip-rel">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <% if @workshop.present? or @group.present? %>
-                  <%= link_to organization_structure_employees_path(format: "xls", employees: employee_ids) do %>
-                    <span style="color: #269Eff;">导出表格</span>
-                  <% end %>
-                <% else %>
-                  <%= link_to organization_structure_employees_path(format: "xls", employees: "全部") do %>
-                    <span style="color: #269Eff;">导出表格</span>
-                  <% end %>
-                <% end %>
 
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right;">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
-                   <span style="color: #269Eff;">新增车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
-                   <span style="color: #269Eff;">新增班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeWorkshopModal" do  %>
-                   <span style="color: #269Eff;">合并车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#mergeGroupModal" do  %>
-                   <span style="color: #269Eff;">合并班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
+
+            <!-- <div class="ivu-tooltip-rel" style="text-align: right">
               <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
                 <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
                    <span style="color: #269Eff;">删除车间/班组</span>
@@ -77,77 +30,34 @@
                 <% end %>
               </button>
             </div>
-          <% end %>
-        </div>
+           -->
+
+
+
+
+  <div class="panel">
+    <div class="panel-body">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active btn btn-success-alt"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">组织结构</a></li>
+        <% if can? :import, Employee%>
+        <li role="presentation" class="btn btn-success-alt"><a href="#workshop" aria-controls="workshop" role="tab" data-toggle="tab">合并车间</a></li>
+        <li role="presentation" class="btn btn-success-alt"><a href="#group" aria-controls="group" role="tab" data-toggle="tab">合并班组</a></li>
+        <% end %>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content" style="margin-top: 20px;">
+        <div role="tabpanel" class="tab-pane active" id="home"><%= render partial:"show_organization" %></div>
+        <div role="tabpanel" class="tab-pane" id="workshop"><%= render partial:"show_merge_workshop" %></div>
+        <div role="tabpanel" class="tab-pane" id="group"><%= render partial:"show_merge_group" %></div>
       </div>
-    </div>
-  </div>
- </div>
-</div> -->
-<!-- <h5>人数：<%= @employees.total_count %></h5> -->
-<div class="panel">
-  <div class="panel-body">
-    <div class="col-md-12">
-      <!-- <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-
-        <h5><%= link_to "北京供电段", organization_structure_employees_path(duan: "北京供电段") %></h5>
-        <ul>
-          <% @workshops.each do |workshop| %>
-          <li>
-            <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a href='/employees/organization_structure?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-
-            <ul>
-              <% @groups = Group.current.where(:workshop_id => workshop.id) %>
-              <% @groups.each do |group| %>
-                <li><a href='/employees/organization_structure?group=<%= group.id %>'><%= group.name %></a></li>
-              <% end %>
-            </ul>
-          </li>
-          <% end %>
-        </ul>
-      </div> -->
-
-
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>组织名称</th>
-              <th>组织人数</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <% Workshop.current.each do |workshop| %>
-              <tr class="parent" id="<%= workshop.id%>">
-                <td style="text-align: left"><%= workshop.name %></td>
-                <td><%= Employee.current.where(workshop: workshop).count%></td>
-                <td>
-                  <%= link_to "新增班组" %>
-                  <%= link_to "编辑" %>
-                  <%= link_to "删除" %>
-                </td>
-              </tr>
-              <% Group.current.where(workshop: workshop).each do |group| %>
-              <tr class="child-<%= workshop.id %>" style="display:none;">
-                <td><%= group.name %></td>
-                <td><%= Employee.current.where(group: group).count%></td>
-                <td>
-                  <%= link_to "编辑" %>
-                  <%= link_to "删除" %>
-                </td>
-              </tr>
-              <% end %>
-            <% end %>
-         </tbody>
-        </table>
     </div>
   </div>
 </div>
 
 
 
-<div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -163,9 +73,9 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
-<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -184,11 +94,9 @@
     </div>
   </div>
 </div>
-<%= render "show_merge_workshop" %>
-<%= render "show_merge_group" %>
 <%= render "show_delete_organization" %>
 <%= render "show_edit_workshop" %>
-<%= render "show_edit_group" %>
+<%= render "show_edit_group" %> -->
 </div>
 
 <script type="text/javascript">
@@ -201,5 +109,5 @@
                 $(this).siblings('.child-'+ this.id).toggle();
               });
             });
-})
+});
 </script>
