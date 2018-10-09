@@ -114,7 +114,7 @@
             <% if day_attendance == "x" %>
               <%= " " %>
             <% else %>
-              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening.strip %>
+              <%= VacationCategory.find_by(:vacation_code => day_attendance).vacation_shortening %>
             <% end %>
           </Data></Cell>
         <% end %>
@@ -122,9 +122,21 @@
           <% @vacation_name_hash.keys.each do |code| %>
             <Cell ss:StyleID="Description"><Data ss:Type="String">
               <% if attendance_count.present? %>
-              <%= attendance_count.attributes[code] %>
+                <% if attendance_count.attributes[code] == 0%>
+                  <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                    <%= attendance.add_overtime.to_i%>
+                  <% else %>
+
+                  <% end %>
+                <% else %>
+                  <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                    <%= attendance.add_overtime.to_i + attendance_count.attributes[code]%>
+                  <% else %>
+                    <%= attendance_count.attributes[code]%>
+                  <% end %>
+                <% end %>
               <% else %>
-               0
+               
               <% end %>
             </Data></Cell>
           <% end %>
