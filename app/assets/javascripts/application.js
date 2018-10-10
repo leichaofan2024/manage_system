@@ -41,31 +41,12 @@ $(document).ready(function($) {
 /*结束*/
 jQuery(document).ready(function() {
   "use strict";
-   // Add class everytime a mouse pointer hover over it
-   jQuery('.nav-bracket > li').hover(function(){
-      jQuery(this).addClass('nav-hover');
-   }, function(){
-      jQuery(this).removeClass('nav-hover');
-   });
-
-   // Tooltip
-   jQuery('.tooltips').tooltip({ container: 'body'});
-
-   jQuery('.panel-btns').click(function(){
-      var t = jQuery(this);
-      var p = t.closest('.panel');
-      if(!jQuery(this).hasClass('panel-btns')) {
-         p.find('.panel-body, .panel-footer').slideUp(200);
-         t.addClass('panel-btns');
-         t.html('&plus;筛选');
-      } else {
-         p.find('.panel-body, .panel-footer').slideDown(200);
-         t.removeClass('panel-btns');
-         t.html('&minus;筛选');
-      }
-      return false;
-   });
-
+   // // Add class everytime a mouse pointer hover over it
+   // jQuery('.nav-bracket > li').hover(function(){
+   //    jQuery(this).addClass('nav-hover');
+   // }, function(){
+   //    jQuery(this).removeClass('nav-hover');
+   // });
    jQuery('.menutoggle').click(function(){
 
       var body = jQuery('body');
@@ -88,6 +69,41 @@ jQuery(document).ready(function() {
          }
       }
    });
+   // Tooltip
+   jQuery('.tooltips').tooltip({ container: 'body'});
+
+   jQuery('.panel-btns').click(function(){
+      var t = jQuery(this);
+      var p = t.closest('.panel');
+      if(!jQuery(this).hasClass('panel-btns')) {
+         p.find('.panel-body, .panel-footer').slideUp(200);
+         t.addClass('panel-btns');
+         t.html('&plus;筛选');
+      } else {
+         p.find('.panel-body, .panel-footer').slideDown(200);
+         t.removeClass('panel-btns');
+         t.html('&minus;筛选');
+      }
+      return false;
+   });
+
+   jQuery('.table-body > li.font').click(function(){
+     var parent = jQuery(this).parent();
+     var sub = parent.find(' > .children');
+      if(sub.is(':visible')) {
+         sub.slideUp(200, function(){
+           jQuery('.mainpanel').css({height: ''});
+           adjustmainpanelheight();
+         });
+      } else {
+        sub.slideDown(200, function(){
+           adjustmainpanelheight();
+        });
+      }
+      return false;
+   });
+
+
    jQuery('.leftpanel .nav-parent > a').on('click', function() {
 
        var parent = jQuery(this).parent();
@@ -141,15 +157,15 @@ jQuery(document).ready(function() {
 				$col   = $t.find('thead, tbody').clone();
 
 			// Add class, remove margins, reset width and wrap table
-			$t
-			.addClass('sticky-enabled')
-			.css({
-				margin: 0,
-				width: '100%'
-			}).wrap('<div class="sticky-wrap" />');
+        $t
+  			.addClass('sticky-enabled')
+  			.css({
+  				margin: 0,
+  				width: '100%'
+  			}).wrap('<div class="sticky-wrap" />');
+
 
 			if($t.hasClass('overflow-y')) $t.removeClass('overflow-y').parent().addClass('overflow-y');
-
 			// Create new sticky table head (basic)
 			$t.after('<table class="sticky-thead" />');
 

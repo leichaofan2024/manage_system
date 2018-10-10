@@ -291,7 +291,6 @@ strong {
 .nav-bracket {
     margin-bottom: 30px;
 }
-
 .nav-bracket > li > a > span{
     color: #8292A6;
     padding: 7px 10px;
@@ -407,6 +406,13 @@ strong {
     border: 0;
 }
 
+.table-parent .children > li {
+  display: block;
+  background-color: #fff;
+  font-size: 14px;
+  border-bottom:  1px solid;
+  border-radius: 2px;
+}
 
 /********** 5. MAIN PANEL **********/
 /***********************************/
@@ -1629,6 +1635,14 @@ h4 {
 .widget-chart-container:after{
   clear:both;
 }
+.todo-list{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.todo-list li {
+  padding: 15px 10px 8px 20px;
+}
 /*---------------end--------------*/
 
 
@@ -2313,6 +2327,13 @@ button.close {
 .content-footer{
   float: right;
 }
+.content-title{
+  background-color: #EAEEF3;
+  margin-top: 30px;
+}
+.content-title h4{
+  color: #171718;
+}
 
 
 // 考勤段审核首页
@@ -2478,6 +2499,7 @@ button.close {
     border-radius: 50px;
 }
 
+<<<<<<< HEAD
 .wage-header-button{
   background-color: rgba(255,255,255,0);
   border: none;
@@ -2508,4 +2530,90 @@ button.close {
 
 .income-filter-select{
   margin-right:10px;
+=======
+/********** table-organization **********/
+/**********************************************/
+
+.table-title{
+  list-style: none;
+  margin: 10px 0 20px;
+  padding: 0;
+  background-color: #EAEEF3;
+}
+
+.table-title li {
+  display: inline-block;
+  padding: 20px 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.table-title .filter-type{
+  float: right;
+  margin-right: 40px;
+}
+
+.table-body {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    background: #fcfcfc;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+}
+
+.table-body li {
+    display: inline-block;
+    padding: 12px 15px;
+    border-right: 1px solid #eee;
+    font-size: 16px;
+    color: #666;
+}
+.table-body li.font{
+  cursor: pointer;
+}
+.table-body li a {
+    color: #666;
+}
+
+
+.table-body li i {
+    font-size: 14px;
+    margin-right: 5px;
+    color: #444;
+}
+
+.table-body .ckbox label {
+    margin: 0 !important;
+}
+
+.table-body .filter-type {
+    float: right;
+    border-right: 0;
+    border-left: 1px solid #eee;
+    margin-right: 10px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.table-body .btn-group > .btn {
+  margin-left: 5px;
+  float: none;
+}
+
+.table-body .filter-type a:last-child {
+    margin-right: 0;
+}
+
+.table-body .filter-type a:first-child {
+    margin-left: 10px;
+}
+
+.table-body .filter-type a.active {
+    text-decoration: underline;
+    color: #2A6496;
+>>>>>>> views-employee-organization_structure
 }
