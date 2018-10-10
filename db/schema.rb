@@ -386,7 +386,7 @@ ActiveRecord::Schema.define(version: 20180924095846) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "djbonus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "djbonus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id"
     t.integer "month"
     t.integer "year"
@@ -493,21 +493,21 @@ ActiveRecord::Schema.define(version: 20180924095846) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "djbonus_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "djbonus_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "header"
     t.json "formula"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "djwage_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "djwage_headers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "header"
     t.json "formula"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "djwages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "djwages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id"
     t.integer "month"
     t.integer "year"

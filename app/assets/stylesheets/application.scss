@@ -291,7 +291,6 @@ strong {
 .nav-bracket {
     margin-bottom: 30px;
 }
-
 .nav-bracket > li > a > span{
     color: #8292A6;
     padding: 7px 10px;
@@ -407,6 +406,13 @@ strong {
     border: 0;
 }
 
+.table-parent .children > li {
+  display: block;
+  background-color: #fff;
+  font-size: 14px;
+  border-bottom:  1px solid;
+  border-radius: 2px;
+}
 
 /********** 5. MAIN PANEL **********/
 /***********************************/
@@ -1122,7 +1128,6 @@ h4 {
     -webkit-margin-after: 1.33em;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
-    text-align: center;
 }
 
 //部门信息
@@ -1248,6 +1253,7 @@ h4 {
 .right-Qtwf2_0 {
     float: right;
     background: #fff;
+    color: #1CAF9A;
 }
 
 .edit-2kYy__0 {
@@ -1255,7 +1261,6 @@ h4 {
     font-size: 14px;
     background-color: #fff;
     z-index: 2;
-    color: #269EFF;
     cursor: pointer;
     margin-right: 12px;
 }
@@ -1630,6 +1635,14 @@ h4 {
 .widget-chart-container:after{
   clear:both;
 }
+.todo-list{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.todo-list li {
+  padding: 15px 10px 8px 20px;
+}
 /*---------------end--------------*/
 
 
@@ -1740,7 +1753,75 @@ h4 {
   font-size: 0.75em;
 }
 
+.employee_show_head{
+    background: #fcfcfc;
+    padding: 20px;
+    font-size: 13px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    margin-bottom: 20px;
+}
 
+.placeholder {
+    width: 110px;
+    height: 110px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    margin-right: 10px;
+    background-color: #bad9ff;
+    text-align: center;
+    line-height: 120px;
+
+}
+.placeholder span {
+  font-size: 36px;
+  color: #ffff;
+}
+
+.person-name{
+  margin: 0 0 5px 0;
+}
+
+.employee_show_head .social-list{
+  margin-top: 10px;
+  margin-bottom: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.employee_show_head .social-list::after {
+    clear: both;
+    display: block;
+    content: '';
+}
+.employee_show_head .social-list li {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.employee_show_head .social-list li a,
+.employee_show_head .social-list input[type="submit"] {
+    border: 1px solid #1CAF9A;
+    padding: 3px 5px;
+    display: block;
+    text-align: center;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+.employee_show_head .social-list li a:hover{
+  background-color: #eee;
+  color: #333;
+}
+.employee_show_head .social-list input[type="file"]{
+  width: 160px;
+}
 
 .nav-btn-group{
   list-style: none;
@@ -1776,6 +1857,32 @@ h4 {
 #select-btn a {
   color: black;
 }
+
+.organization_structure {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  float: right;
+  margin-bottom: 10px;
+}
+.organization_structure::after{
+  clear: both;
+  content: '';
+  display: block;
+
+}
+
+.organization_structure > li {
+  display: inline-block;
+}
+.organization_structure > li > a {
+  color: #1CAF9A;
+}
+.organization_structure li.active > a  {
+  background-color:#fcfcfc;
+  box-shadow: none !important;
+}
+
 
 
 
@@ -2220,6 +2327,13 @@ button.close {
 .content-footer{
   float: right;
 }
+.content-title{
+  background-color: #EAEEF3;
+  margin-top: 30px;
+}
+.content-title h4{
+  color: #171718;
+}
 
 
 // 考勤段审核首页
@@ -2312,15 +2426,6 @@ button.close {
     background-color: red;
   }
 
-  // div{
-  //   display: inline-block;
-    // height:16px;
-    // width:20px;
-    // margin-right: 5px;
-    // position: relative;
-  //   top:4px;
-  // }
-
 }
 .workshop_verify_card{
   width:100%;
@@ -2394,6 +2499,7 @@ button.close {
     border-radius: 50px;
 }
 
+
 .wage-header-button{
   background-color: rgba(255,255,255,0);
   border: none;
@@ -2408,9 +2514,7 @@ button.close {
   padding:10px;
 }
 
-.search-bar-input{
-  width:500px;
-}
+
 .employee-start-time{
   width:50px;
 }
@@ -2427,15 +2531,88 @@ button.close {
 .income-filter-select{
   margin-right:10px;
 }
-// .select2-selection__rendered{
-//   height: 1;
-//   box-sizing: border-box;
-//   display: block;
-//   list-style: none;
-//   margin: 0;
-//   overflow: hidden;
-//   padding: 0;
-//   width: 100%;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-// }
+/********** table-organization **********/
+/**********************************************/
+
+.table-title{
+  list-style: none;
+  margin: 10px 0 20px;
+  padding: 0;
+  background-color: #EAEEF3;
+}
+
+.table-title li {
+  display: inline-block;
+  padding: 20px 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.table-title .filter-type{
+  float: right;
+  margin-right: 40px;
+}
+
+.table-body {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    background: #fcfcfc;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+}
+
+.table-body li {
+    display: inline-block;
+    padding: 12px 15px;
+    border-right: 1px solid #eee;
+    font-size: 16px;
+    color: #666;
+}
+.table-body li.font{
+  cursor: pointer;
+}
+.table-body li a {
+    color: #666;
+}
+
+
+.table-body li i {
+    font-size: 14px;
+    margin-right: 5px;
+    color: #444;
+}
+
+.table-body .ckbox label {
+    margin: 0 !important;
+}
+
+.table-body .filter-type {
+    float: right;
+    border-right: 0;
+    border-left: 1px solid #eee;
+    margin-right: 10px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.table-body .btn-group > .btn {
+  margin-left: 5px;
+  float: none;
+}
+
+.table-body .filter-type a:last-child {
+    margin-right: 0;
+}
+
+.table-body .filter-type a:first-child {
+    margin-left: 10px;
+}
+
+.table-body .filter-type a.active {
+    text-decoration: underline;
+    color: #2A6496;
+}

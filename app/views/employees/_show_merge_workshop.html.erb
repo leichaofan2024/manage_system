@@ -1,23 +1,25 @@
-<div class="modal fade" id="mergeWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">合并车间</h4>
-      </div>
-      <div class="modal-body">
-          <%= form_tag merge_workshop_employees_path, method: 'post' do %>
-            <% Workshop.current.each do |workshop| %>
-              <%= check_box_tag "workshops[]", workshop.id %>
-              <%= label_tag :q, "#{workshop.name}"%><br>
-            <% end %>
-            <%= label_tag :请输入合并后的车间名称 %>
-            <%= text_field_tag :merge_workshop %>
-            <%= submit_tag :确定 %>
-            <h6>注意：合并后，您选中车间下的班组会统一属于您填写的车间</h6>
-          <% end %>
-          
-      </div> 
-    </div> 
-  </div>
-</div>
+<%= form_tag merge_workshop_employees_path, method: 'post' do %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>组织名称</th>
+        <th>组织人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Workshop.current.each do |workshop| %>
+        <tr class="parent" id="<%= workshop.id%>">
+          <td style="text-align: left; font-size: 18px;">
+            <%= check_box_tag "workshops[]", workshop.id %>
+            <%= label_tag :q, "#{workshop.name}", style:"font-weight: normal"%>
+          </td>
+          <td><%= Employee.current.where(workshop: workshop).count%></td>
+        </tr>
+      <% end %>
+      <%= label_tag :请输入合并后的车间名称 %>
+      <%= text_field_tag :merge_workshop %>
+      <%= submit_tag :确定 %>
+      <h6>注意：合并后，您选中车间下的班组会统一属于您填写的车间</h6>
+    </tbody>
+    </table>
+  <% end %>

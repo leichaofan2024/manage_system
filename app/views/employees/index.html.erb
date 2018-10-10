@@ -122,18 +122,23 @@
                 </div>
                 <div class="panel-body" id="employee-btn" style="display: none;">
                     <ul class="employee-search">
-                      <li style="padding-top: 20px;">
-                        <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
-                          <div class="input-group" style="width: 80%;">
-                            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
-                            <span class="input-group-btn">
-                              <button type="submit" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-search"></span>
-                              </button>
-                            </span>
-                          </div>
-                        <% end %>
-                      </li>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <li style="padding-top: 20px;">
+                            <%= form_tag search_employees_path, :class => "posts-search-form", :method => :get do %>
+                              <div class="input-group">
+                                <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号或身份证号">
+                                <span class="input-group-btn">
+                                  <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                  </button>
+                                </span>
+                              </div>
+                            <% end %>
+                          </li>
+                        </div>
+                      </div>
+
 
                       <li>
                         <%= form_tag filter_employees_path, method: 'get' do %>

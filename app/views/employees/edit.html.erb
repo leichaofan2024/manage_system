@@ -1,5 +1,361 @@
 <div class="contentpanel">
-<%= form_for @employee do |f| %>
+  <%= form_for @employee do |f| %>
+    <% transfer_columns = {
+                            "sal_number" => "工资号",
+                            "job_number" =>  "工号",
+                            "record_number" => "档案号",
+                            "workshop" => "部门" ,
+                            "group" => "班组名称",
+                            "group_category" => "班组类别",
+                            "name" =>  "姓名",
+                            "sex" => "性别" ,
+                            "birth_date" =>  "出生日期",
+                            "birth_year" =>  "出生年份",
+                            "age" =>  "年龄",
+                            "nation" =>  "民族",
+                            "native_place" =>  "籍贯",
+                            "political_role" =>  "政治面目",
+                            "political_party_date" =>  "党团时间",
+                            "working_time" => "工作时间" ,
+                            "railway_time" => "入路时间",
+                            "entry_time" => "本单位日期",
+                            "duty" => "职务",
+                            "employment_period" => "任职时间",
+                            "part_time" =>  "兼职" ,
+                            "grade" => "级别",
+                            "promotion_leader_time" =>  "转干时间",
+                            "technique_duty" => "技术职务" ,
+                            "hold_technique_time" =>  "任技时间",
+                            "work_type" => "工种分类",
+                            "job_foreman_category" => "班组长类别",
+                            "job_foreman_duty" =>  "班组长职务",
+                            "job_foreman" => "任班组长",
+                            "contract_station" => "合同岗位",
+                            "three_one" => "三员一长",
+                            "people_source" => "人员来源",
+                            "people_category" => "人员分类",
+                            "education_background" =>  "文化程度",
+                            "graduation_time" => "毕业时间",
+                            "graduation_school" => "毕业学校",
+                            "school_sort" => "学校类别",
+                            "major" => "所学专业",
+                            "where_place" => "现在何处",
+                            "employment_form" => "用工形式",
+                            "contract_period" => "合同期限",
+                            "conclude_contract_time" => "签订时间",
+                            "record_saler" => "档案工资",
+                            "skilledness_saler" => "技能工资" ,
+                            "station_saler" => "岗位工资",
+                            "seniority_saler" =>  "工龄工资",
+                            "skilledness_authenticate" =>  "技能鉴定",
+                            "treatment" => "待遇" ,
+                            "station_rank" => "岗位档序",
+                            "skilledness_rank" => "技能档序",
+                            "station_now" => "现岗位",
+                            "station_now_time" =>   "现岗时间",
+                            "retire_condition" => "退休条件",
+                            "marriage_status" => "婚况" ,
+                            "separate_status" => "分居情况",
+                            "visit_family" => "享受探亲",
+                            "registered_residence" =>  "户口所在",
+                            "family_address" => "家庭住址",
+                            "comment" => "备注" ,
+                            "identity_card_number" =>  "身份证号",
+                            "employee_card_number" => "工作证号",
+                            "trade_code" =>  "行业代码",
+                            "produce_group" => "生产组",
+                            "saler_item" => "工资项目",
+                            "other_saler" =>  "其他工资",
+                            "comment_data" => "备用数据" ,
+                            "TBZ" =>  "TBZ",
+                            "PY" =>  "PY",
+                            "company_name" =>  "单位名称",
+                            "CJBZPX" => "CJBZPX",
+                            "family" =>  "家属",
+                            "J01BF" =>   "J01BF",
+                            "duting" => "职务化"}%>
+
+
+<div class="panel">
+  <div class="panel-body">
+    <!--按钮-->
+    <%= link_to employee_path(@employee),class:"btn btn-success-alt" do%>
+     返回
+    <% end %>
+    <div class="employee_show_head">
+      <div class="media">
+        <div class="placeholder pull-left">
+          <% if @employee.avatar.present? %>
+            <img src="<%= @employee.avatar.thum %>">
+          <% else %>
+            <% if @employee.name != nil %>
+              <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="media-body media-middle">
+          <!--姓名-->
+          <h4 class="person-name"><%= @employee.name %></h4>
+          <!--部门信息-->
+          <p><%= Workshop.current.find(@employee.workshop).name %> &nbsp <%= Group.current.find(@employee.group).name %> &nbsp <%= @employee.duty%> </p>
+          <!--基本信息-->
+          <span><%= @employee.sex%></span>
+          <span>出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
+          <span>年龄：<%= @employee.age%>岁</span>
+  <!-- <ul class="social-list">
+    <li><%= f.file_field :avatar %></li>
+    <li><%= f.submit :上传照片,class:"btn btn-success-alt"%></li>
+  </ul> -->
+        </div>
+      </div>
+  <!--头像-->
+    </div>
+
+
+
+
+
+
+
+
+<!--下边-->
+<div class="head-3fDND_0">
+  <div class="info-2zzSp_0" style="background: #F8F8F9">
+    <%= "基本信息"%>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5">
+    <ul class="employee-list">
+      <li>
+      <span class="glyphicon glyphicon-asterisk"></span>
+      <span>工资号</span>
+
+      <%= f.text_field :sal_number, required: true %>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span><span>性别</span>
+        <select name="employee[sex]">
+          <% [["男", "1"], ["女", "2"]].each do |key,value| %>
+            <% if @employee.sex == key %>
+              <option value="<%= key %>" selected><%= key %></option>
+            <% else %>
+              <option value="<%= key %>"><%= key %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>车间
+        <select name="employee[workshop]" id="selid" onchange="selCity(this)">
+          <% Workshop.current.each do |workshop| %>
+            <% if workshop.id == @employee.workshop.to_i %>
+              <option value="<%= workshop.id %>" selected><%= workshop.name %></option>
+            <% else %>
+              <option value="<%= workshop.id %>"><%= workshop.name %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>出生日期
+      <%= f.text_field :birth_date, required: true %>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>入路时间
+      <%= f.text_field :railway_time, required: true %>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>文化程度
+        <select class="" name="employee[education_background]">
+          <% Employee.pluck(:education_background).uniq.compact.each do |education_background| %>
+            <% if @employee.education_background == education_background  %>
+              <option value="<%= education_background %>" selected><%= education_background %></option>
+            <% else %>
+              <option value="<%= education_background %>"><%= education_background %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li>籍贯
+        <select class="" name="employee[native_place]">
+          <% ((Employee.pluck(:native_place).uniq.compact.take 25) + ["重庆","贵州","宁夏"]).each do |city| %>
+            <% if @employee.native_place == city  %>
+              <option value="<%= city %>" selected><%= city %></option>
+            <% else %>
+              <option value="<%= city %>"><%= city %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li>党团时间
+      <%= f.text_field :political_party_date  %>
+      </li>
+      <li>毕业院校
+      <%= f.text_field :graduation_school %>
+      </li>
+      <li>所学专业
+      <%= f.text_field :major %>
+      </li>
+      <li>分居情况
+      <%= f.text_field :separate_status %>
+      </li>
+      <li>家庭住址
+      <%= f.text_field :family_address %>
+      </li>
+      <li>联系电话
+      <%= f.text_field :phone_number %>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-5">
+    <ul class="employee-list">
+      <li><span class="glyphicon glyphicon-asterisk"></span>姓名
+      <%= f.text_field :name, required: true %>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>职务
+        <select class="" name="employee[duty]">
+          <% Employee.pluck(:duty).uniq.compact.each do |duty| %>
+            <% if @employee.duty == duty  %>
+              <option value="<%= duty %>" selected><%= duty %></option>
+            <% else %>
+              <option value="<%= duty %>"><%= duty %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>班组
+        <select class="" name="employee[group]" id="subselid">
+          <% Group.current.where(workshop_id: @employee.workshop).each do |group| %>
+            <% if group.name == Group.find(@employee.group).name %>
+              <option value="<%= group.id %>" selected><%= group.name %></option>
+            <% else %>
+              <option value="<%= group.id %>"><%= group.name %></option>
+            <% end %>
+          <% end %>
+        </select>
+      <!-- <%= f.select(:group, options_for_select(Group.current.collect{ |u| [u.name] }), {include_blank: '请选择' ,required: true}, id: "subselid") %> -->
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>工作时间
+      <%= f.text_field :working_time, required: true %>
+      </li>
+      <li><span class="glyphicon glyphicon-asterisk"></span>工种分类
+        <select class="" name="employee[work_type]">
+          <% Employee.pluck(:work_type).uniq.compact.each do |work_type| %>
+            <% if @employee.work_type == work_type  %>
+              <option value="<%= work_type %>" selected><%= work_type %></option>
+            <% else %>
+              <option value="<%= work_type %>"><%= work_type %></option>
+            <% end %>
+          <% end %>
+        </select>
+      </li>
+      <li>民族
+      <%= f.text_field :nation %>
+      </li>
+      <li>政治面目
+        <select class="" name="employee[political_role]">
+          <% Employee.pluck(:political_role).uniq.compact.each do |political_role| %>
+            <% if @employee.political_role == political_role  %>
+              <option value="<%= political_role %>" selected><%= political_role %></option>
+            <% else %>
+              <option value="<%= political_role %>"><%= political_role %></option>
+            <% end %>
+          <% end %>
+        </select>
+
+      </li>
+      <li>毕业时间
+      <%= f.text_field :graduation_time %>
+      </li>
+      <li>学校类别
+      <%= f.text_field :school_sort %>
+      </li>
+      <li>婚况
+      <%= f.text_field :marriage_status %>
+      </li>
+      <li>户口所在
+      <%= f.text_field :registered_residence %>
+      </li>
+      <li>身份证号
+      <%= f.text_field :identity_card_number %>
+      </li>
+    </ul>
+  </div>
+</div> <!--row-->
+<!-- 结束 -->
+
+
+
+
+<!--其他信息-->
+<!--基本信息的头部字-->
+<div class="head-3fDND_0">
+  <div class="info-2zzSp_0" style="background: #F8F8F9">
+    <%= "岗位信息"%>
+  </div>
+</div>
+<% station_info_columns = ["job_number", "record_number", "station_rank", "skilledness_rank", "entry_time", "employment_period", "part_time", "grade", "promotion_leader_time", "technique_duty", "hold_technique_time", "job_foreman", "contract_station", "company_name"]%>
+<% station_info_columns_other = ["three_one", "people_source" , "people_category" ,"where_place", "employment_form", "contract_period", "conclude_contract_time", "skilledness_authenticate", "station_now", "station_now_time", "retire_condition", "visit_family", "employee_card_number", "trade_code", "produce_group"]%>
+
+<div class="row">
+  <div class="col-md-5">
+      <ul class="employee-list">
+        <% station_info_columns.each do |emp| %>
+        <li><%= transfer_columns[emp] %>
+           <%= f.text_field emp %>
+        </li>
+        <% end %>
+      </ul>
+  </div>
+  <div class="col-md-5">
+    <ul class="employee-list">
+      <% station_info_columns_other.each do |emp| %>
+      <li>
+        <%= transfer_columns[emp] %>
+        <%= f.text_field emp %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+
+<!--其他信息结束-->
+
+<!--工资信息-->
+
+<!--信息的头部字-->
+<div class="head-3fDND_0">
+  <div class="info-2zzSp_0" style="background: #F8F8F9">
+    <%= "工资信息"%>
+  </div>
+</div>
+
+  <% saler_info_columns = ["record_saler","skilledness_saler", "station_saler", "seniority_saler"]%>
+    <div class="row">
+      <div class="col-md-5">
+        <ul class="employee-list">
+            <% saler_info_columns.each do |emp| %>
+              <li>
+                <%= transfer_columns[emp] %>
+                <%= f.text_field emp %>
+              </li>
+            <% end %>
+        </ul>
+      </div>
+    </div>
+
+
+
+  <div class="center-uRe1b_0">
+    <%= f.submit :确定修改, class:"btn button-success"%>
+  </div>
+<!-- 结束 -->
+  </div>
+</div>
+
+
+
+
+<% end %>
+</div>
 <!-- 级联菜单JS代码-开始 -->
 <script type="text/javascript">
   function selCity()
@@ -23,841 +379,3 @@
   }
 </script>
 <!-- 级联菜单JS代码-结束 -->
-<% transfer_columns = {
-                        "sal_number" => "工资号",
-                        "job_number" =>  "工号",
-                        "record_number" => "档案号",
-                        "workshop" => "部门" ,
-                        "group" => "班组名称",
-                        "group_category" => "班组类别",
-                        "name" =>  "姓名",
-                        "sex" => "性别" ,
-                        "birth_date" =>  "出生日期",
-                        "birth_year" =>  "出生年份",
-                        "age" =>  "年龄",
-                        "nation" =>  "民族",
-                        "native_place" =>  "籍贯",
-                        "political_role" =>  "政治面目",
-                        "political_party_date" =>  "党团时间",
-                        "working_time" => "工作时间" ,
-                        "railway_time" => "入路时间",
-                        "entry_time" => "本单位日期",
-                        "duty" => "职务",
-                        "employment_period" => "任职时间",
-                        "part_time" =>  "兼职" ,
-                        "grade" => "级别",
-                        "promotion_leader_time" =>  "转干时间",
-                        "technique_duty" => "技术职务" ,
-                        "hold_technique_time" =>  "任技时间",
-                        "work_type" => "工种分类",
-                        "job_foreman_category" => "班组长类别",
-                        "job_foreman_duty" =>  "班组长职务",
-                        "job_foreman" => "任班组长",
-                        "contract_station" => "合同岗位",
-                        "three_one" => "三员一长",
-                        "people_source" => "人员来源",
-                        "people_category" => "人员分类",
-                        "education_background" =>  "文化程度",
-                        "graduation_time" => "毕业时间",
-                        "graduation_school" => "毕业学校",
-                        "school_sort" => "学校类别",
-                        "major" => "所学专业",
-                        "where_place" => "现在何处",
-                        "employment_form" => "用工形式",
-                        "contract_period" => "合同期限",
-                        "conclude_contract_time" => "签订时间",
-                        "record_saler" => "档案工资",
-                        "skilledness_saler" => "技能工资" ,
-                        "station_saler" => "岗位工资",
-                        "seniority_saler" =>  "工龄工资",
-                        "skilledness_authenticate" =>  "技能鉴定",
-                        "treatment" => "待遇" ,
-                        "station_rank" => "岗位档序",
-                        "skilledness_rank" => "技能档序",
-                        "station_now" => "现岗位",
-                        "station_now_time" =>   "现岗时间",
-                        "retire_condition" => "退休条件",
-                        "marriage_status" => "婚况" ,
-                        "separate_status" => "分居情况",
-                        "visit_family" => "享受探亲",
-                        "registered_residence" =>  "户口所在",
-                        "family_address" => "家庭住址",
-                        "comment" => "备注" ,
-                        "identity_card_number" =>  "身份证号",
-                        "employee_card_number" => "工作证号",
-                        "trade_code" =>  "行业代码",
-                        "produce_group" => "生产组",
-                        "saler_item" => "工资项目",
-                        "other_saler" =>  "其他工资",
-                        "comment_data" => "备用数据" ,
-                        "TBZ" =>  "TBZ",
-                        "PY" =>  "PY",
-                        "company_name" =>  "单位名称",
-                        "CJBZPX" => "CJBZPX",
-                        "family" =>  "家属",
-                        "J01BF" =>   "J01BF",
-                        "duting" => "职务化"}%>
-
-
-<div class="detail-3D1aE_0">
-  <div class="wraper-3HSto_0">
-    <div class="wraper-k3Z8K_0">
-      <!--按钮-->
-      <div class="backMain-19P3__0">
-        <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
-          <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to employee_path(@employee) do%>
-            <span>返回</span>
-          <% end %>
-      </div>
-
-      <!--头像-->
-      <div class="wraper-3Rhbr_0">
-        <div class="detail-2tgTZ_0">
-          <% if @employee.avatar.present? %>
-            <img src="<%= @employee.avatar.thum %>">
-          <% else %>
-            <% if @employee.name != nil %>
-              <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-
-      <!--姓名-->
-      <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
-
-      <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= Workshop.current.find(@employee.workshop).name %> &nbsp <%= Group.current.find(@employee.group).name %> &nbsp <%= @employee.duty%> </p>
-
-      <!--基本信息-->
-      <p>
-        <span class="tag-3NYmT_0"><%= @employee.sex%></span>
-        <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
-        <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
-      </p>
-      <p>
-          <%= f.label :上传照片 %>
-          <%= f.file_field :avatar %>
-          <%= f.submit :保存 %>
-      </p>
-    </div>
-  </div>
-
-
-  <!--下边-->
-  <div class="main-1XSRW_0" style="background: #F8F8F9">
-    <div>
-      <div>
-        <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
-          <!--基本信息-->
-          <div class="tructure-2zHdB_0">
-            <!--基本信息的头部字-->
-            <div class="head-3fDND_0">
-              <div class="info-2zzSp_0" style="background: #F8F8F9">
-                <%= "基本信息"%>
-              </div>
-            </div>
-            <div class="edit-NsWan_0">
-              <div class="info-2UJx6_0">
-                <div class="ivu-row-flex">
-
-                  <div class="ivu-col ivu-col-span-12">
-                    <span class="customField-2KxGL_0">
-                      <div>
-                       <div>
-                         <div class="ivu-form ivu-form-label-right">
-                           <div class="ivu-form-item">
-                             <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >联系电话</label>
-                             <div class="ivu-form-item-content" style="margin-left: 150px;">
-                               <div class="ivu-input-wrapper ivu-input-type">
-                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                                 <%= f.text_field :phone_number %>
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                      </div>
-                    </span>
-                  </div>
-
-                  <div class="center-uRe1b_0">
-                      <span>
-                        <font style="vertical-align: inherit;">
-                          <font style="vertical-align: inherit;"><%= f.submit :保存, class: 'btn btn-primary' %></font>
-                        </font>
-                      </span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        <% else %>
-        <!--基本信息-->
-        <div class="tructure-2zHdB_0">
-          <!--基本信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0" style="background: #F8F8F9">
-              <%= "基本信息"%>
-            </div>
-          </div>
-          <div class="edit-NsWan_0">
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >姓名</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :name, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >性别</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :sex, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >车间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.select(:workshop, options_for_select(Workshop.current.collect{ |u| [u.name, u.id] }, :selected => Workshop.current.find(@employee.workshop).id), {required: true}, id: "selid",  :onchange => "selCity(this)" ) %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >班组</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.select(:group, options_for_select(Group.current.collect{ |u| [u.name, u.id] }, :selected => Group.current.find(@employee.group).id), {required: true}, id: "subselid") %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <!-- <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >性别</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :sex, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div> -->
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >出生日期</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :birth_date, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px; padding: 10px 24px 10px 0;   text-align: right;   vertical-align: middle;  float: left;   font-size: 12px; color: #495060; line-height: 1; box-sizing: border-box;" >民族</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :nation %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">籍贯</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :native_place %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">政治面目</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :political_role %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">党团时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :political_party_date  %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工作时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :working_time, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">文化程度</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :education_background, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">毕业时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :graduation_time %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">毕业院校</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :graduation_school %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">学校类别</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :school_sort %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">所学专业</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :major %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">婚况</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :marriage_status %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">分居情况</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :separate_status %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">户口所在</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :registered_residence %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">家庭住址</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :family_address %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">身份证号</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :identity_card_number %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">联系电话</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :phone_number %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 结束 -->
-
-
-
-
-        <!--其他信息-->
-        <div class="tructure-2zHdB_0">
-          <!--基本信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0" style="background: #F8F8F9">
-              <%= "岗位信息"%>
-            </div>
-          </div>
-
-          <div class="edit-NsWan_0">
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工资号</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :sal_number, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">职务</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :duty, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">工种分类</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :work_type, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                     <div>
-                       <div class="ivu-form ivu-form-label-right">
-                         <div class="ivu-form-item">
-                           <label class="ivu-form-item-label" style="width: 150px;">入路时间</label>
-                           <div class="ivu-form-item-content" style="margin-left: 150px;">
-                             <div class="ivu-input-wrapper ivu-input-type">
-                               <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                               <%= f.text_field :railway_time, required: true %>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                    </div>
-                  </span>
-                </div>
-
-                <% station_info_columns = ["job_number", "record_number", "station_rank", "skilledness_rank", "entry_time", "employment_period", "part_time", "grade", "promotion_leader_time", "technique_duty", "hold_technique_time", "job_foreman", "contract_station", "three_one", "people_source" , "people_category" ,"where_place", "employment_form", "contract_period", "conclude_contract_time", "skilledness_authenticate", "station_now", "station_now_time", "retire_condition", "visit_family", "employee_card_number", "trade_code", "produce_group", "company_name" ]%>
-
-                <% station_info_columns.each do |emp| %>
-                  <div class="ivu-col ivu-col-span-12">
-                    <span class="customField-2KxGL_0">
-                      <div>
-                       <div>
-                         <div class="ivu-form ivu-form-label-right">
-                           <div class="ivu-form-item">
-                             <label class="ivu-form-item-label" style="width: 150px;"><%=transfer_columns[emp] %></label>
-                             <div class="ivu-form-item-content" style="margin-left: 150px;">
-                               <div class="ivu-input-wrapper ivu-input-type">
-                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                                 <%= f.text_field emp %>
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                      </div>
-                    </span>
-                  </div>
-                <% end %>
-
-
-              </div>
-            </div>
-          </div>
-        <!--其他信息结束-->
-
-        <!--工资信息-->
-        <div class="tructure-2zHdB_0">
-          <!--信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0" style="background: #F8F8F9">
-              <%= "工资信息"%>
-            </div>
-          </div>
-
-          <div class="edit-NsWan_0">
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
-
-
-                <% saler_info_columns = ["record_saler","skilledness_saler", "station_saler", "seniority_saler"]%>
-                <% saler_info_columns.each do |emp| %>
-                  <div class="ivu-col ivu-col-span-12">
-                    <span class="customField-2KxGL_0">
-                      <div>
-                       <div>
-                         <div class="ivu-form ivu-form-label-right">
-                           <div class="ivu-form-item">
-                             <label class="ivu-form-item-label" style="width: 150px;"><%=transfer_columns[emp] %></label>
-                             <div class="ivu-form-item-content" style="margin-left: 150px;">
-                               <div class="ivu-input-wrapper ivu-input-type">
-                                 <i class="ivu-icon ivu-icon-load-c ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                                 <%= f.text_field emp %>
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                      </div>
-                     </span>
-                   </div>
-                  <% end %>
-
-
-              </div>
-            </div>
-
-            <div class="center-uRe1b_0">
-                <span>
-                  <font style="vertical-align: inherit;">
-                    <font style="vertical-align: inherit;"><%= f.submit :保存 %></font>
-                  </font>
-                </span>
-            </div>
-
-          </div>
-        </div>
-        <!-- 结束 -->
-
-        </div>
-       <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<% end %>
-</div>

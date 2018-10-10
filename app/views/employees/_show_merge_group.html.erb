@@ -1,28 +1,36 @@
-<div class="modal fade" id="mergeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">合并班组</h4>
-      </div>
-      <div class="modal-body">
-          <%= form_tag merge_group_employees_path, method: 'post' do %>
-            <% Workshop.current.each do |workshop| %>
-              <h5><%= label_tag :q, "#{workshop.name}"%><br></h5>   
-              <% workshop.groups.each do |group| %>   
-                &nbsp; &nbsp;<%= check_box_tag "groups[]", group.id %>
-                <%= label_tag :q, "#{group.name}"%><br>      
-              <% end %>  
-            <% end %>
-            <%= label_tag :请输入合并后的班组名称 %>
-            <%= text_field_tag :merge_group, nil, required: true %>
-            <%= label_tag :请输入该班组所属的车间名称 %>
-            <%= text_field_tag :workshop, nil, required: true %>
-            <%= submit_tag :确定 %>
-            <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
-          <% end %>
-          
-      </div>
-    </div> 
-  </div>
-</div>
+<%= form_tag merge_group_employees_path, method: 'post' do %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>组织名称</th>
+        <th>组织人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Workshop.current.each do |workshop| %>
+        <tr class="parent" id="<%= workshop.id%>">
+          <td style="text-align: left; font-size: 18px;">
+            <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
+            <%= workshop.name %>
+          </td>
+          <td><%= Employee.current.where(workshop: workshop).count%></td>
+        </tr>
+        <% Group.current.where(workshop: workshop).each do |group| %>
+        <tr class="child-<%= workshop.id %>" style="display:none;">
+          <td style="text-align: left;padding: 10px 20px; font-size: 16px;">
+            <%= check_box_tag "groups[]", group.id %>
+            <%= label_tag :q, "#{group.name}"%>
+          </td>
+          <td><%= Employee.current.where(group: group).count%></td>
+        </tr>
+        <% end %>
+      <% end %>
+      <%= label_tag :请输入合并后的班组名称 %>
+      <%= text_field_tag :merge_group, nil, required: true %>
+      <%= label_tag :请输入该班组所属的车间名称 %>
+      <%= text_field_tag :workshop, nil, required: true %>
+      <%= submit_tag :确定 %>
+      <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
+   </tbody>
+  </table>
+<% end %>

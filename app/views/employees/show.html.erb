@@ -1,820 +1,793 @@
 <div class="contentpanel">
-<div class="detail-3D1aE_0">
-  <div class="wraper-3HSto_0">
-    <div class="wraper-k3Z8K_0">
+  <div class="panel">
+      <div class="employee_show_head">
+        <div class="media">
+          <!--头像-->
+            <div class="placeholder pull-left">
+              <% if @employee.avatar.present? %>
+                <img src="<%= @employee.avatar.thum %>">
+              <% elsif @employee.name != nil %>
+                  <span><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
+              <% end %>
+            </div>
 
-      <!--按钮-->
-      <div class="backMain-19P3__0">
-        <button type="button" class="ivu-btn ivu-btn-cancel ivu-btn-small">
-          <i class="ivu-icon ivu-icon-ios-arrow-back"></i>
-          <%= link_to employees_path do %>
-            <span>返回</span>
-          <% end %>
-      </div>
-      <!--头像-->
+            <div class="media-body media-middle">
+              <!-- 调离调动功能-结束 -->
+              <!--姓名-->
+              <h4 class="person-name"><%= @employee.name %></h4>
+              <!--部门信息-->
+              <p><%= Workshop.current.find(@employee.workshop).name %>&nbsp <%= Group.current.find(@employee.group).name %>&nbsp <%= @employee.duty%> </p>
+              <!--基本信息-->
+              <span><%= @employee.sex%></span>
+              <span>出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
+              <span>年龄：<%= @employee.age%>岁</span>
+              <p>
+              <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)  %>
+                  <%= form_for @employee do |f| %>
+                    <%= f.label :上传照片 %>
+                    <%= f.file_field :avatar %>
+                    <%= submit_tag "点击上传" %>
+                  <% end %>
+              <% end %>
+              </p>
+              <ul class="social-list">
+                <!-- 调离调动功能-开始 -->
+                <% if can? :manage, Employee %>
+                  <% if LeavingEmployee.find_by(:employee_id => @employee.id, :leaving_type => "调离").present? %>
+                  <li><span class="label label-danger">已调离</span></li>
 
-
-      <div class="wraper-3Rhbr_0">
-        <div class="detail-2tgTZ_0">
-          <% if @employee.avatar.present? %>
-            <img src="<%= @employee.avatar.thum %>">
-          <% else %>
-            <% if @employee.name != nil %>
-              <span class="name-36EkS_0"><%= @employee.name[@employee.name.length-2, @employee.name.length] %></span>
-            <% end %>
-          <% end %>
+                  <% else %>
+                    <% if LeavingEmployee.find_by(:employee_id => @employee.id, :leaving_type => "退休").present? %>
+                      <li><span class="label label-danger">已退休</span></li>
+                    <% else %>
+                      <!-- 调动标签 -->
+                      <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
+                        <li><span class="label label-warning">一月内有调动</span></li>
+                      <% end %>
+                      <!-- 调动按钮 -->
+                      <li>
+                        <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调动"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal", class:"btn btn-success-alt" do  %>
+                          调动
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调离"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal",class:"btn btn-success-alt" do  %>
+                          调离
+                        <% end %>
+                      </li>
+                      <!-- 调离按钮 -->
+                      <div id="showLeavingEmployee"></div>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </ul>
+            </div>
         </div>
       </div>
-      <!-- 调离调动功能-开始 -->
-      <% if can? :manage, Employee %>
-        <% if LeavingEmployee.find_by(:employee_id => @employee.id, :leaving_type => "调离").present? %>
-          <span class="label label-danger">已调离</span>
-        <% else %>
-          <% if LeavingEmployee.find_by(:employee_id => @employee.id, :leaving_type => "退休").present? %>
-            <span class="label label-danger">已退休</span>
-          <% else %>
-            <!-- 调动标签 -->
-            <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(@employee.id) %>
-              <span class="label label-warning">一月内有调动</span>
-            <% end %>
-            <!-- 调动按钮 -->
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调动"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
-                   <span style="color: #269Eff;">调动</span>
-                <% end %>
-              </button>
-            </div>
-            <!-- 退休按钮 -->
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "退休"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
-                   <span style="color: #269Eff;">退休</span>
-                <% end %>
-              </button>
-            </div>
-            <!-- 调离按钮 -->
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to show_leaving_employee_modal_employees_path(employee: @employee, type: "调离"), remote: "true", "data-toggle" => "modal", "data-target" => "#leavingEmployeeModal" do  %>
-                   <span style="color: #269Eff;">调离</span>
-                <% end %>
-              </button>
-            </div>
-            <div id="showLeavingEmployee"></div>
-          <% end %>
-        <% end %>
-      <% end %>
-      <!-- 调离调动功能-结束 -->
-      <!--姓名-->
-      <h4 class="des-1Gi_M_0"><%= @employee.name %></h4>
-
-
-      <!--部门信息-->
-      <p class="depJop-2kBwS_0"><%= Workshop.current.find(@employee.workshop).name %>&nbsp <%= Group.current.find(@employee.group).name %>&nbsp <%= @employee.duty%> </p>
-
-      <!--基本信息-->
-      <p>
-        <span class="tag-3NYmT_0"><%= @employee.sex%></span>
-        <span class="tag-3NYmT_0">出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
-        <span class="tag-3NYmT_0">年龄：<%= @employee.age%>岁</span>
-      </p>
-      <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)  %>
-        <p>
-          <%= form_for @employee do |f| %>
-            <%= f.label :上传照片 %>
-            <%= f.file_field :avatar %>
-            <%= submit_tag "点击上传" %>
-          <% end %>
-        </p>
-      <% end %>
-    </div>
-  </div>
-
-
-  <!--下边-->
-  <div class="main-1XSRW_0">
-    <div>
+  <div class="panel-body">
+    <!--下边-->
       <div>
-        <!--基本信息-->
-        <div class="tructure-2zHdB_0">
-          <!--基本信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0">
-              <%= "基本信息"%>
-            </div>
-            <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
-              <div class="right-Qtwf2_0">
-                <div class="edit-2kYy__0">
-                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
-                </div>
+        <div>
+          <!--基本信息-->
+          <div class="tructure-2zHdB_0">
+            <!--基本信息的头部字-->
+            <div class="head-3fDND_0">
+              <div class="info-2zzSp_0">
+                <%= "基本信息"%>
               </div>
-            <% end %>
-          </div>
-
-          <div class>
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">民族</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.nation%></div>
-                      </div>
-                    </div>
-                  </span>
+              <% if (can? :edit, @employee) || (current_user.has_role? :workshopadmin) || (current_user.has_role? :organsadmin)%>
+                <div class="right-Qtwf2_0">
+                  <div class="edit-2kYy__0">
+                    <i class="fa fa-edit ivu-icon  icon-nUnTL_0"></i>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                  </div>
                 </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">籍贯</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.native_place%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">政治面目</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.political_role%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-                <% end %>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">党团时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.political_party_date.to_datetime.strftime("%Y年%m月%d日") if @employee.political_party_date.present?%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工作时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_time.to_datetime.strftime("%Y年%m月%d日") if @employee.working_time.present? %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">文化程度</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.education_background%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">毕业时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.graduation_time.to_datetime.strftime("%Y年%m月%d日") if @employee.graduation_time.present? %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">毕业院校</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.graduation_school%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">学校类别</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.school_sort%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">所学专业</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.major%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">电话号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">婚况</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.marriage_status%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">分居情况</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.separate_status%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">户口所在</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.registered_residence%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">家庭住址</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.family_address%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">身份证号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.identity_card_number%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">联系电话</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-                <% end %>
-
-              </div>
+              <% end %>
             </div>
-          </div>
-        </div>
-        <!-- 结束 -->
 
-        <!--其他信息-->
-        <% if (can? :manage, Employee) || (can? :leader_read, Employee) || ( current_user.has_role? :workshopadmin ) %>
-        <div class="tructure-2zHdB_0">
-          <!--基本信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0">
-              <%= "岗位信息"%>
-            </div>
-            <% if can? :edit, @employee %>
-              <div class="right-Qtwf2_0">
-                <div class="edit-2kYy__0">
-                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <div class>
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
+            <div>
+              <div class="info-2UJx6_0">
+                <div class="ivu-row-flex">
 
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工资号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.sal_number%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">民族</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.nation%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.job_number%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">籍贯</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.native_place%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">档案号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.record_number%></div>
+                  <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">政治面目</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.political_role%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
+                  <% end %>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工龄</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_years%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">党团时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.political_party_date.to_datetime.strftime("%Y年%m月%d日") if @employee.political_party_date.present?%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">路龄</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.rali_years%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工作时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_time.to_datetime.strftime("%Y年%m月%d日") if @employee.working_time.present? %></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">入路时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.railway_time.to_datetime.strftime("%Y年%m月%d日") if @employee.railway_time.present?%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">文化程度</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.education_background%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">本单位日期</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.entry_time.to_datetime.strftime("%Y年%m月%d日") if @employee.entry_time.present? %></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">毕业时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.graduation_time.to_datetime.strftime("%Y年%m月%d日") if @employee.graduation_time.present? %></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">职务</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.duty%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">毕业院校</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.graduation_school%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">任职时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employment_period.to_datetime.strftime("%Y年%m月%d日") if @employee.employment_period.present?%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">学校类别</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.school_sort%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">兼职</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.part_time%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">所学专业</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.major%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">级别</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.grade%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">电话号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">转干时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.promotion_leader_time.to_datetime.strftime("%Y年%m月%d日") if @employee.promotion_leader_time.present? %></div>
+                  <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :workshopadmin) %>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">婚况</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.marriage_status%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">技术职务</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.technique_duty%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">分居情况</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.separate_status%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">任技时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.hold_technique_time.to_datetime.strftime("%Y年%m月%d日") if @employee.hold_technique_time.present? %></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">户口所在</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.registered_residence%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工种分类</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.work_type%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">家庭住址</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.family_address%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">任班组长</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.job_foreman%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">身份证号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.identity_card_number%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">合同岗位</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.contract_station%></div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">联系电话</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.phone_number %></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
+                    </span>
+                  </div>
+                  <% end %>
+
                 </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">三员一长</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.three_one%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">人员来源</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.people_source%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">人员分类</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.people_category%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">现在何处</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.where_place%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">用工形式</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employment_form%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">合同期限</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.contract_period%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">签订时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.conclude_contract_time.to_datetime.strftime("%Y年%m月%d日") if @employee.conclude_contract_time.present? %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">技能鉴定</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_authenticate%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">岗位档序</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_rank%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">技能档序</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_rank%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">现岗位</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_now%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">现岗时间</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_now_time.to_datetime.strftime("%Y年%m月%d日") if @employee.station_now_time.present? %></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">退休条件</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.retire_condition%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">享受探亲</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.visit_family%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工作证号</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employee_card_number%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">行业代码</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.trade_code%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">生产组</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.produce_group%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">单位名称</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.company_name%></div>
-                      </div>
-                    </div>
-                  </span>
-                </div>
-
               </div>
             </div>
           </div>
-        <!--其他信息结束-->
+          <!-- 结束 -->
 
-        <!--工资信息-->
-        <div class="tructure-2zHdB_0">
-          <!--信息的头部字-->
-          <div class="head-3fDND_0">
-            <div class="info-2zzSp_0">
-              <%= "工资信息"%>
+          <!--其他信息-->
+          <% if (can? :manage, Employee) || (can? :leader_read, Employee) || ( current_user.has_role? :workshopadmin ) %>
+          <div class="tructure-2zHdB_0">
+            <!--基本信息的头部字-->
+            <div class="head-3fDND_0">
+              <div class="info-2zzSp_0">
+                <%= "岗位信息"%>
+              </div>
+              <% if can? :edit, @employee %>
+                <div class="right-Qtwf2_0">
+                  <div class="edit-2kYy__0">
+                    <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                  </div>
+                </div>
+              <% end %>
             </div>
-            <% if can? :edit, @employee %>
-              <div class="right-Qtwf2_0">
-                <div class="edit-2kYy__0">
-                  <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
-                  <span class="middle" style="color:#269EFF"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+
+            <div class>
+              <div class="info-2UJx6_0">
+                <div class="ivu-row-flex">
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工资号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.sal_number%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.job_number%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">档案号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.record_number%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工龄</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_years%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">路龄</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.rali_years%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">入路时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.railway_time.to_datetime.strftime("%Y年%m月%d日") if @employee.railway_time.present?%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">本单位日期</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.entry_time.to_datetime.strftime("%Y年%m月%d日") if @employee.entry_time.present? %></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">职务</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.duty%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">任职时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employment_period.to_datetime.strftime("%Y年%m月%d日") if @employee.employment_period.present?%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">兼职</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.part_time%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">级别</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.grade%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">转干时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.promotion_leader_time.to_datetime.strftime("%Y年%m月%d日") if @employee.promotion_leader_time.present? %></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">技术职务</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.technique_duty%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">任技时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.hold_technique_time.to_datetime.strftime("%Y年%m月%d日") if @employee.hold_technique_time.present? %></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工种分类</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.work_type%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">任班组长</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.job_foreman%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">合同岗位</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.contract_station%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">三员一长</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.three_one%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">人员来源</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.people_source%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">人员分类</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.people_category%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">现在何处</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.where_place%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">用工形式</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employment_form%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">合同期限</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.contract_period%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">签订时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.conclude_contract_time.to_datetime.strftime("%Y年%m月%d日") if @employee.conclude_contract_time.present? %></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">技能鉴定</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_authenticate%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">岗位档序</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_rank%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">技能档序</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_rank%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">现岗位</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_now%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">现岗时间</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_now_time.to_datetime.strftime("%Y年%m月%d日") if @employee.station_now_time.present? %></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">退休条件</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.retire_condition%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">享受探亲</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.visit_family%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工作证号</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.employee_card_number%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">行业代码</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.trade_code%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">生产组</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.produce_group%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">单位名称</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.company_name%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
                 </div>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <!--其他信息结束-->
 
-          <div class>
-            <div class="info-2UJx6_0">
-              <div class="ivu-row-flex">
-
-
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">档案工资</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.record_saler%></div>
-                      </div>
-                    </div>
-                  </span>
+          <!--工资信息-->
+          <div class="tructure-2zHdB_0">
+            <!--信息的头部字-->
+            <div class="head-3fDND_0">
+              <div class="info-2zzSp_0">
+                <%= "工资信息"%>
+              </div>
+              <% if can? :edit, @employee %>
+                <div class="right-Qtwf2_0">
+                  <div class="edit-2kYy__0">
+                    <i class="fa fa-edit ivu-icon  icon-nUnTL_0" style=""></i>
+                    <span class="middle"><%= link_to "编辑", edit_employee_path(@employee)%></span>
+                  </div>
                 </div>
+              <% end %>
+            </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">技能工资</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_saler%></div>
+            <div class>
+              <div class="info-2UJx6_0">
+                <div class="ivu-row-flex">
+
+
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">档案工资</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.record_saler%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">岗位工资</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_saler%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">技能工资</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.skilledness_saler%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
-                <div class="ivu-col ivu-col-span-12">
-                  <span class="customField-2KxGL_0">
-                    <div>
-                      <div class="formGroup-313Le_0">
-                        <label class="controlLabel-3ZJIZ_0">工龄工资</label>
-                        <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.seniority_saler%></div>
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">岗位工资</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.station_saler%></div>
+                        </div>
                       </div>
-                    </div>
-                  </span>
-                </div>
+                    </span>
+                  </div>
 
+                  <div class="ivu-col ivu-col-span-12">
+                    <span class="customField-2KxGL_0">
+                      <div>
+                        <div class="formGroup-313Le_0">
+                          <label class="controlLabel-3ZJIZ_0">工龄工资</label>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.seniority_saler%></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <% end %>
-        <!-- 结束 -->
+          <% end %>
+          <!-- 结束 -->
 
+          </div>
         </div>
       </div>
-    </div>
+
   </div>
 </div>
 </div>
