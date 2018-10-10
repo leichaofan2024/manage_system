@@ -1,7 +1,25 @@
 <div class="contentpanel">
-
-
-  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月多经工资情况</h3>
+  <div class="panel">
+    <div class="panel-heading" style="background-color: rgba(247, 249, 250, 1)">
+      <div class="wage-navbar">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="/wages/import_wage"> 主业工资</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bonus/import_bonus"> 主业奖金</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/djwages/import_djwage"> 多经工资 </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="/djbonus/import_djbonus"> 多经奖金</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-body">
+  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月多经工资表</h3>
   <% if (current_user.has_role? :incomeadmin) %>
     <div class="ivu-tooltip-rel pull-right col-md-6 col-lg-6 col-ms-6" style = "padding-right:20px;">
         <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
@@ -133,4 +151,6 @@
   <% end %>
   <%= render "show_create_header" %>
   <%= render "show_edit_header" %>
+</div>
+</div>
 </div>

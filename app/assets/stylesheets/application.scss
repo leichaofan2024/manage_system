@@ -306,6 +306,8 @@ strong {
     box-shadow: 0 3px 0 rgba(0,0,0,0.2);
 }
 
+
+
 /*****  nav parent *****/
 .nav-bracket > li.nav-parent > a:focus {
     background-color: none;
@@ -965,25 +967,6 @@ div.pagination ul {
 
 
 /*---------------end----------------*/
-
-
-/*-----------点击颜色改变---------*/
-li.active > a {
-    background-color: #2ca8ff;
-    -webkit-box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
-    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
-}
-
-.sidebar .nav li.active>a, .sidebar .nav li.active > a i {
-    color: #fff;
-}
-
-li.active > a:hover{
-    background-color: #2ca8ff;
-}
-
-/*-------------end----------------*/
-
 
 /*-----------个人详情页面-----------*/
 .detail-3D1aE_0 {
@@ -2512,6 +2495,18 @@ button.close {
   margin-top:20px;
   background-color: white;
   padding:10px;
+}
+
+.wage-navbar a {
+  color: #1CAF9A
+}
+.wage-navbar li.nav-item{
+  border: solid 1px #1CAF9A;
+  border-radius: 4px;
+}
+.wage-navbar a.active {
+  background-color: #FFFFFF;
+  color: #333333;
 }
 
 

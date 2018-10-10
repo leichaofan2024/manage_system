@@ -78,11 +78,11 @@
           <% if  (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
 
                 <% if @workshop.present? %>
-                  <h4><%= Workshop.find(@workshop).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,["车间已审核","科室已上报"])%></span>) </h4>
+                  <h4 style="text-align: center"><%= Workshop.find(@workshop).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,["车间已审核","科室已上报"])%></span>) </h4>
                 <% elsif @group.present? %>
-                  <h4><%= Group.find(@group).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= groups_checked(@group,@year,@month)%></span>) </h4>
+                  <h4 style="text-align: center"><%= Group.find(@group).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= groups_checked(@group,@year,@month)%></span>) </h4>
                 <% else %>
-                  <h4>供电段<%= @year %>年<%= @month %>月考勤情况</h4>
+                  <h4 style="text-align: center">供电段<%= @year %>年<%= @month %>月考勤情况</h4>
                 <% end %>
 
                 <%= link_to show_application_attendances_path(type: "duan"),data: {disable_with: "加载中... "} do %>
@@ -94,13 +94,13 @@
           <% if current_user.has_role? :workshopadmin %>
             <% if @workshop.present? %>
 
-              <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,"班组已上报")%></span>)</h4>
+              <h4 style="text-align: center"><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,"班组已上报")%></span>)</h4>
             <% elsif @group.present? %>
 
-                <h4><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group,@year,@month)%></span>)</h4>
+                <h4 style="text-align: center"><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group,@year,@month)%></span>)</h4>
             <% else %>
 
-              <h4><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group, @year, @month)%></span>)</h4>
+              <h4 style="text-align: center"><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group, @year, @month)%></span>)</h4>
             <% end %>
 
 
