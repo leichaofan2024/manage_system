@@ -117,6 +117,11 @@
 
           <div class="searchform">
             <%= form_tag group_current_time_info_attendances_path, method: 'get' do %>
+              <% if params[:workshop].present? %>
+                <%=  hidden_field_tag :workshop,params[:workshop] %>
+              <% elsif params[:group].present? %>
+                <%= hidden_field_tag :group,params[:group]%>
+              <% end %>
               <%= label_tag :请输入时间段搜索 %>
                 <select class="" name="year">
                   <% Attendance.pluck(:year).uniq.each do |year| %>

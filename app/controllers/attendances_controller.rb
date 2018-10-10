@@ -48,10 +48,11 @@ class AttendancesController < ApplicationController
     end
     #什么时候可以导出考勤：
     if params[:format] == "xls"
-      if @attendance_status.status != "段已审核"
-        redirect_to group_attendances_path
-        flash[:alert] = "本月考勤还未被段管理员审核，不能导出，请等待段管理员审核完成后，再进行导出！"
-      end
+      
+      # if @attendance_status.status != "段已审核"
+      #   redirect_to group_attendances_path
+      #   flash[:alert] = "本月考勤还未被段管理员审核，不能导出，请等待段管理员审核完成后，再进行导出！"
+      # end
     end
 
 #班组能填写考勤的时间段：
