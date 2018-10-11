@@ -2468,15 +2468,6 @@ button.close {
   color:blue;
 }
 
-.wage_layout{
-  width:94%;
-  margin-left: 3%;
-  margin-top:20px;
-  background-color: white;
-  padding:10px;
-}
-
-
 /******各项表中的button的样式******/
 
 .wage-navbar a , .wage-btn-group a {
@@ -2507,6 +2498,10 @@ button.close {
   margin-top: 5px;
 }
 
+.fa-plus {
+  color: #1CAF9A;
+  font-size: 18px;
+}
 
 .employee-start-time{
   width:50px;
