@@ -111,10 +111,9 @@
   	<% end %>
   </div>
 
-  <% if (current_user.has_role? :incomeadmin) %>
+
   <%= render "show_upload_file" %>
   <%= render "delete_wage_file"%>
-  <% end %>
   <%= render "show_create_header" %>
   <%= render "show_edit_header" %>
 </div>
