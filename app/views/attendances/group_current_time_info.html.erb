@@ -27,7 +27,9 @@
             </div>
       <% else %>
 
-              <%= form_tag group_current_time_info_attendances_path,method: :get do %>
+            <%= form_tag group_current_time_info_attendances_path,method: :get do %>
+              <%= hidden_field_tag :month,@month %>
+              <%= hidden_field_tag :year,@year %>
               <form>
                 <div class="row" style="margin-bottom: 10px;">
                   <div class="col-md-5">
@@ -46,7 +48,7 @@
                     <%= submit_tag "搜索",data: {disable_with: "加载中..."},class: "btn btn-primary" %>
                 </div>
               </form>
-              <% end %>
+            <% end %>
 
             <div class="group-btns">
               <% if params[:workshop].present? %>
