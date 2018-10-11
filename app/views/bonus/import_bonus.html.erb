@@ -22,7 +22,11 @@
     <% end %>
 
     <div class="panel-body">
+      <% if (current_user.has_role? :incomeadmin) %>
       <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月主业奖金表</h3>
+      <% elsif %>
+      <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月奖金表</h3>
+      <% end %>
       <% if (current_user.has_role? :saleradmin) %>
       <div class="wage-btn-group">
         <div class="nav nav-pills">
