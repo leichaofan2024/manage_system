@@ -2476,16 +2476,35 @@ button.close {
   padding:10px;
 }
 
-.wage-navbar a {
+
+/******各项表中的button的样式******/
+
+.wage-navbar a , .wage-btn-group a {
   color: #1CAF9A
 }
-.wage-navbar li.nav-item{
+
+.wage-btn-group li > a {
+  padding: 5px;
+}
+
+.wage-navbar li.nav-item, .wage-btn-group li.nav-item{
   border: solid 1px #1CAF9A;
   border-radius: 4px;
 }
 .wage-navbar a.active {
   background-color: #FFFFFF;
   color: #333333;
+}
+
+.wage-btn-group{
+  float: right;
+}
+
+.wage-btn-group::after{
+  clear: both;
+  content: '';
+  display: block;
+  margin-top: 5px;
 }
 
 
