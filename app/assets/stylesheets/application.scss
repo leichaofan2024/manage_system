@@ -456,12 +456,18 @@ strong {
 .panel-heading li {
   list-style-type: none;
 }
+
+.panel-heading h4 {
+  text-align: center;
+}
 .panel-body {
    padding: 20px;
 }
+
 .panel-body h4 > span {
   font-size: 14px;
 }
+
 .panel-default > .panel-heading {
    border-color: #e7e7e7;
    background-color: #fff;
