@@ -1,29 +1,74 @@
-<br>
-<%= label_tag "资金计算公式："%>
-<br>
-<br>
-<% (Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]).each do |key| %>
-  <span style = "margin-left:20px;display:inline-block;width:200px">
-    &nbsp;&nbsp;
-    <span >
-      <select class="" name= "<%= key%>">
-        <option disabled selected value>--请选择--</option>
-        <option value="1">+</option>
-        <option value="2">-</option>
+<div class="contentpanel">
+  <div class="wage-navbar">
+    <%= link_to "返回",production_stuff_wages_path,class:"nav-item" %>
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a href="/production_stuff_wages/new_head">人员公式</a>
+      </li>
+      <li class="nav-item">
+        <a href="/production_stuff_wages/new_head_wage">金额公式</a>
+      </li>
+    </ul>
+  </div>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4>新增表头(金额公式)</h4>
+    </div>
 
-      </select>
-    </span>
-    <%= label_tag Wage.head_transfer[key]%>
-  </span>
-<% end %>
-<span style = "margin:20px;display:inline-block;width:100%;">
-  &nbsp;&nbsp;<%= label_tag "除以人数：" %>
-    <select class="" name= "per_capita">
-      <option disabled selected value>--请选择--</option>
-      <% ProductionStuffWageHead.pluck(:head_name).each do |head_name| %>
-        <option value="<%= head_name %>"><%= head_name %></option>
+    <div class="panel-body">
+      <%= form_tag create_head_production_stuff_wages_path,method: :post do |f| %>
+      <div class="form-group">
+        <%= label_tag "表头名称：" %>
+        <%= hidden_field_tag "production_head_name",@production_wage_head %>
+        <%= text_field_tag "head_name"  %>
+      </div>
+
+      <%= render "common/new_head_wage"%>
       <% end %>
-    </select>
-</span>
-<br>
-<br>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $("#wage").select2({
+    width: "resolve"
+  });
+  function selWage()
+  {
+    var arr = gon.wage_arry;
+    var wage = document.getElementById("wage");
+    var index = wage.selectedIndex;
+    var keys = arr[index];
+    var wageArry = gon.wages;
+    var subWage = document.getElementById("subwage");
+
+    var subChild = document.createElement("select");
+        subWage.appendChild(subChild);
+        subChild.name = wageArry[index];
+        subChild.id = wageArry[index];
+
+    var subseleNode = document.getElementById(wageArry[index]);
+    var plusArry = [["1","加"],["2","减"]];
+
+        for(var i=0; i< plusArry.length; i++)
+        {
+          var subOption = document.createElement("option");
+              subOption.value = plusArry[i][0];
+              subOption.innerText = plusArry[i][1];
+
+          subseleNode.appendChild(subOption);
+        };
+
+        var wageCreate = document.createElement("div");
+        var wageKey = document.createTextNode(keys);
+            wageCreate.appendChild(wageKey);
+        $("#"+wageArry[index]).before(wageCreate);
+
+        wageCreate.setAttribute("style", "margin: 10px 0;")
+
+        $("#"+wageArry[index]).select2({
+          width: "element"
+        });
+  }
+</script>
