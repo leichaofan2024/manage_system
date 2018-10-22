@@ -102,12 +102,29 @@ class HighSpeedRailStuffsController < ApplicationController
     gon.employee_array = employee_array
   end
 
+  def new_head_wage
+    @high_speed_stuff = "col"+(HighSpeedRailStuffHead.count+1).to_s
+    @wages = Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]
+    wage_arry_string = []
+    wage_arry = []
+
+    @wages.each do |wage|
+      wage_arry_string <<  Wage.head_transfer[wage]
+      wage_arry << wage
+    end
+
+
+    gon.wage_arry = wage_arry_string
+    gon.wages = wage_arry
+  end
+
   def create_head
     if params[:head_name].present?
       high_head_name= params[:high_head_name]
       @name = params[:head_name]
       @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","high_head_name","_method"].include?(key) || (value =="")}
       @high_speed_stuff_head = HighSpeedRailStuffHead.new(:head_name => @name, :high_head_name => high_head_name,:formula => @params_hash)
+      @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
       if @high_speed_stuff_head.save
         redirect_to high_speed_rail_stuffs_path
       else
@@ -155,7 +172,7 @@ class HighSpeedRailStuffsController < ApplicationController
 
     (high_head_id..head_count).each do |high_head|
 
-        @high_speed_stuff_heads[high_head-1].update(:high_head_name => ("col" + production_head.to_s))
+        @high_speed_stuff_heads[high_head-1].update(:high_head_name => ("col" + high_head.to_s))
     end
 
     flash[:notice] = "已删除'#{name}'!"

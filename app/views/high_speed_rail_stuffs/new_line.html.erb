@@ -1,10 +1,11 @@
-<div class="wage_layout">
-  <div class="">
-    <%= link_to("<<  返回",high_speed_rail_stuffs_path) %>
-  </div>
-
-  <div class="" style="padding-bottom: 30px;">
-    <h4>新增项目</h4>
-    <%= render "line_form"%>
+<div class="contentpanel">
+  <%= link_to("返回",high_speed_rail_stuffs_path,class:"btn btn-success-alt") %>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4>新增项目</h4>
+    </div>
+    <div class="panel-body">
+      <%= render "line_form"%>
+    </div>
   </div>
 </div>

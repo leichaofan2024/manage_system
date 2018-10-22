@@ -91,6 +91,15 @@ class MainDrivingStuffsController < ApplicationController
 
   def new_head
    @main_stuff_head = "col"+(MainDrivingStuffHead.count+1).to_s
+   @employee_columns = Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
+   main_arry = []
+   main_key = []
+   @employee_columns.each do |key|
+     main_arry << [key,Employee.pluck(key).uniq]
+     main_key << Employee.head_transfer[key]
+   end
+   gon.main_arry = main_arry
+   gon.main_key = main_key
   end
 
   def create_head

@@ -349,7 +349,7 @@ strong {
 }
 
 .nav-bracket li .fa,
-.nav-bracket li .glyphicon,{
+.nav-bracket li .glyphicon{
     font-size: 20px;
     vertical-align: middle;
     margin-right: 10px;
@@ -357,6 +357,8 @@ strong {
     text-align: center;
     color: #8292A6;
 }
+
+
 
 .nav-bracket > li > a > .badge {
     margin-top: 2px;
@@ -467,6 +469,28 @@ strong {
 .panel-body h4 > span {
   font-size: 14px;
 }
+
+.subpanel-body{
+  padding: 10px 30px;
+  background-color: #FFFF;
+  margin-top: 10px;
+  font-size:16px;
+  line-height: 1.5;
+  clear: both;
+}
+.subpanel-body ul {
+  margin-top: 10px;
+}
+.form-group .select2-container--bootstrap{
+  display: inline-block;
+  margin: 10px;
+}
+
+.form-group {
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
 
 .panel-default > .panel-heading {
    border-color: #e7e7e7;
