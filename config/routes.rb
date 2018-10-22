@@ -259,6 +259,7 @@ Rails.application.routes.draw do
       get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
@@ -276,6 +277,7 @@ Rails.application.routes.draw do
       get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
@@ -293,6 +295,7 @@ Rails.application.routes.draw do
       get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
