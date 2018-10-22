@@ -1,0 +1,58 @@
+<div class="wage-navbar">
+  <%= link_to "返回",divide_level_wages_path,class:"nav-item" %>
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <%= link_to "人员公式", edit_head_divide_level_wages_path(:id => @divide_head.id) %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "金额公式", edit_head_wage_divide_level_wages_path(:id => @divide_head.id)%>
+    </li>
+  </ul>
+</div>
+<div class="panel">
+  <div class="panel-heading">
+    <span>当前项目名称：</span>
+    <p> <%= @divide_head.head_name %> </p>
+    <span>当前公式：</span>
+    <p>
+      <% n = 0 %>
+      <% @divide_head.formula.keys.each do |key| %>
+        <% if @divide_head.formula[key]=="1" %>
+          <% if n == 0 %>
+            "<%= Wage.head_transfer[key] %>"
+          <% else %>
+          +  "<%= Wage.head_transfer[key] %>"
+          <% end %>
+        <% elsif @divide_head.formula[key]=="2" %>
+        -  "<%= Wage.head_transfer[key] %>"
+        <% else %>
+          <p>
+              <% if key == "workshop"%>
+                <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @divide_head.formula[key]).pluck("name") %><br>
+              <% elsif key == "group" %>
+                <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @divide_head.formula[key]).pluck("name") %><br>
+              <% elsif key == "age" %>
+                <%= Employee.head_transfer[key] %>范围:
+                <% age_range = []%>
+                <%  @divide_head.formula[key].each do |value| %>
+                  <% age_range<< value.to_i %>
+                <% end %>
+                <%= age_range.min %>   ~   <%= age_range.max %>
+                <br>
+              <% elsif key == "per_capita"%>
+                <span style="color:red;">计算结果除以：<%= @divide_head.formula["per_capita"]%></span>
+              <% elsif key == "final_period"%>
+                <span style="color:red;">求期末人数</span>
+              <% elsif key == "average"%>
+                <span style="color:red;">每月平均数</span>
+              <% else %>
+              <%= Employee.head_transfer[key] %>: <%= @divide_head.formula[key] %><br>
+              <% end %>
+          </p>
+        <% end %>
+        <% n += 1%>
+      <% end %>
+    </p>
+    <%= link_to("删除表头：",delete_head_divide_level_wages_path(:id => @divide_head.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash") %>
+  </div>
+</div>
