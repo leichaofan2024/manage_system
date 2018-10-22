@@ -1,10 +1,22 @@
-<div class="wage_layout">
-  <div class="">
-    <%= link_to("<<  返回",divide_level_wages_path) %>
-  </div>
-
-  <div class="" style="padding-bottom: 30px;">
-    <h4>新增项目</h4>
-    <%= render "line_form"%>
+<div class="contentpanel">
+  <%= link_to("返回",divide_level_wages_path,class:"btn btn-success-alt") %>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4>新增项目</h4>
+    </div>
+    <div class="panel-body">
+      <%= form_tag create_line_divide_level_wages_path,method: :post do %>
+      <div class="form-group">
+        <%= label_tag "项目名称：" %>
+        <%= text_field_tag "name"  %>
+      </div>
+      <%= render "common/new_head"%>
+      <% end %>
+    </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  $("#selid").select2();
+</script>

@@ -51,50 +51,6 @@
   <% end %>
 </div>
 
-
-
-
-
 <script type="text/javascript">
-
-  function selCity()
-          {
-            var arr = gon.employee_array;
-            var textarr = gon.employee_key;
-            var selNode = document.getElementById("selid");
-            var subselNode = document.getElementById("subselid");
-            var index = selNode.selectedIndex;
-            var citys = arr[index];
-            var keys = textarr[index];
-
-            var selectNode = document.createElement("select");
-            subselNode.appendChild(selectNode);
-            selectNode.name = citys[0]+"[]";
-            selectNode.id = citys[0];
-
-            var selectBlock = document.getElementById(citys[0]);
-
-            for(var i=0; i<citys[1].length; i++)
-            {
-              var optionNode = document.createElement("option");
-              optionNode.value = citys[1][i];
-              optionNode.innerText = citys[1][i];
-              selectBlock.appendChild(optionNode);
-            };
-
-            selectBlock.multiple = true;
-            selectBlock.setAttribute("style", "width: 80%;");
-
-            var newDiv = document.createElement("div");
-            var newContent = document.createTextNode(keys);
-            newDiv.appendChild(newContent); //add the text node to the newly created div.
-            // add the newly created element and its content into the DOM
-            $("#"+citys[0]).before(newDiv);
-
-            $("#"+citys[0]).select2( {
-              theme: "bootstrap"
-            });
-          };
-
-          $("#selid").select2();
+  $("#selid").select2();
 </script>

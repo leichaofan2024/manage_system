@@ -26,6 +26,15 @@ class ProductionStuffWagesController < ApplicationController
 
   def new_line
     @production_wage = ProductionStuffWage.new
+    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
+    employee_array = []
+    employee_key = []
+    @employee_columns.each do |column|
+      employee_array << [column,Employee.pluck(column).uniq]
+      employee_key << Employee.head_transfer[column]
+    end
+    gon.employee_key = employee_key
+    gon.employee_array = employee_array
   end
 
   def create_line
@@ -91,14 +100,14 @@ class ProductionStuffWagesController < ApplicationController
   def new_head
    @production_wage_head = "col"+(ProductionStuffWageHead.count+1).to_s
    @employee_columns = Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
-   productions_arry = []
-   productions_key = []
-    @employee_columns.each do |key|
-      productions_arry << [key, Employee.pluck(key).uniq]
-      productions_key << Employee.head_transfer[key]
-    end
-    gon.production_arry = productions_arry
-    gon.production_key = productions_key
+   employee_array = []
+   employee_key = []
+   @employee_columns.each do |column|
+     employee_array << [column,Employee.pluck(column).uniq]
+     employee_key << Employee.head_transfer[column]
+   end
+   gon.employee_key = employee_key
+   gon.employee_array = employee_array
   end
 
   def new_head_wage

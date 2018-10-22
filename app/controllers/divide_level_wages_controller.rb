@@ -27,6 +27,15 @@ class DivideLevelWagesController < ApplicationController
 
   def new_line
     @divide_level_wage = DivideLevelWage.new
+    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
+    employee_array = []
+    employee_key = []
+    @employee_columns.each do |column|
+      employee_array << [column,Employee.pluck(column).uniq]
+      employee_key << Employee.head_transfer[column]
+    end
+    gon.employee_key = employee_key
+    gon.employee_array = employee_array
   end
 
   def create_line
@@ -93,14 +102,14 @@ class DivideLevelWagesController < ApplicationController
   def new_head
    @divide_head_name = "col"+(DivideLevelWageHead.count+1).to_s
    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
-   divide_array = []
-   divide_key = []
+   employee_array = []
+   employee_key = []
    @employee_columns.each do |column|
-     divide_array << [column,Employee.pluck(column).uniq]
-     divide_key << Employee.head_transfer[column]
+     employee_array << [column,Employee.pluck(column).uniq]
+     employee_key << Employee.head_transfer[column]
    end
-   gon.divide_array = divide_array
-   gon.divide_key = divide_key
+   gon.employee_key = employee_key
+   gon.employee_array = employee_array
   end
 
   def new_head_wage
