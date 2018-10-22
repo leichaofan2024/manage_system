@@ -40,4 +40,17 @@ class ApplicationController < ActionController::Base
     gon.employee_array = employee_array
   end
 
+  def wage_name_columns
+    @wages = Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]
+    wage_arry_string = []
+    wage_arry = []
+
+    @wages.each do |wage|
+      wage_arry_string <<  Wage.head_transfer[wage]
+      wage_arry << wage
+    end
+    gon.wage_arry = wage_arry_string
+    gon.wages = wage_arry
+  end
+
 end

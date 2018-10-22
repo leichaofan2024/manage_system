@@ -1,46 +1,44 @@
-<div class="wage_layout">
-  <div class="">
-    <%= link_to("<<  返回",high_speed_rail_stuffs_path) %>
-  </div>
-  <div style="padding-bottom:30px;">
-    <h4>项目编辑</h4>
-    <div class="pull-right" style= "margin-right:30px;color:red;">
-      <%= "删除本项目："%>
-      <%= link_to("",delete_line_high_speed_rail_stuffs_path(:id => @high_speed_stuff.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %>
-    </div>
-    <p style = "font-size= 30px;font-weight:900">当前项目名称：</p>
-    <p> <%= @high_speed_stuff.name %> </p>
-    <p style = "font-size= 30px;font-weight:900">当前筛选条件：</p>
-    <p>
-      <% @high_speed_stuff.formula.keys.each do |key| %>
-        <% if key == "workshop"%>
-          <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
-        <% elsif key == "group" %>
-          <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
-        <% elsif key == "add_people" %>
-          手动增加人员: <%= @high_speed_stuff.formula[key] %><br>
-        <% elsif key == "reduce_people" %>
-          手动删除人员: <%= @high_speed_stuff.formula[key] %><br>
-        <% else %>
-        <%= Employee.head_transfer[key] %>: <%= @high_speed_stuff.formula[key] %><br>
+<div class="contentpanel">
+  <%= link_to("返回",high_speed_rail_stuffs_path,class:"btn btn-success-alt") %>
+  <div class="panel">
+    <div class="panel-heading">
+      <label>当前项目名称：</label><span> <%= @high_speed_stuff.name %> </span>
+      <br>
+      <label>当前筛选条件：</label>
+      <span>
+        <% @high_speed_stuff.formula.keys.each do |key| %>
+          <% if key == "workshop"%>
+            <%= Employee.head_transfer[key] %>: <%= Workshop.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
+          <% elsif key == "group" %>
+            <%= Employee.head_transfer[key] %>: <%= Group.current.where(:id => @high_speed_stuff.formula[key]).pluck("name") %><br>
+          <% elsif key == "add_people" %>
+            手动增加人员: <%= @high_speed_stuff.formula[key] %><br>
+          <% elsif key == "reduce_people" %>
+            手动删除人员: <%= @high_speed_stuff.formula[key] %><br>
+          <% else %>
+          <%= Employee.head_transfer[key] %>: <%= @high_speed_stuff.formula[key] %><br>
+          <% end %>
         <% end %>
-      <% end %>
-    </p>
-    <br>
+      </span>
+      <%= link_to("删除本项目",delete_line_high_speed_rail_stuffs_path(:id => @high_speed_stuff.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash") %>
+      <%= link_to "查看人员详情",employees_wage_show_wages_path(:category => "high",content_name: @high_speed_stuff.name, content_id: @high_speed_stuff.id) %>
+    </div>
+  </div>
 
 
-    <%= form_tag update_line_high_speed_rail_stuffs_path(:id => @high_speed_stuff.id),method: :patch do |f| %>
-      <%= label_tag "项目名称：" %>
-      <%= text_field_tag "name"  %>
-      <div class="pull-right" style = "margin-right:40px;">
-        <%= link_to "查看人员详情 >>",employees_wage_show_wages_path(:category => "high",content_name: @high_speed_stuff.name, content_id: @high_speed_stuff.id) %>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4>项目编辑</h4>
+    </div>
+    <div class="panel-body">
+      <%= form_tag update_line_high_speed_rail_stuffs_path(:id => @high_speed_stuff.id),method: :patch do |f| %>
+      <div class="form-group">
+        <%= label_tag "项目名称：" %>
+        <%= text_field_tag "name"  %>
       </div>
-      <br>
       <%= label_tag "筛选条件："%>
-      <br>
-      <span style = "margin-left:20px;display:inline-block;width:200px">
-        &nbsp;&nbsp;<%= label_tag "手动增加人员" %>
-        <span >
+      <div class="form-group">
+        <%= label_tag "手动增加人员" %>
           <select multiple="multiple" class="form-control" name="add_people[]" id="add_people">
             <% Employee.current.pluck(:sal_number).each do |sal_number| %>
               <% if @high_speed_stuff.formula["add_people"].present? && @high_speed_stuff.formula["add_people"].include?(sal_number) %>
@@ -50,14 +48,10 @@
               <% end %>
             <% end %>
           </select>
-        </span>
-      </span>
-      <script>
-        $("#add_people").select2( { theme: "bootstrap"} );
-      </script>
-      <span style = "margin-left:20px;display:inline-block;width:200px">
-        &nbsp;&nbsp;<%= label_tag "手动删除人员" %>
-        <span >
+      </div>
+
+        <div class="form-group">
+          <%= label_tag "手动删除人员" %>
           <select multiple="multiple" class="form-control" name="reduce_people[]" id="reduce_people">
             <% Employee.current.pluck(:sal_number).each do |sal_number| %>
               <% if @high_speed_stuff.formula["reduce_people"].present? && @high_speed_stuff.formula["reduce_people"].include?(sal_number) %>
@@ -67,57 +61,14 @@
               <% end %>
             <% end %>
           </select>
-        </span>
-      </span>
-      <script>
-        $("#reduce_people").select2( { theme: "bootstrap"} );
-      </script>
-      <% (Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]).each do |key| %>
-        <span style = "margin-left:20px;display:inline-block;width:200px">
-          &nbsp;&nbsp;<%= label_tag Employee.head_transfer[key] %>
-          <span >
-            <% if key == "workshop" %>
-              <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
-                <% Workshop.current.each do |workshop| %>
-                  <% if @high_speed_stuff.formula[key].present? && @high_speed_stuff.formula[key].include?((workshop.id).to_s) %>
-                    <option value="<%= workshop.id %>" selected><%= workshop.name  %></option>
-                  <% else %>
-                    <option value="<%= workshop.id %>"><%= workshop.name  %></option>
-                  <% end %>
-                <% end %>
-              </select>
-            <% elsif key == "group"%>
-              <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
-                <% Group.current.each do |group| %>
-                  <% if @high_speed_stuff.formula[key].present? && @high_speed_stuff.formula[key].include?((group.id).to_s) %>
-                    <option value="<%= group.id %>" selected><%= group.name  %></option>
-                  <% else %>
-                    <option value="<%= group.id %>"><%= group.name  %></option>
-                  <% end %>
-                <% end %>
-              </select>
-            <% else %>
-              <select multiple="multiple" class="form-control" name="<%= key+"[]"%>" id="<%= key%>">
-                <% Employee.pluck(key).uniq.each do |content| %>
-                  <% if @high_speed_stuff.formula[key].present? && @high_speed_stuff.formula[key].include?(content) %>
-                    <option value="<%= content %>" selected><%= content  %></option>
-                  <% else %>
-                    <option value="<%= content %>"><%= content %></option>
-                  <% end %>
-                <% end %>
-              </select>
-            <% end %>
-            <!-- <%= check_box_tag key,"yes",false %> -->
-          </span>
-
-        </span>
-        <script>
-          $("#<%= key%>").select2( { theme: "bootstrap"} );
-        </script>
+        </div>
+          <%= render "common/new_head"%>
       <% end %>
-      <br>
-      <br>
-      <%= submit_tag :筛选,:data => {:disable_with => "正在提交..."} %>
-    <% end %>
+    </div>
   </div>
-</div>
+
+  <script>
+    $("#add_people").select2( {width: "resolve"} );
+    $("#reduce_people").select2( {width: "resolve"} );
+    $("#selid").select2();
+  </script>
