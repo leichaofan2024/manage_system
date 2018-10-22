@@ -3,10 +3,10 @@
     <%= link_to "返回",divide_level_wages_path,class:"nav-item" %>
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a href="/high_speed_rail_stuffs/new_head">人员公式</a>
+        <a href="/divide_level_wages/new_head">人员公式</a>
       </li>
       <li class="nav-item">
-        <a href="/high_speed_rail_stuffs/new_head_wage">金额公式</a>
+        <a href="/divide_level_wages/new_head_wage">金额公式</a>
       </li>
     </ul>
   </div>
@@ -20,6 +20,16 @@
         <%= label_tag "表头名称：" %>
         <%= hidden_field_tag "divide_head_name",@divide_head_name %>
         <%= text_field_tag "head_name"  %>
+      </div>
+      <div class="form-group">
+        <span>
+          <%= label_tag "期末人数" %>
+          <%= check_box_tag "final_period","yes" %>
+        </span>
+        <span>
+          <%= label_tag "平均人数" %>
+          <%= check_box_tag "average","yes" %>
+        </span>
       </div>
         <%= render "common/new_head"%>
     </div>

@@ -256,6 +256,7 @@ Rails.application.routes.draw do
       delete :delete_line
 
       get :new_head
+      get :new_head_wage
       post :create_head
       get :edit_head
       patch :update_head
