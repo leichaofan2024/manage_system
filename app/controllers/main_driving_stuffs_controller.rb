@@ -102,6 +102,22 @@ class MainDrivingStuffsController < ApplicationController
    gon.main_key = main_key
   end
 
+  def new_head_wage
+    @main_stuff_head = "col"+(MainDrivingStuffHead.count+1).to_s
+    @wages = Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]
+    wage_arry_string = []
+    wage_arry = []
+
+    @wages.each do |wage|
+      wage_arry_string <<  Wage.head_transfer[wage]
+      wage_arry << wage
+    end
+
+
+    gon.wage_arry = wage_arry_string
+    gon.wages = wage_arry
+  end
+
   def create_head
     if params[:head_name].present?
       main_head_name= params[:main_head_name]

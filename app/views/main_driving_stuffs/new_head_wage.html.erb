@@ -1,12 +1,12 @@
 <div class="contentpanel">
   <div class="wage-navbar">
-    <%= link_to "返回",high_speed_rail_stuffs_path,class:"nav-item" %>
+    <%= link_to "返回",main_driving_stuffs_path,class:"nav-item" %>
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a href="/high_speed_rail_stuffs/new_head">人员公式</a>
+        <a href="/main_driving_stuffs/new_head">人员公式</a>
       </li>
       <li class="nav-item">
-        <a href="/high_speed_rail_stuffs/new_head_wage">金额公式</a>
+        <a href="/main_driving_stuffs/new_head_wage">金额公式</a>
       </li>
     </ul>
   </div>
@@ -16,12 +16,13 @@
     </div>
 
     <div class="panel-body">
-      <%= form_tag create_head_high_speed_rail_stuffs_path,method: :post do %>
+      <%= form_tag create_head_main_driving_stuffs_path,method: :post do |f| %>
       <div class="form-group">
         <%= label_tag "表头名称：" %>
-        <%= hidden_field_tag "high_head_name",@high_speed_stuff %>
+        <%= hidden_field_tag "main_head_name",@main_stuff_head %>
         <%= text_field_tag "head_name"  %>
       </div>
+
       <%= render "common/new_head_wage"%>
       <% end %>
     </div>

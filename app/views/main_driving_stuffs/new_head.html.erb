@@ -6,12 +6,15 @@
         <a href="/main_driving_stuffs/new_head">人员公式</a>
       </li>
       <li class="nav-item">
-        <a href="/high_speed_rail_stuffs/new_head_wage">金额公式</a>
+        <a href="/main_driving_stuffs/new_head_wage">金额公式</a>
       </li>
     </ul>
   </div>
 
-
+  <div class="panel">
+    <div class="panel-heading">
+      <h4>新增表头(人员公式)</h4>
+    </div>
     <div class="panel-body">
       <%= form_tag create_head_main_driving_stuffs_path,method: :post do |f| %>
       <div class="form-group">
@@ -33,6 +36,7 @@
       <%= render "common/new_head"%>
       <% end %>
     </div>
+  </div>
 </div>
 
 

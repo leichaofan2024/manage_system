@@ -21,6 +21,30 @@
         <%= hidden_field_tag "high_head_name",@high_speed_stuff %>
         <%= text_field_tag "head_name"  %>
       </div>
+
+      <div class="form-group">
+        <span>
+        <%= label_tag "除以人数：" %>
+        <select class="" name= "per_capita">
+        <option disabled selected value>--请选择--</option>
+        <% HighSpeedRailStuffHead.pluck(:head_name).each do |head_name| %>
+        <option value="<%= head_name %>"><%= head_name %></option>
+        <% end %>
+        </select>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "人数计算公式："%>
+        <span>
+        <%= label_tag "期末人数" %>
+        <%= check_box_tag "final_period","yes" %>
+        </span>
+        <span>
+        <%= label_tag "平均人数" %>
+        <%= check_box_tag "average","yes" %>
+        </span>
+      </div>
         <%= render "common/new_head"%>
     </div>
   </div>
