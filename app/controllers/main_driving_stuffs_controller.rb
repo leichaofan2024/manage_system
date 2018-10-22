@@ -1,7 +1,7 @@
 class MainDrivingStuffsController < ApplicationController
 
   layout "home"
-
+  before_action :employee_name_colums,only: [:new_head,:new_line]
 
   def index
     if params[:year].present? && params[:month].present?
@@ -27,15 +27,6 @@ class MainDrivingStuffsController < ApplicationController
 
   def new_line
     @main_wage = ProductionStuffWage.new
-    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
-    employee_array = []
-    employee_key = []
-    @employee_columns.each do |column|
-      employee_array << [column,Employee.pluck(column).uniq]
-      employee_key << Employee.head_transfer[column]
-    end
-    gon.employee_key = employee_key
-    gon.employee_array = employee_array
   end
 
   def create_line
@@ -100,15 +91,6 @@ class MainDrivingStuffsController < ApplicationController
 
   def new_head
    @main_stuff_head = "col"+(MainDrivingStuffHead.count+1).to_s
-   @employee_columns = Employee.attribute_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
-   employee_array = []
-   employee_key = []
-   @employee_columns.each do |column|
-     employee_array << [column,Employee.pluck(column).uniq]
-     employee_key << Employee.head_transfer[column]
-   end
-   gon.employee_key = employee_key
-   gon.employee_array = employee_array
   end
 
   def new_head_wage

@@ -321,13 +321,35 @@ function selCity()
 
           var selectBlock = document.getElementById(citys[0]);
 
-          for(var i=0; i<citys[1].length; i++)
-          {
-            var optionNode = document.createElement("option");
-            optionNode.value = citys[1][i];
-            optionNode.innerText = citys[1][i];
-            selectBlock.appendChild(optionNode);
-          };
+
+
+            if(citys[0] == "workshop"){
+              for(var i=0; i<citys[1][0].length; i++)
+              {
+                var optionNode = document.createElement("option");
+                optionNode.value = citys[1][0][i];
+                optionNode.innerText = citys[1][1][i];
+                selectBlock.appendChild(optionNode);
+              };
+            }else if (citys[0] == "group") {
+              for(var i=0; i<citys[1][0].length; i++)
+              {
+                var optionNode = document.createElement("option");
+                optionNode.value = citys[1][0][i];
+                optionNode.innerText = citys[1][1][i];
+                selectBlock.appendChild(optionNode);
+              };
+            }else {
+              for(var i=0; i<citys[1].length; i++)
+              {
+                var optionNode = document.createElement("option");
+                optionNode.value = citys[1][i];
+                optionNode.innerText = citys[1][i];
+                selectBlock.appendChild(optionNode);
+              };
+            }
+
+
 
           selectBlock.multiple = true;
           selectBlock.setAttribute("style", "width: 80%;");

@@ -22,4 +22,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def employee_name_colums
+    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
+    employee_array = []
+    employee_key = []
+    @employee_columns.each do |column|
+      if column == "workshop"
+        employee_array << [column,[Employee.pluck(column).uniq.compact,Employee.pluck(column).uniq.compact.map{|x| Workshop.find_by(id: x).name}]]
+      elsif column == "group"
+        employee_array << [column,[Employee.pluck(column).uniq.compact,Employee.pluck(column).uniq.compact.map{|x| Group.find_by(id: x).name}]]
+      else
+        employee_array << [column,Employee.pluck(column).uniq.compact]
+      end
+      employee_key << Employee.head_transfer[column]
+    end
+    gon.employee_key = employee_key
+    gon.employee_array = employee_array
+  end
+
 end
