@@ -1,6 +1,6 @@
         <div class="contentpanel">
           <div class="wage-navbar">
-            <%= link_to "返回",high_speed_rail_stuffs_path,class:"nav-item" %>
+            <%= link_to "返回",divide_level_wages_path,class:"nav-item" %>
             <ul class="nav nav-pills">
               <li class="nav-item">
                 <a href="/divide_level_wages/new_head">人员公式</a>
@@ -10,13 +10,12 @@
               </li>
             </ul>
           </div>
+          <%= form_tag create_head_divide_level_wages_path,method: :post do %>
           <div class="panel">
             <div class="panel-heading">
               <h4>新增表头(金额公式)</h4>
             </div>
-
             <div class="panel-body">
-              <%= form_tag create_head_divide_level_wages_path,method: :post do %>
               <div class="form-group">
                 <%= label_tag "表头名称：" %>
                 <%= hidden_field_tag "divide_head_name",@divide_head_name %>
@@ -25,7 +24,7 @@
               <div class="form-group">
                 <span>
                 <%= label_tag "除以人数：" %>
-                <select class="" name= "per_capita">
+                <select name= "per_capita">
                   <option disabled selected value>--请选择--</option>
                   <% DivideLevelWageHead.pluck(:head_name).each do |head_name| %>
                     <option value="<%= head_name %>"><%= head_name %></option>
@@ -34,9 +33,9 @@
                 </span>
               </div>
               <%= render "common/new_head_wage"%>
-              <% end %>
             </div>
           </div>
+          <% end %>
         </div>
 
 

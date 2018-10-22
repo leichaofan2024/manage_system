@@ -114,7 +114,6 @@ class DivideLevelWagesController < ApplicationController
       wage_arry << wage
     end
 
-
     gon.wage_arry = wage_arry_string
     gon.wages = wage_arry
   end
