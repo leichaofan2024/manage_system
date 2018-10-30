@@ -1,0 +1,30 @@
+<div class="modal fade" id="uploadWageform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">上传表格</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag import_table_djwages_path, multipart: true do %>
+          <select class="" name="year">
+            <option value="<%= (Time.now.year)-1 %>"><%= (Time.now.year)-1 %></option>
+            <option value="<%= Time.now.year%>" selected><%= Time.now.year %></option>
+            <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
+          </select>
+          <select class="" name="month">
+            <% (1..12).each do |month| %>
+              <% if month == Time.now.month %>
+                <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
+              <% else %>
+                <option value="<%= month%>"><%= month%></option>
+              <% end %>
+            <% end %>
+          </select>
+          <%= file_field_tag :file%>
+          <%= submit_tag "上传", data: { disable_with: "上传中..." }%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 class MainDrivingStuffsController < ApplicationController
 
   layout "home"
-
+  before_action :employee_name_colums,only: [:new_head,:new_line,:edit_head,:edit_line]
+  before_action :wage_name_columns, only: [:new_head_wage,:edit_head_wage]
 
   def index
     if params[:year].present? && params[:month].present?
@@ -93,6 +94,10 @@ class MainDrivingStuffsController < ApplicationController
    @main_stuff_head = "col"+(MainDrivingStuffHead.count+1).to_s
   end
 
+  def new_head_wage
+    @main_stuff_head = "col"+(MainDrivingStuffHead.count+1).to_s
+  end
+
   def create_head
     if params[:head_name].present?
       main_head_name= params[:main_head_name]
@@ -114,6 +119,10 @@ class MainDrivingStuffsController < ApplicationController
   def edit_head
    @main_stuff_head = MainDrivingStuffHead.find(params[:id])
 
+  end
+
+  def edit_head_wage
+    @main_stuff_head = MainDrivingStuffHead.find(params[:id])
   end
 
   def update_head

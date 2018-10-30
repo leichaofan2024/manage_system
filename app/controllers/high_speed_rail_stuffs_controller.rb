@@ -1,7 +1,8 @@
 class HighSpeedRailStuffsController < ApplicationController
 
   layout "home"
-
+  before_action :employee_name_colums,only: [:new_head,:new_line,:edit_head,:edit_line]
+  before_action :wage_name_columns, only: [:new_head_wage,:edit_head_wage]
 
   def index
     if params[:year].present? && params[:month].present?
@@ -90,7 +91,11 @@ class HighSpeedRailStuffsController < ApplicationController
   end
 
   def new_head
-   @high_speed_stuff = "col"+(HighSpeedRailStuffHead.count+1).to_s
+    @high_speed_stuff = "col"+(HighSpeedRailStuffHead.count+1).to_s
+  end
+
+  def new_head_wage
+    @high_speed_stuff = "col"+(HighSpeedRailStuffHead.count+1).to_s
   end
 
   def create_head
@@ -99,6 +104,7 @@ class HighSpeedRailStuffsController < ApplicationController
       @name = params[:head_name]
       @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","head_name","high_head_name","_method"].include?(key) || (value =="")}
       @high_speed_stuff_head = HighSpeedRailStuffHead.new(:head_name => @name, :high_head_name => high_head_name,:formula => @params_hash)
+      @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
       if @high_speed_stuff_head.save
         redirect_to high_speed_rail_stuffs_path
       else
@@ -113,6 +119,10 @@ class HighSpeedRailStuffsController < ApplicationController
 
   def edit_head
    @high_speed_stuff_head = HighSpeedRailStuffHead.find(params[:id])
+  end
+
+  def edit_head_wage
+    @high_speed_stuff_head = HighSpeedRailStuffHead.find(params[:id])
   end
 
   def update_head

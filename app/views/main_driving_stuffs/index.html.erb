@@ -1,9 +1,21 @@
-<div class="col-md-12 wage_layout">
-  <a href="/wages/import_wage" ><< 返回 </a>
-  <div class="pull-right">
-    <a href="wages/kuaizhao_index?category=main">主要行车工种情况统计表<span style="color:red;">(累计) </a>
-  </div>
+<div class="contentpanel">
+  <a href="/wages/import_wage" >返回 </a>
+  <div class="panel">
+    <div class="panel-heading">
+      <div class="wage-navbar">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">单月表格</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="wages/kuaizhao_index?category=main">累计表格</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-body">
 
+      <div class="col-md-12 wage_layout">
   <h5 style="text-align: center;"><%=@year%>年<%=@month%>月（<span style="color:red;">单月</span> ）主要行车工种情况统计表</h5>
   <div class="col-md-12 col-lg-12 col-ms-12" style = "padding-left: 20px;">
     <%= form_tag main_driving_stuffs_path,method: :get  do %>
@@ -122,4 +134,8 @@
   <div class="col-md-12">
     <%= link_to("生成快照", create_kuaizhao_wages_path(:year => @year,:month => @month,:category => "main"),method: :post,:data => {disable_with: "正在生成快照..."})%>
   </div>
+</div>
+
+  </div>
+</div>
 </div>

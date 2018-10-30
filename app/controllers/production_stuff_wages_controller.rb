@@ -1,7 +1,7 @@
 class ProductionStuffWagesController < ApplicationController
   layout "home"
-
-
+  before_action :employee_name_colums,only: [:new_head,:new_line,:edit_head,:edit_line]
+  before_action :wage_name_columns, only: [:new_head_wage,:edit_head_wage]
   def index
     if params[:year].present? && params[:month].present?
 			@year = params[:year].to_i
@@ -92,6 +92,10 @@ class ProductionStuffWagesController < ApplicationController
    @production_wage_head = "col"+(ProductionStuffWageHead.count+1).to_s
   end
 
+  def new_head_wage
+    @production_wage_head = "col"+(HighSpeedRailStuffHead.count+1).to_s
+  end
+
   def create_head
     if params[:head_name].present?
       production_head_name= params[:production_head_name]
@@ -113,6 +117,10 @@ class ProductionStuffWagesController < ApplicationController
   def edit_head
    @production_wage_head = ProductionStuffWageHead.find(params[:id])
 
+  end
+
+  def edit_head_wage
+    @production_wage_head = ProductionStuffWageHead.find(params[:id])
   end
 
   def update_head
