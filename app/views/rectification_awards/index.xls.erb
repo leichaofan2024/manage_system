@@ -19,17 +19,27 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">变动原因</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">整改返奖合计</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">牌卡返奖</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">中层返奖</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组长返奖</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">抽考返奖</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">其他返奖</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
       </Row>
-    <% @export_changes.each do |saler| %>
+    <% @export_rectifications.each do |item| %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.班组 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.姓名 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.变动原因 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.序号 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.科室车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.整改返奖合计 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.牌卡返奖 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.中层返奖 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.班组长返奖 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.抽考返奖 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.其他返奖 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.备注 %></Data></Cell>
       </Row>
     <% end %>
     </Table>

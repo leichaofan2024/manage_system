@@ -372,7 +372,7 @@
                         <% else %>
                           <li><a href="/divide_level_wages"> 铁路企业分层次人员工资情况 </a></li>
                         <% end %>
-                        <li><a href="/home/notfound"> 工资图表分析</a></li>
+                        <li><a href="/analyses"> 工资图表分析</a></li>
                       </ul>
                      </li>
                    <% end %>
@@ -380,7 +380,7 @@
                    <% if (current_user.has_role? :awardadmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
 
                      <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>奖惩管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                        <% if ["workshop_relative_salers","people_changes","charge_details","relative_salers_totals","standard_award_totals","star_awards","other_award_totals","relative_salers","examination_charges","red_middle_charges","company_relative_salers"].include?(url_for.split("/").last) %>
+                        <% if ["workshop_relative_salers","people_changes","charge_details","relative_salers_totals","standard_award_totals","star_awards","other_award_totals","relative_salers","examination_charges","red_middle_charges","company_relative_salers","rectification_awards","teamleader_awards"].include?(url_for.split("/").last) %>
                           <ul class="children" style="display:block;">
                         <% else %>
                           <ul class="children">
@@ -390,7 +390,7 @@
                         <% else %>
                           <li><a href="/workshop_relative_salers"> 工效挂钩明细表(科室上传) </a></li>
                         <% end %>
-                        <% if (url_for.split("/").last == "relative_salers_totals") || (url_for == "/relative_salers") %>
+                        <% if  ["relative_salers_totals","rectification_awards","relative_salers","teamleader_awards"].include?(url_for.split("/").last)%>
                           <li style="background-color:white;"><a href="/relative_salers_totals"> 工效挂钩表(劳资上传) </a></li>
                         <% else %>
                           <li><a href="/relative_salers_totals"> 工效挂钩表(劳资上传)</a></li>

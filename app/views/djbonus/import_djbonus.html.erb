@@ -1,23 +1,54 @@
 <div class="contentpanel">
-  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月多经奖金情况</h3>
-  <% if (current_user.has_role? :incomeadmin) %>
-    <div class="ivu-tooltip-rel pull-right col-md-6 col-lg-6 col-ms-6" style = "padding-right:20px;">
-        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-            <%= link_to import_djbonus_djbonus_path(format: "xls") do %>
-               <span style="color: #269Eff;">导出表格</span>
-            <% end %>
-        </button>
-        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-            <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createBonusHeader" do  %>
-              <span style="color: #269Eff;">新增表头</span>
-            <% end %>
-        </button>
-        <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0 pull-right">
-            <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editBonusHeader" do  %>
-              <span style="color: #269Eff;">修改表头</span>
-            <% end %>
-        </button>
+  <div class="panel">
+    <div class="panel-heading" style="background-color: rgba(247, 249, 250, 1)">
+      <div class="wage-navbar">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="/wages/import_wage"> 主业工资</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bonus/import_bonus"> 主业奖金</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/djwages/import_djwage"> 多经工资 </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/djbonus/import_djbonus"> 多经奖金</a>
+          </li>
+        </ul>
+      </div>
     </div>
+    <div class="panel-body">
+  <h3 class="col-md-12 col-lg-12 col-ms-12" style="text-align:center;"><%= @year %>年<%= @month %>月多经奖金表</h3>
+  <% if (current_user.has_role? :incomeadmin) %>
+  <div class="wage-btn-group">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#uploadWageform" do  %>
+             <span>上传表格</span>
+          <% end %>
+      </li>
+      <li class="nav-item">
+          <%= link_to import_djbonus_djbonus_path(format: "xls") do %>
+             <span>导出表格</span>
+          <% end %>
+      </li>
+      <li class="nav-item">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteWageform" do %>
+             <span>删除表格</span>
+          <% end %>
+      </li>
+      <li class="nav-item">
+          <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createBonusHeader" do  %>
+            <span>新增表头</span>
+          <% end %>
+      <li class="nav-item">
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editBonusHeader" do  %>
+          <span>修改表头</span>
+        <% end %>
+      </li>
+    </ul>
+  </div>
   <% end %>
   <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left: 20px;">
     <%= form_tag import_djbonus_djbonus_path,method: :get  do %>
@@ -45,10 +76,10 @@
   </div>
 
 
-  <div class="col-md-12 col-lg-12 col-ms-12">
-    <div class="card">
-      <div style="overflow: auto;" class="col-md-12">
-        <table id="example" class="table table-bordered">
+
+
+
+        <table class="table table-bordered">
           <thead>
           	<tr>
           		<% DjbonusHeader.pluck("header").each do |i| %>
@@ -70,67 +101,17 @@
           	<% end %>
           </tbody>
         </table>
-      </div>
-    </div>
-  </div>
 
   <div class="col-md-12 col-lg-12 col-ms-12 text-center">
   	<% if params[:filter_type].blank? && params[:q].blank? %>
   	  <%= paginate @djbonus %>
   	<% end %>
   </div>
-
-  <% if (current_user.has_role? :incomeadmin) %>
-    <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left:20px;margin-bottom: 30px;">
-      <h5>上传多经奖金表</h5>
-      <%= form_tag import_table_djbonus_path, multipart: true do %>
-      <select class="" name="year">
-        <option value="<%= (Time.now.year)-1 %>"><%= (Time.now.year)-1 %></option>
-        <option value="<%= Time.now.year%>" selected><%= Time.now.year %></option>
-        <option value="<%= (Time.now.year)+1 %>"> <%= (Time.now.year)+1 %></option>
-      </select>
-      <select class="" name="month">
-        <% (1..12).each do |month| %>
-          <% if month == Time.now.month %>
-            <option value="<%= Time.now.month %>" selected><%= Time.now.month %></option>
-          <% else %>
-            <option value="<%= month%>"><%= month%></option>
-          <% end %>
-        <% end %>
-      </select>
-      <%= file_field_tag :file%>
-      <%= submit_tag "上传",data: {disable_with: "上传中..."}%>
-      <% end %>
-    </div>
-
-    <div class="col-md-6 col-lg-6 col-ms-6" style = "text-align: right;padding-right:20px;margin-bottom: 30px;">
-      <h5 style="margin-right:120px;">删除已上传多经奖金表:</h5>
-      <%= form_tag delete_djbonus_djbonus_path,method: :delete  do %>
-        <%= label_tag :请输入时间段搜索 %>
-        <select class="" name="year">
-          <% Djbonu.pluck(:year).uniq.each do |year| %>
-            <% if year == @year %>
-              <option value="<%= year %>" selected><%= year %></option>
-            <% else %>
-              <option value="<%= year %>"><%= year %></option>
-            <% end %>
-          <% end %>
-        </select>
-        <select class="" name="month">
-          <% Bonu.pluck(:month).uniq.each do |month| %>
-            <% if month == @month %>
-              <option value="<%= month %>" selected><%= month %></option>
-            <% else %>
-              <option value="<%= month %>"><%= month %></option>
-            <% end %>
-          <% end %>
-        </select>
-        <%= submit_tag :删除, data: { confirm: "您确定要删除#{@year}年#{@month}月奖金表吗？" }%>
-      <% end %>
-    </div>
-  <% end %>
-
+  <%= render "show_upload_file" %>
+  <%= render "delete_wage_file"%>
   <%= render "show_create_header" %>
   <%= render "show_edit_header" %>
 
+</div>
+</div>
 </div>

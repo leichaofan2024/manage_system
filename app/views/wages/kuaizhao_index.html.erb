@@ -1,101 +1,117 @@
-<div class="col-md-12 wage_layout">
-  <% if params[:category] == "divide" %>
-    <a href="/divide_level_wages" ><< 返回 </a>
-  <% elsif params[:category] == "production" %>
-    <a href="/production_stuff_wages" ><< 返回 </a>
-  <% elsif params[:category] == "main" %>
-    <a href="/main_driving_stuffs" ><< 返回 </a>
-  <% elsif params[:category] == "high" %>
-    <a href="/high_speed_rail_stuffs" ><< 返回 </a>
-  <% end %>
-  <div class="col-md-12" style="margin-top: 15px;margin-bottom: 15px;">
-    <%= form_tag kuaizhao_index_wages_path, method: 'get' do %>
-      <%= render "wages/customize_form_partial"%>
-    <% end %>
-  </div>
+<div class="contentpanel">
+  <div class="panel">
+    <div class="panel-heading">
+      <div class="wage-navbar">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <% if params[:category] == "divide" %>
+              <a class="nav-link" href="/divide_level_wages">单月表格</a>
+            <% elsif params[:category] == "production" %>
+              <a href="/production_stuff_wages" >单月表格</a>
+            <% elsif params[:category] == "main" %>
+              <a href="/main_driving_stuffs" >单月表格</a>
+            <% elsif params[:category] == "high" %>
+              <a href="/high_speed_rail_stuffs" >单月表格</a>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active disabled" href="#">累计表格</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-body">
+      <% if params[:category] == "divide" %>
+      <h3 style="text-align: center;"><%=@year%>年<%=@month%>月铁路企业分层次人员工资情况统计表</h3>
+      <% elsif params[:category] == "production" %>
+      <h3 style="text-align: center;"><%=@year%>年<%=@month%>月运输站段生产人员人数和报酬统计表</h3>
+      <% elsif params[:category] == "main" %>
+      <h3 style="text-align: center;"><%=@year%>年<%=@month%>月主要行车工种情况统计表</h3>
+      <% elsif params[:category] == "high" %>
+      <h3 style="text-align: center;"><%=@year%>年<%=@month%>月高铁岗位人员情况统计表</h3>
+      <% end %>
 
-  <% if params[:category] == "divide" %>
-    <h5 style="text-align: center;"><%=@year%>年<%=@month%>月铁路企业分层次人员工资情况统计表</h5>
-  <% elsif params[:category] == "production" %>
-    <h5 style="text-align: center;"><%=@year%>年<%=@month%>月运输站段生产人员人数和报酬统计表</h5>
-  <% elsif params[:category] == "main" %>
-    <h5 style="text-align: center;"><%=@year%>年<%=@month%>月主要行车工种情况统计表</h5>
-  <% elsif params[:category] == "high" %>
-    <h5 style="text-align: center;"><%=@year%>年<%=@month%>月高铁岗位人员情况统计表</h5>
-  <% end %>
-  <%= link_to kuaizhao_index_wages_path(:year => @year,:month => @month ,:category => params[:category],format: "xls") do  %>
-    <button type="button" class="btn button-success pull-right" style="margin-right:20px;">
-      <span>导出记录</span>
-    </button>
-  <% end %>
-  <div class="card">
-    <div style="overflow: auto;" class="col-md-12">
-      <table id="example" class="table table-bordered">
+      <div style="display: inline-block;">
+        <%= form_tag kuaizhao_index_wages_path, method: 'get' do %>
+        <%= render "wages/customize_form_partial"%>
+        <% end %>
+      </div>
+
+
+      <div class="wage-btn-group">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <%= link_to kuaizhao_index_wages_path(:year => @year,:month => @month ,:category => params[:category],format: "xls") do  %>
+            导出记录
+            <% end %>
+          </li>
+        </ul>
+      </div>
+
+
+      <table  class="table table-bordered">
         <thead>
-        	<tr>
+          <tr>
             <th>序号</th>
             <th>项目</th>
             <% @column_array.each do |head| %>
-              <!-- <th><%= link_to(head,edit_head_divide_level_wages_path(:header_name => head),style: "color: black;") %></th> -->
-              <th><%= head %></th>
+<!-- <th><%= link_to(head,edit_head_divide_level_wages_path(:header_name => head),style: "color: black;") %></th> -->
+            <th><%= head %></th>
             <% end %>
-        	</tr>
+          </tr>
         </thead>
         <tbody>
           <% n = 0 %>
           <% line_content_hash = Hash.new %>
           <% @line_name_array.each do |content_name| %>
-            <% n = n+1 %>
-            <tr>
-              <td><%= n %></td>
-              <td>
-                <!-- <%= link_to edit_line_divide_level_wages_path(:name => content_name),style: "color: black;" do %> -->
-                  <%= content_name %>
+              <% n = n+1 %>
+              <tr>
+                <td><%= n %></td>
+                <td>
+    <!-- <%= link_to edit_line_divide_level_wages_path(:name => content_name),style: "color: black;" do %> -->
+                <%= content_name %>
                 <!-- <% end %> -->
-              </td>
-              <% contents = @kuaizhao_contents.where(:name => content_name)%>
-              <% months = contents.pluck(:month) %>
-              <% @column_array.each do |head| %>
+                </td>
+                <% contents = @kuaizhao_contents.where(:name => content_name)%>
+                <% months = contents.pluck(:month) %>
+                <% @column_array.each do |head| %>
+
                 <% form_cel_value = 0 %>
                 <% last_month = months.max%>
                 <% last_month_header = @kuaizhao_headers.find_by(:header_name => head,:month =>last_month) %>
                 <% if last_month_header.formula.keys.include?("final_period")%>
                   <% form_cel_value = contents.find_by(:month => last_month).attributes[last_month_header.content_name]%>
                 <% else %>
-                    <% months.each do |month| %>
-                      <% kuaizhao_header = @kuaizhao_headers.find_by(:header_name => head,:month => month) %>
-                      <% kuaizhao_content = contents.find_by(:month => month)%>
+                  <% months.each do |month| %>
+                    <% kuaizhao_header = @kuaizhao_headers.find_by(:header_name => head,:month => month) %>
+                    <% kuaizhao_content = contents.find_by(:month => month)%>
                       <% if kuaizhao_header.present? && kuaizhao_content.present? %>
                         <% column = kuaizhao_header.content_name %>
                         <% form_cel_value += kuaizhao_content.attributes[column] %>
                       <% end  %>
-                    <% end %>
-                    <% if last_month_header.formula.keys.include?("per_capita") %>
-                      <% if line_content_hash[last_month_header.formula["per_capita"]].to_i == 0 %>
-                        <% form_cel_value = 0%>
-                      <% else %>
-                        <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
-                      <% end %>
-                    <% end %>
-                    <% if last_month_header.formula.keys.include?("average")%>
-                      <% form_cel_value = form_cel_value/(months.count)%>
-                    <% end %>
+                  <% end %>
 
+                  <% if last_month_header.formula.keys.include?("per_capita") %>
+                    <% if line_content_hash[last_month_header.formula["per_capita"]].to_i == 0 %>
+                      <% form_cel_value = 0%>
+                    <% else %>
+                      <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>
+                    <% end %>
+                  <% end %>
+                  <% if last_month_header.formula.keys.include?("average")%>
+                    <% form_cel_value = form_cel_value/(months.count)%>
+                  <% end %>
                 <% end %>
                 <td>
                   <%= form_cel_value %>
                   <% line_content_hash[head] = form_cel_value %>
                 </td>
-              <% end %>
-            </tr>
-            <% line_content_hash.clear %>
+                <% end %>
+              </tr>
+              <% line_content_hash.clear %>
           <% end %>
-
         </tbody>
       </table>
     </div>
   </div>
-
-
-
 </div>

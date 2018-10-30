@@ -4,11 +4,11 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h4 class="modal-title" id="myModalLabel">
-          上传人员变动情况表
+          上传整改返奖明细表
         </h4>
       </div>
       <div class="modal-body">
-        <%= form_tag import_people_changes_path, method: 'post', multipart: true do %>
+        <%= form_tag import_rectification_awards_path, method: 'post', multipart: true do %>
           <div class="col-md-6 col-md-offset-4 datepicker-input">
             <div class="form-group">
                 <div class='input-group date' id='datetimepicker10'>
@@ -29,7 +29,7 @@
           <div class=" remind-circle">
             <h5 style=" margin-top: 40px;">温馨提示</h5>
             <p>1、暂不支持复合表头（即合并单元格）；</p>
-            <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【人员变动情况模板】", download_people_change_table_template_announcements_path(format: "xls") %></p>
+            <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【整改返奖明细模板】", download_rectification_awards_table_template_announcements_path(format: "xls") %></p>
           </div>
         <% end %>
 

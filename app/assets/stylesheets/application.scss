@@ -306,6 +306,8 @@ strong {
     box-shadow: 0 3px 0 rgba(0,0,0,0.2);
 }
 
+
+
 /*****  nav parent *****/
 .nav-bracket > li.nav-parent > a:focus {
     background-color: none;
@@ -347,7 +349,7 @@ strong {
 }
 
 .nav-bracket li .fa,
-.nav-bracket li .glyphicon,{
+.nav-bracket li .glyphicon{
     font-size: 20px;
     vertical-align: middle;
     margin-right: 10px;
@@ -355,6 +357,8 @@ strong {
     text-align: center;
     color: #8292A6;
 }
+
+
 
 .nav-bracket > li > a > .badge {
     margin-top: 2px;
@@ -454,12 +458,40 @@ strong {
 .panel-heading li {
   list-style-type: none;
 }
+
+.panel-heading h4 {
+  text-align: center;
+}
 .panel-body {
    padding: 20px;
 }
+
 .panel-body h4 > span {
   font-size: 14px;
 }
+
+.subpanel-body{
+  padding: 10px 30px;
+  background-color: #FFFF;
+  margin-top: 10px;
+  font-size:16px;
+  line-height: 1.5;
+  clear: both;
+}
+.subpanel-body ul {
+  margin-top: 10px;
+}
+.form-group .select2-container--bootstrap{
+  display: inline-block;
+  margin: 10px;
+}
+
+.form-group {
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+
 .panel-default > .panel-heading {
    border-color: #e7e7e7;
    background-color: #fff;
@@ -965,25 +997,6 @@ div.pagination ul {
 
 
 /*---------------end----------------*/
-
-
-/*-----------点击颜色改变---------*/
-li.active > a {
-    background-color: #2ca8ff;
-    -webkit-box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
-    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(156,39,176,.4);
-}
-
-.sidebar .nav li.active>a, .sidebar .nav li.active > a i {
-    color: #fff;
-}
-
-li.active > a:hover{
-    background-color: #2ca8ff;
-}
-
-/*-------------end----------------*/
-
 
 /*-----------个人详情页面-----------*/
 .detail-3D1aE_0 {
@@ -1823,28 +1836,7 @@ h4 {
   width: 160px;
 }
 
-.nav-btn-group{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
 
-.nav-btn-group li {
-  display: inline;
-  border: 1px solid rgba(0, 211, 150, 1);
-  float: left;
-  border-width: 1px 1px 0 1px;
-  padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 20px 30px;
-  background: rgba(0, 211, 150, 1);
-}
-
-.nav-btn-group .nav-btn{
-  padding: 0 20px;
-  color: #ffff;
-  text-decoration: none;
-}
 
 #select-btn{
   border-bottom: 1px;
@@ -2531,14 +2523,40 @@ button.close {
   color:blue;
 }
 
-.wage_layout{
-  width:94%;
-  margin-left: 3%;
-  margin-top:20px;
-  background-color: white;
-  padding:10px;
+/******各项表中的button的样式******/
+
+.wage-navbar a , .wage-btn-group a {
+  color: #1CAF9A
 }
 
+.wage-btn-group li > a {
+  padding: 5px;
+}
+
+.wage-navbar li.nav-item, .wage-btn-group li.nav-item{
+  border: solid 1px #1CAF9A;
+  border-radius: 4px;
+}
+.wage-navbar a.active {
+  background-color: #FFFFFF;
+  color: #333333;
+}
+
+.wage-btn-group{
+  float: right;
+}
+
+.wage-btn-group::after{
+  clear: both;
+  content: '';
+  display: block;
+  margin-top: 5px;
+}
+
+.fa-plus {
+  color: #1CAF9A;
+  font-size: 18px;
+}
 
 .employee-start-time{
   width:50px;

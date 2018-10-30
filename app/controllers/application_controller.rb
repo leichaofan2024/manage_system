@@ -22,4 +22,35 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def employee_name_colums
+    @employee_columns = Employee.column_names - ["id","created_at","updated_at","avatar","group_id","workshop_id","name"]
+    employee_array = []
+    employee_key = []
+    @employee_columns.each do |column|
+      if column == "workshop"
+        employee_array << [column,[Employee.pluck(column).uniq.compact,Employee.pluck(column).uniq.compact.map{|x| Workshop.find_by(id: x).name}]]
+      elsif column == "group"
+        employee_array << [column,[Employee.pluck(column).uniq.compact,Employee.pluck(column).uniq.compact.map{|x| Group.find_by(id: x).name}]]
+      else
+        employee_array << [column,Employee.pluck(column).uniq.compact]
+      end
+      employee_key << Employee.head_transfer[column]
+    end
+    gon.employee_key = employee_key
+    gon.employee_array = employee_array
+  end
+
+  def wage_name_columns
+    @wages = Wage.head_transfer.keys - ["col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12"]
+    wage_arry_string = []
+    wage_arry = []
+
+    @wages.each do |wage|
+      wage_arry_string <<  Wage.head_transfer[wage]
+      wage_arry << wage
+    end
+    gon.wage_arry = wage_arry_string
+    gon.wages = wage_arry
+  end
+
 end

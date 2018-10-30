@@ -29,47 +29,50 @@
       </li>
     </ul>
   </div> -->
-  <ul class="nav-btn-group">
-        <% if url_for == "/employees/age_statistical_analysis" %>
-          <li id="select-btn">
+  <div class="wage-navbar">
+    <ul class="nav nav-pills">
+          <% if url_for == "/employees/age_statistical_analysis" %>
+            <li class="nav-item" id="select-btn">
+          <% else %>
+            <li class="nav-item">
+          <% end %>
+            <%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员"),class:"nav-link" %>
+            </li>
+            <% if url_for == "/employees/working_years_statistical_analysis" %>
+            <li class="nav-item"id="select-btn">
+          <% else %>
+            <li class="nav-item">
+          <% end %>
+            <%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+
+            <% if url_for == "/employees/rali_years_statistical_analysis" %>
+            <li class="nav-item"id="select-btn">
+          <% else %>
+            <li class="nav-item">
+          <% end %>
+          <%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+
+
+          <% if url_for == "/employees/education_statistical_analysis" %>
+          <li class="nav-item"id="select-btn">
         <% else %>
-          <li>
+          <li class="nav-item">
         <% end %>
-          <%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %>
-          </li>
-          <% if url_for == "/employees/working_years_statistical_analysis" %>
-          <li id="select-btn">
+          <%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+
+          <% if url_for == "/employees/worktype_statistical_analysis" %>
+          <li class="nav-item"id="select-btn">
         <% else %>
-          <li>
+          <li class="nav-item">
         <% end %>
-          <%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
-
-          <% if url_for == "/employees/rali_years_statistical_analysis" %>
-          <li id="select-btn">
+          <%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+          <% if url_for == "/employees/compsite_statistical_analysis" %>
+          <li class="nav-item"id="select-btn">
         <% else %>
-          <li>
+          <li class="nav-item">
         <% end %>
-        <%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+          <%= link_to "综合分析", compsite_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
+    </ul>
+  </div>
 
-
-        <% if url_for == "/employees/education_statistical_analysis" %>
-        <li id="select-btn">
-      <% else %>
-        <li>
-      <% end %>
-        <%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
-
-        <% if url_for == "/employees/worktype_statistical_analysis" %>
-        <li id="select-btn">
-      <% else %>
-        <li>
-      <% end %>
-        <%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
-        <% if url_for == "/employees/compsite_statistical_analysis" %>
-        <li id="select-btn">
-      <% else %>
-        <li>
-      <% end %>
-        <%= link_to "综合分析", compsite_statistical_analysis_employees_path(data_source: "全员"),class:"nav-btn" %></li>
-  </ul>
 <% end %>

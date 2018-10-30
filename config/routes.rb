@@ -103,41 +103,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # 劳资上传功效挂钩明细表：
-  resources :relative_salers do
-    collection do
-      post :import
-      get :show_modal
-      delete :delete_relative_salers
-    end
-  end
 
-# 车间、科室上传工挂工资明细表：
-  resources :workshop_relative_salers do
-    collection do
-      post :import
-      get :show_modal
-      delete :delete_workshop_relative_salers
-    end
-  end
-
-# 企管工效挂钩考核表：
-  resources :company_relative_salers do
-    collection do
-      post :import
-      get :show_modal
-      delete :delete_company_relative_salers
-    end
-  end
-
-# 考核扣款明细表：
-  resources :charge_details do
-    collection do
-      post :import
-      get :show_modal
-      delete :delete_charge_details
-    end
-  end
 
 
   resources :announcements do
@@ -161,6 +127,42 @@ Rails.application.routes.draw do
     end
   end
 
+  # 劳资上传功效挂钩明细表：
+  resources :relative_salers do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_relative_salers
+    end
+  end
+
+  # 车间、科室上传工挂工资明细表：
+  resources :workshop_relative_salers do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_workshop_relative_salers
+    end
+  end
+
+  # 企管工效挂钩考核表：
+  resources :company_relative_salers do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_company_relative_salers
+    end
+  end
+
+  # 考核扣款明细表：
+  resources :charge_details do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_charge_details
+    end
+  end
+  
 # 整改返奖：
   resources :rectification_awards do
     collection do
@@ -170,6 +172,7 @@ Rails.application.routes.draw do
     end
   end
 
+# 其他返奖明细表：
   resources :other_awards do
     collection do
       post :import
@@ -178,24 +181,49 @@ Rails.application.routes.draw do
     end
   end
 
+# 中层返奖明细表：
   resources :middle_awards do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_middle_awards
+    end
   end
 
+# 班组长返奖明细表：
   resources :teamleader_awards do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_teamleader_awards
+    end
   end
 
+# 抽考返奖明细表：
   resources :examination_awards do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_examination_awards
+    end
   end
 
+# 抽考扣款明细表：
   resources :examination_charges do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_examination_charges
+    end
   end
 
+# 红牌中层返奖明细表：
   resources :red_middle_charges do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_red_middle_charges
+    end
   end
 
 # 人员变动情况表：
@@ -313,8 +341,10 @@ Rails.application.routes.draw do
       delete :delete_line
 
       get :new_head
+      get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
@@ -329,8 +359,10 @@ Rails.application.routes.draw do
       delete :delete_line
 
       get :new_head
+      get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
@@ -345,8 +377,10 @@ Rails.application.routes.draw do
       delete :delete_line
 
       get :new_head
+      get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
@@ -361,11 +395,15 @@ Rails.application.routes.draw do
       delete :delete_line
 
       get :new_head
+      get :new_head_wage
       post :create_head
       get :edit_head
+      get :edit_head_wage
       patch :update_head
       delete :delete_head
     end
   end
+
+  resources :analyses
 
 end
