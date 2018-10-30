@@ -16,7 +16,7 @@
       </h4>
     </header>
     <div class="content-body">
-      <%= form_tag relative_salers_path,method: :get do %>
+      <%= form_tag standard_award_totals_path,method: :get do %>
         <select class="" style="display:inline-block;" name="year">
           <% @years.each do |year| %>
             <% if @year == year %>
