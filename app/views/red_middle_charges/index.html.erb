@@ -1,50 +1,87 @@
-<%= render 'relative_salers/saler_navbar'%>
-
-<div class="head-btn col-md-12">
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
   <div class="back-btn">
-    <%= link_to "返回", charge_details_path %>
+    <%= link_to "返回", charge_details_path(:year => @year,:month => @month) %>
   </div>
 
-  <div class="col-md-6">
-    <h4 style="text-align: left; margin-left: -15px;">2018年7月 红牌中层扣款明细表</h4>
-  </div>
-  <%= link_to "上传红牌中层扣款明细表", new_red_middle_charge_path, class: 'btn btn-primary-upload'%>
-</div>
-
-
-<div class="col-md-12">
-
-  <div class="card">
-    <div style="overflow: auto; width: 100%;">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>姓名</th>
-            <th>工资号</th>
-            <th>部门</th>
-            <th>核减金额</th>
-            <th>备注</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @charges.each do |item| %>
-            <tr>
-              <td><%= item.id %></td>
-              <td><%= item.姓名 %></td>
-              <td><%= item.工资号 %></td>
-              <td><%= item.部门 %></td>
-              <td><%= item.核减金额 %></td>
-              <td><%= item.备注 %></td>
-            </tr>
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            红牌中层扣款明细表
+      </h4>
+    </header>
+    <div class="content-body">
+      <%= form_tag red_middle_charges_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
           <% end %>
-       </tbody>
-      </table>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_red_middle_charges_red_middle_charges_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月红牌中层扣款明细表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",red_middle_charges_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传红牌中层扣款明细表",show_modal_red_middle_charges_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+
+
+      <div  class="content-table" style="clear:both;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>部门</th>
+              <th>核减金额</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @red_middle_charges.each do |item| %>
+              <tr>
+                <td><%= item.序号 %></td>
+                <td><%= item.姓名 %></td>
+                <td><%= item.工资号 %></td>
+                <td><%= item.部门 %></td>
+                <td><%= item.核减金额 %></td>
+                <td><%= item.备注 %></td>
+              </tr>
+            <% end %>
+         </tbody>
+        </table>
+      </div>
+      <div class="text-center">
+        <%= paginate @red_middle_charges %>
+      </div>
     </div>
+    <div id="showModal"></div>
   </div>
-
-  <div class="text-center">
-    <%= paginate @charges %>
-  </div>
-
 </div>
+
+<script>
+  $("#month-multiple").select2( { theme: "bootstrap"} );
+</script>
