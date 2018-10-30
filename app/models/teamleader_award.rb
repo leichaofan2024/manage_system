@@ -12,9 +12,9 @@ class TeamleaderAward < ApplicationRecord
       end
     end
     year_month_already_import = TeamleaderAward.pluck(:upload_year,:upload_month).uniq
-    year = upload_time.split("-")[0].to_s
-    month = upload_time.split("-")[1].to_s
-    if year_month_already_import.include?([year,month])
+    year = upload_time.split("-")[0].to_i
+    month = upload_time.split("-")[1].to_i
+    if year_month_already_import.include?([year.to_s,month.to_s])
       message[:year_month] = "本月数据已上传，请勿重复上传！"
     end
 

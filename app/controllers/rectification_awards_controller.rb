@@ -19,8 +19,8 @@ class RectificationAwardsController < ApplicationController
     end
     @years = RectificationAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = RectificationAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @rectifications = RectificationAward.all.page(params[:page]).per(20)
-    @export_rectifications = RectificationAward.all
+    @rectifications = RectificationAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_rectifications = RectificationAward.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_rectifications.to_csv}

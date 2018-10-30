@@ -19,8 +19,8 @@ class OtherAwardTotalsController < ApplicationController
     end
     @years = OtherAwardTotal.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = OtherAwardTotal.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @other_award_totals = OtherAwardTotal.all.page(params[:page]).per(20)
-    @export_other_award_totals = OtherAwardTotal.all
+    @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_other_award_totals.to_csv}

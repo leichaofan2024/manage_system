@@ -19,8 +19,8 @@ class OtherAwardsController < ApplicationController
     end
     @years = OtherAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = OtherAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @other_awards = OtherAward.all.page(params[:page]).per(20)
-    @export_other_awards = OtherAward.all
+    @other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_other_awards.to_csv}

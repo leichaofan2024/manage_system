@@ -18,8 +18,8 @@ class PeopleChangesController < ApplicationController
     end
     @years = PeopleChange.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = PeopleChange.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @changes = PeopleChange.all.page(params[:page]).per(20)
-    @export_changes = PeopleChange.all
+    @changes = PeopleChange.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_changes = PeopleChange.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_changes.to_csv}

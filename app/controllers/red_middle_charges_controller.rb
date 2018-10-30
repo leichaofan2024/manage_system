@@ -18,8 +18,8 @@ class RedMiddleChargesController < ApplicationController
     end
     @years = RedMiddleCharge.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = RedMiddleCharge.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @red_middle_charges = RedMiddleCharge.all.page(params[:page]).per(20)
-    @export_red_middle_charges = RedMiddleCharge.all
+    @red_middle_charges = RedMiddleCharge.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_red_middle_charges = RedMiddleCharge.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_red_middle_charges.to_csv}

@@ -18,8 +18,8 @@ class StarAwardsController < ApplicationController
     end
     @years = StarAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = StarAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @star_awards = StarAward.all.page(params[:page]).per(20)
-    @export_star_awards = StarAward.all
+    @star_awards = StarAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_star_awards = StarAward.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_star_awards.to_csv}

@@ -17,10 +17,11 @@ class StandardAwardTotalsController < ApplicationController
       @year = Time.now.year
       @month = [Time.now.month]
     end
+
     @years = StandardAwardTotal.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = StandardAwardTotal.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @standard_award_totals = StandardAwardTotal.all.page(params[:page]).per(20)
-    @export_standard_award_totals = StandardAwardTotal.all
+    @standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
+    @export_standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month)
     respond_to do |format|
       format.html
       format.csv { send_data @export_standard_award_totals.to_csv}
