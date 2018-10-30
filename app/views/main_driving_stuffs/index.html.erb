@@ -1,4 +1,5 @@
 <div class="contentpanel">
+  <a href="/wages/import_wage" >返回 </a>
   <div class="panel">
     <div class="panel-heading">
       <div class="wage-navbar">
@@ -13,57 +14,55 @@
       </div>
     </div>
     <div class="panel-body">
-      <h3 style="text-align: center;"><%=@year%>年<%=@month%>月主要行车工种情况统计表</h3>
-      <div class="wage-btn-group">
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <%= link_to("生成快照", create_kuaizhao_wages_path(:year => @year,:month => @month,:category => "main"),method: :post,:data => {disable_with: "正在生成快照..."})%>
-          </li>
-        </ul>
-      </div>
-      <%= form_tag main_driving_stuffs_path,method: :get  do %>
-        <%= label_tag :请输入时间段搜索 %>
-        <select class="" name="year">
-          <% Wage.pluck(:year).uniq.each do |year| %>
-            <% if year == @year %>
-          <option value="<%= year %>" selected><%= year %></option>
-            <% else %>
-          <option value="<%= year %>"><%= year %></option>
-            <% end %>
-          <% end %>
-        </select>
-        <select class="" name="month">
-          <% Wage.pluck(:month).uniq.each do |month| %>
-            <% if month == @month %>
-          <option value="<%= month %>" selected><%= month %></option>
-            <% else %>
-          <option value="<%= month %>"><%= month %></option>
-            <% end %>
-          <% end %>
-        </select>
-        <%= submit_tag :筛选 %>
-      <% end %>
 
-      <table class="table table-bordered">
+      <div class="col-md-12 wage_layout">
+  <h5 style="text-align: center;"><%=@year%>年<%=@month%>月（<span style="color:red;">单月</span> ）主要行车工种情况统计表</h5>
+  <div class="col-md-12 col-lg-12 col-ms-12" style = "padding-left: 20px;">
+    <%= form_tag main_driving_stuffs_path,method: :get  do %>
+      <%= label_tag :请输入时间段搜索 %>
+      <select class="" name="year">
+        <% Wage.pluck(:year).uniq.each do |year| %>
+          <% if year == @year %>
+            <option value="<%= year %>" selected><%= year %></option>
+          <% else %>
+            <option value="<%= year %>"><%= year %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <select class="" name="month">
+        <% Wage.pluck(:month).uniq.each do |month| %>
+          <% if month == @month %>
+            <option value="<%= month %>" selected><%= month %></option>
+          <% else %>
+            <option value="<%= month %>"><%= month %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%= submit_tag :筛选 %>
+    <% end %>
+  </div>
+  <div class="card">
+    <div style="overflow: auto;" class="col-md-12">
+      <table id="example" class="table table-bordered">
         <thead>
-          <tr>
+        	<tr>
             <th>序号</th>
             <th>项目</th>
             <% MainDrivingStuffHead.all.each do |head| %>
               <th><%= link_to(head.head_name,edit_head_main_driving_stuffs_path(:id => head.id),style: "color: black;") %></th>
             <% end %>
-            <th><%= link_to new_head_main_driving_stuffs_path do  %><i class="fa fa-plus"></i><% end %></th>
-          </tr>
+            <th><%= link_to("+",new_head_main_driving_stuffs_path,style: "color: blue;") %></th>
+        	</tr>
         </thead>
         <tbody>
-        <% n = 0 %>
-        <% line_content_hash = Hash.new %>
-        <% MainDrivingStuff.all.each do |level| %>
+          <% n = 0 %>
+          <% line_content_hash = Hash.new %>
+          <% MainDrivingStuff.all.each do |level| %>
             <% n = n+1%>
             <% level_formula = level.formula %>
             <% if level_formula.keys.include?("age") %>
               <% level_age_range = []%>
-              <% level_formula["age"].each do |value| %>
+              <%  level_formula["age"].each do |value| %>
                 <% level_age_range<< value.to_i %>
               <% end %>
               <% level_formula["age"] = (level_age_range.min..level_age_range.max)%>
@@ -71,65 +70,72 @@
             <% add_people = Employee.current.where(:sal_number => level_formula["add_people"])%>
             <% reduce_people = level_formula["reduce_people"]%>
             <% if add_people.present? %>
-              <% employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)%>
+              <% employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people).or(add_people)%>
             <% else %>
               <% employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)%>
             <% end %>
             <% wage_people = Wage.where(Wage.head_transfer.index("工资号") => employee_people.pluck("sal_number"),:year => @year,:month => @month) %>
-          <tr>
-            <td><%= n %></td>
-            <td>
-              <%= link_to edit_line_main_driving_stuffs_path(:id => level.id),style: "color: black;" do %>
-              <%= level.name %>
-              <% end %>
-        <!-- <%= link_to("",edit_line_divide_level_wages_path(:id => level.id),class: "fa fa-pencil-square-o",style: "color: blue;") %>&nbsp|&nbsp
-        <%= link_to("",delete_line_divide_level_wages_path(:id => level.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %> -->
-            </td>
-
-          <% MainDrivingStuffHead.all.each do |head| %>
-            <% origin_formula = MainDrivingStuffHead.find_by(:head_name => head.head_name).formula %>
-            <% head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) } %>
-              <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
-                <% if head_formula.keys.include?("age") %>
-                  <% age_range = []%>
-                  <%  head_formula["age"].each do |value| %>
-                    <% age_range<< value.to_i %>
-                  <% end %>
-                  <% head_formula["age"] = (age_range.min..age_range.max)%>
+            <tr>
+              <td><%= n %></td>
+              <td>
+                <%= link_to edit_line_main_driving_stuffs_path(:id => level.id),style: "color: black;" do %>
+                  <%= level.name %>
                 <% end %>
-                <% form_cel_value= employee_people.where(head_formula).count %>
+                <!-- <%= link_to("",edit_line_divide_level_wages_path(:id => level.id),class: "fa fa-pencil-square-o",style: "color: blue;") %>&nbsp|&nbsp
+                <%= link_to("",delete_line_divide_level_wages_path(:id => level.id),method: :delete,confirm: "确认删除？",class: "fa fa-trash",style: "color: blue;") %> -->
+              </td>
 
-              <% else %>
+              <% MainDrivingStuffHead.all.each do |head| %>
+                <% origin_formula = MainDrivingStuffHead.find_by(:head_name => head.head_name).formula %>
+                <% head_formula = head.formula.delete_if{|key,value| ["average","final_period","per_capita"].include?(key) } %>
+                <% if !head_formula.values.include?("1") && !head_formula.values.include?("2")%>
+                  <% if head_formula.keys.include?("age") %>
+                    <% age_range = []%>
+                    <%  head_formula["age"].each do |value| %>
+                      <% age_range<< value.to_i %>
+                    <% end %>
+                    <% head_formula["age"] = (age_range.min..age_range.max)%>
+                  <% end %>
+                  <% form_cel_value= employee_people.where(head_formula).count %>
 
-                <% form_cel_value = 0 %>
-                <% head_formula.keys.each do |key| %>
-                  <% if head_formula[key] == "1" %>
-                    <% form_cel_value += wage_people.sum(key).to_i %>
-                  <% elsif head_formula[key] == "2" %>
-                    <% form_cel_value -= wage_people.sum(key).to_i %>
+                <% else %>
+                  <% form_cel_value = 0 %>
+                  <% head_formula.keys.each do |key| %>
+                    <% if head_formula[key] == "1" %>
+                       <% form_cel_value += wage_people.sum(key).to_i %>
+                    <% elsif head_formula[key] == "2" %>
+                       <% form_cel_value -= wage_people.sum(key).to_i %>
+                    <% end %>
                   <% end %>
                 <% end %>
-              <% end %>
                 <td>
                   <% if origin_formula.keys.include?("per_capita") %>
-                    <% if line_content_hash[origin_formula["per_capita"]] == 0 %>
-                  <% form_cel_value = 0 %>
+                    <% if line_content_hash[origin_formula["per_capita"]].to_i == 0 %>
+                      <% form_cel_value = 0 %>
                     <% else %>
-                  <%  form_cel_value =  form_cel_value/(line_content_hash[origin_formula["per_capita"]]) %>
+                      <%  form_cel_value =  form_cel_value/(line_content_hash[origin_formula["per_capita"]]) %>
                     <% end %>
                   <% end %>
                   <%= form_cel_value %>
                   <% line_content_hash[head.head_name] = form_cel_value %>
-              </td>
+                </td>
               <% end %>
             </tr>
             <% line_content_hash.clear %>
           <% end %>
           <tr>
-            <td><%= link_to new_line_main_driving_stuffs_path do %><i class="fa fa-plus"></i><% end %></td>
+            <td><%= link_to("+",new_line_main_driving_stuffs_path,style: "color: blue;") %></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <div class="col-md-12">
+    <%= link_to("生成快照", create_kuaizhao_wages_path(:year => @year,:month => @month,:category => "main"),method: :post,:data => {disable_with: "正在生成快照..."})%>
+  </div>
+</div>
+
+  </div>
+</div>
 </div>
