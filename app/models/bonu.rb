@@ -52,13 +52,13 @@ class Bonu < ApplicationRecord
             bonu.month = month.to_i
 
             formula = BonusHeader.find_by(:header => "主业奖金").formula
-            row[header_hash["主业奖金"]] = 0
+            row[header_hash["主业奖金"]] = 0.0
             if formula.present?
               formula.keys.each do |key|
                 if formula[key].to_i == 1
-                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_i + row[key].to_i)
+                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_f + row[key].to_f)
                 elsif formula[key].to_i == 2
-                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_i - row[key].to_i)
+                  row[header_hash["主业奖金"]] = (row[header_hash["主业奖金"]].to_f - row[key].to_f)
                 end
               end
             end
@@ -73,20 +73,20 @@ class Bonu < ApplicationRecord
             if wage.present?
 							wage_attributes = wage.attributes
 							bonus_formula = WageHeader.find_by(:header => "奖金二").formula
-							bonus_value = 0
+							bonus_value = 0.0
 							if bonus_formula.present?
 								bonus_formula.keys.each do |key|
 									if bonus_formula[key].to_i == 1
 										if key.split("-")[0] == "wage"
-											bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_i)
+											bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_f)
 										else
-											bonus_value = (bonus_value + bonu.attributes[key].to_i)
+											bonus_value = (bonus_value + bonu.attributes[key].to_f)
 										end
 									elsif bonus_formula[key].to_i == 2
 										if key.split("-")[0] == "wage"
-											bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_i)
+											bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_f)
 										else
-											bonus_value = (bonus_value - bonu.attributes[key].to_i)
+											bonus_value = (bonus_value - bonu.attributes[key].to_f)
 										end
 									end
 								end
@@ -95,13 +95,13 @@ class Bonu < ApplicationRecord
               wage_attributes = wage.attributes
 							["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
                 formula = WageHeader.find_by(:header => name).formula
-								value = 0
+								value = 0.0
 								if formula.present?
 									formula.keys.each do |key|
 	                  if formula[key].to_i == 1
-											value = (value + wage_attributes[key].to_i)
+											value = (value + wage_attributes[key].to_f)
 										elsif formula[key].to_i == 2
-											value = (value - wage_attributes[key].to_i)
+											value = (value - wage_attributes[key].to_f)
 										end
 									end
 									wage.update(wage_header_hash[name] => value)

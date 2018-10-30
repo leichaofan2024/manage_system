@@ -1,8 +1,54 @@
-<%= render 'relative_salers/saler_navbar'%>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="back-btn">
+    <%= link_to "返回", relative_salers_totals_path %>
+  </div>
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            人员变动情况表
+      </h4>
+    </header>
+    <div class="content-body">
+      <%= form_tag rectification_awards_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_rectification_awards_rectification_awards_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月整改返奖明细表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",rectification_awards_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传整改返奖明细表",show_modal_rectification_awards_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
 
 <div class="head-btn col-md-12">
   <div class="back-btn">
-    <%= link_to "返回", relative_salers_totals_path %>
+    <%= link_to "返回", rectification_awards_path %>
   </div>
 
   <div class="col-md-6">

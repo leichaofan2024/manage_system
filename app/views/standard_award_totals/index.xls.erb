@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">标准化合计</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">标准化科室车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">标准化班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">标杆优秀达标车间奖励</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间备份</Data></Cell>
+
+      </Row>
+    <% @export_standard_award_totals.each do |total| %>
+      <Row>
+
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.序号 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.科室车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化合计.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化科室车间.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化班组.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标杆优秀达标车间奖励.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.科室车间备份 %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

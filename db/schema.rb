@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180924095846) do
+ActiveRecord::Schema.define(version: 20181025083821) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -175,79 +175,79 @@ ActiveRecord::Schema.define(version: 20180924095846) do
     t.string "col5"
     t.string "col6"
     t.string "col7"
-    t.integer "col8"
-    t.integer "col9"
-    t.integer "col10"
-    t.integer "col11"
-    t.integer "col12"
-    t.integer "col13"
-    t.integer "col14"
-    t.integer "col15"
-    t.integer "col16"
-    t.integer "col17"
-    t.integer "col18"
-    t.integer "col19"
-    t.integer "col20"
-    t.integer "col21"
-    t.integer "col22"
-    t.integer "col23"
-    t.integer "col24"
-    t.integer "col25"
-    t.integer "col26"
-    t.integer "col27"
-    t.integer "col28"
-    t.integer "col29"
-    t.integer "col30"
-    t.integer "col31"
-    t.integer "col32"
-    t.integer "col33"
-    t.integer "col34"
-    t.integer "col35"
-    t.integer "col36"
-    t.integer "col37"
-    t.integer "col38"
-    t.integer "col39"
-    t.integer "col40"
-    t.integer "col41"
-    t.integer "col42"
-    t.integer "col43"
-    t.integer "col44"
-    t.integer "col45"
-    t.integer "col46"
-    t.integer "col47"
-    t.integer "col48"
-    t.integer "col49"
-    t.integer "col50"
-    t.integer "col51"
-    t.integer "col52"
-    t.integer "col53"
-    t.integer "col54"
-    t.integer "col55"
-    t.integer "col56"
-    t.integer "col57"
-    t.integer "col58"
-    t.integer "col59"
-    t.integer "col60"
-    t.integer "col61"
-    t.integer "col62"
-    t.integer "col63"
-    t.integer "col64"
-    t.integer "col65"
-    t.integer "col66"
-    t.integer "col67"
-    t.integer "col68"
-    t.integer "col69"
-    t.integer "col70"
-    t.integer "col71"
-    t.integer "col72"
-    t.integer "col73"
-    t.integer "col74"
-    t.integer "col75"
-    t.integer "col76"
-    t.integer "col77"
-    t.integer "col78"
-    t.integer "col79"
-    t.integer "col80"
+    t.float "col8", limit: 24
+    t.float "col9", limit: 24
+    t.float "col10", limit: 24
+    t.float "col11", limit: 24
+    t.float "col12", limit: 24
+    t.float "col13", limit: 24
+    t.float "col14", limit: 24
+    t.float "col15", limit: 24
+    t.float "col16", limit: 24
+    t.float "col17", limit: 24
+    t.float "col18", limit: 24
+    t.float "col19", limit: 24
+    t.float "col20", limit: 24
+    t.float "col21", limit: 24
+    t.float "col22", limit: 24
+    t.float "col23", limit: 24
+    t.float "col24", limit: 24
+    t.float "col25", limit: 24
+    t.float "col26", limit: 24
+    t.float "col27", limit: 24
+    t.float "col28", limit: 24
+    t.float "col29", limit: 24
+    t.float "col30", limit: 24
+    t.float "col31", limit: 24
+    t.float "col32", limit: 24
+    t.float "col33", limit: 24
+    t.float "col34", limit: 24
+    t.float "col35", limit: 24
+    t.float "col36", limit: 24
+    t.float "col37", limit: 24
+    t.float "col38", limit: 24
+    t.float "col39", limit: 24
+    t.float "col40", limit: 24
+    t.float "col41", limit: 24
+    t.float "col42", limit: 24
+    t.float "col43", limit: 24
+    t.float "col44", limit: 24
+    t.float "col45", limit: 24
+    t.float "col46", limit: 24
+    t.float "col47", limit: 24
+    t.float "col48", limit: 24
+    t.float "col49", limit: 24
+    t.float "col50", limit: 24
+    t.float "col51", limit: 24
+    t.float "col52", limit: 24
+    t.float "col53", limit: 24
+    t.float "col54", limit: 24
+    t.float "col55", limit: 24
+    t.float "col56", limit: 24
+    t.float "col57", limit: 24
+    t.float "col58", limit: 24
+    t.float "col59", limit: 24
+    t.float "col60", limit: 24
+    t.float "col61", limit: 24
+    t.float "col62", limit: 24
+    t.float "col63", limit: 24
+    t.float "col64", limit: 24
+    t.float "col65", limit: 24
+    t.float "col66", limit: 24
+    t.float "col67", limit: 24
+    t.float "col68", limit: 24
+    t.float "col69", limit: 24
+    t.float "col70", limit: 24
+    t.float "col71", limit: 24
+    t.float "col72", limit: 24
+    t.float "col73", limit: 24
+    t.float "col74", limit: 24
+    t.float "col75", limit: 24
+    t.float "col76", limit: 24
+    t.float "col77", limit: 24
+    t.float "col78", limit: 24
+    t.float "col79", limit: 24
+    t.float "col80", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -289,6 +289,25 @@ ActiveRecord::Schema.define(version: 20180924095846) do
     t.datetime "updated_at", null: false
     t.string "upload_year"
     t.string "upload_month"
+  end
+
+  create_table "company_relative_salers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "被考核科室"
+    t.string "生产经营绩效考核得分"
+    t.string "生产经营绩效考核扣分"
+    t.string "生产经营绩效考核_综合指标扣分"
+    t.string "生产经营绩效考核_设备质量扣分"
+    t.string "安全质量考核得分"
+    t.string "安全质量考核扣分"
+    t.string "安全质量考核_牌卡检查问题考核扣分"
+    t.string "工作质量考核_得分"
+    t.string "工作质量考核_平均扣分"
+    t.string "备注"
+    t.string "upload_year"
+    t.string "upload_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "divide_level_wage_heads", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -1432,93 +1451,167 @@ ActiveRecord::Schema.define(version: 20180924095846) do
     t.string "col10"
     t.string "col11"
     t.string "col12"
-    t.integer "col13"
-    t.integer "col14"
-    t.integer "col15"
-    t.integer "col16"
-    t.integer "col17"
-    t.integer "col18"
-    t.integer "col19"
-    t.integer "col20"
-    t.integer "col21"
-    t.integer "col22"
-    t.integer "col23"
-    t.integer "col24"
-    t.integer "col25"
-    t.integer "col26"
-    t.integer "col27"
-    t.integer "col28"
-    t.integer "col29"
-    t.integer "col30"
-    t.integer "col31"
-    t.integer "col32"
-    t.integer "col33"
-    t.integer "col34"
-    t.integer "col35"
-    t.integer "col36"
-    t.integer "col37"
-    t.integer "col38"
-    t.integer "col39"
-    t.integer "col40"
-    t.integer "col41"
-    t.integer "col42"
-    t.integer "col43"
-    t.integer "col44"
-    t.integer "col45"
-    t.integer "col46"
-    t.integer "col47"
-    t.integer "col48"
-    t.integer "col49"
-    t.integer "col50"
-    t.integer "col51"
-    t.integer "col52"
-    t.integer "col53"
-    t.integer "col54"
-    t.integer "col55"
-    t.integer "col56"
-    t.integer "col57"
-    t.integer "col58"
-    t.integer "col59"
-    t.integer "col60"
-    t.integer "col61"
-    t.integer "col62"
-    t.integer "col63"
-    t.integer "col64"
-    t.integer "col65"
-    t.integer "col66"
-    t.integer "col67"
-    t.integer "col68"
-    t.integer "col69"
-    t.integer "col70"
-    t.integer "col71"
-    t.integer "col72"
-    t.integer "col73"
-    t.integer "col74"
-    t.integer "col75"
-    t.integer "col76"
-    t.integer "col77"
-    t.integer "col78"
-    t.integer "col79"
-    t.integer "col80"
-    t.integer "col81"
-    t.integer "col82"
-    t.integer "col83"
-    t.integer "col84"
-    t.integer "col85"
-    t.integer "col86"
-    t.integer "col87"
-    t.integer "col88"
-    t.integer "col89"
-    t.integer "col90"
-    t.integer "col91"
-    t.integer "col92"
-    t.integer "col93"
-    t.integer "col94"
-    t.integer "col95"
-    t.integer "col96"
-    t.integer "col97"
-    t.integer "col98"
-    t.integer "col99"
+    t.float "col13", limit: 24
+    t.float "col14", limit: 24
+    t.float "col15", limit: 24
+    t.float "col16", limit: 24
+    t.float "col17", limit: 24
+    t.float "col18", limit: 24
+    t.float "col19", limit: 24
+    t.float "col20", limit: 24
+    t.float "col21", limit: 24
+    t.float "col22", limit: 24
+    t.float "col23", limit: 24
+    t.float "col24", limit: 24
+    t.float "col25", limit: 24
+    t.float "col26", limit: 24
+    t.float "col27", limit: 24
+    t.float "col28", limit: 24
+    t.float "col29", limit: 24
+    t.float "col30", limit: 24
+    t.float "col31", limit: 24
+    t.float "col32", limit: 24
+    t.float "col33", limit: 24
+    t.float "col34", limit: 24
+    t.float "col35", limit: 24
+    t.float "col36", limit: 24
+    t.float "col37", limit: 24
+    t.float "col38", limit: 24
+    t.float "col39", limit: 24
+    t.float "col40", limit: 24
+    t.float "col41", limit: 24
+    t.float "col42", limit: 24
+    t.float "col43", limit: 24
+    t.float "col44", limit: 24
+    t.float "col45", limit: 24
+    t.float "col46", limit: 24
+    t.float "col47", limit: 24
+    t.float "col48", limit: 24
+    t.float "col49", limit: 24
+    t.float "col50", limit: 24
+    t.float "col51", limit: 24
+    t.float "col52", limit: 24
+    t.float "col53", limit: 24
+    t.float "col54", limit: 24
+    t.float "col55", limit: 24
+    t.float "col56", limit: 24
+    t.float "col57", limit: 24
+    t.float "col58", limit: 24
+    t.float "col59", limit: 24
+    t.float "col60", limit: 24
+    t.float "col61", limit: 24
+    t.float "col62", limit: 24
+    t.float "col63", limit: 24
+    t.float "col64", limit: 24
+    t.float "col65", limit: 24
+    t.float "col66", limit: 24
+    t.float "col67", limit: 24
+    t.float "col68", limit: 24
+    t.float "col69", limit: 24
+    t.float "col70", limit: 24
+    t.float "col71", limit: 24
+    t.float "col72", limit: 24
+    t.float "col73", limit: 24
+    t.float "col74", limit: 24
+    t.float "col75", limit: 24
+    t.float "col76", limit: 24
+    t.float "col77", limit: 24
+    t.float "col78", limit: 24
+    t.float "col79", limit: 24
+    t.float "col80", limit: 24
+    t.float "col81", limit: 24
+    t.float "col82", limit: 24
+    t.float "col83", limit: 24
+    t.float "col84", limit: 24
+    t.float "col85", limit: 24
+    t.float "col86", limit: 24
+    t.float "col87", limit: 24
+    t.float "col88", limit: 24
+    t.float "col89", limit: 24
+    t.float "col90", limit: 24
+    t.float "col91", limit: 24
+    t.float "col92", limit: 24
+    t.float "col93", limit: 24
+    t.float "col94", limit: 24
+    t.float "col95", limit: 24
+    t.float "col96", limit: 24
+    t.float "col97", limit: 24
+    t.float "col98", limit: 24
+    t.float "col99", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "col100", limit: 24
+    t.float "col101", limit: 24
+    t.float "col102", limit: 24
+    t.float "col103", limit: 24
+    t.float "col104", limit: 24
+    t.float "col105", limit: 24
+    t.float "col106", limit: 24
+    t.float "col107", limit: 24
+    t.float "col108", limit: 24
+    t.float "col109", limit: 24
+    t.float "col110", limit: 24
+    t.float "col111", limit: 24
+    t.float "col112", limit: 24
+    t.float "col113", limit: 24
+    t.float "col114", limit: 24
+    t.float "col115", limit: 24
+    t.float "col116", limit: 24
+    t.float "col117", limit: 24
+    t.float "col118", limit: 24
+    t.float "col119", limit: 24
+    t.float "col120", limit: 24
+    t.float "col121", limit: 24
+    t.float "col122", limit: 24
+    t.float "col123", limit: 24
+    t.float "col124", limit: 24
+    t.float "col125", limit: 24
+    t.float "col126", limit: 24
+    t.float "col127", limit: 24
+    t.float "col128", limit: 24
+    t.float "col129", limit: 24
+    t.float "col130", limit: 24
+    t.float "col131", limit: 24
+    t.float "col132", limit: 24
+    t.float "col133", limit: 24
+    t.float "col134", limit: 24
+    t.float "col135", limit: 24
+    t.float "col136", limit: 24
+    t.float "col137", limit: 24
+    t.float "col138", limit: 24
+    t.float "col139", limit: 24
+    t.float "col140", limit: 24
+    t.float "col141", limit: 24
+    t.float "col142", limit: 24
+    t.float "col143", limit: 24
+    t.float "col144", limit: 24
+    t.float "col145", limit: 24
+    t.float "col146", limit: 24
+    t.float "col147", limit: 24
+    t.float "col148", limit: 24
+    t.float "col149", limit: 24
+    t.float "col150", limit: 24
+  end
+
+  create_table "workshop_relative_salers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "科室车间"
+    t.string "姓名"
+    t.string "工资号"
+    t.integer "挂钩工资"
+    t.integer "安全质量"
+    t.integer "工作质量"
+    t.integer "行车"
+    t.integer "整改返奖"
+    t.integer "一体化"
+    t.integer "兼职兼岗"
+    t.integer "考核扣款"
+    t.integer "其他"
+    t.integer "应发"
+    t.integer "小计"
+    t.string "备注"
+    t.string "upload_year"
+    t.string "upload_month"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

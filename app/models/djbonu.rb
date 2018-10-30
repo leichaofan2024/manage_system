@@ -50,9 +50,9 @@ class Djbonu < ApplicationRecord
             if formula.present?
               formula.keys.each do |key|
                 if formula[key].to_i == 1
-                  row[header_hash["多经奖金"]] = (row[header_hash["多经奖金"]].to_i + row[key].to_i)
+                  row[header_hash["多经奖金"]] = (row[header_hash["多经奖金"]].to_f + row[key].to_f)
                 elsif formula[key].to_i == 2
-                  row[header_hash["多经奖金"]] = (row[header_hash["多经奖金"]].to_i - row[key].to_i)
+                  row[header_hash["多经奖金"]] = (row[header_hash["多经奖金"]].to_f - row[key].to_f)
                 end
               end
             end

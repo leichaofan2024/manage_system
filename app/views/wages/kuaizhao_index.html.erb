@@ -71,7 +71,7 @@
                       <% end  %>
                     <% end %>
                     <% if last_month_header.formula.keys.include?("per_capita") %>
-                      <% if line_content_hash[last_month_header.formula["per_capita"]] == 0 %>
+                      <% if line_content_hash[last_month_header.formula["per_capita"]].to_i == 0 %>
                         <% form_cel_value = 0%>
                       <% else %>
                         <% form_cel_value =  form_cel_value/(line_content_hash[last_month_header.formula["per_capita"]]) %>

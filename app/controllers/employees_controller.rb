@@ -52,7 +52,8 @@ class EmployeesController < ApplicationController
       @export_employees = Employee.where(id: params[:employees])
     end
     workshop = Workshop.current.pluck("name")
-    group = []
+    group = Array.new
+    group << [["全部",""]]
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
@@ -190,7 +191,7 @@ class EmployeesController < ApplicationController
     @workshop = params[:workshop]
     @group = params[:group]
     workshop = Workshop.current.pluck("name")
-    group = []
+    group = [[["全部",""]]]
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end

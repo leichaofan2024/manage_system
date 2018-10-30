@@ -1,0 +1,99 @@
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            工效挂钩考核表
+      </h4>
+    </header>
+    <div class="content-body">
+      <%= form_tag company_relative_salers_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_company_relative_salers_company_relative_salers_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月工效挂钩考核表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",company_relative_salers_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传工效挂钩考核表",show_modal_company_relative_salers_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+
+      <div  class="content-table" style="clear:both;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>被考核科室</th>
+              <th>生产经营绩效考核得分</th>
+              <th>生产经营绩效考核扣分</th>
+              <th>生产经营绩效考核_综合指标扣分</th>
+              <th>生产经营绩效考核_设备质量扣分</th>
+              <th>安全质量考核得分</th>
+              <th>安全质量考核扣分</th>
+              <th>安全质量考核_牌卡检查问题考核扣分</th>
+              <th>工作质量考核_得分</th>
+              <th>工作质量考核_平均扣分</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @company_relative_salers.each do |item| %>
+              <tr>
+                <td><%=  item.序号 %></td>
+                <td><%=  item.被考核科室 %></td>
+                <td><%=  item.生产经营绩效考核得分.to_f.round(2) %></td>
+                <td><%=  item.生产经营绩效考核扣分.to_f.round(2) %></td>
+                <td><%=  item.生产经营绩效考核_综合指标扣分.to_f.round(2) %></td>
+                <td><%=  item.生产经营绩效考核_设备质量扣分.to_f.round(2) %></td>
+                <td><%=  item.安全质量考核得分.to_f.round(2) %></td>
+                <td><%=  item.安全质量考核扣分.to_f.round(2) %></td>
+                <td><%=  item.安全质量考核_牌卡检查问题考核扣分.to_f.round(2) %></td>
+                <td><%=  item.工作质量考核_得分.to_f.round(2) %></td>
+                <td><%=  item.工作质量考核_平均扣分.to_f.round(2) %></td>
+                <td><%=  item.备注 %></td>
+              </tr>
+            <% end %>
+         </tbody>
+        </table>
+      </div>
+      <div class="text-center">
+        <%= paginate @company_relative_salers %>
+      </div>
+    </div>
+    <div id="showModal"></div>
+  </div>
+
+</div>
+
+
+
+
+<script>
+  $("#month-multiple").select2( { theme: "bootstrap"} );
+</script>

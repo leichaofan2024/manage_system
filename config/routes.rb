@@ -103,14 +103,40 @@ Rails.application.routes.draw do
     end
   end
 
-  # 奖惩模块
+  # 劳资上传功效挂钩明细表：
   resources :relative_salers do
-    collection { post :import }
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_relative_salers
+    end
   end
 
+# 车间、科室上传工挂工资明细表：
+  resources :workshop_relative_salers do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_workshop_relative_salers
+    end
+  end
+
+# 企管工效挂钩考核表：
+  resources :company_relative_salers do
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_company_relative_salers
+    end
+  end
+
+# 考核扣款明细表：
   resources :charge_details do
-    collection { post :import }
-    collection { post :upload }
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_charge_details
+    end
   end
 
 
@@ -135,12 +161,21 @@ Rails.application.routes.draw do
     end
   end
 
+# 整改返奖：
   resources :rectification_awards do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_rectification_awards
+    end
   end
 
   resources :other_awards do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_other_awards
+    end
   end
 
   resources :middle_awards do
@@ -163,28 +198,50 @@ Rails.application.routes.draw do
     collection { post :import}
   end
 
+# 人员变动情况表：
   resources :people_changes do
-    collection { post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_people_changes
+    end
   end
 
+# 劳资上传功效挂钩汇总表：
   resources :relative_salers_totals do
-    collection {post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_relative_salers_totals
+    end
   end
-
+# 单项奖标准化汇总表：
   resources :standard_award_totals do
-    collection {post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_standard_award_totals
+    end
   end
 
   resources :standard_groups do
     collection {post :import}
   end
-
+# 星级岗汇总表：
   resources :star_awards do
-    collection {post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_star_awards
+    end
   end
-
+# 其他单项奖总明细表：
   resources :other_award_totals do
-    collection {post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_other_award_totals
+    end
   end
 
   resources :users

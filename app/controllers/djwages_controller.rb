@@ -54,72 +54,20 @@ class DjwagesController < ApplicationController
 		@header_name = params[:header_name]
     @params_hash = params.delete_if{|key,value| ["year","month","header_name","utf8","authenticity_token","commit","controller","action","name","id","_method"].include?(key) || (value =="")}
 		@djwages = Djwage.where(:year => @year,:month => @month)
-		@bonus = Bonu.where(:year => @year,:month => @month)
 		djwage_headers = DjwageHeader.pluck("header")
     header_ids = (1..DjwageHeader.count).map{|m| "col"+ m.to_s}
     header_hash = [djwage_headers,header_ids].transpose.to_h
-		bonus_headers = BonusHeader.pluck("header")
-		bonu_header_ids = (1..(BonusHeader.count)).map{|h| "col"+ h.to_s}
-		bonu_header_hash = [bonus_headers,bonu_header_ids].transpose.to_h
-		if @params_hash.present? && (@header_name == "奖金二")
-			DjwageHeader.find_by(:header => @header_name).update(:formula => @params_hash)
 
-			if @bonus.present?
-	      @djwages.each do |djwage|
-					djwage_attributes = djwage.attributes
-					@bonu = Bonu.find_by(:year => @year,:month => @month,bonu_header_hash["工资号"] => djwage_attributes[header_hash["工资号"]])
-					if @bonu.present?
-						bonus_attributes = @bonu.attributes
-	          bonus_value = 0
-						@params_hash.keys.each do |key|
-							if @params_hash[key].to_i == 1
-								if key.split("-")[0] == "djwage"
-									bonus_value = (bonus_value + djwage_attributes[(key.split("-")[1])].to_i)
-								else
-									bonus_value = (bonus_value + bonus_attributes[key].to_i)
-								end
-							elsif @params_hash[key].to_i == 2
-								if key.split("-")[0] == "djwage"
-									bonus_value = (bonus_value - djwage_attributes[(key.split("-")[1])].to_i)
-								else
-									bonus_value = (bonus_value - bonus_attributes[key].to_i)
-								end
-							end
-						end
-						djwage.update(header_hash[@header_name] => bonus_value)
-          end
-
-					["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"].each do |name|
-						formula = DjwageHeader.find_by(:header => name).formula
-						value = 0
-						if formula.present?
-							formula.keys.each do |key|
-								if formula[key].to_i == 1
-									value = (value + djwage_attributes[key].to_i)
-								elsif formula[key].to_i == 2
-									value = (value - djwage_attributes[key].to_i)
-								end
-							end
-							djwage.update(header_hash[name] => value)
-						end
-					end
-				end
-				flash[:notice] = "奖金二、工资总额、基本工资、绩效工资、津贴补贴、岗位工资、技能工资、加班工资等八项数据更新成功！"
-				redirect_to import_djwage_djwages_path(:year => @year ,:month => @month)
-			else
-				flash[:warngin] = "公式更新成功！但由于#{@year}年#{@month}月奖金表尚未上传，‘奖金二’栏位暂无数据，数据在奖金表上传后自动更新！"
-				redirect_to import_djwage_djwages_path(:year => @year ,:month => @month)
-			end
-		elsif @params_hash.present?
+		if @params_hash.present?
       DjwageHeader.find_by(:header => @header_name).update(:formula => @params_hash)
 			@djwages.each do |djwage|
 				djwage_attributes = djwage.attributes
-				djwage_value = 0
+				djwage_value = 0.0
 				@params_hash.keys.each do |key|
 					if @params_hash[key].to_i == 1
-						djwage_value = (djwage_value + djwage_attributes[key].to_i)
+						djwage_value = (djwage_value + djwage_attributes[key].to_f)
 					elsif @params_hash[key].to_i == 2
-						djwage_value = (djwage_value - djwage_attributes[key].to_i)
+						djwage_value = (djwage_value - djwage_attributes[key].to_f)
 					end
 				end
 				djwage.update(header_hash[@header_name] => djwage_value)

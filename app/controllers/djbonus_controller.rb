@@ -94,9 +94,9 @@ class DjbonusController < ApplicationController
 				djbonus_value = 0
 				@params_hash.keys.each do |key|
 					if @params_hash[key].to_i == 1
-						djbonus_value = (djbonus_value + djbonus_attributes[key].to_i)
+						djbonus_value = (djbonus_value + djbonus_attributes[key].to_f)
 					elsif @params_hash[key].to_i == 2
-						djbonus_value = (djbonus_value - djbonus_attributes[key].to_i)
+						djbonus_value = (djbonus_value - djbonus_attributes[key].to_f)
 					end
 				end
 				djbonus.update(header_hash[@header_name] => djbonus_value)

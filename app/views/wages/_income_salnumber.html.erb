@@ -78,7 +78,7 @@
       <% end %>
       <% last_income = last_wage + last_bonu %>
     <% end %>
-    <%= last_income %>
+    <%= last_income.round(2) %>
   </td>
   <td>
     <% wage = 0 %>
@@ -101,7 +101,7 @@
       <% end %>
       <% now_income = wage + bonu %>
     <% end %>
-    <%= now_income %>
+    <%= now_income.round(2) %>
   </td>
   <td>
     <% if last_income == 0 %>
@@ -139,7 +139,7 @@
       <% end %>
       <% actually_income = (wage + bonu - tax) %>
     <% end %>
-    <%= actually_income %>
+    <%= actually_income.round(2) %>
   </td>
   <td>
     <% if djbonus_member.present? %>

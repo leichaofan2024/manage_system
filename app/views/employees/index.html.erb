@@ -145,6 +145,7 @@
 
                           <li style="display: inline-block;">车间：
                               <select name="workshop"  id="selid" onchange="selCity(this)">
+                                <option value="" selected >北京供电段</option>
                                 <% Workshop.current.each do |workshop| %>
                                   <% if workshop.id == params[:workshop].to_i %>
                                     <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
@@ -156,13 +157,7 @@
                           </li>
                           <li style="display: inline-block;">班组：
                               <select name="group"  id="subselid">
-                                <% Group.current.each do |group| %>
-                                  <% if group.id == params[:group].to_i %>
-                                    <option value="<%= group.id%>" selected><%= group.name%></option>
-                                  <% else %>
-                                    <option value="<%= group.id%>"><%= group.name%></option>
-                                  <% end %>
-                                <% end %>
+                                <option value="">全部</option>
                               </select>
                           </li>
                           <br>
@@ -262,7 +257,10 @@
         var citys = arr[index];
 
         subselNode.options.length = 0;
-
+        var firstoptionNode = document.createElement("option");
+        firstoptionNode.value = arr[0][0][1];
+        firstoptionNode.innerText = arr[0][0][0];
+        subselNode.appendChild(firstoptionNode);
         for(var i=0; i<citys.length; i++)
         {
             var optionNode = document.createElement("option");

@@ -10,13 +10,14 @@
   <% end %>
   <h3 style="text-align:center;"><%= params[:content_name]%></h3>
   <%= link_to employees_wage_show_wages_path(:category => params[:category],:content_id => params[:content_id],:content_name => params[:content_name],format: "xls") do  %>
-    <button type="button" class="btn button-success">
+    <button type="button" class="btn button-success pull-right">
       <span>导出记录</span>
     </button>
   <% end %>
 
       <div>
         <div>
+          <p style="color:red;"><b style="font-size:15px;">【温馨提示】</b>1、岗位工资来自<%= Time.now.year%>年<%= Time.now.month%>月工资表数据。2、“无”表示本月尚未上传工资表</p>
           <table id="example" class="table  overflow-y table-bordered table-striped">
             <thead>
               <tr>
@@ -38,11 +39,13 @@
                 <th>工龄</th>
                 <th>入路时间</th>
                 <th>路龄</th>
+                <th>岗位工资</th>
                 <th>联系电话</th>
               </tr>
             </thead>
              <tbody data-behavior='sortable'>
               <% @employees.each do |employee| %>
+              <% wage_employee = Wage.find_by(:year => Time.now.year,:month => Time.now.month,@wage_head_hash["工资号"] => employee.sal_number) %>
               <% if @formula.keys.include?("add_people") && @formula.keys.include?("reduce_people")%>
                  <% if @formula["reduce_people"].include?(employee.sal_number) %>
                    <tr class="row-click-able" style = "background-color: red;" data-url="/wages/employees_wage_show?category=<%= params[:category] %>&content_id=<%= params[:content_id]%>&content_name=<%= params[:content_name] %>&sal_number=<%=employee.sal_number%>&type=add_people">
@@ -93,6 +96,14 @@
                   <td><%= employee.working_years %></td>
                   <td><%= employee.railway_time.to_i %></td>
                   <td><%= employee.rali_years %></td>
+                  <td>
+                    <% if wage_employee.present? %>
+                      <% wage_employee_attributes = wage_employee.attributes %>
+                      <%= wage_employee_attributes[@wage_head_hash["岗位工资"]].to_f %>
+                    <% else %>
+                      无
+                    <% end %>
+                  </td>
                   <td><%= employee.phone_number %></td>
                 </tr>
               <% end %>

@@ -1,0 +1,101 @@
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            工效挂钩明细表
+      </h4>
+    </header>
+
+    <div class="content-body">
+      <%= form_tag workshop_relative_salers_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_workshop_relative_salers_workshop_relative_salers_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月工效挂钩明细表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",workshop_relative_salers_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传工挂明细表",show_modal_workshop_relative_salers_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>科室车间</th>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>挂钩工资</th>
+              <th>安全质量</th>
+              <th>工作质量</th>
+              <th>行车</th>
+              <th>整改返奖</th>
+              <th>一体化</th>
+              <th>兼职兼岗</th>
+              <th>考核扣款</th>
+              <th>其他</th>
+              <th>应发</th>
+              <th>小计</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @workshop_relative_salers.each do |f| %>
+              <tr>
+                <td><%= f.序号 %></td>
+                <td><%= f.科室车间 %></td>
+                <td><%= f.姓名 %></td>
+                <td><%= f.工资号 %></td>
+                <td><%= f.挂钩工资 %></td>
+                <td><%= f.安全质量 %></td>
+                <td><%= f.工作质量 %></td>
+                <td><%= f.行车 %></td>
+                <td><%= f.整改返奖 %></td>
+                <td><%= f.一体化 %></td>
+                <td><%= f.兼职兼岗 %></td>
+                <td><%= f.考核扣款 %></td>
+                <td><%= f.其他 %></td>
+                <td><%= f.应发 %></td>
+                <td><%= f.小计 %></td>
+                <td><%= f.备注 %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center">
+        <%= paginate @workshop_relative_salers %>
+      </div>
+    </div>
+    <div id="showModal"></div>
+  </div>
+</div>
+<script>
+  $("#month-multiple").select2( { theme: "bootstrap"} );
+</script>

@@ -52,13 +52,13 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
             wage.month = month.to_i
             ["工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资","主业工资"].each do |name|
               formula = WageHeader.find_by(:header => name).formula
-              row[header_hash[name]] = 0
+              row[header_hash[name]] = 0.0
               if formula.present?
                 formula.keys.each do |key|
                   if formula[key].to_i == 1
-                    row[header_hash[name]] = (row[header_hash[name]].to_i + row[key].to_i)
+                    row[header_hash[name]] = (row[header_hash[name]].to_f + row[key].to_f)
                   elsif formula[key].to_i == 2
-                    row[header_hash[name]] = (row[header_hash[name]].to_i - row[key].to_i)
+                    row[header_hash[name]] = (row[header_hash[name]].to_f - row[key].to_f)
                   end
                 end
               end

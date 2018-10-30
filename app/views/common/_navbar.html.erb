@@ -378,14 +378,44 @@
                    <% end %>
 
                    <% if (current_user.has_role? :awardadmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
-                     <% if ["divide_level_wages"].include?(url_for.split("/").second) %>
-                      <li style="background-color:white;">
-                     <% else %>
-                      <li>
-                     <% end %>
-                       <a  href="/relative_salers">
-                         <i class="fa fa-th-list"></i> <span>奖惩管理</span>
-                       </a>
+
+                     <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>奖惩管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
+                        <% if ["workshop_relative_salers","people_changes","charge_details","relative_salers_totals","standard_award_totals","star_awards","other_award_totals","relative_salers","examination_charges","red_middle_charges","company_relative_salers"].include?(url_for.split("/").last) %>
+                          <ul class="children" style="display:block;">
+                        <% else %>
+                          <ul class="children">
+                        <% end %>
+                        <% if url_for.split("/").last == "workshop_relative_salers" %>
+                          <li style="background-color:white;"><a href="/workshop_relative_salers"> 工效挂钩明细表(科室上传) </a></li>
+                        <% else %>
+                          <li><a href="/workshop_relative_salers"> 工效挂钩明细表(科室上传) </a></li>
+                        <% end %>
+                        <% if (url_for.split("/").last == "relative_salers_totals") || (url_for == "/relative_salers") %>
+                          <li style="background-color:white;"><a href="/relative_salers_totals"> 工效挂钩表(劳资上传) </a></li>
+                        <% else %>
+                          <li><a href="/relative_salers_totals"> 工效挂钩表(劳资上传)</a></li>
+                        <% end %>
+                        <% if  ["charge_details","examination_charges","red_middle_charges"].include?(url_for.split("/").last)  %>
+                          <li  style="background-color:white;"><a href="/charge_details"> 考核扣款明细表</a></li>
+                        <% else %>
+                          <li><a href="/charge_details"> 考核扣款明细表</a></li>
+                        <% end %>
+                        <% if ["standard_award_totals","star_awards","other_award_totals"].include?(url_for.split("/").last) %>
+                          <li style="background-color:white;"><a href="/standard_award_totals"> 单项奖汇总表 </a></li>
+                        <% else %>
+                          <li><a href="/standard_award_totals"> 单项奖汇总表 </a></li>
+                        <% end %>
+                        <% if url_for.split("/").last == "people_changes" %>
+                          <li style="background-color:white;"><a href="/people_changes"> 人员变动表 </a></li>
+                        <% else %>
+                          <li><a href="/people_changes"> 人员变动表 </a></li>
+                        <% end %>
+                        <% if url_for.split("/").last == "company_relative_salers"%>
+                          <li style="background-color:white;"><a href="/company_relative_salers"> 工效挂钩考核表(企管上传) </a></li>
+                        <% else %>
+                          <li><a href="/company_relative_salers"> 工效挂钩考核表(企管上传) </a></li>
+                        <% end %>
+                      </ul>
                      </li>
                    <% end %>
 

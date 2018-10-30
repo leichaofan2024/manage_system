@@ -4,38 +4,91 @@
   xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Title">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:Bold="1" ss:FontName="sans-serif" ss:Size="36"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="End">
+      <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+      <Font ss:FontName="sans-serif" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titlelittle">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titleright">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Borders>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+    </Style>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
-        <Cell><Data ss:Type="String">工资号</Data></Cell>
-        <Cell><Data ss:Type="String">工号</Data></Cell>
-        <Cell><Data ss:Type="String">档案号</Data></Cell>
-        <Cell><Data ss:Type="String">车间</Data></Cell>
-        <Cell><Data ss:Type="String">班组</Data></Cell>
-        <Cell><Data ss:Type="String">工种</Data></Cell>
-        <Cell><Data ss:Type="String">姓名</Data></Cell>
-        <Cell><Data ss:Type="String">职务</Data></Cell>
-        <Cell><Data ss:Type="String">电话号</Data></Cell>
-        <Cell><Data ss:Type="String">性别</Data></Cell>
-        <Cell><Data ss:Type="String">年龄</Data></Cell>
-        <Cell><Data ss:Type="String">文化程度</Data></Cell>
-        <Cell><Data ss:Type="String">民族</Data></Cell>
-        <Cell><Data ss:Type="String">籍贯</Data></Cell>
-        <Cell><Data ss:Type="String">工作时间</Data></Cell>
-        <Cell><Data ss:Type="String">工龄</Data></Cell>
-        <Cell><Data ss:Type="String">入路时间</Data></Cell>
-        <Cell><Data ss:Type="String">路龄</Data></Cell>
-        <Cell><Data ss:Type="String">联系电话</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工资号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">档案号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工种</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">职务</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">电话号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">性别</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">年龄</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">文化程度</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">民族</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">籍贯</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作时间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工龄</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">入路时间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">路龄</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">岗位工资</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">联系电话</Data></Cell>
       </Row>
     <% @employees.each do |employee| %>
+      <% wage_employee = Wage.find_by(:year => Time.now.year,:month => Time.now.month,@wage_head_hash["工资号"] => employee.sal_number) %>
       <Row>
-        <Cell><Data ss:Type="String"><%= employee.sal_number.to_i %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.work_type %></Data></Cell>
-        <Cell><Data ss:Type="String">
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.work_type %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">
           <%=  employee.name %>
           <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
             <span class="label label-danger">已调离</span>
@@ -45,18 +98,26 @@
               <span class="label label-warning">一月内有调动</span>
           <% end %>
         </Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.age %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.education_background %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.nation %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.native_place %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.working_time %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.working_years %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.railway_time.to_i %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.rali_years %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sex %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.age %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.education_background %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.nation %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.native_place %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.working_time %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.working_years %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.railway_time.to_i %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.rali_years %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">
+          <% if wage_employee.present? %>
+            <% wage_employee_attributes = wage_employee.attributes %>
+            <%= wage_employee_attributes[@wage_head_hash["岗位工资"]].to_f %>
+          <% else %>
+            无
+          <% end %>
+        </Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
       </Row>
     <% end %>
     </Table>

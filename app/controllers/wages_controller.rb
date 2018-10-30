@@ -74,15 +74,15 @@ class WagesController < ApplicationController
 						@params_hash.keys.each do |key|
 							if @params_hash[key].to_i == 1
 								if key.split("-")[0] == "wage"
-									bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_i)
+									bonus_value = (bonus_value + wage_attributes[(key.split("-")[1])].to_f)
 								else
-									bonus_value = (bonus_value + bonus_attributes[key].to_i)
+									bonus_value = (bonus_value + bonus_attributes[key].to_f)
 								end
 							elsif @params_hash[key].to_i == 2
 								if key.split("-")[0] == "wage"
-									bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_i)
+									bonus_value = (bonus_value - wage_attributes[(key.split("-")[1])].to_f)
 								else
-									bonus_value = (bonus_value - bonus_attributes[key].to_i)
+									bonus_value = (bonus_value - bonus_attributes[key].to_f)
 								end
 							end
 						end
@@ -95,9 +95,9 @@ class WagesController < ApplicationController
 						if formula.present?
 							formula.keys.each do |key|
 								if formula[key].to_i == 1
-									value = (value + wage_attributes[key].to_i)
+									value = (value + wage_attributes[key].to_f)
 								elsif formula[key].to_i == 2
-									value = (value - wage_attributes[key].to_i)
+									value = (value - wage_attributes[key].to_f)
 								end
 							end
 							wage.update(header_hash[name] => value)
@@ -117,9 +117,9 @@ class WagesController < ApplicationController
 				wage_value = 0
 				@params_hash.keys.each do |key|
 					if @params_hash[key].to_i == 1
-						wage_value = (wage_value + wage_attributes[key].to_i)
+						wage_value = (wage_value + wage_attributes[key].to_f)
 					elsif @params_hash[key].to_i == 2
-						wage_value = (wage_value - wage_attributes[key].to_i)
+						wage_value = (wage_value - wage_attributes[key].to_f)
 					end
 				end
 				wage.update(header_hash[@header_name] => wage_value)
@@ -168,6 +168,7 @@ class WagesController < ApplicationController
 
 	#每项具体人员信息
   def employees_wage_show
+		@wage_head_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|n| "col"+n.to_s}].transpose.to_h
 		if params[:category] == "divide"
       @line_content = DivideLevelWage.find(params[:content_id])
 			@formula = @line_content.formula
@@ -318,7 +319,7 @@ class WagesController < ApplicationController
 					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
 					reduce_people = level_formula["reduce_people"]
 					if add_people.present?
-						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people).or(add_people)
 					else
 						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
 					end
@@ -382,7 +383,7 @@ class WagesController < ApplicationController
 					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
 					reduce_people = level_formula["reduce_people"]
 					if add_people.present?
-						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people).or(add_people)
 					else
 						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
 					end
@@ -446,7 +447,7 @@ class WagesController < ApplicationController
 					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
 					reduce_people = level_formula["reduce_people"]
 					if add_people.present?
-						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people).or(add_people)
 					else
 						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
 					end
@@ -509,7 +510,7 @@ class WagesController < ApplicationController
 					add_people = Employee.current.where(:sal_number => level_formula["add_people"])
 					reduce_people = level_formula["reduce_people"]
 					if add_people.present?
-						@employee_people = (Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people) | add_people)
+						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people).or(add_people)
 					else
 						@employee_people = Employee.current.where(level_formula.delete_if{|key,value| ["add_people","reduce_people"].include?(key)}).where.not(:sal_number => reduce_people)
 					end

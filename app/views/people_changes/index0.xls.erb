@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">变动原因</Data></Cell>
+      </Row>
+    <% @export_changes.each do |saler| %>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.班组 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.姓名 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.变动原因 %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

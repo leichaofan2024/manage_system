@@ -91,12 +91,12 @@ class BonusController < ApplicationController
       BonusHeader.find_by(:header => @header_name).update(:formula => @params_hash)
 			@bonus.each do |bonus|
 				bonus_attributes = bonus.attributes
-				bonus_value = 0
+				bonus_value = 0.0
 				@params_hash.keys.each do |key|
 					if @params_hash[key].to_i == 1
-						bonus_value = (bonus_value + bonus_attributes[key].to_i)
+						bonus_value = (bonus_value + bonus_attributes[key].to_f)
 					elsif @params_hash[key].to_i == 2
-						bonus_value = (bonus_value - bonus_attributes[key].to_i)
+						bonus_value = (bonus_value - bonus_attributes[key].to_f)
 					end
 				end
 				bonus.update(header_hash[@header_name] => bonus_value)

@@ -2275,8 +2275,13 @@ button.close {
 }
 
 // 温馨提示样式
+.remind-circle {
+  background-color:#fff;
+  overflow: auto;
+  clear:both;
+}
 .remind-circle p {
-  margin-left: -15px;
+
 }
 
 .remind-circle h4 {
@@ -2286,13 +2291,33 @@ button.close {
 // 上传各种表格的按钮
 .btn-primary-upload {
   color: #fff;
-  background-color: #007bff;
-  border-color: #2e6da4;
+  background-color: #00D396;
+  border-color: #00D396;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-left:10px;
   font-weight: 10px;
 }
 
+.btn-tab {
+  color: #fff;
+  background-color: #00D396;
+  margin-bottom: 0px;
+  margin-left:0px;
+  font-weight: 8px;
+  font-size:17px;
+  -moz-border-radius: 0px 0px 0px 0px;
+　　border-radius: 0px 0px 0px 0px;
+}
+.btn-tab-selected {
+  color: black;
+  background-color: #fcfcfc;
+  margin-bottom: 0px;
+  margin-left:0px;
+  font-weight: 8px;
+  font-size:17px;
+  -moz-border-radius: 0px 0px 0px 0px;
+　border-radius: 0px 0px 0px 0px;
+}
 .head-btn {
   text-align: right;
 }

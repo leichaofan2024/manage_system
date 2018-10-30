@@ -1,28 +1,79 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding='UTF-8'?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:o="urn:schemas-microsoft-com:office:office"
   xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Title">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:Bold="1" ss:FontName="sans-serif" ss:Size="36"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="End">
+      <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+      <Font ss:FontName="sans-serif" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom"/>
+      <Border ss:Position="Top"/>
+      <Border ss:Position="Left"/>
+      <Border ss:Position="Right"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titlelittle">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+      <Borders>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+    <Style ss:ID="Titleright">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+      <Borders>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+      <Font ss:FontName="SimSun" ss:Size="16"/>
+    </Style>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
-        <Cell><Data ss:Type="String">序号</Data></Cell>
-        <Cell><Data ss:Type="String">车间</Data></Cell>
-        <Cell><Data ss:Type="String">班组</Data></Cell>
-        <Cell><Data ss:Type="String">姓名</Data></Cell>
-        <Cell><Data ss:Type="String">工资号</Data></Cell>
-        <Cell><Data ss:Type="String">职务</Data></Cell>
-        <Cell><Data ss:Type="String">病假</Data></Cell>
-        <Cell><Data ss:Type="String">事假</Data></Cell>
-        <Cell><Data ss:Type="String">婚假</Data></Cell>
-        <Cell><Data ss:Type="String">产假</Data></Cell>
-        <Cell><Data ss:Type="String">探亲假</Data></Cell>
-        <Cell><Data ss:Type="String">丧假</Data></Cell>
-        <Cell><Data ss:Type="String">育儿假</Data></Cell>
-        <Cell><Data ss:Type="String">陪产假</Data></Cell>
-        <Cell><Data ss:Type="String">工伤假</Data></Cell>
-        <Cell><Data ss:Type="String">旷工</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工资号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">职务</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">病假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">事假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">婚假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">产假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">探亲假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">丧假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">育儿假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">陪产假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工伤假</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">旷工</Data></Cell>
       </Row>
       <%@export_employees = Employee.current%>
       <%employee_ids = []%>
@@ -42,16 +93,16 @@
     <% @export_employees.where(:id => employee_ids).each do |employee| %>
     <% n += 1%>
       <Row>
-        <Cell><Data ss:Type="String"><%= n %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.name %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% if attendance_count.present? %>
           <% @vacation_codes.each do |code| %>
-              <Cell><Data ss:Type="String"><%= attendance_count.attributes[code] %></Data></Cell>
+              <Cell ss:StyleID="Description"><Data ss:Type="String"><%= attendance_count.attributes[code] %></Data></Cell>
           <% end %>
         <% end %>
       </Row>

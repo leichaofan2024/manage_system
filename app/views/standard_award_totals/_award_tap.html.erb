@@ -1,0 +1,15 @@
+<div class="" >
+  <% if url_for == "/standard_award_totals"%>
+    <%= link_to("标准化汇总",standard_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab-selected") %>
+    <%= link_to("星级岗汇总",star_awards_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+    <%= link_to("其他单项奖",other_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+  <% elsif url_for == "/star_awards" %>
+    <%= link_to("标准化汇总",standard_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+    <%= link_to("星级岗汇总",star_awards_path(:year => @year,:month => @month),class:"btn btn-tab-selected") %>
+    <%= link_to("其他单项奖",other_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+  <% elsif url_for == "/other_award_totals" %>
+    <%= link_to("标准化汇总",standard_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+    <%= link_to("星级岗汇总",star_awards_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+    <%= link_to("其他单项奖",other_award_totals_path(:year => @year,:month => @month),class:"btn btn-tab-selected") %>
+  <% end %>
+</div>

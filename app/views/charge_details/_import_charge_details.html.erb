@@ -22,8 +22,6 @@
             <th><%= link_to "红牌中层扣款",red_middle_charges_path %></th>
             <th>处分扣款</th>
             <th>其他扣款</th>
-            <th>年份</th>
-            <th>月份</th>
           </tr>
         </thead>
         <tbody>
@@ -45,8 +43,6 @@
                <td><%= item.红牌中层扣款 %></td>
                <td><%= item.处分扣款 %></td>
                <td><%= item.其他扣款 %></td>
-               <td><%= item.upload_year %></td>
-               <td><%= item.upload_month %></td>
             </tr>
           <% end %>
        </tbody>

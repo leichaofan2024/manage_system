@@ -146,7 +146,7 @@ class HighSpeedRailStuffsController < ApplicationController
 
     (high_head_id..head_count).each do |high_head|
 
-        @high_speed_stuff_heads[high_head-1].update(:high_head_name => ("col" + production_head.to_s))
+        @high_speed_stuff_heads[high_head-1].update(:high_head_name => ("col" + high_head.to_s))
     end
 
     flash[:notice] = "已删除'#{name}'!"

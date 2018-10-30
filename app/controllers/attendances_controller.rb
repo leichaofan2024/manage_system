@@ -24,7 +24,7 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
-    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15)
+    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 50)
       redirect_to group_attendances_path
       flash[:alert] = "当月15号前可查看上月考勤，当前为#{Time.now.day}号，不能查看！"
     end
@@ -41,14 +41,14 @@ class AttendancesController < ApplicationController
       @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:workshop_id => @group.workshop_id,:status => "班组/科室填写中")
     end
     #提醒班组导出考勤表
-    if (@shenhe_attdendance_status.status == "段已审核") && (Time.now.day < 16)
+    if (@shenhe_attdendance_status.status == "段已审核") && (Time.now.day < 15)
       @group_export_permission = 1
     else
       @group_export_permission = 0
     end
     #什么时候可以导出考勤：
     if params[:format] == "xls"
-      
+
       # if @attendance_status.status != "段已审核"
       #   redirect_to group_attendances_path
       #   flash[:alert] = "本月考勤还未被段管理员审核，不能导出，请等待段管理员审核完成后，再进行导出！"

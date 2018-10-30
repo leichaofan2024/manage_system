@@ -45,13 +45,13 @@ class Djwage < ApplicationRecord
             djwage.year = year.to_i
             djwage.month = month.to_i
             formula = DjwageHeader.find_by(:header => "多经工资").formula
-            row[header_hash["多经工资"]] = 0
+            row[header_hash["多经工资"]] = 0.0
             if formula.present?
               formula.keys.each do |key|
                 if formula[key].to_i == 1
-                  row[header_hash["多经工资"]] = (row[header_hash["多经工资"]].to_i + row[key].to_i)
+                  row[header_hash["多经工资"]] = (row[header_hash["多经工资"]].to_f + row[key].to_f)
                 elsif formula[key].to_i == 2
-                  row[header_hash["多经工资"]] = (row[header_hash["多经工资"]].to_i - row[key].to_i)
+                  row[header_hash["多经工资"]] = (row[header_hash["多经工资"]].to_f - row[key].to_f)
                 end
               end
             end

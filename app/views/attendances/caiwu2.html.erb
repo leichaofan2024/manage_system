@@ -61,9 +61,24 @@
 	        		<td><%= employee.sal_number %></td>
               <td><%= employee.duty %></td>
 	        		<% attendance_count = AttendanceCount.find_by(employee_id: employee.id, month: @month, year: @year) %>
+              <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
               <% if attendance_count.present? %>
                 <td><%= attendance_count.attributes["b"]%></td>
-                <td><%= attendance_count.attributes["d"]%></td>
+                <td>
+                  <% if attendance_count.attributes["d"].to_i == 0%>
+                    <% if  (attendance.add_overtime.to_i > 0) %>
+                      <%= attendance.add_overtime.to_i %>
+                    <% else %>
+
+                    <% end %>
+                  <% else %>
+                    <% if  (attendance.add_overtime.to_i > 0) %>
+                      <%= attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i %>
+                    <% else %>
+                      <%= attendance_count.attributes["d"].to_i %>
+                    <% end %>
+                  <% end %>
+                </td>
                 <td><%= attendance_count.attributes["c"]%></td>
               <% end %>
 	        	</tr>

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">扣款合计</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全业绩扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">总重吨公里扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">综合指标扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">设备质量扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">盈亏结果扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作质量扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">抽考扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">红牌中层扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">处分扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">其他扣款</Data></Cell>
+
+      </Row>
+    <% @export_charge_details.each do |saler| %>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.序号 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.科室车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.扣款合计 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全业绩扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.总重吨公里扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.综合指标扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.设备质量扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.盈亏结果扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核中牌卡扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核中牌卡扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.抽考扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.红牌中层扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.处分扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.其他扣款 %></Data></Cell>
+
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

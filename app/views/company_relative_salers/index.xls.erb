@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">被考核科室</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效考核得分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效考核扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效考核_综合指标扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效考核_设备质量扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核得分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核_牌卡检查问题考核扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作质量考核_得分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作质量考核_平均扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
+
+      </Row>
+    <% @export_company_relative_salers.each do |saler| %>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.序号 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.被考核科室 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核得分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核_综合指标扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核_设备质量扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核得分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核_牌卡检查问题考核扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量考核_得分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量考核_平均扣分 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.备注 %></Data></Cell>
+
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

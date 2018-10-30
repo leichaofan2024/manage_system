@@ -1,24 +1,64 @@
-<div class="contentpanel">
-  <div class="panel panel-default">
-    <%= render 'saler_navbar'%>
-  </div>
-
-  <%= render 'import_relative_saler_table'%>
-
-  <% if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin) %>
-
-
-    <div class="col-md-12">
-      <h5>上传工效挂钩明细表</h5>
-      <%= form_tag import_relative_salers_path, multipart: true do %>
-        <%= file_field_tag :file%>
-        <%= submit_tag "上传"%>
-      <% end %>
-    </div>
-  <% end %>
-
-  <% if current_user.has_role? :awardadmin %>
-    <%= link_to "表格导出", relative_salers_path(format: "xls"), class: "btn"%>
-  <% end %>
-
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
+<div class="contentpanel">
+  <div class="" >
+    <% if url_for == "/relative_salers_totals"%>
+      <%= link_to("工效挂钩汇总",relative_salers_totals_path(:year => @year,:month => @month),class:"btn btn-tab-selected") %>
+      <%= link_to("功效挂钩明细",relative_salers_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+    <% elsif url_for == "/relative_salers" %>
+      <%= link_to("工效挂钩汇总",relative_salers_totals_path(:year => @year,:month => @month),class:"btn btn-tab") %>
+      <%= link_to("功效挂钩明细",relative_salers_path(:year => @year,:month => @month),class:"btn btn-tab-selected") %>
+    <% end %>
+  </div>
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            工挂工资明细表
+      </h4>
+    </header>
+    <div class="content-body">
+      <%= form_tag relative_salers_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_relative_salers_relative_salers_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月工效挂钩明细表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",relative_salers_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传工挂工资明细表",show_modal_relative_salers_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+
+      <%= render 'import_relative_saler_table'%>
+
+    </div>
+    <div id="showModal"></div>
+  </div>
+</div>
+
+    <script>
+    $("#month-multiple").select2( { theme: "bootstrap"} );
+    </script>

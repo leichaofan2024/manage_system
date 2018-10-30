@@ -1,11 +1,24 @@
 class RelativeSalersController < ApplicationController
   layout 'home'
   def index
-    if (current_user.has_role? :awardadmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
-      @relative_salers = RelativeSaler.page(params[:page]).per(20)
+    if params[:year].present?
+      @year = params[:year].to_i
+      @month = Array.new
+      if params[:month].present?
+        params[:month].each do |month|
+          @month << month.to_i
+        end
+      else
+        @month = RelativeSaler.where(:upload_year => params[:year]).pluck(:upload_month).map{|x| x.to_i}.uniq
+      end
     else
-      @relative_salers = RelativeSaler.where(:科室车间 => Workshop.find(current_user.workshop_id).name ).page(params[:page]).per(20)
+      @year = Time.now.year
+      @month = [Time.now.month]
     end
+    @years = RelativeSaler.pluck(:upload_year).map{|x| x.to_i}.uniq
+    @months = RelativeSaler.pluck(:upload_month).map{|x| x.to_i}.uniq
+    @relative_salers = RelativeSaler.all.page(params[:page]).per(20)
+    @export_relative_salers = RelativeSaler.all
     respond_to do |format|
       format.html
       format.csv { send_data @relative_salers.to_csv}
@@ -16,27 +29,33 @@ class RelativeSalersController < ApplicationController
   def import
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
-      render :new
+    elsif !params[:upload_time].present?
+      flash[:alert] = "您还没有选择日期哦"
     else
-      RelativeSaler.import(params[:file], params[:upload_time])
-      flash[:notice] = "上传成功"
-      redirect_to relative_salers_path
+      @import_message = RelativeSaler.import_form(params[:file],params[:upload_time])
+      if @import_message[:head].present?
+        flash[:alert] = @import_message[:head]
+			elsif @import_message[:year_month].present?
+				flash[:alert] = @import_message[:year_month]
+			else
+				flash[:notice] = "上传成功"
+			end
     end
+    redirect_to relative_salers_path
   end
 
-  def new
-    @relative_saler = RelativeSaler.new
+  def show_modal
+    respond_to do |format|
+			format.js
+		end
   end
 
-  def create
-    @relative_saler = RelativeSaler.new(charge_params)
-    if @relative_saler.save!
-      flash[:notice] = "上传成功"
-      redirect_to relative_salers_path
-    else
-      flash[:notice] = "上传失败"
-      render :new
-    end
+  def delete_relative_salers
+    @year = params[:year]
+    @month = params[:month]
+    RelativeSaler.where(:upload_year => @year,:upload_month => @month).delete_all
+    flash[:notice] = "#{@year}年#{@month}月工效挂钩明细表已成功删除！"
+    redirect_to relative_salers_path
   end
 
 

@@ -37,6 +37,7 @@
                                       <li><%= link_to "日勤夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["日勤夜班"])  %></li>
                                       <li><%= link_to "轮流夜班", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["轮流夜班"])  %></li>
                                       <li><%= link_to "休", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["休"])  %></li>
+                                      <li><%= link_to "加班", group_application_form_attendances_path(:type => "一键申请",:group_id =>@group.id ,:year => @year, :month => @month,:day => i-1,:code => @vacation_hash["节日加班"])  %></li>
                                   </ul>
                               </a>
                             </li>
