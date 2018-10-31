@@ -162,7 +162,7 @@ Rails.application.routes.draw do
       delete :delete_charge_details
     end
   end
-  
+
 # 整改返奖：
   resources :rectification_awards do
     collection do
@@ -253,7 +253,11 @@ Rails.application.routes.draw do
   end
 
   resources :standard_groups do
-    collection {post :import}
+    collection do
+      post :import
+      get :show_modal
+      delete :delete_standard_groups
+    end
   end
 # 星级岗汇总表：
   resources :star_awards do

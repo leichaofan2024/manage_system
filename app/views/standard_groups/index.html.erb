@@ -1,18 +1,52 @@
-<div class="contentpanel">
-  <div class="panel panel-default">
-    <%= render 'relative_salers/saler_navbar'%>
-  </div>
-<div class="head-btn col-md-12">
-  <div class="col-md-6">
-    <h4 style="text-align: left; margin-left: -15px;">2018年7月 标准化班组表</h4>
-  </div>
-  <%= link_to "上传标准化班组表", new_standard_group_path, class: 'btn btn-primary-upload'%>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
+<div class="contentpanel">
+  <div class="back-btn">
+    <%= link_to "返回", standard_award_totals_path(:year => @year,:month => @month) %>
+  </div>
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年
+                                            <% if @month.count == 0 %>
+                                            <% elsif @month.count == 1 %>
+                                              <%= @month.first %>月
+                                            <% else %>
+                                              <%= @month %>月
+                                            <% end %>
+                                            标准化班组表
+      </h4>
+    </header>
+    <div class="content-body">
+      <%= form_tag standard_groups_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>月
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <%= link_to("删除表格",delete_standard_groups_standard_groups_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月标准化班组表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("导出表格",standard_groups_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <%= link_to("上传标准化班组表",show_modal_standard_groups_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
 
-
-<div class="col-md-12">
-  <div class="card">
-    <div style="overflow: auto; width: 100%;">
+    <div  class="content-table" style="clear:both;">
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -29,7 +63,7 @@
         <tbody>
           <% @standard_groups.each do |item| %>
             <tr>
-              <td><%= item.id %></td>
+              <td><%= item.序号 %></td>
               <td><%= item.科室车间 %></td>
               <td><%= item.班组名称 %></td>
               <td><%= item.评定等级 %></td>
@@ -42,10 +76,14 @@
        </tbody>
       </table>
     </div>
+    <div class="text-center">
+      <%= paginate @standard_groups %>
+    </div>
   </div>
+  <div id="showModal"></div>
+</div>
+</div>
 
-  <div class="text-center">
-    <%= paginate @standard_groups %>
-  </div>
-</div>
-</div>
+<script>
+$("#month-multiple").select2( { theme: "bootstrap"} );
+</script>
