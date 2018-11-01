@@ -122,7 +122,7 @@
           <% @vacation_name_hash.keys.each do |code| %>
             <Cell ss:StyleID="Description"><Data ss:Type="String">
               <% if attendance_count.present? %>
-                <% if attendance_count.attributes[code] == 0%>
+                <% if attendance_count.attributes[code].to_i == 0%>
                   <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
                     <%= attendance.add_overtime.to_i%>
                   <% else %>

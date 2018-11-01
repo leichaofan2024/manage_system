@@ -52,39 +52,33 @@
               <th>科室车间</th>
               <th>综合考核排名奖励</th>
               <th>发现和防止安全隐患奖励</th>
-              <th>奖励1</th>
-              <th>奖励2</th>
-              <th>奖励3</th>
-              <th>奖励4</th>
-              <th>奖励5</th>
-              <th>奖励6</th>
+              <% @head_hash.keys.each do |key| %>
+                <th><%= link_to(key,edit_head_other_award_totals_path(:year => @year,:month => @month,:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal") %></th>
+              <% end %>
               <th>备注</th>
             </tr>
           </thead>
           <tbody>
-            <% @other_award_totals.each do |item| %>
+            <% n = 0 %>
+            <% @other_award_totals.each do |workshop,items| %>
+              <% n += 1%>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.科室车间 %></td>
-                <td><%= item.排名奖励 %></td>
-                <td><%= item.防止安全隐患奖励 %></td>
-                <td><%= item.奖励1 %></td>
-                <td><%= item.奖励2 %></td>
-                <td><%= item.奖励3 %></td>
-                <td><%= item.奖励4 %></td>
-                <td><%= item.奖励5 %></td>
-                <td><%= item.奖励6 %></td>
-                <td><%= item.备注 %></td>
+                <td><%= n %></td>
+                <td><%= workshop %></td>
+                <td><%= items.map{|item| item.排名奖励.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.防止安全隐患奖励.to_f.round(2)}.sum %></td>
+                <% @head_hash.values.each do |value| %>
+                  <th><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></th>
+                <% end %>
+                <td><%= items.map{|item| item.备注}.join("；")%></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @other_award_totals %>
-      </div>
     </div>
     <div id="showModal"></div>
+    <div id="editHead"></div>
   </div>
 </div>
 

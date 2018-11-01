@@ -1,0 +1,2 @@
+class OtherAwardTotalsHead < ApplicationRecord
+end

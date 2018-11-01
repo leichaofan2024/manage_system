@@ -273,9 +273,10 @@ Rails.application.routes.draw do
       post :import
       get :show_modal
       delete :delete_other_award_totals
+      get :edit_head
+      patch :update_head
     end
   end
-
   resources :users
 
 

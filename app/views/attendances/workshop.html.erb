@@ -74,7 +74,7 @@
                   <td><%= employee.age %></td>
                   <% @vacation_code_hash.keys.each do |code| %>
                     <% if attendance_count.present? %>
-                      <% if attendance_count.attributes[code] == 0%>
+                      <% if attendance_count.attributes[code].to_i == 0%>
                         <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
                           <td><%= attendance.add_overtime.to_i%> </td>
                         <% else %>

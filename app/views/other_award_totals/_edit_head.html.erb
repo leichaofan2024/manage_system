@@ -1,0 +1,36 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="margin-top:100px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">
+          修改单项奖名称<%= @month%>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag update_head_other_award_totals_path(:month => @month), method: 'patch', multipart: true do %>
+          <%= hidden_field_tag :year, @year %>
+          <%= hidden_field_tag :old_name, @name %>
+          <%= label_tag "当前单项奖名："%><%= @name %><br><br>
+
+          <div class="col-md-6 col-md-offset-4 datepicker-input">
+            <div class="form-group">
+              <%= label_tag "修改为:"%>
+              <%= text_field_tag :name %>
+            </div>
+          </div>
+          <div class="" style="">
+             <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
+          </div>
+          <div class=" remind-circle">
+            <h5 style=" margin-top: 40px;">温馨提示</h5>
+            <p>1、修改的单项奖名称只对当前页面所含月份生效；</p>
+            <p>2、如果想如果想统一修改几个月的单项奖名称，请先进行时间筛选，再点击表头进行修改；</p>
+          </div>
+        <% end %>
+
+
+      </div>
+    </div>
+  </div>
+</div>

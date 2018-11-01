@@ -19,12 +19,14 @@ class OtherAwardTotalsController < ApplicationController
     end
     @years = OtherAwardTotal.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = OtherAwardTotal.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month)
+    @other_award_totals_heads = OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month)
+    @head_hash = @other_award_totals_heads.pluck(:name,:col_name).uniq.to_h
+    @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+    @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
     respond_to do |format|
       format.html
       format.csv { send_data @export_other_award_totals.to_csv}
-      format.xls { headers["Content-Disposition"] = 'attachment; filename="星级岗奖励总明细表.xls"'}
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="其他单项总明细表.xls"'}
     end
   end
 
@@ -52,11 +54,50 @@ class OtherAwardTotalsController < ApplicationController
     end
   end
 
+  def edit_head
+    @year = params[:year]
+    @month = params[:month]
+    @name = params[:name]
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_head
+    @year = params[:year]
+    @month = params[:month]
+    @old_name = params[:old_name]
+    @name = params[:name]
+    # 旧名字所在的月份：
+    old_year_months = OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).pluck(:year,:month)
+    old_year_months.each do |year_month|
+      already_have_head = OtherAwardTotalsHead.where(:upload_year => year_month[0],:upload_month => year_month[1],:name => @name)
+      if already_have_head.present?
+        flash[:alert] = "修改失败！#{year_month[1]}月已有单项奖#{@name}，同一月份单项奖名不可重复！"
+        redirect_to other_award_totals_path(:year => @year,:month => @month)
+      end
+    end
+
+    # 旧名字或新名字在以前已经存在：
+    all_old_names = OtherAwardTotalsHead.where.not(:upload_year => @year,:upload_month => @month).pluck(:name).uniq
+    all_new_names = OtherAwardTotalsHead.all.pluck(:name).uniq
+    head_hash = OtherAwardTotalsHead.pluck(:name,:col_name).uniq.to_h
+    if all_old_names.include?(@old_name) && all_new_names.include?(@name)
+       OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name,:col_name => head_hash[@name])
+       OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).each do |other_award|
+         
+       end
+    OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name)
+    flash[:notice] = "#{@month}月单项奖【#{@old_name}】成功修改为【#{@name}】 !"
+    redirect_to other_award_totals_path(:year => @year,:month => @month)
+  end
+
   def delete_other_award_totals
     @year = params[:year]
     @month = params[:month]
     OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).delete_all
-    flash[:notice] = "#{@year}年#{@month}月星级岗奖励总明细表已成功删除！"
+    OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month).delete_all
+    flash[:notice] = "#{@year}年#{@month}月其他单项总明细表已成功删除！"
     redirect_to other_award_totals_path
   end
 end
