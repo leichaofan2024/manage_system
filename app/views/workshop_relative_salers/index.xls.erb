@@ -34,26 +34,35 @@
           <Cell ss:StyleID="Description"><Data ss:Type="String">其他</Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="String">应发</Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="String">小计</Data></Cell>
+          <% @head_hash.keys.each do |key| %>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= key %></Data></Cell>
+          <% end %>
           <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
         </Row>
-        <% @export_workshop_relative_salers.each do |f| %>
+        <% n = 0 %>
+        <% @export_workshop_relative_salers.each do |sal_number,items|  %>
+          <% workshop_single_awards = WorkshopSingleAward.where(:upload_year => @year ,:upload_month => @month,:工资号 => sal_number)%>
+          <% n += 1 %>
           <Row>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.序号 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.科室车间 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.姓名 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.工资号 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.挂钩工资 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.安全质量 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.工作质量 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.行车 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.整改返奖 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.一体化 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.兼职兼岗 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.考核扣款 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.其他 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.应发 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.小计 %></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= f.备注 %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.科室车间 %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.姓名 %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= sal_number %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.挂钩工资.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.安全质量.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.工作质量.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.行车.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.整改返奖.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.一体化.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.兼职兼岗.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.考核扣款.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.其他.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.应发.to_f.round(2)}.sum %></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.小计.to_f.round(2)}.sum %></Data></Cell>
+            <% @head_hash.values.each do |value| %>
+              <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop_single_awards.map{|x| x.send(value).to_f.round(2)}.sum %></Data></Cell>
+            <% end %>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.备注}.join(";") %></Data></Cell>
           </Row>
         <% end %>
     </Table>

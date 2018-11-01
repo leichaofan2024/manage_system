@@ -68,7 +68,7 @@
                 <td><%= items.map{|item| item.排名奖励.to_f.round(2)}.sum %></td>
                 <td><%= items.map{|item| item.防止安全隐患奖励.to_f.round(2)}.sum %></td>
                 <% @head_hash.values.each do |value| %>
-                  <th><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></th>
+                  <td><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></td>
                 <% end %>
                 <td><%= items.map{|item| item.备注}.join("；")%></td>
               </tr>

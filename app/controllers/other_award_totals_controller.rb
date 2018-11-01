@@ -82,7 +82,12 @@ class OtherAwardTotalsController < ApplicationController
     all_old_names = OtherAwardTotalsHead.where.not("upload_year = ? and upload_month in (?)",@year,@month).pluck(:name).uniq
     all_new_names = OtherAwardTotalsHead.all.pluck(:name).uniq
     head_hash = OtherAwardTotalsHead.pluck(:name,:col_name).uniq.to_h
-    if already_have_head.present?
+    # 车间科室本月是否已上传单项奖明细表：
+
+    workshop_single_award  = WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month)
+    if workshop_single_award.present?
+      flash[:alert] = "修改失败！车间科室#{@month}月已上传单项奖明细表，您不能再修改单项奖名称！"
+    elsif already_have_head.present?
       flash[:alert] = "修改失败！#{already_have_head[0]}月已有单项奖#{@name}，同一月份单项奖名不可重复！"
     elsif all_new_names.include?(@name)
        OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name,:col_name => head_hash[@name])
@@ -112,7 +117,8 @@ class OtherAwardTotalsController < ApplicationController
     @month = params[:month]
     OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).delete_all
     OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month).delete_all
-    flash[:notice] = "#{@year}年#{@month}月其他单项总明细表已成功删除！"
+    WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month).delete_all
+    flash[:notice] = "#{@year}年#{@month}月其他单项总明细表以及车间、科室上传的单项奖表均已同步删除！"
     redirect_to other_award_totals_path
   end
 end

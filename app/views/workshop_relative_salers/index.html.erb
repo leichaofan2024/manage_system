@@ -62,38 +62,47 @@
               <th>其他</th>
               <th>应发</th>
               <th>小计</th>
+              <% @head_hash.keys.each do |key| %>
+                <th><%= link_to(key,single_award_upload_workshop_relative_salers_path(:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal") %></th>
+              <% end %>
               <th>备注</th>
+
             </tr>
           </thead>
           <tbody>
-            <% @workshop_relative_salers.each do |f| %>
+            <% n = 0 %>
+            <% @workshop_relative_salers.each do |sal_number,items| %>
+              <% workshop_single_awards = WorkshopSingleAward.where(:upload_year => @year ,:upload_month => @month,:工资号 => sal_number)%>
+              <% n += 1 %>
               <tr>
-                <td><%= f.序号 %></td>
-                <td><%= f.科室车间 %></td>
-                <td><%= f.姓名 %></td>
-                <td><%= f.工资号 %></td>
-                <td><%= f.挂钩工资 %></td>
-                <td><%= f.安全质量 %></td>
-                <td><%= f.工作质量 %></td>
-                <td><%= f.行车 %></td>
-                <td><%= f.整改返奖 %></td>
-                <td><%= f.一体化 %></td>
-                <td><%= f.兼职兼岗 %></td>
-                <td><%= f.考核扣款 %></td>
-                <td><%= f.其他 %></td>
-                <td><%= f.应发 %></td>
-                <td><%= f.小计 %></td>
-                <td><%= f.备注 %></td>
+                <th><%= n %></th>
+                <th><%= items.first.科室车间 %></th>
+                <th><%= items.first.姓名 %></th>
+                <td><%= sal_number %></td>
+                <td><%= items.map{|x| x.挂钩工资.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.安全质量.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.工作质量.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.行车.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.整改返奖.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.一体化.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.兼职兼岗.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.考核扣款.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.其他.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.应发.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|x| x.小计.to_f.round(2)}.sum %></td>
+                <% @head_hash.values.each do |value| %>
+                  <td><%= workshop_single_awards.map{|x| x.send(value).to_f.round(2)}.sum %></td>
+                <% end %>
+                <td><%= items.map{|x| x.备注}.join(";") %></td>
               </tr>
             <% end %>
           </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @workshop_relative_salers %>
-      </div>
+
     </div>
     <div id="showModal"></div>
+    <div id="single_award_upload"></div>
   </div>
 </div>
 <script>

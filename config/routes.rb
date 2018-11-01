@@ -142,6 +142,8 @@ Rails.application.routes.draw do
       post :import
       get :show_modal
       delete :delete_workshop_relative_salers
+      post :single_award_import
+      get :single_award_upload
     end
   end
 

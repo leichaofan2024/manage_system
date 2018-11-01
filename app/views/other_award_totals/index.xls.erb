@@ -24,28 +24,24 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">综合考核排名奖励</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">发现和防止安全隐患奖励</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励1</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励2</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励3</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励4</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励5</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">奖励6</Data></Cell>
+        <% @head_hash.keys.each do |key| %>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= link_to(key,edit_head_other_award_totals_path(:year => @year,:month => @month,:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal") %></Data></Cell>
+        <% end %>
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
 
       </Row>
-    <% @export_other_award_totals.each do |item| %>
+    <% n = 0 %>
+    <% @export_other_award_totals.each do |workshop,items| %>
+      <% n += 1%>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.排名奖励 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.防止安全隐患奖励 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励1 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励2 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励3 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励4 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励5 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.奖励6 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.排名奖励.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.防止安全隐患奖励.to_f.round(2)}.sum %></Data></Cell>
+        <% @head_hash.values.each do |value| %>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></Data></Cell>
+        <% end %>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.join("；")%></Data></Cell>
 
       </Row>
     <% end %>
