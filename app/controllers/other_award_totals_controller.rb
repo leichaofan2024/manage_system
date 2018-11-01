@@ -69,26 +69,41 @@ class OtherAwardTotalsController < ApplicationController
     @old_name = params[:old_name]
     @name = params[:name]
     # 旧名字所在的月份：
-    old_year_months = OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).pluck(:year,:month)
+    old_year_months = OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).pluck(:upload_year,:upload_month)
+    already_have_head = Array.new
     old_year_months.each do |year_month|
-      already_have_head = OtherAwardTotalsHead.where(:upload_year => year_month[0],:upload_month => year_month[1],:name => @name)
-      if already_have_head.present?
-        flash[:alert] = "修改失败！#{year_month[1]}月已有单项奖#{@name}，同一月份单项奖名不可重复！"
-        redirect_to other_award_totals_path(:year => @year,:month => @month)
+      new_other_award_totals_heads = OtherAwardTotalsHead.where(:upload_year => year_month[0],:upload_month => year_month[1],:name => @name)
+      if new_other_award_totals_heads.present?
+        already_have_head << year_month[1]
       end
     end
 
     # 旧名字或新名字在以前已经存在：
-    all_old_names = OtherAwardTotalsHead.where.not(:upload_year => @year,:upload_month => @month).pluck(:name).uniq
+    all_old_names = OtherAwardTotalsHead.where.not("upload_year = ? and upload_month in (?)",@year,@month).pluck(:name).uniq
     all_new_names = OtherAwardTotalsHead.all.pluck(:name).uniq
     head_hash = OtherAwardTotalsHead.pluck(:name,:col_name).uniq.to_h
-    if all_old_names.include?(@old_name) && all_new_names.include?(@name)
+    if already_have_head.present?
+      flash[:alert] = "修改失败！#{already_have_head[0]}月已有单项奖#{@name}，同一月份单项奖名不可重复！"
+    elsif all_new_names.include?(@name)
        OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name,:col_name => head_hash[@name])
        OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).each do |other_award|
-         
+         column_value = other_award.send(head_hash[@old_name])
+         other_award.update(head_hash[@old_name] => 0,head_hash[@name] => column_value)
        end
-    OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name)
-    flash[:notice] = "#{@month}月单项奖【#{@old_name}】成功修改为【#{@name}】 !"
+       flash[:notice] = "#{@month}月单项奖【#{@old_name}】成功修改为【#{@name}】 !"
+    elsif all_old_names.include?(@old_name) && !all_new_names.include?(@name)
+      new_col_name = "col"+(head_hash.count+1).to_s
+      head_hash[@name] = new_col_name
+      OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name,:col_name => head_hash[@name])
+      OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).each do |other_award|
+        column_value = other_award.send(head_hash[@old_name])
+        other_award.update(head_hash[@old_name] => 0,head_hash[@name] => column_value)
+      end
+      flash[:notice] = "旧有新无"
+    elsif !all_old_names.include?(@old_name) && !all_new_names.include?(@name)
+      OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name)
+      flash[:notice] = "都是新的 !"
+    end
     redirect_to other_award_totals_path(:year => @year,:month => @month)
   end
 
