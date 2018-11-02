@@ -61,9 +61,10 @@ class WorkshopRelativeSalersController < ApplicationController
   def delete_workshop_relative_salers
     @year = params[:year]
     @month = params[:month]
-    WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month).delete_all
-    WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month).delete_all
-    flash[:notice] = "#{@year}年#{@month}月工效挂钩明细表及同期单项奖表均已成功删除！"
+    workshop_name = current_user.name
+    WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month,:科室车间 => workshop_name).delete_all
+    WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month,:科室车间 => workshop_name).delete_all
+    flash[:notice] = "#{workshop_name}#{@year}年#{@month}月工效挂钩明细表及同期单项奖表均已成功删除！"
     redirect_to workshop_relative_salers_path
   end
 

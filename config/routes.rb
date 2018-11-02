@@ -109,6 +109,10 @@ Rails.application.routes.draw do
   resources :announcements do
     collection do
       get :download_table_template
+      get :download_workshop_relative_saler_table_template
+      get :download_workshop_single_award_table_template
+      get :download_relative_salers_total_table_template
+      get :download_relative_saler_table_template
       get :download_charge_details_table_template
       get :download_rectification_awards_table_template
       get :download_middle_awards_table_template
@@ -119,7 +123,7 @@ Rails.application.routes.draw do
       get :download_people_change_table_template
       get :download_examination_charges_table_template
       get :download_red_middle_charges_table_template
-      get :download_relative_salers_total_table_template
+
       get :download_standard_award_total_table_template
       get :download_standard_group_table_template
       get :download_star_award_table_template
