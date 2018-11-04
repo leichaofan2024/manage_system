@@ -60,22 +60,22 @@
             </tr>
           </thead>
           <tbody>
-            <% @examinations.each do |item| %>
+            <% n = 0 %>
+            <% @examinations.each do |sal_number,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.工资编号 %></td>
-                <td><%= item.姓名 %></td>
-                <td><%= item.车间 %></td>
-                <td><%= item.金额 %></td>
-                <td><%= item.备注 %></td>
+                <td><%= n %></td>
+                <td><%= sal_number %></td>
+                <td><%= items.first.姓名 %></td>
+                <td><%= items.first.车间 %></td>
+                <td><%= items.map{|item| item.金额.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.备注}.join(";") %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @examinations %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

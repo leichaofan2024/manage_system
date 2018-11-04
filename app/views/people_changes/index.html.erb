@@ -48,6 +48,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
+              <th>序号</th>
               <th>车间</th>
               <th>班组</th>
               <th>姓名</th>
@@ -55,20 +56,21 @@
             </tr>
           </thead>
           <tbody>
-            <% @changes.each do |item| %>
+            <% n = 0 %>
+            <% @changes.each do |name,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.车间 %></td>
-                <td><%= item.班组 %></td>
-                <td><%= item.姓名 %></td>
-                <td><%= item.变动原因 %></td>
+                <td><%= n %></td>
+                <td><%= items.first.车间 %></td>
+                <td><%= items.first.班组 %></td>
+                <td><%= name %></td>
+                <td><%= items.map{|x| x.变动原因}.join(";") %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @changes %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

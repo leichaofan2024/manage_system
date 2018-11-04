@@ -19,8 +19,8 @@ class TeamleaderAwardsController < ApplicationController
     end
     @years = TeamleaderAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = TeamleaderAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @teamleader_awards = TeamleaderAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_teamleader_awards = TeamleaderAward.where(:upload_year => @year,:upload_month => @month)
+    @teamleader_awards = TeamleaderAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+    @export_teamleader_awards = TeamleaderAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
     respond_to do |format|
       format.html
       format.csv { send_data @export_teamleader_awards.to_csv}

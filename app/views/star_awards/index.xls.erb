@@ -35,22 +35,24 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
 
       </Row>
-    <% @export_star_awards.each do |item| %>
+      <% n = 0 %>
+    <% @export_star_awards.each do |workshop,items| %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.发放合计 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.五星岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.四星岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.三星岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.二星岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.一星岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.五星人数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.四星人数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.三星人数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.二星人数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.一星人数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.发放合计.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.五星岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.四星岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.三星岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.二星岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.一星岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.五星人数.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.四星人数.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.三星人数.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.二星人数.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.一星人数.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.join(";") %></Data></Cell>
 
       </Row>
     <% end %>

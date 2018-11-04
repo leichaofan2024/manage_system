@@ -19,8 +19,8 @@ class MiddleAwardsController < ApplicationController
       end
       @years = MiddleAward.pluck(:upload_year).map{|x| x.to_i}.uniq
       @months = MiddleAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-      @middle_awards = MiddleAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-      @export_middle_awards = MiddleAward.where(:upload_year => @year,:upload_month => @month)
+      @middle_awards = MiddleAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+      @export_middle_awards = MiddleAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
       respond_to do |format|
         format.html
         format.csv { send_data @export_middle_awards.to_csv}

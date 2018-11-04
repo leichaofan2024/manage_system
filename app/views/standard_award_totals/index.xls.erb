@@ -28,16 +28,17 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间备份</Data></Cell>
 
       </Row>
-    <% @export_standard_award_totals.each do |total| %>
+      <% n = 0 %>
+    <% @export_standard_award_totals.each do |workshop,items| %>
+      <% n += 1 %>
       <Row>
-
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化合计.to_i %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化科室车间.to_i %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标准化班组.to_i %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.标杆优秀达标车间奖励.to_i %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= total.科室车间备份 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化合计.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化科室车间.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化班组.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标杆优秀达标车间奖励.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.科室车间备份}.join(";") %></Data></Cell>
       </Row>
     <% end %>
     </Table>

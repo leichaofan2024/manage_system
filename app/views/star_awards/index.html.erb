@@ -65,30 +65,30 @@
             </tr>
           </thead>
           <tbody>
-            <% @star_awards.each do |item| %>
+            <% n = 0 %>
+            <% @star_awards.each do |workshop,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.科室车间 %></td>
-                <td><%= item.发放合计 %></td>
-                <td><%= item.五星岗 %></td>
-                <td><%= item.四星岗 %></td>
-                <td><%= item.三星岗 %></td>
-                <td><%= item.二星岗 %></td>
-                <td><%= item.一星岗 %></td>
-                <td><%= item.五星人数 %></td>
-                <td><%= item.四星人数 %></td>
-                <td><%= item.三星人数 %></td>
-                <td><%= item.二星人数 %></td>
-                <td><%= item.一星人数 %></td>
-                <td><%= item.备注 %></td>
+                <td><%= n %></td>
+                <td><%= workshop %></td>
+                <td><%= items.map{|item| item.发放合计.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.五星岗.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.四星岗.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.三星岗.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.二星岗.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.一星岗.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.五星人数.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.四星人数.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.三星人数.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.二星人数.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.一星人数.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.备注}.join(";") %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @star_awards %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

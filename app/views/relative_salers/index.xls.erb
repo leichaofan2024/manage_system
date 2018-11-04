@@ -36,24 +36,26 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">合计</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
       </Row>
+      <% n = 0 %>
     <% @export_relative_salers.each do |saler| %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.部门班组 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工资号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.姓名 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.系数 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.挂钩工资 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.一体化 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.兼职兼岗 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.其他 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.应发 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.考核扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.合计 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.科室车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.部门班组 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= sal_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.姓名 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.系数}.join(",") %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.挂钩工资.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.安全质量.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.工作质量.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.一体化.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.兼职兼岗.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.其他.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.应发.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.考核扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.合计.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.备注}.join(";")  %></Data></Cell>
       </Row>
     <% end %>
     </Table>

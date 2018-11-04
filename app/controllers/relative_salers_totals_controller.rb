@@ -18,8 +18,8 @@ class RelativeSalersTotalsController < ApplicationController
     end
     @years = RelativeSalersTotal.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = RelativeSalersTotal.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @totals = RelativeSalersTotal.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_totals = RelativeSalersTotal.where(:upload_year => @year,:upload_month => @month)
+    @totals = RelativeSalersTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+    @export_totals = RelativeSalersTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
     respond_to do |format|
       format.html
       format.csv { send_data @export_totals.to_csv }

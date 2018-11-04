@@ -26,14 +26,16 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">返奖金额</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
       </Row>
-    <% @export_other_awards.each do |item| %>
+      <% n = 0 %>
+    <% @export_other_awards.each do |sal_number,items| %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.工资号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.姓名 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.返奖金额 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= sal_number %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.姓名 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.返奖金额.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.sum %></Data></Cell>
       </Row>
     <% end %>
     </Table>

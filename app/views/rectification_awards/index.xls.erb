@@ -29,17 +29,19 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">其他返奖</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
       </Row>
-    <% @export_rectifications.each do |item| %>
+      <% n = 0 %>
+      <% @export_rectifications.each do |workshop,items| %>
+        <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.整改返奖合计 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.牌卡返奖 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.中层返奖 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.班组长返奖 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.抽考返奖 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.其他返奖 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= item.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.备注}.join(";")  %></Data></Cell>
       </Row>
     <% end %>
     </Table>

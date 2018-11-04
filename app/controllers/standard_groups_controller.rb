@@ -20,8 +20,8 @@ class StandardGroupsController < ApplicationController
 
     @years = StandardGroup.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = StandardGroup.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month)
+    @standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
+    @export_standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
     respond_to do |format|
       format.html
       format.csv { send_data @export_standard_groups.to_csv}

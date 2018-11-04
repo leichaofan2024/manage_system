@@ -18,8 +18,8 @@ class CompanyRelativeSalersController < ApplicationController
     end
     @years = CompanyRelativeSaler.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = CompanyRelativeSaler.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @company_relative_salers = CompanyRelativeSaler.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_company_relative_salers = CompanyRelativeSaler.where(:upload_year => @year,:upload_month => @month)
+    @company_relative_salers = CompanyRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.被考核科室}
+    @export_company_relative_salers = CompanyRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.被考核科室}
     respond_to do |format|
       format.html
       format.csv { send_data @export_company_relative_salers.to_csv}

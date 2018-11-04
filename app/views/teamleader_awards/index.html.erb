@@ -61,22 +61,21 @@
             </tr>
           </thead>
           <tbody>
-            <% @teamleader_awards.each do |item| %>
+            <% n = 0 %>
+            <% @teamleader_awards.each do |sal_number,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.车间 %></td>
-                <td><%= item.班组 %></td>
-                <td><%= item.工资号 %></td>
-                <td><%= item.姓名 %></td>
-                <td><%= item.性别 %></td>
-                <td><%= item.金额 %></td>
+                <td><%= n %></td>
+                <td><%= items.first.车间 %></td>
+                <td><%= items.first.班组 %></td>
+                <td><%= sal_number %></td>
+                <td><%= items.first.姓名 %></td>
+                <td><%= items.first.性别 %></td>
+                <td><%= items.map{|item| item.金额.to_f.round(2)}.sum %></td>
               </tr>
             <% end %>
           </tbody>
         </table>
-      </div>
-      <div class="text-center">
-        <%= paginate @teamleader_awards %>
       </div>
     </div>
     <div id="showModal"></div>

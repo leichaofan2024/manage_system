@@ -61,24 +61,24 @@
           </tr>
         </thead>
         <tbody>
-          <% @standard_groups.each do |item| %>
+          <% n = 0 %>
+          <% @standard_groups.each do |group,items| %>
+            <% n += 1 %>
             <tr>
-              <td><%= item.序号 %></td>
-              <td><%= item.科室车间 %></td>
-              <td><%= item.班组名称 %></td>
-              <td><%= item.评定等级 %></td>
-              <td><%= item.奖励标准 %></td>
-              <td><%= item.人数 %></td>
-              <td><%= item.奖励金额 %></td>
-              <td><%= item.备注 %></td>
+              <td><%= n %></td>
+              <td><%= items.first.科室车间 %></td>
+              <td><%= group %></td>
+              <td><%= items.map{|item| item.评定等级}.join(";") %></td>
+              <td><%= items.map{|item| item.奖励标准}.join(";") %></td>
+              <td><%= items.map{|item| item.人数}.join(";") %></td>
+              <td><%= items.map{|item| item.奖励金额.to_f.round(2)}.sum %></td>
+              <td><%= items.map{|item| item.备注}.join(";") %></td>
             </tr>
           <% end %>
        </tbody>
       </table>
     </div>
-    <div class="text-center">
-      <%= paginate @standard_groups %>
-    </div>
+
   </div>
   <div id="showModal"></div>
 </div>

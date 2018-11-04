@@ -62,25 +62,25 @@
             </tr>
           </thead>
           <tbody>
-            <% @rectifications.each do |item| %>
+            <% n = 0 %>
+            <% @rectifications.each do |workshop,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.科室车间 %></td>
-                <td><%= item.整改返奖合计 %></td>
-                <td><%= item.牌卡返奖 %></td>
-                <td><%= item.中层返奖 %></td>
-                <td><%= item.班组长返奖 %></td>
-                <td><%= item.抽考返奖 %></td>
-                <td><%= item.其他返奖 %></td>
-                <td><%= item.备注 %></td>
+                <td><%= n %></td>
+                <td><%= workshop %></td>
+                <td><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|x| x.备注}.join(";")  %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @rectifications %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

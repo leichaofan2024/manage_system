@@ -19,8 +19,8 @@ class ExaminationAwardsController < ApplicationController
     end
     @years = ExaminationAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = ExaminationAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @examinations = ExaminationAward.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_examinations = ExaminationAward.where(:upload_year => @year,:upload_month => @month)
+    @examinations = ExaminationAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
+    @export_examinations = ExaminationAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
     respond_to do |format|
       format.html
       format.csv { send_data @export_examinations.to_csv}

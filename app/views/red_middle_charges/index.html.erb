@@ -61,22 +61,22 @@
             </tr>
           </thead>
           <tbody>
-            <% @red_middle_charges.each do |item| %>
+            <% n = 0 %>
+            <% @red_middle_charges.each do |sal_number,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.姓名 %></td>
-                <td><%= item.工资号 %></td>
-                <td><%= item.部门 %></td>
-                <td><%= item.核减金额 %></td>
-                <td><%= item.备注 %></td>
+                <td><%= n %></td>
+                <td><%= items.first.姓名 %></td>
+                <td><%= sal_number %></td>
+                <td><%= items.first.部门 %></td>
+                <td><%= items.map{|item| item.核减金额.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.备注}.join(";") %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @red_middle_charges %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

@@ -24,31 +24,28 @@
       </tr>
     </thead>
     <tbody>
-      <% @relative_salers.each do |item| %>
+      <% n = 0 %>
+      <% @relative_salers.each do |sal_number,items| %>
+        <% n += 1 %>
         <tr>
-          <td><%= item.序号 %></td>
-          <td><%= item.科室车间 %></td>
-          <td><%= item.部门班组 %></td>
-          <td><%= item.工资号 %></td>
-          <td><%= item.姓名 %></td>
-          <td><%= item.系数 %></td>
-          <td><%= item.挂钩工资 %></td>
-          <td><%= item.安全质量 %></td>
-          <td><%= item.工作质量 %></td>
-          <td><%= item.一体化 %></td>
-          <td><%= item.兼职兼岗 %></td>
-          <td><%= item.其他 %></td>
-          <td><%= item.应发 %></td>
-          <td><%= item.考核扣款 %></td>
-          <td><%= item.合计 %></td>
-          <td><%= item.备注 %></td>
+          <td><%= n %></td>
+          <td><%= items.first.科室车间 %></td>
+          <td><%= items.first.部门班组 %></td>
+          <td><%= sal_number %></td>
+          <td><%= items.first.姓名 %></td>
+          <td><%= items.map{|x| x.系数}.join(",") %></td>
+          <td><%= items.map{|x| x.挂钩工资.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.安全质量.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.工作质量.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.一体化.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.兼职兼岗.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.其他.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.应发.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.考核扣款.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.合计.to_f.round(2)}.sum  %></td>
+          <td><%= items.map{|x| x.备注}.join(";")  %></td>
         </tr>
       <% end %>
    </tbody>
   </table>
-</div>
-
-
-<div class="text-center">
-  <%= paginate @relative_salers %>
 </div>

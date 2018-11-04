@@ -19,44 +19,63 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
+        
         <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">科室车间</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">扣款合计</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">挂钩考核扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全业绩扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">安全业绩扣款</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">生产经营绩效扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">总重吨公里扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">总重吨公里扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">综合指标扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">综合指标扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">设备质量扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">设备质量扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">盈亏结果扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">盈亏结果扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量扣款</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣分</Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作质量扣分</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">工作质量扣款</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">抽考扣款</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">红牌中层扣款</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">处分扣款</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">其他扣款</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">安全质量考核中牌卡扣款</Data></Cell>
 
       </Row>
-    <% @export_charge_details.each do |saler| %>
+      <% n = 0 %>
+    <% @export_charge_details.each do |workshop,items| %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.科室车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.扣款合计 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全业绩扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.总重吨公里扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.综合指标扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.设备质量扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.盈亏结果扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核中牌卡扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核中牌卡扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.抽考扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.红牌中层扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.处分扣款 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.其他扣款 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.扣款合计.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.挂钩考核扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全业绩扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全业绩扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.生产经营绩效扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.总重吨公里扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.总重吨公里扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.综合指标扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.综合指标扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.设备质量扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.设备质量扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.盈亏结果扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.盈亏结果扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全质量扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全质量扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.工作质量扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.工作质量扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.抽考扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.红牌中层扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.处分扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.其他扣款.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全质量考核中牌卡扣分.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.安全质量考核中牌卡扣款.to_f.round(2)}.sum  %></Data></Cell>
 
       </Row>
     <% end %>

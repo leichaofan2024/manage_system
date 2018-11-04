@@ -33,20 +33,22 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">备注</Data></Cell>
 
       </Row>
-    <% @export_company_relative_salers.each do |saler| %>
+      <% n = 0 %>
+    <% @export_company_relative_salers.each do |workshop,items| %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.序号 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.被考核科室 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核得分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核_综合指标扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.生产经营绩效考核_设备质量扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核得分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.安全质量考核_牌卡检查问题考核扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量考核_得分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.工作质量考核_平均扣分 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.备注 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  workshop %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.生产经营绩效考核得分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.生产经营绩效考核扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.生产经营绩效考核_综合指标扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.生产经营绩效考核_设备质量扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.安全质量考核得分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.安全质量考核扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.安全质量考核_牌卡检查问题考核扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.工作质量考核_得分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.工作质量考核_平均扣分.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%=  items.map{|item| item.备注}.join(";") %></Data></Cell>
 
       </Row>
     <% end %>

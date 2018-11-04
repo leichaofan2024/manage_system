@@ -20,8 +20,8 @@ class StandardAwardTotalsController < ApplicationController
 
     @years = StandardAwardTotal.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = StandardAwardTotal.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month).page(params[:page]).per(20)
-    @export_standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month)
+    @standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+    @export_standard_award_totals = StandardAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
     respond_to do |format|
       format.html
       format.csv { send_data @export_standard_award_totals.to_csv}

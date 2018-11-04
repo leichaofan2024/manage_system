@@ -19,17 +19,21 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">变动原因</Data></Cell>
       </Row>
-    <% @export_changes.each do |saler| %>
+      <% n = 0 %>
+    <% @export_changes.each do |name,items|  %>
+      <% n += 1 %>
       <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.车间 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.班组 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.姓名 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= saler.变动原因 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.车间 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.班组 %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= name %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.变动原因}.join(";") %></Data></Cell>
       </Row>
     <% end %>
     </Table>

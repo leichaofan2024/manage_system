@@ -59,23 +59,23 @@
             </tr>
           </thead>
           <tbody>
-            <% @standard_award_totals.each do |item| %>
+            <% n = 0 %>
+            <% @standard_award_totals.each do |workshop,items| %>
+              <% n += 1 %>
               <tr>
-                <td><%= item.序号 %></td>
-                <td><%= item.科室车间 %></td>
-                <td><%= item.标准化合计.to_i %></td>
-                <td><%= item.标准化科室车间.to_i %></td>
-                <td><%= item.标准化班组.to_i %></td>
-                <td><%= item.标杆优秀达标车间奖励.to_i %></td>
-                <td><%= item.科室车间备份 %></td>
+                <td><%= n %></td>
+                <td><%= workshop %></td>
+                <td><%= items.map{|item| item.标准化合计.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.标准化科室车间.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.标准化班组.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.标杆优秀达标车间奖励.to_f.round(2)}.sum %></td>
+                <td><%= items.map{|item| item.科室车间备份}.join(";") %></td>
               </tr>
             <% end %>
          </tbody>
         </table>
       </div>
-      <div class="text-center">
-        <%= paginate @standard_award_totals %>
-      </div>
+
     </div>
     <div id="showModal"></div>
   </div>

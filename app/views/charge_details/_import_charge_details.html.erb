@@ -33,32 +33,34 @@
           </tr>
         </thead>
         <tbody>
-          <% @charge_details.each do |item| %>
-               <td><%= item.序号 %></td>
-               <td><%= item.科室车间 %></td>
-               <td><%= item.扣款合计 %></td>
-               <td><%= item.挂钩考核扣款 %></td>
-               <td><%= item.安全业绩扣分 %></td>
-               <td><%= item.安全业绩扣款 %></td>
-               <td><%= item.生产经营绩效扣款 %></td>
-               <td><%= item.总重吨公里扣分 %></td>
-               <td><%= item.总重吨公里扣款 %></td>
-               <td><%= item.综合指标扣分 %></td>
-               <td><%= item.综合指标扣款 %></td>
-               <td><%= item.设备质量扣分 %></td>
-               <td><%= item.设备质量扣款 %></td>
-               <td><%= item.盈亏结果扣分 %></td>
-               <td><%= item.盈亏结果扣款 %></td>
-               <td><%= item.安全质量扣分 %></td>
-               <td><%= item.安全质量扣款 %></td>
-               <td><%= item.工作质量扣分 %></td>
-               <td><%= item.工作质量扣款 %></td>
-               <td><%= item.抽考扣款 %></td>
-               <td><%= item.红牌中层扣款 %></td>
-               <td><%= item.处分扣款 %></td>
-               <td><%= item.其他扣款 %></td>
-               <td><%= item.安全质量考核中牌卡扣分 %></td>
-               <td><%= item.安全质量考核中牌卡扣款 %></td>
+          <% n = 0 %>
+          <% @charge_details.each do |workshop,items| %>
+            <% n += 1 %>
+               <td><%= n %></td>
+               <td><%= workshop %></td>
+               <td><%= items.map{|item| item.扣款合计.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.挂钩考核扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全业绩扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全业绩扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.生产经营绩效扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.总重吨公里扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.总重吨公里扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.综合指标扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.综合指标扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.设备质量扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.设备质量扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.盈亏结果扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.盈亏结果扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全质量扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全质量扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.工作质量扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.工作质量扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.抽考扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.红牌中层扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.处分扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.其他扣款.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全质量考核中牌卡扣分.to_f.round(2)}.sum  %></td>
+               <td><%= items.map{|item| item.安全质量考核中牌卡扣款.to_f.round(2)}.sum  %></td>
             </tr>
           <% end %>
        </tbody>
@@ -66,7 +68,5 @@
     </div>
   </div>
 
-  <div class="text-center">
-    <%= paginate @charge_details %>
-  </div>
+
 </div>
