@@ -219,6 +219,14 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def download_company_relative_saler_table_template
+    respond_to do |format|
+      format.html
+      format.csv { send_data to_csv}
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="工效挂钩考核表.xls"'}
+    end
+  end
+
   private
 
    def notice_params

@@ -18,8 +18,13 @@ class PeopleChangesController < ApplicationController
     end
     @years = PeopleChange.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = PeopleChange.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @changes = PeopleChange.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.姓名}
-    @export_changes = PeopleChange.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.姓名}
+    if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @changes = PeopleChange.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.姓名}
+      @export_changes = PeopleChange.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.姓名}
+    else
+      @changes = PeopleChange.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.姓名}
+      @export_changes = PeopleChange.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.姓名}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @export_changes.to_csv}

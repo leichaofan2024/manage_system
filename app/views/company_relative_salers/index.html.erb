@@ -40,9 +40,12 @@
         </span>月
         <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
       <% end %>
-      <%= link_to("删除表格",delete_company_relative_salers_company_relative_salers_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月工效挂钩考核表吗？"},class:"btn btn-primary-upload pull-right") %>
+      <% if (current_user.has_role? :awardadmin) %>
+        <%= link_to("删除表格",delete_company_relative_salers_company_relative_salers_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月工效挂钩考核表吗？"},class:"btn btn-primary-upload pull-right") %>
+        <%= link_to("上传工效挂钩考核表",show_modal_company_relative_salers_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+      <% end %>
       <%= link_to("导出表格",company_relative_salers_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
-      <%= link_to("上传工效挂钩考核表",show_modal_company_relative_salers_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+
 
       <div  class="content-table" style="clear:both;">
         <table class="table table-bordered">

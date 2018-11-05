@@ -19,8 +19,13 @@ class WorkshopRelativeSalersController < ApplicationController
     @head_hash = @other_award_totals_heads.pluck(:name,:col_name).uniq.to_h
     @years = WorkshopRelativeSaler.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = WorkshopRelativeSaler.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
-    @export_workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+    if (current_user.name == "计划财务科") || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :awardadmin)
+      @workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+      @export_workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+    elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.工资号}
+      @export_workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.工资号}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @export_workshop_relative_salers.to_csv }

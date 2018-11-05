@@ -18,8 +18,13 @@ class ChargeDetailsController < ApplicationController
     end
     @years = ChargeDetail.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = ChargeDetail.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
-    @export_charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+    if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.科室车间}
+      @export_charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.科室车间}
+    else
+      @charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+      @export_charge_details = ChargeDetail.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @charge_details.to_csv}

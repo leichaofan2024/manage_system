@@ -20,8 +20,13 @@ class StandardGroupsController < ApplicationController
 
     @years = StandardGroup.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = StandardGroup.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
-    @export_standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
+    if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.班组名称}
+      @export_standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.班组名称}
+    else
+      @standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
+      @export_standard_groups = StandardGroup.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.班组名称}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @export_standard_groups.to_csv}

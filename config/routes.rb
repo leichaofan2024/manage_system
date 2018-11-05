@@ -128,6 +128,7 @@ Rails.application.routes.draw do
       get :download_standard_group_table_template
       get :download_star_award_table_template
       get :download_other_award_total_table_template
+      get :download_company_relative_saler_table_template
     end
   end
 

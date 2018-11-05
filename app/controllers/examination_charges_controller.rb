@@ -19,8 +19,13 @@ class ExaminationChargesController < ApplicationController
     end
     @years = ExaminationCharge.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = ExaminationCharge.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
-    @export_examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
+    if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.工资编号}
+      @export_examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.工资编号}
+    else
+      @examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
+      @export_examination_charges = ExaminationCharge.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资编号}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @export_examination_charges.to_csv}

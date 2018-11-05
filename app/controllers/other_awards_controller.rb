@@ -19,8 +19,13 @@ class OtherAwardsController < ApplicationController
     end
     @years = OtherAward.pluck(:upload_year).map{|x| x.to_i}.uniq
     @months = OtherAward.pluck(:upload_month).map{|x| x.to_i}.uniq
-    @other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
-    @export_other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+    if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
+      @other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.工资号}
+      @export_other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month,:车间 => current_user.name).group_by{|x| x.工资号}
+    else
+      @other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+      @export_other_awards = OtherAward.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.工资号}
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @export_other_awards.to_csv}

@@ -33,6 +33,8 @@ User.create(name: "纪委书记", password: "123456", password_confirmation: "12
 User.create(name: "工会主席", password: "123456", password_confirmation: "123456").add_role :depudy_leaderadmin
 "\n"
 
+User.create(name: "企业管理员", password: "123456", password_confirmation: "123456").add_role :company_admin
+
 
 
 puts "创建车间管理员，请稍等。。。"
