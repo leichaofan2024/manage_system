@@ -120,10 +120,29 @@ class OtherAwardTotalsController < ApplicationController
   def delete_other_award_totals
     @year = params[:year]
     @month = params[:month]
-    OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).delete_all
-    OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month).delete_all
-    WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month).delete_all
-    flash[:notice] = "#{@year}年#{@month}月其他单项总明细表以及车间、科室上传的单项奖表均已同步删除！"
+    this_year == Time.now.year
+    this_month == Time.now.month
+    if Time.now.month == 1
+      last_year = Time.now.year - 1
+      last_month = 12
+    else
+      last_year = Time.now.year
+      last_month = Time.now.month - 1
+    end
+    allow_year_month_array = [[this_year,this_month],[last_year,last_month]]
+    request_year_month = Array.new
+    @month.each do |month|
+      request_year_month << [@year.to_i,month.to_i]
+    end
+
+    if allow_year_month_array.include?(request_year_month)
+      OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).delete_all
+      OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month).delete_all
+      WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month).delete_all
+      flash[:notice] = "#{@year}年#{@month}月其他单项总明细表以及车间、科室上传的单项奖表均已同步删除！"
+    else
+      flash[:alert] = "#{@year}年#{@month}月包含往期已封存数据，不可删除！"
+    end
     redirect_to other_award_totals_path
   end
 end
