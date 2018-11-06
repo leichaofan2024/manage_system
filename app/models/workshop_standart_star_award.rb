@@ -17,19 +17,38 @@ class WorkshopStandartStarAward < ApplicationRecord
     # 先验证劳资有没有上传"标准化"或"星级岗"汇总表：
     if name == "标准化"
       befor_import = StandardAwardTotal.where(:upload_year =>year,:upload_month => month)
+      sum_value = "标准化合计"
     elsif name == "星级岗"
       befor_import = StarAward.where(:upload_year =>year,:upload_month => month)
+      sum_value = "发放合计"
     end
     if !befor_import.present?
       message[:after_total] = "劳资尚未上传“#{name}”汇总表，请等劳资上传后再操作！"
     end
     # 劳资本月上传"标准化"或"星级岗"汇总表中的所有科室车间名称：
     workshop_names = befor_import.pluck(:科室车间).uniq
+    # 科室车间上传的工挂明细表中的科室或车间名：
+    workshop_index = (spreadsheet.row(1)).index("科室车间")
+    workshop_name_array = Array.new
+    (2..spreadsheet.last_row).each do |n|
+      workshop_name_array << (spreadsheet.row(n))[workshop_index]
+    end
+    workshop_name = workshop_name_array.uniq
 
-    # 科室车间上传的"标准化"或"星级岗"明细表中的科室或车间名：
-    workshop_name = [spreadsheet.row(1),spreadsheet.row(2)].transpose.to_h["科室车间"]
-    if !workshop_names.include?(workshop_name)
-      message[:workshop_name] = "您上传的工挂工资明细表中的科室或车间名与劳资上传的汇总表里的科室或车间名称不一样，请核对、更正后再上传！"
+
+    # 劳资本月上传汇总表中的所有科室车间名称是否包含车间、科室上传的：
+    workshop_names = befor_import.pluck(:科室车间).uniq
+    diff_names = Array.new
+    workshop_name.each do |x|
+      if !workshop_names.include?(x)
+        diff_names << 1
+      end
+    end
+
+    if workshop_name.count != (workshop_name.compact.count)
+      message[:workshop_name] = "您上传的单项奖明细表中的科室或车间名不能为空，请核对、更正后再上传！"
+    elsif diff_names.present?
+      message[:workshop_name] = "科室或车间名要与劳资上传的单项奖汇总表里的科室或车间名称保持一致，请核对、更正后再上传！"
     end
 
     if message.blank?
@@ -48,18 +67,23 @@ class WorkshopStandartStarAward < ApplicationRecord
         end
       end
 
-      message[:value_match] = Array.new
-      # 本科室、车间单项奖汇总表信息：
-      award_total = befor_import.find_by(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name)
-      award_total_hash = award_total.attributes
-      # 本月本科室、车间上传的单项奖明细表信息：
-      workshop_single_awards = WorkshopStandartStarAward.where(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name)
 
-      if workshop_single_awards.sum(name).to_f != award_total_hash[name].to_f
-        message[:value_match] << name
+
+      message[:value_match] = Array.new
+      workshop_name.each do |every_name|
+        # 本科室、车间标准化和星级岗汇总表信息：
+        award_total = befor_import.find_by(:科室车间 => every_name)
+        award_total_hash = award_total.attributes
+        # 本次上传的标准化和星级岗明细表信息：
+        workshop_single_awards = WorkshopStandartStarAward.where(:upload_year =>year,:upload_month => month,:科室车间 => every_name)
+
+        if workshop_single_awards.sum(name).to_f != award_total_hash[sum_value].to_f
+          message[:value_match] << name
+        end
       end
+
       if message[:value_match].present?
-        workshop_single_awards.delete_all
+        WorkshopStandartStarAward.where(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name).delete_all
       end
     end
     return message

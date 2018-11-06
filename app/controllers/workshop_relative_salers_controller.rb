@@ -84,8 +84,10 @@ class WorkshopRelativeSalersController < ApplicationController
       @import_message = WorkshopSingleAward.import_form(params[:file],params[:upload_time],params[:name])
       if @import_message[:head].present?
         flash[:alert] = @import_message[:head]
-      elsif @import_message[:year_month].present?
-        flash[:alert] = @import_message[:year_month]
+      elsif @import_message[:workshop_name].present?
+				flash[:alert] = @import_message[:workshop_name]
+      elsif @import_message[:value_match].present?
+        flash[:alert] = "#{@import_message[:value_match]}这几项的合计值与劳资上传的单项奖汇总表有出入，请核对后再上传！"
       else
         flash[:notice] = "单项奖明细表#{params[:name]}上传成功"
       end
@@ -104,6 +106,12 @@ class WorkshopRelativeSalersController < ApplicationController
         flash[:alert] = @import_message[:head]
       elsif @import_message[:year_month].present?
         flash[:alert] = @import_message[:year_month]
+      elsif @import_message[:after_total].present?
+        flash[:alert] = @import_message[:after_total]
+      elsif @import_message[:workshop_name].present?
+        flash[:alert] = @import_message[:workshop_name]
+      elsif @import_message[:value_match].present?
+        flash[:alert] = "#{@import_message[:value_match]}这几项的合计值与劳资上传的#{params[:name]}汇总表有出入，请核对后再上传！"
       else
         flash[:notice] = "单项奖明细表#{params[:name]}上传成功"
       end

@@ -22,8 +22,8 @@ class OtherAwardTotalsController < ApplicationController
     @other_award_totals_heads = OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month)
     @head_hash = @other_award_totals_heads.pluck(:name,:col_name).uniq.to_h
     if (current_user.has_role? :organsadmin) || (current_user.has_role? :workshopadmin)
-      @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user).group_by{|x| x.科室车间}
-      @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user).group_by{|x| x.科室车间}
+      @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.科室车间}
+      @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month,:科室车间 => current_user.name).group_by{|x| x.科室车间}
     else
       @other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
       @export_other_award_totals = OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).group_by{|x| x.科室车间}
@@ -120,8 +120,8 @@ class OtherAwardTotalsController < ApplicationController
   def delete_other_award_totals
     @year = params[:year]
     @month = params[:month]
-    this_year == Time.now.year
-    this_month == Time.now.month
+    this_year = Time.now.year
+    this_month = Time.now.month
     if Time.now.month == 1
       last_year = Time.now.year - 1
       last_month = 12
@@ -135,7 +135,7 @@ class OtherAwardTotalsController < ApplicationController
       request_year_month << [@year.to_i,month.to_i]
     end
 
-    if allow_year_month_array.include?(request_year_month)
+    if (allow_year_month_array <=> request_year_month) > -1
       OtherAwardTotal.where(:upload_year => @year,:upload_month => @month).delete_all
       OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month).delete_all
       WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month).delete_all
@@ -143,6 +143,7 @@ class OtherAwardTotalsController < ApplicationController
     else
       flash[:alert] = "#{@year}年#{@month}月包含往期已封存数据，不可删除！"
     end
+
     redirect_to other_award_totals_path
   end
 end

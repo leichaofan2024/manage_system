@@ -74,7 +74,8 @@
           <tbody>
             <% n = 0 %>
             <% @workshop_relative_salers.each do |sal_number,items| %>
-              <% workshop_single_awards = WorkshopSingleAward.where(:upload_year => @year ,:upload_month => @month,:工资号 => sal_number)%>
+              <% workshop_single_awards = WorkshopSingleAward.where(:upload_year => @year ,:upload_month => @month,:工资号 => sal_number) %>
+              <% standard_star_awards = WorkshopStandartStarAward.where(:upload_year => @year ,:upload_month => @month,:工资号 => sal_number) %>
               <% n += 1 %>
               <tr>
                 <th><%= n %></th>
@@ -92,8 +93,8 @@
                 <td><%= items.map{|x| x.其他.to_f.round(2)}.sum %></td>
                 <td><%= items.map{|x| x.应发.to_f.round(2)}.sum %></td>
                 <td><%= items.map{|x| x.小计.to_f.round(2)}.sum %></td>
-                <td></td>
-                <td></td>
+                <td><%= standard_star_awards.map{|x| x.标准化.to_f.round(2)}.sum %></td>
+                <td><%= standard_star_awards.map{|x| x.星级岗.to_f.round(2)}.sum %></td>
                 <% @head_hash.values.each do |value| %>
                   <td><%= workshop_single_awards.map{|x| x.send(value).to_f.round(2)}.sum %></td>
                 <% end %>
