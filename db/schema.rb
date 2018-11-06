@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181101080138) do
+ActiveRecord::Schema.define(version: 20181105051000) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -1729,6 +1729,21 @@ ActiveRecord::Schema.define(version: 20181101080138) do
     t.string "col48"
     t.string "col49"
     t.string "col50"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "workshop_standart_star_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "序号"
+    t.string "科室车间"
+    t.string "班组"
+    t.string "工资号"
+    t.string "姓名"
+    t.string "标准化"
+    t.string "星级岗"
+    t.string "备注"
+    t.string "upload_year"
+    t.string "upload_month"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

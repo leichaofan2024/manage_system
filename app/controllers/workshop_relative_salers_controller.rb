@@ -69,6 +69,7 @@ class WorkshopRelativeSalersController < ApplicationController
     workshop_name = current_user.name
     WorkshopRelativeSaler.where(:upload_year => @year,:upload_month => @month,:科室车间 => workshop_name).delete_all
     WorkshopSingleAward.where(:upload_year => @year,:upload_month => @month,:科室车间 => workshop_name).delete_all
+    WorkshopStandartStarAward.where(:upload_year => @year,:upload_month => @month,:科室车间 => workshop_name).delete_all
     flash[:notice] = "#{workshop_name}#{@year}年#{@month}月工效挂钩明细表及同期单项奖表均已成功删除！"
     redirect_to workshop_relative_salers_path
   end
@@ -81,6 +82,24 @@ class WorkshopRelativeSalersController < ApplicationController
       flash[:alert] = "您还没有选择日期哦"
     else
       @import_message = WorkshopSingleAward.import_form(params[:file],params[:upload_time],params[:name])
+      if @import_message[:head].present?
+        flash[:alert] = @import_message[:head]
+      elsif @import_message[:year_month].present?
+        flash[:alert] = @import_message[:year_month]
+      else
+        flash[:notice] = "单项奖明细表#{params[:name]}上传成功"
+      end
+    end
+    redirect_to workshop_relative_salers_path
+  end
+
+  def standard_star_award_import
+    if !params[:file].present?
+      flash[:alert] = "您还没有选择文件哦"
+    elsif !params[:upload_time].present?
+      flash[:alert] = "您还没有选择日期哦"
+    else
+      @import_message = WorkshopStandartStarAward.import_form(params[:file],params[:upload_time],params[:name])
       if @import_message[:head].present?
         flash[:alert] = @import_message[:head]
       elsif @import_message[:year_month].present?

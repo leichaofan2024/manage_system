@@ -19,7 +19,7 @@ class WorkshopSingleAward < ApplicationRecord
     diff_head_name_array = Array.new
     import_form_headers.each do |head_name|
       if !import_head_hash.keys.include?(head_name)
-         message[:head] = "所上传的工挂工资汇总表表头为‘#{fh}’的字段与系统不匹配，请核对更正后再上传！"
+         message[:head] = "所上传的单项奖明细表表头为‘#{head_name}’的字段与系统不匹配，请核对更正后再上传！"
       end
     end
     if message.blank?
@@ -35,7 +35,7 @@ class WorkshopSingleAward < ApplicationRecord
           workshop_single_award.update(import_head_hash["单项奖"] => row_hash[import_head_hash["单项奖"]])
         else
           WorkshopSingleAward.create(row_hash)
-        end 
+        end
       end
     end
     return message

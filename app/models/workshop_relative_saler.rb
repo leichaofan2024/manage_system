@@ -9,10 +9,18 @@ class WorkshopRelativeSaler < ApplicationRecord
         message[:head] = "所上传的工挂工资明细表表头为‘#{fh}’的字段与系统不匹配，请核对后再上传！"
       end
     end
-    year_month_already_import = WorkshopRelativeSaler.pluck(:upload_year,:upload_month).uniq
+    # 科室车间上传的工挂明细表中的科室或车间名：
+    workshop_index = (spreadsheet.row(1)).index("科室车间")
+    workshop_name_array = Array.new
+    (2..spreadsheet.last_row).each do |n|
+      workshop_name_array << (spreadsheet.row(n))[workshop_index]
+    end
+    workshop_name = workshop_name_array.uniq
+
     year = upload_time.split("-")[0].to_i
     month = upload_time.split("-")[1].to_i
-    if year_month_already_import.include?([year.to_s,month.to_s])
+    year_month_already_import = WorkshopRelativeSaler.where(:upload_year => year,:upload_month => month,:科室车间 => workshop_name)
+    if year_month_already_import.present?
       message[:year_month] = "本月数据已上传，请勿重复上传！"
     end
 
@@ -23,11 +31,17 @@ class WorkshopRelativeSaler < ApplicationRecord
     end
     # 劳资本月上传汇总表中的所有科室车间名称：
     workshop_names = relative_saler_totals.pluck(:科室车间).uniq
+    diff_names = Array.new
+    workshop_name.each do |x|
+      if !workshop_names.include?(x)
+        diff_names << 1
+      end
+    end
 
-    # 科室车间上传的工挂明细表中的科室或车间名：
-    workshop_name = [spreadsheet.row(1),spreadsheet.row(2)].transpose.to_h["科室车间"]
-    if !workshop_names.include?(workshop_name)
-      message[:workshop_name] = "您上传的工挂工资明细表中的科室或车间名与劳资上传的汇总表里的科室或车间名称不一样，请核对、更正后再上传！"
+    if workshop_name.count != (workshop_name.compact.count)
+      message[:workshop_name] = "您上传的工挂工资明细表中的科室或车间名不能为空，请核对、更正后再上传！"
+    elsif diff_names.present?
+      message[:workshop_name] = "科室或车间名要与劳资上传的汇总表里的科室或车间名称保持一致，请核对、更正后再上传！"
     end
 
     if message.blank?
@@ -38,18 +52,22 @@ class WorkshopRelativeSaler < ApplicationRecord
         WorkshopRelativeSaler.create(row_hash)
       end
       message[:value_match] = Array.new
-      # 本科室、车间工效挂钩工资汇总表信息：
-      relative_saler_total = RelativeSalersTotal.find_by(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name)
-      relative_saler_total_hash = relative_saler_total.attributes
-      # 本次上传的工效挂钩明细表信息：
-      workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name)
-      ["挂钩工资","安全质量","工作质量","行车","整改返奖","一体化","兼职兼岗","考核扣款","其他","应发","小计"].each do |name|
-        if workshop_relative_salers.sum(name).to_f != relative_saler_total_hash[name].to_f
-          message[:value_match] << name
+
+      workshop_name.each do |every_name|
+        # 本科室、车间工效挂钩工资汇总表信息：
+        relative_saler_total = RelativeSalersTotal.find_by(:upload_year =>year,:upload_month => month,:科室车间 => every_name)
+        relative_saler_total_hash = relative_saler_total.attributes
+        # 本次上传的工效挂钩明细表信息：
+        workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year =>year,:upload_month => month,:科室车间 => every_name)
+        ["挂钩工资","安全质量","工作质量","行车","整改返奖","一体化","兼职兼岗","考核扣款","其他","应发","小计"].each do |name|
+          if workshop_relative_salers.sum(name).to_f != relative_saler_total_hash[name].to_f
+            message[:value_match] << name
+          end
         end
       end
+
       if message[:value_match].present?
-        workshop_relative_salers.delete_all
+        WorkshopRelativeSaler.where(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name).delete_all
       end
 
     end

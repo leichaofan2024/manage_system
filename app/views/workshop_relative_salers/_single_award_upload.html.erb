@@ -8,30 +8,59 @@
         </h4>
       </div>
       <div class="modal-body">
-        <%= form_tag single_award_import_workshop_relative_salers_path(:name => @name), method: 'post', multipart: true do %>
-          <div class="col-md-6 col-md-offset-4 datepicker-input">
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker10'>
-                  <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
-                    <span class="input-group-addon" style="margin-left: -20px">
-                        <span class="glyphicon glyphicon-calendar">
-                        </span>
-                    </span>
-                </div>
+        <% if ["标准化","星级岗"].include?(@name) %>
+          <%= form_tag standard_star_award_import_workshop_relative_salers_path(:name => @name), method: 'post', multipart: true do %>
+            <div class="col-md-6 col-md-offset-4 datepicker-input">
+              <div class="form-group">
+                  <div class='input-group date' id='datetimepicker10'>
+                    <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                      <span class="input-group-addon" style="margin-left: -20px">
+                          <span class="glyphicon glyphicon-calendar">
+                          </span>
+                      </span>
+                  </div>
+              </div>
             </div>
-          </div>
-          <div class="file-style">
-            <%= file_field_tag :file,required: true %>
-          </div>
-          <div class="" style="">
-             <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
-          </div>
-          <div class=" remind-circle">
-            <h5 style=" margin-top: 40px;">温馨提示</h5>
-            <p>1、暂不支持复合表头（即合并单元格）；</p>
-            <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【单项奖明细表模板】", download_workshop_single_award_table_template_announcements_path(format: "xls") %></p>
-          </div>
+            <div class="file-style">
+              <%= file_field_tag :file,required: true %>
+            </div>
+            <div class="" style="">
+               <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
+            </div>
+            <div class=" remind-circle">
+              <h5 style=" margin-top: 40px;">温馨提示</h5>
+              <p>1、暂不支持复合表头（即合并单元格）；</p>
+              <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【单项奖明细表模板】", download_workshop_single_award_table_template_announcements_path(format: "xls") %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <%= form_tag single_award_import_workshop_relative_salers_path(:name => @name), method: 'post', multipart: true do %>
+            <div class="col-md-6 col-md-offset-4 datepicker-input">
+              <div class="form-group">
+                  <div class='input-group date' id='datetimepicker10'>
+                    <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                      <span class="input-group-addon" style="margin-left: -20px">
+                          <span class="glyphicon glyphicon-calendar">
+                          </span>
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="file-style">
+              <%= file_field_tag :file,required: true %>
+            </div>
+            <div class="" style="">
+               <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
+            </div>
+            <div class=" remind-circle">
+              <h5 style=" margin-top: 40px;">温馨提示</h5>
+              <p>1、暂不支持复合表头（即合并单元格）；</p>
+              <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【单项奖明细表模板】", download_workshop_single_award_table_template_announcements_path(format: "xls") %></p>
+            </div>
+          <% end %>
         <% end %>
+
+
 
 
       </div>
