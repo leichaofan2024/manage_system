@@ -2,119 +2,128 @@
   <div class="panel">
     <div class="panel-heading">
       <h4>各职务收入对比(2017年3月-7月对比2018年3-7月)</h4>
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          时间选择
+        </a>
+        <div class="daterangepicker dropdown-menu">
+          <div class="calendar-wrap">
+            <div class="calendar">
+              <ul>
+                <li>
+                  <span>从</span>
+                  <input id="beginTime" value="">
+                </li>
+                <li>
+                  <span>到</span>
+                  <input id="endTime" value="">
+                </li>
+                <li>
+                  <span>按月显示</span>
+                </li>
+              </ul>
+            </div>
+            <div class="ranges">
+              <ul>
+                <li onclick="getQuarter()">本季度</li>
+                <li onclick="getLastQuarter(today.getFullYear() )">上季度</li>
+                <li onclick="thisYear()">本年度</li>
+                <li onclick="lastYear()">上年度</li>
+              </ul>
+            </div>
+            <div class="toolbar">
+              <span class="item">
+                与上一年同期相比
+              </span>
+              <span class="item">
+                <button type="button" name="button" class="btn btn-link btn-small">取消</button>
+                <button type="button" name="button" class="btn btn-primary btn-small">确定</button>
+              </span>
+            </div>
+          </div>
 
-        <button type="button" class="btn btn-info" onclick="getQuarter()">本季度</button>
-        <button type="button" class="btn btn-success" onclick="getLastQuarter(today.getFullYear() )">上季度</button>
-        <button type="button" class="btn btn-primary" onclick="thisYear()">本年度</button>
-        <button type="button" class="btn btn-light" onclick="lastYear()">上年度</button>
+        </div>
+      </div>
+    </div>
 
+    <div class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      数据源选择
+    </a>
+    <div class="dateselect dropdown-menu"  id="multiCollapseExample2">
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <% Workshop.current.each do |workshop| %>
+            <li>
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  <%= workshop.name %>
+                </label>
+            </li>
+          <% end %>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <% Employee.pluck(:grade).uniq.compact.each do |grade| %>
+            <li>
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  <%= grade %>
+                </label>
+            </li>
+          <% end %>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <% Employee.pluck(:duty).uniq.compact.each do |duty| %>
+            <li>
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  <%= duty %>
+                </label>
+            </li>
+          <% end %>
+        </div>
+        <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
+          <% Employee.pluck(:work_type).uniq.compact.each do |work_type| %>
+            <li>
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  <%= work_type %>
+                </label>
+            </li>
+          <% end %>
+        </div>
+        <div class="toolbar" style="position:relative;float:right;">
+          <span class="item">
+            <button type="button" name="button" class="btn btn-link btn-small">取消</button>
+            <button type="button" name="button" class="btn btn-primary btn-small">确定</button>
+          </span>
+        </div>
+      </div>
+
+
+      <ul class="select-nav" id="myTab" role="tablist">
+        <li class="item">
+          <a class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true" href="#home" >车间部门</a>
+        </li>
+        <li class="item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">级别</a>
+        </li>
+        <li class="item">
+          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">职务</a>
+        </li>
+        <li class="item">
+          <a class="nav-link" id="group-tab" data-toggle="tab" role="tab" aria-controls="group" aria-selected="false" href="#group" >工种</a>
+        </li>
+      </ul>
+    </div><!--dateselect-->
 
     </div>
+
+
     <div class="panel-body">
-      <form class="form-inline">
-        <input id="beginTime" value="">
-        <input id="endTime" value="">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">确定</button>
-      </form>
-    </div>
-    <div class="panel">
+      <div class="demo" style="margin: 0; border: 1px solid; min-width: 500px;">
+        hah
+      </div>
     </div>
   </div>
 </div>
-<script type="text/javascript">
-Date.prototype.format =function(format)
-  {
-  var o = {
-  "M+" : this.getMonth()+1, //month
-  "d+" : this.getDate(), //day
-  "h+" : this.getHours(), //hour
-  "m+" : this.getMinutes(), //minute
-  "s+" : this.getSeconds(), //second
-  "q+" : Math.floor((this.getMonth()+3)/3), //quarter
-  "S" : this.getMilliseconds() //millisecond
-  }
-  if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
-  (this.getFullYear()+"").substr(4- RegExp.$1.length));
-  for(var k in o)if(new RegExp("("+ k +")").test(format))
-  format = format.replace(RegExp.$1,
-  RegExp.$1.length==1? o[k] :
-  ("00"+ o[k]).substr((""+ o[k]).length));
-  return format;
-  }
-  var today = new Date();
-
-  function getQuarter(){
-      var nowToday = today.getMonth();
-      var quarter = 0;
-      var endQuarter = 0;
-      if (8 < nowToday) {
-        quarter = 9;
-        endQuarter = 11;
-      }
-      if (5 < nowToday && nowToday < 9) {
-        quarter = 6;
-        endQuarter = 8;
-      }
-      if (2 < nowToday && nowToday < 6) {
-        quarter = 3;
-        endQuarter = 5;
-      }
-      if (nowToday < 3) {
-        quarter = 0;
-        endQuarter = 2;
-      }
-      //得到上一个月的第一天
-      var lastMonthFirstDay = new Date(today.getFullYear() , quarter, 1);
-      //得到本月第一天
-      var nowMonthFirstDay = new Date(today.getFullYear() ,endQuarter, 1);
-
-      document.getElementById("beginTime").value = lastMonthFirstDay.format('yyyy-MM');
-      document.getElementById("endTime").value = nowMonthFirstDay.format('yyyy-MM');
-  }
-
-  function getLastQuarter(year){
-      var nowToday = today.getMonth();
-      var lastquarter = 0;
-      var lastendQuarter = 0;
-      if (8 < nowToday) {
-        lastquarter = 6;
-        lastendQuarter = 8;
-      }
-      if (5 < nowToday && nowToday < 9) {
-        lastquarter = 3;
-        lastendQuarter = 5;
-      }
-      if (2 < nowToday && nowToday < 6) {
-        lastquarter = 0;
-        lastendQuarter = 2;
-      }
-      if (nowToday < 3) {
-        year -- ;
-        lastquarter = 6;
-        lastendQuarter = 8;
-      }
-      //得到上一个季度的第一天
-      var lastQuarterFirstDay = new Date(year, lastquarter , 1);
-      //得到本月第一天
-      var nowMonthFirstDay = new Date(year, lastendQuarter, 1);
-      document.getElementById("beginTime").value = lastQuarterFirstDay.format('yyyy-MM');
-      document.getElementById("endTime").value = nowMonthFirstDay.format('yyyy-MM');
-  }
-  function thisYear() {
-      var nowYear = new Date(today.getFullYear() , 0, 1);
-      var endYear = new Date(today.getFullYear() , 11, 31);
-      document.getElementById("beginTime").value = nowYear.format('yyyy-MM');
-      document.getElementById("endTime").value = endYear.format('yyyy-MM');
-    }
-
-  function lastYear() {
-    var now = today.getFullYear();
-     now -- ;
-    var lastFirstYear = new Date(now, 0,1);
-    var lastEndYear = new Date(now, 11, 31);
-
-    document.getElementById("beginTime").value = lastFirstYear.format('yyyy-MM');
-    document.getElementById("endTime").value = lastEndYear.format('yyyy-MM');
-  }
-
-</script>

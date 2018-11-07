@@ -2659,3 +2659,94 @@ button.close {
     text-decoration: underline;
     color: #2A6496;
 }
+
+.daterangepicker {
+  padding: 12px 10px 10px;
+  font-size: 13px;
+  position: absolute;
+  background: #ffff;
+  border-radius: 4px;
+  border: 1px solid #e7ebf0;
+}
+.daterangepicker .calendar-wrap{
+  overflow: hidden;
+}
+.calendar{
+  float: right;
+  margin: 4px;
+  list-style: none;
+  padding: 10px 20px;
+  background: #f5f5f5;
+}
+
+.calendar ul {
+  list-style: none;
+  padding-left: 0;
+
+}
+.calendar ul li {
+  margin: 5px;
+  padding-bottom: 10px;
+}
+.ranges {
+  float: right;
+}
+.daterangepicker .ranges ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.daterangepicker .ranges ul li,.dateselect .select-nav li{
+  margin: 4px 3px;
+  padding: 4px 7px;
+  text-align: center;
+  border-radius: 2px;
+  color: #559FF0;
+  cursor: pointer;
+  border: 1px solid #f5f5f5;
+  background: #f5f5f5;
+}
+.daterangepicker .toolbar{
+  clear: both;
+  margin: 6px 0 0;
+}
+.daterangepicker .toolbar .item:last-child{
+  margin-right: 5px;
+  float: right;
+}
+.btn .btn-small {
+  min-width: 60px;
+  height: 30px;
+  padding: 5px 10px;
+}
+
+
+.dateselect {
+  position: absolute;
+  border: 1px solid #f5f5f5;
+  border-radius: 4px;
+  background-color: #ffff;
+}
+
+.dateselect .select-nav{
+  list-style: none;
+  float: right;
+  padding: 0;
+}
+
+
+.dateselect .tab-content {
+  padding: 0;
+  float: right;
+  max-width: 800px;
+  padding: 4px 7px;
+}
+
+
+.dateselect .tab-content li{
+  list-style: none;
+  font-size: 13px;
+  position: relative;
+  width: 20%;
+  display: inline-block;
+}
