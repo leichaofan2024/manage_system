@@ -1104,11 +1104,11 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["e","f","i","j","o","n","k","l","s","r"]
 
-		@employees = Employee.current.order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
+		@employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
 
 		# 导出考勤表
 
-		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
+		@export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
 		respond_to do |format|
 	      format.html
 	      format.csv { send_data @export_employees.to_csv }
@@ -1152,8 +1152,8 @@ class AttendancesController < ApplicationController
     end
     @years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@employees = Employee.current.order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
-		@export_employees = Employee.current.order("employees.workshop ASC,employees.group ASC")
+		@employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
+		@export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
 		# 导出考勤表
 		respond_to do |format|
 	      format.html

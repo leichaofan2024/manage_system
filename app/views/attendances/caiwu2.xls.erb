@@ -82,23 +82,25 @@
         <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% if attendance_count.present? %>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= attendance_count.attributes["b"]%></Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String">
-              <% if attendance_count.attributes["d"].to_i == 0%>
-                <% if  (attendance.add_overtime.to_i > 0) %>
-                  <%= attendance.add_overtime.to_i %>
-                <% else %>
-
-                <% end %>
+            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["b"]%></Data></Cell>
+            <% if attendance_count.attributes["d"].to_i == 0%>
+              <% if  (attendance.add_overtime.to_i > 0) %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance.add_overtime.to_i %></Data></Cell>
               <% else %>
-                <% if  (attendance.add_overtime.to_i > 0) %>
-                  <%= attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i %>
-                <% else %>
-                  <%= attendance_count.attributes["d"].to_i %>
-                <% end %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
               <% end %>
-            </Data></Cell>
-            <Cell ss:StyleID="Description"><Data ss:Type="String"><%= attendance_count.attributes["c"]%></Data></Cell>
+            <% else %>
+              <% if  (attendance.add_overtime.to_i > 0) %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i %></Data></Cell>
+              <% else %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["d"].to_i %></Data></Cell>
+              <% end %>
+            <% end %>
+            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["c"].to_i%></Data></Cell>
+        <% else %>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
         <% end %>
       </Row>
     <% end %>

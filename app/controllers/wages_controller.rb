@@ -680,13 +680,13 @@ class WagesController < ApplicationController
 			sal_numbers_array << @filter_type_salnumber
 		end
 
-		sal_numbers = []
-		if sal_numbers_array.present?
-			sal_numbers = sal_numbers_array.first
-			sal_numbers_array.each do |m|
-				sal_numbers = (sal_numbers & m)
-			end
-	  end
+		# sal_numbers = []
+		# if sal_numbers_array.present?
+		# 	sal_numbers = sal_numbers_array.first
+		# 	sal_numbers_array.each do |m|
+		# 		sal_numbers = (sal_numbers & m)
+		# 	end
+	  # end
 		if params[:name].present? || params[:sal_number].present? || params[:department].present? || params[:sex].present? || params[:duty].present? || params[:work_type].present? || (params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?)
 			sal_numbers = []
 			sal_numbers = sal_numbers_array.first

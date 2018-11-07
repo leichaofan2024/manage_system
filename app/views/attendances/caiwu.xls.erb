@@ -102,8 +102,10 @@
         <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% if attendance_count.present? %>
           <% @vacation_codes.each do |code| %>
-              <Cell ss:StyleID="Description"><Data ss:Type="String"><%= attendance_count.attributes[code] %></Data></Cell>
+              <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes[code].to_i %></Data></Cell>
           <% end %>
+        <% else %>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
         <% end %>
       </Row>
     <% end %>

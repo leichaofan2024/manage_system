@@ -69,7 +69,7 @@
                     <% if  (attendance.add_overtime.to_i > 0) %>
                       <%= attendance.add_overtime.to_i %>
                     <% else %>
-
+                      <%= 0 %>
                     <% end %>
                   <% else %>
                     <% if  (attendance.add_overtime.to_i > 0) %>
@@ -79,7 +79,7 @@
                     <% end %>
                   <% end %>
                 </td>
-                <td><%= attendance_count.attributes["c"]%></td>
+                <td><%= attendance_count.attributes["c"].to_i %></td>
               <% end %>
 	        	</tr>
         	<% end %>
