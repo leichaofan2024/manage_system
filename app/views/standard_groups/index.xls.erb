@@ -39,7 +39,7 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.评定等级}.join(";") %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.奖励标准}.join(";") %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.人数}.join(";") %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.奖励金额.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.奖励金额.to_f.round(2)}.sum %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.join(";") %></Data></Cell>
       </Row>
     <% end %>

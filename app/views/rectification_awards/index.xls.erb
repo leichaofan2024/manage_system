@@ -35,12 +35,12 @@
       <Row>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|x| x.备注}.join(";")  %></Data></Cell>
       </Row>
     <% end %>

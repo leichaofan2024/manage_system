@@ -34,7 +34,7 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.姓名%></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= sal_number %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.first.部门 %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.返奖金额.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.返奖金额.to_f.round(2)}.sum %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.join(";") %></Data></Cell>
       </Row>
     <% end %>

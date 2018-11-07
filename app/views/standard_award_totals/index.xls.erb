@@ -34,10 +34,10 @@
       <Row>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化合计.to_f.round(2)}.sum %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化科室车间.to_f.round(2)}.sum %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标准化班组.to_f.round(2)}.sum %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.标杆优秀达标车间奖励.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.标准化合计.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.标准化科室车间.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.标准化班组.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.标杆优秀达标车间奖励.to_f.round(2)}.sum %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.科室车间备份}.join(";") %></Data></Cell>
       </Row>
     <% end %>

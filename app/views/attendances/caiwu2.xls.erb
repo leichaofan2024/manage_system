@@ -82,7 +82,7 @@
         <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% if attendance_count.present? %>
-            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["b"]%></Data></Cell>
+            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["b"].to_i %></Data></Cell>
             <% if attendance_count.attributes["d"].to_i == 0%>
               <% if  (attendance.add_overtime.to_i > 0) %>
                 <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance.add_overtime.to_i %></Data></Cell>

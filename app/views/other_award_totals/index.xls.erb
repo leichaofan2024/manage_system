@@ -36,10 +36,10 @@
       <Row>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.排名奖励.to_f.round(2)}.sum %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.防止安全隐患奖励.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.排名奖励.to_f.round(2)}.sum %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.防止安全隐患奖励.to_f.round(2)}.sum %></Data></Cell>
         <% @head_hash.values.each do |value| %>
-          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= items.map{|item| item.send(value).to_f.round(2)}.sum %></Data></Cell>
         <% end %>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= items.map{|item| item.备注}.join("；")%></Data></Cell>
 
