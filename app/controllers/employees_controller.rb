@@ -102,17 +102,17 @@ class EmployeesController < ApplicationController
   end
 
   def edit
-    @employee = Employee.current.find(params[:id])
-    workshop = Workshop.current.pluck("name")
+    @employee = Employee.find(params[:id])
+    workshop = Workshop.pluck("name")
     @group = []
     workshop.each do |name|
-      @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group
   end
 
   def update
-    @employee = Employee.current.find(params[:id])
+    @employee = Employee.find(params[:id])
     @employee.update(employee_params)
     @employee.birth_year = @employee.birth_date[0..3]
     @employee.age = Time.now.year - @employee.birth_year.to_i
