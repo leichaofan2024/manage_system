@@ -76,7 +76,7 @@
       </select>
 
       <select class="" name="month">
-        <% Wage.pluck(:month).uniq.each do |month| %>
+        <% Wage.pluck(:month).uniq.sort.each do |month| %>
           <% if month == @month %>
           <option value="<%= month %>" selected><%= month %></option>
           <% else %>

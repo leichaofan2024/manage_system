@@ -76,7 +76,7 @@
           <% end %>
         </select>
         <select class="" name="month">
-          <% Bonu.pluck(:month).uniq.each do |month| %>
+          <% Bonu.pluck(:month).uniq.sort.each do |month| %>
             <% if month == @month %>
           <option value="<%= month %>" selected><%= month %></option>
             <% else %>
