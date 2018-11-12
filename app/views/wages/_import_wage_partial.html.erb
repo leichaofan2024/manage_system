@@ -1,0 +1,13 @@
+<% wages = Wage.where(:year => year,:month => month,wage_head_hash["工资号"] => sal_number) %>
+<tr>
+  <% (1..WageHeader.count).each do |i| %>
+    <% column_name = "col" + i.to_s %>
+    <td>
+      <% if [wage_head_hash["工资总额"],wage_head_hash["奖金二"],wage_head_hash["应发工资"]].include?(column_name) %>
+        <%= wages.sum(column_name).round(2)%>
+      <% else %>
+        <%= wages.last.send(column_name) %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>

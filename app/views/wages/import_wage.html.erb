@@ -64,28 +64,49 @@
 
     <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left: 20px;">
       <%= form_tag import_wage_wages_path,method: :get  do %>
-      <%= label_tag :请输入时间段搜索 %>
-      <select class="" name="year">
-        <% Wage.pluck(:year).uniq.each do |year| %>
-          <% if year == @year %>
-          <option value="<%= year %>" selected><%= year %></option>
-          <% else %>
-          <option value="<%= year %>"><%= year %></option>
-          <% end %>
-        <% end %>
-      </select>
 
-      <select class="" name="month">
-        <% Wage.pluck(:month).uniq.sort.each do |month| %>
-          <% if month == @month %>
-          <option value="<%= month %>" selected><%= month %></option>
-          <% else %>
-          <option value="<%= month %>"><%= month %></option>
-          <% end %>
-        <% end %>
-      </select>
+        <li style="display: inline-block;">车间：
+            <select name="workshop"  id="selid" onchange="selCity(this)">
+              <option value="" selected >北京供电段</option>
+              <% @workshops.each do |workshop| %>
+                <% if workshop == params[:workshop] %>
+                  <option value="<%= workshop %>" selected><%= workshop %></option>
+                <% else %>
+                  <option value="<%= workshop %>"><%= workshop %></option>
+                <% end %>
+              <% end %>
+            </select>
+        </li>
+        <li style="display: inline-block;">班组：
+            <select name="group"  id="subselid">
+              <option value="">全部</option>
+            </select>
+        </li><br>
 
-      <%= submit_tag :筛选 %>
+        <%= label_tag :请输入时间段搜索 %>
+
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+          <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
+            <% @months.each do |month| %>
+              <% if @month.include?(month) %>
+                <option value="<%= month %>" selected><%= month %></option>
+              <% else %>
+                <option value="<%= month %>"><%= month %></option>
+              <% end %>
+            <% end %>
+          </select>
+        </span>
+      <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
       <% end %>
     </div>
 
@@ -109,22 +130,63 @@
           <% end %>
         </tr>
       </thead>
-      <tbody>
-        <% @wages.each do |wage| %>
-        <tr>
-          <% (1..WageHeader.count).each do |i| %>
-            <td><%= wage.send("col" + i.to_s) %></td>
-          <% end %>
-        </tr>
+      <tbody id = "sal-number-list">
+        <% @sal_numbers.each do |sal_number| %>
+          <%= render :partial => "import_wage_partial",:locals => {:sal_number => sal_number,:year => @year,:month => @month,:wage_head_hash => @wage_head_hash} %>
         <% end %>
       </tbody>
     </table>
-
-    <div class="col-md-12 col-lg-12 col-ms-12 text-center">
-      <% if params[:filter_type].blank? && params[:q].blank? %>
-      <%= paginate @wages %>
-      <% end %>
-    </div>
   </div>
 </div><!--panel-->
 </div>
+
+<script>
+
+  function selCity()
+  {
+      var arr = gon.group_name;
+
+      var selNode = document.getElementById("selid");
+      var subselNode = document.getElementById("subselid");
+      var index = selNode.selectedIndex;
+      var citys = arr[index];
+
+      subselNode.options.length = 0;
+      var firstoptionNode = document.createElement("option");
+      firstoptionNode.value = arr[0];
+      firstoptionNode.innerText = arr[0];
+      subselNode.appendChild(firstoptionNode);
+      for(var i=0; i<citys.length; i++)
+      {
+          var optionNode = document.createElement("option");
+          optionNode.value = citys[i];
+          optionNode.innerText = citys[i];
+          subselNode.appendChild(optionNode);
+      }
+  };
+  $("#month-multiple").select2( { theme: "bootstrap"} );
+// 记下目前画面最小的贴文 ID
+  // var s_count = <%= request.original_url.split("?").count %>;
+  // if (s_count == 2){
+  //   var parameter = <%= request.original_url.split("?").last.sub("max_id=","") %>
+  // } else {
+  //   var parameter = ""
+  // };
+  var current_post_id = <%= @sal_numbers.last %>;
+  // 当捲轴动的时候，会触发这个事件
+  $(window).scroll(function(){
+    // 当捲到最下面的时候
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      var url = "/wages/import_wage?max_id=" + current_post_id + "&" + gon.url_parameter;
+      if (url) {
+        $.ajax({
+          method: "GET",
+          url: url,
+          dataType: "script"
+        })
+      } else {
+        console.log("data ended")
+      }
+    }
+  });
+</script>

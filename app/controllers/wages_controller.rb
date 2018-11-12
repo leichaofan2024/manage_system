@@ -5,24 +5,69 @@ class WagesController < ApplicationController
 
 
 	def import_wage
-		if params[:year].present? && params[:month].present?
-			@year = params[:year].to_i
-			@month = params[:month].to_i
+		if params[:year].present?
+      @year = params[:year].to_i
+      @month = Array.new
+      if params[:month].present?
+        params[:month].each do |month|
+          @month << month.to_i
+        end
+      else
+        @month = Wage.where(:year => params[:year]).pluck(:month).uniq.map{|x| x.to_i}.sort
+      end
 		else
 			wage_year_month_array = Wage.pluck(:year,:month).uniq.last
 			if wage_year_month_array.present?
 				@year = wage_year_month_array[0]
-				@month = wage_year_month_array[1]
+				@month = [wage_year_month_array[1]]
 			else
 				@year = Time.now.year
-				@month = Time.now.month
+				@month = [Time.now.month]
 			end
 		end
-		@wages = Wage.where(:year => @year, :month => @month).page(params[:page]).per(20)
+	  @years = Wage.pluck(:year).uniq.sort
+		@months = Wage.pluck(:month).uniq.sort
+		wage_header_array = WageHeader.pluck(:header)
+    @wage_head_hash = wage_header_array.map{|x| [x,"col"+(wage_header_array.index(x)+1).to_s]}.to_h
+    @wages = Wage.where(:year => @year, :month => @month)
+		if params[:workshop].present?
+			@wages = @wages.where(@wage_head_hash["车间"] => params[:workshop])
+		end
+		if params[:group].present?
+			if params[:group] != "全部"
+				@wages = @wages.where(@wage_head_hash["部门名称"] => params[:group])
+			end
+		end
+		@sal_numbers = @wages.pluck(@wage_head_hash["工资号"]).uniq
+
+
+		gon.url_parameter = ""
+		if params[:max_id].present?
+			index = @sal_numbers.index(params[:max_id])
+			@sal_numbers = @sal_numbers[index+1,20]
+		else
+			@sal_numbers = @sal_numbers.first(20)
+		end
+
+		if request.original_url.split("?").count == 2
+			gon.url_parameter = request.original_url.split("?").last.sub("max_id=","")
+		else
+			gon.url_parameter = ""
+		end
+
+		@workshops = Wage.pluck(@wage_head_hash["车间"]).uniq
+    group = Array.new
+    group << ["全部"]
+    @workshops.each do |name|
+      group << Wage.where(@wage_head_hash["车间"] => name).pluck(@wage_head_hash["部门名称"]).uniq
+    end
+    gon.group_name = group
+
     #下载表格配置
     @export_wages = Wage.where(:year => @year, :month => @month)
     respond_to do |format|
       format.html
+			format.js
       format.xls { headers["Content-Disposition"] = 'attachment; filename="工资表.xls"'}
     end
 	end
@@ -696,7 +741,7 @@ class WagesController < ApplicationController
 	  	@sal_numbers = sal_numbers
 	  end
     gon.url_parameter = ""
-		if params[:max_id]
+		if params[:max_id].present?
 			index = @sal_numbers.index(params[:max_id])
       @sal_numbers = @sal_numbers[index+1,20]
     else
