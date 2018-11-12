@@ -3,9 +3,15 @@ class AttendancesController < ApplicationController
 
 	##班组页面--开始
 	def group
-    @group = Group.find_by(:id => current_user.group_id)
-    @workshop = Workshop.find_by(:id => @group.workshop_id)
-    @applications = Application.where(group_id: current_user.group_id)
+    if params[:group_id].present? && (current_user.has_role? :attendance_admin)
+      @group = Group.find_by(:id => params[:group_id])
+      @workshop = Workshop.find_by(:id => @group.workshop_id)
+      @applications = Application.where(group_id: @group.id) 
+    else
+      @group = Group.find_by(:id => current_user.group_id)
+      @workshop = Workshop.find_by(:id => @group.workshop_id)
+      @applications = Application.where(group_id: current_user.group_id)
+    end
     if params[:year].present? && params[:month].present?
       @year = params[:year].to_i
       @month = params[:month].to_i
@@ -24,7 +30,7 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
-    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15)
+    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15) && (!current_user.has_role? :attendance_admin)
       redirect_to group_attendances_path
       flash[:alert] = "当月15号前可查看上月考勤，当前为#{Time.now.day}号，不能查看！"
     end
@@ -47,7 +53,7 @@ class AttendancesController < ApplicationController
       @group_export_permission = 0
     end
     #什么时候可以导出考勤：
-    if params[:format] == "xls"
+    if params[:format] == "xls" && (!current_user.has_role? :attendance_admin)
 
       if @attendance_status.status != "段已审核"
         redirect_to group_attendances_path
@@ -1152,8 +1158,9 @@ class AttendancesController < ApplicationController
     end
     @years = Attendance.pluck("year").uniq
 		@months = Attendance.pluck("month").uniq.reverse
-		@employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
-		@export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
+		@employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC").page(params[:page]).per(20)
+		@export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
+    # @export_employees = Employee.where(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ? and updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month,"#{@year}-#{@month+1}-15".to_time.end_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
 		# 导出考勤表
 		respond_to do |format|
 	      format.html

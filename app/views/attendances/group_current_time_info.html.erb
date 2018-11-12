@@ -83,6 +83,11 @@
                   <h4 style="text-align: center"><%= Workshop.find(@workshop).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= workshop_checked(@shenhe_day, @groups, @shenhe_year, @shenhe_month,["车间已审核","科室已上报"])%></span>) </h4>
                 <% elsif @group.present? %>
                   <h4 style="text-align: center"><%= Group.find(@group).name %><%= @year %>年<%= @month %>月考勤情况 (<span><%= groups_checked(@group,@year,@month)%></span>) </h4>
+                  <%= link_to group_attendances_path(:year => @year,:month => @month,:group_id => @group,format: "xls") do  %>
+                    <button type="button" class="btn button-success pull-right" style="margin-left:10px;">
+                      <span>导出记录</span>
+                    </button>
+                  <% end %>
                 <% else %>
                   <h4 style="text-align: center">供电段<%= @year %>年<%= @month %>月考勤情况</h4>
                 <% end %>
