@@ -1488,8 +1488,19 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-
-      @employees = LeavingEmployee.where(:leaving_type => "调离").page(params[:page]).per(15)
+      if ["辞职","局内调动","在职死亡"].include?(params[:category_name])
+        category_id = LeavingCategory.find_by(:name => params[:category_name]).id
+        @employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id).page(params[:page]).per(15)
+      elsif params[:category_name] == "退休"
+        category_id = LeavingCategory.find_by(:name => params[:category_name]).id
+        retire_employees = LeavingEmployee.where(:leaving_type => "退休")
+        retire_category_employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
+        @employees = retire_employees.or(retire_category_employees).page(params[:page]).per(15)
+      elsif params[:category_name] == "未分类"
+        @employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil).page(params[:page]).per(15)
+      else
+        @employees = LeavingEmployee.where(:leaving_type => ["调离","退休"]).page(params[:page]).per(15)
+      end
     elsif params[:type] == "调动"
       @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
     elsif params[:type] == "退休"

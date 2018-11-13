@@ -1,145 +1,157 @@
 <div class="contentpanel">
 
-<%= link_to "返回", :back %>
-<%= @duty %>
-<div class="card" style="margin-top: 20px;">
-  
-  <div style="overflow: auto; width: 100%;">
-    <table id="example" class="table table-bordered">
-      <thead>
-      	<tr>
+  <%= link_to("返回", employees_path) %><br>
+  <%= @duty %>
+  <h4 class="text-center">调离人员统计表</h4>
+    <% if @type == "调离" %>
+      <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","未分类"].include?(params[:category_name]) %>
+        <% ["全部","辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+          <% if name == params[:category_name] %>
+            <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye-selected") %>
+          <% else %>
+            <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= link_to("全部",employee_detail_employees_path(:type => "调离",:category_name => "全部"),class:"btn btn-employee-fenye-selected") %>
+        <% ["辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+          <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <table class="table table-bordered">
+    <thead>
+    	<tr>
+    		<th>工资号</th>
+    		<th>姓名</th>
+    		<% if @type == "调离" %>
+      	  <th>原车间</th>
+      	  <th>原班组</th>
+      	  <th>调离时间</th>
+      	<% elsif @type == "退休" %>
+      	  <th>原车间</th>
+      	  <th>原班组</th>
+      	  <th>退休时间</th>
+      	<% elsif @type == "调动" %>
+      	  <th>调动前车间</th>
+      	  <th>调动前班组</th>
+      	  <th>调动后车间</th>
+      	  <th>调动后班组</th>
+      	  <th>调动时间</th>
+      	<% else %>
       		<th>工资号</th>
-      		<th>姓名</th>
-      		<% if @type == "调离" %>
-	      	  <th>原车间</th>
-	      	  <th>原班组</th>
-	      	  <th>调离时间</th>
-	      	<% elsif @type == "退休" %>
-	      	  <th>原车间</th>
-	      	  <th>原班组</th>
-	      	  <th>退休时间</th>
-	      	<% elsif @type == "调动" %>
-	      	  <th>调动前车间</th>
-	      	  <th>调动前班组</th>
-	      	  <th>调动后车间</th>
-	      	  <th>调动后班组</th>
-	      	  <th>调动时间</th>
-	      	<% else %>
-	      		<th>工资号</th>
-	          <th>工号</th>
-	          <th>档案号</th>
-	          <th>车间</th>
-	          <th>班组</th>
-	          <th>工种</th>
-	          <th>姓名</th>
-	          <th>职务</th>
-	          <th>电话号</th>
-	          <th>性别</th>
-	          <th>年龄</th>
-	          <th>文化程度</th>
-	          <th>民族</th>
-	          <th>籍贯</th>
-	          <th>工作时间</th>
-	          <th>工龄</th>
-	          <th>入路时间</th>
-	          <th>路龄</th>
-	          <th>联系电话</th>
-	      	<% end %>
-      	</tr>
-      </thead>
-      <tbody>
-      	<% @employees.each do |employee| %>
-      		<% if @type == "调离" %>
-      			<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
-	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
-	      			<td><%= Employee.find(employee.employee_id).name %></td>
-    					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-    					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-    					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-    				</tr>
-    			<% elsif @type == "退休" %>
-    				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
-	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
-	      			<td><%= Employee.find(employee.employee_id).name %></td>
-    					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-    					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-    					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-    				</tr>
-	      	<% elsif @type == "调动" %>
-	      		<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
-		      		<td><%= Employee.find(employee.employee_id).sal_number %></td>
-	      			<td><%= Employee.find(employee.employee_id).name %></td>
-		      		<td>
-                <% workshop_from = Workshop.find_by(:id => employee.transfer_from_workshop) %>
-                <% if workshop_from.present? %>
-                  <%= workshop_from.name %>
-                <% else %>
-                  <span style = "color: red ;">调动前车间已被删除！</span>
-                <% end %>
-              </td>
-		      		<td>
-                <% group_from = Group.find_by(:id => employee.transfer_from_group) %>
-                <% if group_from.present? %>
-                  <%= group_from.name %>
-                <% else %>
-                  <span style = "color: red ;">调动前班组已被删除！</span>
-                <% end %>
-              </td>
-		      		<td>
-                <% workshop_to = Workshop.find_by(:id => employee.transfer_to_workshop) %>
-                <% if workshop_to.present? %>
-                  <%= workshop_to.name %>
-                <% else %>
-                  <span style = "color: red ;">调动后车间已被删除！</span>
-                <% end %>
-              </td>
-		      		<td>
-                <% group_to = Group.find_by(:id => employee.transfer_to_group) %>
-                <% if group_to.present? %>
-                  <%= group_to.name %>
-                <% else %>
-                  <span style = "color: red ;">调动后班组已被删除！</span>
-                <% end %>
-              </td>
-		      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-		      	</tr>
-	      	<% else %>
-	      		<tr class="row-click-able" data-url="/employees/<%= employee.id %>">
-		      		<td><%= employee.sal_number %></td>
-		            <td><%= employee.job_number %></td>
-		            <td><%= employee.record_number %></td>
-		            <td><%= Workshop.current.find(employee.workshop).name %></td>
-		            <td><%= Group.current.find(employee.group).name %></td>
-		            <td><%= employee.work_type %></td>
-		            <td>
-		              <%=  employee.name %>
-		              <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
-		                <span class="label label-danger">已调离</span>
-		              <% end %>
-
-		              <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
-		                  <span class="label label-warning">一月内有调动</span>
-		              <% end %>
-		            </td>
-		            <td><%= employee.duty %></td>
-		            <td><%= employee.phone_number %></td>
-		            <td><%= employee.sex %></td>
-		            <td><%= employee.age %></td>
-		            <td><%= employee.education_background %></td>
-		            <td><%= employee.nation %></td>
-		            <td><%= employee.native_place %></td>
-		            <td><%= employee.working_time %></td>
-		            <td><%= employee.working_years %></td>
-		            <td><%= employee.railway_time %></td>
-		            <td><%= employee.rali_years %></td>
-		            <td><%= employee.phone_number %></td>
-		        </tr>
-	      	<% end %>
+          <th>工号</th>
+          <th>档案号</th>
+          <th>车间</th>
+          <th>班组</th>
+          <th>工种</th>
+          <th>姓名</th>
+          <th>职务</th>
+          <th>电话号</th>
+          <th>性别</th>
+          <th>年龄</th>
+          <th>文化程度</th>
+          <th>民族</th>
+          <th>籍贯</th>
+          <th>工作时间</th>
+          <th>工龄</th>
+          <th>入路时间</th>
+          <th>路龄</th>
+          <th>联系电话</th>
       	<% end %>
-      </tbody>
-  	</table>
-  </div>
-</div>
+    	</tr>
+    </thead>
+    <tbody>
+    	<% @employees.each do |employee| %>
+    		<% if @type == "调离" %>
+    			<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
+      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
+      			<td><%= Employee.find(employee.employee_id).name %></td>
+  					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+  					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+  					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+  				</tr>
+  			<% elsif @type == "退休" %>
+  				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
+      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
+      			<td><%= Employee.find(employee.employee_id).name %></td>
+  					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+  					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+  					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+  				</tr>
+      	<% elsif @type == "调动" %>
+      		<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
+	      		<td><%= Employee.find(employee.employee_id).sal_number %></td>
+      			<td><%= Employee.find(employee.employee_id).name %></td>
+	      		<td>
+              <% workshop_from = Workshop.find_by(:id => employee.transfer_from_workshop) %>
+              <% if workshop_from.present? %>
+                <%= workshop_from.name %>
+              <% else %>
+                <span style = "color: red ;">调动前车间已被删除！</span>
+              <% end %>
+            </td>
+	      		<td>
+              <% group_from = Group.find_by(:id => employee.transfer_from_group) %>
+              <% if group_from.present? %>
+                <%= group_from.name %>
+              <% else %>
+                <span style = "color: red ;">调动前班组已被删除！</span>
+              <% end %>
+            </td>
+	      		<td>
+              <% workshop_to = Workshop.find_by(:id => employee.transfer_to_workshop) %>
+              <% if workshop_to.present? %>
+                <%= workshop_to.name %>
+              <% else %>
+                <span style = "color: red ;">调动后车间已被删除！</span>
+              <% end %>
+            </td>
+	      		<td>
+              <% group_to = Group.find_by(:id => employee.transfer_to_group) %>
+              <% if group_to.present? %>
+                <%= group_to.name %>
+              <% else %>
+                <span style = "color: red ;">调动后班组已被删除！</span>
+              <% end %>
+            </td>
+	      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+	      	</tr>
+      	<% else %>
+      		<tr class="row-click-able" data-url="/employees/<%= employee.id %>">
+	      		<td><%= employee.sal_number %></td>
+	            <td><%= employee.job_number %></td>
+	            <td><%= employee.record_number %></td>
+	            <td><%= Workshop.current.find(employee.workshop).name %></td>
+	            <td><%= Group.current.find(employee.group).name %></td>
+	            <td><%= employee.work_type %></td>
+	            <td>
+	              <%=  employee.name %>
+	              <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+	                <span class="label label-danger">已调离</span>
+	              <% end %>
+
+	              <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+	                  <span class="label label-warning">一月内有调动</span>
+	              <% end %>
+	            </td>
+	            <td><%= employee.duty %></td>
+	            <td><%= employee.phone_number %></td>
+	            <td><%= employee.sex %></td>
+	            <td><%= employee.age %></td>
+	            <td><%= employee.education_background %></td>
+	            <td><%= employee.nation %></td>
+	            <td><%= employee.native_place %></td>
+	            <td><%= employee.working_time %></td>
+	            <td><%= employee.working_years %></td>
+	            <td><%= employee.railway_time %></td>
+	            <td><%= employee.rali_years %></td>
+	            <td><%= employee.phone_number %></td>
+	        </tr>
+      	<% end %>
+    	<% end %>
+    </tbody>
+	</table>
 
 <div class="text-center">
   <%= paginate @employees %>

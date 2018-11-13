@@ -38,14 +38,9 @@
               <span>平均年龄</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span>
+              <span class="highlight-1iKYJ_0"><%= link_to LeavingEmployee.where(:leaving_type => ["调离","退休"]).count, employee_detail_employees_path(type: "调离")%></span>
               <br>
               <span>调离</span>
-            </li>
-            <li>
-              <span class="highlight-1iKYJ_0"><%= link_to Employee.retire.count, employee_detail_employees_path(type: "退休")%></span>
-              <br>
-              <span>退休</span>
             </li>
             <li>
               <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span>
