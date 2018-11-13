@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105051000) do
+ActiveRecord::Schema.define(version: 20181113012829) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -973,6 +973,12 @@ ActiveRecord::Schema.define(version: 20181105051000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "leaving_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "leaving_employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "employee_id"
     t.text "cause"
@@ -983,6 +989,7 @@ ActiveRecord::Schema.define(version: 20181105051000) do
     t.integer "transfer_from_group"
     t.integer "transfer_to_workshop"
     t.integer "transfer_to_group"
+    t.integer "category_id"
   end
 
   create_table "main_driving_stuff_heads", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

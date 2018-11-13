@@ -3,6 +3,7 @@
 <%= link_to "返回", :back %>
 <%= @duty %>
 <div class="card" style="margin-top: 20px;">
+  
   <div style="overflow: auto; width: 100%;">
     <table id="example" class="table table-bordered">
       <thead>
@@ -52,18 +53,18 @@
       			<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
-					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-				</tr>
-			<% elsif @type == "退休" %>
-				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
+    					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+    					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+    					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+    				</tr>
+    			<% elsif @type == "退休" %>
+    				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 	      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
 	      			<td><%= Employee.find(employee.employee_id).name %></td>
-					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-				</tr>
+    					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
+    					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+    					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
+    				</tr>
 	      	<% elsif @type == "调动" %>
 	      		<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
 		      		<td><%= Employee.find(employee.employee_id).sal_number %></td>

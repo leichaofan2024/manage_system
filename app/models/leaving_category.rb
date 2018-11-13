@@ -1,0 +1,2 @@
+class LeavingCategory < ApplicationRecord
+end

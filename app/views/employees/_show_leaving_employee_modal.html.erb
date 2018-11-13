@@ -12,10 +12,17 @@
             退休
           <% end %>
         </h4>
-      </div> 
+      </div>
       <div class="modal-body">
           <%= form_tag create_leaving_employees_path, method: 'post' do %>
             <% if @type == "调离" %>
+              <%= label_tag :选择调离类型： %>
+              <select class="" name="category_id">
+                <% ["辞职","局内调动","在职死亡","退休"].each do |name| %>
+                  <% category_id = LeavingCategory.find_by(:name => name).id %>
+                  <option value="<%= category_id%>"><%= name %></option>
+                <% end %>
+              </select>
               <%= label_tag :填写调离原因： %>
               <%= text_field_tag :cause, nil, required: true %>
             <% elsif @type == "调动" %>
@@ -30,8 +37,8 @@
             <%= hidden_field_tag :employee, @employee %>
             <%= hidden_field_tag :type, @type %>
             <%= submit_tag :确定 %>
-          <% end %> 
+          <% end %>
       </div>
-    </div> 
+    </div>
   </div>
 </div>

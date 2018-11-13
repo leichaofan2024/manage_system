@@ -1470,7 +1470,9 @@ class EmployeesController < ApplicationController
 
   def create_leaving
     if params[:type] == "调离"
-      LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "调离")
+      if params[:category_id].present?
+        LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "调离",:category_id => params[:category_id])
+      end
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调离"
     elsif params[:type] == "调动"
       LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
@@ -1486,6 +1488,7 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
+
       @employees = LeavingEmployee.where(:leaving_type => "调离").page(params[:page]).per(15)
     elsif params[:type] == "调动"
       @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
