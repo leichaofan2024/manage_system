@@ -8,14 +8,21 @@
     <Table>
       <Row>
         <% WageHeader.pluck("header").each do |i| %>
-            <th><%= i %></th>
             <Cell><Data ss:Type="String"><%= i %></Data></Cell>
         <% end %>
       </Row>
-    <% @export_wages.each do |wage| %>
+    <% @export_sal_numbrs.each do |sal_number| %>
+      <% wages = Wage.where(:year => @year,:month => @month,@wage_head_hash["工资号"] => sal_number) %>
       <Row>
         <% (1..WageHeader.count).each do |i| %>
-            <Cell><Data ss:Type="String"><%= wage.send("col" + i.to_s) %></Data></Cell>
+          <% column_name = "col" + i.to_s %>
+          <% if [@wage_head_hash["工资总额"],@wage_head_hash["奖金二"],@wage_head_hash["应发工资"]].include?(column_name) %>
+            <Cell><Data ss:Type="Number"><%= wages.sum(column_name).round(2) %></Data></Cell>
+          <% elsif i<13%>
+            <Cell><Data ss:Type="String"><%= wages.last.send(column_name) %></Data></Cell>
+          <% else %>
+            <Cell><Data ss:Type="Number"><%= wages.last.send(column_name) %></Data></Cell>
+          <% end %>
         <% end %>
       </Row>
     <% end %>

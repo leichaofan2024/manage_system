@@ -40,7 +40,7 @@ class WagesController < ApplicationController
 		end
 		@sal_numbers = @wages.pluck(@wage_head_hash["工资号"]).uniq
 
-
+    @export_sal_numbrs = @sal_numbers
 		gon.url_parameter = ""
 		if params[:max_id].present?
 			index = @sal_numbers.index(params[:max_id])
@@ -64,7 +64,6 @@ class WagesController < ApplicationController
     gon.group_name = group
 
     #下载表格配置
-    @export_wages = Wage.where(:year => @year, :month => @month)
     respond_to do |format|
       format.html
 			format.js
