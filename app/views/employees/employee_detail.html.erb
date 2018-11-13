@@ -24,19 +24,18 @@
     	<tr>
     		<th>工资号</th>
     		<th>姓名</th>
+
     		<% if @type == "调离" %>
       	  <th>原车间</th>
       	  <th>原班组</th>
+          <th>备注</th>
       	  <th>调离时间</th>
-      	<% elsif @type == "退休" %>
-      	  <th>原车间</th>
-      	  <th>原班组</th>
-      	  <th>退休时间</th>
       	<% elsif @type == "调动" %>
       	  <th>调动前车间</th>
       	  <th>调动前班组</th>
       	  <th>调动后车间</th>
       	  <th>调动后班组</th>
+          <th>备注</th>
       	  <th>调动时间</th>
       	<% else %>
       		<th>工资号</th>
@@ -69,14 +68,7 @@
       			<td><%= Employee.find(employee.employee_id).name %></td>
   					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
   					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-  					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-  				</tr>
-  			<% elsif @type == "退休" %>
-  				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
-      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
-      			<td><%= Employee.find(employee.employee_id).name %></td>
-  					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-  					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+            <td><%= employee.cause %></td>
   					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
   				</tr>
       	<% elsif @type == "调动" %>
@@ -115,6 +107,7 @@
                 <span style = "color: red ;">调动后班组已被删除！</span>
               <% end %>
             </td>
+            <td><%= employee.cause %></td>
 	      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 	      	</tr>
       	<% else %>
