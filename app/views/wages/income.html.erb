@@ -9,62 +9,59 @@
       <!-- 导出与新增-结束 -->
     </div>
     <div class="panel-body" id="employee-btn" style="display: none;">
-        <ul class="employee-search">
 
-          <li>
             <%= form_tag income_wages_path, method: 'get' do %>
             <%= hidden_field_tag :year,@year %>
             <span hidden="hidden">
-              <select class=""  multiple="multiple" name="month[]">
+              <select multiple="multiple" name="month[]">
                <% @month.each do |month| %>
                  <option value="<%= month.to_i %>" selected><%= month.to_i %></option>
                <% end %>
               </select>
             </span>
+            <div class="input-group mb15">
+              <%= label_tag :姓名： %>
+                <select class= "form-control input-lg" multiple name="name[]" id="name_select" style="width:75%">
+                  <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
+                    <% if params[:name].present? && params[:name].include?(name) %>
+                      <option selected value="<%= name%>"><%= name%></option>
+                    <% else %>
+                      <option  value="<%= name%>"><%= name%></option>
+                    <% end %>
+                  <% end %>
+                </select>
+            </div>
 
-            <%= label_tag :姓名： %>
-            <span style = "display:inline-block;margin-right:10px;">
-              <select class= "form-control income-filter-select2" multiple="multiple" name="name[]" id="name_select">
-                <option disabled value>请选择</option>
-                <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
-                  <% if params[:name].present? && params[:name].include?(name) %>
-                    <option selected value="<%= name%>"><%= name%></option>
-                  <% else %>
-                    <option  value="<%= name%>"><%= name%></option>
+            <div class="input-group mb15">
+              <%= label_tag :工资号： %>
+                <select class= "form-control input-lg" multiple name="sal_number[]" id="sal_number_select" style="width:75%">
+                  <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
+                    <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
+                      <option selected value="<%= sal_number%>"><%= sal_number%></option>
+                    <% else %>
+                      <option  value="<%= sal_number%>"><%= sal_number%></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-            </span>
-            <%= label_tag :工资号： %>
-            <span style = "display:inline-block;margin-right:10px;">
-              <select class= "form-control income-filter-select2" multiple="multiple" name="sal_number[]" id="sal_number_select">
-                <option disabled value>请选择</option>
-                <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
-                  <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
-                    <option selected value="<%= sal_number%>"><%= sal_number%></option>
-                  <% else %>
-                    <option  value="<%= sal_number%>"><%= sal_number%></option>
-                  <% end %>
-                <% end %>
-              </select>
-            </span>
+                </select>
+            </div>
 
-            <%= label_tag :部门： %>
-            <span style = "display:inline-block;">
-              <select class= "form-control income-filter-select2" style = "height:20px;line-height:20px;"  multiple="multiple" name="department[]" id="department_select">
-                <option disabled value>请选择</option>
-                <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
-                  <% if params[:department].present? && params[:department].include?(department) %>
-                    <option selected value="<%= department%>"><%= department%></option>
-                  <% else %>
-                    <option  value="<%= department%>"><%= department%></option>
+            <div class="input-group mb15">
+              <%= label_tag :部门： %>
+                <select class= "form-control input-lg" multiple name="department[]" id="department_select" style="width:75%">
+                  <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
+                    <% if params[:department].present? && params[:department].include?(department) %>
+                      <option selected value="<%= department%>"><%= department%></option>
+                    <% else %>
+                      <option  value="<%= department%>"><%= department%></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-            </span>
-            <br>
+                </select>
+            </div>
+
+
+
               <%= label_tag :男女： %>
-              <select class="income-filter-select" name="sex">
+              <select class= "form-control" name="sex">
                 <option value>请选择</option>
                 <% ["男","女"].each do |sex| %>
                   <% if params[:sex] == sex %>
@@ -75,7 +72,7 @@
                 <% end %>
               </select>
               <%= label_tag :按职务： %>
-              <select class="income-filter-select" name="duty">
+              <select class= "form-control" name="duty">
                 <option value>请选择</option>
                 <% Employee.pluck("duty").uniq.compact.each do |duty| %>
                   <% if params[:duty] == duty %>
@@ -86,7 +83,7 @@
                 <% end %>
               </select>
               <%= label_tag :工种： %>
-              <select class="income-filter-select" name="work_type">
+              <select class= "form-control" name="work_type">
                 <option value>请选择</option>
                 <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
                   <% if params[:work_type] == work_type %>
@@ -97,7 +94,7 @@
                 <% end %>
               </select>
               <%= label_tag :按时间段： %>
-              <select class="" name="filter_type">
+              <select class= "form-control" name="filter_type">
                 <option value>请选择</option>
                 <% ["年龄","工龄","路龄"].each do |filter_type| %>
                   <% if params[:filter_type] == filter_type %>
@@ -107,6 +104,8 @@
                   <% end %>
                 <% end %>
               </select>
+
+
               <% if params[:start_time].present? && params[:end_time].present? %>
                 <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
                 <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
@@ -115,12 +114,9 @@
                 <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
               <% end %>
 
-              <br>
-              <br>
+
               <%= submit_tag :筛选 %>
             <% end %>
-          </li>
-        </ul>
       </div>
 
   </div>
@@ -141,7 +137,7 @@
         <% end %>
       </div>
 
-            <table class="table table-bordered overflow-y table-striped fixed">
+            <table class="table table-bordered overflow-y table-striped">
               <thead>
               	<tr>
               		<th>姓名</th>
@@ -203,9 +199,19 @@
           e.style.display = 'block';
     };
 
-    $("#department_select").select2( { theme: "bootstrap"} );
-    $("#name_select").select2( { theme: "bootstrap"} );
-    $("#sal_number_select").select2( { theme: "bootstrap"} );
+    $("#department_select").select2({
+      placeholder: "输入或点击选择",
+      allowClear: true
+    });
+    $("#name_select").select2({
+      placeholder: "输入或点击选择",
+      allowClear: true,
+      width: 'resolve'
+    });
+    $("#sal_number_select").select2({
+      placeholder: "输入或点击选择",
+      allowClear: true
+    });
 
 
     // 记下目前画面最小的贴文 ID

@@ -620,7 +620,6 @@ class WagesController < ApplicationController
 		end
 	end
 #快照功能结束
-
 	def income
 		if params[:year].present? && params[:month].present?
 			@year = params[:year].to_i

@@ -1,30 +1,41 @@
-
-  <%= hidden_field_tag :category, params[:category] %>
-  <%= label_tag :请输入时间段搜索 %>
-  <select name="year"  required = "true">
-    <option disabled selected value>选择年份</option>
-    <% @years.each do |year| %>
-      <% if year == params[:year].to_i %>
-        <option value="<%= year%>" selected><%= year%></option>
-      <% else %>
-        <option value="<%= year%>"><%= year%></option>
-      <% end %>
-    <% end %>
-  </select> 年
-  <span style="width: 200px;display: inline-block;">
-    <select class= "form-control"  multiple="multiple" name="month[]" id="month_select">
-      <option disabled value>选择月份</option>
-      <% @months.each do |month|%>
-        <% if [month.to_s] == params[:month] %>
-          <option selected value="<%= month%>"><%= month%></option>
-        <% else %>
-          <option  value="<%= month%>"><%= month%></option>
-        <% end %>
-      <% end %>
-    </select>
-  </span> 月
-
-  <%= submit_tag :筛选 %>
-  <script>
-    $("#month_select").select2( { theme: "bootstrap"} );
-  </script>
+<div class="row">
+  <div class="col-ms-4 col-md-4">
+    <div class="form-group">
+      <%= hidden_field_tag :category, params[:category] %>
+      <%= label_tag :请输入时间段搜索 %>
+      <div class="input-group mb15">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+        <select class= "form-control" name="year"  required = "true" style="width: 50%">
+          <option disabled selected value>选择年份</option>
+          <% @years.each do |year| %>
+            <% if year == params[:year].to_i %>
+              <option value="<%= year%>" selected><%= year%></option>
+            <% else %>
+              <option value="<%= year%>"><%= year%></option>
+            <% end %>
+          <% end %>
+        </select>
+      </div>
+      <div class="input-group mb15">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+        <select multiple="multiple" name="month[]" id="month_select" style="width: 50%;">
+          <% @months.each do |month|%>
+            <% if [month.to_s] == params[:month] %>
+              <option selected value="<%= month%>"><%= month%></option>
+            <% else %>
+              <option  value="<%= month%>"><%= month%></option>
+            <% end %>
+          <% end %>
+        </select>
+      </div>
+      <%= submit_tag :筛选 %>
+    </div>
+  </div>
+</div>
+<script>
+  $("#month_select").select2(
+    {
+      placeholder: "请选择月份",
+      allowClear: true
+    });
+</script>
