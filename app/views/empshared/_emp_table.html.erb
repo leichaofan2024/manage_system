@@ -1,6 +1,7 @@
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
+          <th>请选择</th>
           <th>工资号</th>
           <th>工号</th>
           <th>档案号</th>
@@ -25,6 +26,7 @@
        <tbody data-behavior='sortable'>
         <% @employees.each do |employee| %>
           <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+            <td></td>
             <td><%= employee.sal_number.to_i %></td>
             <td><%= employee.job_number %></td>
             <td><%= employee.record_number %></td>
