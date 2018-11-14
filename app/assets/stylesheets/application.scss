@@ -92,7 +92,13 @@ strong {
 .header-right {
     float: right;
 }
-
+.header-notes{
+  line-height: 50px;
+  display: inline-block;
+}
+.header-notes > span {
+  padding-top: 30px;
+}
 .headermenu {
     list-style: none;
     margin: 0;
@@ -815,6 +821,8 @@ table {
     margin-bottom: 3em;
     background: #fff;
 }
+// table.fixed { table-layout:fixed; }
+// table.fixed td th{ overflow: hidden; }
 table .btn{
   display: inline;
 }
@@ -830,11 +838,8 @@ td {
     white-space: nowrap;
 }
 th {
-    color:black;
-    // background-color: #31bc86;
     background-color: #EAEEF3;
     font-weight: bold;
-    // color: #fff;
     white-space: nowrap;
 }
 th > li {

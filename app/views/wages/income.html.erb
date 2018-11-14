@@ -140,8 +140,8 @@
           <%= render "wages/customize_form_partial"%>
         <% end %>
       </div>
-      
-            <table id="example" class="table table-bordered">
+
+            <table class="table table-bordered overflow-y table-striped fixed">
               <thead>
               	<tr>
               		<th>姓名</th>
@@ -156,7 +156,7 @@
                   <th>去年
                     <% if @month.count > 1 %>
                       <% @month.each do |month| %>
-                        <%= month.to_i %>、
+                        <%= month.to_i %>
                       <% end %>
                     <% else %>
                       <%= @month.first%>
@@ -165,7 +165,7 @@
                   <th>今年
                     <% if @month.count > 1 %>
                       <% @month.each do |month| %>
-                        <%= month.to_i %>、
+                        <%= month.to_i %>
                       <% end %>
                     <% else %>
                       <%= @month.first%>
@@ -192,6 +192,7 @@
 
 </div>
 
+
 <script type="text/javascript">
 
     function toggle_visibility(id) {
@@ -206,30 +207,29 @@
     $("#name_select").select2( { theme: "bootstrap"} );
     $("#sal_number_select").select2( { theme: "bootstrap"} );
 
-</script>
-<script>
-// 记下目前画面最小的贴文 ID
-  // var s_count = <%= request.original_url.split("?").count %>;
-  // if (s_count == 2){
-  //   var parameter = <%= request.original_url.split("?").last.sub("max_id=","") %>
-  // } else {
-  //   var parameter = ""
-  // };
-  var current_post_id = <%= @sal_numbers.last %>;
-  // 当捲轴动的时候，会触发这个事件
-  $(window).scroll(function(){
-    // 当捲到最下面的时候
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      var url = "/wages/income?max_id=" + current_post_id + "&" + gon.url_parameter;
-      if (url) {
-        $.ajax({
-          method: "GET",
-          url: url,
-          dataType: "script"
-        })
-      } else {
-        console.log("data ended")
-      }
-    }
-  });
+
+    // 记下目前画面最小的贴文 ID
+      // var s_count = <%= request.original_url.split("?").count %>;
+      // if (s_count == 2){
+      //   var parameter = <%= request.original_url.split("?").last.sub("max_id=","") %>
+      // } else {
+      //   var parameter = ""
+      // };
+      var current_post_id = <%= @sal_numbers.last %>;
+      // 当捲轴动的时候，会触发这个事件
+      $(window).scroll(function(){
+        // 当捲到最下面的时候
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          var url = "/wages/income?max_id=" + current_post_id + "&" + gon.url_parameter;
+          if (url) {
+            $.ajax({
+              method: "GET",
+              url: url,
+              dataType: "script"
+            })
+          } else {
+            console.log("data ended")
+          }
+        }
+      });
 </script>

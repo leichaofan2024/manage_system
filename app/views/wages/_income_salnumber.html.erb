@@ -34,7 +34,7 @@
     <% if sex.present? %>
       <%= sex.compact.first %>
     <% else %>
-      <span style="color:red;">无信息！</span>
+      无信息！
     <% end %>
   </td>
   <td>
@@ -43,7 +43,7 @@
     <% elsif employee.present? %>
       <%= Group.find_by(:id => employee.group).name %>
     <% else %>
-      <span style="color:red;">无部门信息！</span>
+      无部门信息！
     <% end %>
   </td>
   <% if employee.present? %>
@@ -54,7 +54,7 @@
     <td><%= employee.rali_years %></td>
   <% else %>
     <% 5.times do %>
-      <td><span style="color:red;">无信息！</span></td>
+      <td>无信息！</td>
     <% end %>
   <% end %>
   <td>
@@ -105,13 +105,13 @@
   </td>
   <td>
     <% if last_income == 0 %>
-       <span>去年无数据 </span>
+       去年无数据
     <% else %>
       <% increase_percent = (now_income.to_f/last_income).round(2) - 1 %>
       <% if increase_percent > 0 %>
         <%= increase_percent %>
       <% else %>
-        <span style="color:red;"><%= increase_percent %></span>
+        <%= increase_percent %>
       <% end %>
     <% end %>
   </td>
@@ -147,7 +147,7 @@
     <% elsif bonus_member.present? %>
       <%= (bonus_member.attributes[bonus_hash["扣税款"]]).to_f %>
     <% else %>
-      <span style = "color:red;">无信息</span>
+      无信息
     <% end %>
   </td>
 </tr>
