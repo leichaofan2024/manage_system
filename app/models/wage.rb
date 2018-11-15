@@ -70,17 +70,4 @@ scope :total_wage, -> { where.not(:id => LeavingEmployee.where(:leaving_type => 
 
       return wage_import_message
 	end
-  # class Array
-  #   def self.bubble_sort!
-  # 		f = 1
-  # 		while f < self.length
-  # 			(0...(self.length-f)).to_a.each do |i|
-  # 				self[i], self[i+1] = self[i+1], self[i] if self[i] > self[i+1]
-  # 			end
-  # 		f += 1
-  # 		end
-  # 		self
-  # 	end
-  # end
-
 end

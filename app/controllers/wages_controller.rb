@@ -632,7 +632,7 @@ class WagesController < ApplicationController
 			@month = [Wage.where(:year => @year).pluck(:month).max]
 		end
     @years = Wage.pluck("year").uniq
-    @months = Wage.pluck("month").uniq
+    @months = Wage.pluck("month").uniq.sort_by(&:to_i)
 		@wage_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
 		@bonus_hash = [BonusHeader.pluck(:header),(1..BonusHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
 		@djwage_hash = [DjwageHeader.pluck(:header),(1..DjwageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
