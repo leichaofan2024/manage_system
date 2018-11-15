@@ -54,10 +54,16 @@ class EmployeesController < ApplicationController
     workshop = Workshop.current.pluck("name")
     group = Array.new
     group << [["全部",""]]
+    # 用于批量调动：
+    batch_leaving_group = Array.new
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
+    # 用于现员筛选：
     gon.group_name = group
+    # 用于批量调动：
+    gon.batch_leaving_group_name = batch_leaving_group
     respond_to do |format|
       format.html
       format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
@@ -192,10 +198,17 @@ class EmployeesController < ApplicationController
     @group = params[:group]
     workshop = Workshop.current.pluck("name")
     group = [[["全部",""]]]
+    # 用于批量调动：
+    batch_leaving_group = Array.new
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
+    # 用于现员筛选：
     gon.group_name = group
+    # 用于批量调动：
+    gon.batch_leaving_group_name = batch_leaving_group
+    
     render action: "index"
   end
   #搜索和筛选--结束
@@ -1475,9 +1488,21 @@ class EmployeesController < ApplicationController
       end
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调离"
     elsif params[:type] == "调动"
-      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
-      Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.current.find_by(:name => params[:group]).id)
-      flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+      if params[:employee_id].present?
+        workshop_name = Workshop.find(params[:workshop]).name
+        group_name = Group.find(params[:group]).name
+        params[:employee_id].keys.each do |employee_id| 
+          LeavingEmployee.create(:employee_id => employee_id, :leaving_type => "调动", :transfer_from_workshop => Employee.find(employee_id).workshop, :transfer_from_group => Employee.find(employee_id).group, :transfer_to_workshop => params[:workshop], :transfer_to_group => params[:group])
+          Employee.find(employee_id).update(:workshop => params[:workshop], :group => params[:group])
+        end 
+        employee_names = Employee.where(:id => params[:employee_id].keys).pluck(:name)
+        flash[:notice] = "已将#{employee_names}调动到#{workshop_name}车间#{group_name}班组"
+      elsif params[:employee].present?
+        LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
+        Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.current.find_by(:name => params[:group]).id)
+        flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+      end 
+      
     elsif params[:type] == "退休"
       LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "退休")
       flash[:notice] = "#{Employee.find(params[:employee]).name}已退休"

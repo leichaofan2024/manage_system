@@ -1,7 +1,8 @@
+<%= form_tag create_leaving_employees_path, method: 'post' do %>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>请选择</th>
+          <th class="batch-select">请选择</th>
           <th>工资号</th>
           <th>工号</th>
           <th>档案号</th>
@@ -23,39 +24,67 @@
           <th>联系电话</th>
         </tr>
       </thead>
-       <tbody data-behavior='sortable'>
-        <% @employees.each do |employee| %>
-          <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
-            <td></td>
-            <td><%= employee.sal_number.to_i %></td>
-            <td><%= employee.job_number %></td>
-            <td><%= employee.record_number %></td>
-            <td><%= Workshop.current.find(employee.workshop).name %></td>
-            <td><%= Group.current.find(employee.group).name %></td>
-            <td><%= employee.work_type %></td>
-            <td>
-              <%=  employee.name %>
-              <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
-                <span class="label label-danger">已调离</span>
-              <% end %>
+      <tbody data-behavior='sortable'>
+        
+          <% @employees.each do |employee| %>
+            <tr>
+              <td class="batch-select"><%= check_box_tag "employee_id[#{employee.id}]",1,false,class:"batch-select"%></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sal_number.to_i %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.job_number %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.record_number %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= Workshop.current.find(employee.workshop).name %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= Group.current.find(employee.group).name %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.work_type %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>">
+                <%=  employee.name %>
+                <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+                  <span class="label label-danger">已调离</span>
+                <% end %>
 
-              <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
-                  <span class="label label-warning">一月内有调动</span>
-              <% end %>
-            </td>
-            <td><%= employee.duty %></td>
-            <td><%= employee.phone_number %></td>
-            <td><%= employee.sex %></td>
-            <td><%= employee.age %></td>
-            <td><%= employee.education_background %></td>
-            <td><%= employee.nation %></td>
-            <td><%= employee.native_place %></td>
-            <td><%= employee.working_time %></td>
-            <td><%= employee.working_years %></td>
-            <td><%= employee.railway_time.to_i %></td>
-            <td><%= employee.rali_years %></td>
-            <td><%= employee.phone_number %></td>
-          </tr>
-        <% end %>
+                <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+                    <span class="label label-warning">一月内有调动</span>
+                <% end %>
+              </td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.duty %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sex %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.age %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.education_background %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.nation %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.native_place %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_time %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_years %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.railway_time.to_i %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.rali_years %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
+            </tr>
+          <% end %>
+          
      </tbody>
     </table>
+    <div class="employee-batch-submit">
+      <div class="employee-batch-submit-head"><h4>批量调动</h4></div>
+      <hr>
+      <div class="employee-batch-submit-body">
+        <span>车间：
+          <select name="workshop"  id="workshop" onchange="selworkshop(this)">
+            <% Workshop.current.each do |workshop| %>
+              <option value="<%= workshop.id%>"><%= workshop.name%></option>
+            <% end %>
+          </select>
+        </span>
+        <span>班组：
+            <select name="group"  id="group">
+              <% Group.current.where(workshop_id: Workshop.current.first.id).each do |group| %>
+                <option value="<%= group.id %>" ><%= group.name %></option>
+              <% end %>
+            </select>
+        </span>
+        <br>
+        <%= hidden_field_tag :type,"调动" %>
+        <%= submit_tag "一键调动",:data => {:disable_with => "提交中..."} %>
+      </div>
+      
+    </div>
+    
+<% end %>

@@ -110,7 +110,8 @@
                               <%= link_to new_employee_path,class:"btn btn-success-alt" do  %>
                                  新增人员
                               <% end %>
-                              a
+                              <a id="click-batch-open"  class="btn btn-success-alt">批量调动</a>
+                              <a id="click-batch-close"  class="btn btn-success-alt">批量调动</a>
                         <% end %>
                       <% end %>
                     </div>
@@ -243,6 +244,10 @@
 
 </div>
 <script type="text/javascript">
+    $("#click-batch-close").hide();
+    $(".batch-select").hide();
+    $(".employee-batch-submit").hide();
+
     function selCity()
     {
         var arr = gon.group_name;
@@ -272,5 +277,39 @@
           e.style.display = 'none';
        else
           e.style.display = 'block';
-    }
+    };
+    
+    $("#click-batch-open").click(function(){
+      $("#click-batch-open").hide();
+      $("#click-batch-close").show();
+      $(".batch-select").show();
+      $(".employee-batch-submit").show();
+    });
+
+    $("#click-batch-close").click(function(){
+      $("#click-batch-close").hide();
+      $(".batch-select").hide();
+      $(".employee-batch-submit").hide();
+      $("#click-batch-open").show();
+    });
+
+    function selworkshop()
+    {
+        var arr = gon.batch_leaving_group_name;
+
+        var selNode = document.getElementById("workshop");
+        var subselNode = document.getElementById("group");
+        var index = selNode.selectedIndex;
+        var citys = arr[index];
+
+        subselNode.options.length = 0;
+        for(var i=0; i<citys.length; i++)
+        {
+            var optionNode = document.createElement("option");
+            optionNode.value = citys[i][1];
+            optionNode.innerText = citys[i][0];
+            subselNode.appendChild(optionNode);
+        }
+    };
+
 </script>
