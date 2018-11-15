@@ -58,10 +58,9 @@
                 </select>
             </div>
 
-
-
+            <div class="input-group mb15">
               <%= label_tag :男女： %>
-              <select class= "form-control" name="sex">
+              <select class= "form-control" name="sex" style="width:75%">
                 <option value>请选择</option>
                 <% ["男","女"].each do |sex| %>
                   <% if params[:sex] == sex %>
@@ -71,8 +70,11 @@
                   <% end %>
                 <% end %>
               </select>
+            </div>
+
+            <div class="input-group mb15">
               <%= label_tag :按职务： %>
-              <select class= "form-control" name="duty">
+              <select class= "form-control" name="duty" style="width:75%">
                 <option value>请选择</option>
                 <% Employee.pluck("duty").uniq.compact.each do |duty| %>
                   <% if params[:duty] == duty %>
@@ -82,8 +84,11 @@
                   <% end %>
                 <% end %>
               </select>
+            </div>
+
+            <div class="input-group mb15">
               <%= label_tag :工种： %>
-              <select class= "form-control" name="work_type">
+              <select class= "form-control" name="work_type" style="width:75%">
                 <option value>请选择</option>
                 <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
                   <% if params[:work_type] == work_type %>
@@ -93,8 +98,11 @@
                   <% end %>
                 <% end %>
               </select>
+            </div>
+
+            <div class="input-group mb15">
               <%= label_tag :按时间段： %>
-              <select class= "form-control" name="filter_type">
+              <select class= "form-control" name="filter_type" style="width:75%">
                 <option value>请选择</option>
                 <% ["年龄","工龄","路龄"].each do |filter_type| %>
                   <% if params[:filter_type] == filter_type %>
@@ -104,18 +112,31 @@
                   <% end %>
                 <% end %>
               </select>
-
-
-              <% if params[:start_time].present? && params[:end_time].present? %>
-                <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
-                <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
-              <% else %>
-                <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
-                <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
-              <% end %>
-
-
-              <%= submit_tag :筛选 %>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <% if params[:start_time].present? && params[:end_time].present? %>
+                  <div class="input-group mb15">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <%= text_field_tag :start_time,params[:start_time],{:class => "form-control",style:"width:25%"}%>
+                  </div>
+                  <div class="input-group mb15">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <%= text_field_tag :end_time,params[:end_time],{:class => "form-control",style:"width:25%"} %>
+                  </div>
+                <% else %>
+                    <div class="input-group mb15">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      <%= text_field_tag :start_time,"",{:class => "form-control",placeholder:"起始数字",style:"width:25%"}%>
+                    </div>
+                    <div class="input-group mb15">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      <%= text_field_tag :end_time,"",{:class => "form-control",placeholder:"结束数字",style:"width:25%"} %>
+                    </div>
+                <% end %>
+              </div>
+            </div>
+              <%= submit_tag :筛选, class:"btn btn-default" %>
             <% end %>
       </div>
 
