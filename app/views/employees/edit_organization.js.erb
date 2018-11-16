@@ -1,0 +1,7 @@
+<% if @group_id.present? %>
+  $("#show-edit-organization").html("<%= escape_javascript render 'show_edit_group' %>");
+  $("#editGroupModal").modal('show');
+<% elsif @workshop_id.present? %>
+  $("#show-edit-organization").html("<%= escape_javascript render 'show_edit_workshop' %>");
+  $("#editWorkshopModal").modal('show');
+<% end %>

@@ -1,0 +1,23 @@
+<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">新增班组</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag create_group_employees_path, method: 'post' do %>
+          <%= label_tag :请选择车间 %>
+          <select name="workshop_id">
+            <% Workshop.current.each do |workshop| %>
+              <option value="<%= workshop.id %>"><%= workshop.name %></option>
+            <% end %>
+          </select>
+          <%= label_tag :请输入班组名称 %>
+          <%= text_field_tag :name, nil, required: true %>
+          <%= submit_tag :点击新增, :data => {:disable_with => "新增中..."} %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

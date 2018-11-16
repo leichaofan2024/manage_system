@@ -8,8 +8,8 @@
     </thead>
     <tbody>
       <% Workshop.current.each do |workshop| %>
-        <tr class="parent" id="<%= workshop.id%>">
-          <td style="text-align: left; font-size: 18px;">
+        <tr>
+          <td class="parent" id="<%= workshop.id%>" style="text-align: left; font-size: 18px;">
             <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
             <%= workshop.name %>
           </td>

@@ -1,40 +1,5 @@
 
 <div class="contentpanel">
-<!-- 通过@employees的总页数，找出所有的id-开始 -->
-<% pages = @employees.total_pages %>
-<% employee_ids = @employees.page(1).per(16).pluck("id") %>
-<% (2..pages).each do |i| %>
-  <% employee_ids += @employees.page(i).per(16).pluck("id") %>
-<% end %>
-<!-- 通过@employees的总页数，找出所有的id-结束 -->
-
-<!--
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#deleteOrganizationModal" do  %>
-                   <span style="color: #269Eff;">删除车间/班组</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editWorkshopModal" do  %>
-                   <span style="color: #269Eff;">修改车间</span>
-                <% end %>
-              </button>
-            </div>
-            <div class="ivu-tooltip-rel" style="text-align: right; margin-right: -20px; ">
-              <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-                <%= link_to "#", "data-toggle" => "modal", "data-target" => "#editGroupModal" do  %>
-                   <span style="color: #269Eff;">修改班组</span>
-                <% end %>
-              </button>
-            </div> -->
-
-
-
-
-
   <div class="panel">
     <div class="panel-body">
       <!-- Nav tabs -->
@@ -57,56 +22,20 @@
 
 
 
-<div class="modal fade" id="createWorkshopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">新增车间</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag create_workshop_employees_path, method: 'post' do %>
-          <%= label_tag :请输入车间名称 %>
-          <%= text_field_tag :name, nil, required: true %>
-          <%= submit_tag :点击新增 %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h4 class="modal-title" id="myModalLabel">新增班组</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag create_group_employees_path, method: 'post' do %>
-          <%= label_tag :请输入班组名称 %>
-          <%= text_field_tag :name, nil, required: true %>
-          <%= label_tag :请输入所属车间名称 %>
-          <%= text_field_tag :workshop_name, nil, required: true %>
-          <%= submit_tag :点击新增 %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
 <%= render "show_delete_organization" %>
-<%= render "show_edit_workshop" %>
-<%= render "show_edit_group" %> -->
+<div id="show-edit-organization"></div>
+<%= render "show_create_workshop" %>
+<%= render "show_create_group" %>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function () {
       $(function() {
-        $('tr.parent')
+        $('td.parent')
               .css("cursor","pointer")
               .attr("title","点击这里展开/关闭")
               .click(function(){
-                $(this).siblings('.child-'+ this.id).toggle();
+                $('.child-'+ this.id).toggle();
               });
             });
 });

@@ -10,19 +10,26 @@
     <tr>
       <td>北京供电段</td>
       <td><%= @employees.total_count%></td>
-      <td><%= link_to "新增车间"%></td>
+
+      <td>
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createWorkshopModal" do  %>
+          <span style="color: #269Eff;">新增车间</span>
+        <% end %>
+        <%= link_to "#", "data-toggle" => "modal", "data-target" => "#createGroupModal" do  %>
+          <span style="color: #269Eff;">新增班组</span>
+        <% end %>
+      </td>
     </tr>
     <% Workshop.current.each do |workshop| %>
-      <tr class="parent" id="<%= workshop.id%>">
-        <td style="text-align: left; font-size: 18px;">
+      <tr>
+        <td class="parent" id="<%= workshop.id%>" style="text-align: left; font-size: 18px;">
           <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
           <%= workshop.name %>
         </td>
         <td><%= Employee.current.where(workshop: workshop).count%></td>
         <td>
-          <%= link_to "新增班组" %>
-          <%= link_to "编辑" %>
-          <%= link_to "删除" %>
+          <%= link_to "编辑",edit_organization_employees_path(:workshop_id => workshop.id),remote: true %>
+          <%= link_to "删除",delete_organization_employees_path(:workshop => workshop.id),method: :post,:data => {:confirm => "你确定要删除【#{workshop.name}】吗？"} %>
         </td>
       </tr>
       <% Group.current.where(workshop: workshop).each do |group| %>
@@ -32,8 +39,8 @@
         </td>
         <td><%= Employee.current.where(group: group).count%></td>
         <td>
-          <%= link_to "编辑" %>
-          <%= link_to "删除" %>
+          <%= link_to "编辑",edit_organization_employees_path(:group_id => group.id),remote: true %>
+          <%= link_to "删除",delete_organization_employees_path(:group => group.id),method: :post,:data => {:confirm => "你确定要删除【#{group.name}】吗？"} %>
         </td>
       </tr>
       <% end %>

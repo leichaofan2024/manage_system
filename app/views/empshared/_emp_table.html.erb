@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody data-behavior='sortable'>
-        
+
           <% @employees.each do |employee| %>
             <tr>
               <td class="batch-select"><%= check_box_tag "employee_id[#{employee.id}]",1,false,class:"batch-select"%></td>
@@ -59,21 +59,21 @@
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
             </tr>
           <% end %>
-          
+
      </tbody>
     </table>
     <div class="employee-batch-submit">
       <div class="employee-batch-submit-head"><h4>批量调动</h4></div>
       <hr>
       <div class="employee-batch-submit-body">
-        <span>车间：
+        <span>调往车间：
           <select name="workshop"  id="workshop" onchange="selworkshop(this)">
             <% Workshop.current.each do |workshop| %>
               <option value="<%= workshop.id%>"><%= workshop.name%></option>
             <% end %>
           </select>
         </span>
-        <span>班组：
+        <span>调往班组：
             <select name="group"  id="group">
               <% Group.current.where(workshop_id: Workshop.current.first.id).each do |group| %>
                 <option value="<%= group.id %>" ><%= group.name %></option>
@@ -84,7 +84,7 @@
         <%= hidden_field_tag :type,"调动" %>
         <%= submit_tag "一键调动",:data => {:disable_with => "提交中..."} %>
       </div>
-      
+
     </div>
-    
+
 <% end %>
