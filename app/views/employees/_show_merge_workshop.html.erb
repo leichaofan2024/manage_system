@@ -18,7 +18,7 @@
       <% end %>
       <%= label_tag :请输入合并后的车间名称 %>
       <%= text_field_tag :merge_workshop %>
-      <%= submit_tag :确定 %>
+      <%= submit_tag :确定,:data => {:confirm => "确定要合并车间吗？"} %>
       <h6>注意：合并后，您选中车间下的班组会统一属于您填写的车间</h6>
     </tbody>
     </table>
