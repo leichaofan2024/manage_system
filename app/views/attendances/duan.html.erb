@@ -100,8 +100,12 @@
                        <td></td>
                       <% end %>
                     <% end %>
-                    <% attendancerecords = AttendanceRecord.where(:attendance_id => attendance.id).count%>
-                    <% if attendance.present? && (attendancerecords > 0) %>
+                    <% if attendance.present? %>
+                      <% attendancerecords = AttendanceRecord.where(:attendance_id => attendance.id).count%>
+                    <% else %>
+                      <% attendancerecords = 0 %>
+                    <% end %>
+                    <% if (attendancerecords > 0) %>
                       <td><%= link_to attendancerecords, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
                     <% else %>
                       <td>0</td>

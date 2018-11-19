@@ -6,7 +6,7 @@ class AttendancesController < ApplicationController
     if params[:group_id].present? && (current_user.has_role? :attendance_admin)
       @group = Group.find_by(:id => params[:group_id])
       @workshop = Workshop.find_by(:id => @group.workshop_id)
-      @applications = Application.where(group_id: @group.id) 
+      @applications = Application.where(group_id: @group.id)
     else
       @group = Group.find_by(:id => current_user.group_id)
       @workshop = Workshop.find_by(:id => @group.workshop_id)
@@ -997,6 +997,7 @@ class AttendancesController < ApplicationController
     @duan = params[:duan]
     @vacation_codes = VacationCategory.pluck("vacation_code").uniq
 		status_workshop = AttendanceStatus.where(:year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间已审核"]).pluck("workshop_id").uniq
+    status_workshop = status_workshop & Workshop.current.pluck(:id)
 		if status_workshop.all?{|x| x.nil?}
 			@workshops = []
 		else
