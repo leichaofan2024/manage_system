@@ -92,7 +92,13 @@ strong {
 .header-right {
     float: right;
 }
-
+.header-notes{
+  line-height: 50px;
+  display: inline-block;
+}
+.header-notes > span {
+  padding-top: 30px;
+}
 .headermenu {
     list-style: none;
     margin: 0;
