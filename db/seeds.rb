@@ -34,7 +34,7 @@ User.create(name: "工会主席", password: "123456", password_confirmation: "12
 "\n"
 
 User.create(name: "企业管理员", password: "123456", password_confirmation: "123456").add_role :company_admin
-
+User.create(name: "安全生产调度指挥中心", password: "123456", password_confirmation: "123456").add_role :safe_productionadmin
 
 
 puts "创建车间管理员，请稍等。。。"
