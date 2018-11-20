@@ -1531,18 +1531,64 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      if ["辞职","局内调动","在职死亡"].include?(params[:category_name])
+      if params[:leaving_search].present?
+        if params[:leaving_search][:name].present?
+          employee_ids = Employee.where(:name => params[:leaving_search][:name]).ids
+          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          if employees.count == 1
+            category_id = employees.first.category_id
+            leaving_type = employees.first.leaving_type
+            if category_id.present?
+              params[:category_name] = LeavingCategory.find_by(:id => category_id).name
+            else
+              if leaving_type == "退休"
+                params[:category_name] = "退休"
+              else
+                params[:category_name] = "未分类"
+              end
+            end
+          end
+        elsif params[:leaving_search][:sal_number].present?
+          employee_ids = Employee.where(:sal_number => params[:leaving_search][:sal_number]).ids
+          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          if employees.present?
+            category_id = employees.first.category_id
+            leaving_type = employees.first.leaving_type
+            if category_id.present?
+              params[:category_name] = LeavingCategory.find_by(:id => category_id).name
+            else
+              if leaving_type == "退休"
+                params[:category_name] = "退休"
+              else
+                params[:category_name] = "未分类"
+              end
+            end
+          end
+        else
+          employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
+        end
+        @employees = employees.page(params[:page]).per(15)
+        @employees_count = @employees.count
+      elsif ["辞职","局内调动","在职死亡"].include?(params[:category_name])
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
-        @employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
+        @employees_count = employees.count
+        @employees = employees.page(params[:page]).per(15)
       elsif params[:category_name] == "退休"
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
         retire_employees = LeavingEmployee.where(:leaving_type => "退休")
         retire_category_employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
-        @employees = retire_employees.or(retire_category_employees).page(params[:page]).per(15)
+        employees = retire_employees.or(retire_category_employees)
+        @employees_count = employees.count
+        @employees = employees.page(params[:page]).per(15)
       elsif params[:category_name] == "未分类"
-        @employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil)
+        @employees_count = employees.count
+        @employees = employees.page(params[:page]).per(15)
       else
-        @employees = LeavingEmployee.where(:leaving_type => ["调离","退休"]).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
+        @employees_count = employees.count
+        @employees = employees.page(params[:page]).per(15)
       end
     elsif params[:type] == "调动"
       @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)

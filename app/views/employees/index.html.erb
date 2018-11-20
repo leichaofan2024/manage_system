@@ -19,12 +19,12 @@
               <span>合计</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(aa: request.query_parameters, default: "男") %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
               <br>
               <span>男</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(aa: request.query_parameters, default: "女") %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
               <br>
               <span>女</span>
             </li>

@@ -3,7 +3,7 @@
   <%= link_to("返回", employees_path) %><br>
   <%= @duty %>
   <% if @type == "调离" %>
-    <h4 class="text-center">调离人员统计表</h4>
+    <h4 class="text-center">调离人员统计表(<%= @employees_count %> 人) </h4>
     <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","未分类"].include?(params[:category_name]) %>
       <% ["全部","辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
         <% if name == params[:category_name] %>
@@ -18,6 +18,15 @@
         <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
       <% end %>
     <% end %>
+    <span class="pull-right leaving-search" style="display:inline-block">
+      <%= form_tag employee_detail_employees_path,method: :get do %>
+        <%= hidden_field_tag :type,"调离" %>
+        <%= text_field_tag :"leaving_search[name]",nil,placeholder: "请输入姓名..." %>
+        <%= text_field_tag :"leaving_search[sal_number]",nil,placeholder: "请输入工资号..." %>
+        <%= submit_tag "搜索",:data => {:disable_with => "搜索中..."} %>
+      <% end %>
+    </span>
+
   <% elsif @type == "调动" %>
     <h4 class="text-center">调动人员统计表</h4>
   <% end %>

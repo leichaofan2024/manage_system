@@ -23,7 +23,7 @@
                   <option value="<%= category_id%>"><%= name %></option>
                 <% end %>
               </select>
-              <%= label_tag :填写调离原因： %>
+              <%= label_tag :填写备注： %>
               <%= text_field_tag :cause, nil, required: true %>
             <% elsif @type == "调动" %>
               <%= label_tag :填写调动后车间： %>
