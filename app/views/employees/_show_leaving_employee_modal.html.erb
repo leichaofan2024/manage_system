@@ -36,7 +36,7 @@
             <% end %>
             <%= hidden_field_tag :employee, @employee %>
             <%= hidden_field_tag :type, @type %>
-            <%= submit_tag :确定 %>
+            <%= submit_tag :确定,:data => {:disable_with => "处理中..."} %>
           <% end %>
       </div>
     </div>
