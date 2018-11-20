@@ -499,7 +499,7 @@ class AttendancesController < ApplicationController
         @applications = Application.where(:group_id => current_user.group_id).order("created_at DESC")
       end
     end
-
+    @applications = @applications.page(params[:page]).per(20)
  	end
 
 

@@ -5,11 +5,11 @@
 <div class="pageheader">
   <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
     <h4><span class="glyphicon glyphicon-share-alt"></span>
-    <%= link_to '返回', group_attendances_path %>
+    <%= link_to '返回', :back %>
     </h4>
   <% elsif (current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin) %>
   <h4>
-    <span class="glyphicon glyphicon-share-alt"></span><%= link_to '返回', group_current_time_info_attendances_path %>
+    <span class="glyphicon glyphicon-share-alt"></span><%= link_to '返回', :back %>
   </h4>
   <% end %>
 </div>
@@ -91,6 +91,9 @@
           	<% end %>
         </tbody>
     </table>
+    <div class="text-center">
+      <%= paginate @applications %>
+    </div>
   <% if (current_user.has_role? :workshopadmin) || (current_user.has_role? :attendance_admin) %>
 
       <% if params[:type] == "duan" %>
