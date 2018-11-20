@@ -89,7 +89,7 @@
         <Cell><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <Cell><Data ss:Type="String"><%= employee.work_type %></Data></Cell>
         <% if can? :import, Employee%>
-            <Cell><Data ss:Type="String"><%= employee.job_number %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= employee.job_number.to_i %></Data></Cell>
             <Cell><Data ss:Type="String"><%= employee.record_number %></Data></Cell>
             <Cell><Data ss:Type="String"><%= employee.sex %></Data></Cell>
             <Cell><Data ss:Type="String"><%= employee.birth_date %></Data></Cell>
