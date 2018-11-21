@@ -24,7 +24,7 @@
     </select>
   </span> 月
 
-  <%= submit_tag :筛选 %>
+  <%= submit_tag :筛选,:data => {:disable_with => "筛选中... "} %>
   <script>
     $("#month_select").select2( { theme: "bootstrap"} );
   </script>
