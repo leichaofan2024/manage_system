@@ -25,14 +25,30 @@ class AnnualHolidaysController < ApplicationController
 			holiday.update(:workshop_id => params[:workshop].to_i, :year => Time.now.year, :work_type => params[:work_type], params[:input_name] => params[:number])
 		end
 		if params[:status].present?
-			if holiday.present?
-				if (holiday.this_year_people_number == holiday.five_days + holiday.ten_days + holiday.fifteen_days) && (holiday.this_year_people_number == holiday.January_plan_number + holiday.February_plan_number + holiday.March_plan_number + holiday.April_plan_number + holiday.May_plan_number + holiday.June_plan_number + holiday.July_plan_number + holiday.August_plan_number + holiday.September_plan_number + holiday.October_plan_number + holiday.November_plan_number + holiday.December_plan_number)
-					holiday.update(:status => "车间填写完毕")
-				else
-					flash[:alert] = "确认失败，请核对您的总数"
-				end
+			if current_user.has_role? :workshopadmin
+				hoiday_plans = AnnualHolidayPlan.where(:workshop_id => current_user.workshop_id,:year => Time.now.year)
+			elsif (current_user.has_role? :organsadmin)
+				hoiday_plans = AnnualHolidayPlan.where(:orgnization_id => current_user.group_id,:year => Time.now.year)
+			end 
+			if hoiday_plans.present?
+				message_array = Array.new 
+				hoiday_plans.each do |holiday| 
+					if (holiday.this_year_people_number.to_i == holiday.five_days.to_i + holiday.ten_days.to_i + holiday.fifteen_days.to_i) && (holiday.holiday_days.to_i == holiday.January_plan_number.to_i + holiday.February_plan_number.to_i + holiday.March_plan_number.to_i + holiday.April_plan_number.to_i + holiday.May_plan_number.to_i + holiday.June_plan_number.to_i + holiday.July_plan_number.to_i + holiday.August_plan_number.to_i + holiday.September_plan_number.to_i + holiday.October_plan_number.to_i + holiday.November_plan_number.to_i + holiday.December_plan_number.to_i)
+					else
+						if AnnualHolidayWorkType.find_by(:id => holiday.work_type).present?
+						  work_type = AnnualHolidayWorkType.find_by(:id => holiday.work_type).work_type
+						  message_array << work_type
+					    end 
+					end
+				end 
+				if message_array.present?
+				  flash[:alert] = "上报失败！#{message_array}项总数核对有误，请检查！"
+				else 
+				  hoiday_plans.update(:status => "yes")
+				  flash[:notice] = "#{Time.now.year}年年休假计划上报成功！"
+				end 
 			else
-				flash[:alert] = "确认失败，请核对您的总数"
+				flash[:alert] = "没有数据，请填写完成后再上报！"
 			end
 		end
 		redirect_back(fallback_location: annual_holidays_path)
