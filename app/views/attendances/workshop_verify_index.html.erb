@@ -1,5 +1,5 @@
 <div class="workshop_verify_index1">
-  <div class="workshop_verify_label" id="my-open-click">
+  <div class="workshop_verify_label" id="my-open-click" style="display:none;">
     <b style="font-size:20px;margin-left:-30px;margin-right:30px;">+</b>当前已审核班组：<%= @groups_already.count %>个，未审核班组：<%= @groups_can.count + @groups_cannot.count %>个，审核进度<%= ((@groups_already.count.to_f)*100/@groups.count).round(2)%>%
   </div>
   <div class="" id="foo">
@@ -76,7 +76,7 @@
     </div>
   <% end %>
 
-  <h4>
+  <h4 style="text-align:center;">
     <% if params[:workshop_id].present? %>
       <%= @workshop.name%><%= @shenhe_month %>月考勤
     <% else %>
