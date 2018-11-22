@@ -35,8 +35,11 @@ User.create(name: "工会主席", password: "123456", password_confirmation: "12
 
 User.create(name: "企业管理员", password: "123456", password_confirmation: "123456").add_role :company_admin
 User.create(name: "安全生产调度指挥中心", password: "123456", password_confirmation: "123456").add_role :safe_productionadmin
-
-
+User.create(name: "承德南综合维修车间",workshop_id: 30, password: "123456", password_confirmation: "123456").add_role :workshopadmin
+User.create(name: "承德南综合维修车间-承德南高铁供电运行工区",workshop_id: 30,group_id: 898, password: "123456", password_confirmation: "123456").add_role :groupadmin
+User.create(name: "承德南综合维修车间-平泉北高铁供电运行工区",workshop_id: 30,group_id: 900, password: "123456", password_confirmation: "123456").add_role :groupadmin
+User.create(name: "承德南综合维修车间-京沈介入班",workshop_id: 30,group_id: 901, password: "123456", password_confirmation: "123456").add_role :groupadmin
+User.create(name: "承德南综合维修车间-车间",workshop_id: 30,group_id: 902, password: "123456", password_confirmation: "123456").add_role :wgadmin
 puts "创建车间管理员，请稍等。。。"
 @not_organs = Workshop.current.where.not(:name => "机关").pluck(:name).uniq
 @not_organs.uniq.each do |e|
