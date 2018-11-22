@@ -1567,31 +1567,31 @@ class EmployeesController < ApplicationController
         else
           employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
         end
-        @employees = employees.page(params[:page]).per(15)
+        @employees = employees.order(created_at: :DESC).page(params[:page]).per(15)
         @employees_count = @employees.count
       elsif ["辞职","局内调动","在职死亡"].include?(params[:category_name])
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
         employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
         @employees_count = employees.count
-        @employees = employees.page(params[:page]).per(15)
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       elsif params[:category_name] == "退休"
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
         retire_employees = LeavingEmployee.where(:leaving_type => "退休")
         retire_category_employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
         employees = retire_employees.or(retire_category_employees)
         @employees_count = employees.count
-        @employees = employees.page(params[:page]).per(15)
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       elsif params[:category_name] == "未分类"
         employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil)
         @employees_count = employees.count
-        @employees = employees.page(params[:page]).per(15)
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       else
         employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
         @employees_count = employees.count
-        @employees = employees.page(params[:page]).per(15)
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       end
     elsif params[:type] == "调动"
-      @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
+      @employees = LeavingEmployee.order(:created_at => :DESC).where(:leaving_type => "调动").page(params[:page]).per(15)
     elsif params[:type] == "退休"
       @employees = LeavingEmployee.where(:leaving_type => "退休").page(params[:page]).per(15)
     elsif params[:default] == "男"
