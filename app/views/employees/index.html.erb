@@ -309,6 +309,13 @@
       $("#click-batch-open").show();
     });
 
+    $(".click-batch-close").click(function(){
+      $("#click-batch-close").hide();
+      $(".batch-select").hide();
+      $(".employee-batch-submit").hide();
+      $("#click-batch-open").show();
+    })
+
     function selworkshop()
     {
         var arr = gon.batch_leaving_group_name;

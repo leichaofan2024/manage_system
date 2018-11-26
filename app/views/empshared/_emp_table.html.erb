@@ -82,6 +82,8 @@
         </span>
         <br>
         <%= hidden_field_tag :type,"调动" %>
+        <div disabled class="click-batch-close click-batch-close-style" >取消</div>
+
         <%= submit_tag "一键调动",:data => {:disable_with => "提交中..."} %>
       </div>
 
