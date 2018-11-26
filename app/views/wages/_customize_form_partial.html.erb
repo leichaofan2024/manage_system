@@ -11,10 +11,10 @@
       <% end %>
     <% end %>
   </select> 年
-  <span style="width: 200px;display: inline-block;">
+  <span style="width: 200px;display: inline-block;position: relative;top:5px;">
     <select class= "form-control"  multiple="multiple" name="month[]" id="month_select">
       <option disabled value>选择月份</option>
-      <% @months.each do |month|%>
+      <% @months.sort.each do |month|%>
         <% if [month.to_s] == params[:month] %>
           <option selected value="<%= month%>"><%= month%></option>
         <% else %>
@@ -24,7 +24,7 @@
     </select>
   </span> 月
 
-  <%= submit_tag :筛选 %>
+  <%= submit_tag :筛选,:data => {:disable_with => "筛选中... "} %>
   <script>
     $("#month_select").select2( { theme: "bootstrap"} );
   </script>

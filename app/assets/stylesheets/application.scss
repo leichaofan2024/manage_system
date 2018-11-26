@@ -2771,3 +2771,31 @@ button.close {
   margin-right:2px;
   font-weight: 10px;
 }
+
+.employee-batch-submit{
+  padding:0px 10px 10px 10px;
+  position:fixed;
+  top:100px;
+  left:40%;
+  z-index:1000;
+  background-color:#ffff;
+  box-shadow:0px 0px 5px 5px #E0E0E0;
+  width:400px;
+  height:200px;
+  span{
+    display:block;
+    margin-bottom:5px;
+  }
+  hr{
+    border:0;
+    background-color:#E0E0E0;
+    height:1px;
+  }
+}
+.employee-batch-submit-body{
+  padding-left:70px;
+}
+.employee-batch-submit-head{
+  width:400px;
+  text-align:center;
+}

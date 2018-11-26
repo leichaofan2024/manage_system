@@ -19,12 +19,12 @@
               <span>合计</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "男").count, employee_detail_employees_path(aa: request.query_parameters, default: "男") %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
               <br>
               <span>男</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= link_to Employee.where(id: employee_ids).where(:sex => "女").count, employee_detail_employees_path(aa: request.query_parameters, default: "女") %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
               <br>
               <span>女</span>
             </li>
@@ -110,6 +110,8 @@
                               <%= link_to new_employee_path,class:"btn btn-success-alt" do  %>
                                  新增人员
                               <% end %>
+                              <a id="click-batch-open"  class="btn btn-success-alt">批量调动</a>
+                              <a id="click-batch-close"  class="btn btn-success-alt">批量调动</a>
                         <% end %>
                       <% end %>
                     </div>
@@ -137,48 +139,60 @@
 
                       <li>
                         <%= form_tag filter_employees_path, method: 'get' do %>
-
-                          <li style="display: inline-block;">车间：
-                              <select name="workshop"  id="selid" onchange="selCity(this)">
-                                <option value="" selected >北京供电段</option>
-                                <% Workshop.current.each do |workshop| %>
-                                  <% if workshop.id == params[:workshop].to_i %>
-                                    <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
-                                  <% else %>
-                                    <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                          <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) %>
+                            <li style="display: inline-block;">车间：
+                                <select name="workshop"  id="selid" onchange="selCity(this)">
+                                  <option value="" selected >北京供电段</option>
+                                  <% Workshop.current.each do |workshop| %>
+                                    <% if workshop.id == params[:workshop].to_i %>
+                                      <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
+                                    <% else %>
+                                      <option value="<%= workshop.id%>"><%= workshop.name%></option>
+                                    <% end %>
                                   <% end %>
-                                <% end %>
-                              </select>
-                          </li>
-                          <li style="display: inline-block;">班组：
-                              <select name="group"  id="subselid">
-                                <option value="">全部</option>
-                              </select>
-                          </li>
-                          <br>
+                                </select>
+                            </li>
+                            <li style="display: inline-block;">班组：
+                                <select name="group"  id="subselid">
+                                  <option value="">全部</option>
+                                </select>
+                            </li>
+                          <% elsif current_user.has_role? :workshopadmin %>
+                            <li style="display: inline-block;">班组：
+                                <select name="group">
+                                  <% Group.current.where(:workshop_id => current_user.workshop_id).each do |group| %>
+                                    <option value="<%= group.id%>"><%= group.name%></option>
+                                  <% end %>
+                                </select>
+                            </li>
+                          <% end %>
 
-                          <%= label_tag :按男女： %>
-                          <select class="" name="sex">
-                            <option value>请选择</option>
-                            <% ["男","女"].each do |sex| %>
-                              <% if params[:sex] == sex %>
-                                <option value="<%= sex %>" selected><%= sex %></option>
-                              <% else %>
-                                <option value="<%= sex %>"><%= sex %></option>
+
+                          <% if !current_user.has_role? :safe_productionadmin %>
+                          <br>
+                            <%= label_tag :按男女： %>
+                            <select class="" name="sex">
+                              <option value>请选择</option>
+                              <% ["男","女"].each do |sex| %>
+                                <% if params[:sex] == sex %>
+                                  <option value="<%= sex %>" selected><%= sex %></option>
+                                <% else %>
+                                  <option value="<%= sex %>"><%= sex %></option>
+                                <% end %>
                               <% end %>
-                            <% end %>
-                          </select>
-                          <%= label_tag :按职务： %>
-                          <select class="" name="duty">
-                            <option value>请选择</option>
-                            <% Employee.pluck("duty").uniq.compact.each do |duty| %>
-                              <% if params[:duty] == duty %>
-                                <option value="<%= duty %>" selected><%= duty %></option>
-                              <% else %>
-                                <option value="<%= duty %>"><%= duty %></option>
+                            </select>
+                            <%= label_tag :按职务： %>
+                            <select class="" name="duty">
+                              <option value>请选择</option>
+                              <% Employee.pluck("duty").uniq.compact.each do |duty| %>
+                                <% if params[:duty] == duty %>
+                                  <option value="<%= duty %>" selected><%= duty %></option>
+                                <% else %>
+                                  <option value="<%= duty %>"><%= duty %></option>
+                                <% end %>
                               <% end %>
-                            <% end %>
-                          </select>
+                            </select>
+                          <% end %>
                           <%= label_tag :按技术职称： %>
                           <select class="" name="work_type">
                             <option value>请选择</option>
@@ -190,24 +204,28 @@
                               <% end %>
                             <% end %>
                           </select>
-                          <%= label_tag :按时间段： %>
-                          <select class="" name="filter_type">
-                            <option value>请选择</option>
-                            <% ["年龄","工龄","路龄"].each do |filter_type| %>
-                              <% if params[:filter_type] == filter_type %>
-                                <option value="<%= filter_type %>" selected><%= filter_type %></option>
-                              <% else %>
-                                <option value="<%= filter_type %>"><%= filter_type %></option>
+
+                          <% if !current_user.has_role? :safe_productionadmin %>
+                            <%= label_tag :按时间段： %>
+                            <select class="" name="filter_type">
+                              <option value>请选择</option>
+                              <% ["年龄","工龄","路龄"].each do |filter_type| %>
+                                <% if params[:filter_type] == filter_type %>
+                                  <option value="<%= filter_type %>" selected><%= filter_type %></option>
+                                <% else %>
+                                  <option value="<%= filter_type %>"><%= filter_type %></option>
+                                <% end %>
                               <% end %>
+                            </select>
+                            <% if params[:start_time].present? && params[:end_time].present? %>
+                              <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
+                              <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
+                            <% else %>
+                              <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
+                              <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
                             <% end %>
-                          </select>
-                          <% if params[:start_time].present? && params[:end_time].present? %>
-                            <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
-                            <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
-                          <% else %>
-                            <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
-                            <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
                           <% end %>
+
                           <!-- <% if params[:workshop].present? %>
                             <%= hidden_field_tag :workshop, params[:workshop] %>
                           <% elsif params[:group].present? %>
@@ -226,11 +244,11 @@
 
                     <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) %>
                       <%= render 'empshared/emp_table' %>
-                    <% elsif current_user.has_role? :attendance_admin %>
-                      <%= render 'empshared/other_duanadmin' %>
+                    <% elsif current_user.has_role? :safe_productionadmin %>
+                      <%= render 'empshared/emp_safe_productionadmin' %>
                     <% elsif (current_user.has_role? :workshopadmin) %>
-                      <%= render 'empshared/workshop_table', :locals => {:@workshop => @workshop, :@group => @group} %>
-                    <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :awardadmin)%>
+                      <%= render 'empshared/workshop_table' %>
+                    <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
                       <%= render 'empshared/emp_table_not_empadmin'%>
                     <% end %>
                 <div class="text-center">
@@ -242,6 +260,10 @@
 
 </div>
 <script type="text/javascript">
+    $("#click-batch-close").hide();
+    $(".batch-select").hide();
+    $(".employee-batch-submit").hide();
+
     function selCity()
     {
         var arr = gon.group_name;
@@ -271,5 +293,39 @@
           e.style.display = 'none';
        else
           e.style.display = 'block';
-    }
+    };
+
+    $("#click-batch-open").click(function(){
+      $("#click-batch-open").hide();
+      $("#click-batch-close").show();
+      $(".batch-select").show();
+      $(".employee-batch-submit").show();
+    });
+
+    $("#click-batch-close").click(function(){
+      $("#click-batch-close").hide();
+      $(".batch-select").hide();
+      $(".employee-batch-submit").hide();
+      $("#click-batch-open").show();
+    });
+
+    function selworkshop()
+    {
+        var arr = gon.batch_leaving_group_name;
+
+        var selNode = document.getElementById("workshop");
+        var subselNode = document.getElementById("group");
+        var index = selNode.selectedIndex;
+        var citys = arr[index];
+
+        subselNode.options.length = 0;
+        for(var i=0; i<citys.length; i++)
+        {
+            var optionNode = document.createElement("option");
+            optionNode.value = citys[i][1];
+            optionNode.innerText = citys[i][0];
+            subselNode.appendChild(optionNode);
+        }
+    };
+
 </script>

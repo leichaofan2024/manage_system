@@ -8,8 +8,8 @@
     </thead>
     <tbody>
       <% Workshop.current.each do |workshop| %>
-        <tr class="parent" id="<%= workshop.id%>">
-          <td style="text-align: left; font-size: 18px;">
+        <tr>
+          <td class="parent" id="<%= workshop.id%>" style="text-align: left; font-size: 18px;">
             <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
             <%= workshop.name %>
           </td>
@@ -29,7 +29,7 @@
       <%= text_field_tag :merge_group, nil, required: true %>
       <%= label_tag :请输入该班组所属的车间名称 %>
       <%= text_field_tag :workshop, nil, required: true %>
-      <%= submit_tag :确定 %>
+      <%= submit_tag :确定,:data => {:confirm => "确定要合并班组吗？"} %>
       <h6>注意：合并后，您选中班组下的人员会统一属于您填写的班组</h6>
    </tbody>
   </table>

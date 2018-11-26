@@ -109,10 +109,10 @@ class OtherAwardTotalsController < ApplicationController
         column_value = other_award.send(head_hash[@old_name])
         other_award.update(head_hash[@old_name] => 0,head_hash[@name] => column_value)
       end
-      flash[:notice] = "旧有新无"
+      flash[:notice] = "#{@month}月单项奖【#{@old_name}】成功修改为【#{@name}】"
     elsif !all_old_names.include?(@old_name) && !all_new_names.include?(@name)
       OtherAwardTotalsHead.where(:upload_year => @year,:upload_month => @month,:name => @old_name).update(:name => @name)
-      flash[:notice] = "都是新的 !"
+      flash[:notice] = "#{@month}月单项奖【#{@old_name}】成功修改为【#{@name}】 !"
     end
     redirect_to other_award_totals_path(:year => @year,:month => @month)
   end

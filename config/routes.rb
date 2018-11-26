@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get :employee_detail
       post :update_holiday_information
       post :insert_attendance_cate
+      get :edit_organization
       #搜索功能
       get :search
     end

@@ -1,8 +1,8 @@
 <div class="headerbar">
   <a class="menutoggle"><i class="fa fa-bars"></i></a>
 
-    <!-- <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
-      <span style="line-height: 50px;height: 50px;width:50%;margin-left:20%;">
+    <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
+      <span style="line-height: 50px;height: 50px;width:50%;margin-left:10%;">
         <% if (current_user.has_role? :attendance_admin) %>
           <% if (1..15)  === (Time.now.day) %>
             <span style="font-size:16px;">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", duan_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "},style:"color:red;" %></span>
@@ -11,42 +11,19 @@
            <span style="font-size:16px;">【最新通知】您有未审核的车间/班组  <%= link_to "前往查看 >> ", workshop_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "},style:"color:red;" %></span>
         <% end %>
       </span>
-    <% elsif Announcement.last.present? %>
-      <span style="line-height: 50px;height: 50px;width:50%;margin-left:20%;">
-        <marquee loop="2" onMouseOut="this.start()"onMouseOver="this.stop()" style="font-size: 12pt; height: 30px">【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %></marquee>
-      </span>
     <% end %>
 
     <% if @group_export_permission == 1 %>
-      <div style="padding-left: 40px;line-height: 40px;height: 40px;width:50%;margin-left:20%;margin-top:5px;font-size:14px;color:white;background-color:#FF6600;display:inline-block;">
+      <span style="line-height: 50px;height: 50px;width:50%;margin-left:10%;font-size:14px;color:white;background-color:#FF6600;display:inline-block;">
          <%= @shenhe_month%>月考勤可以导出了，请于15日前完成导出并上交给劳资！
          <%= link_to group_attendances_path(:year => @shenhe_year,:month => @shenhe_month,format: "xls") do  %>
            <span style="color:blue;"> 点击导出 > > </span>
          <% end %>
-      </div>
-    <% end %> -->
-    <div class="header-notes">
-      <% if @attendance_marquee == 1 && @shenhe_day === (Time.now.day) %>
-          <% if (current_user.has_role? :attendance_admin) %>
-            <% if (1..15)  === (Time.now.day) %>
-              <span>【最新通知】您有未审核的车间/班组  <%= link_to "前往查看", duan_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "}%></span>
-            <% end %>
-          <% elsif current_user.has_role? :workshopadmin %>
-             <span>【最新通知】您有未审核的车间/班组  <%= link_to "前往查看", workshop_verify_index_attendances_path,data: {disable_with: "正在前往，请稍候... "} %></span>
-          <% end %>
-      <% elsif Announcement.last.present? %>
-        <span>
-          【最新通知】<%= link_to "#{Announcement.last.title}", announcement_path(Announcement.last) %>
-        </span>
-      <% end %>
-
-      <% if @group_export_permission == 1 %>
-           <%= @shenhe_month%>月考勤可以导出了，请于15日前完成导出并上交给劳资！
-           <%= link_to group_attendances_path(:year => @shenhe_year,:month => @shenhe_month,format: "xls") do  %>
-             <span> 点击导出 > > </span>
-           <% end %>
-      <% end %>
-    </div>
+      </span>
+    <% end %>
+    <% if Announcement.last.present?  && ((Time.now - Announcement.last.created_at) < 604800) %>
+      <span style="line-height: 50px;height: 50px;width:30%;"><%= link_to("【最新通知】"+Announcement.last.title,announcement_path(:id => Announcement.last.id))%> </span>
+    <% end %>
     <div class="header-right">
       <ul class="headermenu">
         <li>

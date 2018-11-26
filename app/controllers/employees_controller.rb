@@ -31,7 +31,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
-    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin)
+    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :safe_productionadmin)
       @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
     elsif current_user.has_role? :workshopadmin
       @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(15)
@@ -47,17 +47,23 @@ class EmployeesController < ApplicationController
     end
     #下载表格配置
     if params[:employees] == "全部"
-      @export_employees = Employee.all
+      @export_employees = Employee.current
     else
       @export_employees = Employee.where(id: params[:employees])
     end
     workshop = Workshop.current.pluck("name")
     group = Array.new
     group << [["全部",""]]
+    # 用于批量调动：
+    batch_leaving_group = Array.new
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
+    # 用于现员筛选：
     gon.group_name = group
+    # 用于批量调动：
+    gon.batch_leaving_group_name = batch_leaving_group
     respond_to do |format|
       format.html
       format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
@@ -145,7 +151,7 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :saleradmin) or (current_user.has_role? :awardadmin) or (current_user.has_role? :incomeadmin ) or (current_user.has_role? :limitadmin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) or (current_user.has_role? :depudy_leaderadmin)
+    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :saleradmin) or (current_user.has_role? :awardadmin) or (current_user.has_role? :incomeadmin ) or (current_user.has_role? :limitadmin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) or (current_user.has_role? :depudy_leaderadmin) or (current_user.has_role? :safe_productionadmin)
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"
@@ -192,10 +198,17 @@ class EmployeesController < ApplicationController
     @group = params[:group]
     workshop = Workshop.current.pluck("name")
     group = [[["全部",""]]]
+    # 用于批量调动：
+    batch_leaving_group = Array.new
     workshop.each do |name|
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
+    # 用于现员筛选：
     gon.group_name = group
+    # 用于批量调动：
+    gon.batch_leaving_group_name = batch_leaving_group
+
     render action: "index"
   end
   #搜索和筛选--结束
@@ -1350,24 +1363,32 @@ class EmployeesController < ApplicationController
     if Workshop.current.find_by(:name => params[:name]).present?
       flash[:alert] = "该车间名称已存在，换一个试试~"
     else
-      Workshop.create(:name => params[:name])
-      flash[:notice] = "新增车间成功"
+      # 在已删除车间找，如果有且只有一个则恢复，否则新增一个车间
+      workshops = Workshop.where(:status => false,:name => params[:name])
+      if workshops.present? && (workshops.count == 1)
+        workshops.update(:status => true)
+      else
+        Workshop.create(:name => params[:name])
+      end
+      flash[:notice] = "新增车间成功!"
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
   def create_group
-    workshop_id = Workshop.current.find_by(:name => params[:workshop_name]).id
-    if workshop_id.present?
-      if Group.current.find_by(:name => params[:name]).present?
-        flash[:alert] = "该班组名称已存在，换一个试试~"
-      else
-        Group.create(name: params[:name], workshop_id: workshop_id)
-        flash[:notice] = "新增班组成功"
-      end
+
+    if Group.current.find_by(:name => params[:name]).present?
+      flash[:alert] = "该班组名称已存在，换一个试试~"
     else
-      flash[:alert] = "该车间名称不存在，请先检查"
+      groups = Group.where(:status => false,:name => params[:name])
+      if groups.present? && (groups.count == 1)
+        groups.update(:status => true)
+      else
+        Group.create(name: params[:name], workshop_id: params[:workshop_id])
+      end
+      flash[:notice] = "新增班组成功!"
     end
+
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
@@ -1377,15 +1398,15 @@ class EmployeesController < ApplicationController
     else
       workshop = Workshop.current.find_by(:name => params[:merge_workshop])
       if !params[:workshops].present?
-        flash[:alert] = "请先选择车间再合并"
+        flash[:alert] = "请先选择车间再合并!"
       else
         params[:workshops].each do |workshop_id|
-          Employee.where(workshop: workshop_id).update(workshop: workshop.id)
+          Employee.current.where(workshop: workshop_id).update(workshop: workshop.id)
           Group.current.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
-          User.groupadmin.where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.pluck("id")).update(workshop_id: workshop.id)
+          User.all_group.where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.current.pluck("id")).update(workshop_id: workshop.id)
         end
         User.workshopadmin.where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
-        flash[:notice] = "合并车间成功"
+        flash[:notice] = "合并车间成功!"
       end
     end
     redirect_back(fallback_location: organization_structure_employees_path)
@@ -1403,10 +1424,10 @@ class EmployeesController < ApplicationController
         else
           group = Group.current.find_by(name: params[:merge_group])
           params[:groups].each do |group_id|
-            Employee.where(group: group_id).update(group: group.id)
+            Employee.current.where(group: group_id).update(group: group.id)
           end
           User.all_group.where(group_id: params[:groups]).where.not(group_id: group.id).delete_all
-          flash[:notice] = "合并班组成功"
+          flash[:notice] = "合并班组成功!"
         end
       end
     end
@@ -1416,10 +1437,10 @@ class EmployeesController < ApplicationController
   def delete_organization
     if params[:workshop].present?
       workshop = Workshop.current.find(params[:workshop])
-      if workshop.groups.blank? && Employee.current.where(:workshop => params[:workshop]).blank?
-        workshop.update(status: "0")
+      if workshop.groups.current.blank? && Employee.current.where(:workshop => params[:workshop]).blank?
+        workshop.update(status: false)
         User.workshopadmin.where(workshop_id: params[:workshop]).delete_all
-        flash[:notice] = "删除成功"
+        flash[:notice] = "#{workshop.name}删除成功"
       else
         flash[:alert] = "本车间下还有班组或人员，不能删除"
       end
@@ -1428,7 +1449,7 @@ class EmployeesController < ApplicationController
       if Employee.current.where(:group => params[:group]).blank?
         group.update(status: "0")
         User.all_group.where(group_id: params[:group]).delete_all
-        flash[:notice] = "删除成功"
+        flash[:notice] = "#{group.name}删除成功"
       else
         flash[:alert] = "本班组下还有人员，不能删除"
       end
@@ -1436,26 +1457,36 @@ class EmployeesController < ApplicationController
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
-  def edit_workshop
-    if !params[:workshop].present?
-      flash[:alert] = "请先选择一个车间再修改"
-    else
-      Workshop.current.find(params[:workshop]).update(:name => params[:workshop_name])
-      flash[:notice] = "更新成功"
+  def edit_organization
+    if params[:group_id].present?
+      @group_id = params[:group_id]
+    elsif params[:workshop_id].present?
+      @workshop_id = params[:workshop_id]
     end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def edit_workshop
+      workshop = Workshop.current.where(:name => params[:workshop_name])
+      if workshop.present?
+        flash[:alert] = "更新失败！系统中已有名字为【#{params[:workshop_name]}】的车间"
+      else
+        Workshop.current.find(params[:workshop_id]).update(:name => params[:workshop_name])
+        flash[:notice] = "更新成功!"
+      end
+
     redirect_back(fallback_location: organization_structure_employees_path)
   end
 
   def edit_group
-    if !Workshop.current.find_by(:name => params[:workshop_name]).present?
-      flash[:alert] = "您填写的车间名称不存在，请先新增哦"
+    group = Group.current.where(:name => params[:group_name])
+    if group.present?
+      flash[:alert] = "更新失败！系统中已有名字为【#{params[:group_name]}】的班组"
     else
-      if !params[:group].present?
-        flash[:alert] = "请先选择一个班组再修改"
-      else
-        Group.current.find(params[:group]).update(:name => params[:group_name], :workshop_id => Workshop.current.find_by(:name => params[:workshop_name]).id)
-        flash[:notice] = "更新成功"
-      end
+      Group.current.find(params[:group_id]).update(:name => params[:group_name])
+      flash[:notice] = "更新成功!"
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
@@ -1475,9 +1506,21 @@ class EmployeesController < ApplicationController
       end
       flash[:notice] = "已将#{Employee.find(params[:employee]).name}调离"
     elsif params[:type] == "调动"
-      LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
-      Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.current.find_by(:name => params[:group]).id)
-      flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+      if params[:employee_id].present?
+        workshop_name = Workshop.find(params[:workshop]).name
+        group_name = Group.find(params[:group]).name
+        params[:employee_id].keys.each do |employee_id|
+          LeavingEmployee.create(:employee_id => employee_id, :leaving_type => "调动", :transfer_from_workshop => Employee.find(employee_id).workshop, :transfer_from_group => Employee.find(employee_id).group, :transfer_to_workshop => params[:workshop], :transfer_to_group => params[:group])
+          Employee.find(employee_id).update(:workshop => params[:workshop], :group => params[:group])
+        end
+        employee_names = Employee.where(:id => params[:employee_id].keys).pluck(:name)
+        flash[:notice] = "已将#{employee_names}调动到#{workshop_name}车间#{group_name}班组"
+      elsif params[:employee].present?
+        LeavingEmployee.create(:employee_id => params[:employee], :leaving_type => "调动", :transfer_from_workshop => Employee.find(params[:employee]).workshop, :transfer_from_group => Employee.find(params[:employee]).group, :transfer_to_workshop => Workshop.current.find_by(:name => params[:workshop]).id, :transfer_to_group => Group.current.find_by(:name => params[:group]).id)
+        Employee.current.find(params[:employee]).update(:workshop => Workshop.current.find_by(:name => params[:workshop]).id, :group => Group.current.find_by(:name => params[:group]).id)
+        flash[:notice] = "已将#{Employee.find(params[:employee]).name}调动到#{params[:workshop]}车间#{params[:group]}班组"
+      end
+
     elsif params[:type] == "退休"
       LeavingEmployee.create(:employee_id => params[:employee], :cause => params[:cause], :leaving_type => "退休")
       flash[:notice] = "#{Employee.find(params[:employee]).name}已退休"
@@ -1488,21 +1531,67 @@ class EmployeesController < ApplicationController
   def employee_detail
     @type = params[:type]
     if params[:type] == "调离"
-      if ["辞职","局内调动","在职死亡"].include?(params[:category_name])
+      if params[:leaving_search].present?
+        if params[:leaving_search][:name].present?
+          employee_ids = Employee.where(:name => params[:leaving_search][:name]).ids
+          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          if employees.count == 1
+            category_id = employees.first.category_id
+            leaving_type = employees.first.leaving_type
+            if category_id.present?
+              params[:category_name] = LeavingCategory.find_by(:id => category_id).name
+            else
+              if leaving_type == "退休"
+                params[:category_name] = "退休"
+              else
+                params[:category_name] = "未分类"
+              end
+            end
+          end
+        elsif params[:leaving_search][:sal_number].present?
+          employee_ids = Employee.where(:sal_number => params[:leaving_search][:sal_number]).ids
+          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          if employees.present?
+            category_id = employees.first.category_id
+            leaving_type = employees.first.leaving_type
+            if category_id.present?
+              params[:category_name] = LeavingCategory.find_by(:id => category_id).name
+            else
+              if leaving_type == "退休"
+                params[:category_name] = "退休"
+              else
+                params[:category_name] = "未分类"
+              end
+            end
+          end
+        else
+          employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
+        end
+        @employees = employees.order(created_at: :DESC).page(params[:page]).per(15)
+        @employees_count = @employees.count
+      elsif ["辞职","局内调动","在职死亡"].include?(params[:category_name])
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
-        @employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
+        @employees_count = employees.count
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       elsif params[:category_name] == "退休"
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
         retire_employees = LeavingEmployee.where(:leaving_type => "退休")
         retire_category_employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
-        @employees = retire_employees.or(retire_category_employees).page(params[:page]).per(15)
+        employees = retire_employees.or(retire_category_employees)
+        @employees_count = employees.count
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       elsif params[:category_name] == "未分类"
-        @employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => ["调离"],:category_id => nil)
+        @employees_count = employees.count
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       else
-        @employees = LeavingEmployee.where(:leaving_type => ["调离","退休"]).page(params[:page]).per(15)
+        employees = LeavingEmployee.where(:leaving_type => ["调离","退休"])
+        @employees_count = employees.count
+        @employees = employees.order("created_at DESC").page(params[:page]).per(15)
       end
     elsif params[:type] == "调动"
-      @employees = LeavingEmployee.where(:leaving_type => "调动").page(params[:page]).per(15)
+      @employees = LeavingEmployee.order(:created_at => :DESC).where(:leaving_type => "调动").page(params[:page]).per(15)
     elsif params[:type] == "退休"
       @employees = LeavingEmployee.where(:leaving_type => "退休").page(params[:page]).per(15)
     elsif params[:default] == "男"

@@ -2,41 +2,51 @@
 
   <%= link_to("返回", employees_path) %><br>
   <%= @duty %>
-  <h4 class="text-center">调离人员统计表</h4>
-    <% if @type == "调离" %>
-      <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","未分类"].include?(params[:category_name]) %>
-        <% ["全部","辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
-          <% if name == params[:category_name] %>
-            <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye-selected") %>
-          <% else %>
-            <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
-          <% end %>
-        <% end %>
-      <% else %>
-        <%= link_to("全部",employee_detail_employees_path(:type => "调离",:category_name => "全部"),class:"btn btn-employee-fenye-selected") %>
-        <% ["辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+  <% if @type == "调离" %>
+    <h4 class="text-center">调离人员统计表(<%= @employees_count %> 人) </h4>
+    <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","未分类"].include?(params[:category_name]) %>
+      <% ["全部","辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+        <% if name == params[:category_name] %>
+          <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye-selected") %>
+        <% else %>
           <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
         <% end %>
       <% end %>
+    <% else %>
+      <%= link_to("全部",employee_detail_employees_path(:type => "调离",:category_name => "全部"),class:"btn btn-employee-fenye-selected") %>
+      <% ["辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+        <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
+      <% end %>
     <% end %>
+    <span class="pull-right leaving-search" style="display:inline-block">
+      <%= form_tag employee_detail_employees_path,method: :get do %>
+        <%= hidden_field_tag :type,"调离" %>
+        <%= text_field_tag :"leaving_search[name]",nil,placeholder: "请输入姓名..." %>
+        <%= text_field_tag :"leaving_search[sal_number]",nil,placeholder: "请输入工资号..." %>
+        <%= submit_tag "搜索",:data => {:disable_with => "搜索中..."} %>
+      <% end %>
+    </span>
+
+  <% elsif @type == "调动" %>
+    <h4 class="text-center">调动人员统计表</h4>
+  <% end %>
   <table class="table table-bordered">
     <thead>
     	<tr>
     		<th>工资号</th>
     		<th>姓名</th>
+
     		<% if @type == "调离" %>
       	  <th>原车间</th>
       	  <th>原班组</th>
+          <th>备注</th>
       	  <th>调离时间</th>
-      	<% elsif @type == "退休" %>
-      	  <th>原车间</th>
-      	  <th>原班组</th>
-      	  <th>退休时间</th>
       	<% elsif @type == "调动" %>
       	  <th>调动前车间</th>
       	  <th>调动前班组</th>
       	  <th>调动后车间</th>
       	  <th>调动后班组</th>
+          <th>备注</th>
       	  <th>调动时间</th>
       	<% else %>
       		<th>工资号</th>
@@ -69,14 +79,7 @@
       			<td><%= Employee.find(employee.employee_id).name %></td>
   					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
   					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
-  					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
-  				</tr>
-  			<% elsif @type == "退休" %>
-  				<tr class="row-click-able" data-url="/employees/<%= employee.employee_id %>">
-      			<td><%= Employee.find(employee.employee_id).sal_number %></td>
-      			<td><%= Employee.find(employee.employee_id).name %></td>
-  					<td><%= Workshop.find(Employee.find(employee.employee_id).workshop).name %></td>
-  					<td><%= Group.find(Employee.find(employee.employee_id).group).name %></td>
+            <td><%= employee.cause %></td>
   					<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
   				</tr>
       	<% elsif @type == "调动" %>
@@ -115,6 +118,7 @@
                 <span style = "color: red ;">调动后班组已被删除！</span>
               <% end %>
             </td>
+            <td><%= employee.cause %></td>
 	      		<td><%= employee.created_at.to_datetime.strftime("%Y年%m月%d日") %></td>
 	      	</tr>
       	<% else %>

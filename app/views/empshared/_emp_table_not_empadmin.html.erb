@@ -4,9 +4,7 @@
       <th>车间</th>
       <th>班组</th>
       <th>姓名</th>
-      <% if (!current_user.has_role? :groupadmin) && (!current_user.has_role? :organsadmin) && (!current_user.has_role? :wgadmin)%>
-        <th>电话号</th>
-      <% end %>
+      <th>电话号</th>
       <th>性别</th>
       <th>年龄</th>
       <th>文化程度</th>
@@ -24,9 +22,7 @@
           <td><%= Workshop.current.find(employee.workshop).name %></td>
           <td><%= Group.current.find(employee.group).name %></td>
           <td><%= employee.name %></td>
-          <% if (!current_user.has_role? :groupadmin) && (!current_user.has_role? :organsadmin) && (!current_user.has_role? :wgadmin)%>
-            <td><%= employee.phone_number %></td>
-          <% end %>
+          <td><%= employee.phone_number %></td>
           <td><%= employee.sex %></td>
           <td><%= employee.age %></td>
           <td><%= employee.education_background %></td>

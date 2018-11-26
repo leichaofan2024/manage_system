@@ -1,0 +1,29 @@
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>工资号</th>
+      <th>姓名</th>
+      <th>车间</th>
+      <th>班组</th>
+      <th>工种</th>
+      <th>政治面貌</th>
+      <th>工作时间</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <% @employees.each do |employee| %>
+        <tr>
+        <td><%= employee.sal_number %></td>
+        <td><%= employee.name %></td>
+        <td><%= Workshop.current.find(employee.workshop).name %></td>
+        <td><%= Group.current.find(employee.group).name %></td>
+        <td><%= employee.work_type %></td>
+        <td><%= employee.political_role %></td>
+        <td><%= employee.working_time %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
