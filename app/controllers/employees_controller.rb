@@ -30,27 +30,25 @@ class EmployeesController < ApplicationController
     #按工种筛选和默认显示的情况 和每个车间、班组登录只能看到自己的部门的人
     @work_type = params[:work_type]
     if params[:work_type].present?
-      @employees = Employee.current.where(work_type: params[:work_type]).order('id ASC').page(params[:page]).per(10)
+      @employees_all = Employee.current.where(work_type: params[:work_type]).order('id ASC')
     elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :safe_productionadmin)
-      @employees = Employee.current.order('id ASC').page(params[:page]).per(15)
+      @employees_all = Employee.current.order('id ASC')
     elsif current_user.has_role? :workshopadmin
-      @employees = Employee.current.where(:workshop => current_user.workshop_id).page(params[:page]).per(15)
+      @employees_all = Employee.current.where(:workshop => current_user.workshop_id).order('id ASC')
       @workshop = Workshop.current.find(current_user.workshop_id)
 			@groups = @workshop.groups
       if params[:group].present?
-        @employees = Employee.where(:workshop => @workshop.id, :group => params[:group]).page(params[:page]).per(15)
+        @employees_all = Employee.where(:workshop => @workshop.id, :group => params[:group]).order('id ASC')
       end
     elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
-      @employees = Employee.current.where(:group => current_user.group_id).page(params[:page]).per(10)
+      @employees_all = Employee.current.where(:group => current_user.group_id).order('id ASC')
     else
-      @employees = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).page(params[:page])
+      @employees_all = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).order('id ASC')
     end
+    @employees = @employees_all.limit(15)
     #下载表格配置
-    if params[:employees] == "全部"
-      @export_employees = Employee.current
-    else
-      @export_employees = Employee.where(id: params[:employees])
-    end
+    
+    @export_employees = @employees_all
     workshop = Workshop.current.pluck("name")
     group = Array.new
     group << [["全部",""]]
@@ -66,6 +64,7 @@ class EmployeesController < ApplicationController
     gon.batch_leaving_group_name = batch_leaving_group
     respond_to do |format|
       format.html
+      format.js
       format.xls { headers["Content-Disposition"] = 'attachment; filename="现员管理表.xls"'}
     end
   end
@@ -188,8 +187,9 @@ class EmployeesController < ApplicationController
         condition += ", rali_years: #{params[:start_time]}..#{params[:end_time]}"
       end
     end
-    condition += ").page(params[:page]).per(15)"
-    @employees = eval("Employee#{condition}")
+    condition += ")"
+    @employees_all = eval("Employee#{condition}").order("id ASC")
+    @employees = @employees_all.limit(15)
     @sex = params[:sex]
     @duty = params[:duty]
     @work_type = params[:work_type]
@@ -208,6 +208,18 @@ class EmployeesController < ApplicationController
     gon.group_name = group
     # 用于批量调动：
     gon.batch_leaving_group_name = batch_leaving_group
+    
+    gon.url_parameter = ""
+    if params[:max_id].present?
+      index = @employees.index(params[:max_id])
+      @employees = @employees_all.where("id > ?",params[:max_id]).limit(15)
+    end
+
+    if request.original_url.split("?").count == 2
+      gon.url_parameter = request.original_url.split("?").last.sub("max_id=","")
+    else
+      gon.url_parameter = ""
+    end
 
     render action: "index"
   end

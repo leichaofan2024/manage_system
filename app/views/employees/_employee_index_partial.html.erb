@@ -1,0 +1,79 @@
+<% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) %>
+  <tr>
+    <td class="batch-select"><%= check_box_tag "employee_id[#{employee.id}]",1,false,class:"batch-select"%></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sal_number.to_i %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.job_number %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.record_number %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= Workshop.current.find(employee.workshop).name %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= Group.current.find(employee.group).name %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.work_type %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>">
+      <%=  employee.name %>
+      <% if LeavingEmployee.find_by(:employee_id => employee.id, :leaving_type => "调离").present? %>
+        <span class="label label-danger">已调离</span>
+      <% end %>
+
+      <% if Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).pluck("id").include?(employee.id) %>
+          <span class="label label-warning">一月内有调动</span>
+      <% end %>
+    </td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.duty %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sex %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.age %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.education_background %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.nation %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.native_place %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_time %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_years %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.railway_time.to_i %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.rali_years %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
+  </tr>
+<% elsif current_user.has_role? :safe_productionadmin %>
+  <tr>
+    <td><%= employee.sal_number %></td>
+    <td><%= employee.name %></td>
+    <td><%= Workshop.current.find(employee.workshop).name %></td>
+    <td><%= Group.current.find(employee.group).name %></td>
+    <td><%= employee.work_type %></td>
+    <td><%= employee.political_role %></td>
+    <td><%= employee.working_time %></td>
+  </tr>
+<% elsif (current_user.has_role? :workshopadmin) %>
+  <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+    <td><%= employee.sal_number %></td>
+    <td><%= employee.job_number %></td>
+    <td><%= employee.record_number %></td>
+    <td><%= Workshop.current.find(employee.workshop).name %></td>
+    <td><%= Group.current.find(employee.group).name %></td>
+    <td><%= employee.name %></td>
+    <td><%= employee.sex %></td>
+    <td><%= employee.age %></td>
+    <td><%= employee.education_background %></td>
+    <td><%= employee.nation %></td>
+    <td><%= employee.native_place %></td>
+    <td><%= employee.working_time %></td>
+    <td><%= employee.working_years %></td>
+    <td><%= employee.railway_time %></td>
+    <td><%= employee.rali_years %></td>
+    <td><%= employee.registered_residence %></td>
+    <td><%= employee.family_address%></td>
+    <td><%= employee.phone_number %></td>
+  </tr>
+<% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+  <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
+      <td><%= Workshop.current.find(employee.workshop).name %></td>
+      <td><%= Group.current.find(employee.group).name %></td>
+      <td><%= employee.name %></td>
+      <td><%= employee.phone_number %></td>
+      <td><%= employee.sex %></td>
+      <td><%= employee.age %></td>
+      <td><%= employee.education_background %></td>
+      <td><%= employee.nation %></td>
+      <td><%= employee.native_place %></td>
+      <td><%= employee.registered_residence %></td>
+      <!-- <td><%= employee.family_address%></td> -->
+      <td><%= employee.phone_number %></td>
+  </tr>
+<% end %>
