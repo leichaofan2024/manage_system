@@ -130,6 +130,12 @@
     <ul class="employee-list">
       <li>
       <span class="glyphicon glyphicon-asterisk"></span>
+      <span>是否属于多经人员</span>
+      
+      <%= f.check_box :duojing,{},1,false %>
+      </li>
+      <li>
+      <span class="glyphicon glyphicon-asterisk"></span>
       <span>工资号</span>
 
       <%= f.text_field :sal_number, required: true %>
