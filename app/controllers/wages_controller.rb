@@ -765,69 +765,73 @@ class WagesController < ApplicationController
 
     def wage_analyses
     	wage_head_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|x| "col"+x.to_s}].transpose.to_h
-    	start_time = (params[:start_time] + "-15").to_time 
-    	end_time = (params[:end_time] + "-15").to_time
-    	start_year = params[:start_time].split("-")[0].to_i
-    	start_month =  params[:start_time].split("-")[1].to_i
-    	end_year = params[:end_time].split("-")[0].to_i
-    	end_month =  params[:end_time].split("-")[1].to_i
-    	time_hash = Hash.new 
-    	if (end_time-start_time) > 0
-    		if params[:timeselect] == "月"
-              if start_year == end_year
-              	(start_month..end_month).each do |month|
-              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
-              	end 
-              else
-              	subtract_year = end_year - start_year 
-              	(start_month..12).each do |month|
-              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
-              	end 
-              	if subtract_year > 1
-                  (1..(subtract_year-1)).each do |year| 
-                  	(1..12).each do |month|
-                  		@time_hash["#{start_year+year}-#{month}月"] = [start_year+year,month]
-                  	end 
-                  end 
-                end 
-                (1..end_month).each do |month|
-              		@time_hash["#{end_year}-#{month}月"] = [end_year,month]
-              	end 
-              end 
-    		elsif params[:timeselect] == "季度"
-    		  quarter_eveay_month_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
-    		  quarter_hash = {1 => [1,2,3],2 => [4,5,6],3 => [7,8,9],4 => [10,11,12]}
-    		  if start_year == end_year
-                (quarter_eveay_month_hash[start_month]..quarter_eveay_month_hash[end_month]).each do |quarter|
-              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
-              	end 
-              else
-              	subtract_year = end_year - start_year 
-              	start_quarter = quarter_eveay_month_hash[start_month]
-              	(start_quarter..4).each do |quarter|
-              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
-              	end 
-              	if subtract_year > 1
-                  (1..(subtract_year-1)).each do |year| 
-                  	(1..4).each do |quarter|
-                  		@time_hash["#{start_year+year}-#{quarter}季度"] = [start_year+year,quarter_hash[quarter]]
-                  	end 
-                  end 
-                end 
-                end_quarter = quarter_eveay_month_hash[end_month]
-                (1..end_quarter).each do |quarter|
-              		@time_hash["#{end_year}-#{month}季度"] = [end_year,quarter_hash[quarter]]
-              	end 
-              end 
-    		elsif params[:timeselect] == "年"
-    			(start_year..end_year).each do |year|
-    				@time_hash["#{year}年度"] = [year,(1..12)]
-    			end 
-    		end
-        else 
-        	flash[:alert] = "时间筛选的结束时间必须要大于开始时间！"
-        	redirect_to wage_analyses_wages_path
-        end 
+
+    	
+    	@time_hash = Hash.new 
+	    if params[:start_time].present? && params[:end_time].present? 
+	    	start_time = (params[:start_time] + "-15").to_time 
+	    	end_time = (params[:end_time] + "-15").to_time
+	    	start_year = params[:start_time].split("-")[0].to_i
+	    	start_month =  params[:start_time].split("-")[1].to_i
+	    	end_year = params[:end_time].split("-")[0].to_i
+	    	end_month =  params[:end_time].split("-")[1].to_i
+	    	if (end_time-start_time) > 0
+	    		if params[:timeselect] == "月"
+	              if start_year == end_year
+	              	(start_month..end_month).each do |month|
+	              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
+	              	end 
+	              else
+	              	subtract_year = end_year - start_year 
+	              	(start_month..12).each do |month|
+	              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
+	              	end 
+	              	if subtract_year > 1
+	                  (1..(subtract_year-1)).each do |year| 
+	                  	(1..12).each do |month|
+	                  		@time_hash["#{start_year+year}-#{month}月"] = [start_year+year,month]
+	                  	end 
+	                  end 
+	                end 
+	                (1..end_month).each do |month|
+	              		@time_hash["#{end_year}-#{month}月"] = [end_year,month]
+	              	end 
+	              end 
+	    		elsif params[:timeselect] == "季度"
+	    		  quarter_eveay_month_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
+	    		  quarter_hash = {1 => [1,2,3],2 => [4,5,6],3 => [7,8,9],4 => [10,11,12]}
+	    		  if start_year == end_year
+	                (quarter_eveay_month_hash[start_month]..quarter_eveay_month_hash[end_month]).each do |quarter|
+	              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
+	              	end 
+	              else
+	              	subtract_year = end_year - start_year 
+	              	start_quarter = quarter_eveay_month_hash[start_month]
+	              	(start_quarter..4).each do |quarter|
+	              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
+	              	end 
+	              	if subtract_year > 1
+	                  (1..(subtract_year-1)).each do |year| 
+	                  	(1..4).each do |quarter|
+	                  		@time_hash["#{start_year+year}-#{quarter}季度"] = [start_year+year,quarter_hash[quarter]]
+	                  	end 
+	                  end 
+	                end 
+	                end_quarter = quarter_eveay_month_hash[end_month]
+	                (1..end_quarter).each do |quarter|
+	              		@time_hash["#{end_year}-#{month}季度"] = [end_year,quarter_hash[quarter]]
+	              	end 
+	              end 
+	    		elsif params[:timeselect] == "年"
+	    			(start_year..end_year).each do |year|
+	    				@time_hash["#{year}年度"] = [year,(1..12)]
+	    			end 
+	    		end
+	        else 
+	        	flash[:alert] = "时间筛选的结束时间必须要大于开始时间！"
+	        	redirect_to wage_analyses_wages_path
+	        end 
+	    end 
    
         # 把数据源类型存在一个统一的数组里
         category_data_array = Hash.new 
@@ -857,7 +861,7 @@ class WagesController < ApplicationController
         		employee_salnumbers = Employee.where(category_data_array.first[0] => category).pluck(:sal_number)
         		sum_array = Array.new 
                 @time_hash.values.each do |time|
-                	sum = Wage.where(:year => time[0],:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"])
+                	sum = Wage.where(:year => time[0],:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"]).round(2)
                     sum_array.push(sum)
                 end 
                 if category_data_array.first[0]=="workshop"
