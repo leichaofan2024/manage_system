@@ -836,41 +836,87 @@ class WagesController < ApplicationController
         # 把数据源类型存在一个统一的数组里
         category_data_array = Hash.new 
         if params[:workshop].present? 
-        	employees = Employee.where(:workshop => params[:workshop])
         	category_data_array["workshop"] = params[:workshop]
         elsif params[:grade].present? 
-        	employees = Employee.where(:grade => params[:grade])
         	category_data_array["grade"] = params[:grade]
         elsif params[:duty].present? 
         	if params[:duty].include?("未填写")
         		params[:duty] = params[:duty].reject{|x| x=="未填写"}.push(nil)
         	end 
-            employees = Employee.where(:duty => params[:duty])
             category_data_array["duty"] = params[:duty]
         elsif params[:work_type].present? 
         	if params[:work_type].include?("未填写")
         		params[:work_type] = params[:work_type].reject{|x| x=="未填写"}.push(nil)
         	end 
-            employees = Employee.where(:work_type => params[:work_type])
             category_data_array["work_type"] = params[:work_type]
-        end  
+        elsif params[:grade_compare].present? 
+            leaders = Employee.pluck(:grade).uniq.delete_if{|x| x==nil || x==""}
+            workers = [nil,""]
+            category_data_array["grade_compare"] = [leaders,workers]
+        end   
         @category_income_compare = Array.new
 
         if category_data_array.present? 
         	category_data_array.first[1].each do |category|
-        		employee_salnumbers = Employee.where(category_data_array.first[0] => category).pluck(:sal_number)
+        		if params[:grade_compare].present?
+        			employee_salnumbers = Employee.where(:grade => category).pluck(:sal_number)
+        		else
+        			employee_salnumbers = Employee.where(category_data_array.first[0] => category).pluck(:sal_number)
+        		end 
+        		
         		sum_array = Array.new 
+        		last_sum_array = Array.new
                 @time_hash.values.each do |time|
                 	sum = Wage.where(:year => time[0],:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"]).round(2)
+                	if params[:phase_contrast].present?
+                		last_sum = Wage.where(:year => time[0]-1,:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"]).round(2)
+                		last_sum_array.push(last_sum)
+                	end 
                     sum_array.push(sum)
                 end 
                 if category_data_array.first[0]=="workshop"
-                	@category_income_compare.push([Workshop.find_by(:id => category).name,sum_array])
-                else 
-                	@category_income_compare.push([category,sum_array])
+                	if params[:phase_contrast].present?
+                		@category_income_compare.push([Workshop.find_by(:id => category).name,sum_array,last_sum_array])
+                	else
+                	    @category_income_compare.push([Workshop.find_by(:id => category).name,sum_array])
+                	end 
+                elsif params[:grade_compare].present? && (category == leaders)
+                	if params[:phase_contrast].present?
+                		@category_income_compare.push(["干部",sum_array,last_sum_array])
+                    else 
+                	    @category_income_compare.push(["干部",sum_array])
+                    end 
+                elsif params[:grade_compare].present? && (category == workers)
+                	if params[:phase_contrast].present?
+                		@category_income_compare.push(["工人",sum_array,last_sum_array])
+                	else
+	                	@category_income_compare.push(["工人",sum_array])
+	                end 
+                else
+                	if params[:phase_contrast].present?
+                		if category == nil 
+                			@category_income_compare.push(["未填写",sum_array,last_sum_array])
+                		else
+	                		@category_income_compare.push([category,sum_array,last_sum_array])
+	                	end 
+                	else 
+                		if category == nil 
+                			@category_income_compare.push(["未填写",sum_array])
+                		else 
+		                	@category_income_compare.push([category,sum_array])
+		                end 
+	                end 
                 end  
             end 
         end 
         @time_form_header = @time_hash.keys
+        
+        respond_to do |format|
+        format.html
+		format.js
+        format.xls { headers["Content-Disposition"] = 'attachment; filename="工资统计分析表.xls"'}
+    end
     end 
+
+
 end
