@@ -14,7 +14,26 @@
                   <%= text_field_tag :end_time,""%>
                 <% end %>
               </li>
-
+              <!-- <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker6'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div> -->
+    <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker7'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
               <li>
                 <%= label_tag :时间段： %>
                 <select name="timeselect">
@@ -156,5 +175,25 @@
     }else {
       $("#profile input[type='checkbox']").removeAttr("disabled");;
     }
-  })
+  });
+  // $(function () {
+  //     $('#datetimepicker10').datetimepicker({
+  //         viewMode: 'years',
+  //         format: 'YYYY-MM',
+  //         locale: moment.locale('zh-cn')
+  //     });
+  // });
+
+  $(function () {
+      $('#datetimepicker6').datetimepicker();
+      $('#datetimepicker7').datetimepicker({
+          useCurrent: false //Important! See issue #1075
+      });
+      $("#datetimepicker6").on("dp.change", function (e) {
+          $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+      });
+      $("#datetimepicker7").on("dp.change", function (e) {
+          $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+      });
+  });
 </script>
