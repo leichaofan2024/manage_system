@@ -761,15 +761,15 @@ class WagesController < ApplicationController
 	      format.js    # 如果客户端要求 JavaScript，回传 index.js.erb
 	    end
 	end
-    
+
 
     def wage_analyses
     	wage_head_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|x| "col"+x.to_s}].transpose.to_h
 
-    	
-    	@time_hash = Hash.new 
-	    if params[:start_time].present? && params[:end_time].present? 
-	    	start_time = (params[:start_time] + "-15").to_time 
+
+    	@time_hash = Hash.new
+	    if params[:start_time].present? && params[:end_time].present?
+	    	start_time = (params[:start_time] + "-15").to_time
 	    	end_time = (params[:end_time] + "-15").to_time
 	    	start_year = params[:start_time].split("-")[0].to_i
 	    	start_month =  params[:start_time].split("-")[1].to_i
@@ -780,97 +780,97 @@ class WagesController < ApplicationController
 	              if start_year == end_year
 	              	(start_month..end_month).each do |month|
 	              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
-	              	end 
+	              	end
 	              else
-	              	subtract_year = end_year - start_year 
+	              	subtract_year = end_year - start_year
 	              	(start_month..12).each do |month|
 	              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
-	              	end 
+	              	end
 	              	if subtract_year > 1
-	                  (1..(subtract_year-1)).each do |year| 
+	                  (1..(subtract_year-1)).each do |year|
 	                  	(1..12).each do |month|
 	                  		@time_hash["#{start_year+year}-#{month}月"] = [start_year+year,month]
-	                  	end 
-	                  end 
-	                end 
+	                  	end
+	                  end
+	                end
 	                (1..end_month).each do |month|
 	              		@time_hash["#{end_year}-#{month}月"] = [end_year,month]
-	              	end 
-	              end 
+	              	end
+	              end
 	    		elsif params[:timeselect] == "季度"
 	    		  quarter_eveay_month_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
 	    		  quarter_hash = {1 => [1,2,3],2 => [4,5,6],3 => [7,8,9],4 => [10,11,12]}
 	    		  if start_year == end_year
 	                (quarter_eveay_month_hash[start_month]..quarter_eveay_month_hash[end_month]).each do |quarter|
 	              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
-	              	end 
+	              	end
 	              else
-	              	subtract_year = end_year - start_year 
+	              	subtract_year = end_year - start_year
 	              	start_quarter = quarter_eveay_month_hash[start_month]
 	              	(start_quarter..4).each do |quarter|
 	              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
-	              	end 
+	              	end
 	              	if subtract_year > 1
-	                  (1..(subtract_year-1)).each do |year| 
+	                  (1..(subtract_year-1)).each do |year|
 	                  	(1..4).each do |quarter|
 	                  		@time_hash["#{start_year+year}-#{quarter}季度"] = [start_year+year,quarter_hash[quarter]]
-	                  	end 
-	                  end 
-	                end 
+	                  	end
+	                  end
+	                end
 	                end_quarter = quarter_eveay_month_hash[end_month]
 	                (1..end_quarter).each do |quarter|
-	              		@time_hash["#{end_year}-#{month}季度"] = [end_year,quarter_hash[quarter]]
-	              	end 
-	              end 
+	              		@time_hash["#{end_year}-#{quarter}季度"] = [end_year,quarter_hash[quarter]]
+	              	end
+	              end
 	    		elsif params[:timeselect] == "年"
 	    			(start_year..end_year).each do |year|
 	    				@time_hash["#{year}年度"] = [year,(1..12)]
-	    			end 
+	    			end
 	    		end
-	        else 
+	        else
 	        	flash[:alert] = "时间筛选的结束时间必须要大于开始时间！"
 	        	redirect_to wage_analyses_wages_path
-	        end 
-	    end 
-   
+	        end
+	    end
+
         # 把数据源类型存在一个统一的数组里
-        category_data_array = Hash.new 
-        if params[:workshop].present? 
+        category_data_array = Hash.new
+        if params[:workshop].present?
         	employees = Employee.where(:workshop => params[:workshop])
         	category_data_array["workshop"] = params[:workshop]
-        elsif params[:grade].present? 
+        elsif params[:grade].present?
         	employees = Employee.where(:grade => params[:grade])
         	category_data_array["grade"] = params[:grade]
-        elsif params[:duty].present? 
+        elsif params[:duty].present?
         	if params[:duty].include?("未填写")
         		params[:duty] = params[:duty].reject{|x| x=="未填写"}.push(nil)
-        	end 
+        	end
             employees = Employee.where(:duty => params[:duty])
             category_data_array["duty"] = params[:duty]
-        elsif params[:work_type].present? 
+        elsif params[:work_type].present?
         	if params[:work_type].include?("未填写")
         		params[:work_type] = params[:work_type].reject{|x| x=="未填写"}.push(nil)
-        	end 
+        	end
             employees = Employee.where(:work_type => params[:work_type])
             category_data_array["work_type"] = params[:work_type]
-        end  
+        end
         @category_income_compare = Array.new
 
-        if category_data_array.present? 
+        if category_data_array.present?
         	category_data_array.first[1].each do |category|
         		employee_salnumbers = Employee.where(category_data_array.first[0] => category).pluck(:sal_number)
-        		sum_array = Array.new 
+        		sum_array = Array.new
                 @time_hash.values.each do |time|
                 	sum = Wage.where(:year => time[0],:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"]).round(2)
                     sum_array.push(sum)
-                end 
+                end
                 if category_data_array.first[0]=="workshop"
                 	@category_income_compare.push([Workshop.find_by(:id => category).name,sum_array])
-                else 
+                else
                 	@category_income_compare.push([category,sum_array])
-                end  
-            end 
-        end 
+                end
+            end
+        end
         @time_form_header = @time_hash.keys
-    end 
+    end
 end
