@@ -27,7 +27,12 @@
     <div class="ivu-tooltip-rel pull-right" style="margin-left: 15px">
       <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
         <%= link_to caiwu_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
-           <span style="color: #269Eff;">导出记录</span>
+           <span style="color: #269Eff;">导出记录(含多经)</span>
+        <% end %>
+      </button>
+      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+        <%= link_to caiwu_attendances_path(:duojing => 0,:year => params[:year],:month => params[:month],format: "xls") do  %>
+           <span style="color: #269Eff;">导出记录(不含多经)</span>
         <% end %>
       </button>
     </div>

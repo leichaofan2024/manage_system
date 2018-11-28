@@ -75,9 +75,9 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">工伤假</Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">旷工</Data></Cell>
       </Row>
-      <%@export_employees = Employee.current%>
-      <%employee_ids = []%>
-    <%@export_employees.each do |employee|%>
+     
+      <% employee_ids = []%>
+      <% @export_employees.each do |employee|%>
         <%attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <%  have_count = 0%>
         <%if attendance_count.present?%>
