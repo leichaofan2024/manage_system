@@ -21,7 +21,7 @@
       <th>联系电话</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="employee-id-list">
 
     <% @employees.each do |employee| %>
         <tr class="row-click-able" data-url="/employees/<%= employee.id%>">

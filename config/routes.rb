@@ -306,6 +306,7 @@ Rails.application.routes.draw do
       get :edit_header_formula
       post :update_header_formula
       get :income
+      get :wage_analyses
     end
   end
 

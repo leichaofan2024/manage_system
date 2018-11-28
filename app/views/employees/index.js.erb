@@ -1,0 +1,14 @@
+<% @employees.each do |employee| %>
+  $("#employee-id-list").append("<%=j render :partial => "employee_index_partial",:locals =>{:employee => employee} %>");
+<% end %>
+
+<% if @employees.any? %>
+  var current_post_id = <%= @employees.last.id %>;
+  $("#click-batch-close").hide();
+  $(".batch-select").hide();
+  $(".employee-batch-submit").hide();
+  $("#click-batch-open").show();
+<% else %>
+  $("#js-log").show();
+<% end %>
+

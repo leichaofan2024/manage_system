@@ -1,38 +1,29 @@
-<!-- Preloader -->
 <div id="preloader">
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
 <div class="contentpanel">
-      <!-- 通过@employees的总页数，找出所有的id-开始 -->
-      <% pages = @employees.total_pages %>
-      <% employee_ids = @employees.page(1).per(16).pluck("id") %>
-      <% (2..pages).each do |i| %>
-        <% employee_ids += @employees.page(i).per(16).pluck("id") %>
-      <% end %>
-      <!-- 通过@employees的总页数，找出所有的id-结束 -->
 
-      <!-- 总数统计-开始 -->
-        <% if (can? :manage, Employee) || (can? :leader_read, Employee) || (current_user.has_role? :depudy_leaderadmin)%>
+        <% if (current_user.has_role? :empadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :limitadmin) %>
           <ul class="employee-title">
             <li>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count%></span><br>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees_all.count%></span><br>
               <span>合计</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "男").count %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= @employees_all.where(:sex => "男").count %></span>
               <br>
               <span>男</span>
             </li>
             <li>
-              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= Employee.where(id: employee_ids).where(:sex => "女").count %></span>
+              <span class="highlight-1iKYJ_1" style="color: #269EFF"><%= @employees_all.where(:sex => "女").count %></span>
               <br>
               <span>女</span>
             </li>
             <li>
-              <% if Employee.where(id: employee_ids).count == 0 %>
+              <% if @employees_all.count == 0 %>
                 <span class="highlight-1iKYJ_0" style="color: #269EFF">0</span>
               <% else %>
-                <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).sum("age") / Employee.where(id: employee_ids).count %></span>
+                <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees_all.sum("age") / @employees_all.count %></span>
               <% end %>
               <br>
               <span>平均年龄</span>
@@ -48,33 +39,10 @@
               <span>最近一月调动</span>
             </li>
           </ul>
-        <% elsif (current_user.has_role? :awardadmin) || (current_user.has_role? :incomeadmin)%>
-          <ul class="employee-title">
-            <li>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.count%></span><br>
-              <span>合计</span>
-            </li>
-            <li>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "男").count%></span><br>
-              <span>男</span>
-            </li>
-            <li>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.current.where(:sex => "女").count%></span><br>
-              <span>女</span>
-            </li>
-            <li>
-              <span class="highlight-1iKYJ_0"><%= link_to Employee.leaving.count, employee_detail_employees_path(type: "调离")%></span><br>
-              <span>调离</span>
-            </li>
-            <li>
-              <span class="highlight-1iKYJ_0"><%= link_to Employee.transfer(Time.now.beginning_of_month, Time.now.end_of_month).count, employee_detail_employees_path(type: "调动")%></span><br>
-              <span>最近一月调动</span>
-            </li>
-        </ul>
         <% else %>
           <ul class="employee-title">
             <li>
-              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= Employee.where(id: employee_ids).count %></span><br>
+              <span class="highlight-1iKYJ_0" style="color: #269EFF"><%= @employees_all.count %></span><br>
               <span>合计</span>
             </li>
           </ul>
@@ -95,15 +63,10 @@
                   </button>
                     <div class="margin-right-10" style="float: right;">
                       <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
-                            <% if @sex.present? or @duty.present? or @work_type.present? or @filter_type.present? or @workshop.present? or @group.present? %>
-                              <%= link_to employees_path(format: "xls", employees: employee_ids),class:"btn btn-success-alt" do %>
-                                 导出表格
-                              <% end %>
-                            <% else %>
-                              <%= link_to employees_path(format: "xls", employees: "全部"),class:"btn btn-success-alt" do %>
-                                导出表格
-                              <% end %>
-                            <% end %>
+                            
+                        <%= link_to employees_path(format: "xls", employees: "全部"),class:"btn btn-success-alt" do %>
+                          导出表格
+                        <% end %>
 
                         <% if current_user.has_role? :empadmin %>
 
@@ -153,17 +116,23 @@
                                 </select>
                             </li>
                             <li style="display: inline-block;">班组：
-                                <select name="group"  id="subselid">
+                              <span class="employee-group-input" style="display:inline-block;">
+                                <select name="group[]"  id="subselid" multiple="multiple" class="form-control group-batch-select" style="width:400px;height:20px;">
                                   <option value="">全部</option>
                                 </select>
+                              </span>
+                                
                             </li>
                           <% elsif current_user.has_role? :workshopadmin %>
                             <li style="display: inline-block;">班组：
-                                <select name="group">
+                              <span class="employee-group-input" style="display:inline-block;">
+                                <select name="group[]" multiple="multiple"  class="form-control group-batch-select" style="width:400px;height:20px;">
                                   <% Group.current.where(:workshop_id => current_user.workshop_id).each do |group| %>
                                     <option value="<%= group.id%>"><%= group.name%></option>
                                   <% end %>
                                 </select>
+                              </span>
+                                
                             </li>
                           <% end %>
 
@@ -226,106 +195,128 @@
                             <% end %>
                           <% end %>
 
-                          <!-- <% if params[:workshop].present? %>
-                            <%= hidden_field_tag :workshop, params[:workshop] %>
-                          <% elsif params[:group].present? %>
-                            <%= hidden_field_tag :group, params[:group] %>
-                          <% end %> -->
                           <br>
                           <br>
-                          <%= submit_tag :筛选 %>
+                          <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
                         <% end %>
                       </li>
                     </ul>
                   </div>
-              </div><!--panel-->
+              </div>
 
-              <!--- 搜索-开始  -->
 
-                    <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) %>
-                      <%= render 'empshared/emp_table' %>
-                    <% elsif current_user.has_role? :safe_productionadmin %>
-                      <%= render 'empshared/emp_safe_productionadmin' %>
-                    <% elsif (current_user.has_role? :workshopadmin) %>
-                      <%= render 'empshared/workshop_table' %>
-                    <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
-                      <%= render 'empshared/emp_table_not_empadmin'%>
-                    <% end %>
-                <div class="text-center">
-                  <%= paginate @employees %>
-                </div>
+                <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) %>
+                  <%= render 'empshared/emp_table' %>
+                <% elsif current_user.has_role? :safe_productionadmin %>
+                  <%= render 'empshared/emp_safe_productionadmin' %>
+                <% elsif (current_user.has_role? :workshopadmin) %>
+                  <%= render 'empshared/workshop_table' %>
+                <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
+                  <%= render 'empshared/emp_table_not_empadmin'%>
+                <% end %>
+                
 
-              </div><!--panel-body-->
+              </div>
           </div>
+
+          <div style="text-align:center;display:none;" id="js-log">别扯了，已经到底啦～ </div>
 
 </div>
 <script type="text/javascript">
+
+  $(".group-batch-select").select2( { theme: "bootstrap"} );
+  $("#click-batch-close").hide();
+  $(".batch-select").hide();
+  $(".employee-batch-submit").hide();
+
+  function selCity()
+  {
+      var arr = gon.group_name;
+
+      var selNode = document.getElementById("selid");
+      var subselNode = document.getElementById("subselid");
+      var index = selNode.selectedIndex;
+      var citys = arr[index];
+
+      subselNode.options.length = 0;
+      var firstoptionNode = document.createElement("option");
+      firstoptionNode.value = arr[0][0][1];
+      firstoptionNode.innerText = arr[0][0][0];
+      subselNode.appendChild(firstoptionNode);
+      for(var i=0; i<citys.length; i++)
+      {
+          var optionNode = document.createElement("option");
+          optionNode.value = citys[i][1];
+          optionNode.innerText = citys[i][0];
+          subselNode.appendChild(optionNode);
+      }
+  };
+
+  function toggle_visibility(id) {
+     var e = document.getElementById(id);
+     if(e.style.display == 'block')
+        e.style.display = 'none';
+     else
+        e.style.display = 'block';
+  };
+
+  $("#click-batch-open").click(function(){
+    $("#click-batch-open").hide();
+    $("#click-batch-close").show();
+    $(".batch-select").show();
+    $(".employee-batch-submit").show();
+  });
+
+  $("#click-batch-close").click(function(){
     $("#click-batch-close").hide();
     $(".batch-select").hide();
     $(".employee-batch-submit").hide();
+    $("#click-batch-open").show();
+  });
 
-    function selCity()
-    {
-        var arr = gon.group_name;
+  $(".click-batch-close").click(function(){
+    $("#click-batch-close").hide();
+    $(".batch-select").hide();
+    $(".employee-batch-submit").hide();
+    $("#click-batch-open").show();
+  });
 
-        var selNode = document.getElementById("selid");
-        var subselNode = document.getElementById("subselid");
-        var index = selNode.selectedIndex;
-        var citys = arr[index];
+  function selworkshop()
+  {
+      var arr = gon.batch_leaving_group_name;
 
-        subselNode.options.length = 0;
-        var firstoptionNode = document.createElement("option");
-        firstoptionNode.value = arr[0][0][1];
-        firstoptionNode.innerText = arr[0][0][0];
-        subselNode.appendChild(firstoptionNode);
-        for(var i=0; i<citys.length; i++)
-        {
-            var optionNode = document.createElement("option");
-            optionNode.value = citys[i][1];
-            optionNode.innerText = citys[i][0];
-            subselNode.appendChild(optionNode);
-        }
-    };
+      var selNode = document.getElementById("workshop");
+      var subselNode = document.getElementById("group");
+      var index = selNode.selectedIndex;
+      var citys = arr[index];
 
-    function toggle_visibility(id) {
-       var e = document.getElementById(id);
-       if(e.style.display == 'block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'block';
-    };
+      subselNode.options.length = 0;
+      for(var i=0; i<citys.length; i++)
+      {
+          var optionNode = document.createElement("option");
+          optionNode.value = citys[i][1];
+          optionNode.innerText = citys[i][0];
+          subselNode.appendChild(optionNode);
+      }
+  };
 
-    $("#click-batch-open").click(function(){
-      $("#click-batch-open").hide();
-      $("#click-batch-close").show();
-      $(".batch-select").show();
-      $(".employee-batch-submit").show();
-    });
 
-    $("#click-batch-close").click(function(){
-      $("#click-batch-close").hide();
-      $(".batch-select").hide();
-      $(".employee-batch-submit").hide();
-      $("#click-batch-open").show();
-    });
-
-    function selworkshop()
-    {
-        var arr = gon.batch_leaving_group_name;
-
-        var selNode = document.getElementById("workshop");
-        var subselNode = document.getElementById("group");
-        var index = selNode.selectedIndex;
-        var citys = arr[index];
-
-        subselNode.options.length = 0;
-        for(var i=0; i<citys.length; i++)
-        {
-            var optionNode = document.createElement("option");
-            optionNode.value = citys[i][1];
-            optionNode.innerText = citys[i][0];
-            subselNode.appendChild(optionNode);
-        }
-    };
-
+  var current_post_id = <%= @employees.last.id %>;
+  // 当捲轴动的时候，会触发这个事件
+  $(window).scroll(function(){
+    // 当捲到最下面的时候
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      var url = "/employees/filter?max_id=" + current_post_id + "&" + gon.url_parameter;
+      if (url) {
+        $.ajax({
+          method: "GET",
+          url: url,
+          dataType: "script"
+        });
+        
+      } else {
+        console.log("data ended")
+      }
+    }
+  });
 </script>

@@ -2698,3 +2698,20 @@ button.close {
   width:400px;
   text-align:center;
 }
+.click-batch-close-style{
+  display:inline-block;
+  width:80px;
+  text-align:center;
+  line-height:26px;
+  height:26px;
+  margin-right:30px;
+  cursor: pointer;
+  border:1px solid rgb(175,175,175);
+  background-color: rgb(232,232,232);
+  color:rgb(97,110,124);
+}
+.employee-group-input{
+  li{
+    padding:0px;
+  }
+}

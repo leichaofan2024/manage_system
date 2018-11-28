@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="panel-heading">
       <h4>各职务收入对比(2017年3月-7月对比2018年3-7月)</h4>
-      <%= form_tag "home/notfound",method: :get do%>
+      <%= form_tag wage_analyses_wages_path,method: :get do%>
           <div class="form-group">
               <li>
                 <span>时间搜索:</span>
@@ -140,6 +140,8 @@
 
   </div>
 </div>
+<%= @time_form_header %>
+<%= @category_income_compare%>
 
 <script type="text/javascript">
   function GetCheckData(){
