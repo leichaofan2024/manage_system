@@ -24,7 +24,7 @@
             </div>
         </div>
     </div> -->
-    <div class='col-md-5'>
+    <!-- <div class='col-md-5'>
         <div class="form-group">
             <div class='input-group date' id='datetimepicker7'>
                 <input type='text' class="form-control" />
@@ -33,7 +33,7 @@
                 </span>
             </div>
         </div>
-    </div>
+    </div> -->
               <li>
                 <%= label_tag :时间段： %>
                 <select name="timeselect">
@@ -48,8 +48,8 @@
               </li>
 
               <li>
-                  <%= check_box_tag(:phase_contrast)%>
-                  <%= label_tag(:phase_contrast,"与上一年同期相比")%>
+                  <%= check_box_tag(:phase_contrast,1)%>
+                  <%= label_tag "与上一年同期相比" %>
               </li>
           </div>
           <div class="row">
