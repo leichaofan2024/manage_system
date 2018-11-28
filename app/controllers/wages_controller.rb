@@ -632,8 +632,8 @@ class WagesController < ApplicationController
 			@year = Time.now.year
 			@month = [Wage.where(:year => @year).pluck(:month).max]
 		end
-    @years = Wage.pluck("year").uniq
-    @months = Wage.pluck("month").uniq
+      @years = Wage.pluck("year").uniq
+      @months = Wage.pluck("month").uniq
 		@wage_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
 		@bonus_hash = [BonusHeader.pluck(:header),(1..BonusHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
 		@djwage_hash = [DjwageHeader.pluck(:header),(1..DjwageHeader.count).map{|h| "col" + h.to_s}].transpose.to_h
@@ -664,7 +664,7 @@ class WagesController < ApplicationController
 
 		employee_condition = Hash.new
 		@params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method"].include?(key) || (value =="")}
-    @name_salnumber = []
+        @name_salnumber = []
 		@sal_number_salnumber = []
 		@department_salnumber = []
 		@sex_salnumber = []
@@ -679,7 +679,7 @@ class WagesController < ApplicationController
 			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["人员名称"] => params[:name]).pluck(@djbonus_hash["工资号"])
 			@name_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber)
 			sal_numbers_array << @name_salnumber
-    end
+        end
 		if params[:sal_number].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["工资号"] => params[:sal_number]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["工资号"] => params[:sal_number]).pluck(@bonus_hash["工资号"])
@@ -687,31 +687,31 @@ class WagesController < ApplicationController
 			djbonus_salnumber = Djbonu.where(:year => @year,:month => @month).where(@djbonus_hash["工资号"] => params[:sal_number]).pluck(@djbonus_hash["工资号"])
 			@sal_number_salnumber = (wage_salnumber | bonus_salnumber | djwage_salnumber | djbonus_salnumber).uniq
 			sal_numbers_array << @sal_number_salnumber
-    end
+        end
 		if params[:department].present?
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["部门名称"] => params[:department]).pluck(@bonus_hash["工资号"])
 			@department_salnumber = bonus_salnumber.uniq
 			sal_numbers_array << @department_salnumber
-    end
+        end
 		if params[:sex].present?
 			wage_salnumber = Wage.where(:year => @year,:month => @month).where(@wage_hash["性别"] => params[:sex]).pluck(@wage_hash["工资号"])
 			bonus_salnumber = Bonu.where(:year => @year,:month => @month).where(@bonus_hash["性别"] => params[:sex]).pluck(@bonus_hash["工资号"])
 			employee_salnumber = @employees.where(:sex => params[:sex]).pluck(:sal_number)
 			@sex_salnumber = (wage_salnumber | bonus_salnumber | employee_salnumber).uniq
 			sal_numbers_array << @sex_salnumber
-    end
+        end
 		if params[:duty].present?
 		  employee_salnumber = @employees.where(:duty => params[:duty]).pluck(:sal_number)
 			@duty_salnumber = employee_salnumber.uniq
 			sal_numbers_array << @duty_salnumber
-    end
+        end
 
-	  if params[:work_type].present?
+	    if params[:work_type].present?
 			employee_salnumber = @employees.where(:work_type => params[:work_type]).pluck(:sal_number)
 			@work_type_salnumber = employee_salnumber.uniq
 			sal_numbers_array << @work_type_salnumber
 		end
-    if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
+        if params[:filter_type].present? && params[:start_time].present? && params[:end_time].present?
 			if params[:filter_type] == "年龄"
 				employee_condition["age"]  = (params[:start_time]..params[:end_time])
 			elsif params[:filter_type] == "工龄"
@@ -737,13 +737,13 @@ class WagesController < ApplicationController
 			sal_numbers_array.each do |m|
 				sal_numbers = (sal_numbers & m)
 			end
-	  	@sal_numbers = sal_numbers
-	  end
-    gon.url_parameter = ""
+	  	    @sal_numbers = sal_numbers
+	    end
+        gon.url_parameter = ""
 		if params[:max_id].present?
 			index = @sal_numbers.index(params[:max_id])
-      @sal_numbers = @sal_numbers[index+1,20]
-    else
+          @sal_numbers = @sal_numbers[index+1,20]
+        else
 			@sal_numbers = @sal_numbers.first(20)
 		end
 		request.query_parameters.each do |key,value|
@@ -756,10 +756,117 @@ class WagesController < ApplicationController
 		else
 			gon.url_parameter = ""
 		end
-    respond_to do |format|
-      format.html  # 如果客户端要求 HTML，则回传 index.html.erb
-      format.js    # 如果客户端要求 JavaScript，回传 index.js.erb
-    end
+        respond_to do |format|
+          format.html  # 如果客户端要求 HTML，则回传 index.html.erb
+	      format.js    # 如果客户端要求 JavaScript，回传 index.js.erb
+	    end
 	end
+    
 
+    def wage_analyses
+    	wage_head_hash = [WageHeader.pluck(:header),(1..WageHeader.count).map{|x| "col"+x.to_s}].transpose.to_h
+    	start_time = (params[:start_time] + "-15").to_time 
+    	end_time = (params[:end_time] + "-15").to_time
+    	start_year = params[:start_time].split("-")[0].to_i
+    	start_month =  params[:start_time].split("-")[1].to_i
+    	end_year = params[:end_time].split("-")[0].to_i
+    	end_month =  params[:end_time].split("-")[1].to_i
+    	time_hash = Hash.new 
+    	if (end_time-start_time) > 0
+    		if params[:timeselect] == "月"
+              if start_year == end_year
+              	(start_month..end_month).each do |month|
+              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
+              	end 
+              else
+              	subtract_year = end_year - start_year 
+              	(start_month..12).each do |month|
+              		@time_hash["#{start_year}-#{month}月"] = [start_year,month]
+              	end 
+              	if subtract_year > 1
+                  (1..(subtract_year-1)).each do |year| 
+                  	(1..12).each do |month|
+                  		@time_hash["#{start_year+year}-#{month}月"] = [start_year+year,month]
+                  	end 
+                  end 
+                end 
+                (1..end_month).each do |month|
+              		@time_hash["#{end_year}-#{month}月"] = [end_year,month]
+              	end 
+              end 
+    		elsif params[:timeselect] == "季度"
+    		  quarter_eveay_month_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
+    		  quarter_hash = {1 => [1,2,3],2 => [4,5,6],3 => [7,8,9],4 => [10,11,12]}
+    		  if start_year == end_year
+                (quarter_eveay_month_hash[start_month]..quarter_eveay_month_hash[end_month]).each do |quarter|
+              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
+              	end 
+              else
+              	subtract_year = end_year - start_year 
+              	start_quarter = quarter_eveay_month_hash[start_month]
+              	(start_quarter..4).each do |quarter|
+              		@time_hash["#{start_year}-#{quarter}季度"] = [start_year,quarter_hash[quarter]]
+              	end 
+              	if subtract_year > 1
+                  (1..(subtract_year-1)).each do |year| 
+                  	(1..4).each do |quarter|
+                  		@time_hash["#{start_year+year}-#{quarter}季度"] = [start_year+year,quarter_hash[quarter]]
+                  	end 
+                  end 
+                end 
+                end_quarter = quarter_eveay_month_hash[end_month]
+                (1..end_quarter).each do |quarter|
+              		@time_hash["#{end_year}-#{month}季度"] = [end_year,quarter_hash[quarter]]
+              	end 
+              end 
+    		elsif params[:timeselect] == "年"
+    			(start_year..end_year).each do |year|
+    				@time_hash["#{year}年度"] = [year,(1..12)]
+    			end 
+    		end
+        else 
+        	flash[:alert] = "时间筛选的结束时间必须要大于开始时间！"
+        	redirect_to wage_analyses_wages_path
+        end 
+   
+        # 把数据源类型存在一个统一的数组里
+        category_data_array = Hash.new 
+        if params[:workshop].present? 
+        	employees = Employee.where(:workshop => params[:workshop])
+        	category_data_array["workshop"] = params[:workshop]
+        elsif params[:grade].present? 
+        	employees = Employee.where(:grade => params[:grade])
+        	category_data_array["grade"] = params[:grade]
+        elsif params[:duty].present? 
+        	if params[:duty].include?("未填写")
+        		params[:duty] = params[:duty].reject{|x| x=="未填写"}.push(nil)
+        	end 
+            employees = Employee.where(:duty => params[:duty])
+            category_data_array["duty"] = params[:duty]
+        elsif params[:work_type].present? 
+        	if params[:work_type].include?("未填写")
+        		params[:work_type] = params[:work_type].reject{|x| x=="未填写"}.push(nil)
+        	end 
+            employees = Employee.where(:work_type => params[:work_type])
+            category_data_array["work_type"] = params[:work_type]
+        end  
+        @category_income_compare = Array.new
+
+        if category_data_array.present? 
+        	category_data_array.first[1].each do |category|
+        		employee_salnumbers = Employee.where(category_data_array.first[0] => category).pluck(:sal_number)
+        		sum_array = Array.new 
+                @time_hash.values.each do |time|
+                	sum = Wage.where(:year => time[0],:month => time[1],wage_head_hash["工资号"] => employee_salnumbers).sum(wage_head_hash["工资总额"])
+                    sum_array.push(sum)
+                end 
+                if category_data_array.first[0]=="workshop"
+                	@category_income_compare.push([Workshop.find_by(:id => category).name,sum_array])
+                else 
+                	@category_income_compare.push([category,sum_array])
+                end  
+            end 
+        end 
+        @time_form_header = @time_hash.keys
+    end 
 end
