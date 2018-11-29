@@ -594,7 +594,10 @@ class AttendancesController < ApplicationController
 
       if @attendance_count.present?
         @attendance_count_attributes = @attendance_count.attributes
-        if @month_attendances_before[params[:day].to_i] == "x"
+        if params[:code] == "x"
+          @attendance_count.update(@month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[@month_attendances_before[params[:day].to_i]].to_i) -1))
+          @attendance_count.save
+        elsif @month_attendances_before[params[:day].to_i] == "x"
           @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
           @attendance_count.save
         else
@@ -639,6 +642,7 @@ class AttendancesController < ApplicationController
 		@categories.each do |category|
 			@vacation[category.vacation_shortening] = category.vacation_code
 		end
+    @vacation["取消填写"] = "x"
 		respond_to do |format|
 			format.js
 		end
