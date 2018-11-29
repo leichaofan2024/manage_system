@@ -151,20 +151,43 @@
             <th>
               <%= head_time %>
             </th>
+              <% if params[:phase_contrast].present? %>
+            <th>
+              <% a = head_time.split("-")[0] %>
+              <% b = a.to_i - 1 %>
+              <% c = head_time.gsub(a,b.to_s) %>
+              <%= c %>
+            </th>
+              <% end %>
             <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @category_income_compare.each do |key,value| %>
+          <% @category_income_compare.each do |date| %>
           <tr>
             <td>
-              <%= key %>
+              <%= date[0] %>
             </td>
-            <% value.each do |table_value| %>
-            <td>
-              <%= table_value%>
-            </td>
+            <% date[1].each do |table_value| %>
+              <td>
+                <%= table_value%>
+              </td>
+              <% n = date[1].index(table_value)%>
+                <% if date.length == 3%>
+                  <td><%= date[2][n]%></td>
+                <% end %>
             <% end %>
+            <tr>
+              <td>同比增长</td>
+              <td><%= 0.0 %></td>
+              <% date[1].each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |compare_data|%>
+                <% if compare_data.nan? || compare_data.infinite? || compare_data == -100 %>
+                  <td>无法对比</td>
+                <% else %>
+                  <td><%= compare_data %>%</td>
+                <% end %>
+              <% end %>
+            </tr>
           </tr>
           <% end %>
         </tbody>
@@ -209,25 +232,5 @@
     }else {
       $("#profile input[type='checkbox']").removeAttr("disabled");
     }
-  });
-//   function btnlink(){
-//     var input[type='checkbox'] = this;
-//     if(typeof this == "undefined"){
-//       ("#check-button").attr("disabled", true);
-//     }
-//
-// }
-
-  $(function () {
-      $('#datetimepicker6').datetimepicker();
-      $('#datetimepicker7').datetimepicker({
-          useCurrent: false //Important! See issue #1075
-      });
-      $("#datetimepicker6").on("dp.change", function (e) {
-          $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-      });
-      $("#datetimepicker7").on("dp.change", function (e) {
-          $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-      });
   });
 </script>
