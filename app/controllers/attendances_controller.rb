@@ -782,7 +782,7 @@ class AttendancesController < ApplicationController
           if (@attendance_status.status != "班组/科室填写中")
             flash[:warning] = "#{@group.name}#{@year}年#{@month}月考勤已上报，不可重复上报！"
           elsif @group.workshop_id == 1
-            @attendance_status.update(:status => "科室已上报")
+            @attendance_status.update(:status => "科室已上报",:workshop_id => 1)
             flash[:notice] = "#{@group.name}#{@year}年#{@month}月考勤上报成功！"
           else
             @attendance_status.update(:status => "班组已上报")
@@ -792,7 +792,7 @@ class AttendancesController < ApplicationController
           if @group.workshop_id == 1
             AttendanceStatus.create(:year => @year,:month => @month,:group_id => @group_id,:workshop_id => @group.workshop_id,:status => "科室已上报")
           else
-            AttendanceStatus.create(:year => @year,:month => @month,:group_id => @group_id,:workshop_id => @group.workshop_id,:status => "班组已上报")
+            AttendanceStatus.create(:year => @year,:month => @month,:group_id => @group_id,:status => "班组已上报")
           end
           flash[:notice] = "#{@group.name}#{@year}年#{@month}月考勤上报成功！"
         end
@@ -807,21 +807,20 @@ class AttendancesController < ApplicationController
       end
 			@workshop = Workshop.find(current_user.workshop_id)
       group = Group.find_by(:id => params[:group_id])
-      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
+      application = Application.where(:group_id => params[:group_id]).pluck(:status)
       if @shenhe_day === Time.now.day
-        if application.include?(0)
+        if application.include?("班组发起申请")
           flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
         else
           attendance_status = AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id])
           if attendance_status.status == "班组已上报"
-            attendance_status.update(:status => "段已审核",:workshop_id => group.workshop_id)
+            attendance_status.update(:status => "车间已审核",:workshop_id => group.workshop_id)
             flash[:notice] = "#{group.name}审核完成!"
           elsif ["段已审核","车间已审核"].include?(attendance_status.status)
             flash[:warning] = "#{group.name}已完成审核，无需再审!"
           else
             flash[:warning] = "班组还未上报，请耐心等待!"
           end
-    			AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).update(:status => "车间已审核",:workshop_id => @workshop.id)
     			flash[:notice] = "#{group.name}审核完成!"
         end
       else
@@ -831,8 +830,8 @@ class AttendancesController < ApplicationController
 
 		elsif params[:authority] == "duan"
       group = Group.find_by(:id => params[:group_id])
-      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id]).pluck(:application_pass)
-      if application.include?(0)
+      application = Application.where(:group_id => params[:group_id]).pluck(:status)
+      if application.include?("车间发起申请","科室发起申请")
         flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
       else
         attendance_status = AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id])
@@ -874,8 +873,8 @@ class AttendancesController < ApplicationController
       if @shenhe_day === Time.now.day
   			@workshop = Workshop.find(current_user.workshop_id)
   			@groups = Group.current.where(:workshop_id => @workshop.id)
-        application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => @groups.ids).pluck(:application_pass)
-        if application.include?(0)
+        application = Application.where(:group_id => @groups.ids).pluck(:status)
+        if application.include?("班组发起申请")
           flash[:warning] = "#{@workshop.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
           redirect_to workshop_verify_index_attendances_path
         else
@@ -890,13 +889,13 @@ class AttendancesController < ApplicationController
 		elsif params[:authority] == "duan"
 			@workshop = Workshop.find(params[:workshop_id])
 			@groups = Group.current.where(:workshop_id => @workshop.id)
-      application = Application.where(:month => @shenhe_month,:year => @shenhe_year,:group_id => @groups.ids).pluck(:application_pass)
-      if application.include?(0)
+      application = Application.where(:group_id => @groups.ids).pluck(:status)
+      if application.include?("科室发起申请","车间发起申请")
         flash[:warning] = "#{@workshop.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
         redirect_to workshop_verify_index_attendances_path
       else
         if @workshop.id == 1
-          AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "科室已上报").update(:status => "段已审核", :workshop_id => @workshop.id)
+          AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "科室已上报").update(:status => "段已审核", :workshop_id => 1)
         else
           AttendanceStatus.where(:group_id => @groups.ids,:year => @shenhe_year,:month => @shenhe_month,:status => "车间已审核").update(:status => "段已审核", :workshop_id => @workshop.id)
         end
@@ -1224,8 +1223,9 @@ class AttendancesController < ApplicationController
                     end
 
     @vacation_codes = VacationCategory.pluck("vacation_code").uniq
-		can_verified_workshop_id = AttendanceStatus.where(:year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间已审核"]).pluck("workshop_id").uniq
-		if can_verified_workshop_id.all?{|x| x.nil?}
+    all_current_group_ids = Group.current.pluck(:id)
+		can_verified_workshop_id = AttendanceStatus.where(:group_id => all_current_group_ids, :year => @shenhe_year,:month => @shenhe_month,:status => ["科室已上报","车间已审核"]).pluck("workshop_id").uniq
+		if can_verified_workshop_id.blank?
 			@duan_can_varify = []
 		else
 			@duan_can_varify = Workshop.current.where(:id => can_verified_workshop_id)
@@ -1283,6 +1283,10 @@ class AttendancesController < ApplicationController
     end
 
     if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
+      @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
+      if @attendance_status.blank?
+        @attendance_status = AttendanceStatus.create(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month,:status => "班组/科室填写中")
+      end
       @groups = Group.current.where(:workshop_id => @workshop.id)
       @shenhe_day = 1..31
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:status => ["车间已审核","科室已上报"]).present?
@@ -1290,7 +1294,11 @@ class AttendancesController < ApplicationController
       end
       @shenhe_attdendance_status = AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => @groups.ids,:status => "班组/科室填写中")
       if (Time.now.day >3) && @shenhe_attdendance_status.present?
+        if (@workshop.id == 1) 
           @shenhe_attdendance_status.update(:status => "科室已上报",:workshop_id => 1)
+        else 
+          @shenhe_attdendance_status.update(:status => "班组已上报")
+        end
       end
       if AttendanceStatus.where(:year => @shenhe_year, :month => @shenhe_month,:group_id => @groups.ids,:status => ["车间已审核","科室已上报"]).present?
         @duan_yijian_permission = 1
@@ -1305,6 +1313,10 @@ class AttendancesController < ApplicationController
         @workshop = Workshop.find_by(:id => current_user.workshop_id)
         @group = Group.current.find_by(:workshop_id => @workshop.id)
         @employees = Employee.current.where(:group => @group.id)
+      end
+      @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
+      if @attendance_status.blank?
+        @attendance_status = AttendanceStatus.create(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month,:status => "班组/科室填写中")
       end
       @groups = Group.current.where(:workshop_id => @workshop.id)
       if (Time.now.month == 2) || (Time.now.month == 10)
@@ -1330,10 +1342,6 @@ class AttendancesController < ApplicationController
     end
     @attendances = Attendance.where(:employee_id => @employees.ids,:year => @shenhe_year,:month => @shenhe_month)
     @attendance_counts = AttendanceCount.where(:employee_id => @employees.ids,:year => @shenhe_year,:month => @shenhe_month)
-    @attendance_status = AttendanceStatus.find_by(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month)
-    if @attendance_status.blank?
-      @attendance_status = AttendanceStatus.create(:group_id => @group.id,:year => @shenhe_year,:month => @shenhe_month,:status => "班组/科室填写中")
-    end
   end
 
   def add_overtime_form
