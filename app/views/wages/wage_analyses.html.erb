@@ -7,35 +7,16 @@
               <li>
                 <span>时间搜索:</span>
                 <% if params[:start_time].present? && params[:end_time].present? %>
-                  <%= text_field_tag :start_time,params[:start_time]%> ~
+                  <%= text_field_tag :start_time,params[:start_time]%> 至
                   <%= text_field_tag :end_time,params[:end_time] %>
                 <% else %>
-                  <%= text_field_tag :start_time,""%> ~
-                  <%= text_field_tag :end_time,""%>
+                  <%= text_field_tag :start_time,"",placeholder:"年-月"%> 至
+                  <%= text_field_tag :end_time,"",placeholder:"年-月"%>
                 <% end %>
               </li>
-              <!-- <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker6'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker7'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div> -->
+
               <li>
-                <%= label_tag :时间段： %>
+                <%= label_tag :时间区间： %>
                 <select name="timeselect">
                   <% ["月","季度","年"].each do |time| %>
                     <% if params[:time] == time %>
@@ -165,7 +146,7 @@
         <tbody>
           <% @category_income_compare.each do |date| %>
           <tr>
-            <td>
+            <td rowspan="2" style="text-align: center;vertical-align:middle;">
               <%= date[0] %>
             </td>
             <% date[1].each do |table_value| %>
@@ -179,7 +160,6 @@
             <% end %>
             <% if params[:phase_contrast].present?%>
             <tr>
-              <td>与去年同比增长</td>
 
               <% data_max = [] %>
               <% data_max << date[2] %>
@@ -190,7 +170,13 @@
                     <% if phase_compare_data.nan? || phase_compare_data.infinite? || phase_compare_data == -100 %>
                       <td>无法对比</td>
                     <% else %>
-                      <td><%= phase_compare_data %>%</td>
+                      <td>
+                      <% if phase_compare_data > 0 %>
+                        <span class="badge badge-success"><%= phase_compare_data %>%</span>
+                      <% else %>
+                        <span class="badge badge-danger"><%= phase_compare_data %>%</span>
+                      <% end %>
+                      </td>
                     <% end %>
                     <td>0.0</td>
                   <% end %>
@@ -198,13 +184,18 @@
             </tr>
             <% else %>
             <tr>
-              <td>同比增长</td>
               <td><%= 0.0 %></td>
               <% date[1].each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |compare_data|%>
                 <% if compare_data.nan? || compare_data.infinite? || compare_data == -100 %>
                   <td>无法对比</td>
                 <% else %>
-                  <td><%= compare_data %>%</td>
+                  <td>
+                    <% if compare_data > 0 %>
+                    <span class="badge badge-success"><%= compare_data %>%</span>
+                    <% else %>
+                    <span class="badge badge-danger"><%= compare_data %>%</span>
+                    <% end %>
+                  </td>
                 <% end %>
               <% end %>
             </tr>
