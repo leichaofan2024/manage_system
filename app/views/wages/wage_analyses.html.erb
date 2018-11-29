@@ -177,6 +177,26 @@
                   <td><%= date[2][n]%></td>
                 <% end %>
             <% end %>
+            <% if params[:phase_contrast].present?%>
+            <tr>
+              <td>与去年同比增长</td>
+
+              <% data_max = [] %>
+              <% data_max << date[2] %>
+              <% data_max << date[1] %>
+
+              <% data_max.transpose.each do |max| %>
+                  <% max.each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |phase_compare_data|%>
+                    <% if phase_compare_data.nan? || phase_compare_data.infinite? || phase_compare_data == -100 %>
+                      <td>无法对比</td>
+                    <% else %>
+                      <td><%= phase_compare_data %>%</td>
+                    <% end %>
+                    <td>0.0</td>
+                  <% end %>
+              <% end %>
+            </tr>
+            <% else %>
             <tr>
               <td>同比增长</td>
               <td><%= 0.0 %></td>
@@ -188,6 +208,7 @@
                 <% end %>
               <% end %>
             </tr>
+            <% end %>
           </tr>
           <% end %>
         </tbody>
