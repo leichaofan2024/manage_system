@@ -1189,7 +1189,7 @@ class AttendancesController < ApplicationController
 
 #一键计算所有当月所有考勤统计
   def attendance_count_compute
-    @employees = Employee
+    @employees = Employee.all
     @vacation_name_hash = VacationCategory.pluck("vacation_shortening","vacation_code").to_h
     @employees.each do |employee|
       @attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :year => params[:year],:month => params[:month])
@@ -1206,9 +1206,9 @@ class AttendancesController < ApplicationController
           @attendance_count =AttendanceCount.create(:employee_id => employee.id, :year => params[:year],:month => params[:month],:group_id => employee.group,:workshop_id => employee.workshop)
         end
         @attendance_count.update(attendance_hash)
-        
+
         annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: params[:month], year: params[:year]) || AnnualHoliday.new
-        annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["h"].to_i) + (attendance_count_attributes["g"].to_i)))
+        annual_holiday.update(employee_id: employee.id, month: params[:month], year: params[:year], holiday_days: ((@attendance_count.attributes["h"].to_i) + (@attendance_count.attributes["g"].to_i)))
       end
 
     end
