@@ -1114,13 +1114,13 @@ class AttendancesController < ApplicationController
 		@months = Attendance.pluck("month").uniq.reverse
 		@vacation_codes = ["e","f","i","j","o","n","k","l","s","r"]
 
-		@employees = Employee.where(:duojing => 0).where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
+		@employees = Employee.where(:duojing => 0).where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order('employees.workshop ASC,employees.group ASC').page(params[:page]).per(20)
 
 		# 导出考勤表
     if params[:duojing].present? 
-		  @export_employees = Employee.where(:duojing => 0).where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
+		  @export_employees = Employee.where(:duojing => 0).where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
     else 
-      @export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at > ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
+      @export_employees = Employee.where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{@year}-#{@month}-15".to_time.beginning_of_month).pluck("employee_id")).order("employees.workshop ASC,employees.group ASC")
     end 
 		respond_to do |format|
 	      format.html

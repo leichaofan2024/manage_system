@@ -70,8 +70,18 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String">轮流夜班天数</Data></Cell>
       </Row>
       <% n = 0 %>
+      <% sum_hash = Hash.new %>
     <% @export_employees.each do |employee| %>
-    <% n += 1 %>
+      <% if sum_hash["b"].blank? %>
+        <% sum_hash["b"] = Array.new %>
+      <% end %>
+      <% if sum_hash["d"].blank? %>
+        <% sum_hash["d"] = Array.new %>
+      <% end %>
+      <% if sum_hash["c"].blank? %>
+        <% sum_hash["c"] = Array.new %>
+      <% end %>
+      <% n += 1 %>
       <Row>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
@@ -82,21 +92,30 @@
         <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
         <% if attendance_count.present? %>
-            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["b"].to_i %></Data></Cell>
+            <% value_b = attendance_count.attributes["b"].to_i %>
+            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value_b %></Data></Cell>
+            <% sum_hash["b"] << value_b %>
             <% if attendance_count.attributes["d"].to_i == 0%>
               <% if  (attendance.add_overtime.to_i > 0) %>
-                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance.add_overtime.to_i %></Data></Cell>
+                <% value_d = attendance.add_overtime.to_i %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value_d %></Data></Cell>
               <% else %>
+                <% value_d = 0 %>
                 <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
               <% end %>
             <% else %>
               <% if  (attendance.add_overtime.to_i > 0) %>
-                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i %></Data></Cell>
+                <% value_d = attendance.add_overtime.to_i + attendance_count.attributes["d"].to_i %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value_d %></Data></Cell>
               <% else %>
-                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["d"].to_i %></Data></Cell>
+                <% value_d = attendance_count.attributes["d"].to_i %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value_d %></Data></Cell>
               <% end %>
             <% end %>
-            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes["c"].to_i%></Data></Cell>
+            <% sum_hash["d"] << value_d %>
+            <% value_c = attendance_count.attributes["c"].to_i %>
+            <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value_c %></Data></Cell>
+            <% sum_hash["c"] << value_c %>
         <% else %>
           <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
@@ -104,6 +123,12 @@
         <% end %>
       </Row>
     <% end %>
+    <Row>
+      <Cell  ss:StyleID="Description" ss:MergeAcross="6"><Data ss:Type="String">合计</Data></Cell>
+      <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= sum_hash["b"].sum %></Data></Cell>
+      <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= sum_hash["d"].sum %></Data></Cell>
+      <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= sum_hash["c"].sum %></Data></Cell>
+    </Row>
     </Table>
   </Worksheet>
 </Workbook>

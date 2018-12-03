@@ -88,27 +88,41 @@
           <%    employee_ids << employee.id%>
           <%  end%>
         <%  end%>
-    <%  end%>
-    <% n = 0%>
-    <% @export_employees.where(:id => employee_ids).each do |employee| %>
-    <% n += 1%>
-      <Row>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
-        <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
-        <% if attendance_count.present? %>
-          <% @vacation_codes.each do |code| %>
-              <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= attendance_count.attributes[code].to_i %></Data></Cell>
+      <%  end%>
+      <% n = 0%>
+      <% sum_hash = Hash.new %>
+      <% @export_employees.where(:id => employee_ids).each do |employee| %>
+        <% n += 1%>
+        <Row>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= n %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
+          <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+          <% if attendance_count.present? %>
+            <% @vacation_codes.each do |code| %>
+                <% if sum_hash[code].blank? %>
+                  <% sum_hash[code] = Array.new %>
+                <% end %>
+                <% value = attendance_count.attributes[code].to_i %>
+                <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= value %></Data></Cell>
+                <%  sum_hash[code] << value %>
+            <% end %>
+          <% else %>
+            <% @vacation_codes.each do |code| %>
+              <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
+            <% end %>
           <% end %>
-        <% else %>
-          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= 0 %></Data></Cell>
+        </Row>
+      <% end %>
+      <Row>
+        <Cell  ss:StyleID="Description" ss:MergeAcross="5"><Data ss:Type="String">合计</Data></Cell>
+        <% @vacation_codes.each do |code| %>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= sum_hash[code].sum %></Data></Cell>
         <% end %>
       </Row>
-    <% end %>
     </Table>
   </Worksheet>
 </Workbook>

@@ -15,14 +15,26 @@
         </tr>
       </thead>
         <tbody data-behavior='sortable'>
+        <% sum_hash = Hash.new %>
 	      <% @workshops.each do |workshop| %>
-        <tr>
-	        <td><%= workshop.name %></td>
-          <% @vacation_codes.each do |code| %>
-            <td><%= AttendanceCount.where(:workshop_id => workshop.id).sum(code) %></td>
-          <% end %>
-	      </tr>
+          <tr>
+  	        <td><%= workshop.name %></td>
+            <% @vacation_codes.each do |code| %>
+              <% if sum_hash[code].blank? %>
+                <% sum_hash[code]= Array.new %>
+              <% end %>
+              <% sum_code = AttendanceCount.where(:workshop_id => workshop.id).sum(code) %>
+              <% sum_hash[code] << sum_code %>
+              <td><%= sum_code %></td>
+            <% end %>
+  	      </tr>
         <% end %>
+        <tr>
+          <td>合计</td>
+          <% @vacation_codes.each do |code| %>
+            <td><%= sum_hash[code].sum %></td>
+          <% end %>
+        </tr>
        </tbody>
     </table>
   </div>
