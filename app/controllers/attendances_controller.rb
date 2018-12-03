@@ -595,11 +595,15 @@ class AttendancesController < ApplicationController
       if @attendance_count.present?
         @attendance_count_attributes = @attendance_count.attributes
         if params[:code] == "x"
-          @attendance_count.update(@month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[@month_attendances_before[params[:day].to_i]].to_i) -1))
-          @attendance_count.save
+          if @month_attendances_before[params[:day].to_i] != "x"
+            @attendance_count.update(@month_attendances_before[params[:day].to_i] => ((@attendance_count_attributes[@month_attendances_before[params[:day].to_i]].to_i) -1))
+            @attendance_count.save
+          end 
         elsif @month_attendances_before[params[:day].to_i] == "x"
-          @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
-          @attendance_count.save
+          if params[:code] != "x"
+            @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
+            @attendance_count.save
+          end 
         else
           @attendance_count.update(params[:code] => ((@attendance_count_attributes[params[:code]].to_i) +1))
           @attendance_count.save
@@ -609,13 +613,12 @@ class AttendancesController < ApplicationController
         end
 
       else
-				@attendance_count = AttendanceCount.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year],params[:code] => 1)
+				@attendance_count = AttendanceCount.create(:employee_id => params[:employee_id], params[:code] => 1, :group_id => employee.group, :workshop_id => employee.workshop, :month => params[:month], :year => params[:year])
       end
       @attendance.update(:month_attendances => @month_attendances_after)
       @attendance.save
       attendance_count_attributes = @attendance_count.attributes
-			annual_holiday = AnnualHoliday.find_by(employee_id: params[:employee_id], month: params[:month], year: params[:year]) || AnnualHoliday.new
-			annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["f"].to_i) + (attendance_count_attributes["g"].to_i)))
+			
 
       group_id = Employee.current.find_by(:id => params[:employee_id]).group
       flash[:notice] = "考勤修改成功！"
@@ -1186,7 +1189,7 @@ class AttendancesController < ApplicationController
 
 #一键计算所有当月所有考勤统计
   def attendance_count_compute
-    @employees = Employee.current
+    @employees = Employee
     @vacation_name_hash = VacationCategory.pluck("vacation_shortening","vacation_code").to_h
     @employees.each do |employee|
       @attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :year => params[:year],:month => params[:month])
@@ -1203,7 +1206,11 @@ class AttendancesController < ApplicationController
           @attendance_count =AttendanceCount.create(:employee_id => employee.id, :year => params[:year],:month => params[:month],:group_id => employee.group,:workshop_id => employee.workshop)
         end
         @attendance_count.update(attendance_hash)
+        
+        annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: params[:month], year: params[:year]) || AnnualHoliday.new
+        annual_holiday.update(employee_id: params[:employee_id], month: params[:month], year: params[:year], holiday_days: ((attendance_count_attributes["h"].to_i) + (attendance_count_attributes["g"].to_i)))
       end
+
     end
   end
 
