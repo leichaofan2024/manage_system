@@ -1,7 +1,7 @@
 <div class="contentpanel">
   <div class="panel">
     <div class="panel-heading">
-      <h4>各职务收入对比</h4>
+      <h4>工资对比</h4>
       <%= form_tag wage_analyses_wages_path,method: :get do%>
           <div class="form-group">
               <li>
@@ -35,7 +35,7 @@
           </div>
           <div class="row">
               <ul class="nav nav-tabs" id="click-prop">
-                <li class="nav-item">
+                <li class="nav-item active">
                   <a class="nav-link" data-toggle="tab" href="#home" >车间部门</a>
                 </li>
                 <li class="nav-item">
@@ -50,7 +50,7 @@
               </ul>
 
               <div class="tab-content" id="myTabContent">
-                <div class="tab-pane" id="home">
+                <div class="tab-pane active" id="home">
                   <div class="col-md-12">
                     <input id="check_all" type="checkbox" />
                     <label for="check_all">全选</label>
@@ -119,6 +119,14 @@
   </div>
 
   <div class="panel">
+    <div class="panel-heading">
+      <span>在类别中选择两项，可点击此计算差额和百分比</span>
+      <%= link_to wage_analyses_wages_path(request.query_parameters.delete_if{|x| ["utf8","commit"].include?(x) }.merge({:format => "xls"})) do  %>
+      <span style="float:right;position:relative;">
+          导出表格
+      </span>
+      <% end %>
+    </div>
     <div class="panel-body">
       <table class="table overflow-y">
         <thead>
@@ -168,9 +176,9 @@
               <% data_max.transpose.each do |max| %>
                   <% max.each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |phase_compare_data|%>
                     <% if phase_compare_data.nan? || phase_compare_data.infinite? || phase_compare_data == -100 %>
-                      <td>无法对比</td>
+                      <td colspan="2">无法对比</td>
                     <% else %>
-                      <td>
+                      <td colspan="2">
                       <% if phase_compare_data > 0 %>
                         <span class="badge badge-success"><%= phase_compare_data %>%</span>
                       <% else %>
@@ -178,7 +186,6 @@
                       <% end %>
                       </td>
                     <% end %>
-                    <td>0.0</td>
                   <% end %>
               <% end %>
             </tr>
