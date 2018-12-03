@@ -1,41 +1,22 @@
 <div class="contentpanel">
   <div class="panel">
     <div class="panel-heading">
-      <h4>各职务收入对比</h4>
+      <h4>工资对比</h4>
       <%= form_tag wage_analyses_wages_path,method: :get do%>
           <div class="form-group">
               <li>
                 <span>时间搜索:</span>
                 <% if params[:start_time].present? && params[:end_time].present? %>
-                  <%= text_field_tag :start_time,params[:start_time]%> ~
+                  <%= text_field_tag :start_time,params[:start_time]%> 至
                   <%= text_field_tag :end_time,params[:end_time] %>
                 <% else %>
-                  <%= text_field_tag :start_time,""%> ~
-                  <%= text_field_tag :end_time,""%>
+                  <%= text_field_tag :start_time,"",placeholder:"年-月"%> 至
+                  <%= text_field_tag :end_time,"",placeholder:"年-月"%>
                 <% end %>
               </li>
-              <!-- <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker6'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker7'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div> -->
+
               <li>
-                <%= label_tag :时间段： %>
+                <%= label_tag :时间区间： %>
                 <select name="timeselect">
                   <% ["月","季度","年"].each do |time| %>
                     <% if params[:time] == time %>
@@ -54,7 +35,7 @@
           </div>
           <div class="row">
               <ul class="nav nav-tabs" id="click-prop">
-                <li class="nav-item">
+                <li class="nav-item active">
                   <a class="nav-link" data-toggle="tab" href="#home" >车间部门</a>
                 </li>
                 <li class="nav-item">
@@ -69,7 +50,7 @@
               </ul>
 
               <div class="tab-content" id="myTabContent">
-                <div class="tab-pane" id="home">
+                <div class="tab-pane active" id="home">
                   <div class="col-md-12">
                     <input id="check_all" type="checkbox" />
                     <label for="check_all">全选</label>
@@ -138,6 +119,14 @@
   </div>
 
   <div class="panel">
+    <div class="panel-heading">
+      <span>在类别中选择两项，可点击此计算差额和百分比</span>
+      <%= link_to wage_analyses_wages_path(request.query_parameters.delete_if{|x| ["utf8","commit"].include?(x) }.merge({:format => "xls"})) do  %>
+      <span style="float:right;position:relative;">
+          导出表格
+      </span>
+      <% end %>
+    </div>
     <div class="panel-body">
       <table class="table overflow-y">
         <thead>
@@ -151,19 +140,72 @@
             <th>
               <%= head_time %>
             </th>
+              <% if params[:phase_contrast].present? %>
+            <th>
+              <% a = head_time.split("-")[0] %>
+              <% b = a.to_i - 1 %>
+              <% c = head_time.gsub(a,b.to_s) %>
+              <%= c %>
+            </th>
+              <% end %>
             <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @category_income_compare.each do |key,value| %>
+          <% @category_income_compare.each do |date| %>
           <tr>
-            <td>
-              <%= key %>
+            <td rowspan="2" style="text-align: center;vertical-align:middle;">
+              <%= date[0] %>
             </td>
-            <% value.each do |table_value| %>
-            <td>
-              <%= table_value%>
-            </td>
+            <% date[1].each do |table_value| %>
+              <td>
+                <%= table_value%>
+              </td>
+              <% n = date[1].index(table_value)%>
+                <% if date.length == 3%>
+                  <td><%= date[2][n]%></td>
+                <% end %>
+            <% end %>
+            <% if params[:phase_contrast].present?%>
+            <tr>
+
+              <% data_max = [] %>
+              <% data_max << date[2] %>
+              <% data_max << date[1] %>
+
+              <% data_max.transpose.each do |max| %>
+                  <% max.each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |phase_compare_data|%>
+                    <% if phase_compare_data.nan? || phase_compare_data.infinite? || phase_compare_data == -100 %>
+                      <td colspan="2">无法对比</td>
+                    <% else %>
+                      <td colspan="2">
+                      <% if phase_compare_data > 0 %>
+                        <span class="badge badge-success"><%= phase_compare_data %>%</span>
+                      <% else %>
+                        <span class="badge badge-danger"><%= phase_compare_data %>%</span>
+                      <% end %>
+                      </td>
+                    <% end %>
+                  <% end %>
+              <% end %>
+            </tr>
+            <% else %>
+            <tr>
+              <td><%= 0.0 %></td>
+              <% date[1].each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |compare_data|%>
+                <% if compare_data.nan? || compare_data.infinite? || compare_data == -100 %>
+                  <td>无法对比</td>
+                <% else %>
+                  <td>
+                    <% if compare_data > 0 %>
+                    <span class="badge badge-success"><%= compare_data %>%</span>
+                    <% else %>
+                    <span class="badge badge-danger"><%= compare_data %>%</span>
+                    <% end %>
+                  </td>
+                <% end %>
+              <% end %>
+            </tr>
             <% end %>
           </tr>
           <% end %>
@@ -209,25 +251,5 @@
     }else {
       $("#profile input[type='checkbox']").removeAttr("disabled");
     }
-  });
-//   function btnlink(){
-//     var input[type='checkbox'] = this;
-//     if(typeof this == "undefined"){
-//       ("#check-button").attr("disabled", true);
-//     }
-//
-// }
-
-  $(function () {
-      $('#datetimepicker6').datetimepicker();
-      $('#datetimepicker7').datetimepicker({
-          useCurrent: false //Important! See issue #1075
-      });
-      $("#datetimepicker6").on("dp.change", function (e) {
-          $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-      });
-      $("#datetimepicker7").on("dp.change", function (e) {
-          $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-      });
   });
 </script>

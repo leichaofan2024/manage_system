@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">类型</Data></Cell>
+        <% @time_form_header.each do |i| %>
+            <Cell><Data ss:Type="String"><%= i %></Data></Cell>
+            <% if params[:phase_contrast].present? %>
+              <% a = i.split("-")[0] %>
+              <% b = a.to_i - 1 %>
+              <% c = i.gsub(a,b.to_s) %>
+              <Cell><Data ss:Type="String"><%= c %></Data></Cell>
+            <% end %>
+        <% end %>
+      </Row>
+
+      <% @category_income_compare.each do |date| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= date[0]%></Data></Cell>
+
+        <% date[1].each do |i| %>
+            <Cell><Data ss:Type="Number"><%= i%></Data></Cell>
+        <% n = date[1].index(i)%>
+          <% if date.length == 3%>
+            <Cell><Data ss:Type="Number"><%= date[2][n]%></Data></Cell>
+          <% end %>
+        <% end %>
+      </Row>
+      <Row>
+        <% if params[:phase_contrast].present?%>
+            <% data_max = [] %>
+            <% data_max << date[2] %>
+            <% data_max << date[1] %>
+            <Cell></Cell>
+            <% data_max.transpose.each do |max| %>
+                <% max.each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |phase_compare_data|%>
+                  <% if phase_compare_data.nan? || phase_compare_data.infinite? || phase_compare_data == -100 %>
+                    <Cell><Data ss:Type="String">无法对比</Data></Cell>
+                  <% else %>
+                    <Cell><Data ss:Type="Number"><%= phase_compare_data %></Data></Cell>
+                  <% end %>
+                <% end %>
+            <% end %>
+          <% else %>
+            <Cell ss:Index="2"><Data ss:Type="Number">0.0</Data></Cell>
+            <% date[1].each_cons(2).map{|n,m| ((m/n-1)*100).round(2)}.each do |compare_data|%>
+              <% if compare_data.nan? || compare_data.infinite? || compare_data == -100 %>
+                <Cell><Data ss:Type="String">无法对比</Data></Cell>
+              <% else %>
+                <Cell><Data ss:Type="Number"><%= compare_data %></Data></Cell>
+              <% end %>
+            <% end %>
+        <% end %>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
