@@ -158,13 +158,13 @@
               <%= date[0] %>
             </td>
             <% date[1].each do |table_value| %>
-              <td>
-                <%= table_value%>
-              </td>
               <% n = date[1].index(table_value)%>
-                <% if date.length == 3%>
-                  <td><%= date[2][n]%></td>
-                <% end %>
+              <td>
+                <%= link_to(table_value,wage_analyses_detail_wages_path(request.query_parameters.delete_if{|x| ["utf8","commit","start_time","end_time"].include?(x) }.merge({:year => @time_hash[@time_form_header[n]][0],:month=> @time_hash[@time_form_header[n]][1],:category => date[0]})))%>
+              </td>
+              <% if date.length == 3%>
+                <td><%= link_to(date[2][n],wage_analyses_detail_wages_path(request.query_parameters.delete_if{|x| ["utf8","commit","start_time","end_time"].include?(x) }.merge({:year => (@time_hash[@time_form_header[n]][0]-1),:month=> @time_hash[@time_form_header[n]][1]})))%></td>
+              <% end %>
             <% end %>
             <% if params[:phase_contrast].present?%>
             <tr>
