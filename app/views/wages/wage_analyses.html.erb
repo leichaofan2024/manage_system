@@ -3,18 +3,27 @@
     <div class="panel-heading">
       <h4>工资对比</h4>
       <%= form_tag wage_analyses_wages_path,method: :get do%>
-          <div class="form-group">
-              <li>
-                <span>时间搜索:</span>
-                <% if params[:start_time].present? && params[:end_time].present? %>
-                  <%= text_field_tag :start_time,params[:start_time]%> 至
-                  <%= text_field_tag :end_time,params[:end_time] %>
-                <% else %>
-                  <%= text_field_tag :start_time,"",placeholder:"年-月"%> 至
-                  <%= text_field_tag :end_time,"",placeholder:"年-月"%>
-                <% end %>
-              </li>
+          <div class="row">
+            <div class="col-md-5">
+                  <div class='input-group date' id='datetimepicker6'>
+                    <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar">
+                          </span>
+                      </span>
+                  </div>
+            </div>
+            <div class="col-md-5">
+                <div class='input-group date' id='datetimepicker7'>
+                  <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar">
+                        </span>
+                    </span>
+                </div>
 
+            </div>
+            <ul>
               <li>
                 <%= label_tag :时间区间： %>
                 <select name="timeselect">
@@ -27,13 +36,11 @@
                   <% end %>
                 </select>
               </li>
-
               <li>
                   <%= check_box_tag(:phase_contrast,1)%>
                   <%= label_tag "与上一年同期相比" %>
               </li>
-          </div>
-          <div class="row">
+            </ul>
               <ul class="nav nav-tabs" id="click-prop">
                 <li class="nav-item active">
                   <a class="nav-link" data-toggle="tab" href="#home" >车间部门</a>
@@ -252,4 +259,38 @@
       $("#profile input[type='checkbox']").removeAttr("disabled");
     }
   });
+  $(function () {
+        $('#datetimepicker6').datetimepicker({
+          icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down"
+                },
+          format: 'YYYY-MM',
+          locale: moment.locale('zh-cn')
+        });
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down"
+                },
+            format: 'YYYY-MM',
+            locale: moment.locale('zh-cn'),
+            widgetPositioning: {
+            horizontal: 'left',
+            vertical: 'top'
+        }
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+
+    });
 </script>
