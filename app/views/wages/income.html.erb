@@ -21,102 +21,103 @@
                <% end %>
               </select>
             </span>
+            <div class="row">
+            <div class="col-md-6">
+              <%= label_tag :姓名： %>
+                <select class= "form-control income-filter-select2" multiple="multiple" name="name[]" id="name_select">
+                  <option disabled value>请选择</option>
+                  <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
+                    <% if params[:name].present? && params[:name].include?(name) %>
+                      <option selected value="<%= name%>"><%= name%></option>
+                    <% else %>
+                      <option  value="<%= name%>"><%= name%></option>
+                    <% end %>
+                  <% end %>
+                </select>
+            </div>
+            <div class="col-md-6">
+              <%= label_tag :工资号： %>
+                <select class= "form-control income-filter-select2" multiple="multiple" name="sal_number[]" id="sal_number_select">
+                  <option disabled value>请选择</option>
+                  <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
+                    <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
+                      <option selected value="<%= sal_number%>"><%= sal_number%></option>
+                    <% else %>
+                      <option  value="<%= sal_number%>"><%= sal_number%></option>
+                    <% end %>
+                  <% end %>
+                </select>
+            </div>
 
-            <%= label_tag :姓名： %>
-            <span style = "display:inline-block;margin-right:10px;">
-              <select class= "form-control income-filter-select2" multiple="multiple" name="name[]" id="name_select">
-                <option disabled value>请选择</option>
-                <% (Bonu.pluck(@bonus_hash["姓名"]) + Wage.pluck(@wage_hash["姓名"]) + Djbonu.pluck(@djbonus_hash["人员名称"]) + Djwage.pluck(@djwage_hash["人员名称"])).uniq.each do |name| %>
-                  <% if params[:name].present? && params[:name].include?(name) %>
-                    <option selected value="<%= name%>"><%= name%></option>
-                  <% else %>
-                    <option  value="<%= name%>"><%= name%></option>
+            <div class="col-md-6">
+              <%= label_tag :部门： %>
+                <select class= "form-control income-filter-select2" style = "height:20px;line-height:20px;"  multiple="multiple" name="department[]" id="department_select">
+                  <option disabled value>请选择</option>
+                  <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
+                    <% if params[:department].present? && params[:department].include?(department) %>
+                      <option selected value="<%= department%>"><%= department%></option>
+                    <% else %>
+                      <option  value="<%= department%>"><%= department%></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-            </span>
-            <%= label_tag :工资号： %>
-            <span style = "display:inline-block;margin-right:10px;">
-              <select class= "form-control income-filter-select2" multiple="multiple" name="sal_number[]" id="sal_number_select">
-                <option disabled value>请选择</option>
-                <% (Bonu.pluck(@bonus_hash["工资号"]) + Wage.pluck(@wage_hash["工资号"]) + Djbonu.pluck(@djbonus_hash["工资号"]) + Djwage.pluck(@djwage_hash["工资号"])).uniq.each do |sal_number| %>
-                  <% if params[:sal_number].present? && params[:sal_number].include?(sal_number) %>
-                    <option selected value="<%= sal_number%>"><%= sal_number%></option>
-                  <% else %>
-                    <option  value="<%= sal_number%>"><%= sal_number%></option>
+                </select>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-md-12">
+                <%= label_tag :男女： %>
+                <select class="income-filter-select" name="sex">
+                  <option value>请选择</option>
+                  <% ["男","女"].each do |sex| %>
+                    <% if params[:sex] == sex %>
+                      <option value="<%= sex %>" selected><%= sex %></option>
+                    <% else %>
+                      <option value="<%= sex %>"><%= sex %></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-            </span>
-
-            <%= label_tag :部门： %>
-            <span style = "display:inline-block;">
-              <select class= "form-control income-filter-select2" style = "height:20px;line-height:20px;"  multiple="multiple" name="department[]" id="department_select">
-                <option disabled value>请选择</option>
-                <% Bonu.pluck(@bonus_hash["部门名称"]).uniq.each do |department| %>
-                  <% if params[:department].present? && params[:department].include?(department) %>
-                    <option selected value="<%= department%>"><%= department%></option>
-                  <% else %>
-                    <option  value="<%= department%>"><%= department%></option>
+                </select>
+                <%= label_tag :按职务： %>
+                <select class="income-filter-select" name="duty">
+                  <option value>请选择</option>
+                  <% Employee.pluck("duty").uniq.compact.each do |duty| %>
+                    <% if params[:duty] == duty %>
+                      <option value="<%= duty %>" selected><%= duty %></option>
+                    <% else %>
+                      <option value="<%= duty %>"><%= duty %></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-            </span>
-            <br>
-              <%= label_tag :男女： %>
-              <select class="income-filter-select" name="sex">
-                <option value>请选择</option>
-                <% ["男","女"].each do |sex| %>
-                  <% if params[:sex] == sex %>
-                    <option value="<%= sex %>" selected><%= sex %></option>
-                  <% else %>
-                    <option value="<%= sex %>"><%= sex %></option>
+                </select>
+                <%= label_tag :工种： %>
+                <select class="income-filter-select" name="work_type">
+                  <option value>请选择</option>
+                  <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
+                    <% if params[:work_type] == work_type %>
+                      <option value="<%= work_type %>" selected><%= work_type %></option>
+                    <% else %>
+                      <option value="<%= work_type %>"><%= work_type %></option>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </select>
-              <%= label_tag :按职务： %>
-              <select class="income-filter-select" name="duty">
-                <option value>请选择</option>
-                <% Employee.pluck("duty").uniq.compact.each do |duty| %>
-                  <% if params[:duty] == duty %>
-                    <option value="<%= duty %>" selected><%= duty %></option>
-                  <% else %>
-                    <option value="<%= duty %>"><%= duty %></option>
+                </select>
+                <%= label_tag :按时间段： %>
+                <select class="" name="filter_type">
+                  <option value>请选择</option>
+                  <% ["年龄","工龄","路龄"].each do |filter_type| %>
+                    <% if params[:filter_type] == filter_type %>
+                      <option value="<%= filter_type %>" selected><%= filter_type %></option>
+                    <% else %>
+                      <option value="<%= filter_type %>"><%= filter_type %></option>
+                    <% end %>
                   <% end %>
+                </select>
+                <% if params[:start_time].present? && params[:end_time].present? %>
+                  <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
+                  <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
+                <% else %>
+                  <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
+                  <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
                 <% end %>
-              </select>
-              <%= label_tag :工种： %>
-              <select class="income-filter-select" name="work_type">
-                <option value>请选择</option>
-                <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
-                  <% if params[:work_type] == work_type %>
-                    <option value="<%= work_type %>" selected><%= work_type %></option>
-                  <% else %>
-                    <option value="<%= work_type %>"><%= work_type %></option>
-                  <% end %>
-                <% end %>
-              </select>
-              <%= label_tag :按时间段： %>
-              <select class="" name="filter_type">
-                <option value>请选择</option>
-                <% ["年龄","工龄","路龄"].each do |filter_type| %>
-                  <% if params[:filter_type] == filter_type %>
-                    <option value="<%= filter_type %>" selected><%= filter_type %></option>
-                  <% else %>
-                    <option value="<%= filter_type %>"><%= filter_type %></option>
-                  <% end %>
-                <% end %>
-              </select>
-              <% if params[:start_time].present? && params[:end_time].present? %>
-                <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
-                <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
-              <% else %>
-                <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
-                <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
-              <% end %>
-
-              <br>
-              <br>
+              </div>
+            </div>
               <%= submit_tag :筛选 %>
             <% end %>
           </li>
@@ -140,7 +141,7 @@
           <%= render "wages/customize_form_partial"%>
         <% end %>
       </div>
-      
+
             <table id="example" class="table table-bordered">
               <thead>
               	<tr>
