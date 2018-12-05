@@ -834,7 +834,7 @@ class AttendancesController < ApplicationController
 		elsif params[:authority] == "duan"
       group = Group.find_by(:id => params[:group_id])
       application = Application.where(:group_id => params[:group_id]).pluck(:status)
-      if application.include?("车间发起申请","科室发起申请")
+      if application.include?("车间发起申请") or application.include?("科室发起申请")
         flash[:warning] = "#{group.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
       else
         attendance_status = AttendanceStatus.find_by(:month => @shenhe_month,:year => @shenhe_year,:group_id => params[:group_id])
@@ -893,7 +893,7 @@ class AttendancesController < ApplicationController
 			@workshop = Workshop.find(params[:workshop_id])
 			@groups = Group.current.where(:workshop_id => @workshop.id)
       application = Application.where(:group_id => @groups.ids).pluck(:status)
-      if application.include?("科室发起申请","车间发起申请")
+      if application.include?("科室发起申请") or application.include?("车间发起申请")
         flash[:warning] = "#{@workshop.name}还有考勤修改申请未通过，请先处理完申请后再审核！"
         redirect_to workshop_verify_index_attendances_path
       else
