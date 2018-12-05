@@ -108,12 +108,16 @@ class AttendancesController < ApplicationController
       end
       attendance_this_month = Attendance.where(employee_id: employee.id, year: @year, month: @month)
       attendance_count_this_month = AttendanceCount.find_by(employee_id: employee.id, year: @year, month: @month)
+      annual_holiday_this_month = AnnualHoliday.find_by(employee_id: employee.id, year: @year, month: @month)
       if !attendance_count_this_month.present?
         AttendanceCount.create(employee_id: employee.id, group_id: employee.group,:workshop_id =>employee.workshop , year: @year, month: @month)
       end
       if !attendance_this_month.present?
         Attendance.create(employee_id: employee.id, group_id: employee.group, year: @year, month: @month)
       end
+      if !annual_holiday_this_month.present? 
+        AnnualHoliday.create(employee_id: employee.id, year: @year, month: @month)
+      end 
     end
     @vacation_code_hash = VacationCategory.pluck("vacation_code","vacation_shortening").to_h
     @vacation_name_hash = VacationCategory.pluck("vacation_code","vacation_name").to_h
@@ -192,11 +196,11 @@ class AttendancesController < ApplicationController
           end
           @attendance_count.update(attendance_hash)
           annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
-          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["f"].to_i) +(@attendance_count.attributes["g"].to_i)))
+          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["h"].to_i) +(@attendance_count.attributes["g"].to_i)))
         end
       else
         @params_hash = params.delete_if{|key,value| ["utf8","authenticity_token","commit","controller","action","_method","group_id","year","month","day"].include?(key) || (value =="")}
-        @employees = Employee.current.where(:id => @params_hash.keys)
+        @employees = Employee.where(:id => @params_hash.keys)
         @employees.each do |employee|
           attendance = Attendance.find_by(:employee_id => employee.id,:year => @year,:month => @month)
           month_attendances = attendance.month_attendances
@@ -214,7 +218,7 @@ class AttendancesController < ApplicationController
           end
           @attendance_count.update(attendance_hash)
           annual_holiday = AnnualHoliday.find_by(employee_id: employee.id, month: @month, year: @year) || AnnualHoliday.new
-          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["f"].to_i) + (@attendance_count.attributes["g"].to_i)))
+          annual_holiday.update(employee_id: employee.id, month: @month, year: @year, holiday_days: ((@attendance_count.attributes["h"].to_i) + (@attendance_count.attributes["g"].to_i)))
         end
       end
       flash[:notice] = "一键考勤填写成功！"
@@ -397,6 +401,9 @@ class AttendancesController < ApplicationController
               attendance_count_before.update(application.application_before => ((attendance_count_before.attributes[application.application_before].to_i) -1))
             end
           end
+          attendance_count = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
+          annual_holiday = AnnualHoliday.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month) || AnnualHoliday.new
+          annual_holiday.update(employee_id: application.employee_id,:year => application.year, :month => application.month, holiday_days: ((attendance_count.attributes["h"].to_i) + (attendance_count.attributes["g"].to_i)))
         end
         flash[:notice] = "已成功一键通过所有申请!"
       else
@@ -421,6 +428,9 @@ class AttendancesController < ApplicationController
             attendance_count_before.update(@application.application_before => ((attendance_count_before.attributes[@application.application_before].to_i) -1))
           end
         end
+        attendance_count = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
+        annual_holiday = AnnualHoliday.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month) || AnnualHoliday.new
+        annual_holiday.update(employee_id: @application.employee_id,:year => @application.year, :month => @application.month, holiday_days: ((attendance_count.attributes["h"].to_i) + (attendance_count.attributes["g"].to_i)))
         flash[:notice] = "关于#{employee.name}的考勤修改申请已通过!"
       end
     else
@@ -448,6 +458,9 @@ class AttendancesController < ApplicationController
               attendance_count_before.update(application.application_before => ((attendance_count_before.attributes[application.application_before].to_i) -1))
             end
           end
+          attendance_count = AttendanceCount.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month)
+          annual_holiday = AnnualHoliday.find_by(employee_id: application.employee_id,:year => application.year, :month => application.month) || AnnualHoliday.new
+          annual_holiday.update(employee_id: application.employee_id,:year => application.year, :month => application.month, holiday_days: ((attendance_count.attributes["h"].to_i) + (attendance_count.attributes["g"].to_i)))
         end
         flash[:notice] = "已成功一键通过所有申请!"
       else
@@ -472,6 +485,9 @@ class AttendancesController < ApplicationController
             attendance_count_before.update(@application.application_before => ((attendance_count_before.attributes[@application.application_before].to_i) -1))
           end
         end
+        attendance_count = AttendanceCount.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month)
+        annual_holiday = AnnualHoliday.find_by(employee_id: @application.employee_id,:year => @application.year, :month => @application.month) || AnnualHoliday.new
+        annual_holiday.update(employee_id: @application.employee_id,:year => @application.year, :month => @application.month, holiday_days: ((attendance_count.attributes["h"].to_i) + (attendance_count.attributes["g"].to_i)))
         flash[:notice] = "关于#{employee.name}的考勤修改申请已通过!"
       end
     end
@@ -618,7 +634,8 @@ class AttendancesController < ApplicationController
       @attendance.update(:month_attendances => @month_attendances_after)
       @attendance.save
       attendance_count_attributes = @attendance_count.attributes
-			
+			annual_holiday = AnnualHoliday.find_by(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year]) || AnnualHoliday.new
+      annual_holiday.update(:employee_id => params[:employee_id], :month => params[:month], :year => params[:year], holiday_days: ((attendance_count_attributes["h"].to_i) + (attendance_count_attributes["g"].to_i)))
 
       group_id = Employee.current.find_by(:id => params[:employee_id]).group
       flash[:notice] = "考勤修改成功！"
@@ -1078,12 +1095,17 @@ class AttendancesController < ApplicationController
       @employees.each do |employee|
         attendance_this_month = Attendance.where(employee_id: employee.id, year: @year, month: @month)
         attendance_count_this_month = AttendanceCount.find_by(employee_id: employee.id, year: @year, month: @month)
+        annual_holiday_this_month = AnnualHoliday.find_by(employee_id: employee.id, year: @year, month: @month)
         if !attendance_count_this_month.present?
           AttendanceCount.create(employee_id: employee.id, group_id: employee.group,:workshop_id =>employee.workshop , year: @year, month: @month)
         end
         if !attendance_this_month.present?
           Attendance.create(employee_id: employee.id, group_id: employee.group, year: @year, month: @month)
         end
+        if !annual_holiday_this_month.present? 
+          AnnualHoliday.create(employee_id: employee.id, year: @year, month: @month)
+        end 
+
       end
 		else
       if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
