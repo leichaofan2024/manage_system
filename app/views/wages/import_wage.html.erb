@@ -62,30 +62,34 @@
       <%= render "delete_wage_file"%>
     <% end %>
 
-    <div class="col-md-6 col-lg-6 col-ms-6" style = "padding-left: 20px;">
+    <div class="row">
       <%= form_tag import_wage_wages_path,method: :get  do %>
-
-        <li style="display: inline-block;">车间：
-            <select name="workshop"  id="selid" onchange="selCity(this)">
-              <option value="" selected >北京供电段</option>
-              <% @workshops.each do |workshop| %>
-                <% if workshop == params[:workshop] %>
-                  <option value="<%= workshop %>" selected><%= workshop %></option>
-                <% else %>
-                  <option value="<%= workshop %>"><%= workshop %></option>
-                <% end %>
+      <div class="col-md-12 mb15">
+        <span>车间：</span>
+          <select name="workshop"  id="selid" onchange="selCity(this)">
+            <option value="" selected >北京供电段</option>
+            <% @workshops.each do |workshop| %>
+              <% if workshop == params[:workshop] %>
+                <option value="<%= workshop %>" selected><%= workshop %></option>
+              <% else %>
+                <option value="<%= workshop %>"><%= workshop %></option>
               <% end %>
-            </select>
-        </li>
-        <li style="display: inline-block;">班组：
-            <select name="group"  id="subselid">
-              <option value="">全部</option>
-            </select>
-        </li><br>
+            <% end %>
+          </select>
+      </div>
 
-        <%= label_tag :请输入时间段搜索 %>
+      <div class="col-md-12 mb15">
+        <span>班组：</span>
+        <select name="group"  id="subselid">
+          <option value="">全部</option>
+        </select>
+      </div>
+      <div class="col-md-12">
+        <%= label_tag :请输入时间段搜索%>
+      </div>
 
-        <select class="" style="display:inline-block;" name="year">
+      <div class="col-md-6 mb15">
+        <select class="col-md-2" name="year">
           <% @years.each do |year| %>
             <% if @year == year %>
               <option value="<%= year %>" selected><%= year %></option>
@@ -94,8 +98,7 @@
             <% end %>
           <% end %>
         </select>年
-        ~
-        <span style="display:inline-block;width:200px;position:relative;top:5px;">
+
           <select class="form-control" name="month[]" multiple="multiple" id="month-multiple">
             <% @months.each do |month| %>
               <% if @month.include?(month) %>
@@ -105,8 +108,10 @@
               <% end %>
             <% end %>
           </select>
-        </span>
-      <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      </div>
+      <div class="col-md-12 mb15">
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      </div>
       <% end %>
     </div>
 
