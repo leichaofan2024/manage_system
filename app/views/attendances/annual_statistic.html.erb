@@ -3,39 +3,46 @@
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
 <div class="contentpanel">
-
-  <div class="col-md-12">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>车间</th>
-          <% @vacation_codes.each do |code| %>
-            <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
-          <% end %>
-        </tr>
-      </thead>
-        <tbody data-behavior='sortable'>
-        <% sum_hash = Hash.new %>
-	      <% @workshops.each do |workshop| %>
-          <tr>
-  	        <td><%= workshop.name %></td>
-            <% @vacation_codes.each do |code| %>
-              <% if sum_hash[code].blank? %>
-                <% sum_hash[code]= Array.new %>
-              <% end %>
-              <% sum_code = AttendanceCount.where(:workshop_id => workshop.id).sum(code) %>
-              <% sum_hash[code] << sum_code %>
-              <td><%= sum_code %></td>
-            <% end %>
-  	      </tr>
-        <% end %>
-        <tr>
-          <td>合计</td>
-          <% @vacation_codes.each do |code| %>
-            <td><%= sum_hash[code].sum %></td>
-          <% end %>
-        </tr>
-       </tbody>
-    </table>
+<div class="panel">
+  <div class="panel-heading">
+    <h4>年考勤统计</h4>
   </div>
+  <div class="panel-body">
+    <div class="col-md-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>车间</th>
+            <% @vacation_codes.each do |code| %>
+              <th><%= VacationCategory.find_by(:vacation_code => code).vacation_name %></th>
+            <% end %>
+          </tr>
+        </thead>
+          <tbody data-behavior='sortable'>
+          <% sum_hash = Hash.new %>
+  	      <% @workshops.each do |workshop| %>
+            <tr>
+    	        <td><%= workshop.name %></td>
+              <% @vacation_codes.each do |code| %>
+                <% if sum_hash[code].blank? %>
+                  <% sum_hash[code]= Array.new %>
+                <% end %>
+                <% sum_code = AttendanceCount.where(:workshop_id => workshop.id).sum(code) %>
+                <% sum_hash[code] << sum_code %>
+                <td><%= sum_code %></td>
+              <% end %>
+    	      </tr>
+          <% end %>
+          <tr>
+            <td>合计</td>
+            <% @vacation_codes.each do |code| %>
+              <td><%= sum_hash[code].sum %></td>
+            <% end %>
+          </tr>
+         </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 </div>

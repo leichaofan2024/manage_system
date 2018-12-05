@@ -189,7 +189,7 @@
                             <div class="row">
                               <div class="col-md-5 mb15">
                                     <div class='input-group date' id='datetimepicker6'>
-                                      <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                                      <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择开始日期" required />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar">
                                             </span>
@@ -201,7 +201,7 @@
                               <div class="row">
                                 <div class="col-md-5 mb15">
                                     <div class='input-group date' id='datetimepicker7'>
-                                      <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                                      <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择结束日期" required />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar">
                                             </span>
@@ -210,9 +210,6 @@
                                 </div>
                               </div>
                           <% end %>
-
-                          <br>
-                          <br>
                           <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
                         <% end %>
                       </li>
