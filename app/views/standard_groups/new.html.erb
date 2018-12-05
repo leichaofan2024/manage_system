@@ -8,7 +8,6 @@
   <h4>上传标准化班组表</h4>
   <%= form_tag import_standard_groups_path, multipart: true, method: 'post' do %>
     <div class="col-md-6 col-md-offset-4 datepicker-input">
-        <div class="form-group">
             <div class='input-group date' id='datetimepicker10'>
               <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required: true />
                 <span class="input-group-addon" style="margin-left: -20px">
@@ -16,7 +15,6 @@
                     </span>
                 </span>
             </div>
-        </div>
     </div>
     <div class="file-style">
       <%= file_field_tag :file %>

@@ -63,7 +63,7 @@
                   </button>
                     <div class="margin-right-10" style="float: right;">
                       <% if (current_user.has_role? :empadmin) || (current_user.has_role? :workshopadmin)%>
-                            
+
                         <%= link_to employees_path(format: "xls", employees: "全部"),class:"btn btn-success-alt" do %>
                           导出表格
                         <% end %>
@@ -121,7 +121,7 @@
                                   <option value="">全部</option>
                                 </select>
                               </span>
-                                
+
                             </li>
                           <% elsif current_user.has_role? :workshopadmin %>
                             <li style="display: inline-block;">班组：
@@ -132,7 +132,7 @@
                                   <% end %>
                                 </select>
                               </span>
-                                
+
                             </li>
                           <% end %>
 
@@ -186,13 +186,29 @@
                                 <% end %>
                               <% end %>
                             </select>
-                            <% if params[:start_time].present? && params[:end_time].present? %>
-                              <span class="employee-start-time"><%= text_field_tag :start_time,params[:start_time],{:class => "employee-start-time" }%></span> ~
-                              <span class="employee-start-time"><%= text_field_tag :end_time,params[:end_time],{:class => "employee-start-time"} %></span>
-                            <% else %>
-                              <span class="employee-start-time"><%= text_field_tag :start_time,"",{:class => "employee-start-time" }%></span> ~
-                              <span class="employee-start-time"><%= text_field_tag :end_time,"",{:class => "employee-start-time"} %></span>
-                            <% end %>
+                            <div class="row">
+                              <div class="col-md-5 mb15">
+                                    <div class='input-group date' id='datetimepicker6'>
+                                      <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar">
+                                            </span>
+                                        </span>
+                                    </div>
+                              </div>
+                            </div>
+
+                              <div class="row">
+                                <div class="col-md-5 mb15">
+                                    <div class='input-group date' id='datetimepicker7'>
+                                      <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar">
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                              </div>
                           <% end %>
 
                           <br>
@@ -214,7 +230,7 @@
                 <% elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin) %>
                   <%= render 'empshared/emp_table_not_empadmin'%>
                 <% end %>
-                
+
 
               </div>
           </div>
@@ -313,10 +329,44 @@
           url: url,
           dataType: "script"
         });
-        
+
       } else {
         console.log("data ended")
       }
     }
   });
+  $(function () {
+        $('#datetimepicker6').datetimepicker({
+          icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down"
+                },
+          format: 'YYYY-MM',
+          locale: moment.locale('zh-cn')
+        });
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down"
+                },
+            format: 'YYYY-MM',
+            locale: moment.locale('zh-cn'),
+            widgetPositioning: {
+            horizontal: 'left',
+            vertical: 'auto'
+        }
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+
+    });
 </script>

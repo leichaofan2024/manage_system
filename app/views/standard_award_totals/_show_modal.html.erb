@@ -10,15 +10,13 @@
       <div class="modal-body">
         <%= form_tag import_standard_award_totals_path, method: 'post', multipart: true do %>
           <div class="col-md-6 col-md-offset-4 datepicker-input">
-            <div class="form-group">
                 <div class='input-group date' id='datetimepicker10'>
                   <input type='text' name="upload_time" id="upload_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
-                    <span class="input-group-addon" style="margin-left: -20px">
+                    <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar">
                         </span>
                     </span>
                 </div>
-            </div>
           </div>
           <div class="file-style">
             <%= file_field_tag :file,required: true %>

@@ -919,7 +919,7 @@ class WagesController < ApplicationController
 	        format.xls { headers["Content-Disposition"] = 'attachment; filename="工资统计分析表.xls"'}
         end
     end
-    
+
 
     def wage_analyses_detail
     	category_data = Hash.new
@@ -947,20 +947,21 @@ class WagesController < ApplicationController
         end
         wage_header_array = WageHeader.pluck(:header)
         @wage_head_hash = wage_header_array.map{|x| [x,"col"+(wage_header_array.index(x)+1).to_s]}.to_h
-        @wage_salnumbers = Wage.where(@wage_head_hash["工资号"] => @employees_salnumber,:year => params[:year],:month => params[:month]).pluck(@wage_head_hash["工资号"]).uniq
-        @form_head = ["姓名","性别","工资号","车间","班组","职务","工种","级别","奖金","工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"]
-        @employee_columns = ["name","sex","sal_number","workshop","group","duty","work_type","grade"]
+        @wage_salnumber = Wage.where(@wage_head_hash["工资号"] => @employees_salnumber,:year => params[:year],:month => params[:month]).pluck(@wage_head_hash["工资号"]).uniq
+				@wage_salnumbers = Kaminari.paginate_array(@wage_salnumber).page(params[:page]).per(20)
+        @form_head = ["姓名","性别","车间","班组","工资号","职务","工种","级别","奖金","工资总额","基本工资","绩效工资","津贴补贴","岗位工资","技能工资","加班工资"]
+        @employee_columns = ["sal_number","duty","work_type","grade"]
         @wage_columns = [@wage_head_hash["奖金二"],@wage_head_hash["工资总额"],@wage_head_hash["基本工资"],@wage_head_hash["绩效工资"],@wage_head_hash["津贴补贴"],@wage_head_hash["岗位工资"],@wage_head_hash["技能工资"],@wage_head_hash["加班工资"]]
-        if params[:month].class == Array 
+        if params[:month].class == Array
           if params[:month].size == 3
           	quarter_hash = {["1","2","3"] => 1 , ["4","5","6"]=>2 ,["7","8","9"] => 3 ,["10","11","12"] => 4}
           	@title_time = "#{params[:year]}年第 #{quarter_hash[params[:month]]} "
           elsif params[:month].size == 12
           	@title_time = params[:year]
-          end 
-        else 
+          end
+        else
         	@title_time = "#{params[:year]}年#{params[:month]}"
-        end 
-    end 
+        end
+    end
 
 end

@@ -4,7 +4,7 @@
       <h4>工资对比</h4>
       <%= form_tag wage_analyses_wages_path,method: :get do%>
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-5 mb15">
                   <div class='input-group date' id='datetimepicker6'>
                     <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
                       <span class="input-group-addon">
@@ -13,17 +13,21 @@
                       </span>
                   </div>
             </div>
-            <div class="col-md-5">
-                <div class='input-group date' id='datetimepicker7'>
-                  <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar">
-                        </span>
-                    </span>
-                </div>
+          </div>
 
+            <div class="row">
+              <div class="col-md-5 mb15">
+                  <div class='input-group date' id='datetimepicker7'>
+                    <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar">
+                          </span>
+                      </span>
+                  </div>
+              </div>
             </div>
-            <ul>
+
+            <ul style="padding:0;">
               <li>
                 <%= label_tag :时间区间： %>
                 <select name="timeselect">
@@ -41,6 +45,7 @@
                   <%= label_tag "与上一年同期相比" %>
               </li>
             </ul>
+            <div class="row">
               <ul class="nav nav-tabs" id="click-prop">
                 <li class="nav-item active">
                   <a class="nav-link" data-toggle="tab" href="#home" >车间部门</a>
@@ -282,7 +287,7 @@
             locale: moment.locale('zh-cn'),
             widgetPositioning: {
             horizontal: 'left',
-            vertical: 'top'
+            vertical: 'auto'
         }
         });
         $("#datetimepicker6").on("dp.change", function (e) {
