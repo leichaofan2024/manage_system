@@ -28,7 +28,9 @@
 
           <% @employees.each do |employee| %>
             <tr>
-              <td class="batch-select"><%= check_box_tag "employee_id[#{employee.id}]",1,false,class:"batch-select"%></td>
+              <% if current_user.has_role? :empadmin %>
+                <td class="batch-select"><%= check_box_tag "employee_id[#{employee.id}]",1,false %></td>
+              <% end %>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sal_number.to_i %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.job_number %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.record_number %></td>
@@ -62,31 +64,33 @@
 
      </tbody>
     </table>
-    <div class="employee-batch-submit">
-      <div class="employee-batch-submit-head"><h4>批量调动</h4></div>
-      <hr>
-      <div class="employee-batch-submit-body">
-        <span>调往车间：
-          <select name="workshop"  id="workshop" onchange="selworkshop(this)">
-            <% Workshop.current.each do |workshop| %>
-              <option value="<%= workshop.id%>"><%= workshop.name%></option>
-            <% end %>
-          </select>
-        </span>
-        <span>调往班组：
-            <select name="group"  id="group">
-              <% Group.current.where(workshop_id: Workshop.current.first.id).each do |group| %>
-                <option value="<%= group.id %>" ><%= group.name %></option>
+    <% if current_user.has_role? :empadmin %>
+      <div class="employee-batch-submit">
+        <div class="employee-batch-submit-head"><h4>批量调动</h4></div>
+        <hr>
+        <div class="employee-batch-submit-body">
+          <span>调往车间：
+            <select name="workshop"  id="workshop" onchange="selworkshop(this)">
+              <% Workshop.current.each do |workshop| %>
+                <option value="<%= workshop.id%>"><%= workshop.name%></option>
               <% end %>
             </select>
-        </span>
-        <br>
-        <%= hidden_field_tag :type,"调动" %>
-        <div disabled class="click-batch-close click-batch-close-style" >取消</div>
+          </span>
+          <span>调往班组：
+              <select name="group"  id="group">
+                <% Group.current.where(workshop_id: Workshop.current.first.id).each do |group| %>
+                  <option value="<%= group.id %>" ><%= group.name %></option>
+                <% end %>
+              </select>
+          </span>
+          <br>
+          <%= hidden_field_tag :type,"调动" %>
+          <div disabled class="click-batch-close click-batch-close-style" >取消</div>
 
-        <%= submit_tag "一键调动",:data => {:disable_with => "提交中..."} %>
+          <%= submit_tag "一键调动",:data => {:disable_with => "提交中..."} %>
+        </div>
+
       </div>
-
-    </div>
+    <% end %>
 
 <% end %>
