@@ -6,7 +6,7 @@
           <div class="row">
             <div class="col-md-5 mb15">
                   <div class='input-group date' id='datetimepicker6'>
-                    <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                    <input type='text' name="start_time" class="form-control" placeholder="点击右侧按钮选择开始日期" required />
                       <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar">
                           </span>
@@ -18,7 +18,7 @@
             <div class="row">
               <div class="col-md-5 mb15">
                   <div class='input-group date' id='datetimepicker7'>
-                    <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择日期" required />
+                    <input type='text' name="end_time" class="form-control" placeholder="点击右侧按钮选择结束日期" required />
                       <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar">
                           </span>
@@ -132,7 +132,7 @@
 
   <div class="panel">
     <div class="panel-heading">
-      <span>在类别中选择两项，可点击此计算差额和百分比</span>
+      <span></span>
       <%= link_to wage_analyses_wages_path(request.query_parameters.delete_if{|x| ["utf8","commit"].include?(x) }.merge({:format => "xls"})) do  %>
       <span style="float:right;position:relative;">
           导出表格
