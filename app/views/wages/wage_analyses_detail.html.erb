@@ -1,50 +1,53 @@
-<%= link_to("返回",:back) %>
-<br>
-<br>
-<p>
-	<%= @wage_salnumbers %>
-</p>
-<p>
-	<%= @form_head %>
-</p>
-<p>
-	<%= @employee_columns %>
-	<%= @wage_columns %>
-</p>
-
-
 <!-- 以上是几个变量的展示 -->
 <!-- 以下为用法示例： -->
-<h4 style="text-align:center;"><%= @title_time %><%= params[:timeselect] %><%= params[:category] %>工资情况(<%= @wage_salnumbers.size %>人)</h4>
-<table>
-	<thead>
-		<tr>
-			<% @form_head.each do |name| %>
-				<th>
-					<%= name %>
-				</th>
-			<% end %>
-		</tr>
-	</thead>
-	<tbody>
-		<% @wage_salnumbers.each do |sal_number| %>
-		    <% employee = Employee.find_by(:sal_number => sal_number ) %>
-		    <% wage = Wage.where(@wage_head_hash["工资号"] => @employees_salnumber,:year => params[:year],:month => params[:month])%>
-            
-			<tr>
-				<% @employee_columns.each do |column| %>
-					<td>
-						<%= employee.send(column) %>
-					</td>
-				<% end %>
-				<% @wage_columns.each do |column| %>
-					<td>
-						<%= wage.sum(column).round(2) %>
-					</td>
-                <% end %>
-			</tr>
-            
-        <% end %>
-	</tbody>
-</table>
+<div class="contentpanel">
+	<div class="panel">
+		<div class="panel-heading">
+			<h4 style="text-align:center;"><%= @title_time %><%= params[:timeselect] %><%= params[:category] %>工资情况(<%= @wage_salnumber.size %>人)</h4>
+		</div>
+		<div class="panel-body">
+			<table>
+				<thead>
+					<tr>
+						<% @form_head.each do |name| %>
+							<th>
+								<%= name %>
+							</th>
+						<% end %>
+					</tr>
+				</thead>
+				<tbody>
+					<% @wage_salnumbers.each do |sal_number| %>
+					    <% employee = Employee.find_by(:sal_number => sal_number ) %>
+					    <% wage = Wage.where(@wage_head_hash["工资号"] => sal_number,:year => params[:year],:month => params[:month])%>
 
+						<tr>
+							<td><%= employee.name %></td>
+							<td><%= employee.sex %></td>
+							<td>
+								<%= Workshop.current.find(employee.workshop).name %>
+							</td>
+							<td>
+								<%= Group.current.find(employee.group).name%>
+							</td>
+							<% @employee_columns.each do |column| %>
+								<td>
+									<%= employee.send(column) %>
+								</td>
+							<% end %>
+							<% @wage_columns.each do |column| %>
+								<td>
+									<%= wage.sum(column).round(2) %>
+								</td>
+			        <% end %>
+						</tr>
+
+			        <% end %>
+				</tbody>
+			</table>
+			<div class="text-center">
+			  <%= paginate @wage_salnumbers %>
+			</div>
+		</div>
+	</div>
+</div>

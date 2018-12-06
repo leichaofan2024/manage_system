@@ -1726,7 +1726,7 @@ h4 {
  vertical-align: middle;
 }
 .employee-search li {
- padding: 10px 5px;
+ padding: 0;
 }
 
 
@@ -2720,4 +2720,8 @@ button.close {
 }
 .badge-danger{
   background-color: #d9534f;
+}
+
+.mb15{
+  margin-bottom: 5px;
 }

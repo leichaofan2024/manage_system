@@ -1,45 +1,44 @@
 <div class="contentpanel">
   <div class="col-md-12">
-    <div class="pulll-left" style="display:inline-block;">
-      <%= form_tag caiwu_attendances_path,method: :get do %>
-        <%= label_tag "时间搜索"%>
-        <select class="" name="year">
-          <% @years.each do |year| %>
-            <% if @year == year %>
-              <option value="<%= year%>" selected><%=year%></option>
-            <% else %>
-              <option value="<%= year%>"><%=year%></option>
-            <% end %>
-          <% end %>
-        </select>年 ～
-        <select class="" name="month">
-          <% @months.each do |month| %>
-            <% if @month == month %>
-              <option value="<%= month%>" selected><%=month%></option>
-            <% else %>
-              <option value="<%= month%>"><%=month%></option>
-            <% end %>
-          <% end %>
-        </select>月
-        <%= submit_tag "搜索",:data => {:disable_with => "搜索中 ..."}%>
-      <% end %>
-    </div>
-    <div class="ivu-tooltip-rel pull-right" style="margin-left: 15px">
-      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-        <%= link_to caiwu_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
-           <span style="color: #269Eff;">导出记录(含多经)</span>
-        <% end %>
-      </button>
-      <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
-        <%= link_to caiwu_attendances_path(:duojing => 0,:year => params[:year],:month => params[:month],format: "xls") do  %>
-           <span style="color: #269Eff;">导出记录(不含多经)</span>
-        <% end %>
-      </button>
-    </div>
-
     <div class="card">
       <div style="overflow: auto;" class="col-md-12">
         <h4 style = "text-align:center"><%= @year%>年<%= @month%>月财务表-1</h4>
+        <div class="pulll-left" style="display:inline-block;">
+          <%= form_tag caiwu_attendances_path,method: :get do %>
+            <%= label_tag "时间搜索"%>
+            <select class="" name="year">
+              <% @years.each do |year| %>
+                <% if @year == year %>
+                  <option value="<%= year%>" selected><%=year%></option>
+                <% else %>
+                  <option value="<%= year%>"><%=year%></option>
+                <% end %>
+              <% end %>
+            </select>年 ～
+            <select class="" name="month">
+              <% @months.each do |month| %>
+                <% if @month == month %>
+                  <option value="<%= month%>" selected><%=month%></option>
+                <% else %>
+                  <option value="<%= month%>"><%=month%></option>
+                <% end %>
+              <% end %>
+            </select>月
+            <%= submit_tag "搜索",:data => {:disable_with => "搜索中 ..."}%>
+          <% end %>
+        </div>
+        <div class="ivu-tooltip-rel pull-right" style="margin-left: 15px">
+          <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+            <%= link_to caiwu_attendances_path(:year => params[:year],:month => params[:month],format: "xls") do  %>
+               <span style="color: #269Eff;">导出记录(含多经)</span>
+            <% end %>
+          </button>
+          <button type="button" class="ivu-btn ivu-btn-primary btn-oaG3J_0">
+            <%= link_to caiwu_attendances_path(:duojing => 0,:year => params[:year],:month => params[:month],format: "xls") do  %>
+               <span style="color: #269Eff;">导出记录(不含多经)</span>
+            <% end %>
+          </button>
+        </div>
         <table id="example" class="table table-bordered">
           <thead>
           	<tr>
