@@ -118,7 +118,6 @@
                             <li style="display: inline-block;">班组：
                               <span class="employee-group-input" style="display:inline-block;">
                                 <select name="group[]"  id="subselid" multiple="multiple" class="form-control group-batch-select" style="width:400px;height:20px;">
-                                  <option value="">全部</option>
                                 </select>
                               </span>
 
@@ -239,7 +238,7 @@
 </div>
 <script type="text/javascript">
 
-  $(".group-batch-select").select2( { theme: "bootstrap"} );
+  $(".group-batch-select").select2( { theme: "bootstrap"});
   $("#click-batch-close").hide();
   $(".batch-select").hide();
   $(".employee-batch-submit").hide();
@@ -255,9 +254,9 @@
 
       subselNode.options.length = 0;
       var firstoptionNode = document.createElement("option");
-      firstoptionNode.value = arr[0][0][1];
-      firstoptionNode.innerText = arr[0][0][0];
-      subselNode.appendChild(firstoptionNode);
+      // firstoptionNode.value = arr[0][0][1];
+      // firstoptionNode.innerText = arr[0][0][0];
+      // subselNode.appendChild(firstoptionNode);
       for(var i=0; i<citys.length; i++)
       {
           var optionNode = document.createElement("option");
@@ -315,8 +314,9 @@
       }
   };
 
-
-  var current_post_id = <%= @employees.last.id %>;
+  <% if @employees.present? %>
+    var current_post_id = <%= @employees.last.id %>;
+  <% end %>
   // 当捲轴动的时候，会触发这个事件
   $(window).scroll(function(){
     // 当捲到最下面的时候

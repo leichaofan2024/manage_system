@@ -50,8 +50,7 @@ class EmployeesController < ApplicationController
     
     @export_employees = @employees_all
     workshop = Workshop.current.pluck("name")
-    group = Array.new
-    group << [["全部",""]]
+    group = [[[]]]
     # 用于批量调动：
     batch_leaving_group = Array.new
     workshop.each do |name|
@@ -197,7 +196,7 @@ class EmployeesController < ApplicationController
     @workshop = params[:workshop]
     @group = params[:group]
     workshop = Workshop.current.pluck("name")
-    group = [[["全部",""]]]
+    group = [[[]]]
     # 用于批量调动：
     batch_leaving_group = Array.new
     workshop.each do |name|
