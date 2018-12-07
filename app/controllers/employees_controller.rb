@@ -31,7 +31,7 @@ class EmployeesController < ApplicationController
     @work_type = params[:work_type]
     if params[:work_type].present?
       @employees_all = Employee.current.where(work_type: params[:work_type]).order('id ASC')
-    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :safe_productionadmin)
+    elsif (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :safe_productionadmin) || (current_user.has_role? :staradmin)
       @employees_all = Employee.current.order('id ASC')
     elsif current_user.has_role? :workshopadmin
       @employees_all = Employee.current.where(:workshop => current_user.workshop_id).order('id ASC')
@@ -149,7 +149,7 @@ class EmployeesController < ApplicationController
   end
 
   def filter
-    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :saleradmin) or (current_user.has_role? :awardadmin) or (current_user.has_role? :incomeadmin ) or (current_user.has_role? :limitadmin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) or (current_user.has_role? :depudy_leaderadmin) or (current_user.has_role? :safe_productionadmin)
+    if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :saleradmin) or (current_user.has_role? :awardadmin) or (current_user.has_role? :incomeadmin ) or (current_user.has_role? :limitadmin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) or (current_user.has_role? :depudy_leaderadmin) or (current_user.has_role? :safe_productionadmin) or (current_user.has_role? :staradmin)
       condition = ".current.where(company_name: '北京供电段'"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"
