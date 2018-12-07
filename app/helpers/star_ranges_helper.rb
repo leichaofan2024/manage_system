@@ -1,0 +1,2 @@
+module StarRangesHelper
+end

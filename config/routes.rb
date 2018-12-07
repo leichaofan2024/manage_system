@@ -420,6 +420,23 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :basic_scores
+
+  resources :final_statistics
+
+  resources :star_infos do
+    collection do
+      get :five_star_info
+      get :all_star_info
+    end
+  end
+
+  resources :star_applications
+
+  resources :score_weights
+
+  resources :star_ranges
+
   resources :analyses
 
 end

@@ -1,0 +1,2 @@
+module BasicScoresHelper
+end

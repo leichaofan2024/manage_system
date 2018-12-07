@@ -1,0 +1,2 @@
+module StarInfosHelper
+end
