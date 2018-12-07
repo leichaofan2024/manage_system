@@ -55,13 +55,23 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def duan_holiday_plan
-		useless_columns = ["id", "workshop_id", "work_type","created_at", "updated_at", "year", "status"]
+		@years = AnnualHolidayPlan.pluck(:year).uniq.sort{|a,b| b<=>a}
+		if params[:year].present?
+			@year = params[:year]
+		else 
+			@year = Time.now.year
+		end 
+		useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"]
 		@columns = AnnualHolidayPlan.column_names - useless_columns
-		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "车间填写完毕").pluck("workshop_id"))
+		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("workshop_id"))
+		@organizations = Group.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("orgnization_id"))
 		@worktypes = AnnualHolidayWorkType.all
-		@duan = params[:duan]
 		if params[:workshop].present?
-			@workshop = params[:workshop]
+			@annual_holidays = AnnualHolidayPlan.where(:workshop_id => params[:workshop],:year => @year)
+		elsif params[:organization].present? 
+			@annual_holidays = AnnualHolidayPlan.where(:orgnization_id => params[:organization],:year => @year)
+		else 
+			@annual_holidays = AnnualHolidayPlan.where(:year => @year)
 		end
 	end
 
@@ -88,46 +98,45 @@ class AnnualHolidaysController < ApplicationController
 	      @group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
 	    end
 	    gon.group_name = @group
-		@years = AnnualHoliday.pluck("year").uniq
+		@years = AnnualHoliday.pluck("year").uniq.sort{|a,b| b<=>a}
 		@workshop_names = Workshop.current.pluck("name","id")
 	end
 
 	def filter
 		@workshops = Workshop.current
 		@workshop_names = @workshops.pluck("name","id")
-		@groups = Group.current
+		@group = [[]]
+	    @workshops.each do |workshop|
+	      @group << Group.current.where(:workshop_id => workshop.id).pluck("name","id")
+	    end
+	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
-		if !params[:workshop].present? && !params[:group].present? && !params[:year].present?
-			flash[:alert] = "请先选择筛选条件哦"
-			redirect_to holiday_fulfill_detail_annual_holidays_path
-		else
-			if params[:year].present?
-				@params_year = params[:year]
-				if (params[:workshop].present?) && (params[:group].blank?)
-					@employees = Employee.current.where(:workshop => params[:workshop]).page(params[:page]).per(20)
-				elsif (params[:workshop].blank?) && (params[:group].present?)
-					@employees = Employee.current.where(:group => params[:group]).page(params[:page]).per(20)
-				elsif (params[:workshop].present?) && (params[:group].present?)
-					@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group]).page(params[:page]).per(20)
-				elsif (params[:workshop].blank?) && (params[:group].blank?)
-					@employees = Employee.current.page(params[:page]).per(20)
-				end
-				render action: "holiday_fulfill_detail"
-			else
-				if (params[:workshop].present?) && (params[:group].blank?)
-					@employees = Employee.current.where(:workshop => params[:workshop]).page(params[:page]).per(20)
-				elsif (params[:workshop].blank?) && (params[:group].present?)
-					@employees = Employee.current.where(:group => params[:group]).page(params[:page]).per(20)
-				elsif (params[:workshop].present?) && (params[:group].present?)
-					@employees = Employee.current.where(:workshop => params[:workshop], :group => params[:group]).page(params[:page]).per(20)
-				end
-				render action: "holiday_fulfill_detail"
-			end
-		end
+		if params[:year].present?
+			@year = params[:year]
+		else 
+			@year = Time.now.year
+		end 
+		
+		if params[:group].present?
+			employees = Employee.current.where(:group => params[:group])
+		elsif  params[:workshop].present?
+			employees = Employee.current.where(:workshop => params[:workshop])
+		else 
+			employees = Employee.current
+		end 
+		@employees = employees.page(params[:page]).per(20)
+        render action: "holiday_fulfill_detail"
+		
 
 	end
 
 	def holiday_fulfillment_rate
+		if params[:year].present? 
+			@year = params[:year]
+		else 
+			@year = Time.now.year
+		end 
+		@quarter_hash = {1 => [[1,2,3],["January_plan_days", "February_plan_days", "March_plan_days"]],2 => [[4,5,6],["April_plan_days", "May_plan_days", "June_plan_days"]],3 => [[7,8,9],["July_plan_days", "August_plan_days", "Semptember_plan_days"]],4 => [[10,11,12],["October_plan_days", "November_plan_days", "December_plan_days"]]}
 		@workshops = Workshop.current
 	end
 
