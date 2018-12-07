@@ -10,7 +10,8 @@ class Employee < ActiveRecord::Base
   has_many :attendance_counts
   has_many :annual_holidays
   has_one :leaving_employee
-
+  
+  scope :at_that_time, ->(year,month){where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{year}-#{month}-15".to_time.beginning_of_month).pluck("employee_id"))}
   #去掉调离和退休的所有人
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).pluck("employee_id"))}
   #所有调离的人
