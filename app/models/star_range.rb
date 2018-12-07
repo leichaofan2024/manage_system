@@ -1,0 +1,2 @@
+class StarRange < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181128082448) do
+ActiveRecord::Schema.define(version: 20181207080407) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -163,6 +163,29 @@ ActiveRecord::Schema.define(version: 20181128082448) do
     t.integer "year", null: false
     t.integer "group_id", null: false
     t.integer "add_overtime"
+  end
+
+  create_table "basic_scores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "year"
+    t.integer "quarter"
+    t.string "workshop"
+    t.string "group"
+    t.string "name"
+    t.string "sal_number"
+    t.string "duty"
+    t.float "theory_score", limit: 24, default: 0.0
+    t.float "theory_weighted_score", limit: 24, default: 0.0
+    t.float "practical_score", limit: 24, default: 0.0
+    t.float "practical_weighted_score", limit: 24, default: 0.0
+    t.float "work_performance", limit: 24, default: 0.0
+    t.float "work_performance_weighted_score", limit: 24, default: 0.0
+    t.float "extra_score", limit: 24, default: 0.0
+    t.string "extra_score_reason"
+    t.float "final_score", limit: 24, default: 0.0
+    t.string "team_leader"
+    t.boolean "confirm_status", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bonus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -760,6 +783,22 @@ ActiveRecord::Schema.define(version: 20181128082448) do
     t.datetime "updated_at", null: false
     t.string "upload_year"
     t.string "upload_month"
+  end
+
+  create_table "final_statistics", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "year"
+    t.integer "quarter"
+    t.string "workshop"
+    t.integer "number_of_workers"
+    t.integer "five_star"
+    t.integer "four_star"
+    t.integer "three_star"
+    t.integer "two_star"
+    t.integer "one_star"
+    t.float "total_amount", limit: 24, default: 0.0
+    t.integer "team_leader_five_star"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -1388,6 +1427,14 @@ ActiveRecord::Schema.define(version: 20181128082448) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
+  create_table "score_weights", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.float "theory_score", limit: 24, default: 0.0
+    t.float "practical_score", limit: 24, default: 0.0
+    t.float "work_performance", limit: 24, default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "standard_award_totals", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "序号"
     t.string "科室车间"
@@ -1417,6 +1464,15 @@ ActiveRecord::Schema.define(version: 20181128082448) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "star_applications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "star_info_id"
+    t.integer "up_down_star"
+    t.string "applicant"
+    t.boolean "status", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "star_awards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "科室车间"
     t.string "序号"
@@ -1435,6 +1491,38 @@ ActiveRecord::Schema.define(version: 20181128082448) do
     t.string "备注"
     t.string "upload_year"
     t.string "upload_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "star_confirm_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "year"
+    t.integer "quarter"
+    t.boolean "status", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "star_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "basic_score_id"
+    t.integer "year"
+    t.integer "quarter"
+    t.string "workshop"
+    t.string "group"
+    t.string "name"
+    t.string "sal_number"
+    t.string "duty"
+    t.float "final_score", limit: 24, default: 0.0
+    t.string "star"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "name"
+    t.string "type"
+    t.float "value", limit: 24, default: 0.0
+    t.float "money", limit: 24, default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -1,0 +1,2 @@
+class StarInfo < ApplicationRecord
+end

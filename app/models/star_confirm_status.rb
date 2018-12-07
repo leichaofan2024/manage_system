@@ -1,0 +1,2 @@
+class StarConfirmStatus < ApplicationRecord
+end

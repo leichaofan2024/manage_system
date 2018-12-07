@@ -1,0 +1,2 @@
+class FinalStatistic < ApplicationRecord
+end
