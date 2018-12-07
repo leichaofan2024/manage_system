@@ -6,17 +6,36 @@
 	    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
 	      <h5><%= link_to "北京供电段", duan_holiday_plan_annual_holidays_path(duan: "北京供电段") %></h5>
 	      <ul>
+	      	<% @organizations.each do |organization| %>
+		        <li>
+		          <a href='/annual_holidays/duan_holiday_plan?organization=<%= organization.id %>'><%= organization.name %></a>
+		        </li>
+	        <% end %>
 	        <% @workshops.each do |workshop| %>
-	        <li>
-	          <a href='/annual_holidays/duan_holiday_plan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
-	        </li>
+		        <li>
+		          <a href='/annual_holidays/duan_holiday_plan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+		        </li>
 	        <% end %>
 	      </ul>
 				<!-- ##这个是table左边的下拉菜单 -->
 	    </div>
-    <h4 class="text-center">年休假计划</h4>
+    <h4 class="text-center"><%= @year%>年休假计划</h4>
+
 		<div class="card">
+
 		    <div style="overflow: auto;" class="col-md-10">
+		    	<%= form_tag duan_holiday_plan_annual_holidays_path  do %>
+				  <select name="year">
+				  	<% @years.each do |year| %>
+				  	  <% if year == Time.now.year %>
+				  	    <option value="<%=year%>" selected><%= year %></option>
+				  	  <% else %>
+				  	    <option value="<%=year%>"><%= year %></option>
+				  	  <% end %>
+				  	<% end %>
+				  </select>年
+				  <%= submit_tag "筛选",:data => {:disable_with => "计算中..."} %>
+				<% end %>
 		      <table id="example" class="table table-bordered">
 		        <thead>
 		        	<tr>
@@ -37,11 +56,11 @@
 		        		<% @worktypes.each do |type| %>
 		        			<tr>
 		        				<td><%= type.work_type %></td>
-										<% @columns.each do |column| %>
-			        				<td>
-												<%= holiday_plan_column(@workshop,@workshops,type,column) %>
-			        				</td>
-										<% end %>
+									<% @columns.each do |column| %>
+				        				<td>
+											<%= @annual_holidays.where(:work_type => type).sum(column) %>
+				        				</td>
+									<% end %>
 		        			</tr>
 		        		<% end %>
 			        </tbody>
