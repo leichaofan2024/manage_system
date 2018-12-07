@@ -459,39 +459,38 @@
                    </li>
                  <% end %>
 
-                 <% if (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
+                 <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)%>
                    <li class="nav-parent"><a href=""><i class="fa fa-suitcase"></i> <span>星级岗管理 <span class="glyphicon glyphicon-chevron-down" style="float:right;"></span></span></a>
-                      <% if ["wages","bonus","djwages","djbonus"].include?(url_for.split("/").second) %>
+                      <% if ["basic_scores","final_statistics","star_infos","star_applications", "score_weights", "star_ranges"].include?(url_for.split("/").second) %>
                         <ul class="children" style="display:block;">
                       <% else %>
                         <ul class="children">
                       <% end %>
-                      <% if url_for == "/basic_scores" %>
+                      <% if "basic_scores" == url_for.split("/").second %>
                         <li style="background-color:white;"><a href="/basic_scores"> 成绩汇总 </a></li>
                       <% else %>
-                        <li><a href="/basic_scores"> 成绩汇总 </a></li>
+                        <li><a href="/basic_scores"> 成绩汇总</a></li>
                       <% end %>
-                      <% if ["wages"].include?(url_for.split("/").second) && (url_for != "/basic_scores") %>
+                      <% if "final_statistics" == url_for.split("/").second %>
                         <li style="background-color:white;"><a href="/final_statistics"> 考核汇总 </a></li>
                       <% else %>
                         <li><a href="/final_statistics"> 考核汇总</a></li>
                       <% end %>
-                      <% if ["bonus"].include?(url_for.split("/").second) %>
-                        <li  style="background-color:white;"><a href="/star_infos/five_star_info"> 五星岗位人员</a></li>
+                      <% if "/star_infos/five_star_info" == url_for%>
+                        <li style="background-color:white;"><a href="/star_infos/five_star_info"> 五星岗位人员 </a></li>
                       <% else %>
                         <li><a href="/star_infos/five_star_info"> 五星岗位人员</a></li>
-                      <% end %>
-                      <% if ["djwages"].include?(url_for.split("/").second) %>
+                      <% end %>  
+                     <% if ["/star_infos/all_star_info","/star_applications/new", "/star_applications/show"].include?(url_for) %>
                         <li style="background-color:white;"><a href="/star_infos/all_star_info"> 全部星级岗位人员 </a></li>
                       <% else %>
-                        <li><a href="/star_infos/all_star_info"> 全部星级岗位人员 </a></li>
+                        <li><a href="/star_infos/all_star_info"> 全部星级岗位人员</a></li>
                       <% end %>
-                      <% if ["djbonus"].include?(url_for.split("/").second) %>
+                      <% if ["score_weights","star_ranges"].include?(url_for.split("/").second) %>
                         <li style="background-color:white;"><a href="/score_weights/show"> 比例设置 </a></li>
                       <% else %>
-                        <li><a href="/score_weights/show"> 比例设置 </a></li>
+                        <li><a href="/score_weights/show"> 比例设置</a></li>
                       <% end %>
-
                     </ul>
                    </li>
                  <% end %>
