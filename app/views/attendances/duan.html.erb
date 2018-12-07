@@ -41,7 +41,7 @@
         </div>
 
 
-        <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+        <div class="col-md-3" id="menu" style="background-color: white;overflow: auto;height: 100%;">
           <h5><%= link_to "北京供电段", duan_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
           <ul style="list-style:none">
             <% @workshops.each do |workshop| %>
@@ -59,8 +59,7 @@
         </div>
       <!-- 组织结构树状图-结束 -->
       <!-- 表格-开始 -->
-      <div class="card">
-        <div style="overflow: auto;" class="col-md-10">
+        <div style="overflow: auto;" class="col-md-9">
           <table id="example" class="table table-bordered">
             <thead>
               <tr>
@@ -144,7 +143,6 @@
                </tbody>
           </table>
         </div>
-      </div>
       <!-- 表格-结束 -->
     </div>
       </div><!--panel-body-->
