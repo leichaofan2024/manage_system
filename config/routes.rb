@@ -433,7 +433,12 @@ Rails.application.routes.draw do
 
   resources :star_applications
 
-  resources :score_weights
+  resources :score_weights do
+    collection do
+      get :show_weight
+      post :update_weight
+    end
+  end
 
   resources :star_ranges
 

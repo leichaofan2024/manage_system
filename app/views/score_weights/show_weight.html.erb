@@ -1,0 +1,20 @@
+<h3>这是当前分数权重页面</h3>
+
+
+<a href="/star_ranges/show"> 星级范围 </a>
+
+<h4>当前分数权重：</h4>
+<p>理论考试：<%= ((ScoreWeight.first.theory_score) * 100).to_i %>%</p>
+<p>实作考试：<%= ((ScoreWeight.first.practical_score) * 100).to_i %>%</p>
+<p>工作业绩：<%= ((ScoreWeight.first.work_performance) * 100).to_i %>%</p>
+
+<h4>编辑权重：</h4>
+<%= form_tag update_weight_score_weights_path(method: :post) do %>
+  <%= label_tag :"请输入理论考试权重：" %>
+  <%= text_field_tag :theory_score, nil, required: "true" %>%<br>
+  <%= label_tag :"请输入实作考试权重：" %>
+  <%= text_field_tag :practical_score, nil, required: "true" %>%<br>
+  <%= label_tag :"请输入工作业绩权重：" %>
+  <%= text_field_tag :work_performance, nil, required: "true" %>%<br>
+  <%= submit_tag :确定修改 %>
+<% end %>
