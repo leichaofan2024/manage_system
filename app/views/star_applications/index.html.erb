@@ -1,0 +1,48 @@
+<%= link_to "未处理申请",star_applications_path(type: 0), class:"btn btn-success-alt" %>
+<%= link_to "已处理申请",star_applications_path(type: 1), class:"btn btn-success-alt" %>
+
+<h4 class="text-center">升/降星申请记录</h4>
+<table class="table overflow-y table-bordered table-striped">
+	<thead>
+		<tr>	
+			<th>姓名</th>
+			<th>工资号</th>
+			<th>车间</th>
+			<th>班组</th>
+			<th>当前星级</th>	
+			<th>升/降星操作</th>
+			<th>申请人</th>
+			<th>申请时间</th>
+			<th>申请状态</th>
+			<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+				<th>处理申请</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% @applications.each do |application| %>
+			<% star = StarInfo.find(application.star_info_id) %>
+			<tr>
+				<td><%= star.name %></td>
+				<td><%= star.sal_number %></td>
+				<td><%= star.workshop %></td>
+				<td><%= star.group %></td>
+				<td><%= star.star %>星</td>
+				<td><%= application.up_down_star %></td>
+				<td><%= application.applicant %></td>
+				<td><%= application.created_at %></td>
+				<td><%= application.treatment_state %></td>
+				<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+					<td>
+						<% if !(application.treatment_state.present?) %>
+							<%= link_to "通过", agree_application_star_applications_path(application: application.id), method: :post, class: "btn btn-primary",  data: { confirm: "您确定要通过本条申请吗？"} %>
+							<%= link_to "拒绝", refuse_application_star_applications_path(application: application.id), method: :post, class: "btn btn-primary",  data: { confirm: "您确定要拒绝本条申请吗？"} %>
+						<% else %>
+							已处理
+						<% end %>
+					</td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

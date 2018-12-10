@@ -10,7 +10,8 @@
     </ul>
   </div>
 </div>
-<h4><%= @updated_star %></h4>
+<%= link_to "发起申请",new_star_application_path, class:"btn btn-success-alt pull-right" %>
+<%= link_to "查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0), class:"btn btn-success-alt pull-right" %>
 <h4 class="text-center">全部星级岗位表</h4>
 <table class="table overflow-y table-bordered table-striped">
 	<thead>
@@ -47,6 +48,3 @@
 	<%= render 'show_star_modal' %>
 </div>
 
-<a href="/star_applications/new"> 发起申请 </a>
-
-<a href="/star_applications/show"> 查看申请 </a>

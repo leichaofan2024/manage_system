@@ -433,7 +433,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :star_applications
+  resources :star_applications do
+    collection do
+      post :refuse_application
+      post :agree_application
+    end
+  end
 
   resources :score_weights do
     collection do
