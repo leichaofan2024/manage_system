@@ -5,7 +5,7 @@
 	<div class="col-md-12" style="height: 100%">
 	    <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
 	      <h5><%= link_to "北京供电段", duan_holiday_plan_annual_holidays_path(duan: "北京供电段") %></h5>
-	      <ul>
+	      <ul style="list-style: none;">
 	      	<% @organizations.each do |organization| %>
 		        <li>
 		          <a href='/annual_holidays/duan_holiday_plan?organization=<%= organization.id %>'><%= organization.name %></a>
