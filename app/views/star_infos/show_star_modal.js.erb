@@ -1,0 +1,5 @@
+$("#showStarModal").html("<%= escape_javascript render 'show_star_modal' %>");
+//这个id是views文件里新增div块的id
+//这条语句用于呼叫_show_modal这个partial，escape_javascript也可简写为 j
+$("#starModal").modal('show');
+//这个id是modal里的id，这条代码作用是手动打开模态框

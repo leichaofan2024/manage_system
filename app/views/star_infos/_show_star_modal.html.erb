@@ -1,0 +1,18 @@
+<div class="modal fade" id="starModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">升/降星操作</h4>
+      </div>
+      <div class="modal-body"> 
+        <%= form_tag update_star_star_infos_path do %>
+          <%= hidden_field_tag :star_info, @star_info  %>
+          <%= select_tag(:update_type, options_for_select([["升", "+"], ["降", "-"]]), {:required => "true"}) %>
+          <%= select_tag(:star_count, options_for_select([["一星", 1], ["二星", 2], ["三星", 3], ["四星", 4], ["五星", 5]]), {:required => "true"}) %><br>
+          <%= submit_tag :确定更新 %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

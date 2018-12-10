@@ -1,4 +1,51 @@
-<h3>这是全部星级岗位页</h3>
+<div class="panel-heading">
+  <div class="wage-navbar">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="/star_infos/five_star_info">五星岗位</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">全部岗位</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<h4><%= @updated_star %></h4>
+<h4 class="text-center">全部星级岗位表</h4>
+<table class="table overflow-y table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>序号</th>
+			<th>姓名</th>
+			<th>车间</th>
+			<th>班组</th>
+			<th>职名</th>
+			<th>分数</th>
+			<th>星级</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% i = 1 %>
+		<% @scores.each do |score| %>
+			<tr>
+				<td><%= i %></td>
+				<% i += 1 %>
+				<td><%= score.name %></td>
+				<td><%= score.workshop %></td>
+				<td><%= score.group %></td>
+				<td><%= score.duty %></td>
+				<td><%= score.final_score %></td>
+				<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+				<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal" %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<div id="showStarModal">
+	<%= render 'show_star_modal' %>
+</div>
 
 <a href="/star_applications/new"> 发起申请 </a>
 

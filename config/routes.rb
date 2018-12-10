@@ -428,6 +428,8 @@ Rails.application.routes.draw do
     collection do
       get :five_star_info
       get :all_star_info
+      get :show_star_modal
+      post :update_star
     end
   end
 
