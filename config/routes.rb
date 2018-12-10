@@ -437,6 +437,7 @@ Rails.application.routes.draw do
     collection do
       post :refuse_application
       post :agree_application
+      post :create_application
     end
   end
 

@@ -27,4 +27,8 @@ class StarApplicationsController < ApplicationController
 		end
 		redirect_to star_applications_path
 	end
+
+	def create_application
+		
+	end
 end

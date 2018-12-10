@@ -1,1 +1,12 @@
-<h3>这是发起申请页面</h3>
+<h3>升/降星申请</h3>
+
+<%= form_tag create_application_star_applications_path do %>
+	<%= label_tag :"申请人员姓名" %>
+	<%= text_field_tag :name, nil, :required => "true" %><br>
+	<%= label_tag :"申请人员工资号" %>
+	<%= text_field_tag :sal_number, nil, :required => "true" %><br>
+	<%= label_tag :"选择升/降星" %>
+	<%= select_tag(:update_type, options_for_select([["升", "+"], ["降", "-"]]), {:required => "true"}) %>
+	<%= select_tag(:star_count, options_for_select([["一星", 1], ["二星", 2], ["三星", 3], ["四星", 4], ["五星", 5]]), {:required => "true"}) %><br>
+	<%= submit_tag :发起申请 %>
+<% end %>
