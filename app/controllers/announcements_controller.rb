@@ -227,6 +227,12 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def download_star_basic_score_table_template
+    respond_to do |format| 
+      format.xls {headers["Content-Disposition"] = 'attachment; filename="工效挂钩考核表.xls"'}
+    end
+  end 
+
   private
 
    def notice_params

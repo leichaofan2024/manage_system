@@ -15,13 +15,7 @@
                 <% workshop = Workshop.current.find_by(name: current_user.name) %>
                   <a class="btn btn-default" href='/attendances/group_current_time_info?workshop=<%= workshop.id %>&year=<%=@year%>&month=<%=@month%>'><%= workshop.name %></a>
                 <% Group.current.where(:workshop_id => workshop.id).each do |group| %>
-                <% if AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "车间已审核")%>
                   <a class="btn btn-default" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                <% elsif AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组已上班")%>
-                  <a class="btn btn-default" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                <% else AttendanceStatus.where(:year => @shenhe_year , :month => @shenhe_month,:group_id => group.id,:status => "班组/科室填写中")%>
-                  <a class="btn btn-default" href='/attendances/group_current_time_info?group=<%= group.id %>&year=<%=@year%>&month=<%=@month%>'>
-                <% end %>
                 <%= group.name %></a>
               <% end %>
             </div>
@@ -105,6 +99,11 @@
             <% elsif @group.present? %>
 
                 <h4 style="text-align: center"><%= Group.current.find(@group).name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group,@year,@month)%></span>)</h4>
+                 <%= link_to group_attendances_path(:year => @year,:month => @month,:group_id => @group,format: "xls") do  %>
+                    <button type="button" class="btn button-success pull-right" style="margin-left:10px;">
+                      <span>导出记录</span>
+                    </button>
+                  <% end %>
             <% else %>
 
               <h4 style="text-align: center"><%= current_user.name %><%= @year %>年<%= @month %>月考勤情况(<span><%= groups_checked(@group, @year, @month)%></span>)</h4>

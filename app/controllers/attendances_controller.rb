@@ -3,7 +3,7 @@ class AttendancesController < ApplicationController
 
 	##班组页面--开始
 	def group
-    if params[:group_id].present? && (current_user.has_role? :attendance_admin)
+    if params[:group_id].present? && ((current_user.has_role? :attendance_admin) || (current_user.has_role? :workshopadmin))
       @group = Group.find_by(:id => params[:group_id])
       @workshop = Workshop.find_by(:id => @group.workshop_id)
       @applications = Application.where(group_id: @group.id)
@@ -30,7 +30,7 @@ class AttendancesController < ApplicationController
                     else
                       (Time.now.month) -1
                     end
-    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15) && (!current_user.has_role? :attendance_admin)
+    if (@year == @shenhe_year) && (@month == @shenhe_month) && (Time.now.day > 15) && ((current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin))
       redirect_to group_attendances_path
       flash[:alert] = "当月15号前可查看上月考勤，当前为#{Time.now.day}号，不能查看！"
     end
@@ -53,10 +53,13 @@ class AttendancesController < ApplicationController
       @group_export_permission = 0
     end
     #什么时候可以导出考勤：
-    if params[:format] == "xls" && (!current_user.has_role? :attendance_admin)
-
+    if params[:format] == "xls"
       if @attendance_status.status != "段已审核"
-        redirect_to group_attendances_path
+        if (current_user.has_role? :groupadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :wgadmin)
+          redirect_to group_attendances_path
+        else
+          redirect_back fallback_location: group_current_time_info_attendances_path
+        end 
         flash[:alert] = "本月考勤还未被段管理员审核，不能导出，请等待段管理员审核完成后，再进行导出！"
       end
     end

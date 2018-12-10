@@ -1,1 +1,61 @@
-<h3>这是成绩汇总页面</h3>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度星级岗成绩汇总表</h4>
+    </header>
+
+    <div class="content-body">
+      <%= form_tag basic_scores_path,method: :get do %>
+        <select class="" style="display:inline-block;" name="year">
+          <% @years.each do |year| %>
+            <% if @year == year %>
+              <option value="<%= year %>" selected><%= year %></option>
+            <% else %>
+              <option value="<%= year %>"><%= year %></option>
+            <% end %>
+          <% end %>
+        </select>年
+        ~
+        <select class="" style="display:inline-block;" name="quarter">
+          <% @quarters.each do |quarter| %>
+            <% if @quarter == quarter %>
+              <option value="<%= quarter %>" selected><%= quarter %></option>
+            <% else %>
+              <option value="<%= quarter %>"><%= quarter %></option>
+            <% end %>
+          <% end %>
+        </select>
+       季度
+        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
+      <% end %>
+      <% if (current_user.has_role? :workshopadmin) %>
+        <%= link_to("删除表格",delete_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop).name),method: :delete,:data => {confirm: "您确定要删除#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
+        <%= link_to("上传星级岗成绩汇总表",show_modal_basic_scores_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+      <% end %>
+      <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% n = 0 %>
+            <% @basic_scores.each do |basic_score| %>
+              <tr>
+                <td></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div id="showModal"></div>
+    <div id="single_award_upload"></div>
+  </div>
+</div>

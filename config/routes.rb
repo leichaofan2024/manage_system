@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       get :download_star_award_table_template
       get :download_other_award_total_table_template
       get :download_company_relative_saler_table_template
+      get :download_star_basic_score_table_template
     end
   end
 
@@ -420,7 +421,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :basic_scores
+  resources :basic_scores do 
+    collection do 
+      post :import_basic_score
+      delete :delete_basic_score
+    end 
+  end 
 
   resources :final_statistics
 
