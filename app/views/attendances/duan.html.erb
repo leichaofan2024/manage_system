@@ -1,148 +1,154 @@
 <div class="contentpanel">
-  <div class="col-md-12">
-    <%= form_tag duan_attendances_path, method: 'get' do %>
-      <%= label_tag :请输入时间段搜索 %>
-        <select class="" name="year">
-          <% @years.each do |year| %>
-            <% if year == @year %>
-              <option value="<%= year %>" selected ><%= year %></option>
-            <% else %>
-              <option value="<%= year %>" ><%= year %> </option>
-            <% end %>
-          <% end %>
-        </select>
-    ～
-        <select class="" name="month">
-          <% @months.each do |month| %>
-            <% if month == @month %>
-              <option value="<%= month%>" selected ><%= month%></option>
-            <% else %>
-              <option value="<%= month%>" ><%= month %></option>
-            <% end %>
-          <% end %>
-        </select>
-      <%= submit_tag :筛选 %>
-    <% end %>
-    <!-- <div class="ivu-tooltip-rel" style="text-align: right;">
-      <button type="button" class="ivu-btn ivu-btn-primary2 btn-oaG3J_0">
-        <%= link_to create_default_attendance_attendances_path, method: 'post' do  %>
-           <span style="color: #269Eff;">新建下月考勤</span>
-        <% end %>
-      </button>
-    </div> -->
-  </div>
-
-
   <!-- 主体部分-开始 -->
-  <div class="col-md-12" style="height: 100%">
+  <div class="col-md-12">
     <!-- 组织结构树状图-开始 -->
-      <h4><%= @year %>年<%= @month %>月考勤统计表</h4>
-      <div class="col-md-2" id="menu" style="background-color: white;overflow: auto;height: 100%;">
-        <h5><%= link_to "北京供电段", duan_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
-        <ul>
-          <% @workshops.each do |workshop| %>
-            <li>
-              <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
-              <ul>
-                <% groups = Group.current.where(:workshop_id => workshop.id) %>
-                <% groups.each do |group| %>
-                  <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-        </ul><br>
+    <div class="panel">
+      <div class="panel-heading">
+        <h4><%= @year %>年<%= @month %>月考勤统计表</h4>
       </div>
-    <!-- 组织结构树状图-结束 -->
-    <!-- 表格-开始 -->
-    <div class="card">
-      <div style="overflow: auto;" class="col-md-10">
-        <table id="example" class="table table-bordered">
-          <thead>
-            <tr>
-
-                <th>姓名</th>
-                <th>工资号</th>
-                <th>车间</th>
-                <th>班组</th>
-              <% @vacation_name_hash.values.each do |name| %>
-                <th><%= name %></th>
+      <div class="panel-body">
+        <div class="col-md-12 mb15">
+          <%= form_tag duan_attendances_path, method: 'get' do %>
+            <%= label_tag :请输入时间段搜索 %>
+              <select class="" name="year">
+                <% @years.each do |year| %>
+                  <% if year == @year %>
+                    <option value="<%= year %>" selected ><%= year %></option>
+                  <% else %>
+                    <option value="<%= year %>" ><%= year %> </option>
+                  <% end %>
+                <% end %>
+              </select>
+          ～
+              <select class="" name="month">
+                <% @months.each do |month| %>
+                  <% if month == @month %>
+                    <option value="<%= month%>" selected ><%= month%></option>
+                  <% else %>
+                    <option value="<%= month%>" ><%= month %></option>
+                  <% end %>
+                <% end %>
+              </select>
+            <%= submit_tag :筛选 %>
+          <% end %>
+          <!-- <div class="ivu-tooltip-rel" style="text-align: right;">
+            <button type="button" class="ivu-btn ivu-btn-primary2 btn-oaG3J_0">
+              <%= link_to create_default_attendance_attendances_path, method: 'post' do  %>
+                 <span style="color: #269Eff;">新建下月考勤</span>
               <% end %>
-              <th>修改次数</th>
-            </tr>
-          </thead>
-             <tbody data-behavior='sortable'>
-                <% sum_hash = Hash.new %>
-                <% @employees.each do |employee| %>
-                  <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: @month, year: @year)%>
-                  <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
-                  <tr>
-                    <td><%= employee.name %></td>
-                    <td><%= employee.sal_number %></td>
-                    <td><%= Workshop.find(employee.workshop).name %></td>
-                    <td><%= Group.find(employee.group).name %></td>
-                    <% @vacation_name_hash.keys.each do |code| %>
-                      <% if sum_hash[code].blank? %>
-                        <% sum_hash[code] = Array.new %>
-                      <% end %>
-                      <% if attendance_count.present? %>
-                        <% if attendance_count.attributes[code] == 0%>
-                          <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
-                            <% value = attendance.add_overtime.to_i%>
-                            <td><%=  value %> </td>
-                          <% else %>
-                            <% value = 0 %>
-                            <td></td>
-                          <% end %>
-                        <% else %>
-                          <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
-                            <% value = attendance.add_overtime.to_i + attendance_count.attributes[code].to_i %>
-                            <td><%= value %> </td>
-                          <% else %>
-                            <% value = attendance_count.attributes[code].to_i %>
-                            <% if value > 0 %>
-                              <td><%= value %></td>
+            </button>
+          </div> -->
+        </div>
+
+
+        <div class="col-md-3" id="menu" style="background-color: white;overflow: auto;height: 100%;">
+          <h5><%= link_to "北京供电段", duan_attendances_path(type:"duan",duan: "北京供电段", month: @month, year: @year) %></h5>
+          <ul style="list-style:none">
+            <% @workshops.each do |workshop| %>
+              <li>
+                <i class="fa fa-plus-square-o" aria-hidden="true" style= "margin-right: 10px;"></i><a style="color:red" href='/attendances/duan?workshop=<%= workshop.id %>&month=<%= @month %>&year=<%= @year %>'><%= workshop.name %></a>
+                <ul>
+                  <% groups = Group.current.where(:workshop_id => workshop.id) %>
+                  <% groups.each do |group| %>
+                    <li><a style="color:green" href='/attendances/duan?group=<%= group.id %>&month=<%= @month %>&year=<%= @year %>'><%= group.name %></a></li>
+                  <% end %>
+                </ul>
+              </li>
+            <% end %>
+          </ul><br>
+        </div>
+      <!-- 组织结构树状图-结束 -->
+      <!-- 表格-开始 -->
+        <div style="overflow: auto;" class="col-md-9">
+          <table id="example" class="table table-bordered">
+            <thead>
+              <tr>
+
+                  <th>姓名</th>
+                  <th>工资号</th>
+                  <th>车间</th>
+                  <th>班组</th>
+                <% @vacation_name_hash.values.each do |name| %>
+                  <th><%= name %></th>
+                <% end %>
+                <th>修改次数</th>
+              </tr>
+            </thead>
+               <tbody data-behavior='sortable'>
+                  <% sum_hash = Hash.new %>
+                  <% @employees.each do |employee| %>
+                    <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, month: @month, year: @year)%>
+                    <% attendance = Attendance.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
+                    <tr>
+                      <td><%= employee.name %></td>
+                      <td><%= employee.sal_number %></td>
+                      <td><%= Workshop.find(employee.workshop).name %></td>
+                      <td><%= Group.find(employee.group).name %></td>
+                      <% @vacation_name_hash.keys.each do |code| %>
+                        <% if sum_hash[code].blank? %>
+                          <% sum_hash[code] = Array.new %>
+                        <% end %>
+                        <% if attendance_count.present? %>
+                          <% if attendance_count.attributes[code] == 0%>
+                            <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                              <% value = attendance.add_overtime.to_i%>
+                              <td><%=  value %> </td>
                             <% else %>
+                              <% value = 0 %>
                               <td></td>
                             <% end %>
+                          <% else %>
+                            <% if (code == "d" )&& (attendance.add_overtime.to_i > 0) %>
+                              <% value = attendance.add_overtime.to_i + attendance_count.attributes[code].to_i %>
+                              <td><%= value %> </td>
+                            <% else %>
+                              <% value = attendance_count.attributes[code].to_i %>
+                              <% if value > 0 %>
+                                <td><%= value %></td>
+                              <% else %>
+                                <td></td>
+                              <% end %>
+                            <% end %>
                           <% end %>
+                        <% else %>
+                          <% value = 0 %>
+                          <td></td>
                         <% end %>
+                        <% sum_hash[code] << value %>
+                      <% end %>
+                      <% if attendance.present? %>
+                        <% attendancerecords = AttendanceRecord.where(:attendance_id => attendance.id).count%>
                       <% else %>
-                        <% value = 0 %>
+                        <% attendancerecords = 0 %>
+                      <% end %>
+                      <% if (attendancerecords > 0) %>
+                        <td><%= link_to attendancerecords, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
+                      <% else %>
+                        <td>0</td>
+                      <% end %>
+                    </tr>
+
+                  <% end %>
+                  <tr>
+                    <td colspan="4">合计</td>
+                    <% @vacation_name_hash.keys.each do |code| %>
+                      <% sum_code = sum_hash[code].sum %>
+                      <% if sum_code > 0 %>
+                        <td><%= sum_code %></td>
+                      <% else %>
                         <td></td>
                       <% end %>
-                      <% sum_hash[code] << value %>
-                    <% end %>
-                    <% if attendance.present? %>
-                      <% attendancerecords = AttendanceRecord.where(:attendance_id => attendance.id).count%>
-                    <% else %>
-                      <% attendancerecords = 0 %>
-                    <% end %>
-                    <% if (attendancerecords > 0) %>
-                      <td><%= link_to attendancerecords, show_record_attendances_path(employee: employee, month: @month, year: @year), class: 'btn btn-primary2' %></td>
-                    <% else %>
-                      <td>0</td>
                     <% end %>
                   </tr>
-
-                <% end %>
-                <tr>
-                  <td colspan="4">合计</td>
-                  <% @vacation_name_hash.keys.each do |code| %>
-                    <% sum_code = sum_hash[code].sum %>
-                    <% if sum_code > 0 %>
-                      <td><%= sum_code %></td>
-                    <% else %>
-                      <td></td>
-                    <% end %>
-                  <% end %>
-                </tr>
-             </tbody>
-        </table>
-      </div>
+               </tbody>
+          </table>
+        </div>
+      <!-- 表格-结束 -->
     </div>
-    <!-- 表格-结束 -->
-  </div>
+      </div><!--panel-body-->
+    </div>
+
+
   <!-- 主体部分-结束 -->
   <!-- 进度条引用的库-开始 -->
   <!-- <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
