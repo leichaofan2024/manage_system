@@ -1,5 +1,15 @@
-
-<a href="/star_ranges/show_range"> 星级范围 </a>
+<div class="panel-heading">
+  <div class="wage-navbar">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">分数比例设置</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/star_ranges/show_range">星级比例设置</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <h4>当前分数权重：</h4>
 <p>理论考试：<%= ((ScoreWeight.first.theory_score) * 100).to_i %>%</p>
