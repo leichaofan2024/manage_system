@@ -37,7 +37,7 @@
 				<td><%= score.duty %></td>
 				<td><%= score.final_score %></td>
 				<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
-				<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal" %></td>
+				<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal", class: "btn btn-primary" %></td>
 			</tr>
 		<% end %>
 	</tbody>
