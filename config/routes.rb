@@ -440,7 +440,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :star_ranges
+  resources :star_ranges do
+    collection do
+      get :show_range
+      post :update_range
+    end
+  end
 
   resources :analyses
 

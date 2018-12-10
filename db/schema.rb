@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207080407) do
+ActiveRecord::Schema.define(version: 20181209145755) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -1520,7 +1520,7 @@ ActiveRecord::Schema.define(version: 20181207080407) do
 
   create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "name"
-    t.string "type"
+    t.string "range_type"
     t.float "value", limit: 24, default: 0.0
     t.float "money", limit: 24, default: 0.0
     t.datetime "created_at", null: false
