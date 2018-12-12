@@ -129,18 +129,7 @@
 
 	      <% if !current_user.has_role? :safe_productionadmin %>
 	      <br>
-	        <%= label_tag :按男女： %>
-	        <select class="" name="sex">
-	          <option value>请选择</option>
-	          <% ["男","女"].each do |sex| %>
-	            <% if params[:sex] == sex %>
-	              <option value="<%= sex %>" selected><%= sex %></option>
-	            <% else %>
-	              <option value="<%= sex %>"><%= sex %></option>
-	            <% end %>
-	          <% end %>
-	        </select>
-	        <%= label_tag :按职务： %>
+	        <%= label_tag :按职名： %>
 	        <select class="" name="duty">
 	          <option value>请选择</option>
 	          <% Employee.pluck("duty").uniq.compact.each do |duty| %>
@@ -152,7 +141,7 @@
 	          <% end %>
 	        </select>
 	      <% end %>
-	      <%= label_tag :按技术职称： %>
+	      <%= label_tag :按星级： %>
 	      <select class="" name="work_type">
 	        <option value>请选择</option>
 	        <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
@@ -163,26 +152,6 @@
 	          <% end %>
 	        <% end %>
 	      </select>
-	      <div class="row">
-	        <div class="col-md-12">
-	          <% if !current_user.has_role? :safe_productionadmin %>
-	            <%= label_tag :按时间段选择： %>
-	            <select class="" name="filter_type">
-	              <option value>请选择</option>
-	              <% ["年龄","工龄","路龄"].each do |filter_type| %>
-	                <% if params[:filter_type] == filter_type %>
-	                  <option value="<%= filter_type %>" selected><%= filter_type %></option>
-	                <% else %>
-	                  <option value="<%= filter_type %>"><%= filter_type %></option>
-	                <% end %>
-	              <% end %>
-	            </select>
-
-	            <%= text_field_tag :start_time %> ~
-	            <%= text_field_tag :end_time %>
-	          <% end %>
-	        </div>
-	      </div>
 	      <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
 	    <% end %>
 	  </li>
