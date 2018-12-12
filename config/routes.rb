@@ -430,6 +430,7 @@ Rails.application.routes.draw do
       get :all_star_info
       get :show_star_modal
       post :update_star
+      get :search
     end
   end
 

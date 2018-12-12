@@ -1,4 +1,5 @@
 class StarInfosController < ApplicationController
+	before_action :validate_search_key, only: [:search]
 	layout 'home'
 
 	def all_star_info
@@ -33,9 +34,10 @@ class StarInfosController < ApplicationController
 	end
 
 	def show_star_modal
-	@star_info = params[:star_info]
-	respond_to do |format|
-		format.js
+		@star_info = params[:star_info]
+		respond_to do |format|
+			format.js
+		end
 	end
 
 	def update_star
@@ -50,5 +52,24 @@ class StarInfosController < ApplicationController
 		end	
 		redirect_to all_star_info_star_infos_path
 	end
-end
+
+	def search
+		if @query_string.present?
+			@scores = search_params
+		end
+	end
+
+	protected
+
+	def validate_search_key
+       # gsub 是Ruby中正则表达式的方法，它会切换所有匹配到的部分
+       @query_string = params[:q].gsub(/\\|\'|\/|\?/, "")if params[:q].present?  
+    end
+
+	def search_params
+		BasicScore.ransack({ :name_or_sal_number_cont => @query_string}).result(distinct: true)
+    end
+
+    
+
 end

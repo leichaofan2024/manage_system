@@ -1,0 +1,52 @@
+<div class="minHeight1000 bg-gray">
+    <div class="col-md-12">
+      <div class="back-btn" style="margin-bottom: 10px; font-size: 15px;">
+       <%= link_to "返回", :back%>
+      </div>
+    </div>
+
+    <div class="search-page w1200 pt30 bc">
+      <% if @scores.present? %>
+        <table class="table overflow-y table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>车间</th>
+              <th>班组</th>
+              <th>职名</th>
+              <th>分数</th>
+              <th>星级</th>
+              <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+                <th>操作</th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% i = 1 %>
+            <% @scores.each do |score| %>
+              <tr>
+                <td><%= i %></td>
+                <% i += 1 %>
+                <td><%= score.name %></td>
+                <td><%= score.sal_number %></td>
+                <td><%= score.workshop %></td>
+                <td><%= score.group %></td>
+                <td><%= score.duty %></td>
+                <td><%= score.final_score %></td>
+                <td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+                <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+                  <td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal", class: "btn btn-primary" %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="col-md-12">
+          <p class="tc mt100" style="font-size: 18px;">未找到~</p>
+        </div>
+      <% end %>
+    </div>
+</div>
