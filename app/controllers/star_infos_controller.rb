@@ -2,7 +2,18 @@ class StarInfosController < ApplicationController
 	layout 'home'
 
 	def all_star_info
-		@scores = BasicScore.all
+		@type = params[:type]
+		if @type == "passed"
+			@scores = BasicScore.where(confirm_status: 1)
+		else
+			@scores = BasicScore.all
+		end
+		@export_scores = @scores
+		respond_to do |format|
+	      format.html
+	      format.js
+	      format.xls { headers["Content-Disposition"] = 'attachment; filename="全部星级岗位表.xls"'}
+	    end
 	end
 
 	def show_star_modal

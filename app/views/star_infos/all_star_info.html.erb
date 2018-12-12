@@ -10,12 +10,18 @@
     </ul>
   </div>
 </div>
+<% if @type == "passed" %>
+	<%= link_to "查看全部五星",all_star_info_star_infos_path(type: "all"), class:"btn btn-success-alt pull-right" %>
+<% else %>
+	<%= link_to "查看通过五星",all_star_info_star_infos_path(type: "passed"), class:"btn btn-success-alt pull-right" %>
+<% end %>
 <% if (current_user.has_role? :workshopadmin) %>
 	<%= link_to "发起申请",new_star_application_path, class:"btn btn-success-alt pull-right" %>
 	<%= link_to "查看申请",star_applications_path(type: 0), class:"btn btn-success-alt pull-right" %>
 <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
 	<%= link_to "查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0), class:"btn btn-success-alt pull-right" %>
 <% end %>
+<%= link_to "导出表格",all_star_info_star_infos_path(format: "xls", type: @type), class:"btn btn-success-alt pull-right" %>
 <h4 class="text-center">全部星级岗位表</h4>
 <table class="table overflow-y table-bordered table-striped">
 	<thead>
