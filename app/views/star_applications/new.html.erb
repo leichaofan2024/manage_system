@@ -5,6 +5,9 @@
 	<%= text_field_tag :name, nil, :required => "true" %><br>
 	<%= label_tag :"申请人员工资号" %>
 	<%= text_field_tag :sal_number, nil, :required => "true" %><br>
+	<%= label_tag :"选择年份、季度：" %>
+	<%= select_tag(:year, options_for_select(StarInfo.pluck(:year).uniq), {:required => "true"}) %>
+	<%= select_tag(:quarter, options_for_select(StarInfo.pluck(:quarter).uniq), {:required => "true"}) %><br>
 	<%= label_tag :"选择升/降星" %>
 	<%= select_tag(:update_type, options_for_select([["升", "+"], ["降", "-"]]), {:required => "true"}) %>
 	<%= select_tag(:star_count, options_for_select([["一星", 1], ["二星", 2], ["三星", 3], ["四星", 4], ["五星", 5]]), {:required => "true"}) %><br>
