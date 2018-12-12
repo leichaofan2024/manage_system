@@ -2,11 +2,27 @@ class StarInfosController < ApplicationController
 	layout 'home'
 
 	def all_star_info
+		@year = params[:year]
+		@quarter = params[:quarter]
 		@type = params[:type]
-		if @type == "passed"
-			@scores = BasicScore.where(confirm_status: 1)
+		quarter_month = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]
+		quarter_month.each do |i|
+			if i.include?(Time.now.month)
+				@current_quarter = (quarter_month.index(i) + 1)
+			end
+		end
+		if (@year.present?) || (@quarter.present?)
+			if @type == "passed"
+				@scores = BasicScore.where(confirm_status: 1, year: @year, quarter: @quarter)
+			else
+				@scores = BasicScore.where(year: @year, quarter: @quarter)
+			end
 		else
-			@scores = BasicScore.all
+			if @type == "passed"
+				@scores = BasicScore.where(confirm_status: 1, year: Time.now.year, quarter: @current_quarter)
+			else
+				@scores = BasicScore.where(year: Time.now.year, quarter: @current_quarter)
+			end
 		end
 		@export_scores = @scores
 		respond_to do |format|

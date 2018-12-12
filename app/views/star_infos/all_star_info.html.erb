@@ -10,6 +10,12 @@
     </ul>
   </div>
 </div>
+<%= form_tag all_star_info_star_infos_path, method: :get do%>
+	<%= label_tag :"请选择年份和季度：" %>
+	<%= select_tag(:year, options_for_select(BasicScore.pluck(:year).uniq), {:required => "true"}) %>
+	<%= select_tag(:quarter, options_for_select(BasicScore.pluck(:quarter).uniq), {:required => "true"}) %>
+	<%= submit_tag :筛选 %>
+<% end %>
 <% if @type == "passed" %>
 	<%= link_to "查看全部五星",all_star_info_star_infos_path(type: "all"), class:"btn btn-success-alt pull-right" %>
 <% else %>
