@@ -7,12 +7,12 @@ class StarApplicationsController < ApplicationController
 		else
 			@applications = StarApplication.where(status: 0)
 		end
-	end
+	end 
 
 	def refuse_application
 		application = StarApplication.find(params[:application])
 		basic_score = BasicScore.find(StarInfo.find(application.star_info_id).basic_score_id)
-		if basic_score.confirm_status == 1
+		if basic_score.confirm_status == true
 			StarApplication.find(params[:application]).update(status: 1, treatment_state: "拒绝")
 			flash[:notice] = "已拒绝本次申请，流程结束"
 		else
@@ -25,12 +25,18 @@ class StarApplicationsController < ApplicationController
 		application = StarApplication.find(params[:application])
 		updated_star = (StarInfo.find(application.star_info_id).star).to_i + application.up_down_star	
 		basic_score = BasicScore.find(StarInfo.find(application.star_info_id).basic_score_id)
-		if basic_score.confirm_status == 1
+		if basic_score.confirm_status == true
 			if (updated_star > 5) || (updated_star < 1)
 				flash[:alert] = "升/降星后该人员的星级高于五星或低于一星，请检查"
 			else
+				if application.up_down_star < 0
+					record = StarInfo.find(application.star_info_id).descend_record
+					record += 1
+					StarInfo.find(application.star_info_id).update(star: updated_star, descend_record: record)
+				else
+					StarInfo.find(application.star_info_id).update(star: updated_star)
+				end
 				application.update(status: 1, treatment_state: "通过")
-				StarInfo.find(application.star_info_id).update(star: updated_star)
 				flash[:notice] = "您已通过本次申请，系统已自动更新该人员的星级"
 			end
 		else

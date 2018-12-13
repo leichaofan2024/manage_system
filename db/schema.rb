@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210083229) do
+ActiveRecord::Schema.define(version: 20181213093039) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -1517,6 +1517,7 @@ ActiveRecord::Schema.define(version: 20181210083229) do
     t.string "star"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "descend_record", default: 0
   end
 
   create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

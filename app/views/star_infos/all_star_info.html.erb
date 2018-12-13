@@ -57,7 +57,12 @@
 			<tr>
 				<td><%= i %></td>
 				<% i += 1 %>
-				<td><%= score.name %></td>
+				<td>
+					<%= score.name %>
+					<% if StarInfo.where(basic_score_id: score.id).pluck(:descend_record).uniq[0] > 0 %>
+	                	<span class="label label-danger">降星<%= StarInfo.where(basic_score_id: score.id).pluck(:descend_record).sum %>次</span>
+	                <% end %>
+				</td>
 				<td><%= score.sal_number %></td>
 				<td><%= score.workshop %></td>
 				<td><%= score.group %></td>

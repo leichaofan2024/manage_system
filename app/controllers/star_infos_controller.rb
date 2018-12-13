@@ -60,13 +60,18 @@ class StarInfosController < ApplicationController
 	def update_star
 		@scores = BasicScore.all
 		star = StarInfo.find(params[:star_info])
+		basic_score = BasicScore.find(star.basic_score_id)
 		updated_star = (star.star).to_i + (params[:update_type] + params[:star_count]).to_i
-		if (updated_star > 5) || (updated_star < 1)
-			flash[:alert] = "升/降星后该人员的星级高于五星或低于一星，请检查"
+		if basic_score.confirm_status == true
+			if (updated_star > 5) || (updated_star < 1)
+				flash[:alert] = "升/降星后该人员的星级高于五星或低于一星，请检查"
+			else
+				star.update(star: updated_star)
+				flash[:notice] = "更新完成"	
+			end	
 		else
-			star.update(star: updated_star)
-			flash[:notice] = "更新完成"	
-		end	
+			flash[:alert] = "您还未完成本季度的评定，请完成后再处理申请"
+		end
 		redirect_to all_star_info_star_infos_path
 	end
 
