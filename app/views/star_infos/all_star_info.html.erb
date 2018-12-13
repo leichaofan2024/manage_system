@@ -95,36 +95,17 @@
 
 	  <li>
 	    <%= form_tag filter_employees_path, method: 'get' do %>
-	      <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :incomeadmin) || (current_user.has_role? :staradmin) %>
-	        <li style="display: inline-block;margin-bottom: 5px;">车间：
-	            <select name="workshop"  id="selid" onchange="selCity(this)">
-	              <option value="" selected >北京供电段</option>
-	              <% Workshop.current.each do |workshop| %>
-	                <% if workshop.id == params[:workshop].to_i %>
-	                  <option value="<%= workshop.id%>" selected><%= workshop.name%></option>
-	                <% else %>
-	                  <option value="<%= workshop.id%>"><%= workshop.name%></option>
-	                <% end %>
-	              <% end %>
-	            </select>
-	        </li>
-	        <li>班组：
-	          <span class="employee-group-input" style="display:inline-block;">
-	            <select name="group[]"  id="subselid" multiple="multiple" class="form-control group-batch-select" style="width:400px;height:20px;">
-	            </select>
-	          </span>
-	        </li>
-	      <% elsif current_user.has_role? :workshopadmin %>
-	        <li>班组：
-	          <span class="employee-group-input" style="display:inline-block;">
-	            <select name="group[]" multiple="multiple"  class="form-control group-batch-select" style="width:400px;height:20px;">
-	              <% Group.current.where(:workshop_id => current_user.workshop_id).each do |group| %>
-	                <option value="<%= group.id%>"><%= group.name%></option>
-	              <% end %>
-	            </select>
-	          </span>
-	        </li>
-	      <% end %>
+	      
+	        <select name="workshop" id="selid" onchange="selCity(this)">
+		                <option>--选择车间--</option>
+		                <% @workshop_names.each do |name| %>
+		                    <option value="<%= name %>"><%= name %></option>
+		                <% end %>
+		            </select>
+		            <select name="group" id="subselid">
+		                <option>--选择班组--</option>
+		            </select>
+	     
 
 
 	      <% if !current_user.has_role? :safe_productionadmin %>
@@ -165,5 +146,27 @@
 		else
 			e.style.display = 'block';
   	};
+
+  	function selCity()
+				{
+						var arr = gon.group_name;
+
+						var selNode = document.getElementById("selid");
+						var subselNode = document.getElementById("subselid");
+						var index = selNode.selectedIndex;
+						var citys = arr[index];
+
+						subselNode.options.length = 0;
+                        firstoption = document.createElement("option");
+
+                        subselNode.appendChild(firstoption);
+						for(var i=0; i<citys.length; i++)
+						{
+								var optionNode = document.createElement("option");
+								optionNode.value = citys[i];
+								optionNode.innerText = citys[i];
+								subselNode.appendChild(optionNode);
+						}
+				}
 </script>
 

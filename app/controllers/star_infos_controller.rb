@@ -3,6 +3,15 @@ class StarInfosController < ApplicationController
 	layout 'home'
 
 	def all_star_info
+		# 配置车间班组筛选框数据
+		workshop = StarInfo.pluck("workshop").uniq
+		@group = [["--选择省份--"]]
+	    workshop.each do |name|
+	      @group << StarInfo.where(workshop: name).pluck(:group).uniq
+	    end
+	    gon.group_name = @group
+		@workshop_names = StarInfo.pluck("workshop").uniq
+
 		@year = params[:year]
 		@quarter = params[:quarter]
 		@type = params[:type]
