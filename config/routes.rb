@@ -431,6 +431,7 @@ Rails.application.routes.draw do
       get :show_star_modal
       post :update_star
       get :search
+      get :filter
     end
   end
 

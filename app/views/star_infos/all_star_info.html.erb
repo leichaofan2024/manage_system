@@ -92,28 +92,22 @@
 	    </div>
 	  </div>
 
-
 	  <li>
-	    <%= form_tag filter_employees_path, method: 'get' do %>
-	      
+	    <%= form_tag filter_star_infos_path, method: 'get' do %>	      
 	        <select name="workshop" id="selid" onchange="selCity(this)">
-		                <option>--选择车间--</option>
-		                <% @workshop_names.each do |name| %>
-		                    <option value="<%= name %>"><%= name %></option>
-		                <% end %>
-		            </select>
-		            <select name="group" id="subselid">
-		                <option>--选择班组--</option>
-		            </select>
-	     
-
-
-	      <% if !current_user.has_role? :safe_productionadmin %>
-	      <br>
+                <option>--选择车间--</option>
+                <% @workshop_names.each do |name| %>
+                    <option value="<%= name %>"><%= name %></option>
+                <% end %>
+            </select>
+            <select name="group" id="subselid">
+                <option>--选择班组--</option>
+            </select>	     
+	      	<br>
 	        <%= label_tag :按职名： %>
 	        <select class="" name="duty">
 	          <option value>请选择</option>
-	          <% Employee.pluck("duty").uniq.compact.each do |duty| %>
+	          <% StarInfo.pluck("duty").uniq.compact.each do |duty| %>
 	            <% if params[:duty] == duty %>
 	              <option value="<%= duty %>" selected><%= duty %></option>
 	            <% else %>
@@ -121,19 +115,18 @@
 	            <% end %>
 	          <% end %>
 	        </select>
-	      <% end %>
-	      <%= label_tag :按星级： %>
-	      <select class="" name="work_type">
+	        <%= label_tag :按星级： %>
+	        <select class="" name="star">
 	        <option value>请选择</option>
-	        <% Employee.pluck("work_type").uniq.compact.each do |work_type| %>
-	          <% if params[:work_type] == work_type %>
-	            <option value="<%= work_type %>" selected><%= work_type %></option>
-	          <% else %>
-	            <option value="<%= work_type %>"><%= work_type %></option>
-	          <% end %>
-	        <% end %>
-	      </select>
-	      <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
+		        <% StarInfo.pluck("star").uniq.compact.each do |star| %>
+		          <% if params[:star] == star %>
+		            <option value="<%= star %>" selected><%= (star + "星") %></option>
+		          <% else %>
+		            <option value="<%= star %>"><%= (star + "星") %></option>
+		          <% end %>
+		        <% end %>
+	      	</select>
+	      	<%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
 	    <% end %>
 	  </li>
 	</ul>
@@ -147,26 +140,22 @@
 			e.style.display = 'block';
   	};
 
-  	function selCity()
-				{
-						var arr = gon.group_name;
-
-						var selNode = document.getElementById("selid");
-						var subselNode = document.getElementById("subselid");
-						var index = selNode.selectedIndex;
-						var citys = arr[index];
-
-						subselNode.options.length = 0;
-                        firstoption = document.createElement("option");
-
-                        subselNode.appendChild(firstoption);
-						for(var i=0; i<citys.length; i++)
-						{
-								var optionNode = document.createElement("option");
-								optionNode.value = citys[i];
-								optionNode.innerText = citys[i];
-								subselNode.appendChild(optionNode);
-						}
-				}
+  	function selCity(){		
+		var arr = gon.group_name;
+		var selNode = document.getElementById("selid");
+		var subselNode = document.getElementById("subselid");
+		var index = selNode.selectedIndex;
+		var citys = arr[index];
+		subselNode.options.length = 0;
+        firstoption = document.createElement("option");
+        subselNode.appendChild(firstoption);
+		for(var i=0; i<citys.length; i++)
+		{
+			var optionNode = document.createElement("option");
+			optionNode.value = citys[i];
+			optionNode.innerText = citys[i];
+			subselNode.appendChild(optionNode);
+		}
+	}
 </script>
 
