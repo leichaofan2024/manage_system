@@ -15,6 +15,7 @@
         <Cell><Data ss:Type="String">职名</Data></Cell>
         <Cell><Data ss:Type="String">分数</Data></Cell>
         <Cell><Data ss:Type="String">星级</Data></Cell>
+        <Cell><Data ss:Type="String">时间</Data></Cell>
       </Row>
       <% i = 1 %>
       <% @export_scores.each do |score| %>
@@ -28,6 +29,7 @@
             <Cell><Data ss:Type="String"><%= score.duty %></Data></Cell>
             <Cell><Data ss:Type="String"><%= score.final_score %></Data></Cell>
             <Cell><Data ss:Type="String"><%= StarInfo.find_by(basic_score_id: score.id).star %>星</Data></Cell>
+            <Cell><Data ss:Type="String"><%= score.year %>年第<%= score.quarter %>季度</Data></Cell>
           </Row>
       <% end %>
     </Table>

@@ -486,10 +486,12 @@
                       <% else %>
                         <li><a href="/star_infos/all_star_info"> 全部星级岗位人员</a></li>
                       <% end %>
-                      <% if ["score_weights","star_ranges"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/score_weights/show_weight"> 比例设置 </a></li>
-                      <% else %>
-                        <li><a href="/score_weights/show_weight"> 比例设置</a></li>
+                      <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin)%>
+                        <% if ["score_weights","star_ranges"].include?(url_for.split("/").second) %>
+                          <li style="background-color:white;"><a href="/score_weights/show_weight"> 比例设置 </a></li>
+                        <% else %>
+                          <li><a href="/score_weights/show_weight"> 比例设置</a></li>
+                        <% end %>
                       <% end %>
                     </ul>
                    </li>
