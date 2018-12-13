@@ -21,7 +21,7 @@ class BasicScoresController < ApplicationController
         end 
 	  end 
 	  if current_user.has_role? :workshopadmin
-	  	@basic_scores = BasicScore.where(:workshop => Workshop.find_by(:id =>current_user.workshop).name,:year => @year,:quarter => @quarter)
+	  	@basic_scores = BasicScore.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
 	  elsif (current_user.has_role? :staradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
         @basic_scores = BasicScore.where(:year => @year,:quarter => @quarter)
       end 
@@ -44,8 +44,15 @@ class BasicScoresController < ApplicationController
 		else 
           flash[:alert] = "请正确选择所属车间、年份、季度信息！"
 		end 
-		redirect_to fallback_location: basic_scores_path
+		redirect_back fallback_location: basic_scores_path
 	end 
+    
+    def import_model
+      @quarter_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
+      @workshops = Workshop.current
+      @years = ((Time.now.year-5)..(Time.now.year)).sort{|a,b| b<=>a}
+      @quarters = [4,3,2,1]
+    end 
 
 	def delete_basic_score
 		basic_score = BasicScore.find_by(year: params[:year],quarter: params[:quarter],workshop: params[:workshop])
@@ -60,6 +67,6 @@ class BasicScoresController < ApplicationController
 		else 
 			flash[:alert] = "#{params[:workshop]}#{params[:year]}年第#{params[:quarter]}季度考勤汇总表已上报至劳资，不能删除！"
 		end 
-		redirect_to fallback_location: basic_scores_path
+		redirect_back fallback_location: basic_scores_path
 	end 
 end

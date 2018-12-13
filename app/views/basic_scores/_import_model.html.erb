@@ -1,0 +1,68 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="margin-top:100px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">
+          上传星级岗考核汇总表
+        </h4>
+      </div>
+      <div class="modal-body">
+       
+          <%= form_tag import_basic_score_basic_scores_path, method: 'post', multipart: true do %>
+            <div class="star_import_model_file_style">
+              <ul class ="star_import_model">
+                <li>
+                  <select name="workshop">
+                    <% @workshops.each do |workshop| %>
+                      <% if workshop.id == current_user.workshop_id %>
+                        <option value="<%= workshop.name %>" selected ><%= workshop.name %></option>
+                      <% else %>
+                        <option value="<%= workshop.name %>"><%= workshop.name %></option>
+                      <% end %>
+                    <% end %>
+                  </select>
+                  <%= label_tag "车间" %>
+                </li>
+                <li>
+                  <select name="year">
+                    <% @years.each do |year| %>
+                      <% if year == Time.now.year %>
+                        <option value="<%= year %>" selected ><%= year %></option>
+                      <% else %>
+                        <option value="<%= year %>"><%= year %></option>
+                      <% end %>
+                    <% end %>
+                  </select>
+                  <%= label_tag "年" %>
+                  <select name="quarter">
+                    <% @quarters.each do |quarter| %>
+                      <% if quarter == @quarter_hash[Time.now.month] %>
+                        <option value="<%= quarter %>" selected ><%= quarter %></option>
+                      <% else %>
+                        <option value="<%= quarter %>"><%= quarter %></option>
+                      <% end %>
+                    <% end %>
+                  </select>
+                  <%= label_tag "季度" %>
+                </li>
+                <li>
+                  <%= file_field_tag :file,required: true %>
+                </li>
+              </ul>
+            </div>
+            <div class="" style="">
+               <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
+            </div>
+
+            <div class=" remind-circle">
+              <h5 style=" margin-top: 40px;">温馨提示</h5>
+              <p>1、暂不支持复合表头（即合并单元格）；</p>
+              <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【星级岗成绩汇总表模版】", download_star_basic_score_table_template_announcements_path(format: "xls") %></p>
+            </div>
+          <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

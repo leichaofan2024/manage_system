@@ -425,6 +425,7 @@ Rails.application.routes.draw do
     collection do 
       post :import_basic_score
       delete :delete_basic_score
+      get :import_model
     end 
   end 
 

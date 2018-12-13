@@ -229,7 +229,7 @@ class AnnouncementsController < ApplicationController
 
   def download_star_basic_score_table_template
     respond_to do |format| 
-      format.xls {headers["Content-Disposition"] = 'attachment; filename="工效挂钩考核表.xls"'}
+      format.xls {headers["Content-Disposition"] = 'attachment; filename="星级岗成绩汇总表.xls"'}
     end
   end 
 
