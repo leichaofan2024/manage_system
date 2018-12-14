@@ -69,8 +69,15 @@
                         <%= label_tag :班组：%>
                         <span class="employee-group-input" style="display:inline-block;">
                           <select name="group" id="subselid" >
-                            <% if params[:group].present? %>
-                              <option value="<%= params[:group] %>"><%= params[:group] %></option>
+                            <% if params[:workshop].present? %>
+                              <% groups = StarInfo.where(:year => @year,:quarter => @quarter,:workshop => params[:workshop]).pluck(:group).uniq %>
+                              <% groups.each do |group| %>
+                                <% if params[:group].present? && group == params[:group] %>
+                                  <option value="<%= group %>" selected><%= group %></option>
+                                <% else %>
+                                  <option value="<%= group %>"><%= group %></option>
+                                <% end %>
+                              <% end %>
                             <% end %>
                           </select>
                         </span>
