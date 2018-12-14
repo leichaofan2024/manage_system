@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工资号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">职名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">理论考试</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">权重</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">实作考试</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">权重</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工作业绩</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">权重</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">增减分数</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">增减分原因</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">最终得分</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">星级</Data></Cell>
+      </Row>
+      <% n = 0 %>
+      <% @basic_scores_export.each do |basic_score| %>
+        <% star_info = StarInfo.find_by(:basic_score_id => basic_score.id) %>
+        <% n += 1 %>
+        <Row>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= n %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.workshop %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.group %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.name %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.sal_number %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.duty %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.theory_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.theory_weighted_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.practical_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.practical_weighted_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.work_performance %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.work_performance_weighted_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.extra_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= basic_score.extra_score_reason %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= basic_score.final_score %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">
+            <% if star_info.star == "pre_5" %>
+              推荐五星
+            <% else %>
+              <%= star_info.star %>星
+            <% end %>
+          </Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

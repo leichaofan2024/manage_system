@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间人数</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">五星(<%= StarRange.find_by(:name => 5).money%>元)</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">四星(<%= StarRange.find_by(:name => 4).money%>元)</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">三星(<%= StarRange.find_by(:name => 3).money%>元)</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">二星(<%= StarRange.find_by(:name => 2).money%>元)</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">一星(<%= StarRange.find_by(:name => 1).money%>元)</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">合计金额</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组长五星</Data></Cell>
+      </Row>
+      <% n = 0 %>
+      <% @workshops.each do |workshop| %>
+        <% star_infoes = StarInfo.where(:workshop => workshop,:year => @year,:quarter => @quarter) %>
+        <% sum_count = star_infoes.count %>
+        <% n += 1 %>
+        <% if params[:passed_5_star].present? %>
+          <% five_star_count = star_infoes.where(:star => ["5"]).count %>
+        <% else %>
+          <% five_star_count = star_infoes.where(:star => ["5","pre_5"]).count %>
+        <% end %>
+        <% four_star_count = star_infoes.where(:star => 4).count %>
+        <% three_star_count = star_infoes.where(:star => 3).count %>
+        <% two_star_count = star_infoes.where(:star => 2).count %>
+        <% one_star_count = star_infoes.where(:star => 1).count %>
+        <% if params[:passed_5_star].present? %>
+          <% team_leader_count = star_infoes.where(:star => ["5"],:team_leader => true).count %>
+        <% else %>
+          <% team_leader_count = star_infoes.where(:star => ["5","pre_5"],:team_leader => true).count %>
+        <% end %>
+        <Row>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= n %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= workshop %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= star_infoes.count %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= five_star_count %>/比例<%= (five_star_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= four_star_count %>/比例<%= (four_star_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= three_star_count %>/比例<%= (three_star_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= two_star_count %>/比例<%= (two_star_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= one_star_count %>/比例<%= (one_star_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= (StarRange.find_by(:name => 2).money * two_star_count) + (StarRange.find_by(:name => 3).money * three_star_count) + (StarRange.find_by(:name => 4).money * four_star_count) + (StarRange.find_by(:name => 5).money * five_star_count) %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String">人数<%= team_leader_count %>/比例<%= (team_leader_count*100.to_f/sum_count).round(1) %>%</Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

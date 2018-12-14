@@ -1,1 +1,129 @@
-<h3>这是考核汇总页面</h3>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度星级岗考核汇总表</h4>
+    </header>
+
+    <div class="content-body">
+      <div class="panel">
+          <div class="panel-heading" style="background-color: #fff;">
+            <span style="display:inline-block;">
+              <%= form_tag final_statistics_path, method: 'get' do %>
+                <%= label_tag :选择时间： %>
+                <select class="" style="display:inline-block;" name="year">
+                  <% @years.each do |year| %>
+                    <% if @year == year %>
+                      <option value="<%= year %>" selected><%= year %></option>
+                    <% else %>
+                      <option value="<%= year %>"><%= year %></option>
+                    <% end %>
+                  <% end %>
+                </select>年
+                -
+                <select class="" style="display:inline-block;" name="quarter">
+                  <% @quarters.each do |quarter| %>
+                    <% if @quarter == quarter %>
+                      <option value="<%= quarter %>" selected><%= quarter %></option>
+                    <% else %>
+                      <option value="<%= quarter %>"><%= quarter %></option>
+                    <% end %>
+                  <% end %>
+                </select>
+                季度
+                <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
+              <% end %>
+            </span>
+            
+
+            <span style="float: right;"> 
+              <% find_parameters = request.query_parameters %>
+              <% if params[:passed_5_star].present? %>  
+                <%= link_to("导出表格",final_statistics_path(:year => @year,:quarter => @quarter,:passed_5_star => "yes",format: "xls"),class:"btn btn-primary-upload pull-right") %>      
+                <%= link_to("查看全部五星",final_statistics_path(find_parameters.delete_if{|key,value| key=="passed_5_star"}),class:"btn btn-primary-upload pull-right") %>
+              <% else %>
+                <%= link_to("导出表格",final_statistics_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+                <% find_parameters[:passed_5_star] = "yes" %>
+                <%= link_to("查看通过五星",final_statistics_path(find_parameters),class:"btn btn-primary-upload pull-right") %>
+              <% end %>
+              <%= link_to("查看申请",star_applications_path,class:"btn btn-primary-upload pull-right") %>
+              
+            </span>
+          </div>
+         
+      </div>
+      
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>车间</th>
+              <th>车间人数</th>
+              <th>五星(<%= StarRange.find_by(:name => 5).money%>元)</th>
+              <th>四星(<%= StarRange.find_by(:name => 4).money%>元)</th>
+              <th>三星(<%= StarRange.find_by(:name => 3).money%>元)</th>
+              <th>二星(<%= StarRange.find_by(:name => 2).money%>元)</th>
+              <th>一星(<%= StarRange.find_by(:name => 1).money%>元)</th>
+              <th>合计金额</th>
+              <th>班组长五星</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% n = 0 %>
+            <% @workshops.each do |workshop| %>
+              <% star_infoes = StarInfo.where(:workshop => workshop,:year => @year,:quarter => @quarter) %>
+              <% sum_count = star_infoes.count %>
+              <% n += 1 %>
+              <tr>
+                <td><%= n %></td>
+                <td><%= workshop %></td>
+                <td><%= star_infoes.count %></td>
+                <td>
+                  <% if params[:passed_5_star].present? %>
+                    <% five_star_count = star_infoes.where(:star => ["5"]).count %>
+                  <% else %>
+                    <% five_star_count = star_infoes.where(:star => ["5","pre_5"]).count %>
+                  <% end %>
+                  人数<%= five_star_count %>/比例<%= (five_star_count*100.to_f/sum_count).round(1) %>%
+                </td>
+                <td>
+                  <% four_star_count = star_infoes.where(:star => 4).count %>
+                  人数<%= four_star_count %>/比例<%= (four_star_count*100.to_f/sum_count).round(1) %>%
+                </td>
+                <td>
+                  <% three_star_count = star_infoes.where(:star => 3).count %>
+                  人数<%= three_star_count %>/比例<%= (three_star_count*100.to_f/sum_count).round(1) %>%
+                </td>
+                <td>
+                  <% two_star_count = star_infoes.where(:star => 2).count %>
+                  人数<%= two_star_count %>/比例<%= (two_star_count*100.to_f/sum_count).round(1) %>%
+                </td>
+                <td>
+                  <% one_star_count = star_infoes.where(:star => 1).count %>
+                  人数<%= one_star_count %>/比例<%= (one_star_count*100.to_f/sum_count).round(1) %>%
+                </td>
+                <td>
+                  <%= (StarRange.find_by(:name => 2).money * two_star_count) + (StarRange.find_by(:name => 3).money * three_star_count) + (StarRange.find_by(:name => 4).money * four_star_count) + (StarRange.find_by(:name => 5).money * five_star_count) %>
+                </td>
+                <td>
+                  <% if params[:passed_5_star].present? %>
+                    <% team_leader_count = star_infoes.where(:star => ["5"],:team_leader => true).count %>
+                  <% else %>
+                    <% team_leader_count = star_infoes.where(:star => ["5","pre_5"],:team_leader => true).count %>
+                  <% end %>
+                  
+                  人数<%= team_leader_count %>/比例<%= (team_leader_count*100.to_f/sum_count).round(1) %>%
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -8,53 +8,227 @@
     </header>
 
     <div class="content-body">
-      <%= form_tag basic_scores_path,method: :get do %>
-        <select class="" style="display:inline-block;" name="year">
-          <% @years.each do |year| %>
-            <% if @year == year %>
-              <option value="<%= year %>" selected><%= year %></option>
-            <% else %>
-              <option value="<%= year %>"><%= year %></option>
-            <% end %>
-          <% end %>
-        </select>年
-        ~
-        <select class="" style="display:inline-block;" name="quarter">
-          <% @quarters.each do |quarter| %>
-            <% if @quarter == quarter %>
-              <option value="<%= quarter %>" selected><%= quarter %></option>
-            <% else %>
-              <option value="<%= quarter %>"><%= quarter %></option>
-            <% end %>
-          <% end %>
-        </select>
-       季度
-        <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
-      <% end %>
-      <% if (current_user.has_role? :workshopadmin) %>
-        <%= link_to("删除表格",delete_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :delete,:data => {confirm: "您确定要删除【#{Workshop.find(current_user.workshop_id).name}】#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
-        <%= link_to("上传星级岗成绩汇总表",import_model_basic_scores_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
-      <% end %>
-      <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+      <div class="panel">
+          <div class="panel-heading" style="background-color: #fff;">
+  <!-- 导出与新增-开始 -->
+            <button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
+              <span class="glyphicon glyphicon-filter"></span>搜索/筛选
+            </button>
+            
+            
+            <span style="float: right;">                
+              <% if (current_user.has_role? :workshopadmin) %>
+                <%= link_to("删除表格",delete_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :delete,:data => {confirm: "您确定要删除【#{Workshop.find(current_user.workshop_id).name}】#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
+                <%= link_to("上传星级岗成绩汇总表",import_model_basic_scores_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+              <% end %>
+              <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+            </span>
+          </div>
+          <div class="panel-body" id="employee-btn" style="display: none;">
+              <ul class="employee-search" style="padding:20px;">
+                  <%= form_tag basic_scores_path, method: 'get' do %>
+
+                    <%= label_tag :选择时间： %>
+                    <select class="" style="display:inline-block;" name="year">
+                      <% @years.each do |year| %>
+                        <% if @year == year %>
+                          <option value="<%= year %>" selected><%= year %></option>
+                        <% else %>
+                          <option value="<%= year %>"><%= year %></option>
+                        <% end %>
+                      <% end %>
+                    </select>年
+                    -
+                    <select class="" style="display:inline-block;" name="quarter">
+                      <% @quarters.each do |quarter| %>
+                        <% if @quarter == quarter %>
+                          <option value="<%= quarter %>" selected><%= quarter %></option>
+                        <% else %>
+                          <option value="<%= quarter %>"><%= quarter %></option>
+                        <% end %>
+                      <% end %>
+                    </select>
+                    季度
+                    <br>
+
+                    <% if (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) ||(current_user.has_role? :superadmin) || (current_user.has_role? :staradmin) %>
+                      <li style="display: inline-block;margin-top: 10px;">
+                          <%= label_tag :车间：%>
+                          <select name="workshop"  id="selid" onchange="selCity(this)">
+                            <option value="" selected >北京供电段</option>
+                            <% @workshops.each do |workshop| %>
+                              <% if workshop == params[:workshop] %>
+                                <option value="<%= workshop%>" selected><%= workshop %></option>
+                              <% else %>
+                                <option value="<%= workshop %>"><%= workshop %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
+                      </li>
+                      <li style="display: inline-block;margin-top: 10px;">
+                        <%= label_tag :班组：%>
+                        <span class="employee-group-input" style="display:inline-block;">
+                          <select name="group" id="subselid" >
+                            <% if params[:group].present? %>
+                              <option value="<%= params[:group] %>"><%= params[:group] %></option>
+                            <% end %>
+                          </select>
+                        </span>
+                      </li>
+                    <% elsif current_user.has_role? :workshopadmin %>
+                      <li style="display:inline-block;margin-top:10px;">
+                        <%= label_tag :班组：%>
+                        <span class="employee-group-input" style="display:inline-block;">
+                          <select name="group" >
+                            <option value>请选择</option>
+                            <% @groups.each do |group| %>
+                              <% if params[:group] == group %>
+                                <option value="<%= group %>" selected><%= group %></option>
+                              <% else %>
+                                <option value="<%= group %>"><%= group %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
+                        </span>
+                      </li>
+                    <% end %>
+
+                    <li style="margin-bottom: 10px;">
+                      <%= label_tag :职名： %>
+                      <select class="" name="duty">
+                        <option value>请选择</option>
+                        <% @dutys.each do |duty| %>
+                          <% if params[:duty] == duty %>
+                            <option value="<%= duty %>" selected><%= duty %></option>
+                          <% else %>
+                            <option value="<%= duty %>"><%= duty %></option>
+                          <% end %>
+                        <% end %>
+                      </select>
+                      <%= label_tag :星级： %>
+                      <span style="display:inline-block;position: relative;top:10px;">
+                        <select id="star-batch-select" class="control-form" name="star[]" multiple="multiple" style="width:200px;height:20px;">
+                          <% ["pre_5","5","4","3","2","1"].each do |star| %>
+                            <% if params[:star].present? && params[:star].include?(star) %>
+                              <% if star == "pre_5" %>
+                                <option value="<%= star %>" selected>推荐5星</option>
+                              <% else %>
+                                <option value="<%= star %>" selected><%= star %>星</option>
+                              <% end %>
+                            <% else %>
+                              <% if star == "pre_5" %>
+                                <option value="<%= star %>">推荐5星</option>
+                              <% else %>
+                                <option value="<%= star %>"><%= star %>星</option>
+                              <% end %>
+                            <% end %>
+                          <% end %>
+                        </select>
+                      </span>
+                      
+                    </li>
+                    
+                    <%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
+                  <% end %>
+              </ul>
+            </div>
+      </div>
+      
       <div class="content-table" style="clear:both;">
         <table>
           <thead>
             <tr>
               <th>序号</th>
+              <th>车间</th>
+              <th>班组</th>
+              <th>姓名</th>
+              <th>工资号</th>
+              <th>职名</th>
+              <th>理论考试</th>
+              <th>权重</th>
+              <th>实作考试</th>
+              <th>权重</th>
+              <th>工作业绩</th>
+              <th>权重</th>
+              <th>增减分数</th>
+              <th>增减分原因</th>
+              <th>最终得分</th>
+              <th>星级</th>
             </tr>
           </thead>
           <tbody>
             <% n = 0 %>
             <% @basic_scores.each do |basic_score| %>
+              <% star_info = StarInfo.find_by(:basic_score_id => basic_score.id) %>
+              <% n += 1 %>
               <tr>
-                <td></td>
+                <td><%= n %></td>
+                <td><%= basic_score.workshop %></td>
+                <td><%= basic_score.group %></td>
+                <td><%= basic_score.name %></td>
+                <td><%= basic_score.sal_number %></td>
+                <td><%= basic_score.duty %></td>
+                <td><%= basic_score.theory_score %></td>
+                <td><%= basic_score.theory_weighted_score %></td>
+                <td><%= basic_score.practical_score %></td>
+                <td><%= basic_score.practical_weighted_score %></td>
+                <td><%= basic_score.work_performance %></td>
+                <td><%= basic_score.work_performance_weighted_score %></td>
+                <td><%= basic_score.extra_score %></td>
+                <td><%= basic_score.extra_score_reason %></td>
+                <td><%= basic_score.final_score %></td>
+                <td>
+                  <% if star_info.star == "pre_5" %>
+                    推荐五星
+                  <% else %>
+                    <%= star_info.star %>星
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
         </table>
+        <div class="text-center">
+          <%= paginate @basic_scores %>
+        </div>
       </div>
 
     </div>
     <div id="import_model"></div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  $("#star-batch-select").select2( { theme: "bootstrap"});
+   function selCity()
+  {
+      var arr = gon.groups;
+
+      var selNode = document.getElementById("selid");
+      var subselNode = document.getElementById("subselid");
+      var index = selNode.selectedIndex;
+      var citys = arr[index];
+
+      subselNode.options.length = 0;
+      var firstoptionNode = document.createElement("option");
+      // firstoptionNode.value = arr[0][0][1];
+      // firstoptionNode.innerText = arr[0][0][0];
+      // subselNode.appendChild(firstoptionNode);
+      for(var i=0; i<citys.length; i++)
+      {
+          var optionNode = document.createElement("option");
+          optionNode.value = citys[i];
+          optionNode.innerText = citys[i];
+          subselNode.appendChild(optionNode);
+      }
+  };
+  function toggle_visibility(id) {
+     var e = document.getElementById(id);
+     if(e.style.display == 'block')
+        e.style.display = 'none';
+     else
+        e.style.display = 'block';
+  };
+  
+</script>
