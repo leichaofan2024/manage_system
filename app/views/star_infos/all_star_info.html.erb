@@ -1,5 +1,172 @@
-<h3>这是全部星级岗位页</h3>
+<div class="panel-heading">
+  <div class="wage-navbar">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="/star_infos/five_star_info">五星岗位</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">全部岗位</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
+	<span class="glyphicon glyphicon-filter"></span>搜索/筛选
+</button>
+<%= form_tag filter_star_infos_path, method: :get do%>
+	<%= label_tag :"请选择年份和季度：" %>
+	<%= select_tag(:year, options_for_select(BasicScore.pluck(:year).uniq), {:required => "true"}) %>
+	<%= select_tag(:quarter, options_for_select(BasicScore.pluck(:quarter).uniq), {:required => "true"}) %>
+	<%= hidden_field_tag :workshop, @params_workshop %>
+	<%= hidden_field_tag :group, @params_group %>
+	<%= submit_tag :筛选 %>
+<% end %>
+<% if @type == 1 %>
+	<%= link_to "查看全部五星",all_star_info_star_infos_path(type: "all"), class:"btn btn-success-alt pull-right" %>
+<% else %>
+	<%= link_to "查看通过五星",all_star_info_star_infos_path(type: 1), class:"btn btn-success-alt pull-right" %>
+<% end %>
+<% if (current_user.has_role? :workshopadmin) %>
+	<%= link_to "发起申请",new_star_application_path, class:"btn btn-success-alt pull-right" %>
+	<%= link_to "查看申请",star_applications_path(type: 0), class:"btn btn-success-alt pull-right" %>
+<% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+	<%= link_to "查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0), class:"btn btn-success-alt pull-right" %>
+<% end %>
+<%= link_to "导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)), class:"btn btn-success-alt pull-right" %>
+<h4 class="text-center">全部星级岗位表(<%= @year %>年第<%= @quarter %>季度)</h4>
+<table class="table overflow-y table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>序号</th>
+			<th>姓名</th>
+			<th>工资号</th>
+			<th>车间</th>
+			<th>班组</th>
+			<th>职名</th>
+			<th>分数</th>
+			<th>星级</th>
+			<th>时间</th>
+			<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+				<th>操作</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% i = 1 %>
+		<% @scores.each do |score| %>
+			<tr>
+				<td><%= i %></td>
+				<% i += 1 %>
+				<td>
+					<%= score.name %>
+					<% if StarInfo.where(basic_score_id: score.id).pluck(:descend_record).uniq[0] > 0 %>
+	                	<span class="label label-danger">降星<%= StarInfo.where(basic_score_id: score.id).pluck(:descend_record).sum %>次</span>
+	                <% end %>
+				</td>
+				<td><%= score.sal_number %></td>
+				<td><%= score.workshop %></td>
+				<td><%= score.group %></td>
+				<td><%= score.duty %></td>
+				<td><%= score.final_score %></td>
+				<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+				<td><%= score.year %>年第<%= score.quarter %>季度</td>
+				<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+					<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal", class: "btn btn-primary" %></td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
 
-<a href="/star_applications/new"> 发起申请 </a>
+<div id="showStarModal">
+	<%= render 'show_star_modal' %>
+</div>
 
-<a href="/star_applications/show"> 查看申请 </a>
+<div class="panel-body" id="employee-btn">
+	<ul class="employee-search">
+	  <div class="row">
+	    <div class="col-md-6 mb15">
+	      <li style="padding-top: 20px;">
+	        <%= form_tag search_star_infos_path, :class => "posts-search-form", :method => :get do %>
+	          <div class="input-group">
+	            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号">
+	            <span class="input-group-btn">
+	              <button type="submit" class="btn btn-primary">
+	                <span class="glyphicon glyphicon-search"></span>
+	              </button>
+	            </span>
+	          </div>
+	        <% end %>
+	      </li>
+	    </div>
+	  </div>
+
+	  <li>
+	    <%= form_tag filter_star_infos_path, method: 'get' do %>	      
+	        <select name="workshop" id="selid" onchange="selCity(this)">
+                <option>--选择车间--</option>
+                <% @workshop_names.each do |name| %>
+                    <option value="<%= name %>"><%= name %></option>
+                <% end %>
+            </select>
+            <select name="group" id="subselid">
+                <option>--选择班组--</option>
+            </select>	     
+	      	<br>
+	        <%= label_tag :按职名： %>
+	        <select class="" name="duty">
+	          <option value>请选择</option>
+	          <% StarInfo.pluck("duty").uniq.compact.each do |duty| %>
+	            <% if params[:duty] == duty %>
+	              <option value="<%= duty %>" selected><%= duty %></option>
+	            <% else %>
+	              <option value="<%= duty %>"><%= duty %></option>
+	            <% end %>
+	          <% end %>
+	        </select>
+	        <%= label_tag :按星级： %>
+	        <select class="" name="star">
+	        <option value>请选择</option>
+		        <% StarInfo.pluck("star").uniq.compact.each do |star| %>
+		          <% if params[:star] == star %>
+		            <option value="<%= star %>" selected><%= (star + "星") %></option>
+		          <% else %>
+		            <option value="<%= star %>"><%= (star + "星") %></option>
+		          <% end %>
+		        <% end %>
+	      	</select>
+			<%= hidden_field_tag :year, @year %>
+			<%= hidden_field_tag :quarter, @quarter %>
+	      	<%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %>
+	    <% end %>
+	  </li>
+	</ul>
+</div>
+<script type="text/javascript">
+	function toggle_visibility(id) {
+		var e = document.getElementById(id);
+		if(e.style.display == 'block')
+			e.style.display = 'none';
+		else
+			e.style.display = 'block';
+  	};
+
+  	function selCity(){		
+		var arr = gon.group_name;
+		var selNode = document.getElementById("selid");
+		var subselNode = document.getElementById("subselid");
+		var index = selNode.selectedIndex;
+		var citys = arr[index];
+		subselNode.options.length = 0;
+        firstoption = document.createElement("option");
+        subselNode.appendChild(firstoption);
+		for(var i=0; i<citys.length; i++)
+		{
+			var optionNode = document.createElement("option");
+			optionNode.value = citys[i];
+			optionNode.innerText = citys[i];
+			subselNode.appendChild(optionNode);
+		}
+	}
+</script>
+

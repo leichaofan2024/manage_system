@@ -57,7 +57,7 @@ class EmployeesController < ApplicationController
       group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
       batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
     end
-    # 用于现员筛选：
+    # 用于现员筛选： 
     gon.group_name = group
     # 用于批量调动：
     gon.batch_leaving_group_name = batch_leaving_group

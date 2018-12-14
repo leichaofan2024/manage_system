@@ -435,14 +435,34 @@ Rails.application.routes.draw do
     collection do
       get :five_star_info
       get :all_star_info
+      get :show_star_modal
+      post :update_star
+      get :search
+      get :filter
     end
   end
 
-  resources :star_applications
+  resources :star_applications do
+    collection do
+      post :refuse_application
+      post :agree_application
+      post :create_application
+    end
+  end
 
-  resources :score_weights
+  resources :score_weights do
+    collection do
+      get :show_weight
+      post :update_weight
+    end
+  end
 
-  resources :star_ranges
+  resources :star_ranges do
+    collection do
+      get :show_range
+      post :update_range
+    end
+  end
 
   resources :analyses
 
