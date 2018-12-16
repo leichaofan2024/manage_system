@@ -4,7 +4,7 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度五星级岗位表</h4>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%= params[:workshop]%><%=params[:group]%>五星级岗位表</h4>
     </header>
 
     <div class="content-body">
@@ -17,17 +17,31 @@
             
             
             <span style="float: right;">                
-              <% if (current_user.has_role? :workshopadmin) %>
-                <%= link_to("删除表格",delete_star_info_star_infos_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :delete,:data => {confirm: "您确定要删除【#{Workshop.find(current_user.workshop_id).name}】#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
-                <%= link_to("上传星级岗成绩汇总表",import_model_star_infos_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
-              <% end %>
+              
               <%= link_to("导出表格",five_star_info_star_infos_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+              <% if current_user.has_role? :staradmin %>
+                <%= link_to("完成本次评定",finish_star_assess_star_infos_path(:year => @year,:quarter => @quarter),:data => {:confirm => "您确定要完成#{@year}年#{@quarter}季度星级评定吗？"},method: :post,class:"btn btn-primary-upload pull-right") %>
+              <% end %>
+              <% if (current_user.has_role? :workshopadmin) %>
+                <span id="batch_pass_five_star">
+                  <%= link_to("五星人员操作","#",class:"btn btn-primary-upload pull-right") %>
+                </span>
+                
+              <% end %>
+              <% if params[:passed_five_star].present? %>
+                <%= link_to("查看全部五星",five_star_info_star_infos_path(request.query_parameters.delete_if{|key,value| key=="passed_five_star"}),class:"btn btn-primary-upload pull-right") %>
+              <% else %>
+                <%= link_to("查看通过五星",five_star_info_star_infos_path(request.query_parameters.merge(:passed_five_star => "yes" )),class:"btn btn-primary-upload pull-right") %>
+              <% end %>
+              
             </span>
           </div>
           <div class="panel-body" id="employee-btn" style="display: none;">
               <ul class="employee-search" style="padding:20px;">
                   <%= form_tag five_star_info_star_infos_path, method: 'get' do %>
-
+                    <% if params[:passed_five_star].present? %>
+                      <%= hidden_field_tag :passed_five_star,"yes" %>
+                    <% end %>
                     <%= label_tag :选择时间： %>
                     <select class="" style="display:inline-block;" name="year">
                       <% @years.each do |year| %>

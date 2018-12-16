@@ -4,7 +4,7 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度星级岗成绩汇总表</h4>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%=params[:workshop]%><%=params[:group]%>星级岗成绩汇总表</h4>
     </header>
 
     <div class="content-body">
@@ -16,12 +16,14 @@
             </button>
             
             
-            <span style="float: right;">                
+            <span style="float: right;"> 
+              <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>               
               <% if (current_user.has_role? :workshopadmin) %>
                 <%= link_to("删除表格",delete_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :delete,:data => {confirm: "您确定要删除【#{Workshop.find(current_user.workshop_id).name}】#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
                 <%= link_to("上传星级岗成绩汇总表",import_model_basic_scores_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
+                <%= link_to("上报劳资",confirm_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :past,class:"btn btn-primary-upload pull-right") %>
               <% end %>
-              <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
+              
             </span>
           </div>
           <div class="panel-body" id="employee-btn" style="display: none;">

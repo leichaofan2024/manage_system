@@ -426,6 +426,7 @@ Rails.application.routes.draw do
       post :import_basic_score
       delete :delete_basic_score
       get :import_model
+      post :confirm_basic_score
     end 
   end 
 
@@ -439,6 +440,8 @@ Rails.application.routes.draw do
       post :update_star
       get :search
       get :filter
+      post :finish_star_assess
+      post :update_five_star
     end
   end
 

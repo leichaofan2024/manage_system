@@ -151,17 +151,13 @@ class StarInfosController < ApplicationController
             @quarter = quarter_hash[Time.now.month]
         end 
 	  end 
-	  if params[:passed_five_star].present? 
-	  	@star_infos = StarInfo.where(:star => "5")
-	  else 
-	  	@star_infos = StarInfo.where(:star => ["5","pre_5"])
-	  end 
+	  
 	  if current_user.has_role? :workshopadmin
-	  	@star_infos = @star_infos.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
+	  	@star_infos = StarInfo.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
 	  	@groups = @star_infos.pluck(:group).uniq
 	  	@dutys = @star_infos.pluck(:duty).uniq
 	  elsif (current_user.has_role? :staradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
-        @star_infos = @star_infos.where(:year => @year,:quarter => @quarter)
+        @star_infos = StarInfo.where(:year => @year,:quarter => @quarter)
         @workshops = @star_infos.pluck(:workshop).uniq
         groups_array = [[]]
         @workshops.each do |workshop|
@@ -180,7 +176,11 @@ class StarInfosController < ApplicationController
       if params[:duty].present?
       	@star_infos = @star_infos.where(:duty => params[:duty])
       end
-  
+      if params[:passed_five_star].present? 
+	  	@star_infos = @star_infos.where(:star => "5")
+	  else 
+	  	@star_infos = @star_infos.where(:star => ["5","pre_5"])
+	  end 
       @star_infos_export = @star_infos
       @star_infos = @star_infos.page(params[:page]).per(20)
       
@@ -191,6 +191,34 @@ class StarInfosController < ApplicationController
 	  end  
     end 
 
+    #完成本次评定：
+    def finish_star_assess
+    	star_confirm_status = StarConfirmStatus.find_by(:year => params[:year],:quarter => params[:quarter])
+    	pre_five_star_infos = StarInfo.where(:year => params[:year],:quarter => params[:quarter],:star => "pre_5")
+    	star_confirm_yes = StarConfirmStatus.find_by(:year => params[:year],:quarter => params[:quarter],:status => "1")
+        if star_confirm_yes.present?
+      	  @star_confirm = 1
+        else 
+          @star_confirm = 0
+        end 
+        if @star_confirm == 1
+        	flash[:warning] = "#{params[:year]}年#{params[:quarter]}季度星级已评定完成，无需重复提交！"
+        else
+	    	if star_confirm_status.present? 
+	    		star_confirm_status.update(:status => 1)
+	    	else 
+	    		StarConfirmStatus.create(:year => params[:year],:quarter => params[:quarter],:status => 1)
+	    	end 
+	    	pre_five_star_infos.update(:star => "4")
+	    	flash[:notice] = "#{params[:year]}年#{params[:quarter]}季度星级评定完成！当前处于推荐五星状态的人员已退回四星！"
+	    end 
+    	redirect_back :fallback_location => five_star_info_star_infos_path
+    end 
+    
+    #五星人员操作
+    def update_five_star 
+    	
+    end 
 	protected
 
 	def validate_search_key

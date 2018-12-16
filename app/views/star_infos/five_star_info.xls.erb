@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Description">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1" ss:ShrinkToFit="1"/>
+      <Borders>
+      <Border ss:Position="Top" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Bottom" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Left" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      <Border ss:Position="Right" ss:Weight="1" ss:Color="#1c1c1c" ss:LineStyle="Continuous"/>
+      </Borders>
+      <Interior ss:Pattern="Solid"/>
+    </Style>
+  </Styles>
+
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+
+        <Cell ss:StyleID="Description"><Data ss:Type="String">序号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">车间</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">班组</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">姓名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">工资号</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">职名</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">分数</Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String">星级</Data></Cell>
+      </Row>
+      <% n = 0 %>
+      <% @star_infos_export.each do |star_info| %>
+        <% n += 1 %>
+        <Row>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= n %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= star_info.workshop %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= star_info.group %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= star_info.name %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= star_info.sal_number %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= star_info.duty %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="Number"><%= star_info.final_score %></Data></Cell>
+          <% if star_info.star == "pre_5" %>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"> 推荐五星 </Data></Cell>
+          <% else %>
+            <Cell ss:StyleID="Description"><Data ss:Type="String"> <%= star_info.star %>星 </Data></Cell>
+          <% end %>
+          
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

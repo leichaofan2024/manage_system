@@ -102,4 +102,17 @@ class BasicScoresController < ApplicationController
 		end 
 		redirect_back fallback_location: basic_scores_path
 	end 
+
+	#上报成绩汇总表
+	def confirm_basic_score
+		basic_score = BasicScore.find_by(year: params[:year],quarter: params[:quarter],workshop: params[:workshop],:confirm_status => 1)
+		if basic_score.present? 
+			flash[:warning] = "《#{params[:workshop]}》#{params[:year]}年#{params[:quarter]}季度星级岗成绩汇总表，已上报，无需重复上报！"
+		else 
+			basic_scores = BasicScore.where(year: params[:year],quarter: params[:quarter],workshop: params[:workshop])
+			basic_scores.update(:confirm_status => 1)
+			flash[:notice] = "《#{params[:workshop]}》#{params[:year]}年#{params[:quarter]}季度星级岗成绩汇总表，上报完成！"
+		end 
+		redirect_back :fallback_location => basic_scores_path
+	end 
 end
