@@ -217,7 +217,16 @@ class StarInfosController < ApplicationController
     
     #五星人员操作
     def update_five_star 
-    	
+    	if params[:pass_five_star] == "yes" 
+    		@star_infos = StarInfo.where(:year => params[:year],:quarter => params[:quarter],:sal_number => params[:sal_number].keys,:star => "pre_5")
+    		@star_infos.update(:star => "5")
+    		flash[:notice] = "您已通过#{@star_infos.count}个五星人员评定！"
+    	elsif params[:reback_five_star] == "yes"
+    		@star_infos = StarInfo.where(:year => params[:year],:quarter => params[:quarter],:sal_number => params[:sal_number].keys,:star => "5")
+    		@star_infos.update(:star => "pre_5")
+    		flash[:notice] = "您已将#{@star_infos.count}个五星人员退回推荐五星！"
+    	end 
+    	redirect_back :fallback_location => five_star_info_star_infos_path
     end 
 	protected
 

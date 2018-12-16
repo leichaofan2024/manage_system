@@ -15,25 +15,25 @@
                         <ul class="children">
                       <% end %>
                          <% if url_for == "/employees" %>
-                          <li style="background-color:white;">
+                          <li style="background-color:  #00D396;">
                          <% else %>
                           <li>
                          <% end %>
-                           <a  href="/employees">
+                           <a  href="/employees" style="color: white;">
                              员工信息
                            </a>
                          </li>
                          <% if url_for == "/employees/organization_structure" %>
-                          <li style="background-color:white;">
+                          <li style="background-color:  #00D396;">
                          <% else %>
                           <li>
                          <% end %>
-                           <a href="/employees/organization_structure">
+                           <a href="/employees/organization_structure" style="color: white;">
                              组织架构
                            </a>
                          </li>
                          <li class="nav-parent">
-                           <a class="dropdown-toggle" data-toggle="dropdown">
+                           <a class="dropdown-toggle" data-toggle="dropdown" style="color: white;">
                              统计分析
                              <b class="caret"></b>
                            </a>
@@ -44,37 +44,37 @@
                              <ul class="children">
                            <% end %>
                              <% if url_for == "/employees/age_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
                              <%= link_to "年龄分析", age_statistical_analysis_employees_path(data_source: "全员") %></li>
                              <% if url_for == "/employees/working_years_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
                              <%= link_to "工龄分析", working_years_statistical_analysis_employees_path(data_source: "全员") %></li>
                              <% if url_for == "/employees/rali_years_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
                              <%= link_to"路龄分析", rali_years_statistical_analysis_employees_path(data_source: "全员") %></li>
                              <% if url_for == "/employees/education_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
                              <%= link_to"学历分析", education_statistical_analysis_employees_path(data_source: "全员") %></li>
                              <% if url_for == "/employees/worktype_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
                              <%= link_to"工种分析", worktype_statistical_analysis_employees_path(data_source: "全员") %></li>
                              <% if url_for == "/employees/compsite_statistical_analysis" %>
-                              <li style="background-color:white;">
+                              <li style="background-color:  #00D396;">
                              <% else %>
                               <li>
                              <% end %>
@@ -86,7 +86,7 @@
                      </li>
                   <% elsif !(current_user.has_role? :company_admin) %>
                     <% if url_for.split("/").second == "employees" %>
-                      <li style="background-color:white;"><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
+                      <li style="background-color:  #00D396;"><a href="/employees"><i class="fa fa-home"></i><span style="color: white;">现员管理</span></a></li>
                     <% else %>
                       <li><a href="/employees"><i class="fa fa-home"></i><span>现员管理</span></a></li>
                     <% end %>
@@ -108,20 +108,20 @@
                               <ul class="children">
                             <% end %>
                               <% if url_for.split("?").first == "/attendances/group" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/group">
+                                <a href="/attendances/group"  style="color: white;">
                                   考勤管理
                                 </a>
                               </li>
                               <% if url_for == "/annual_holidays/workshop_holiday_plan" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/annual_holidays/workshop_holiday_plan">
+                                <a href="/annual_holidays/workshop_holiday_plan" style="color: white;">
                                   年休假计划填写
                                 </a>
                               </li>
@@ -138,32 +138,32 @@
                               <ul class="children">
                             <% end %>
                               <% if url_for.split("?").first == "/attendances/group_current_time_info" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
                                 <%= link_to "考勤填写情况", group_current_time_info_attendances_path%>
                               </li>
                               <% if url_for.split("?").first == "/attendances/workshop_verify_index" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
                                 <%= link_to "考勤审核", workshop_verify_index_attendances_path%>
                               </li>
                               <% if url_for.split("?").first == "/attendances/workshop"  ||  url_for.split("?").first == "/attendances/filter" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
                                 <%= link_to "考勤统计", workshop_attendances_path%>
                               </li>
                               <% if url_for.split("?").first == "/annual_holidays/workshop_holiday_plan" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/annual_holidays/workshop_holiday_plan">
+                                <a href="/annual_holidays/workshop_holiday_plan" style="color: white;">
                                   年休假计划填写
                                 </a>
                               </li>
@@ -182,67 +182,67 @@
                               <ul class="children">
                             <% end %>
                               <% if url_for.split("?").first == "/attendances/group_current_time_info" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/group_current_time_info?group=593">考勤填写情况</a>
+                                <a href="/attendances/group_current_time_info?group=593" style="color: white;">考勤填写情况</a>
                               </li>
 
                               <% if url_for.split("?").first == "/attendances/duan_verify_index" %>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/duan_verify_index">考勤审核</a>
+                                <a href="/attendances/duan_verify_index" style="color: white;">考勤审核</a>
                               </li>
 
                               <% if url_for == "/attendances/duan"%>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/duan">
+                                <a href="/attendances/duan" style="color: white;">
                                   段考勤统计
                                 </a>
                               </li>
 
                               <% if url_for == "/attendances/annual_statistic"%>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/annual_statistic">
+                                <a href="/attendances/annual_statistic" style="color: white;">
                                   年考勤统计
                                 </a>
                               </li>
 
                               <% if url_for == "/attendances/caiwu"%>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/caiwu">
+                                <a href="/attendances/caiwu" style="color: white;">
                                   给财务的表-1
                                 </a>
                               </li>
 
                               <% if url_for == "/attendances/caiwu2"%>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/caiwu2">
+                                <a href="/attendances/caiwu2" style="color: white;">
                                   给财务的表-2
                                 </a>
                               </li>
 
                               <% if url_for == "/attendances/setting"%>
-                               <li style="background-color:white;">
+                               <li style="background-color:  #00D396;">
                               <% else %>
                                 <li>
                               <% end %>
-                                <a href="/attendances/setting">
+                                <a href="/attendances/setting" style="color: white;">
                                   考勤设置
                                 </a>
                               </li>
@@ -255,42 +255,42 @@
                                 <ul class="children">
                               <% end %>
                                 <% if url_for == "/annual_holidays/holiday_fulfill_detail"%>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/annual_holidays/holiday_fulfill_detail">
+                                  <a href="/annual_holidays/holiday_fulfill_detail" style="color: white;">
                                     年休假管理
                                   </a>
                                 </li>
 
                                 <% if url_for == "/annual_holidays/holiday_fulfillment_rate"%>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/annual_holidays/holiday_fulfillment_rate">
+                                  <a href="/annual_holidays/holiday_fulfillment_rate" style="color: white;">
                                     年休假完成率页
                                   </a>
                                 </li>
 
                                 <% if url_for == "/annual_holidays/duan_holiday_plan"%>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/annual_holidays/duan_holiday_plan">
+                                  <a href="/annual_holidays/duan_holiday_plan" style="color: white;">
                                     年休假计划页
                                   </a>
                                 </li>
 
 
                                 <% if url_for == "/annual_holidays/holiday_fulfill"%>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/annual_holidays/holiday_fulfill">
+                                  <a href="/annual_holidays/holiday_fulfill" style="color: white;">
                                     年休假落实页
                                   </a>
                                 </li>
@@ -308,20 +308,20 @@
                                 <ul class="children">
                               <% end %>
                                 <% if url_for.split("?").first == "/attendances/group" %>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/attendances/group">
+                                  <a href="/attendances/group" style="color: white;">
                                     填写考勤
                                   </a>
                                 </li>
                                 <% if url_for.split("?").first == "/attendances/group_statistics" %>
-                                 <li style="background-color:white;">
+                                 <li style="background-color:  #00D396;">
                                 <% else %>
                                   <li>
                                 <% end %>
-                                  <a href="/attendances/group_statistics?year=<%=Time.now.year%>&month=<%=Time.now.month%>">
+                                  <a href="/attendances/group_statistics?year=<%=Time.now.year%>&month=<%=Time.now.month%>" style="color: white;">
                                     考勤统计
                                   </a>
                                 </li>
@@ -343,36 +343,36 @@
                           <ul class="children">
                         <% end %>
                         <% if ["wages"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/wages/import_wage"> 工资表</a></li>
+                          <li style="background-color:  #00D396;"><a href="/wages/import_wage" style="color: white;"> 工资表</a></li>
                         <% else %>
                           <li><a href="/wages/import_wage"> 工资表</a></li>
                         <% end %>
                         <% if ["bonus"].include?(url_for.split("/").second) %>
-                          <li  style="background-color:white;"><a href="/bonus/import_bonus"> 奖金表</a></li>
+                          <li  style="background-color:  #00D396;"><a href="/bonus/import_bonus" style="color: white;"> 奖金表</a></li>
                         <% else %>
                           <li><a href="/bonus/import_bonus"> 奖金表</a></li>
                         <% end %>
                         <% if ["high_speed_rail_stuffs"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/high_speed_rail_stuffs"> 高铁岗位人员情况统计 </a></li>
+                          <li style="background-color:  #00D396;"><a href="/high_speed_rail_stuffs" style="color: white;"> 高铁岗位人员情况统计 </a></li>
                         <% else %>
                           <li><a href="/high_speed_rail_stuffs"> 高铁岗位人员情况统计 </a></li>
                         <% end %>
                         <% if ["main_driving_stuffs"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/main_driving_stuffs"> 主要行车工种情况统计 </a></li>
+                          <li style="background-color:  #00D396;"><a href="/main_driving_stuffs" style="color: white;"> 主要行车工种情况统计 </a></li>
                         <% else %>
-                          <li><a href="/main_driving_stuffs"> 主要行车工种情况统计 </a></li>
+                          <li><a href="/main_driving_stuffs" style="color: white;"> 主要行车工种情况统计 </a></li>
                         <% end %>
                         <% if ["production_stuff_wages"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/production_stuff_wages"> 运输站段生产人员人数和报酬 </a></li>
+                          <li style="background-color:  #00D396;"><a href="/production_stuff_wages" style="color: white;"> 运输站段生产人员人数和报酬 </a></li>
                         <% else %>
                           <li><a href="/production_stuff_wages"> 运输站段生产人员人数和报酬 </a></li>
                         <% end %>
                         <% if ["divide_level_wages"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/divide_level_wages"> 铁路企业分层次人员工资情况 </a></li>
+                          <li style="background-color:  #00D396;"><a href="/divide_level_wages" style="color: white;"> 铁路企业分层次人员工资情况 </a></li>
                         <% else %>
                           <li><a href="/divide_level_wages"> 铁路企业分层次人员工资情况 </a></li>
                         <% end %>
-                        <li><a href="/wages/wage_analyses"> 工资图表分析</a></li>
+                        <li><a href="/wages/wage_analyses" style="color: white;"> 工资图表分析</a></li>
                       </ul>
                      </li>
                    <% end %>
@@ -387,33 +387,33 @@
                         <% end %>
                         <% if !(current_user.has_role? :company_admin) %>
                           <% if url_for.split("/").last == "workshop_relative_salers" %>
-                            <li style="background-color:white;"><a href="/workshop_relative_salers"> 工效挂钩明细表(科室上传) </a></li>
+                            <li style="background-color:  #00D396;"><a href="/workshop_relative_salers" style="color: white;"> 工效挂钩明细表(科室上传) </a></li>
                           <% else %>
                             <li><a href="/workshop_relative_salers"> 工效挂钩明细表(科室上传) </a></li>
                           <% end %>
                           <% if  ["relative_salers_totals","rectification_awards","relative_salers","teamleader_awards","examination_awards","other_awards","middle_awards"].include?(url_for.split("/").last)%>
-                            <li style="background-color:white;"><a href="/relative_salers_totals"> 工效挂钩表(劳资上传) </a></li>
+                            <li style="background-color:  #00D396;"><a href="/relative_salers_totals" style="color: white;"> 工效挂钩表(劳资上传) </a></li>
                           <% else %>
                             <li><a href="/relative_salers_totals"> 工效挂钩表(劳资上传)</a></li>
                           <% end %>
                           <% if  ["charge_details","examination_charges","red_middle_charges"].include?(url_for.split("/").last)  %>
-                            <li  style="background-color:white;"><a href="/charge_details"> 考核扣款明细表</a></li>
+                            <li  style="background-color:  #00D396;"><a href="/charge_details" style="color: white;"> 考核扣款明细表</a></li>
                           <% else %>
                             <li><a href="/charge_details"> 考核扣款明细表</a></li>
                           <% end %>
                           <% if ["standard_award_totals","star_awards","other_award_totals","standard_groups"].include?(url_for.split("/").last) %>
-                            <li style="background-color:white;"><a href="/standard_award_totals"> 单项奖汇总表 </a></li>
+                            <li style="background-color:  #00D396;"><a href="/standard_award_totals" style="color: white;"> 单项奖汇总表 </a></li>
                           <% else %>
                             <li><a href="/standard_award_totals"> 单项奖汇总表 </a></li>
                           <% end %>
                           <% if url_for.split("/").last == "people_changes" %>
-                            <li style="background-color:white;"><a href="/people_changes"> 人员变动表 </a></li>
+                            <li style="background-color:  #00D396;"><a href="/people_changes" style="color: white;"> 人员变动表 </a></li>
                           <% else %>
                             <li><a href="/people_changes"> 人员变动表 </a></li>
                           <% end %>
                         <% end %>
                         <% if url_for.split("/").last == "company_relative_salers"%>
-                          <li style="background-color:white;"><a href="/company_relative_salers"> 工效挂钩考核表(企管上传) </a></li>
+                          <li style="background-color:  #00D396;"><a href="/company_relative_salers" style="color: white;"> 工效挂钩考核表(企管上传) </a></li>
                         <% else %>
                           <li><a href="/company_relative_salers"> 工效挂钩考核表(企管上传) </a></li>
                         <% end %>
@@ -430,27 +430,27 @@
                         <ul class="children">
                       <% end %>
                       <% if url_for == "/wages/income" %>
-                        <li style="background-color:white;"><a href="/wages/income"> 收入表 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/wages/income" style="color: white;"> 收入表 </a></li>
                       <% else %>
                         <li><a href="/wages/income"> 收入表 </a></li>
                       <% end %>
                       <% if ["wages"].include?(url_for.split("/").second) && (url_for != "/wages/income") %>
-                        <li style="background-color:white;"><a href="/wages/import_wage"> 主业工资 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/wages/import_wage" style="color: white;"> 主业工资 </a></li>
                       <% else %>
                         <li><a href="/wages/import_wage"> 主业工资</a></li>
                       <% end %>
                       <% if ["bonus"].include?(url_for.split("/").second) %>
-                        <li  style="background-color:white;"><a href="/bonus/import_bonus"> 主业奖金</a></li>
+                        <li  style="background-color:  #00D396;"><a href="/bonus/import_bonus" style="color: white;"> 主业奖金</a></li>
                       <% else %>
                         <li><a href="/bonus/import_bonus"> 主业奖金</a></li>
                       <% end %>
                       <% if ["djwages"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/djwages/import_djwage"> 多经工资 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/djwages/import_djwage" style="color: white;"> 多经工资 </a></li>
                       <% else %>
                         <li><a href="/djwages/import_djwage"> 多经工资 </a></li>
                       <% end %>
                       <% if ["djbonus"].include?(url_for.split("/").second) %>
-                        <li style="background-color:white;"><a href="/djbonus/import_djbonus"> 多经奖金 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/djbonus/import_djbonus" style="color: white;"> 多经奖金 </a></li>
                       <% else %>
                         <li><a href="/djbonus/import_djbonus"> 多经奖金 </a></li>
                       <% end %>
@@ -468,28 +468,28 @@
                         <ul class="children">
                       <% end %>
                       <% if "basic_scores" == url_for.split("/").second %>
-                        <li style="background-color:white;"><a href="/basic_scores"> 成绩汇总 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/basic_scores" style="color: white;"> 成绩汇总 </a></li>
                       <% else %>
                         <li><a href="/basic_scores"> 成绩汇总</a></li>
                       <% end %>
                       <% if "final_statistics" == url_for.split("/").second %>
-                        <li style="background-color:white;"><a href="/final_statistics"> 考核汇总 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/final_statistics" style="color: white;"> 考核汇总 </a></li>
                       <% else %>
                         <li><a href="/final_statistics"> 考核汇总</a></li>
                       <% end %>
                       <% if "/star_infos/five_star_info" == url_for%>
-                        <li style="background-color:white;"><a href="/star_infos/five_star_info"> 五星岗位人员 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/star_infos/five_star_info" style="color: white;"> 五星岗位人员 </a></li>
                       <% else %>
                         <li><a href="/star_infos/five_star_info"> 五星岗位人员</a></li>
                       <% end %>  
                      <% if ["/star_infos/all_star_info","/star_applications/new", "/star_applications/show"].include?(url_for) %>
-                        <li style="background-color:white;"><a href="/star_infos/all_star_info"> 全部星级岗位人员 </a></li>
+                        <li style="background-color:  #00D396;"><a href="/star_infos/all_star_info" style="color: white;"> 全部星级岗位人员 </a></li>
                       <% else %>
                         <li><a href="/star_infos/all_star_info"> 全部星级岗位人员</a></li>
                       <% end %>
                       <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin)%>
                         <% if ["score_weights","star_ranges"].include?(url_for.split("/").second) %>
-                          <li style="background-color:white;"><a href="/score_weights/show_weight"> 比例设置 </a></li>
+                          <li style="background-color:  #00D396;"><a href="/score_weights/show_weight" style="color: white;"> 比例设置 </a></li>
                         <% else %>
                           <li><a href="/score_weights/show_weight"> 比例设置</a></li>
                         <% end %>

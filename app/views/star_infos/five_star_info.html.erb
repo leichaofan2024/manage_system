@@ -8,7 +8,7 @@
     </header>
 
     <div class="content-body">
-      <div class="panel">
+      <div class="panel" id="five_star_option_no">
           <div class="panel-heading" style="background-color: #fff;">
   <!-- 导出与新增-开始 -->
             <button  onclick="toggle_visibility('employee-btn');" type="button" name="button" class="btn btn-success-alt">
@@ -21,13 +21,19 @@
               <%= link_to("导出表格",five_star_info_star_infos_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>
               <% if current_user.has_role? :staradmin %>
                 <%= link_to("完成本次评定",finish_star_assess_star_infos_path(:year => @year,:quarter => @quarter),:data => {:confirm => "您确定要完成#{@year}年#{@quarter}季度星级评定吗？"},method: :post,class:"btn btn-primary-upload pull-right") %>
+                <div class="btn-group">
+                  <a class="btn dropdown-toggle btn-primary-upload" data-toggle="dropdown">
+                    五星人员操作
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                    <li id="pass_five_star"><a href="#">通过五星评定</a></li>
+                    <li id="reback_five_star"><a href="#">退回推荐五星</a></li>
+                  </ul>
+                </div>
               <% end %>
-              <% if (current_user.has_role? :workshopadmin) %>
-                <span id="batch_pass_five_star">
-                  <%= link_to("五星人员操作","#",class:"btn btn-primary-upload pull-right") %>
-                </span>
-                
-              <% end %>
+               
+
               <% if params[:passed_five_star].present? %>
                 <%= link_to("查看全部五星",five_star_info_star_infos_path(request.query_parameters.delete_if{|key,value| key=="passed_five_star"}),class:"btn btn-primary-upload pull-right") %>
               <% else %>
@@ -134,43 +140,64 @@
             </div>
       </div>
       
-      <div class="content-table" style="clear:both;">
-        <table>
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>车间</th>
-              <th>班组</th>
-              <th>姓名</th>
-              <th>工资号</th>
-              <th>职名</th>
-              <th>分数</th>
-              <th>星级</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% n = 0 %>
-            <% @star_infos.each do |star_info| %>
-              <% n += 1 %>
+      <%= form_tag update_five_star_star_infos_path,method: :post do %>
+        <div class="panel" id="five_star_option_pass" style="display:none;">
+          <div style="background-color: #fff;">
+            <span><%= submit_tag "通过五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
+          </div>
+          <%= hidden_field_tag :pass_five_star,"yes" %>
+        </div>
+
+        <div class="panel" id="five_star_option_reback" style="display:none;">
+          <div style="background-color: #fff;">
+            <span><%= submit_tag "退回推荐五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
+          </div>
+          <%= hidden_field_tag :reback_five_star,"yes" %>
+        </div>
+        <%= hidden_field_tag :year,@year %>
+        <%= hidden_field_tag :quarter,@quarter %>
+        <div class="content-table" style="clear:both;">
+          <table>
+            <thead>
               <tr>
-                <td><%= n %></td>
-                <td><%= star_info.workshop %></td>
-                <td><%= star_info.group %></td>
-                <td><%= star_info.name %></td>
-                <td><%= star_info.sal_number %></td>
-                <td><%= star_info.duty %></td>
-                <td><%= star_info.final_score %></td>
-                <td>
-                  <% if star_info.star == "pre_5" %>
-                    推荐五星
-                  <% else %>
-                    <%= star_info.star %>星
-                  <% end %>
-                </td>
+                <th class="select-checkbox" style="display:none;">请选择</th>
+                <th>序号</th>
+                <th>车间</th>
+                <th>班组</th>
+                <th>姓名</th>
+                <th>工资号</th>
+                <th>职名</th>
+                <th>分数</th>
+                <th>星级</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% n = 0 %>
+              <% @star_infos.each do |star_info| %>
+                <% n += 1 %>
+                <tr>
+                  <td class="select-checkbox" style="display:none;">
+                    <%= check_box_tag "sal_number[#{star_info.sal_number}]",1,false %>
+                  </td>
+                  <td><%= n %></td>
+                  <td><%= star_info.workshop %></td>
+                  <td><%= star_info.group %></td>
+                  <td><%= star_info.name %></td>
+                  <td><%= star_info.sal_number %></td>
+                  <td><%= star_info.duty %></td>
+                  <td><%= star_info.final_score %></td>
+                  <td>
+                    <% if star_info.star == "pre_5" %>
+                      推荐五星
+                    <% else %>
+                      <%= star_info.star %>星
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
         <div class="text-center">
           <%= paginate @star_infos %>
         </div>
@@ -213,5 +240,19 @@
      else
         e.style.display = 'block';
   };
+
+  $("#pass_five_star").click(function(){
+    $("#five_star_option_no").hide();
+    $("#five_star_option_pass").show();
+    $("#five_star_option_reback").remove();
+    $(".select-checkbox").show();
+  });
+  
+    $("#reback_five_star").click(function(){
+    $("#five_star_option_no").hide();
+    $("#five_star_option_pass").remove();
+    $("#five_star_option_reback").show();
+    $(".select-checkbox").show();
+  });
   
 </script>
