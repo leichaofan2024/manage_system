@@ -143,6 +143,8 @@
       <%= form_tag update_five_star_star_infos_path,method: :post do %>
         <div class="panel" id="five_star_option_pass" style="display:none;">
           <div style="background-color: #fff;">
+            <span class="all-select btn " style="color:blue;">全选</span>
+            <span class="not-select-at-all btn" style="color:blue;display:none;">全不选</span>
             <span><%= submit_tag "通过五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
           </div>
           <%= hidden_field_tag :pass_five_star,"yes" %>
@@ -150,6 +152,8 @@
 
         <div class="panel" id="five_star_option_reback" style="display:none;">
           <div style="background-color: #fff;">
+            <span class="all-select btn " style="color:blue;">全选</span>
+            <span class="not-select-at-all btn" style="color:blue;display:none;">全不选</span>
             <span><%= submit_tag "退回推荐五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
           </div>
           <%= hidden_field_tag :reback_five_star,"yes" %>
@@ -177,7 +181,7 @@
                 <% n += 1 %>
                 <tr>
                   <td class="select-checkbox" style="display:none;">
-                    <%= check_box_tag "sal_number[#{star_info.sal_number}]",1,false %>
+                    <%= check_box_tag "sal_number[#{star_info.sal_number}]",1,false,class: "checkbox-body" %>
                   </td>
                   <td><%= n %></td>
                   <td><%= star_info.workshop %></td>
@@ -255,4 +259,21 @@
     $(".select-checkbox").show();
   });
   
+  $(".all-select").click(function(){
+    var doccount = document.getElementsByClassName('checkbox-body');
+    $.each(doccount,function(index,value){
+      value.checked = true;
+    });
+    $(".all-select").hide();
+    $(".not-select-at-all").show();
+  });
+  
+  $(".not-select-at-all").click(function(){
+    var doccount = document.getElementsByClassName('checkbox-body');
+    $.each(doccount,function(index,value){
+      value.checked = false;
+    });
+    $(".all-select").show();
+    $(".not-select-at-all").hide();
+  });
 </script>
