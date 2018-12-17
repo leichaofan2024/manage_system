@@ -82,7 +82,7 @@
 			        </li>     
 			      	<br>
 			      	<li style="margin-top: 10px;">
-			        <%= label_tag :按职名： %>
+			        <%= label_tag :职名： %>
 				        <select class="" name="duty">
 				          <option value>请选择</option>
 				          <% StarInfo.pluck("duty").uniq.compact.each do |duty| %>
@@ -93,14 +93,22 @@
 				            <% end %>
 				          <% end %>
 				        </select>
-				        <%= label_tag :按星级： %>
+				        <%= label_tag :星级： %>
 				        <select class="" name="star">
 				        <option value>请选择</option>
 					        <% StarInfo.pluck("star").uniq.compact.each do |star| %>
 					          <% if params[:star] == star %>
-					            <option value="<%= star %>" selected><%= (star + "星") %></option>
+					          	<% if star == "pre_5" %>
+					          		<option value="<%= star %>" selected>推荐5星</option>
+					          	<% else %>
+					            	<option value="<%= star %>" selected><%= (star + "星") %></option>
+					            <% end %>
 					          <% else %>
-					            <option value="<%= star %>"><%= (star + "星") %></option>
+					          	<% if star == "pre_5" %>
+					            	<option value="<%= star %>">推荐5星</option>
+					            <% else %>
+					            	<option value="<%= star %>"><%= (star + "星") %></option>
+					            <% end %>
 					          <% end %>
 					        <% end %>
 				      	</select>
