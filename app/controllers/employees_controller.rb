@@ -1661,7 +1661,7 @@ class EmployeesController < ApplicationController
   private
 
     def employee_params
-      params.require(:employee).permit(:duojing ,:name, :sal_number, :job_number, :record_number, :workshop, :group, :name, :sex, :birth_date, :birth_year, :age, :nation, :native_place, :political_role, :political_party_date, :working_time, :railway_time, :entry_time, :duty, :employment_period, :part_time, :grade, :promotion_leader_time, :technique_duty,
+      params.require(:employee).permit(:health,:if_high_rails,:duojing ,:name, :sal_number, :job_number, :record_number, :workshop, :group, :name, :sex, :birth_date, :birth_year, :age, :nation, :native_place, :political_role, :political_party_date, :working_time, :railway_time, :entry_time, :duty, :employment_period, :part_time, :grade, :promotion_leader_time, :technique_duty,
        :hold_technique_time, :work_type, :job_foreman, :contract_station, :three_one, :people_source, :people_category, :education_background, :graduation_school, :school_sort, :major, :where_place, :employment_form, :contract_period, :conclude_contract_time, :record_saler, :skilledness_saler, :station_saler, :seniority_saler, :skilledness_authenticate, :treatment, :station_rank, :skilledness_rank, :station_now, :station_now_time, :retire_condition,
        :marriage_status, :separate_status, :visit_family, :registered_residence, :family_address, :comment, :identity_card_number, :employee_card_number, :trade_code, :produce_group, :saler_item, :other_saler, :comment_data, :graduation_time, :position, :group_category, :job_foreman_category, :job_foreman_duty, :phone_number, :avatar, :station_rank, :skilledness_rank, :entry_time, :company_name)
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181213093039) do
+ActiveRecord::Schema.define(version: 20181217072457) do
 
   create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "title"
@@ -756,6 +756,9 @@ ActiveRecord::Schema.define(version: 20181213093039) do
     t.string "phone_number"
     t.string "avatar"
     t.boolean "duojing", default: false
+    t.boolean "high_rails", default: false
+    t.boolean "if_high_rails", default: false
+    t.string "health"
     t.index ["sal_number"], name: "index_employees_on_sal_number", unique: true
   end
 

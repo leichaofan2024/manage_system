@@ -132,8 +132,9 @@
       <span class="glyphicon glyphicon-asterisk"></span>
       <span>是否属于多经人员</span>
       
-      <%= f.check_box :duojing,{},1,false %>
+      <%= f.check_box :duojing,{}, checked_value = "1", unchecked_value = "0" %>
       </li>
+      
       <li>
       <span class="glyphicon glyphicon-asterisk"></span>
       <span>工资号</span>
@@ -212,6 +213,12 @@
   </div>
   <div class="col-md-5">
     <ul class="employee-list">
+      <li>
+      <span class="glyphicon glyphicon-asterisk"></span>
+      <span>是否属于高铁人员</span>
+      
+      <%= f.check_box :if_high_rails,{}, checked_value = "1", unchecked_value = "0" %>
+      </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>姓名
       <%= f.text_field :name, required: true %>
       </li>
@@ -282,6 +289,10 @@
       <li>身份证号
       <%= f.text_field :identity_card_number %>
       </li>
+      <li>身体状况
+      <%= f.text_field :health %>
+      </li>
+
     </ul>
   </div>
 </div> <!--row-->

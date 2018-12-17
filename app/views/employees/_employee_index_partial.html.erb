@@ -31,6 +31,14 @@
     <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.railway_time.to_i %></td>
     <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.rali_years %></td>
     <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>">
+      <% if employee.if_high_rails == true %>
+        是
+      <% else %>
+        否
+      <% end %> 
+    </td>
+    <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.health%></td>
   </tr>
 <% elsif current_user.has_role? :safe_productionadmin %>
   <tr>
@@ -41,6 +49,18 @@
     <td><%= employee.work_type %></td>
     <td><%= employee.political_role %></td>
     <td><%= employee.working_time %></td>
+    <td><%= employee.skilledness_authenticate%></td>
+    <td><%= employee.work_type%></td>
+    <td><%= employee.employment_period%></td>
+    <td><%= employee.station_now_time%></td>
+    <td>
+      <% if employee.if_high_rails == true %>
+        是
+      <% else %>
+        否
+      <% end %> 
+      </td>
+    <td><%= employee.health%></td>
   </tr>
 <% elsif (current_user.has_role? :workshopadmin) %>
   <tr class="row-click-able" data-url="/employees/<%= employee.id%>">
