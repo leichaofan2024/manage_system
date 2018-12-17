@@ -1,16 +1,45 @@
-<%= link_to '返回', :back %>
-<h3>升/降星申请</h3>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <%= link_to '返回', :back %>
+	  <h4 style="text-align: center">升/降星申请</h4>
+    </header>
 
-<%= form_tag create_application_star_applications_path do %>
-	<%= label_tag :"申请人员姓名" %>
-	<%= text_field_tag :name, nil, :required => "true" %><br>
-	<%= label_tag :"申请人员工资号" %>
-	<%= text_field_tag :sal_number, nil, :required => "true" %><br>
-	<%= label_tag :"选择年份、季度：" %>
-	<%= select_tag(:year, options_for_select(StarInfo.pluck(:year).uniq), {:required => "true"}) %>
-	<%= select_tag(:quarter, options_for_select(StarInfo.pluck(:quarter).uniq), {:required => "true"}) %><br>
-	<%= label_tag :"选择升/降星" %>
-	<%= select_tag(:update_type, options_for_select([["升", "+"], ["降", "-"]]), {:required => "true"}) %>
-	<%= select_tag(:star_count, options_for_select([["一星", 1], ["二星", 2], ["三星", 3], ["四星", 4], ["五星", 5]]), {:required => "true"}) %><br>
-	<%= submit_tag :发起申请 %>
-<% end %>
+    <div class="content-body">
+      <div class="panel">
+        <%= form_tag create_application_star_applications_path do %>
+          <li style="display: inline-block;margin-top: 15px;margin-left: 450px;">
+            <%= label_tag :申请人员姓名：%>
+		    <%= text_field_tag :name, nil, :required => "true" %>
+		  </li><br>
+		  <li style="display: inline-block;margin-top: 15px;margin-left: 450px;">
+		    <%= label_tag :申请人员工资号： %>
+		    <%= text_field_tag :sal_number, nil, :required => "true" %>
+		  </li><br>
+		  <li style="display: inline-block;margin-top: 15px;margin-left: 450px;">
+		    <%= label_tag :选择年份和季度： %>
+		    <%= select_tag(:year, options_for_select(StarInfo.pluck(:year).uniq), {:required => "true"}) %>
+		    <%= select_tag(:quarter, options_for_select(StarInfo.pluck(:quarter).uniq), {:required => "true"}) %>
+		  </li><br>
+		  <li style="display: inline-block;margin-top: 15px;margin-left: 450px;">
+		    <%= label_tag :"选择升/降星：" %>
+		    <%= select_tag(:update_type, options_for_select([["升", "+"], ["降", "-"]]), {:required => "true"}) %>
+		    <%= select_tag(:star_count, options_for_select([["一星", 1], ["二星", 2], ["三星", 3], ["四星", 4], ["五星", 5]]), {:required => "true"}) %>
+		  </li><br>
+		  <li style="margin-top: 10px;margin-left: 500px;">
+		  	<%= submit_tag :发起申请, class: "btn btn-success" %>
+		  </li>
+	    <% end %>
+      </div>
+    </div>
+  </div>
+ </div>
+
+
+
+
+
+
