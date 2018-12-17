@@ -11,18 +11,59 @@
   </div>
 </div>
 
-<h4>当前分数权重：</h4>
-<p>理论考试：<%= ((ScoreWeight.first.theory_score) * 100).to_i %>%</p>
-<p>实作考试：<%= ((ScoreWeight.first.practical_score) * 100).to_i %>%</p>
-<p>工作业绩：<%= ((ScoreWeight.first.work_performance) * 100).to_i %>%</p>
-
-<h4>编辑权重：</h4>
-<%= form_tag update_weight_score_weights_path(method: :post) do %>
-  <%= label_tag :"请输入理论考试权重：" %>
-  <%= text_field_tag :theory_score, nil, required: "true" %>%<br>
-  <%= label_tag :"请输入实作考试权重：" %>
-  <%= text_field_tag :practical_score, nil, required: "true" %>%<br>
-  <%= label_tag :"请输入工作业绩权重：" %>
-  <%= text_field_tag :work_performance, nil, required: "true" %>%<br>
-  <%= submit_tag :确定修改 %>
-<% end %>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4>当前分数权重：</h4>
+    </header>
+    <div class="content-body"> 
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+            <tr>
+              <th>考试类型</th>
+              <th>权重</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% score = {"theory_score"=>"理论考试", "practical_score"=>"实作考试", "work_performance"=>"工作业绩"} %>
+          <% score.each do |i| %>
+            <tr>
+              <td><%= i[1] %>：</td>
+              <td><%= ((ScoreWeight.first.attributes[i[0]]) * 100).to_i %>%</td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <header>
+        <h4>编辑分数权重：</h4>
+      </header>
+      <div class="content-table" style="clear:both;">
+        <%= form_tag update_weight_score_weights_path(method: :post) do %>
+          <table>
+            <thead>
+              <tr>
+                <th>考试类型</th>
+                <th>权重</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% score = {"theory_score"=>"理论考试", "practical_score"=>"实作考试", "work_performance"=>"工作业绩"} %>
+            <% score.each do |i| %>
+              <tr>
+                <td><%= i[1] %>：</td>
+                <td><%= text_field_tag :"#{i[0]}", nil, required: "true" %>%</td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+          <%= submit_tag :确定修改, class: "btn button-success" %>
+        <% end %>       
+      </div>    
+    </div>
+  </div>
+</div>

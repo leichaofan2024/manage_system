@@ -2,7 +2,8 @@ class StarApplicationsController < ApplicationController
 	layout 'home'
 
 	def index
-		if params[:type] == "1"
+		@type = params[:type]
+		if @type == "1"
 			@applications = StarApplication.where(status: 1)
 		else
 			@applications = StarApplication.where(status: 0)

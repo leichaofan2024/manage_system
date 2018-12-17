@@ -11,45 +11,78 @@
   </div>
 </div>
 
-<h4>当前各星级比例如下：</h4>
-<table class="table table-bordered">
-	<tr>
-		<th>星级</th>
-		<th>人员比例</th>
-		<th>奖励金额</th>
-	</tr>
-	<% star = {5=>"五", 4=>"四", 3=>"三", 2=>"二", 1=>"一"} %>
-	<% star.each do |i| %>
-		<tr>
-			<td><%= i[1] %>星：</td>
-			<td><%= (StarRange.find_by(name: i[0]).f_type) %><%= ((StarRange.find_by(name: i[0]).value) * 100).to_i %>%</td>
-			<td><%= (StarRange.find_by(name: i[0]).money) %>元</td>
-		</tr>
-	<% end %>
-</table>
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4>当前各星级比例：</h4>
+    </header>
+    <div class="content-body"> 
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+			<tr>
+			  <th>星级</th>
+			  <th>人员比例</th>
+			  <th>奖励金额</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<% star = {5=>"五", 4=>"四", 3=>"三", 2=>"二", 1=>"一"} %>
+			<% star.each do |i| %>
+				<tr>
+					<td><%= i[1] %>星：</td>
+					<td><%= (StarRange.find_by(name: i[0]).f_type) %><%= ((StarRange.find_by(name: i[0]).value) * 100).to_i %>%</td>
+					<td><%= (StarRange.find_by(name: i[0]).money) %>元</td>
+				</tr>
+			<% end %>
+		  </tbody>
+        </table>
+      </div>
+      <header>
+        <h4>编辑各星级比例：</h4>
+      </header>
+      <div class="content-table" style="clear:both;">
+        <%= form_tag update_range_star_ranges_path(method: :post) do %>
+	        <table>
+	        	<thead>
+	        		<tr>
+						<th>星级</th>
+						<th>人员比例</th>
+						<th>奖励金额</th>
+					</tr>
+	        	</thead>
+	        	<tbody>
+	        		<% star = {5=>"五", 4=>"四", 3=>"三", 2=>"二", 1=>"一"} %>
+					<% star.each do |i| %>
+					<tr>
+						<td><%= i[1] %>星：</td>
+						<td>
+							<% f_type = ("f_type") + i[0].to_s %>
+							<% value = ("value") + i[0].to_s %>
+							<% money = ("money") + i[0].to_s %>
+							<%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true", star: i[0]}) %>
+							<%= text_field_tag :"#{value}", nil, required: "true", star: i[0] %>%
+						</td>
+						<td><%= text_field_tag :"#{money}"%>元</td>
+					</tr>
+					<% end %>
+	        	</tbody>
+	        </table> 
+	        <%= submit_tag :确定修改, class: "btn button-success" %>
+	    <% end %> 
+	  </div>    
+    </div>
+  </div>
+</div>
 
-<h4>编辑星级比例：</h4>
-<%= form_tag update_range_star_ranges_path(method: :post) do %>
-	<table class="table table-bordered">
-		<tr>
-			<th>星级</th>
-			<th>人员比例</th>
-			<th>奖励金额</th>
-		</tr>
-		<% star = {5=>"五", 4=>"四", 3=>"三", 2=>"二", 1=>"一"} %>
-		<% star.each do |i| %>
-		<tr>
-			<td><%= i[1] %>星：</td>
-			<td>
-				<% f_type = ("f_type") + i[0].to_s %>
-				<% value = ("value") + i[0].to_s %>
-				<% money = ("money") + i[0].to_s %>
-				<%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true", star: i[0]}) %>
-				<%= text_field_tag :"#{value}", nil, required: "true", star: i[0] %>%
-			</td>
-			<td><%= text_field_tag :"#{money}"%>元</td>
-		</tr>
-		<% end %>
-	</table>
-	<%= submit_tag :确定修改 %>
-<% end %>
+
+
+
+
+
+
+
+	

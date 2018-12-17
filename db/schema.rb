@@ -1520,8 +1520,8 @@ ActiveRecord::Schema.define(version: 20181217072457) do
     t.string "star"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "team_leader", default: false
     t.integer "descend_record", default: 0
+    t.boolean "team_leader", default: false
   end
 
   create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
