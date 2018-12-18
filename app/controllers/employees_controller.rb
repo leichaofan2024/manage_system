@@ -1675,7 +1675,7 @@ class EmployeesController < ApplicationController
     def search_params
       if current_user.has_role? :organsadmin
         @employees = Employee.current.where(:group => current_user.group_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
-      elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin)
+      elsif (current_user.has_role? :superadmin) || (current_user.has_role? :empadmin) || (current_user.has_role? :attendance_admin) || (current_user.has_role? :limitadmin) || (current_user.has_role? :awardadmin) || (current_user.has_role? :safe_productionadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) || (current_user.has_role? :saleradmin) || (current_user.has_role? :staradmin)
         Employee.ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
       elsif current_user.has_role? :workshopadmin
         @employees = Employee.current.where(:workshop => current_user.workshop_id).ransack({ :name_or_identity_card_number_or_sal_number_cont => @query_string}).result(distinct: true)
