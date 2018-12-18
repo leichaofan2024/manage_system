@@ -130,7 +130,9 @@
 
                   <% end %>
                   <tr>
-                    <td colspan="4">合计</td>
+                    <td style="font-weight: 700">人数合计</td>
+                    <td colspan="2"><%= @employees.count %></td>
+                    <td style="font-weight: 700">考勤合计</td>
                     <% @vacation_name_hash.keys.each do |code| %>
                       <% sum_code = sum_hash[code].sum %>
                       <% if sum_code > 0 %>
