@@ -144,4 +144,9 @@ class AnnualHolidaysController < ApplicationController
 		@employees = Employee.current.where(:group => current_user.group_id)
 	end
 
+	def holiday_fulfill
+		@dutys = ["接触网工","电力工","轨道车司机"]
+
+	end 
+
 end

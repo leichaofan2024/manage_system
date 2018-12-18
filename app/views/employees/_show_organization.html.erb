@@ -8,7 +8,9 @@
   </thead>
   <tbody>
     <tr>
-      <td>北京供电段</td>
+      <td>北京供电段
+        <span style="margin-left:10px;font-size: 14px;">(<%= Workshop.current.count %>车间|<%= Group.current.count %>班组)</span>
+       </td>
       <td><%= @employees.total_count%></td>
 
       <td>
@@ -24,7 +26,7 @@
       <tr>
         <td class="parent" id="<%= workshop.id%>" style="text-align: left; font-size: 18px;">
           <i class="fa fa-caret-right" style="opacity: 0.5; margin-right: 5px;width: auto; vertical-align: baseline;"></i>
-          <%= workshop.name %>
+          <%= workshop.name %><span style="margin-left:10px;font-size: 14px;">（班组：<%= Group.current.where(:workshop_id => workshop.id).count %>）</span>
         </td>
         <td><%= Employee.current.where(workshop: workshop).count%></td>
         <td>
