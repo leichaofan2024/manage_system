@@ -33,7 +33,7 @@ class AnnualHolidaysController < ApplicationController
 			if hoiday_plans.present?
 				message_array = Array.new 
 				hoiday_plans.each do |holiday| 
-					if (holiday.this_year_people_number.to_i == holiday.five_days.to_i + holiday.ten_days.to_i + holiday.fifteen_days.to_i) && (holiday.holiday_days.to_i == holiday.January_plan_number.to_i + holiday.February_plan_number.to_i + holiday.March_plan_number.to_i + holiday.April_plan_number.to_i + holiday.May_plan_number.to_i + holiday.June_plan_number.to_i + holiday.July_plan_number.to_i + holiday.August_plan_number.to_i + holiday.September_plan_number.to_i + holiday.October_plan_number.to_i + holiday.November_plan_number.to_i + holiday.December_plan_number.to_i)
+					if (holiday.this_year_people_number.to_i == holiday.five_days.to_i + holiday.ten_days.to_i + holiday.fifteen_days.to_i) && (holiday.this_year_people_number.to_i == holiday.January_plan_number.to_i + holiday.February_plan_number.to_i + holiday.March_plan_number.to_i + holiday.April_plan_number.to_i + holiday.May_plan_number.to_i + holiday.June_plan_number.to_i + holiday.July_plan_number.to_i + holiday.August_plan_number.to_i + holiday.September_plan_number.to_i + holiday.October_plan_number.to_i + holiday.November_plan_number.to_i + holiday.December_plan_number.to_i) && (holiday.holiday_days.to_i == holiday.January_plan_days.to_i + holiday.February_plan_days.to_i + holiday.March_plan_days.to_i + holiday.April_plan_days.to_i + holiday.May_plan_days.to_i + holiday.June_plan_days.to_i + holiday.July_plan_days.to_i + holiday.August_plan_days.to_i + holiday.September_plan_days.to_i + holiday.October_plan_days.to_i + holiday.November_plan_days.to_i + holiday.December_plan_days.to_i)
 					else
 						if AnnualHolidayWorkType.find_by(:id => holiday.work_type).present?
 						  work_type = AnnualHolidayWorkType.find_by(:id => holiday.work_type).work_type
@@ -145,8 +145,19 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfill
+		if params[:year].present? 
+			@year = params[:year]
+		else 
+			@year = Time.now.year
+		end 
 		@dutys = ["接触网工","电力工","轨道车司机"]
 
+	end 
+
+	def workshop_employees
+		if params[work_type].present? 
+		else 
+		end 
 	end 
 
 end

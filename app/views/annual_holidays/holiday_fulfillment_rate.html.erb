@@ -9,117 +9,88 @@
 		        	<tr>
 		        		<th>车间</th>
 		        		<th>季度</th>
-						<th>完成人数</th>
-		        		<th>完成率</th>
-		        		<th>完成天数</th>
-		        		<th>完成率</th>
+						<th>本季度完成人数</th>
+		        		<th>累计完成率</th>
+		        		<th>本季度完成天数</th>
+		        		<th>累计完成率</th>
 		        	</tr>
 		        </thead>
-		        						<tbody>
+		        <tbody>
 
 	        		<% @workshops.each do |workshop| %>
+	        		    <% sum_complete_day_count = 0 %>
+	        		    <% sum_complete_employee_count = 0 %>
+	        		    <!-- 本车间全部职工年休假计划： -->
+	        		    <% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: @year,:status => "yes",:work_type => "全部职工") %>
+        				<% if holiday_plan.present? %>
+        				    <!-- 本车间计划年休假天数： -->
+	        				<% plan_sum_days = holiday_plan.holiday_days %>
+	        				<!-- 本车间计划年休假人数： -->
+	        				<% plan_all_employee_count = holiday_plan.this_year_people_number %>
+        				<% end %>
 		        		<% (1..4).each do |i| %>
-		        		<% plan_sum = 0 %>
 		        			<tr>
 		        				<td><%= workshop.name %></td>
 		        				<td><%= i %></td>
-		        				<!-- 表数据配置-开始 -->
-		        				<!-- 第一季度完成天数 -->
-								<% employees = Employee.current.where(workshop: workshop.id).pluck("id").uniq %>
-								<% if i == 1 %>
-									<td></td>
-									<td></td>
-									<% first_quarter_number = AnnualHoliday.where(year: @year, employee_id: employees, month: @quarter_hash[i][0]).sum(:holiday_days) %>
-			        				<td><%= first_quarter_number %></td>
-									<!-- 第一季度计划天数 -->
-									<% columns = ["January_plan_days", "February_plan_days", "March_plan_days"] %>
-									<% holiday_plan = AnnualHolidayPlan.where(workshop_id: workshop.id, year: @year) %>
-									<% columns.each do |column| %>
-										<% if holiday_plan.present? %>
-											<% holiday_plan_attributes = holiday_plan.attributes %>
-											<% if holiday_plan_attributes[column].present? %>
-												<% plan_sum += holiday_plan_attributes[column] %>
-											<% end %>
-										<% end %>
-									<% end %>
-									<!-- 第一季度天数完成率 -->
-									<% if plan_sum != 0 %>
-										<td><%= (first_quarter_number.to_f/plan_sum)*100 %>%</td>
-									<% else %>
-										<td>0</td>
-									<% end %>
-								<!-- 第二季度完成天数 -->
-		        				<% elsif i == 2 %>
-		        					<td></td>
-									<td></td>
-		        					<% second_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 4..6).sum(:holiday_days) %>
-		        					<td><%= second_quarter_number %></td>
-		        					<!-- 第二季度计划天数 -->
-		        					<% columns = ["April_plan_days", "May_plan_days", "June_plan_days"] %>
-									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
-									<% columns.each do |column| %>
-										<% if holiday_plan.present? %>
-											<% holiday_plan_attributes = holiday_plan.attributes %>
-										<% if holiday_plan_attributes[column].present? %>
-											<% plan_sum += holiday_plan_attributes[column] %>
-										<% end %>
-										<% end %>
-									<% end %>
-									<!-- 第二季度完成天数率 -->
-									<% if plan_sum != 0 %>
-										<td><%= (second_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
-									<% else %>
-										<td>0</td>
-									<% end %>
-		    					<!-- 第三季度完成天数 -->
-		        				<% elsif i == 3 %>
-		        					<td></td>
-									<td></td>
-		        					<% third_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 7..9).sum(:holiday_days) %>
-		        					<td><%= third_quarter_number %></td>
-		        					<!-- 第三季度计划天数 -->
-		        					<% columns = ["July_plan_days", "August_plan_days", "Semptember_plan_days"] %>
-									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
-									<% columns.each do |column| %>
-										<% if holiday_plan.present? %>
-											<% holiday_plan_attributes = holiday_plan.attributes %>
-										<% if holiday_plan_attributes[column].present? %>
-											<% plan_sum += holiday_plan_attributes[column] %>
-										<% end %>
-										<% end %>
-									<% end %>
-									<!-- 第三季度完成天数率 -->
-									<% if plan_sum != 0 %>
-										<td><%= (third_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
-									<% else %>
-										<td>0</td>
-									<% end %>
-		        				<!-- 第四季度完成天数 -->
-		        				<% elsif i == 4 %>
-		        					<td></td>
-									<td></td>
-		        					<% forth_quarter_number = AnnualHoliday.where(year: Time.now.year, employee_id: employees, month: 10..12).sum(:holiday_days) %>
-		        					<td><%= forth_quarter_number %></td>
-		        					<!-- 第四季度计划天数 -->
-		        					<% columns = ["October_plan_days", "November_plan_days", "December_plan_days"] %>
-									<% holiday_plan = AnnualHolidayPlan.find_by(workshop_id: workshop.id, year: Time.now.year) %>
-									<% columns.each do |column| %>
-										<% if holiday_plan.present? %>
-											<% holiday_plan_attributes = holiday_plan.attributes %>
-										<% if holiday_plan_attributes[column].present? %>
-											<% plan_sum += holiday_plan_attributes[column] %>
-										<% end %>
-										<% end %>
-									<% end %>
-									<!-- 第四季度完成天数率 -->
-									<% if plan_sum != 0 %>
-										<td><%= (forth_quarter_number.to_f/plan_sum.to_f)*100 %>%</td>
-									<% else %>
-										<td>0</td>
-									<% end %>
-		        				<% end %>
+		        				<!-- 根据工龄计算年休假分别为5天、10天、15天的人员id: -->
+		        				<% should_holiday_hash = {5 => [],10 => [],15 => []} %>
+                                <% employees = Employee.current.where(workshop: workshop.id) %>
+                                <% employees.each do |employee| %>
+                                  <% if group_holiday_year(employee) == 5 %>
+                                    <% should_holiday_hash[5] << employee.id %>
+                                  <% elsif group_holiday_year(employee) == 10 %>
+                                    <% should_holiday_hash[10] << employee.id %>
+                                  <% elsif group_holiday_year(employee) == 15 %>
+                                    <% should_holiday_hash[15] << employee.id %>
+                                  <% end %>
+                                <% end %>
+                                <!-- 计算完成！ -->
+                                
+                                <!-- 分别完成5、10、15天年休假的人数计算： -->
+                                <% complete_five_employees_count = AnnualHoliday.where(:year => @year,:month => @quarter_hash[i][0],:employee_id => should_holiday_hash[5]).group(:employee_id).sum(:holiday_days).delete_if{|key,value| value < 5 }.count %>
+                                <% complete_ten_employees_count = AnnualHoliday.where(:year => @year,:month => @quarter_hash[i][0],:employee_id => should_holiday_hash[10]).group(:employee_id).sum(:holiday_days).delete_if{|key,value| value < 10 }.count %>
+                                 <% complete_fifteen_employees_count = AnnualHoliday.where(:year => @year,:month => @quarter_hash[i][0],:employee_id => should_holiday_hash[15]).group(:employee_id).sum(:holiday_days).delete_if{|key,value| value < 15 }.count %>
 
-								<!-- 表数据配置-结束 -->
+                                 <!-- 当前季度休假人数： -->
+                                 <% complete_all_employees_count = complete_five_employees_count + complete_ten_employees_count + complete_fifteen_employees_count %>
+                                 <!-- 当前季度累计完成休假人数： -->
+                                 <% sum_complete_employee_count += complete_all_employees_count %>
+                                 
+                                 <!-- 当前季度完成年休假天数： -->
+								<% employee_ids = employees.pluck("id") %>
+								<% complete_quarter_daysnumber = AnnualHoliday.where(year: @year, employee_id: employee_ids, month: @quarter_hash[i][0]).sum(:holiday_days) %>
+								<!-- 当面季度累计完成年休假天数： -->
+								<% sum_complete_day_count += complete_quarter_daysnumber %>
+
+                                <% if  complete_all_employees_count > 0 %>
+                                    <!-- 当前季度完成年休假人数： -->
+	                                <td><%= complete_all_employees_count %></td>
+
+	                                <!-- 当前季度累计完成年休假的人数占比： -->
+									<td>
+										<% if holiday_plan.present? %>
+										  <%= (sum_complete_employee_count.to_f*100/plan_all_employee_count).round(1)%>%
+										<% end %>
+									</td>
+								<% else %>	
+								  <td></td>
+								  <td></td>
+								<% end %>
+								
+								<!-- 当前季度累计完成天数： -->
+		        				<td><%= complete_quarter_daysnumber %></td>
+						
+								<!-- 当前季度年休假累计完成率 -->
+								<% if holiday_plan.present? %>
+									<% if plan_sum != 0 %>
+										<td><%= (sum_complete_day_count.to_f/plan_sum_days)*100 %>%</td>
+									<% else %>
+										<td>0</td>
+									<% end %>
+							    <% else %>
+							      <td><span style="color:red;">车间未上报年休假计划！</span></td>
+							    <% end %>
+								
 		        			</tr>
 		        		<% end %>
 	        		<% end %>

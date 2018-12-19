@@ -8,13 +8,15 @@
 	      <h4 class="text-center">
 	      	<%= Time.now.year %>年年休假计划填写表
 	      	<% if current_user.has_role? :workshopadmin %>
-	      	  <% if AnnualHolidayPlan.find_by(:year => Time.now.year,:workshop_id => current_user.workshop_id).status == "yes" %>
+	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => Time.now.year,:workshop_id => current_user.workshop_id)%>
+	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
 	      	     （已上报）
 	      	  <% else %>
 	      	     （未上报）
 	      	  <% end %>
 	      	<% elsif current_user.has_role? :organsadmin %>
-	      	  <% if AnnualHolidayPlan.find_by(:year => Time.now.year,:orgnization_id => current_user.group_id).status == "yes" %>
+	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => Time.now.year,:orgnization_id => current_user.group_id) %>
+	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
 	      	     （已上报）
 	      	  <% else %>
 	      	     （未上报）
@@ -23,9 +25,7 @@
 	      </h4>
 	    </header>
 
-		<!-- <div class="panel panel-default">
-		<%= render 'annual_holiday_sidebar' %>
-		</div> -->
+		
 		<div class="col-md-12">
 		  <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true"), method: :post, class: "btn btn-primary",:data => {:disable_with => "上报中..."} %>
 		</div>
@@ -36,8 +36,8 @@
 			        <thead>
 			        	<tr>
 			        		<th>工种</th>
-			        		<th>上年末单位人数</th>
-			        		<th>休年休假人数</th>
+			        		<th>上年末部门人数</th>
+			        		<th>可休年休假人数</th>
 			        		<th>休5天人数</th>
 			        		<th>休10天人数</th>
 			        		<th>休15天人数</th>

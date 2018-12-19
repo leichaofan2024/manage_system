@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   resources :annual_holidays do
     collection do
       #年休假计划
+      get :workshop_employees
       get :holiday_modal
       post :create_holiday_plan
       get :duan_holiday_plan
