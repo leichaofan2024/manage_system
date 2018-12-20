@@ -1,11 +1,12 @@
 class AnnualHolidaysController < ApplicationController
 	layout 'home'
-
+    before_action :confirm_year
 	def index
+
 		if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin)
-			@employees = Employee.current.where(workshop: "#{current_user.workshop_id}")
+			@employees = @employees.where(workshop: "#{current_user.workshop_id}")
 		elsif (current_user.has_role? :attendance_admin) or (current_user.has_role? :superadmin)
-			@employees = Employee.current.order("id ASC").page(params[:page]).per(20)
+			@employees = @employees.order("id ASC").page(params[:page]).per(20)
 		end
 	end
 
@@ -21,14 +22,14 @@ class AnnualHolidaysController < ApplicationController
 
 	def create_holiday_plan
 		if params[:number].present?
-			holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => Time.now.year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
-			holiday.update(:workshop_id => params[:workshop].to_i, :year => Time.now.year, :work_type => params[:work_type], params[:input_name] => params[:number])
+			holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => @year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
+			holiday.update(:workshop_id => params[:workshop].to_i, :year => @year, :work_type => params[:work_type], params[:input_name] => params[:number])
 		end
 		if params[:status].present?
 			if current_user.has_role? :workshopadmin
-				hoiday_plans = AnnualHolidayPlan.where(:workshop_id => current_user.workshop_id,:year => Time.now.year)
+				hoiday_plans = AnnualHolidayPlan.where(:workshop_id => current_user.workshop_id,:year => @yearr)
 			elsif (current_user.has_role? :organsadmin)
-				hoiday_plans = AnnualHolidayPlan.where(:orgnization_id => current_user.group_id,:year => Time.now.year)
+				hoiday_plans = AnnualHolidayPlan.where(:orgnization_id => current_user.group_id,:year => @year)
 			end 
 			if hoiday_plans.present?
 				message_array = Array.new 
@@ -54,13 +55,12 @@ class AnnualHolidaysController < ApplicationController
 		redirect_back(fallback_location: annual_holidays_path)
 	end
 
+	def workshop_holiday_plan
+		@years = [@year-1,@year,@year+1]
+	end 
+
 	def duan_holiday_plan
 		@years = AnnualHolidayPlan.pluck(:year).uniq.sort{|a,b| b<=>a}
-		if params[:year].present?
-			@year = params[:year]
-		else 
-			@year = Time.now.year
-		end 
 		useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"]
 		@columns = AnnualHolidayPlan.column_names - useless_columns
 		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("workshop_id"))
@@ -79,11 +79,11 @@ class AnnualHolidaysController < ApplicationController
 		attendance_counts = AttendanceCount.where(:year => Time.now.year, vacation_code: ["f", "g"])
 		attendance_counts.pluck("employee_id").uniq.each do |employee|
 			(1..12).each do |month|
-				if attendance_counts.find_by(employee_id: employee, month: month).present?
-					sum = attendance_counts.find_by(employee_id: employee, month: month, vacation_code: "f").count + attendance_counts.find_by(employee_id: employee, month: month, vacation_code: "g").count
+				if attendance_counts.find_by(employee_id: employee,:year => @year, month: month).present?
+					sum = attendance_counts.find_by(employee_id: employee,:year => @year, month: month, vacation_code: "f").count + attendance_counts.find_by(employee_id: employee,:year => @year, month: month, vacation_code: "g").count
 				end
-				annual_holiday = AnnualHoliday.find_by(employee_id: employee, month: month, year: Time.now.year) || AnnualHoliday.new
-				annual_holiday.update(employee_id: employee, month: month, year: Time.now.year, holiday_days: sum)
+				annual_holiday = AnnualHoliday.find_by(employee_id: employee, month: month, year: @year) || AnnualHoliday.new
+				annual_holiday.update(employee_id: employee, month: month, year: @year, holiday_days: sum)
 			end
 		end
 		flash["notice"] = "休假更新成功"
@@ -91,7 +91,7 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfill_detail
-		@employees = Employee.current.page(params[:page]).per(20)
+		@employees = @employees.page(params[:page]).per(20)
 		workshop = Workshop.current.pluck("name")
 	    @group = [["--选择省份--"]]
 	    workshop.each do |name|
@@ -111,18 +111,13 @@ class AnnualHolidaysController < ApplicationController
 	    end
 	    gon.group_name = @group
 		@years = AnnualHoliday.pluck("year").uniq
-		if params[:year].present?
-			@year = params[:year]
-		else 
-			@year = Time.now.year
-		end 
 		
 		if params[:group].present?
-			employees = Employee.current.where(:group => params[:group])
+			employees = @employees.where(:group => params[:group])
 		elsif  params[:workshop].present?
-			employees = Employee.current.where(:workshop => params[:workshop])
+			employees = @employees.where(:workshop => params[:workshop])
 		else 
-			employees = Employee.current
+			employees = @employees
 		end 
 		@employees = employees.page(params[:page]).per(20)
         render action: "holiday_fulfill_detail"
@@ -131,33 +126,64 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfillment_rate
-		if params[:year].present? 
-			@year = params[:year]
-		else 
-			@year = Time.now.year
-		end 
 		@quarter_hash = {1 => [[1,2,3],["January_plan_days", "February_plan_days", "March_plan_days"]],2 => [[4,5,6],["April_plan_days", "May_plan_days", "June_plan_days"]],3 => [[7,8,9],["July_plan_days", "August_plan_days", "Semptember_plan_days"]],4 => [[10,11,12],["October_plan_days", "November_plan_days", "December_plan_days"]]}
 		@workshops = Workshop.current
 	end
 
 	def group_holiday_fulfill
-		@employees = Employee.current.where(:group => current_user.group_id)
+		@employees = @employees.where(:group => current_user.group_id)
 	end
 
 	def holiday_fulfill
-		if params[:year].present? 
-			@year = params[:year]
-		else 
-			@year = Time.now.year
-		end 
 		@dutys = ["接触网工","电力工","轨道车司机"]
 
 	end 
 
 	def workshop_employees
-		if params[work_type].present? 
-		else 
+		if (current_user.has_role? :attendance_admin) || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin) 
+            @employees = @employees
+            @name = "供电段"
+            if params[:workshop].present? 
+              @name = Workshop.find_by(:id => params[:workshop]).name
+	    	  @employees = @employees.where(:workshop => params[:workshop])
+		    elsif params[:organization].present?
+		      @name = Group.find_by(:id => params[:organization]).name 
+		      @employees = @employees.where(:group => params[:organization])
+		    end 
+	    elsif current_user.has_role? :workshopadmin
+	        @employees = @employees.where(:workshop => current_user.workshop_id)
+	        @name = Workshop.find_by(:id => current_user.workshop_id).name
+	    elsif current_user.has_role? :organsadmin
+	    	@employees = @employees.where(:group => current_user.group_id)
+	    	@name = Group.find_by(:id => current_user.group_id).name
+	    end 
+        
+        @dutys = ["接触网工","电力工","轨道车司机"]
+
+		if params[:work_type] == "全部职工"
+			@employees = @employees
+		elsif params[:work_type] == "干部"
+			@employees = @employees.where.not(:grade => [nil,""])
+	    elsif params[:work_type] == "工人"
+	    	@employees = @employees.where(:grade => [nil,""])
+	    elsif params[:work_type] == "其中：主要工种"
+	    	@employees = @employees.where(:duty => @dutys)
+	    elsif params[:work_type] == "接触网工"
+	    	@employees = @employees.where(:duty => "接触网工")
+	    elsif params[:work_type] == "电力工"
+	    	@employees = @employees.where(:duty => "电力工")
+	    elsif params[:work_type] == "轨道车司机"
+	    	@employees = @employees.where(:duty => "轨道车司机")
 		end 
+	end 
+
+	def confirm_year
+		if params[:year].present? 
+			@year = params[:year].to_i
+		else 
+			@year = Time.now.year
+		end
+		@employees = Employee.at_that_time(@year,1)
 	end 
 
 end

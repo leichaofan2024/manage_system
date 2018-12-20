@@ -6,16 +6,16 @@
 	  <div class="panel panel-body">
 	  	<header>
 	      <h4 class="text-center">
-	      	<%= Time.now.year %>年年休假计划填写表
+	      	<%= @year %>年年休假计划填写表
 	      	<% if current_user.has_role? :workshopadmin %>
-	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => Time.now.year,:workshop_id => current_user.workshop_id)%>
+	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:workshop_id => current_user.workshop_id)%>
 	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
 	      	     （已上报）
 	      	  <% else %>
 	      	     （未上报）
 	      	  <% end %>
 	      	<% elsif current_user.has_role? :organsadmin %>
-	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => Time.now.year,:orgnization_id => current_user.group_id) %>
+	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:orgnization_id => current_user.group_id) %>
 	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
 	      	     （已上报）
 	      	  <% else %>
@@ -26,12 +26,29 @@
 	    </header>
 
 		
-		<div class="col-md-12">
-		  <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true"), method: :post, class: "btn btn-primary",:data => {:disable_with => "上报中..."} %>
-		</div>
+	
 		<% if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin) or (current_user.has_role? :attendance_admin) or  (current_user.has_role? :superadmin) %>
 			<div class="card">
+
+				
 			    <div style="overflow: auto;" class="col-md-12">
+			      <div style="display:inline-block;">
+			      	<%= form_tag workshop_holiday_plan_annual_holidays_path,method: :get do %>
+			          <select name="year">
+			        	<% @years.each do |year| %>
+			        	  <% if year == @year %>
+			        	    <option value="<%= year%>" selected><%= year %></option>
+			        	  <% else %>
+			        	    <option value="<%= year%>"><%=year%></option>
+			        	  <% end %>
+			        	<% end %>
+			          </select>
+			          年
+			          <%= submit_tag :筛选,:data => {:disable_with => "筛选中... "} %>
+			        <% end %>
+			      </div>
+			      
+			      <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true",:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {:disable_with => "上报中..."} %>
 			      <table id="example" class="table table-bordered">
 			        <thead>
 			        	<tr>
@@ -51,7 +68,7 @@
 			        <tbody>
 		        		<% AnnualHolidayWorkType.all.each do |type| %>
 		        			<tr>
-		        				<td><%= type.work_type %></td>
+		        				<td><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type)) %></td>
 		        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
 		        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
 		        				<% columns.each do |column| %>
@@ -61,11 +78,11 @@
 		        						<% elsif current_user.has_role? :organsadmin %>
 		        							<% id = Group.current.find(current_user.group_id) %>
 		        						<% end  %>
-			        					<%= link_to holiday_modal_annual_holidays_path(work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
+			        					<%= link_to holiday_modal_annual_holidays_path(:year => @year,work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
 			        					    <% if current_user.has_role? :workshopadmin %>
-		        							  <% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: Time.now.year, work_type: type) %>
+		        							  <% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: @year, work_type: type) %>
 		        						    <% elsif current_user.has_role? :organsadmin %>
-		        						      <% holiday = AnnualHolidayPlan.find_by(orgnization_id: id, year: Time.now.year, work_type: type) %>
+		        						      <% holiday = AnnualHolidayPlan.find_by(orgnization_id: id, year: @year, work_type: type) %>
 		        						    <% end %>
 			        						
 			        						<% if holiday.present? %>

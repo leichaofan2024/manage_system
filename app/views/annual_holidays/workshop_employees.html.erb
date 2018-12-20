@@ -1,0 +1,44 @@
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+
+<div class="contentpanel">
+  <%= link_to("<< 返回",:back)%>
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center"><%= @name %><%= @year %>年<%= params[:work_type] %>人员详情表</h4>
+    </header>
+
+    <div class="content-body">
+    	<div class="content-table" style="clear:both;">
+			<table>
+				<thead>
+					<tr>
+					   <th>车间</th>
+					   <th>班组</th>
+					   <th>姓名</th>
+					   <th>工资号</th>
+					   <th>工种</th>
+					   <th>工龄</th>
+					   <th>应休天数</th>
+					</tr>
+					
+				</thead>
+				<tbody>
+					<% @employees.find_each do |employee| %>
+						<tr>
+							<td><%= Workshop.find_by(:id => employee.workshop).name %></td>
+						    <td><%= Group.find_by(:id => employee.group).name %></td>
+						    <td><%= employee.name %></td>
+						    <td><%= employee.sal_number %></td>
+						    <td><%= holiday_work_type(params[:work_type],employee) %></td>
+						    <td><%= employee.working_years %></td>
+						    <td><%= group_holiday_year(employee) %></td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+  </div>
+</div>

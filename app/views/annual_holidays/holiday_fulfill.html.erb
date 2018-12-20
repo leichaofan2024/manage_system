@@ -21,15 +21,15 @@
         			<tr>
         				<td><%= type.work_type %></td>
         				<% if type.work_type == "全部职工" %>
-        				  <% employee_ids = Employee.pluck(:id) %>
+        				  <% employee_ids = @employees.pluck(:id) %>
         				<% elsif type.work_type == "干部" %>
-        				  <% employee_ids = Employee.where.not(:grade => [nil,""]).pluck(:id) %>
+        				  <% employee_ids = @employees.where.not(:grade => [nil,""]).pluck(:id) %>
         				<% elsif type.work_type == "工人" %>
-        				  <% employee_ids = Employee.where(:grade => [nil,""]).pluck(:id) %>
+        				  <% employee_ids = @employees.where(:grade => [nil,""]).pluck(:id) %>
         				<% elsif type.work_type == "其中：主要工种" %>
-        				  <% employee_ids = Employee.where(:duty => @dutys).pluck(:id) %>
+        				  <% employee_ids = @employees.where(:duty => @dutys).pluck(:id) %>
         				<% elsif @dutys.include?(type.work_type) %>
-        				  <% employee_ids = Employee.where(:duty => type.work_type).pluck(:id) %>
+        				  <% employee_ids = @employees.where(:duty => type.work_type).pluck(:id) %>
         				<% end %>
         				<% (1..12).each do |i| %>
         				  <% annual_holidays = AnnualHoliday.where(:year => @year,:month => i,:employee_id => employee_ids ).where("holiday_days > 0") %>

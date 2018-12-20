@@ -28,5 +28,26 @@ module AnnualHolidaysHelper
     AnnualHoliday.where(employee_id: employee.id, year: Time.now.year).sum(:holiday_days)
   end
 
+  def holiday_work_type(work_type,employee)
+    if work_type == "全部职工"
+      if [nil,""].include?(employee.grade)
+        "工人"
+      else
+        "干部"
+      end 
+    elsif work_type == "干部"
+      "干部"
+    elsif work_type == "工人"
+      "工人"
+    elsif work_type == "其中：主要工种"
+      employee.duty
+    elsif work_type == "接触网工"
+      "接触网工"
+    elsif work_type == "电力工"
+      "电力工"
+    elsif work_type == "轨道车司机"
+      "轨道车司机"
+    end 
+  end 
 
 end
