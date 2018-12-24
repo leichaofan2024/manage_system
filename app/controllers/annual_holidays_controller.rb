@@ -126,8 +126,18 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def holiday_fulfillment_rate
-		@quarter_hash = {1 => [[1,2,3],["January_plan_days", "February_plan_days", "March_plan_days"]],2 => [[4,5,6],["April_plan_days", "May_plan_days", "June_plan_days"]],3 => [[7,8,9],["July_plan_days", "August_plan_days", "Semptember_plan_days"]],4 => [[10,11,12],["October_plan_days", "November_plan_days", "December_plan_days"]]}
-		@workshops = Workshop.current
+		@quarter_hash = {1 => [[1,2,3],["January_plan_number", "February_plan_number", "March_plan_number"],["January_plan_days", "February_plan_days", "March_plan_days"]],2 => [[4,5,6],["April_plan_number", "May_plan_number", "June_plan_number"],["April_plan_days", "May_plan_days", "June_plan_days"]],3 => [[7,8,9],["July_plan_number", "August_plan_number", "Semptember_plan_number"],["July_plan_days", "August_plan_days", "Semptember_plan_days"]],4 => [[10,11,12],["October_plan_number", "November_plan_number", "December_plan_number"],["October_plan_days", "November_plan_days", "December_plan_days"]]}
+		organizations_ids = Group.current.where(:workshop_id => 1).pluck(:id)
+		organizations_hash = Hash.new 
+        organizations_ids.each do |gorup| 
+        	organizations_hash[gorup] = "group"
+        end 
+		workshop_ids = Workshop.current.pluck(:id) - [1]
+		workshops_hash = Hash.new 
+		workshop_ids.each do |workshop| 
+			workshops_hash[workshop] = "workshop"
+		end 
+        @workshops = organizations_hash.merge(workshops_hash)
 	end
 
 	def group_holiday_fulfill
