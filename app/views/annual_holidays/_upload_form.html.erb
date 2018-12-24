@@ -1,0 +1,48 @@
+<div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="margin-top:100px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title" id="myModalLabel">
+          上传年休假计划表
+        </h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag upload_holiday_form_annual_holidays_path, method: 'post', multipart: true do %>
+          <% if current_user.has_role? :workshopadmin %>
+            <%= hidden_field_tag :workshop_id,current_user.workshop_id %>
+          <% elsif current_user.has_role? :organsadmin %>
+            <%= hidden_field_tag :group_id,current_user.group_id %>
+          <% end  %>
+          <div class="file-style">
+            <select name="year">
+                <% @years.each do |year| %>
+                  <% if year == @year %>
+                    <option value="<%= year%>" selected><%= year %></option>
+                  <% else %>
+                    <option value="<%= year%>"><%=year%></option>
+                  <% end %>
+                <% end %>
+            </select>
+                年
+          </div>
+
+          <div class="file-style">
+
+            <%= file_field_tag :file,required: true %>
+          </div>
+          <div class="" style="">
+             <%= submit_tag :点击确定,:data => {disable_with: "附件上传中 ... "},:class => "btn btn-primary-status" %>
+          </div>
+          <div class=" remind-circle">
+            <h5 style=" margin-top: 40px;">温馨提示</h5>
+            <p>1、暂不支持复合表头（即合并单元格）；</p>
+            <p>2、如上传遇到问题，请使用标准模版上传 <%= link_to "【年休假计划表模板】", download_workshop_holiday_plan_table_template_announcements_path(format: "xls") %></p>
+          </div>
+        <% end %>
+
+
+      </div>
+    </div>
+  </div>
+</div>

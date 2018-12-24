@@ -2,7 +2,6 @@ class Workshop < ApplicationRecord
 	has_many :groups
 	has_many :attendance_counts
 	has_many :employees, class_name: "EmpBasicInfo"
-	has_many :annual_holiday_plans
 
 	validates :name, presence: { message: "请填写车间名称"}
   validates :name, uniqueness: { message: "重复的车间名"}

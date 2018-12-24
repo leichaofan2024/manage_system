@@ -88,6 +88,7 @@ Rails.application.routes.draw do
       post :create_holiday_plan
       get :duan_holiday_plan
       get :workshop_holiday_plan
+      post :upload_holiday_form
       #年休假落实
       get :holiday_fulfill
       get :group_holiday_fulfill
@@ -132,6 +133,7 @@ Rails.application.routes.draw do
       get :download_other_award_total_table_template
       get :download_company_relative_saler_table_template
       get :download_star_basic_score_table_template
+      get :download_workshop_holiday_plan_table_template
     end
   end
 

@@ -20,6 +20,7 @@ class AnnualHolidaysController < ApplicationController
 		end
 	end
 
+
 	def create_holiday_plan
 		if params[:number].present?
 			holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => @year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
@@ -57,7 +58,27 @@ class AnnualHolidaysController < ApplicationController
 
 	def workshop_holiday_plan
 		@years = [@year-1,@year,@year+1]
-	end 
+	end
+
+	def upload_holiday_form
+		if params[:file].present? 
+			if params[:workshop_id].present? 
+              message = AnnualHolidayPlan.import_table(params[:year],params[:file],"workshop",params[:workshop_id])
+            elsif params[:group_id].present? 
+              message = AnnualHolidayPlan.import_table(params[:year],params[:file],"group",params[:group_id])
+            end 
+            if message[:wrong_heads].present? 
+               flash[:alert] = "表头#{message[:wrong_heads]}与系统不匹配，请核对后再上传！"
+            elsif message[:already_import].present? 
+            	flash[:alert] = message[:already_import]
+            elsif message[:work_type_wrong].present? 
+            	flash[:alert] = message[:work_type_wrong]
+            else 
+           	   flash[:notice] = "#{params[:year]}年年休假计划表上传成功！"
+            end 
+		end 
+		redirect_back :fallback_location => workshop_holiday_plan_annual_holidays_path
+	end  
 
 	def duan_holiday_plan
 		@years = AnnualHolidayPlan.pluck(:year).uniq.sort{|a,b| b<=>a}

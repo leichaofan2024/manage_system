@@ -49,6 +49,7 @@
 			      </div>
 			      
 			      <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true",:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {:disable_with => "上报中..."} %>
+			      <%= link_to "上传计划表格", "#", class: "btn btn-primary-upload pull-right", "data-toggle" => "modal","data-target" => "#upload-form"%>
 			      <table id="example" class="table table-bordered">
 			        <thead>
 			        	<tr>
@@ -105,6 +106,7 @@
 			    </div>
 			</div>
 			<div id="showHolidayModal"></div>
+			<div><%= render "upload_form" %></div>
 		<% end %>
 
 	  </div>

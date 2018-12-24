@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        
+         <Cell><Data ss:Type="String">工种</Data></Cell>
+         <Cell><Data ss:Type="String">上年末部门人数</Data></Cell>
+         <Cell><Data ss:Type="String">可休年休假人数</Data></Cell>
+         <Cell><Data ss:Type="String">休5天人数</Data></Cell>
+         <Cell><Data ss:Type="String">休10天人数</Data></Cell>
+         <Cell><Data ss:Type="String">休15天人数</Data></Cell>
+         <Cell><Data ss:Type="String">应休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">1月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">1月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">2月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">2月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">3月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">3月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">4月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">4月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">5月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">5月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">6月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">6月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">7月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">7月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">8月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">8月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">9月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">9月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">10月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">10月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">11月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">11月份休假天数</Data></Cell>
+         <Cell><Data ss:Type="String">12月份安排人数</Data></Cell>
+         <Cell><Data ss:Type="String">12月份休假天数</Data></Cell>
+      </Row>
+      <% AnnualHolidayWorkType.pluck(:work_type).each do |work_type| %>
+        <Row>
+           <Cell><Data ss:Type="String"><%= work_type %></Data></Cell>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
