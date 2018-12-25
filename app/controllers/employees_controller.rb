@@ -45,7 +45,7 @@ class EmployeesController < ApplicationController
     else
       @employees_all = Employee.current.where(:workshop => current_user.workshop_id,:group => current_user.group_id).order('id ASC')
     end
-    @employees = @employees_all.limit(15)
+    @employees = @employees_all.limit(20)
     #下载表格配置
     
     @export_employees = @employees_all
@@ -188,7 +188,7 @@ class EmployeesController < ApplicationController
     end
     condition += ")"
     @employees_all = eval("Employee#{condition}").order("id ASC")
-    @employees = @employees_all.limit(15)
+    @employees = @employees_all.limit(20)
     @sex = params[:sex]
     @duty = params[:duty]
     @work_type = params[:work_type]
@@ -211,7 +211,7 @@ class EmployeesController < ApplicationController
     gon.url_parameter = ""
     if params[:max_id].present?
       index = @employees.index(params[:max_id])
-      @employees = @employees_all.where("id > ?",params[:max_id]).limit(15)
+      @employees = @employees_all.where("id > ?",params[:max_id]).limit(20)
     end
 
     if request.original_url.split("?").count == 2

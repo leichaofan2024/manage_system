@@ -299,7 +299,7 @@
   // 当捲轴动的时候，会触发这个事件
   $(window).scroll(function(){
     // 当捲到最下面的时候
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if ((window.innerHeight + window.pageYOffset) >= (document.body.offsetHeight - 1)) {
       var url = "/employees/filter?max_id=" + current_post_id + "&" + gon.url_parameter;
       if (url) {
         $.ajax({
