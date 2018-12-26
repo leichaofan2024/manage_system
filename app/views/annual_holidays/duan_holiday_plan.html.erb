@@ -40,26 +40,35 @@
 		        <thead>
 		        	<tr>
 		        		<th>工种</th>
-		        		<th>上年末部门人数</th>
-		        		<th>可休年休假人数</th>
-		        		<th>休5天人数</th>
-		        		<th>休10天人数</th>
-		        		<th>休15天人数</th>
-		        		<th>应休假天数</th>
+		        		<th>上年末<br>部门人数</th>
+		        		<th>符合条件<br>年休假人数</th>
+		        		<th>休5天<br>人数</th>
+		        		<th>休10天<br>人数</th>
+		        		<th>休15天<br>人数</th>
+		        		<th>应休假<br>天数</th>
 		        		<% (1..12).each do |i| %>
-		        			<th><%= i %>月份安排人数</th>
-		        			<th><%= i %>月份休假天数</th>
+		        			<th><%= i %>月份<br>安排人数</th>
+		        			<th><%= i %>月份<br>休假天数</th>
 		        		<% end %>
 		        	</tr>
 		        </thead>
 			        <tbody>
 		        		<% @worktypes.each do |type| %>
 		        			<tr>
-		        				<td><%= link_to(type.work_type,workshop_employees_annual_holidays_path(request.query_parameters.merge({:work_type => type.work_type}))) %></td>
+		        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(request.query_parameters.merge({:work_type => type.work_type}))) %>
+		        				</th>
 									<% @columns.each do |column| %>
-				        				<td>
+				        				<% if column == "last_year_people_number" %>
+				        				  <th>
+				        			    <% else %>
+				        			      <td>
+				        			    <% end %>
 											<%= @annual_holidays.where(:work_type => type).sum(column) %>
-				        				</td>
+				        				<% if column == "last_year_people_number" %>
+				        				  </th>
+				        			    <% else %>
+				        			      </td>
+				        			    <% end %>
 									<% end %>
 		        			</tr>
 		        		<% end %>

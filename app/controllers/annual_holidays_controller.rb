@@ -23,12 +23,17 @@ class AnnualHolidaysController < ApplicationController
 
 	def create_holiday_plan
 		if params[:number].present?
-			holiday = AnnualHolidayPlan.find_by(:workshop => params[:workshop], :year => @year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
-			holiday.update(:workshop_id => params[:workshop].to_i, :year => @year, :work_type => params[:work_type], params[:input_name] => params[:number])
+			if current_user.has_role? :workshopadmin
+			  holiday = AnnualHolidayPlan.find_by(:workshop_id => params[:workshop], :year => @year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
+			  holiday.update(:workshop_id => params[:workshop].to_i, :year => @year, :work_type => params[:work_type], params[:input_name] => params[:number])
+			elsif (current_user.has_role? :organsadmin)
+			  holiday = AnnualHolidayPlan.find_by(:orgnization_id => params[:workshop], :year => @year, :work_type => params[:work_type]) || AnnualHolidayPlan.new
+			  holiday.update(:orgnization_id => params[:workshop].to_i, :year => @year, :work_type => params[:work_type], params[:input_name] => params[:number])
+		    end 
 		end
 		if params[:status].present?
 			if current_user.has_role? :workshopadmin
-				hoiday_plans = AnnualHolidayPlan.where(:workshop_id => current_user.workshop_id,:year => @yearr)
+				hoiday_plans = AnnualHolidayPlan.where(:workshop_id => current_user.workshop_id,:year => @year)
 			elsif (current_user.has_role? :organsadmin)
 				hoiday_plans = AnnualHolidayPlan.where(:orgnization_id => current_user.group_id,:year => @year)
 			end 
@@ -58,6 +63,16 @@ class AnnualHolidaysController < ApplicationController
 
 	def workshop_holiday_plan
 		@years = [@year-1,@year,@year+1]
+		if current_user.has_role? :workshopadmin
+		  @annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:workshop_id => current_user.workshop_id)
+		elsif current_user.has_role? :organsadmin
+		  @annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:orgnization_id => current_user.group_id)
+		end 
+		if @annual_holiday_plan.present? and @annual_holiday_plan.status == "yes"
+		  @if_reported = 1 
+		else 
+		  @if_reported = 0
+		end 
 	end
 
 	def upload_holiday_form

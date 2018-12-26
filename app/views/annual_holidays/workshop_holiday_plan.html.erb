@@ -7,21 +7,12 @@
 	  	<header>
 	      <h4 class="text-center">
 	      	<%= @year %>年年休假计划填写表
-	      	<% if current_user.has_role? :workshopadmin %>
-	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:workshop_id => current_user.workshop_id)%>
-	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
-	      	     （已上报）
-	      	  <% else %>
-	      	     （未上报）
-	      	  <% end %>
-	      	<% elsif current_user.has_role? :organsadmin %>
-	      	  <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:orgnization_id => current_user.group_id) %>
-	      	  <% if annual_holiday_plan.present? and annual_holiday_plan.status == "yes" %>
-	      	     （已上报）
-	      	  <% else %>
-	      	     （未上报）
-	      	  <% end %>
-	      	<% end %>
+      	    <% annual_holiday_plan = AnnualHolidayPlan.find_by(:year => @year,:workshop_id => current_user.workshop_id)%>
+      	    <% if @if_reported == 1 %>
+      	     （已上报）
+      	    <% elsif @if_reported == 0 %>
+      	     （未上报）
+      	    <% end %>
 	      </h4>
 	    </header>
 
@@ -54,32 +45,37 @@
 			        <thead>
 			        	<tr>
 			        		<th>工种</th>
-			        		<th>上年末部门人数</th>
-			        		<th>可休年休假人数</th>
-			        		<th>休5天人数</th>
-			        		<th>休10天人数</th>
-			        		<th>休15天人数</th>
-			        		<th>应休假天数</th>
+			        		<th>上年末<br>部门人数</th>
+			        		<th>符合条件<br>年休假人数</th>
+			        		<th>休5天<br>人数</th>
+			        		<th>休10天<br>人数</th>
+			        		<th>休15天<br>人数</th>
+			        		<th>应休假<br>天数</th>
 			        		<% (1..12).each do |i| %>
-			        			<th><%= i %>月份安排人数</th>
-			        			<th><%= i %>月份休假天数</th>
+			        			<th><%= i %>月份<br>安排人数</th>
+			        			<th><%= i %>月份<br>休假天数</th>
 			        		<% end %>
 			        	</tr>
 			        </thead>
 			        <tbody>
-		        		<% AnnualHolidayWorkType.all.each do |type| %>
-		        			<tr>
-		        				<td><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type)) %></td>
-		        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
-		        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
-		        				<% columns.each do |column| %>
-			        				<td>
-			        					<% if current_user.has_role? :workshopadmin %>
-		        							<% id = Workshop.current.find(current_user.workshop_id) %>
-		        						<% elsif current_user.has_role? :organsadmin %>
-		        							<% id = Group.current.find(current_user.group_id) %>
-		        						<% end  %>
-			        					<%= link_to holiday_modal_annual_holidays_path(:year => @year,work_type: type, number: column, id: id), remote: true, class: "btn btn-primary", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
+			        	<% if @if_reported == 1 %>
+			        	    <% AnnualHolidayWorkType.all.each do |type| %>
+			        			<tr>
+			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type),style: "color: rgb(81,112,215)") %>
+			        				</th>
+			        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
+			        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
+			        				<% columns.each do |column| %>
+			        				    <% if column == "last_year_people_number" %>
+				        				  <th>
+				        			    <% else %>
+				        			      <td>
+				        			    <% end %>
+				        					<% if current_user.has_role? :workshopadmin %>
+			        							<% id = Workshop.current.find(current_user.workshop_id).id %>
+			        						<% elsif current_user.has_role? :organsadmin %>
+			        							<% id = Group.current.find(current_user.group_id).id %>
+			        						<% end  %>
 			        					    <% if current_user.has_role? :workshopadmin %>
 		        							  <% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: @year, work_type: type) %>
 		        						    <% elsif current_user.has_role? :organsadmin %>
@@ -91,16 +87,66 @@
 				        						<% if holiday_attribute[column].present? %>
 				        							<%= holiday_attribute[column] %>
 				        						<% else %>
-				        							<%= "点击填写" %>
+				        							<%= "填写" %>
 				        						<% end %>
 				        					<% else %>
-				        						<%= "点击填写" %>
+				        						<%= "填写" %>
 				        					<% end %>
-			        					<% end %>
-			        				</td>
-		        				<% end %>
-		        			</tr>
-		        		<% end %>
+				        				<% if column == "last_year_people_number" %>
+				        				  </th>
+				        			    <% else %>
+				        			      </td>
+				        			    <% end %>
+			        				<% end %>
+			        			</tr>
+			        		<% end %>
+			        	<% elsif @if_reported == 0 %>
+			        		<% AnnualHolidayWorkType.all.each do |type| %>
+			        			<tr>
+			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type),style: "color: rgb(81,112,215)") %>
+			        				</th>
+			        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
+			        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
+			        				<% columns.each do |column| %>
+			        				    <% if column == "last_year_people_number" %>
+				        				  <th>
+				        			    <% else %>
+				        			      <td>
+				        			    <% end %>
+				        					<% if current_user.has_role? :workshopadmin %>
+			        							<% id = Workshop.current.find(current_user.workshop_id).id %>
+			        						<% elsif current_user.has_role? :organsadmin %>
+			        							<% id = Group.current.find(current_user.group_id).id %>
+			        						<% end  %>
+
+				        					<%= link_to holiday_modal_annual_holidays_path(:year => @year,work_type: type, number: column, id: id), remote: true, style: "color: rgb(81,112,215)", "data-toggle" => "modal", "data-target" => "#holidayModal" do %>
+				        					    <% if current_user.has_role? :workshopadmin %>
+			        							  <% holiday = AnnualHolidayPlan.find_by(workshop_id: id, year: @year, work_type: type) %>
+			        						    <% elsif current_user.has_role? :organsadmin %>
+			        						      <% holiday = AnnualHolidayPlan.find_by(orgnization_id: id, year: @year, work_type: type) %>
+			        						    <% end %>
+				        						
+				        						<% if holiday.present? %>
+				        						  <% holiday_attribute = holiday.attributes %>
+					        						<% if holiday_attribute[column].present? %>
+					        							<%= holiday_attribute[column] %>
+					        						<% else %>
+					        							<%= "填写" %>
+					        						<% end %>
+					        					<% else %>
+					        						<%= "填写" %>
+					        					<% end %>
+				        					<% end %>
+
+				        				<% if column == "last_year_people_number" %>
+				        				  </th>
+				        			    <% else %>
+				        			      </td>
+				        			    <% end %>
+			        				<% end %>
+			        			</tr>
+			        		<% end %>
+			        	<% end %>
 			        </tbody>
 			      </table>
 			    </div>
