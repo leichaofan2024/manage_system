@@ -8,10 +8,12 @@ class StarRangesController < ApplicationController
 				f_type = "f_type" + i.to_s
 				value = "value" + i.to_s
 				money = "money" + i.to_s
-				if params[:"#{money}"].present?
-					StarRange.find_by(name: i).update(f_type: params[:"#{f_type}"], value: (params[:"#{value}"].to_f)/100, money: params[:"#{money}"])
+				star_range = StarRange.find_by(name: i)
+				if star_range.present? 
+					star_range.update(f_type: params[:"#{f_type}"], value: (params[:"#{value}"].to_f)/100, money: params[:"#{money}"])
 				else
-					StarRange.find_by(name: i).update(f_type: params[:"#{f_type}"], value: (params[:"#{value}"].to_f)/100)
+					star_range = StarRange.create(:name => i)
+					star_range.update(f_type: params[:"#{f_type}"], value: (params[:"#{value}"].to_f)/100, money: params[:"#{money}"])
 				end
 			end
 			flash[:notice] = "更新成功"

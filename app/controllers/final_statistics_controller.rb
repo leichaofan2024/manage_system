@@ -1,6 +1,16 @@
 class FinalStatisticsController < ApplicationController
 	layout 'home'
 	def index 
+	  @five_star_range = StarRange.find_by(:name => 5)
+      @four_star_range = StarRange.find_by(:name => 4)
+      @three_star_range = StarRange.find_by(:name => 3)
+      @two_star_range = StarRange.find_by(:name => 2)
+      @one_star_range = StarRange.find_by(:name => 1)
+      if @five_star_range.present? and @four_star_range.present? and @three_star_range.present? and @two_star_range.present? and @one_star_range.present?
+      	@star_range_all_present = 1
+      else 
+      	@star_range_all_present = 0
+      end 
 	  @years = BasicScore.pluck(:year).uniq.sort{|a,b| b<=>a}
 	  @quarters = BasicScore.pluck(:quarter).uniq.sort{|a,b| b<=> a}
 	  quarter_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}

@@ -57,19 +57,19 @@
 		        			<tr>
 		        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(request.query_parameters.merge({:work_type => type.work_type}))) %>
 		        				</th>
-									<% @columns.each do |column| %>
-				        				<% if column == "last_year_people_number" %>
-				        				  <th>
-				        			    <% else %>
-				        			      <td>
-				        			    <% end %>
-											<%= @annual_holidays.where(:work_type => type).sum(column) %>
-				        				<% if column == "last_year_people_number" %>
-				        				  </th>
-				        			    <% else %>
-				        			      </td>
-				        			    <% end %>
-									<% end %>
+								<% @columns.each do |column| %>
+			        				<% if column == "last_year_people_number" %>
+			        				  <th>
+			        			    <% else %>
+			        			      <td>
+			        			    <% end %>
+										<%= @annual_holidays.where(:work_type => type).sum(column) %>
+			        				<% if column == "last_year_people_number" %>
+			        				  </th>
+			        			    <% else %>
+			        			      </td>
+			        			    <% end %>
+								<% end %>
 		        			</tr>
 		        		<% end %>
 			        </tbody>

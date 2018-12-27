@@ -2,10 +2,10 @@
   <div class="wage-navbar">
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link active" href="/score_weights/show_weight">分数比例设置</a>
+        <a class="nav-link" href="/score_weights/show_weight">分数比例设置</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">星级比例设置</a>
+        <a class="nav-link active" href="#">星级比例设置</a>
       </li>
     </ul>
   </div>
@@ -34,8 +34,16 @@
 			<% star.each do |i| %>
 				<tr>
 					<td><%= i[1] %>星：</td>
-					<td><%= (StarRange.find_by(name: i[0]).f_type) %><%= ((StarRange.find_by(name: i[0]).value) * 100).to_i %>%</td>
-					<td><%= (StarRange.find_by(name: i[0]).money) %>元</td>
+					<% if StarRange.find_by(name: i[0]).present? %>
+						<td>
+							<%= (StarRange.find_by(name: i[0]).f_type) %><%= ((StarRange.find_by(name: i[0]).value) * 100).to_i %>%
+						</td>
+						<td>
+							<%= (StarRange.find_by(name: i[0]).money) %>元
+						</td>
+					<% else %>
+					    <td colspan="2" style="color:red;">未设置</td>
+					<% end %>
 				</tr>
 			<% end %>
 		  </tbody>
@@ -63,10 +71,20 @@
 							<% f_type = ("f_type") + i[0].to_s %>
 							<% value = ("value") + i[0].to_s %>
 							<% money = ("money") + i[0].to_s %>
-							<%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true", star: i[0]}) %>
-							<%= text_field_tag :"#{value}", nil, required: "true", star: i[0] %>%
+							<%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true"}) %>
+							<% if StarRange.find_by(name: i[0]).present? %>
+							  <%= text_field_tag :"#{value}", StarRange.find_by(name: i[0]).value*100, required: "true" %>%
+							<% else %>
+							  <%= text_field_tag :"#{value}", nil, required: "true" %>%
+							<% end %>
 						</td>
-						<td><%= text_field_tag :"#{money}"%>元</td>
+						<td>
+							<% if StarRange.find_by(name: i[0]).present? %>
+							  <%= text_field_tag :"#{money}",StarRange.find_by(name: i[0]).money,required: "true" %>元
+							<% else %>
+							  <%= text_field_tag :"#{money}",nil,required: "true" %>元
+							<% end %>
+						</td>
 					</tr>
 					<% end %>
 	        	</tbody>

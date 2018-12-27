@@ -58,15 +58,46 @@
       <div class="content-table" style="clear:both;">
         <table>
           <thead>
+            
             <tr>
               <th>序号</th>
               <th>车间</th>
               <th>车间人数</th>
-              <th>五星(<%= StarRange.find_by(:name => 5).money%>元)</th>
-              <th>四星(<%= StarRange.find_by(:name => 4).money%>元)</th>
-              <th>三星(<%= StarRange.find_by(:name => 3).money%>元)</th>
-              <th>二星(<%= StarRange.find_by(:name => 2).money%>元)</th>
-              <th>一星(<%= StarRange.find_by(:name => 1).money%>元)</th>
+              <th>
+                <% if @five_star_range.present? %>
+                  五星(<%= @five_star_range.money%>元)
+                <% else %>
+                  <span style="color:red;">五星(金额未设置)</span>
+                <% end %>
+              </th>
+              <th>
+                <% if @four_star_range.present? %>
+                  四星(<%= @four_star_range.money%>元)
+                <% else %>
+                  <span style="color:red;">四星(金额未设置)</span>
+                <% end %>
+              </th>
+              <th>
+                <% if @three_star_range.present? %>
+                  三星(<%= @three_star_range.money%>元)
+                <% else %>
+                  <span style="color:red;">三星(金额未设置)</span>
+                <% end %>
+              </th>
+              <th>
+                <% if @two_star_range.present? %>
+                  二星(<%= @two_star_range.money%>元)
+                <% else %>
+                  <span style="color:red;">二星(金额未设置)</span>
+                <% end %>
+              </th>
+              <th>
+                <% if @one_star_range.present? %>
+                  一星(<%= @one_star_range.money%>元)
+                <% else %>
+                  <span style="color:red;">一星(金额未设置)</span>
+                <% end %>
+              </th>
               <th>合计金额</th>
               <th>班组长五星</th>
             </tr>
@@ -106,7 +137,11 @@
                   人数<%= one_star_count %>/比例<%= (one_star_count*100.to_f/sum_count).round(1) %>%
                 </td>
                 <td>
-                  <%= (StarRange.find_by(:name => 2).money * two_star_count) + (StarRange.find_by(:name => 3).money * three_star_count) + (StarRange.find_by(:name => 4).money * four_star_count) + (StarRange.find_by(:name => 5).money * five_star_count) %>
+                  <% if @star_range_all_present == 1 %>
+                    <%= (StarRange.find_by(:name => 2).money * two_star_count) + (StarRange.find_by(:name => 3).money * three_star_count) + (StarRange.find_by(:name => 4).money * four_star_count) + (StarRange.find_by(:name => 5).money * five_star_count) %>
+                  <% else %>
+                    <span style="color:red;">未设置星级比例和金额！</span>
+                  <% end %>
                 </td>
                 <td>
                   <% if params[:passed_5_star].present? %>

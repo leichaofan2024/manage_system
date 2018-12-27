@@ -33,7 +33,13 @@
           <% score.each do |i| %>
             <tr>
               <td><%= i[1] %>：</td>
-              <td><%= ((ScoreWeight.first.attributes[i[0]]) * 100).to_i %>%</td>
+              <td>
+                <% if ScoreWeight.first.present? %>
+                  <%= ((ScoreWeight.first.attributes[i[0]]) * 100).to_i %>%
+                <% else %>
+                  <span style="color:red;">未设置！</span>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           </tbody>
@@ -56,7 +62,13 @@
             <% score.each do |i| %>
               <tr>
                 <td><%= i[1] %>：</td>
-                <td><%= text_field_tag :"#{i[0]}", nil, required: "true" %>%</td>
+                <td>
+                  <% if ScoreWeight.first.present? %>
+                    <%= text_field_tag :"#{i[0]}", ScoreWeight.first.send(i[0])*100, required: "true" %>%
+                  <% else %>
+                    <%= text_field_tag :"#{i[0]}", nil, required: "true" %>%
+                  <% end %>
+                </td>
               </tr>
             <% end %>
             </tbody>
