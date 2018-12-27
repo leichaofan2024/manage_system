@@ -71,10 +71,19 @@
 							<% f_type = ("f_type") + i[0].to_s %>
 							<% value = ("value") + i[0].to_s %>
 							<% money = ("money") + i[0].to_s %>
-							<%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true"}) %>
 							<% if StarRange.find_by(name: i[0]).present? %>
+							  <select>
+							  	<% ["大于等于", "小于等于"].each do |f_type| %>
+								  	<% if StarRange.find_by(name: i[0]).f_type == f_type %>
+								  	  <option value="<%= f_type %>" selected ><%= f_type %></option>
+								  	<% else %>
+								  	  <option value="<%= f_type %>"><%= f_type %></option>
+								  	<% end %>
+							  	<% end %>
+							  </select>
 							  <%= text_field_tag :"#{value}", StarRange.find_by(name: i[0]).value*100, required: "true" %>%
 							<% else %>
+							  <%= select_tag(:"#{f_type}", options_for_select(["大于等于", "小于等于"]), {:required => "true"}) %>
 							  <%= text_field_tag :"#{value}", nil, required: "true" %>%
 							<% end %>
 						</td>
