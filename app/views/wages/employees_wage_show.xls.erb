@@ -101,14 +101,14 @@
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.phone_number %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sex %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.age %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= current_age(employee) %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.education_background %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.nation %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.native_place %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.working_time %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.working_years %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= working_years(employee) %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.railway_time.to_i %></Data></Cell>
-        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.rali_years %></Data></Cell>
+        <Cell ss:StyleID="Description"><Data ss:Type="String"><%= rali_years(employee) %></Data></Cell>
         <Cell ss:StyleID="Description"><Data ss:Type="String">
           <% if wage_employee.present? %>
             <% wage_employee_attributes = wage_employee.attributes %>

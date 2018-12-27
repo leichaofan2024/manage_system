@@ -21,7 +21,7 @@
               <!--基本信息-->
               <span><%= @employee.sex%></span>
               <span>出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
-              <span>年龄：<%= @employee.age%>岁</span>
+              <span>年龄：<%= current_age(@employee)%>岁</span>
               <p>
               <% if (current_user.has_role? :groupadmin) || (current_user.has_role? :wgadmin)  %>
                   <%= form_for @employee do |f| %>
@@ -401,7 +401,7 @@
                       <div>
                         <div class="formGroup-313Le_0">
                           <label class="controlLabel-3ZJIZ_0">工龄</label>
-                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.working_years%></div>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= working_years(@employee)%></div>
                         </div>
                       </div>
                     </span>
@@ -412,7 +412,7 @@
                       <div>
                         <div class="formGroup-313Le_0">
                           <label class="controlLabel-3ZJIZ_0">路龄</label>
-                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= @employee.rali_years%></div>
+                          <div title="<%= @employee.name%>" class="controlInput-28_ow_0 ellipsis-15d1E_0"><%= rali_years(@employee)%></div>
                         </div>
                       </div>
                     </span>

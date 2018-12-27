@@ -55,7 +55,7 @@
 								</td>
 	        				<% end %>
 
-	        				<td><%= employee.working_years %></td>
+	        				<td><%= working_years(employee) %></td>
 	        				<td><%= group_holiday_year(employee)%></td>
 	        				<td><%= AnnualHoliday.where(:employee_id => employee.id, :year => @year).sum(:holiday_days).to_i %></td>
 	        			</tr>

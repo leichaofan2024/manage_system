@@ -210,12 +210,12 @@ class Employee < ActiveRecord::Base
       employee = find_by(sal_number: row["sal_number"]) || new
       employee.attributes = row
       employee.save!
-      # employee.sal_number = '41' + employee.job_number
+      employee.sal_number = ('41' + employee.job_number).to_i
       employee.birth_year = employee.birth_date[0..3]
       employee.age = Time.now.year - employee.birth_year.to_i
-      # working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
-      rali_years_transfer = (Time.now - employee.railway_time.to_datetime)/60/60/24/365
-      # employee.working_years = working_years_transfer.to_i
+      working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
+      rali_years_transfer = (Time.now - employee.railway_time.to_time)/60/60/24/365
+      employee.working_years = working_years_transfer.to_i
       employee.rali_years = rali_years_transfer.to_i
 
       # 更新Workshop数据

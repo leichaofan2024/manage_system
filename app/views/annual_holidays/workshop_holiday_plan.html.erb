@@ -61,7 +61,8 @@
 			        	<% if @if_reported == 1 %>
 			        	    <% AnnualHolidayWorkType.all.each do |type| %>
 			        			<tr>
-			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type),style: "color: rgb(81,112,215)") %>
+
+			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(request.query_parameters.merge({:work_type => type.work_type})),style: "color: rgb(81,112,215)") %>
 			        				</th>
 			        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
 			        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>
@@ -103,7 +104,7 @@
 			        	<% elsif @if_reported == 0 %>
 			        		<% AnnualHolidayWorkType.all.each do |type| %>
 			        			<tr>
-			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(:work_type => type.work_type),style: "color: rgb(81,112,215)") %>
+			        				<th><%= link_to(type.work_type,workshop_employees_annual_holidays_path(request.query_parameters.merge({:work_type => type.work_type})),style: "color: rgb(81,112,215)") %>
 			        				</th>
 			        				<% useless_columns = ["id", "workshop_id","orgnization_id", "work_type","created_at", "updated_at", "year", "status"] %>
 			        				<% columns = AnnualHolidayPlan.column_names - useless_columns %>

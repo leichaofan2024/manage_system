@@ -10,10 +10,17 @@
     </header>
 
     <div class="content-body">
+    	<div class="workshop_verify_group_statistics">
+	      人数合计：<%= @employees.count %>
+	      &nbsp;&nbsp;
+	      应休天数统计：<%= @employees.map{|employee| group_holiday_year(employee)}.sum %>
+	       
+	    </div>
     	<div class="content-table" style="clear:both;">
 			<table>
 				<thead>
 					<tr>
+					   <th>序号</th>
 					   <th>车间</th>
 					   <th>班组</th>
 					   <th>姓名</th>
@@ -25,17 +32,21 @@
 					
 				</thead>
 				<tbody>
+                    <% n = 0 %>
 					<% @employees.find_each do |employee| %>
+					    <% n += 1 %>
 						<tr>
+							<td><%= n %></td>
 							<td><%= Workshop.find_by(:id => employee.workshop).name %></td>
 						    <td><%= Group.find_by(:id => employee.group).name %></td>
 						    <td><%= employee.name %></td>
 						    <td><%= employee.sal_number %></td>
 						    <td><%= holiday_work_type(params[:work_type],employee) %></td>
-						    <td><%= employee.working_years %></td>
+						    <td><%= working_years(employee) %></td>
 						    <td><%= group_holiday_year(employee) %></td>
 						</tr>
 					<% end %>
+					
 				</tbody>
 			</table>
 		</div>

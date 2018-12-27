@@ -19,7 +19,7 @@
           						 <% @employees.each do |employee| %>
           							 <tr>
           								 <td><%= employee.name %></td>
-          								 <td><%= employee.working_years %></td>
+          								 <td><%= working_years(employee) %></td>
           								 <td><%= group_holiday_fulfill(employee) %></td>
           								 <td><%= group_holiday_year(employee) %></td>
           						     <td><%= group_holiday_day(employee) %></td>

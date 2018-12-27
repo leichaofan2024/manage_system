@@ -94,14 +94,14 @@
               <td><%= Group.current.find(employee.group).name %></td>
               <td><%= employee.name %></td>
               <td><%= employee.sex %></td>
-              <td><%= employee.age %></td>
+              <td><%= current_age(employee) %></td>
               <td><%= employee.education_background %></td>
               <td><%= employee.nation %></td>
               <td><%= employee.native_place %></td>
               <td><%= employee.working_time %></td>
-              <td><%= employee.working_years %></td>
+              <td><%= working_years(employee) %></td>
               <td><%= employee.railway_time %></td>
-              <td><%= employee.rali_years %></td>
+              <td><%= rali_years(employee) %></td>
             </tr>
           <% end %>
        </tbody>

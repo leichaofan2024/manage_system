@@ -52,14 +52,14 @@
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.duty %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.sex %></td>
-              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.age %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= current_age(employee) %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.education_background %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.nation %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.native_place %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_time %></td>
-              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.working_years %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= working_years(employee) %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.railway_time.to_i %></td>
-              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.rali_years %></td>
+              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= rali_years(employee) %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>">
                 <% if employee.if_high_rails == true %>

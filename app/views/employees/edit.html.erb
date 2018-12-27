@@ -101,7 +101,7 @@
           <!--基本信息-->
           <span><%= @employee.sex%></span>
           <span>出生日期：<%= @employee.birth_date.to_datetime.strftime("%Y年%m月%d日") if @employee.birth_date.present? %></span>
-          <span>年龄：<%= @employee.age%>岁</span>
+          <span>年龄：<%= current_age(@employee) %>岁</span>
   <!-- <ul class="social-list">
     <li><%= f.file_field :avatar %></li>
     <li><%= f.submit :上传照片,class:"btn btn-success-alt"%></li>

@@ -15,13 +15,20 @@ module AnnualHolidaysHelper
   end
 
   def group_holiday_year(employee)
-    if !employee.working_years.present? || employee.working_years.to_i <= 10
-       5
-    elsif employee.working_years.to_i >= 11 && employee.working_years.to_i <= 20
-       10
-    elsif employee.working_years.to_i >= 21
-       15
+    if employee.working_time.present? 
+      working_years = ((Time.now - employee.working_time.to_time)/60/60/24/365).to_i
+    else 
+      working_years = 0
+    end 
+    should_holiday = 0
+    if working_years <= 10
+       should_holiday = 5
+    elsif working_years >= 11 && working_years <= 20
+       should_holiday = 10
+    elsif working_years >= 21
+       should_holiday = 15
     end
+    return should_holiday
   end
 
   def group_holiday_day(employee)

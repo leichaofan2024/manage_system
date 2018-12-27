@@ -224,12 +224,13 @@ class AnnualHolidaysController < ApplicationController
 	end 
 
 	def confirm_year
+
 		if params[:year].present? 
 			@year = params[:year].to_i
-		else 
-			@year = Time.now.year
+		elsif Time.now.month>10 or Time.now.month < 3
+			@year = Time.now.year + 1 
 		end
-		@employees = Employee.at_that_time(@year,1)
+		@employees = Employee.current
 	end 
 
 end

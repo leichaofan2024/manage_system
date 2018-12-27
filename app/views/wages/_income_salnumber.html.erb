@@ -49,9 +49,9 @@
   <% if employee.present? %>
     <td><%= employee.work_type %></td>
     <td><%= employee.duty %></td>
-    <td><%= employee.age %></td>
-    <td><%= employee.working_years %></td>
-    <td><%= employee.rali_years %></td>
+    <td><%= current_age(employee) %></td>
+    <td><%= working_years(employee) %></td>
+    <td><%= rali_years(employee) %></td>
   <% else %>
     <% 5.times do %>
       <td><span style="color:red;">无信息！</span></td>
