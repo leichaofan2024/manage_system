@@ -109,10 +109,13 @@ class AnnualHolidaysController < ApplicationController
 		@organizations = Group.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("orgnization_id"))
 		@worktypes = AnnualHolidayWorkType.all
 		if params[:workshop].present?
+			@name = Workshop.find_by(:id => params[:workshop]).name
 			@annual_holidays = AnnualHolidayPlan.where(:workshop_id => params[:workshop],:year => @year,:status => "yes")
 		elsif params[:organization].present? 
+			@name = Group.find_by(:id => params[:organization]).name
 			@annual_holidays = AnnualHolidayPlan.where(:orgnization_id => params[:organization],:year => @year,:status => "yes")
 		else 
+			@name = "供电段"
 			@annual_holidays = AnnualHolidayPlan.where(:year => @year,:status => "yes")
 		end
 	end
