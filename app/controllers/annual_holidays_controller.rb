@@ -76,7 +76,14 @@ class AnnualHolidaysController < ApplicationController
 	end
 
 	def upload_holiday_form
-		if params[:file].present? 
+		if  params[:workshop_id].present? 
+        	annual_holiday_plans = AnnualHolidayPlan.where(:status => "yes",:year => params[:year],:workshop_id => params[:workshop_id])
+        elsif params[:group_id].present?
+        	annual_holiday_plans = AnnualHolidayPlan.where(:status => "yes",:year => params[:year],:orgnization_id => params[:group_id])
+        end 
+        if annual_holiday_plans.present?
+        	flash[:alert] = "#{@year}年年休假计划已上报，已不能再上传！"
+		elsif params[:file].present? 
 			if params[:workshop_id].present? 
               message = AnnualHolidayPlan.import_table(params[:year],params[:file],"workshop",params[:workshop_id])
             elsif params[:group_id].present? 
@@ -84,8 +91,7 @@ class AnnualHolidaysController < ApplicationController
             end 
             if message[:wrong_heads].present? 
                flash[:alert] = "表头#{message[:wrong_heads]}与系统不匹配，请核对后再上传！"
-            elsif message[:already_import].present? 
-            	flash[:alert] = message[:already_import]
+ 
             elsif message[:work_type_wrong].present? 
             	flash[:alert] = message[:work_type_wrong]
             else 
@@ -103,11 +109,11 @@ class AnnualHolidaysController < ApplicationController
 		@organizations = Group.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("orgnization_id"))
 		@worktypes = AnnualHolidayWorkType.all
 		if params[:workshop].present?
-			@annual_holidays = AnnualHolidayPlan.where(:workshop_id => params[:workshop],:year => @year)
+			@annual_holidays = AnnualHolidayPlan.where(:workshop_id => params[:workshop],:year => @year,:status => "yes")
 		elsif params[:organization].present? 
-			@annual_holidays = AnnualHolidayPlan.where(:orgnization_id => params[:organization],:year => @year)
+			@annual_holidays = AnnualHolidayPlan.where(:orgnization_id => params[:organization],:year => @year,:status => "yes")
 		else 
-			@annual_holidays = AnnualHolidayPlan.where(:year => @year)
+			@annual_holidays = AnnualHolidayPlan.where(:year => @year,:status => "yes")
 		end
 	end
 
@@ -222,6 +228,18 @@ class AnnualHolidaysController < ApplicationController
 	    	@employees = @employees.where(:duty => "轨道车司机")
 		end 
 	end 
+    
+    def reback_status
+      if params[:orgnization_id].present? 
+      	@name = Group.find_by(:id => params[:orgnization_id]).name
+      	AnnualHolidayPlan.where(:orgnization_id => params[:orgnization_id],:year => @year).update(:status => nil)
+      elsif params[:workshop_id].present?
+      	@name = Workshop.find_by(:id => params[:workshop_id]).name
+      	AnnualHolidayPlan.where(:workshop_id => params[:workshop_id],:year => @year).update(:status => nil)
+      end 
+      flash[:notice] = "《#{@name}》#{@year}年年休假计划表，已成功退回到上报前状态！" 
+      redirect_to duan_holiday_plan_annual_holidays_path
+    end 
 
 	def confirm_year
 
@@ -232,5 +250,7 @@ class AnnualHolidaysController < ApplicationController
 		end
 		@employees = Employee.current
 	end 
+
+
 
 end

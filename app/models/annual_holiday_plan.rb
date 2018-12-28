@@ -58,11 +58,12 @@ class AnnualHolidayPlan < ApplicationRecord
         	annual_holiday_plans = AnnualHolidayPlan.where(:year => year,:orgnization_id => workshop_id)
         end 
         if annual_holiday_plans.present? 
-        	message[:already_import] = "#{year}年年休假计划已存在，请勿重复上传！"
+        	annual_holiday_plans.delete_all
         end 
         
         work_type_array = AnnualHolidayWorkType.pluck(:work_type)
         if message[:wrong_heads].blank? && message[:already_import].blank?
+
 	        import_form_head_transfers = spreadsheet.row(1).map{|x| AnnualHolidayPlan.head_transfer[x]}
 	        (2..spreadsheet.last_row).each do |n| 
 	            row = [import_form_head_transfers,spreadsheet.row(n)].transpose.to_h

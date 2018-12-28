@@ -27,7 +27,7 @@
 		    	<%= form_tag duan_holiday_plan_annual_holidays_path  do %>
 				  <select name="year">
 				  	<% @years.each do |year| %>
-				  	  <% if year == Time.now.year %>
+				  	  <% if year == @year %>
 				  	    <option value="<%=year%>" selected><%= year %></option>
 				  	  <% else %>
 				  	    <option value="<%=year%>"><%= year %></option>
@@ -35,6 +35,13 @@
 				  	<% end %>
 				  </select>年
 				  <%= submit_tag "筛选",:data => {:disable_with => "计算中..."} %>
+				<% end %>
+				<% if params[:organization].present? %>
+				    <% group_name = Group.find_by(:id => params[:organization]).name %>
+				    <%= link_to "退回上报前状态", reback_status_annual_holidays_path(:orgnization_id => params[:organization],:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {confirm: "您确定要将《#{group_name}》退回到上报前到状态吗？"} %>
+				<% elsif params[:workshop].present? %>
+				    <% workshop_name = Workshop.find_by(:id => params[:workshop]).name %>
+				    <%= link_to "退回上报前状态", reback_status_annual_holidays_path(:workshop_id => params[:workshop],:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {confirm: "您确定要将《#{workshop_name}》退回到上报前到状态吗？"} %>
 				<% end %>
 		      <table id="example" class="table table-bordered">
 		        <thead>

@@ -97,6 +97,8 @@ Rails.application.routes.draw do
       #年休假完成率
       get :holiday_fulfillment_rate
       get :filter
+      # 退回上报前状态：
+      post :reback_status
     end
   end
 

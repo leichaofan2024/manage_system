@@ -38,8 +38,7 @@
 			          <%= submit_tag :筛选,:data => {:disable_with => "筛选中... "} %>
 			        <% end %>
 			      </div>
-			      
-			      <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true",:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {:disable_with => "上报中..."} %>
+			      <%= link_to "上报计划", create_holiday_plan_annual_holidays_path(status: "true",:year => @year), method: :post, class: "btn btn-primary-upload pull-right",:data => {confirm: "您确定要上报吗？一旦上报，将无法更改！"} %>
 			      <%= link_to "上传计划表格", "#", class: "btn btn-primary-upload pull-right", "data-toggle" => "modal","data-target" => "#upload-form"%>
 			      <table id="example" class="table table-bordered">
 			        <thead>
