@@ -5,7 +5,7 @@ class AnnualHolidayPlan < ApplicationRecord
 		head_transfer_hash = {
                               "工种" => "work_type",
                               "上年末部门人数" => "last_year_people_number",
-			        		  "可休年休假人数" => "this_year_people_number",
+			        		  "符合条件休年休假人数" => "this_year_people_number",
 			        		  "休5天人数" => "five_days",
 			        		  "休10天人数" => "ten_days",
 			        		  "休15天人数" => "fifteen_days",
