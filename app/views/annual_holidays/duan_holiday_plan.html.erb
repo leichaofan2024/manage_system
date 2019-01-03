@@ -22,9 +22,11 @@
         <h4 class="text-center"><%= @year%>年<%= @name %>年休假计划</h4>
 
 		<div class="card">
-
+            <div class="col-md-10" style="height:40px;background-color: #F7F9FA;text-align:center;">
+                <p style="height:40px;line-height:40px;">已上报年休假计划车间：<span style="color:red;"><%= @workshops.count %></span>个，已上报年休假计划科室：<span style="color:red;"><%= @organizations.count %></span>个 </p>
+            </div>
 		    <div style="overflow: auto;" class="col-md-10">
-		    	<%= form_tag duan_holiday_plan_annual_holidays_path  do %>
+		    	<%= form_tag duan_holiday_plan_annual_holidays_path,method: :get  do %>
 				  <select name="year">
 				  	<% @years.each do |year| %>
 				  	  <% if year == @year %>

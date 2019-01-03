@@ -7,13 +7,13 @@
 				<%= form_tag filter_annual_holidays_path, method: 'get' do %>
 
 			        <select name="workshop" id="selid" onchange="selCity(this)">
-		                <option>--选择车间--</option>
+		                <option value>--选择车间--</option>
 		                <% @workshop_names.each do |name| %>
 		                    <option value="<%= name[1] %>"><%= name[0] %></option>
 		                <% end %>
 		            </select>
 		            <select name="group" id="subselid">
-		                <option>--选择班组--</option>
+		                <option value>--选择班组--</option>
 		            </select>
 
 					<%= select_tag(:year, options_for_select(@years.collect{ |u| u }), {:prompt => "请选择年份"}) %>

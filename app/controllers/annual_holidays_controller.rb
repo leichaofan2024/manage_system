@@ -248,8 +248,10 @@ class AnnualHolidaysController < ApplicationController
 
 		if params[:year].present? 
 			@year = params[:year].to_i
-		elsif Time.now.month>10 or Time.now.month < 3
+		elsif Time.now.month>10
 			@year = Time.now.year + 1 
+		elsif Time.now.month < 3
+			@year = Time.now.year
 		end
 		@employees = Employee.current
 	end 
