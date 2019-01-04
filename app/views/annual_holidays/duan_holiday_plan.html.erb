@@ -8,15 +8,26 @@
 	      <ul style="list-style: none;">
 	      	<% @organizations.each do |organization| %>
 		        <li>
-		          <a href='/annual_holidays/duan_holiday_plan?organization=<%= organization.id %>'><%= organization.name %></a>
+		          <a href='/annual_holidays/duan_holiday_plan?organization=<%= organization.id %>&year=<%= @year %>'><%= organization.name %></a>
 		        </li>
 	        <% end %>
 	        <% @workshops.each do |workshop| %>
 		        <li>
-		          <a href='/annual_holidays/duan_holiday_plan?workshop=<%= workshop.id %>'><%= workshop.name %></a>
+		          <a href='/annual_holidays/duan_holiday_plan?workshop=<%= workshop.id %>&year=<%= @year %>'><%= workshop.name %></a>
+		        </li>
+	        <% end %>
+	        <% @not_report_organizations.each do |not_report_organization| %>
+		        <li>
+		          <a href='#' style="color:red;"><%= not_report_organization.name %></a>
+		        </li>
+	        <% end %>
+	        <% @not_report_workshops.each do |not_report_workshop| %>
+		        <li>
+		          <a href='#' style="color:red;"><%= not_report_workshop.name %></a>
 		        </li>
 	        <% end %>
 	      </ul>
+	      <p style="color:red;font-weight: 700;margin-top:20px;">说明：红色属于未上报车间和科室</p>
 				<!-- ##这个是table左边的下拉菜单 -->
 	    </div>
         <h4 class="text-center"><%= @year%>年<%= @name %>年休假计划</h4>

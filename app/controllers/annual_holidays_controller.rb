@@ -107,6 +107,8 @@ class AnnualHolidaysController < ApplicationController
 		@columns = AnnualHolidayPlan.column_names - useless_columns
 		@workshops = Workshop.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("workshop_id"))
 		@organizations = Group.current.where(:id => AnnualHolidayPlan.where(:status => "yes",:year => @year).pluck("orgnization_id"))
+		@not_report_workshops = Workshop.current.where.not(:id => @workshops.ids)
+		@not_report_organizations = Group.current.where(:workshop_id => 1).where.not(:id => @organizations.ids)
 		@worktypes = AnnualHolidayWorkType.all
 		if params[:workshop].present?
 			@name = Workshop.find_by(:id => params[:workshop]).name
