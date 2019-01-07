@@ -756,7 +756,6 @@ ActiveRecord::Schema.define(version: 20181217072457) do
     t.string "phone_number"
     t.string "avatar"
     t.boolean "duojing", default: false
-    t.boolean "high_rails", default: false
     t.boolean "if_high_rails", default: false
     t.string "health"
     t.index ["sal_number"], name: "index_employees_on_sal_number", unique: true
@@ -1520,8 +1519,8 @@ ActiveRecord::Schema.define(version: 20181217072457) do
     t.string "star"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "descend_record", default: 0
     t.boolean "team_leader", default: false
+    t.integer "descend_record", default: 0
   end
 
   create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
