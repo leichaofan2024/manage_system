@@ -171,6 +171,7 @@
                 <th>姓名</th>
                 <th>工资号</th>
                 <th>职名</th>
+                <th>班组长</th>
                 <th>分数</th>
                 <th>星级</th>
               </tr>
@@ -205,6 +206,7 @@
 
                   <td><%= star_info.sal_number %></td>
                   <td><%= star_info.duty %></td>
+                  <td><%= BasicScore.find(star_info.basic_score_id).team_leader %></td>
                   <td><%= star_info.final_score %></td>
                   <td>
                     <% if star_info.star == "pre_5" %>

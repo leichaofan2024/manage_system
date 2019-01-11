@@ -133,6 +133,7 @@
 				<th>车间</th>
 				<th>班组</th>
 				<th>职名</th>
+				<th>班组长</th>
 				<th>分数</th>
 				<th>星级</th>
 				<th>时间</th>
@@ -167,6 +168,7 @@
 					<td><%= score.workshop %></td>
 					<td><%= score.group %></td>
 					<td><%= score.duty %></td>
+					<td><%= score.team_leader %></td>
 					<td><%= score.final_score %></td>
 					<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
 					<td><%= score.year %>年第<%= score.quarter %>季度</td>
