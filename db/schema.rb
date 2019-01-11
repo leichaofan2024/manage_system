@@ -1530,7 +1530,6 @@ ActiveRecord::Schema.define(version: 20190107140427) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "team_leader", default: false
-    t.integer "descend_record", default: 0
   end
 
   create_table "star_ranges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
