@@ -149,7 +149,15 @@
 					<% i += 1 %>
 					<td>
 						<%= score.name %>
-						
+						<% this_quarter_times = DescendRecord.where(year: score.year, quarter: score.quarter, sal_number: score.sal_number).count %>
+						<% this_year_times = DescendRecord.where(year: score.year, sal_number: score.sal_number).count %>
+						<% if this_year_times > 1 %>
+							<span class="label label-warning">低于4星和降星共<%= this_year_times %>次</span>
+						<% elsif this_year_times = 1 %>
+							<% if this_quarter_times > 0 %>
+								<span class="label label-danger">低于4星和降星共<%= this_year_times %>次</span>
+							<% end %>
+						<% end %>
 					</td>
 					<td><%= score.sal_number %></td>
 					<td><%= score.workshop %></td>
