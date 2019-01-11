@@ -44,10 +44,10 @@ class StarInfosController < ApplicationController
 		end
 		@export_scores = BasicScore.where(id: params[:export_scores])
 		respond_to do |format|
-	      format.html
-	      format.js
-	      format.xls { headers["Content-Disposition"] = 'attachment; filename="全部星级岗位表.xls"'}
-	    end
+      format.html
+      format.js
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="全部星级岗位表.xls"'}
+    end
 	end
 
 	def show_star_modal
@@ -210,6 +210,11 @@ class StarInfosController < ApplicationController
 	    		StarConfirmStatus.create(:year => params[:year],:quarter => params[:quarter],:status => 1)
 	    	end 
 	    	pre_five_star_infos.update(:star => "4")
+	    	#记录低于4星的人员
+	    	descend_star_infos = StarInfo.where(:year => params[:year], :quarter => params[:quarter], :star => 1..3, :team_leader => true)
+	    	descend_star_infos.each do |star_info|
+	    		DescendRecord.create(:year => star_info.year, :quarter => star_info.quarter, :sal_number => star_info.sal_number, :descend_type => "低于4星")
+	    	end
 	    	flash[:notice] = "#{params[:year]}年#{params[:quarter]}季度星级评定完成！当前处于推荐五星状态的人员已退回四星！"
 	    end 
     	redirect_back :fallback_location => five_star_info_star_infos_path

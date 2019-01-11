@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">序号</Data></Cell>
+        <Cell><Data ss:Type="String">姓名</Data></Cell>
+        <Cell><Data ss:Type="String">工资号</Data></Cell>
+        <Cell><Data ss:Type="String">车间</Data></Cell> 
+        <Cell><Data ss:Type="String">班组</Data></Cell>
+        <Cell><Data ss:Type="String">职名</Data></Cell>
+        <Cell><Data ss:Type="String">班组长</Data></Cell>
+        <Cell><Data ss:Type="String">星级</Data></Cell>
+        <Cell><Data ss:Type="String">类型</Data></Cell>
+      </Row>
+      <% i = 1 %>
+      <% @export_records.each do |record| %>
+          <% basic_score = BasicScore.find_by(sal_number: record.sal_number, year: record.year, quarter: record.quarter) %>
+          <Row>
+            <Cell><Data ss:Type="String"><%= i %></Data></Cell>
+            <% i += 1 %>
+            <Cell><Data ss:Type="String"><%= basic_score.name %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= basic_score.sal_number %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= basic_score.workshop %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= basic_score.group %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= basic_score.duty %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= basic_score.team_leader %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= record.descend_type %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= record.year %>年第<%= record.quarter %>季度</Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -115,4 +115,28 @@ class BasicScoresController < ApplicationController
 		end 
 		redirect_back :fallback_location => basic_scores_path
 	end 
+
+	def descend_record
+		year = params[:year]
+		quarter = params[:quarter]
+		sal_number = params[:sal_number]
+		if (year.present?) && (quarter.present?)
+			@records = DescendRecord.where(year: year, quarter: quarter)
+		elsif (sal_number.present?) && (year.present?)
+			@records = DescendRecord.where(sal_number: sal_number, year: year)
+		else
+			@records = DescendRecord.all
+		end
+
+		@export_records = DescendRecord.where(id: params[:export_records])
+		respond_to do |format|
+      format.html
+      format.js
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="班组长降星记录表.xls"'}
+    end
+	end
+
+	def filter_descend_record
+		redirect_to :action => "descend_record", year: params[:year], quarter: params[:quarter]
+	end
 end

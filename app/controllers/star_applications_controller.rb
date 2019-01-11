@@ -13,9 +13,14 @@ class StarApplicationsController < ApplicationController
 	def refuse_application
 		application = StarApplication.find(params[:application])
 		basic_score = BasicScore.find(StarInfo.find(application.star_info_id).basic_score_id)
-		if basic_score.confirm_status == true
-			StarApplication.find(params[:application]).update(status: 1, treatment_state: "拒绝")
-			flash[:notice] = "已拒绝本次申请，流程结束"
+		star_confirm_status = StarConfirmStatus.find_by(:year => basic_score.year,:quarter => basic_score.quarter)
+		if star_confirm_status.present?
+			if star_confirm_status.status == true
+				StarApplication.find(params[:application]).update(status: 1, treatment_state: "拒绝")
+				flash[:notice] = "已拒绝本次申请，流程结束"
+			else
+				flash[:alert] = "您还未完成本季度的评定，请完成后再处理申请"
+			end
 		else
 			flash[:alert] = "您还未完成本季度的评定，请完成后再处理申请"
 		end
@@ -24,21 +29,25 @@ class StarApplicationsController < ApplicationController
 
 	def agree_application
 		application = StarApplication.find(params[:application])
-		updated_star = (StarInfo.find(application.star_info_id).star).to_i + application.up_down_star	
+		star_info = StarInfo.find(application.star_info_id)
+		updated_star = (star_info.star).to_i + application.up_down_star	
 		basic_score = BasicScore.find(StarInfo.find(application.star_info_id).basic_score_id)
-		if basic_score.confirm_status == true
-			if (updated_star > 5) || (updated_star < 1)
-				flash[:alert] = "升/降星后该人员的星级高于五星或低于一星，请检查"
-			else
-				if application.up_down_star < 0
-					record = StarInfo.find(application.star_info_id).descend_record
-					record += 1
-					StarInfo.find(application.star_info_id).update(star: updated_star, descend_record: record)
+		star_confirm_status = StarConfirmStatus.find_by(:year => basic_score.year,:quarter => basic_score.quarter)
+		if star_confirm_status.present?
+			if star_confirm_status.status == true
+				if (updated_star > 5) || (updated_star < 1)
+					flash[:alert] = "升/降星后该人员的星级高于五星或低于一星，请检查"
 				else
-					StarInfo.find(application.star_info_id).update(star: updated_star)
+					if application.up_down_star < 0
+						DescendRecord.create(year: star_info.year, quarter: star_info.quarter, sal_number: star_info.sal_number, application_id: application.id, descend_type: "降星")
+					else
+						StarInfo.find(application.star_info_id).update(star: updated_star)
+					end
+					application.update(status: 1, treatment_state: "通过")
+					flash[:notice] = "您已通过本次申请，系统已自动更新该人员的星级"
 				end
-				application.update(status: 1, treatment_state: "通过")
-				flash[:notice] = "您已通过本次申请，系统已自动更新该人员的星级"
+			else
+				flash[:alert] = "您还未完成本季度的评定，请完成后再处理申请"
 			end
 		else
 			flash[:alert] = "您还未完成本季度的评定，请完成后再处理申请"
