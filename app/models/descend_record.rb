@@ -1,0 +1,2 @@
+class DescendRecord < ApplicationRecord
+end
