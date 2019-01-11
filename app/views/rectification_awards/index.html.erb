@@ -49,38 +49,69 @@
       <%= link_to("导出表格",rectification_awards_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>
 
       <div  class="content-table" style="clear:both;">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-               <th>序号</th>
-               <th>科室车间</th>
-               <th>整改返奖合计</th>
-               <th>牌卡合计</th>
-               <th><%= link_to "中层返奖", middle_awards_path,:style => "color: #1976D2;" %></th>
-               <th><%= link_to "班组长返奖", teamleader_awards_path,:style => "color: #1976D2;" %></th>
-               <th><%= link_to "抽考返奖", examination_awards_path,:style => "color: #1976D2;" %></th>
-               <th><%= link_to "其他返奖", other_awards_path,:style => "color: #1976D2;" %></th>
-               <th>备注</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% n = 0 %>
+        <% if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin) %>
+          <table class="table table-bordered">
             <% @rectifications.each do |workshop,items| %>
-              <% n += 1 %>
               <tr>
-                <td><%= n %></td>
-                <td><%= workshop %></td>
-                <td><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></td>
-                <td><%= items.map{|x| x.备注}.join(";")  %></td>
+                <th>科室车间</th><td><%= workshop %></td>
+              </tr>
+              <tr>
+                <th>整改返奖合计</th><td><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th>牌卡合计</th><td><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th><%= link_to "中层返奖", middle_awards_path,:style => "color: #1976D2;" %></th><td><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th><%= link_to "班组长返奖", teamleader_awards_path,:style => "color: #1976D2;" %></th><td><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th><%= link_to "抽考返奖", examination_awards_path,:style => "color: #1976D2;" %></th><td><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th><%= link_to "其他返奖", other_awards_path,:style => "color: #1976D2;" %></th><td><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></td>
+              </tr>
+              <tr>
+                <th>备注</th><td><%= items.map{|x| x.备注}.join(";")  %></td>
               </tr>
             <% end %>
-         </tbody>
-        </table>
+          </table>
+        <% else %>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                 <th>序号</th>
+                 <th>科室车间</th>
+                 <th>整改返奖合计</th>
+                 <th>牌卡合计</th>
+                 <th><%= link_to "中层返奖", middle_awards_path,:style => "color: #1976D2;" %></th>
+                 <th><%= link_to "班组长返奖", teamleader_awards_path,:style => "color: #1976D2;" %></th>
+                 <th><%= link_to "抽考返奖", examination_awards_path,:style => "color: #1976D2;" %></th>
+                 <th><%= link_to "其他返奖", other_awards_path,:style => "color: #1976D2;" %></th>
+                 <th>备注</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% n = 0 %>
+              <% @rectifications.each do |workshop,items| %>
+                <% n += 1 %>
+                <tr>
+                  <td><%= n %></td>
+                  <td><%= workshop %></td>
+                  <td><%= items.map{|x| x.整改返奖合计.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.牌卡返奖.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.中层返奖.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.班组长返奖.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.抽考返奖.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.其他返奖.to_f.round(2)}.sum  %></td>
+                  <td><%= items.map{|x| x.备注}.join(";")  %></td>
+                </tr>
+              <% end %>
+           </tbody>
+          </table>
+        <% end %>
       </div>
 
     </div>

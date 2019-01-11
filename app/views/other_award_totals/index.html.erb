@@ -41,7 +41,7 @@
         <%= submit_tag :筛选,:data => {:disable_with => "筛选中..."}%>
       <% end %>
       <% if (current_user.has_role? :awardadmin) %>
-        <%= link_to("删除表格",delete_other_award_totals_other_award_totals_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月其他单项总明细表吗？"},class:"btn btn-primary-upload pull-right") %>
+        <%= link_to("删除表格",delete_other_award_totals_other_award_totals_path(:year => @year,:month => @month),method: :delete,:data => {confirm: "您确定要删除#{@year}年#{@month}月其他单项总明细表吗？本操作会将车间、科室上传的其他单项奖表一并删除，请确认后再操作！"},class:"btn btn-primary-upload pull-right") %>
         <%= link_to("上传其他单项总明细表",show_modal_other_award_totals_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
       <% end %>
       <%= link_to("导出表格",other_award_totals_path(:year => @year,:month => @month,format: "xls"),class:"btn btn-primary-upload pull-right") %>

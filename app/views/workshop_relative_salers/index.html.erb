@@ -65,7 +65,14 @@
               <th>应发</th>
               <th>小计</th>
               <% (["标准化","星级岗"] + @head_hash.keys).each do |key| %>
-                <th><%= link_to(key,single_award_upload_workshop_relative_salers_path(:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal",:style => "color: #1976D2;") %></th>
+                <th>
+                  <% if (current_user.has_role? :workshopadmin) or (current_user.has_role? :organsadmin) %>
+                    <%= link_to(key,single_award_upload_workshop_relative_salers_path(:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal",:style => "color: #1976D2;") %>
+                  <% else %>
+                    <%= key %>
+                  <% end %>
+                    
+                  </th>
               <% end %>
               <th>备注</th>
 
