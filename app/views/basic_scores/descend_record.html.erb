@@ -1,0 +1,68 @@
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<div class="contentpanel">
+  <div class="panel panel-body">
+    <header>
+      <h4 class="text-center">降星/低于4星记录</h4>
+    </header>
+		
+		<div class="content-body">
+      <div class="panel">
+        <div class="panel-heading" style="background-color: #fff;">
+          <span style="display:inline-block;">
+          	<%= form_tag filter_descend_record_basic_scores_path, method: :get do%>
+						<%= label_tag :"请选择年份和季度：" %>
+						<%= select_tag(:year, options_for_select(BasicScore.pluck(:year).uniq), {:required => "true"}) %>
+						<%= select_tag(:quarter, options_for_select(BasicScore.pluck(:quarter).uniq), {:required => "true"}) %>
+						<%= submit_tag :筛选 %>
+					  <% end %>
+          </span>
+          <span style="float: right;"> 
+          	<%= link_to("导出表格",descend_record_basic_scores_path(format: "xls", export_records: @records.pluck(:id)), class:"btn btn-primary-upload pull-right") %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-body">     
+      <div class="content-table" style="clear:both;">
+        <table>
+          <thead>
+						<tr>
+							<th>序号</th>
+							<th>姓名</th>
+							<th>工资号</th>
+							<th>车间</th>
+							<th>班组</th>
+							<th>职名</th>
+							<th>班组长</th>
+							<th>类型</th>
+							<th>时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% i = 1 %>
+						<% @records.each do |record| %>
+							<% basic_score = BasicScore.find_by(sal_number: record.sal_number, year: record.year, quarter: record.quarter) %>
+							<tr>
+								<td><%= i %></td>
+								<% i += 1 %>
+								<td><%= basic_score.name %></td>
+								<td><%= basic_score.sal_number %></td>
+								<td><%= basic_score.workshop %></td>
+								<td><%= basic_score.group %></td>
+								<td><%= basic_score.duty %></td>
+								<td><%= basic_score.team_leader %></td>
+								<td><%= record.descend_type %></td>
+								<td><%= record.year %>年第<%= record.quarter %>季度</td>
+							</tr>
+						<% end %>
+					</tbody>
+        </table>      
+      </div>
+    </div>
+  </div>
+ </div>
+
+

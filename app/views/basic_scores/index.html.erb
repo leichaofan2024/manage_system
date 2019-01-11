@@ -175,16 +175,20 @@
                 <td><%= basic_score.workshop %></td>
                 <td><%= basic_score.group %></td>
                 <td>
-                  <%= basic_score.name %>
-                  <% this_quarter_times = DescendRecord.where(year: basic_score.year, quarter: basic_score.quarter, sal_number: basic_score.sal_number).count %>
-                  <% this_year_times = DescendRecord.where(year: basic_score.year, sal_number: basic_score.sal_number).count %>
-                  <% if this_year_times > 1 %>
-                    <span class="label label-warning">低于4星和降星共<%= this_year_times %>次</span>
-                  <% elsif this_year_times = 1 %>
-                    <% if this_quarter_times > 0 %>
-                      <span class="label label-danger">低于4星和降星共<%= this_year_times %>次</span>
+                  <div>
+                    <%= basic_score.name %><br>
+                    <% this_quarter_times = DescendRecord.where(year: basic_score.year, quarter: basic_score.quarter, sal_number: basic_score.sal_number).count %>
+                    <% this_year_times = DescendRecord.where(year: basic_score.year, sal_number: basic_score.sal_number).count %>
+                    <%= link_to descend_record_basic_scores_path(sal_number: basic_score.sal_number, year: basic_score.year), style: "text-decoration-line:none;" do %>
+                      <% if this_year_times > 1 %>
+                        <div class="label label-warning">低于4星和降星共<%= this_year_times %>次</div>
+                      <% elsif this_year_times = 1 %>
+                        <% if this_quarter_times > 0 %>
+                          <div class="label label-danger">低于4星和降星共<%= this_year_times %>次</div>
+                        <% end %>
+                      <% end %>
                     <% end %>
-                  <% end %>
+                  </div>
                 </td> 
                 <td><%= basic_score.sal_number %></td>
                 <td><%= basic_score.duty %></td>

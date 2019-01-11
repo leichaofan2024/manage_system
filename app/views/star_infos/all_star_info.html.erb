@@ -16,31 +16,31 @@
               </button>
               <span style="display:inline-block;">
               	<%= form_tag filter_star_infos_path, method: :get do%>
-				<%= label_tag :"请选择年份和季度：" %>
-				<%= select_tag(:year, options_for_select(BasicScore.pluck(:year).uniq), {:required => "true"}) %>
-				<%= select_tag(:quarter, options_for_select(BasicScore.pluck(:quarter).uniq), {:required => "true"}) %>
-				<%= hidden_field_tag :workshop, @params_workshop %>
-				<%= hidden_field_tag :group, @params_group %>
-				<%= submit_tag :筛选 %>
-			  <% end %>
+								<%= label_tag :"请选择年份和季度：" %>
+								<%= select_tag(:year, options_for_select(BasicScore.pluck(:year).uniq), {:required => "true"}) %>
+								<%= select_tag(:quarter, options_for_select(BasicScore.pluck(:quarter).uniq), {:required => "true"}) %>
+								<%= hidden_field_tag :workshop, @params_workshop %>
+								<%= hidden_field_tag :group, @params_group %>
+								<%= submit_tag :筛选 %>
+							  <% end %>
               </span>
-			  
             </span>
             
-
             <span style="float: right;"> 
-              <% if @type == 1 %>
-				<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all"),class:"btn btn-primary-upload pull-right") %>
-			  <% else %>
-				<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1),class:"btn btn-primary-upload pull-right") %>
-			  <% end %>
-			  <% if (current_user.has_role? :workshopadmin) %>
-				<%= link_to("发起申请",new_star_application_path,class:"btn btn-primary-upload pull-right") %>
-				<%= link_to("查看申请",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
-			  <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
-				<%= link_to("查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
-			  <% end %>
-			  <%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+            	<%= link_to("查看降星记录",descend_record_basic_scores_path, class:"btn btn-primary-upload pull-right") %>
+		          <% if @type == 1 %>
+								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all"),class:"btn btn-primary-upload pull-right") %>
+						  <% else %>
+								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1),class:"btn btn-primary-upload pull-right") %>
+						  <% end %>
+						  <% if (current_user.has_role? :workshopadmin) %>
+								<%= link_to("发起申请",new_star_application_path,class:"btn btn-primary-upload pull-right") %>
+								<%= link_to("查看申请",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
+						  <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+								<%= link_to("查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
+						  <% end %>
+						  <%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+
             </span>
           </div>
 
@@ -148,17 +148,21 @@
 					<td><%= i %></td>
 					<% i += 1 %>
 					<td>
-						<%= score.name %>
-						<% this_quarter_times = DescendRecord.where(year: score.year, quarter: score.quarter, sal_number: score.sal_number).count %>
-						<% this_year_times = DescendRecord.where(year: score.year, sal_number: score.sal_number).count %>
-						<% if this_year_times > 1 %>
-							<span class="label label-warning">低于4星和降星共<%= this_year_times %>次</span>
-						<% elsif this_year_times = 1 %>
-							<% if this_quarter_times > 0 %>
-								<span class="label label-danger">低于4星和降星共<%= this_year_times %>次</span>
-							<% end %>
-						<% end %>
-					</td>
+            <div>
+              <%= score.name %><br>
+              <% this_quarter_times = DescendRecord.where(year: score.year, quarter: score.quarter, sal_number: score.sal_number).count %>
+              <% this_year_times = DescendRecord.where(year: score.year, sal_number: score.sal_number).count %>
+              <%= link_to descend_record_basic_scores_path(sal_number: score.sal_number, year: score.year), style: "text-decoration-line:none;" do %>
+                <% if this_year_times > 1 %>
+                  <div class="label label-warning">低于4星和降星共<%= this_year_times %>次</div>
+                <% elsif this_year_times = 1 %>
+                  <% if this_quarter_times > 0 %>
+                    <div class="label label-danger">低于4星和降星共<%= this_year_times %>次</div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
 					<td><%= score.sal_number %></td>
 					<td><%= score.workshop %></td>
 					<td><%= score.group %></td>

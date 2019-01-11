@@ -44,10 +44,10 @@ class StarInfosController < ApplicationController
 		end
 		@export_scores = BasicScore.where(id: params[:export_scores])
 		respond_to do |format|
-	      format.html
-	      format.js
-	      format.xls { headers["Content-Disposition"] = 'attachment; filename="全部星级岗位表.xls"'}
-	    end
+      format.html
+      format.js
+      format.xls { headers["Content-Disposition"] = 'attachment; filename="全部星级岗位表.xls"'}
+    end
 	end
 
 	def show_star_modal

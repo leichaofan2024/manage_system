@@ -432,6 +432,8 @@ Rails.application.routes.draw do
       delete :delete_basic_score
       get :import_model
       post :confirm_basic_score
+      get :descend_record
+      get :filter_descend_record
     end 
   end 
 

@@ -187,17 +187,21 @@
                   <td><%= star_info.workshop %></td>
                   <td><%= star_info.group %></td>
                   <td>
-                    <%= star_info.name %>
+                  <div>
+                    <%= star_info.name %><br>
                     <% this_quarter_times = DescendRecord.where(year: star_info.year, quarter: star_info.quarter, sal_number: star_info.sal_number).count %>
                     <% this_year_times = DescendRecord.where(year: star_info.year, sal_number: star_info.sal_number).count %>
-                    <% if this_year_times > 1 %>
-                      <span class="label label-warning">低于4星和降星共<%= this_year_times %>次</span>
-                    <% elsif this_year_times = 1 %>
-                      <% if this_quarter_times > 0 %>
-                        <span class="label label-danger">低于4星和降星共<%= this_year_times %>次</span>
+                    <%= link_to descend_record_basic_scores_path(sal_number: star_info.sal_number, year: star_info.year), style: "text-decoration-line:none;" do %>
+                      <% if this_year_times > 1 %>
+                        <div class="label label-warning">低于4星和降星共<%= this_year_times %>次</div>
+                      <% elsif this_year_times = 1 %>
+                        <% if this_quarter_times > 0 %>
+                          <div class="label label-danger">低于4星和降星共<%= this_year_times %>次</div>
+                        <% end %>
                       <% end %>
                     <% end %>
-                  </td>
+                  </div>
+                </td>
 
                   <td><%= star_info.sal_number %></td>
                   <td><%= star_info.duty %></td>
