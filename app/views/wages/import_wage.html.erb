@@ -36,7 +36,7 @@
             <% end %>
           </li>
           <li class="nav-item">
-            <%= link_to import_wage_wages_path(format: "xls") do %>
+            <%= link_to import_wage_wages_path(request.query_parameters.merge({"format" => "xls"})) do %>
               <span>导出表格</span>
             <% end %>
           </li>
