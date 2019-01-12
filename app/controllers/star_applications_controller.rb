@@ -57,18 +57,24 @@ class StarApplicationsController < ApplicationController
 
 	def create_application
 		up_down_star = (params[:update_type] + params[:star_count]).to_i
-		 
-		if StarInfo.find_by(name: params[:name], sal_number: params[:sal_number], year: params[:year], quarter: params[:quarter]).present?
-			star_info = StarInfo.find_by(name: params[:name], sal_number: params[:sal_number], year: params[:year], quarter: params[:quarter])
-			if (((star_info.star).to_i + up_down_star).to_i > 0) && (((star_info.star).to_i + up_down_star).to_i < 6)
-				StarApplication.create(star_info_id: star_info.id, up_down_star: up_down_star, applicant: current_user.name)
-				flash[:notice] = "成功发起申请"
+		if StarConfirmStatus.find_by(year: params[:year], quarter: params[:quarter]).present?
+			if StarConfirmStatus.find_by(year: params[:year], quarter: params[:quarter]).status == true
+				if StarInfo.find_by(name: params[:name], sal_number: params[:sal_number], year: params[:year], quarter: params[:quarter]).present?
+					star_info = StarInfo.find_by(name: params[:name], sal_number: params[:sal_number], year: params[:year], quarter: params[:quarter])
+					if (((star_info.star).to_i + up_down_star).to_i > 0) && (((star_info.star).to_i + up_down_star).to_i < 6)
+						StarApplication.create(star_info_id: star_info.id, up_down_star: up_down_star, applicant: current_user.name)
+						flash[:notice] = "成功发起申请"
+					else	
+						flash[:alert] = "通过申请后该人员的星级将低于一星或高于五星，请检查"
+					end
+				else
+					flash[:alert] = "您填写的工资号或姓名不在系统内，请先上传"
+				end
 			else
-				
-				flash[:alert] = "通过申请后该人员的星级将低于一星或高于五星，请检查"
+				flash[:alert] = "当前季度的星级评定还未完成，请于完成后再申请升降星"
 			end
 		else
-			flash[:alert] = "您填写的工资号或姓名不在系统内，请先上传"
+			flash[:alert] = "当前季度的星级评定还未完成，请于完成后再申请升降星"
 		end
 		redirect_to new_star_application_path
 	end

@@ -4,7 +4,18 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%=params[:workshop]%><%=params[:group]%>星级岗成绩汇总表</h4>
+      <% if StarConfirmStatus.find_by(year: @year, quarter: @quarter).present? %>
+        <% confirm_status = StarConfirmStatus.find_by(year: @year, quarter: @quarter).status %>
+        <% if confirm_status == true %>
+          <% status = "已完成评定" %>
+        <% else %>
+          <% status = "未完成评定" %>
+        <% end %>
+      <% else %>
+        <% confirm_status = false %>
+        <% status = "未完成评定" %>
+      <% end %>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%=params[:workshop]%><%=params[:group]%>星级岗成绩汇总表(<%= status %>)</h4>
     </header>
 
     <div class="content-body">

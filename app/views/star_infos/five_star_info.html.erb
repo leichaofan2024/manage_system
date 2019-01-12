@@ -4,7 +4,18 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%= params[:workshop]%><%=params[:group]%>五星级岗位表</h4>
+      <% if StarConfirmStatus.find_by(year: @year, quarter: @quarter).present? %>
+        <% confirm_status = StarConfirmStatus.find_by(year: @year, quarter: @quarter).status %>
+        <% if confirm_status == true %>
+          <% status = "已完成评定" %>
+        <% else %>
+          <% status = "未完成评定" %>
+        <% end %>
+      <% else %>
+        <% confirm_status = false %>
+        <% status = "未完成评定" %>
+      <% end %>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%= params[:workshop]%><%=params[:group]%>五星级岗位表(<%= status %>)</h4>
     </header>
 
     <div class="content-body">
@@ -145,7 +156,7 @@
           <div style="background-color: #fff;">
             <span class="all-select btn " style="color:blue;">全选</span>
             <span class="not-select-at-all btn" style="color:blue;display:none;">全不选</span>
-            <span><%= submit_tag "通过五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
+            <span><%= submit_tag "通过五星",:data => {:confirm => "您确定要将以下人员通过为正式五星吗？"}, class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
           </div>
           <%= hidden_field_tag :pass_five_star,"yes" %>
         </div>
@@ -154,7 +165,7 @@
           <div style="background-color: #fff;">
             <span class="all-select btn " style="color:blue;">全选</span>
             <span class="not-select-at-all btn" style="color:blue;display:none;">全不选</span>
-            <span><%= submit_tag "退回推荐五星",:data => {:disable_with => "处理中..."},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
+            <span><%= submit_tag "退回推荐五星",:data => {:confirm => "您确定要将以下人员退回为推荐五星吗？"},class:"btn",style: "background-color: #00D396;margin:10px;" %></span>
           </div>
           <%= hidden_field_tag :reback_five_star,"yes" %>
         </div>
