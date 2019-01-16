@@ -47,7 +47,7 @@ class AttendancesController < ApplicationController
       @attendance_status = AttendanceStatus.create(:year => @year , :month => @month,:group_id => @group.id,:workshop_id => @group.workshop_id,:status => "班组/科室填写中")
     end
     #提醒班组导出考勤表
-    if (@shenhe_attdendance_status.status == "段已审核") && (Time.now.day < 15)
+    if (@shenhe_attdendance_status.present?) && (@shenhe_attdendance_status.status == "段已审核") && (Time.now.day < 15)
       @group_export_permission = 1
     else
       @group_export_permission = 0

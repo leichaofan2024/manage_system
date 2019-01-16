@@ -1377,11 +1377,12 @@ class EmployeesController < ApplicationController
       # 在已删除车间找，如果有且只有一个则恢复，否则新增一个车间
       workshops = Workshop.where(:status => false,:name => params[:name])
       if workshops.present? && (workshops.count == 1)
-        workshops.update(:status => true)
+        workshop = workshops.first.update(:status => true)
       else
-        Workshop.create(:name => params[:name])
+        workshop = Workshop.create(:name => params[:name])
       end
-      flash[:notice] = "新增车间成功!"
+      User.create(:name => workshop.name,:workshop_id =>workshop.id , :password => "123456", :password_confirmation => "123456").add_role :workshopadmin
+      flash[:notice] = "新增车间成功!账户名：#{workshop.name}，默认密码：123456"
     end
     redirect_back(fallback_location: organization_structure_employees_path)
   end
@@ -1391,13 +1392,23 @@ class EmployeesController < ApplicationController
     if Group.current.find_by(:name => params[:name]).present?
       flash[:alert] = "该班组名称已存在，换一个试试~"
     else
-      groups = Group.where(:status => false,:name => params[:name])
+      groups = Group.where(:status => 0,:name => params[:name])
       if groups.present? && (groups.count == 1)
-        groups.update(:status => true)
+        groups.first.update(:status => 1,:workshop_id => params[:workshop_id])
       else
         Group.create(name: params[:name], workshop_id: params[:workshop_id])
       end
-      flash[:notice] = "新增班组成功!"
+      workshop_name = Workshop.find_by(:id => params[:workshop_id]).name 
+      group = Group.find_by(:name => params[:name])
+      group_name = params[:name]
+      if params[:workshop_id].to_i == 1
+        User.create(:name => group_name,:workshop_id => 1 ,:group_id => group.id, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
+        flash[:notice] = "新增班组成功!账户名：#{group_name}，默认密码：123456"
+      else 
+        User.create(:name => (workshop_name+"-"+group_name),:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :groupadmin
+        flash[:notice] = "新增班组成功!账户名：#{workshop_name+"-"+group_name}，默认密码：123456"
+      end 
+      
     end
 
     redirect_back(fallback_location: organization_structure_employees_path)
@@ -1450,7 +1461,7 @@ class EmployeesController < ApplicationController
       workshop = Workshop.current.find(params[:workshop])
       if workshop.groups.current.blank? && Employee.current.where(:workshop => params[:workshop]).blank?
         workshop.update(status: false)
-        User.workshopadmin.where(workshop_id: params[:workshop]).delete_all
+        User.where(workshop_id: params[:workshop]).delete_all
         flash[:notice] = "#{workshop.name}删除成功"
       else
         flash[:alert] = "本车间下还有班组或人员，不能删除"
@@ -1459,7 +1470,7 @@ class EmployeesController < ApplicationController
       group = Group.current.find(params[:group])
       if Employee.current.where(:group => params[:group]).blank?
         group.update(status: "0")
-        User.all_group.where(group_id: params[:group]).delete_all
+        User.where(group_id: params[:group]).delete_all
         flash[:notice] = "#{group.name}删除成功"
       else
         flash[:alert] = "本班组下还有人员，不能删除"

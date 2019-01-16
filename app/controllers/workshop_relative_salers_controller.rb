@@ -42,6 +42,8 @@ class WorkshopRelativeSalersController < ApplicationController
       @import_message = WorkshopRelativeSaler.import_form(params[:file],params[:upload_time])
       if @import_message[:head].present?
         flash[:alert] = @import_message[:head]
+      elsif @import_message[:no_workshop_relative_saler].present?
+        flash[:alert] = @import_message[:no_workshop_relative_saler]
 			elsif @import_message[:year_month].present?
 				flash[:alert] = @import_message[:year_month]
       elsif @import_message[:after_total].present?

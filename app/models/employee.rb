@@ -209,8 +209,8 @@ class Employee < ActiveRecord::Base
       row = Hash[[header, spreadsheet.row(j)].transpose]
       employee = find_by(sal_number: row["sal_number"]) || new
       employee.attributes = row
-      employee.save!
       employee.sal_number = ('41' + employee.job_number).to_i
+      
       employee.birth_year = employee.birth_date[0..3]
       employee.age = Time.now.year - employee.birth_year.to_i
       working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
@@ -236,7 +236,7 @@ class Employee < ActiveRecord::Base
         end
         employee.workshop = workshop.id
       end
-
+      employee.save!
     end
 
 

@@ -31,7 +31,10 @@ class WorkshopSingleAward < ApplicationRecord
          message[:head] = "所上传的单项奖明细表表头为‘#{head_name}’的字段与系统不匹配，请核对更正后再上传！"
       end
     end
-
+    workshop_relative_salers = WorkshopRelativeSaler.where(:upload_year =>year,:upload_month => month,:科室车间 => workshop_name)
+    if !workshop_relative_salers.present?
+      message[:no_workshop_relative_saler] = "您还没有上传#{month}月工挂工资明细表，请现上传后再传单项奖表！"
+    end 
     # 劳资本月上传汇总表中的所有科室车间名称：
     workshop_names = OtherAwardTotal.where(:upload_year =>year,:upload_month => month).pluck(:科室车间).uniq
     diff_names = Array.new

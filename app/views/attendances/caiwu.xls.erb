@@ -98,7 +98,7 @@
           <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Workshop.current.find(employee.workshop).name %></Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="String"><%= Group.current.find(employee.group).name %></Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.name %></Data></Cell>
-          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.sal_number %></Data></Cell>
+          <Cell ss:StyleID="Description"><Data ss:Type="String"><%= (employee.sal_number).to_i %></Data></Cell>
           <Cell ss:StyleID="Description"><Data ss:Type="String"><%= employee.duty %></Data></Cell>
           <% attendance_count = AttendanceCount.find_by(:employee_id => employee.id, :month => @month, :year => @year)%>
           <% if attendance_count.present? %>
