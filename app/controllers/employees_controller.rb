@@ -110,7 +110,7 @@ class EmployeesController < ApplicationController
     workshop = Workshop.pluck("name")
     @group = []
     workshop.each do |name|
-      @group << Group.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      @group << Group.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
     end
     gon.group_name = @group
   end
@@ -141,9 +141,23 @@ class EmployeesController < ApplicationController
   def import_table
     if !params[:file].present?
       flash[:alert] = "您还没有选择文件哦"
-    else
-      Employee.import_table(params[:file])
-      flash[:notice] = "上传成功"
+    else      
+      message = Employee.import_table(params[:file])
+      if message[:new_head].present? 
+        flash[:alert] = message[:new_head]
+      elsif message[:job_number_empty].present?
+        flash[:alert] = message[:job_number_empty]
+      elsif message[:job_number_repeat].present?
+        flash[:alert] = message[:job_number_repeat]
+      elsif message[:must_column_empty].present?
+        flash[:alert] = message[:must_column_empty]
+      elsif message[:new_workshop].present?
+        flash[:alert] = message[:new_workshop]
+      elsif message[:new_group].present?
+        flash[:alert] = message[:new_group]
+      else
+        flash[:notice] = "上传成功"
+      end 
     end
     redirect_to employees_path
   end
@@ -200,8 +214,8 @@ class EmployeesController < ApplicationController
     # 用于批量调动：
     batch_leaving_group = Array.new
     workshop.each do |name|
-      group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
-      batch_leaving_group << Group.current.where(:workshop_id => Workshop.current.find_by(:name => name).id).pluck("name","id")
+      group << Group.current.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
+      batch_leaving_group << Group.current.where(:workshop_id => Workshop.find_by(:name => name).id).pluck("name","id")
     end
     # 用于现员筛选：
     gon.group_name = group

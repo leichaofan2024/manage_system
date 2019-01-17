@@ -205,41 +205,143 @@ class Employee < ActiveRecord::Base
                      "职务化" => "duting"
                    }
     header = spreadsheet.row(1).map{ |i| head_transfer[i]}
-    (2..spreadsheet.last_row).each do |j|
-      row = Hash[[header, spreadsheet.row(j)].transpose]
-      employee = find_by(sal_number: row["sal_number"]) || new
-      employee.attributes = row
-      employee.sal_number = ('41' + employee.job_number).to_i
-      
-      employee.birth_year = employee.birth_date[0..3]
-      employee.age = Time.now.year - employee.birth_year.to_i
-      working_years_transfer = (Time.now - employee.working_time.to_datetime)/60/60/24/365
-      rali_years_transfer = (Time.now - employee.railway_time.to_time)/60/60/24/365
-      employee.working_years = working_years_transfer.to_i
-      employee.rali_years = rali_years_transfer.to_i
+    message = {}
+    job_number_empty = []
+    job_number_repeat = [] 
+    new_workshop = []
+    new_group = []
+    new_head = []
+    must_column_empty = []
+    spreadsheet.row(1).each do |form_column|
+      if !head_transfer.keys.include?(form_column)
+        new_head << form_column
+      end 
+    end 
 
-      # 更新Workshop数据
-      workshop = Workshop.current.find_by(name: row["workshop"])
-      if !workshop.present?
-        workshop_new = Workshop.create!(:name => row["workshop"])
-        group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
-        employee.workshop = workshop_new.id
-        employee.group = group_new.id
+    if new_head.blank? 
+        (2..spreadsheet.last_row).each do |j|
+          row = Hash[[header, spreadsheet.row(j)].transpose]
+          if row["job_number"].blank? 
+            job_number_empty << j
+          else 
+            job_number = ("1" + row["job_number"].to_s).to_i.to_s[1..50]
+            sal_number = '41' + job_number
+            already_sal_number = Employee.pluck(:sal_number) 
+            if already_sal_number.include?(sal_number)
+              job_number_repeat << j
+            else 
+              if row["name"].blank?
+                must_column_empty << j 
+              elsif row["sex"].blank?
+                must_column_empty << j
+              elsif row["workshop"].blank?
+                must_column_empty << j
+              elsif row["group"].blank?
+                must_column_empty << j
+              elsif row["duty"].blank?
+                must_column_empty << j
+              elsif row["birth_date"].blank?
+                must_column_empty << j
+              elsif row["working_time"].blank?
+                must_column_empty << j
+              elsif row["railway_time"].blank?
+                must_column_empty << j
+              elsif row["work_type"].blank?
+                must_column_empty << j
+              elsif row["education_background"].blank?
+                must_column_empty << j
+              end 
 
-      else
-        group = Group.current.find_by(:workshop_id => workshop.id,:name => row["group"] )
-        if !group.present?
-          group_new = Group.create!(:name => row["group"], :workshop_id => workshop.id)
-          employee.group = group_new.id
-        else
-          employee.group = group.id
+              if must_column_empty.blank? 
+                workshop_all = Workshop.pluck(:name)
+                if !workshop_all.include?(row["workshop"])
+                  new_workshop << j
+                  
+                else
+                  wrokshop_id = Workshop.find_by(:name => row["workshop"]).id 
+                  group_all = Group.where(:workshop_id => wrokshop_id).pluck(:name)
+                  if !group_all.include?(row["group"])
+                    new_group << j 
+                    
+                  end 
+                end
+              else 
+                
+              end 
+            end 
+          end  
+        end 
+        
+        if job_number_empty.present? 
+          message[:job_number_empty] = "上传失败！表格中第#{job_number_empty}行中《工号》这一栏不能为空！"
+        elsif job_number_repeat.present? 
+          message[:job_number_repeat] = "上传失败！表格中第#{job_number_repeat}行中工号在系统中已存在！请核对后再上传！"
+        elsif must_column_empty.present? 
+          message[:must_column_empty] = "上传失败！表中第#{must_column_empty}行中《姓名、性别、职务、部门、班组名称、出生日期、工作时间、入路时间、工种分类、文化程度》等栏位不能为空！"
+        elsif new_workshop.present?
+          message[:new_workshop] = "上传失败！表中第#{new_workshop}行中车间名称与系统不符，请核对后再上传！"
+        elsif new_group.present? 
+          message[:new_group] = "上传失败！表中第#{new_group}行中班组名称与系统不符，请核对后再上传！"
+        end 
+
+      if !message.present?
+        (2..spreadsheet.last_row).each do |j|
+          row = Hash[[header, spreadsheet.row(j)].transpose]
+          employee = find_by(sal_number: row["sal_number"]) || new
+          employee.attributes = row
+          employee.job_number = ("1" + row["job_number"].to_s).to_i.to_s[1..50]
+          employee.sal_number = '41' + employee.job_number.to_s
+          employee.birth_date = ("1" + row["birth_date"].to_s).to_i.to_s[1..50]
+          employee.birth_year = employee.birth_date[0..3]
+          employee.age = Time.now.year - employee.birth_year.to_i
+          employee.working_time = ("1" + row["working_time"].to_s).to_i.to_s[1..50]
+          employee.railway_time = ("1" + row["railway_time"].to_s).to_i.to_s[1..50]
+          employee.entry_time = ("1" + row["entry_time"].to_s).to_i.to_s[1..50]
+          
+          employee.employment_period = ("1" + row["employment_period"].to_s).to_i.to_s[1..50]
+          
+          employee.promotion_leader_time = ("1" + row["promotion_leader_time"].to_s).to_i.to_s[1..50]
+          
+          employee.hold_technique_time = ("1" + row["hold_technique_time"].to_s).to_i.to_s[1..50]
+          
+          employee.graduation_time = ("1" + row["graduation_time"].to_s).to_i.to_s[1..50]
+          
+          employee.conclude_contract_time = ("1" + row["conclude_contract_time"].to_s).to_i.to_s[1..50]
+          
+          employee.station_now_time = ("1" + row["station_now_time"].to_s).to_i.to_s[1..50]
+
+          employee.record_number = ("1" + row["record_number"].to_s).to_i.to_s[1..50]
+
+          working_years_transfer = (Time.now - employee.working_time.to_time)/60/60/24/365
+          rali_years_transfer = (Time.now - employee.railway_time.to_time)/60/60/24/365
+          employee.working_years = working_years_transfer.to_i
+          employee.rali_years = rali_years_transfer.to_i
+          # 更新Workshop数据
+          workshop = Workshop.current.find_by(name: row["workshop"])
+          if !workshop.present?
+            workshop_new = Workshop.create!(:name => row["workshop"])
+            group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
+            employee.workshop = workshop_new.id
+            employee.group = group_new.id
+
+          else
+            group = Group.current.find_by(:workshop_id => workshop.id,:name => row["group"] )
+            if !group.present?
+              group_new = Group.create!(:name => row["group"], :workshop_id => workshop.id)
+              employee.group = group_new.id
+            else
+              employee.group = group.id
+            end
+            employee.workshop = workshop.id
+          end
+          employee.save!
         end
-        employee.workshop = workshop.id
-      end
-      employee.save!
-    end
+      end 
+    else 
+      message[:new_head] = "表头名为#{new_head}的栏位名与系统不一致，请核对后再上传！"
+    end 
 
-
+    return message
 
    # 更新Group表数据
     # Workshop.current.each do |i|
