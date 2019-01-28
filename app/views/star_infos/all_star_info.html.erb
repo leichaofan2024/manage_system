@@ -4,7 +4,18 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center">全部星级岗位表(<%= @year %>年第<%= @quarter %>季度)</h4>
+    	<% if StarConfirmStatus.find_by(year: @year, quarter: @quarter).present? %>
+        <% confirm_status = StarConfirmStatus.find_by(year: @year, quarter: @quarter).status %>
+        <% if confirm_status == true %>
+          <% status = "已完成评定" %>
+        <% else %>
+          <% status = "未完成评定" %>
+        <% end %>
+      <% else %>
+        <% confirm_status = false %>
+        <% status = "未完成评定" %>
+      <% end %>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter %>季度全部星级岗位表(<%= status %>)</h4>
     </header>
 
     <div class="content-body">
@@ -27,19 +38,21 @@
             </span>
             
             <span style="float: right;"> 
+            	<%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+            	<% if (current_user.has_role? :workshopadmin) %>
+								<%= link_to("发起申请",new_star_application_path,class:"btn btn-primary-upload pull-right") %>
+								<%= link_to("查看申请",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
+						  <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+								<%= link_to("查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
+						  <% end %>
             	<%= link_to("查看降星记录",descend_record_basic_scores_path, class:"btn btn-primary-upload pull-right") %>
 		          <% if @type == 1 %>
 								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all"),class:"btn btn-primary-upload pull-right") %>
 						  <% else %>
 								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1),class:"btn btn-primary-upload pull-right") %>
 						  <% end %>
-						  <% if (current_user.has_role? :workshopadmin) %>
-								<%= link_to("发起申请",new_star_application_path,class:"btn btn-primary-upload pull-right") %>
-								<%= link_to("查看申请",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
-						  <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
-								<%= link_to("查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
-						  <% end %>
-						  <%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+						  
+						  
 
             </span>
           </div>
@@ -189,7 +202,11 @@
 					<td><%= score.duty %></td>
 					<td><%= score.team_leader %></td>
 					<td><%= score.final_score %></td>
-					<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+					<% if StarInfo.find_by(basic_score_id: score.id).star == "pre_5" %>
+						<td>推荐5星</td>
+					<% else %>
+						<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+					<% end %>
 					<td><%= score.year %>年第<%= score.quarter %>季度</td>
 					<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
 						<% if StarConfirmStatus.find_by(year: score.year, quarter: score.quarter).present? %>

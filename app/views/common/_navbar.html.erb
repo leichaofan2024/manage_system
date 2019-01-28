@@ -472,15 +472,17 @@
                       <% else %>
                         <li><a href="/basic_scores"> 成绩汇总</a></li>
                       <% end %>
-                      <% if "final_statistics" == url_for.split("/").second %>
-                        <li style="background-color:  #00D396;"><a href="/final_statistics" style="color: white;"> 考核汇总 </a></li>
-                      <% else %>
-                        <li><a href="/final_statistics"> 考核汇总</a></li>
-                      <% end %>
-                      <% if "/star_infos/five_star_info" == url_for%>
-                        <li style="background-color:  #00D396;"><a href="/star_infos/five_star_info" style="color: white;"> 五星岗位人员 </a></li>
-                      <% else %>
-                        <li><a href="/star_infos/five_star_info"> 五星岗位人员</a></li>
+                      <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin)%>
+                        <% if "final_statistics" == url_for.split("/").second %>
+                          <li style="background-color:  #00D396;"><a href="/final_statistics" style="color: white;"> 考核汇总 </a></li>
+                        <% else %>
+                          <li><a href="/final_statistics"> 考核汇总</a></li>
+                        <% end %>
+                        <% if "/star_infos/five_star_info" == url_for%>
+                          <li style="background-color:  #00D396;"><a href="/star_infos/five_star_info" style="color: white;"> 五星岗位人员 </a></li>
+                        <% else %>
+                          <li><a href="/star_infos/five_star_info"> 五星岗位人员</a></li>
+                        <% end %>
                       <% end %>  
                      <% if ["/star_infos/all_star_info","/star_applications/new", "/star_applications/show"].include?(url_for) %>
                         <li style="background-color:  #00D396;"><a href="/star_infos/all_star_info" style="color: white;"> 全部星级岗位人员 </a></li>

@@ -139,4 +139,16 @@ class BasicScoresController < ApplicationController
 	def filter_descend_record
 		redirect_to :action => "descend_record", year: params[:year], quarter: params[:quarter]
 	end
+
+	def return_status
+		status = BasicScore.where(year: params[:year], quarter: params[:quarter]).pluck(:confirm_status).uniq[0]
+		if status == true
+			BasicScore.where(year: params[:year], quarter: params[:quarter]).update(confirm_status: false)
+			flash[:notice] = "已将#{params[:year]}年第#{params[:quarter]}季度的成绩汇总表退回上报前状态！"
+		else
+			flash[:alert] = "#{params[:year]}年第#{params[:quarter]}季度的成绩汇总表还未上报，请先上报！"
+		end
+		redirect_back fallback_location: basic_scores_path
+	end
+
 end

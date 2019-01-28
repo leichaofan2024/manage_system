@@ -434,6 +434,7 @@ Rails.application.routes.draw do
       post :confirm_basic_score
       get :descend_record
       get :filter_descend_record
+      post :return_status
     end 
   end 
 
