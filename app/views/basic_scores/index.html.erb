@@ -22,7 +22,7 @@
             
             
             <span style="float: right;"> 
-              <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %> 
+              <%= link_to("导出表格",basic_scores_path(export_scores: @basic_scores.pluck(:id),format: "xls"),class:"btn btn-primary-upload pull-right") %> 
               <% if current_user.has_role? :staradmin %>
                 <%= link_to("退回上报状态",return_status_basic_scores_path(year: @year, quarter: @quarter), method: :post, class:"btn btn-primary-upload pull-right") %> 
               <% elsif (current_user.has_role? :workshopadmin) %>
