@@ -47,9 +47,9 @@
 						  <% end %>
             	<%= link_to("查看降星记录",descend_record_basic_scores_path, class:"btn btn-primary-upload pull-right") %>
 		          <% if @type == 1 %>
-								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all"),class:"btn btn-primary-upload pull-right") %>
+								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all", year: @year, quarter: @quarter),class:"btn btn-primary-upload pull-right") %>
 						  <% else %>
-								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1),class:"btn btn-primary-upload pull-right") %>
+								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1, year: @year, quarter: @quarter),class:"btn btn-primary-upload pull-right") %>
 						  <% end %>
 						  
 						  
