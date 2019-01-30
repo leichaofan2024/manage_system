@@ -13,50 +13,48 @@ class BasicScoresController < ApplicationController
 	  if params[:quarter].present? 
 	    @quarter = params[:quarter].to_i 
 	  else 
-        quarters = BasicScore.where(:year => Time.now.year).pluck(:quarter).uniq.sort{|a,b| b<=> a}
-        if quarters.present? 
-        	@quarter = quarters[0]
-        else 
-            @quarter = quarter_hash[Time.now.month]
-        end 
+      quarters = BasicScore.where(:year => Time.now.year).pluck(:quarter).uniq.sort{|a,b| b<=> a}
+      if quarters.present? 
+      	@quarter = quarters[0]
+      else 
+        @quarter = quarter_hash[Time.now.month]
+      end 
 	  end      
 	  if current_user.has_role? :workshopadmin
 	  	@basic_scores = BasicScore.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
 	  	@groups = @basic_scores.pluck(:group).uniq
 	  	@dutys = @basic_scores.pluck(:duty).uniq
 	  elsif (current_user.has_role? :staradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
-        @basic_scores = BasicScore.where(:year => @year,:quarter => @quarter)
-        @workshops = @basic_scores.pluck(:workshop).uniq
-        groups_array = [[]]
-        @workshops.each do |workshop|
-        	groups = @basic_scores.where(:workshop => workshop).pluck(:group).uniq
-        	groups_array << groups 
-        end 
-        @dutys = @basic_scores.pluck(:duty).uniq
+      @basic_scores = BasicScore.where(:year => @year,:quarter => @quarter)
+      @workshops = @basic_scores.pluck(:workshop).uniq
+      groups_array = [[]]
+      @workshops.each do |workshop|
+      	groups = @basic_scores.where(:workshop => workshop).pluck(:group).uniq
+      	groups_array << groups 
       end 
-      gon.groups = groups_array
-      if params[:workshop].present?
-      	@basic_scores = @basic_scores.where(:workshop => params[:workshop])
-      end 
-      if params[:group].present?
-      	@basic_scores = @basic_scores.where(:group => params[:group])
-      end
-      if params[:duty].present?
-      	@basic_scores = @basic_scores.where(:duty => params[:duty])
-      end
-      if params[:star].present?
-      	if @basic_scores.present? 
+      @dutys = @basic_scores.pluck(:duty).uniq
+    end 
+    gon.groups = groups_array
+    if params[:workshop].present?
+    	@basic_scores = @basic_scores.where(:workshop => params[:workshop])
+    end 
+    if params[:group].present?
+    	@basic_scores = @basic_scores.where(:group => params[:group])
+    end
+    if params[:duty].present?
+    	@basic_scores = @basic_scores.where(:duty => params[:duty])
+    end
+    if params[:star].present?
+    	if @basic_scores.present? 
 	      basic_score_ids = StarInfo.where(:basic_score_id => @basic_scores.ids).where(:star => params[:star]).pluck(:basic_score_id).uniq
 	      @basic_scores = @basic_scores.where(:id => basic_score_ids)
 	    end 
-      end
-      @basic_scores_export = @basic_scores
-      @basic_scores = @basic_scores.page(params[:page]).per(20)
-      
+    end
+    @basic_scores = @basic_scores.page(params[:page]).per(20)
+    @basic_scores_export = BasicScore.where(id: params[:export_scores])
 	  respond_to do |format| 
 	  	format.html
 	  	format.xls { headers["Content-Disposition"] = 'attachment; filename="星级岗成绩汇总表.xls"'}
-
 	  end 
 	end 
 
@@ -139,4 +137,16 @@ class BasicScoresController < ApplicationController
 	def filter_descend_record
 		redirect_to :action => "descend_record", year: params[:year], quarter: params[:quarter]
 	end
+
+	def return_status
+		status = BasicScore.where(year: params[:year], quarter: params[:quarter]).pluck(:confirm_status).uniq[0]
+		if status == true
+			BasicScore.where(year: params[:year], quarter: params[:quarter]).update(confirm_status: false)
+			flash[:notice] = "已将#{params[:year]}年第#{params[:quarter]}季度的成绩汇总表退回上报前状态！"
+		else
+			flash[:alert] = "#{params[:year]}年第#{params[:quarter]}季度的成绩汇总表还未上报，请先上报！"
+		end
+		redirect_back fallback_location: basic_scores_path
+	end
+
 end

@@ -4,7 +4,12 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%=params[:workshop]%><%=params[:group]%>星级岗成绩汇总表</h4>
+      <% if BasicScore.where(year: @year, quarter: @quarter).pluck(:confirm_status).uniq[0] == true %>
+        <% status = "已上报" %>
+      <% else %>
+        <% status = "未上报" %>
+      <% end %>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter%>季度<%=params[:workshop]%><%=params[:group]%>星级岗成绩汇总表(<%= status %>)</h4>
     </header>
 
     <div class="content-body">
@@ -17,8 +22,10 @@
             
             
             <span style="float: right;"> 
-              <%= link_to("导出表格",basic_scores_path(:year => @year,:quarter => @quarter,format: "xls"),class:"btn btn-primary-upload pull-right") %>               
-              <% if (current_user.has_role? :workshopadmin) %>
+              <%= link_to("导出表格",basic_scores_path(export_scores: @basic_scores.pluck(:id),format: "xls"),class:"btn btn-primary-upload pull-right") %> 
+              <% if current_user.has_role? :staradmin %>
+                <%= link_to("退回上报状态",return_status_basic_scores_path(year: @year, quarter: @quarter), method: :post, class:"btn btn-primary-upload pull-right") %> 
+              <% elsif (current_user.has_role? :workshopadmin) %>
                 <%= link_to("删除表格",delete_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :delete,:data => {confirm: "您确定要删除【#{Workshop.find(current_user.workshop_id).name}】#{@year}年第#{@quarter}季度星级岗成绩汇总表吗？"},class:"btn btn-primary-upload pull-right") %>
                 <%= link_to("上传星级岗成绩汇总表",import_model_basic_scores_path, remote: true,class:"btn btn-primary-upload pull-right", "data-toggle" => "modal", "data-target" => "#myModal") %>
                 <%= link_to("上报劳资",confirm_basic_score_basic_scores_path(:year => @year,:quarter => @quarter,:workshop => Workshop.find(current_user.workshop_id).name),method: :past,class:"btn btn-primary-upload pull-right") %>
@@ -153,6 +160,7 @@
               <th>姓名</th>
               <th>工资号</th>
               <th>职名</th>
+              <th>班组长</th>
               <th>理论考试</th>
               <th>权重</th>
               <th>实作考试</th>
@@ -192,6 +200,7 @@
                 </td> 
                 <td><%= basic_score.sal_number %></td>
                 <td><%= basic_score.duty %></td>
+                <td><%= basic_score.team_leader %></td>
                 <td><%= basic_score.theory_score %></td>
                 <td><%= basic_score.theory_weighted_score %></td>
                 <td><%= basic_score.practical_score %></td>

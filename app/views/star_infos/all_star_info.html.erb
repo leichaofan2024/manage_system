@@ -4,7 +4,18 @@
 <div class="contentpanel">
   <div class="panel panel-body">
     <header>
-      <h4 class="text-center">全部星级岗位表(<%= @year %>年第<%= @quarter %>季度)</h4>
+    	<% if StarConfirmStatus.find_by(year: @year, quarter: @quarter).present? %>
+        <% confirm_status = StarConfirmStatus.find_by(year: @year, quarter: @quarter).status %>
+        <% if confirm_status == true %>
+          <% status = "已完成评定" %>
+        <% else %>
+          <% status = "未完成评定" %>
+        <% end %>
+      <% else %>
+        <% confirm_status = false %>
+        <% status = "未完成评定" %>
+      <% end %>
+      <h4 class="text-center"><%= @year %>年第<%= @quarter %>季度全部星级岗位表(<%= status %>)</h4>
     </header>
 
     <div class="content-body">
@@ -27,99 +38,118 @@
             </span>
             
             <span style="float: right;"> 
-            	<%= link_to("查看降星记录",descend_record_basic_scores_path, class:"btn btn-primary-upload pull-right") %>
-		          <% if @type == 1 %>
-								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all"),class:"btn btn-primary-upload pull-right") %>
-						  <% else %>
-								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1),class:"btn btn-primary-upload pull-right") %>
-						  <% end %>
-						  <% if (current_user.has_role? :workshopadmin) %>
+            	<%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+            	<% if (current_user.has_role? :workshopadmin) %>
 								<%= link_to("发起申请",new_star_application_path,class:"btn btn-primary-upload pull-right") %>
 								<%= link_to("查看申请",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
 						  <% elsif (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
 								<%= link_to("查看申请(#{StarApplication.where(status: 0).count})",star_applications_path(type: 0),class:"btn btn-primary-upload pull-right") %>
 						  <% end %>
-						  <%= link_to("导出表格",all_star_info_star_infos_path(format: "xls", type: @type, export_scores: @scores.pluck(:id)),class:"btn btn-primary-upload pull-right") %>
+            	<%= link_to("查看降星记录",descend_record_basic_scores_path, class:"btn btn-primary-upload pull-right") %>
+		          <% if @type == 1 %>
+								<%= link_to("查看全部五星",all_star_info_star_infos_path(type: "all", year: @year, quarter: @quarter),class:"btn btn-primary-upload pull-right") %>
+						  <% else %>
+								<%= link_to("查看通过五星",all_star_info_star_infos_path(type: 1, year: @year, quarter: @quarter),class:"btn btn-primary-upload pull-right") %>
+						  <% end %>
+						  
+						  
 
             </span>
           </div>
 
           <div class="panel-body" id="employee-btn" style="display: none;">
-              <ul class="employee-search" style="padding:20px;">
-                  <div class="" id="employee-btn">
-					<ul class="employee-search">
-					  <div class="row">
-					    <div class="col-md-6">
-					      <li>
-					        <%= form_tag search_star_infos_path, :class => "posts-search-form", :method => :get do %>
-					          <div class="input-group">
-					            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号">
-					            <span class="input-group-btn">
-					              <button type="submit" class="btn btn-primary">
-					                <span class="glyphicon glyphicon-search"></span>
-					              </button>
-					            </span>
-					          </div>
-					        <% end %>
-					      </li>
-					    </div>
-					  </div>
-					</ul>
-				  </div>
-                  <%= form_tag filter_star_infos_path, method: 'get' do %>	
-                    <li style="display: inline-block;margin-top: 15px;">
-                        <%= label_tag :车间：%>      
-				        <select name="workshop" id="selid" onchange="selCity(this)">
-			                <option>--选择车间--</option>
-			                <% @workshop_names.each do |name| %>
-			                    <option value="<%= name %>"><%= name %></option>
-			                <% end %>
-			            </select>
-                        <%= label_tag :班组：%> 
-			            <select name="group" id="subselid">
-			                <option>--选择班组--</option>
-			            </select>	
-			        </li>     
-			      	<br>
-			      	<li style="margin-top: 10px;">
-			        <%= label_tag :职名： %>
-				        <select class="" name="duty">
-				          <option value>请选择</option>
-				          <% StarInfo.pluck("duty").uniq.compact.each do |duty| %>
-				            <% if params[:duty] == duty %>
-				              <option value="<%= duty %>" selected><%= duty %></option>
-				            <% else %>
-				              <option value="<%= duty %>"><%= duty %></option>
-				            <% end %>
-				          <% end %>
-				        </select>
-				        <%= label_tag :星级： %>
-				        <select class="" name="star">
-				        <option value>请选择</option>
-					        <% StarInfo.pluck("star").uniq.compact.each do |star| %>
-					          <% if params[:star] == star %>
-					          	<% if star == "pre_5" %>
-					          		<option value="<%= star %>" selected>推荐5星</option>
-					          	<% else %>
-					            	<option value="<%= star %>" selected><%= (star + "星") %></option>
-					            <% end %>
-					          <% else %>
-					          	<% if star == "pre_5" %>
-					            	<option value="<%= star %>">推荐5星</option>
+            <ul class="employee-search" style="padding:20px;">
+              <div class="" id="employee-btn">
+								<ul class="employee-search">
+								  <div class="row">
+								    <div class="col-md-6">
+								      <li>
+								        <%= form_tag search_star_infos_path, :class => "posts-search-form", :method => :get do %>
+								          <div class="input-group">
+								            <input type="text" class="form-control search-bar-input" name="q" value="<%= params[:q] %>" placeholder="输入姓名或工资号">
+								            <span class="input-group-btn">
+								              <button type="submit" class="btn btn-primary">
+								                <span class="glyphicon glyphicon-search"></span>
+								              </button>
+								            </span>
+								          </div>
+								        <% end %>
+								      </li>
+								    </div>
+								  </div>
+								</ul>
+				  		</div>
+              <%= form_tag filter_star_infos_path, method: 'get' do %>	
+	              <% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
+	                <li style="display: inline-block;margin-top: 15px;">
+	                	
+	                  <%= label_tag :车间：%>      
+					        	<select name="workshop" id="selid" onchange="selCity(this)">
+				              <option>--选择车间--</option>
+				              <% @workshop_names.each do |name| %>
+				                <option value="<%= name %>"><%= name %></option>
+				              <% end %>
+				            </select>
+
+	                  <%= label_tag :班组：%> 
+				            <select name="group" id="subselid">
+				              <option>--选择班组--</option>
+				            </select>	
+				        	</li>    
+			      			<br>
+			      		<% else %>
+			      			<li style="display: inline-block;margin-top: 15px;">
+			      				<%= label_tag :班组：%> 
+				            <select name="group">
+				              <option>--选择班组--</option>
+				              <% StarInfo.pluck("group").uniq.compact.each do |group| %>
+				              	<% if params[:group] == group %>
+						              <option value="<%= group %>" selected><%= group %></option>
+						            <% else %>
+						              <option value="<%= group %>"><%= group %></option>
+						            <% end %>
+				              <% end %>
+				            </select>	
+				        	</li> 
+			      		<% end %>
+			      		<li style="margin-top: 10px;">
+			        		<%= label_tag :职名： %>
+				        	<select class="" name="duty">
+					          <option value>请选择</option>
+					          <% StarInfo.pluck("duty").uniq.compact.each do |duty| %>
+					            <% if params[:duty] == duty %>
+					              <option value="<%= duty %>" selected><%= duty %></option>
 					            <% else %>
-					            	<option value="<%= star %>"><%= (star + "星") %></option>
+					              <option value="<%= duty %>"><%= duty %></option>
 					            <% end %>
 					          <% end %>
-					        <% end %>
-				      	</select>
-				    </li>
-					<%= hidden_field_tag :year, @year %>
-					<%= hidden_field_tag :quarter, @quarter %>
-					<li style="margin-top: 10px;"><%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %></li>
-			      	
-			      <% end %>
-              </ul>
-            </div>
+				        	</select>
+				       	  <%= label_tag :星级： %>
+					        <select class="" name="star">
+					        	<option value>请选择</option>
+						        <% StarInfo.pluck("star").uniq.compact.each do |star| %>
+						          <% if params[:star] == star %>
+						          	<% if star == "pre_5" %>
+						          		<option value="<%= star %>" selected>推荐5星</option>
+						          	<% else %>
+						            	<option value="<%= star %>" selected><%= (star + "星") %></option>
+						            <% end %>
+						          <% else %>
+						          	<% if star == "pre_5" %>
+						            	<option value="<%= star %>">推荐5星</option>
+						            <% else %>
+						            	<option value="<%= star %>"><%= (star + "星") %></option>
+						            <% end %>
+						          <% end %>
+						        <% end %>
+					      	</select>
+				    		</li>
+								<%= hidden_field_tag :year, @year %>
+								<%= hidden_field_tag :quarter, @quarter %>
+								<li style="margin-top: 10px;"><%= submit_tag :筛选,:data => {disable_with: "筛选中..."} %></li>
+			      	<% end %>
+            </ul>
+          </div>
          
       </div>
       
@@ -133,11 +163,14 @@
 				<th>车间</th>
 				<th>班组</th>
 				<th>职名</th>
+				<th>班组长</th>
 				<th>分数</th>
 				<th>星级</th>
 				<th>时间</th>
 				<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
-					<th>操作</th>
+					<% if confirm_status == true %>
+						<th>操作</th>
+					<% end %>
 				<% end %>
 			</tr>
 		</thead>
@@ -167,11 +200,20 @@
 					<td><%= score.workshop %></td>
 					<td><%= score.group %></td>
 					<td><%= score.duty %></td>
+					<td><%= score.team_leader %></td>
 					<td><%= score.final_score %></td>
-					<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+					<% if StarInfo.find_by(basic_score_id: score.id).star == "pre_5" %>
+						<td>推荐5星</td>
+					<% else %>
+						<td><%= StarInfo.find_by(basic_score_id: score.id).star %>星</td>
+					<% end %>
 					<td><%= score.year %>年第<%= score.quarter %>季度</td>
 					<% if (current_user.has_role? :staradmin) || (current_user.has_role? :superadmin) %>
-						<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal", class: "btn btn-primary" %></td>
+						<% if StarConfirmStatus.find_by(year: score.year, quarter: score.quarter).present? %>
+							<% if StarConfirmStatus.find_by(year: score.year, quarter: score.quarter).status == true %>
+								<td><%= link_to "升/降星", show_star_modal_star_infos_path(star_info: StarInfo.find_by(basic_score_id: score.id).id), remote: true, "data-toggle" => "modal", "data-target" => "#starModal", class: "btn btn-primary" %></td>
+							<% end %>
+						<% end %>
 					<% end %>
 				</tr>
 			<% end %>

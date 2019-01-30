@@ -134,29 +134,29 @@ class StarInfosController < ApplicationController
 
     def five_star_info
       @years = BasicScore.pluck(:year).uniq.sort{|a,b| b<=>a}
-	  @quarters = BasicScore.pluck(:quarter).uniq.sort{|a,b| b<=> a}
-	  quarter_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
-	  if params[:year].present? 
-	  	@year = params[:year].to_i 
-	  else 
-	  	@year = Time.now.year 
-	  end 
-	  if params[:quarter].present? 
-	    @quarter = params[:quarter].to_i 
-	  else 
+		  @quarters = BasicScore.pluck(:quarter).uniq.sort{|a,b| b<=> a}
+		  quarter_hash = {1=>1,2=>1,3=>1,4=>2,5=>2,6=>2,7=>3,8=>3,9=>3,10=>4,11=>4,12=>4}
+		  if params[:year].present? 
+		  	@year = params[:year].to_i 
+		  else 
+		  	@year = Time.now.year 
+		  end 
+		  if params[:quarter].present? 
+		    @quarter = params[:quarter].to_i 
+		  else 
         quarters = BasicScore.where(:year => Time.now.year).pluck(:quarter).uniq.sort{|a,b| b<=> a}
         if quarters.present? 
         	@quarter = quarters[0]
         else 
-            @quarter = quarter_hash[Time.now.month]
+          @quarter = quarter_hash[Time.now.month]
         end 
-	  end 
+	  	end 
 	  
-	  if current_user.has_role? :workshopadmin
-	  	@star_infos = StarInfo.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
-	  	@groups = @star_infos.pluck(:group).uniq
-	  	@dutys = @star_infos.pluck(:duty).uniq
-	  elsif (current_user.has_role? :staradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
+		  if current_user.has_role? :workshopadmin
+		  	@star_infos = StarInfo.where(:workshop => Workshop.find_by(:id =>current_user.workshop_id).name,:year => @year,:quarter => @quarter)
+		  	@groups = @star_infos.pluck(:group).uniq
+		  	@dutys = @star_infos.pluck(:duty).uniq
+		  elsif (current_user.has_role? :staradmin)  || (current_user.has_role? :superadmin) || (current_user.has_role? :leaderadmin) || (current_user.has_role? :depudy_leaderadmin)
         @star_infos = StarInfo.where(:year => @year,:quarter => @quarter)
         @workshops = @star_infos.pluck(:workshop).uniq
         groups_array = [[]]
@@ -165,7 +165,7 @@ class StarInfosController < ApplicationController
         	groups_array << groups 
         end 
         @dutys = @star_infos.pluck(:duty).uniq
-      end 
+	    end 
       gon.groups = groups_array
       if params[:workshop].present?
       	@star_infos = @star_infos.where(:workshop => params[:workshop])
@@ -177,18 +177,16 @@ class StarInfosController < ApplicationController
       	@star_infos = @star_infos.where(:duty => params[:duty])
       end
       if params[:passed_five_star].present? 
-	  	@star_infos = @star_infos.where(:star => "5")
-	  else 
-	  	@star_infos = @star_infos.where(:star => ["5","pre_5"])
-	  end 
-      @star_infos_export = @star_infos
+		  	@star_infos = @star_infos.where(:star => "5")
+		  else 
+		  	@star_infos = @star_infos.where(:star => ["5","pre_5"])
+		  end  
       @star_infos = @star_infos.page(params[:page]).per(20)
-      
-	  respond_to do |format| 
-	  	format.html
-	  	format.xls { headers["Content-Disposition"] = 'attachment; filename="五星级岗位表.xls"'}
-
-	  end  
+      @star_infos_export = StarInfo.where(id: params[:export_stars])
+		  respond_to do |format| 
+		  	format.html
+		  	format.xls { headers["Content-Disposition"] = 'attachment; filename="五星级岗位表.xls"'}
+		  end  
     end 
 
     #完成本次评定：
