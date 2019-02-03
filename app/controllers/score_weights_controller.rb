@@ -9,7 +9,11 @@ class ScoreWeightsController < ApplicationController
 			flash[:alert] = "您设置的3个权重总和不等于100%，请检查"
 			render "score_weights/show_weight"
 		else
-			ScoreWeight.first.update(theory_score: (theory_score.to_f)/100, practical_score: (practical_score.to_f)/100, work_performance: (work_performance.to_f)/100)
+			if ScoreWeight.first.present? 
+			  ScoreWeight.first.update(theory_score: (theory_score.to_f)/100, practical_score: (practical_score.to_f)/100, work_performance: (work_performance.to_f)/100)
+			else 
+				ScoreWeight.create(theory_score: (theory_score.to_f)/100, practical_score: (practical_score.to_f)/100, work_performance: (work_performance.to_f)/100)
+			end 
 			flash[:notice] = "更新成功"
 			redirect_to show_weight_score_weights_path
 		end

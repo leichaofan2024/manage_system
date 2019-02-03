@@ -194,26 +194,52 @@ class StarInfosController < ApplicationController
     	star_confirm_status = StarConfirmStatus.find_by(:year => params[:year],:quarter => params[:quarter])
     	pre_five_star_infos = StarInfo.where(:year => params[:year],:quarter => params[:quarter],:star => "pre_5")
     	star_confirm_yes = StarConfirmStatus.find_by(:year => params[:year],:quarter => params[:quarter],:status => "1")
-        if star_confirm_yes.present?
-      	  @star_confirm = 1
-        else 
-          @star_confirm = 0
-        end 
-        if @star_confirm == 1
-        	flash[:warning] = "#{params[:year]}年#{params[:quarter]}季度星级已评定完成，无需重复提交！"
-        else
+      if star_confirm_yes.present?
+    	  @star_confirm = 1
+      else 
+        @star_confirm = 0
+      end 
+      if @star_confirm == 1
+      	flash[:warning] = "#{params[:year]}年#{params[:quarter]}季度星级已评定完成，无需重复提交！"
+      else
 	    	if star_confirm_status.present? 
 	    		star_confirm_status.update(:status => 1)
 	    	else 
 	    		StarConfirmStatus.create(:year => params[:year],:quarter => params[:quarter],:status => 1)
-	    	end 
+    	  end 
 	    	pre_five_star_infos.update(:star => "4")
+        one_to_four_star_infos = StarInfo.where(:year => params[:year], :quarter => params[:quarter], :star => 1..4).order("final_score DESC").group_by{|x| x.workshop}
+        
+        one_to_four_star_range = 1 - (StarRange.find_by(:name => 5).value)
+        four_star_range = ((StarRange.find_by(:name => 4).value)/one_to_four_star_range).round(4)
+        three_star_range = ((StarRange.find_by(:name => 3).value)/one_to_four_star_range).round(4)
+        two_star_range = ((StarRange.find_by(:name => 2).value)/one_to_four_star_range).round(4)
+        one_star_range = ((StarRange.find_by(:name => 1).value)/one_to_four_star_range).round(4)
+        one_to_four_star_infos.each do |workshop,star_infos|
+          all_count = star_infos.count
+          four_star_count = (all_count * four_star_range).to_i
+          three_star_count = (all_count * three_star_range).to_i
+          two_star_count = (all_count * two_star_range).to_i
+          star_infos.first(four_star_count).each do |star_info|
+            star_info.update(:star => 4)
+          end 
+          star_infos.drop(four_star_count).first(three_star_count).each do |star_info| 
+            star_info.update(:star => 3)
+          end 
+          star_infos.drop(three_star_count+four_star_count).first(two_star_count).each do |star_info|
+            star_info.update(:star => 2)
+          end
+          star_infos.drop(four_star_count+three_star_count+two_star_count).each do |star_info|
+            star_info.update(:star => 1)
+          end
+        end 
+
 	    	#记录低于4星的人员
 	    	descend_star_infos = StarInfo.where(:year => params[:year], :quarter => params[:quarter], :star => 1..3, :team_leader => true)
 	    	descend_star_infos.each do |star_info|
 	    		DescendRecord.create(:year => star_info.year, :quarter => star_info.quarter, :sal_number => star_info.sal_number, :descend_type => "低于4星")
 	    	end
-	    	flash[:notice] = "#{params[:year]}年#{params[:quarter]}季度星级评定完成！当前处于推荐五星状态的人员已退回四星！"
+    	  flash[:notice] = "#{params[:year]}年#{params[:quarter]}季度星级评定完成！当前处于推荐五星状态的人员已退回四星！"
 	    end 
     	redirect_back :fallback_location => five_star_info_star_infos_path
     end 
