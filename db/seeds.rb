@@ -7,7 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 # 更新每个车间下的班组
 
-
+puts "创建调离类型"
+["辞职","局内调动","在职死亡","退休","解除劳动合同","调出局外","除名"].each do |name|
+  LeavingCategory.create(:name => name)
+end 
+puts "创建调离类型成功！"
 
 
 puts "创建多个管理员"

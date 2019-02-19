@@ -1570,7 +1570,7 @@ class EmployeesController < ApplicationController
       if params[:leaving_search].present?
         if params[:leaving_search][:name].present?
           employee_ids = Employee.where(:name => params[:leaving_search][:name]).ids
-          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          employees = LeavingEmployee.where(:employee_id => employee_ids,:leaving_type => "调离")
           if employees.count == 1
             category_id = employees.first.category_id
             leaving_type = employees.first.leaving_type
@@ -1586,7 +1586,7 @@ class EmployeesController < ApplicationController
           end
         elsif params[:leaving_search][:sal_number].present?
           employee_ids = Employee.where(:sal_number => params[:leaving_search][:sal_number]).ids
-          employees = LeavingEmployee.where(:employee_id => employee_ids)
+          employees = LeavingEmployee.where(:employee_id => employee_ids,:leaving_type => "调离")
           if employees.present?
             category_id = employees.first.category_id
             leaving_type = employees.first.leaving_type
@@ -1605,7 +1605,7 @@ class EmployeesController < ApplicationController
         end
         @employees = employees.order(created_at: :DESC).page(params[:page]).per(15)
         @employees_count = @employees.count
-      elsif ["辞职","局内调动","在职死亡"].include?(params[:category_name])
+      elsif ["辞职","局内调动","在职死亡","解除劳动合同","调出局外","除名"].include?(params[:category_name])
         category_id = LeavingCategory.find_by(:name => params[:category_name]).id
         employees = LeavingEmployee.where(:leaving_type => "调离",:category_id => category_id)
         @employees_count = employees.count

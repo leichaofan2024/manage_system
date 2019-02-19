@@ -1057,7 +1057,7 @@ class AttendancesController < ApplicationController
       @applications = Application.where(:status => ["车间发起申请","科室发起申请"])
     elsif current_user.has_role? :workshopadmin
       if (Time.now.month == 2) || (Time.now.month == 10)
-        @shenhe_day = 1..8
+        @shenhe_day = 1..15
       else
         @shenhe_day = 1..6
       end

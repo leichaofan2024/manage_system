@@ -4,8 +4,8 @@
   <%= @duty %>
   <% if @type == "调离" %>
     <h4 class="text-center">调离人员统计表(<%= @employees_count %> 人) </h4>
-    <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","未分类"].include?(params[:category_name]) %>
-      <% ["全部","辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+    <% if params[:category_name].present? and ["全部","辞职","局内调动","在职死亡","退休","解除劳动合同","调出局外","除名","未分类"].include?(params[:category_name]) %>
+      <% ["全部","辞职","局内调动","在职死亡","退休","解除劳动合同","调出局外","除名","未分类"].each do |name| %>
         <% if name == params[:category_name] %>
           <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye-selected") %>
         <% else %>
@@ -14,7 +14,7 @@
       <% end %>
     <% else %>
       <%= link_to("全部",employee_detail_employees_path(:type => "调离",:category_name => "全部"),class:"btn btn-employee-fenye-selected") %>
-      <% ["辞职","局内调动","在职死亡","退休","未分类"].each do |name| %>
+      <% ["辞职","局内调动","在职死亡","退休","解除劳动合同","调出局外","除名","未分类"].each do |name| %>
         <%= link_to(name,employee_detail_employees_path(:type => "调离",:category_name => name),class:"btn btn-employee-fenye") %>
       <% end %>
     <% end %>
