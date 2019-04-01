@@ -53,7 +53,7 @@
             <tr>
               <th>序号</th>
               <th>科室车间</th>
-              <th>综合考核排名奖励</th>
+              <th>排名奖励</th>
               <th>发现和防止安全隐患奖励</th>
               <% @head_hash.keys.each do |key| %>
                 <th><%= link_to(key,edit_head_other_award_totals_path(:year => @year,:month => @month,:name => key), remote: true, "data-toggle" => "modal", "data-target" => "#myModal",:style => "color: #1976D2;") %></th>

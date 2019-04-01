@@ -54,6 +54,7 @@
               <th>序号</th>
               <th>科室车间</th>
               <th>发放合计</th>
+              <th>总人数</th>
               <th>五星岗</th>
               <th>四星岗</th>
               <th>三星岗</th>
@@ -75,6 +76,7 @@
                 <td><%= n %></td>
                 <td><%= workshop %></td>
                 <td><%= items.map{|item| item.发放合计.to_f.round(2)}.sum  %></td>
+                <td><%= items.map{|item| item.总人数.to_f.round(2)}.sum  %></td>
                 <td><%= items.map{|item| item.五星岗.to_f.round(2)}.sum  %></td>
                 <td><%= items.map{|item| item.四星岗.to_f.round(2)}.sum  %></td>
                 <td><%= items.map{|item| item.三星岗.to_f.round(2)}.sum  %></td>
