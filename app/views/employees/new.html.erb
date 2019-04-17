@@ -149,7 +149,7 @@
       <%= f.select :duty,options_for_select(Employee.pluck(:duty).uniq.compact), required: true %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>班组
-      <%= f.select(:group, options_for_select(Group.current.where(:workshop_id => 1).collect{ |u| [u.name] }), {required: true}, id: "subselid") %>
+      <%= f.select(:group, options_for_select(Group.current.where(:workshop_id => 1).collect{ |u| [u.name, u.id] }), {required: true}, id: "subselid") %>
       </li>
       <li><span class="glyphicon glyphicon-asterisk"></span>工作时间
       <%= f.text_field :working_time, required: true,placeholder: "格式如：20180812" %>
