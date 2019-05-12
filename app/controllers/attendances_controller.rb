@@ -412,8 +412,13 @@ class AttendancesController < ApplicationController
       else
         @application = Application.find(params[:application_id])
      		@application.update(:status => params[:status],application_pass: 1)
+        employee = Employee.find_by(:id => @application.employee_id)
+        if params[:status] == "段拒绝申请"
+          flash[:warning] = "关于#{employee.name}的考勤修改申请被拒绝!"
+          redirect_back(fallback_location: show_application_attendances_path)
+          return
+        end
         if @application.application_after.present?
-          employee = Employee.find_by(:id => @application.employee_id)
           attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
           month_attendances = attendance.month_attendances
           month_attendances[(@application.day - 1)] = @application.application_after
@@ -469,8 +474,13 @@ class AttendancesController < ApplicationController
       else
         @application = Application.find_by(:id => params[:application_id])
      		@application.update(:status => params[:status],application_pass: 1)
+        employee = Employee.find_by(:id => @application.employee_id)
+        if params[:status] == "车间拒绝申请"
+          flash[:warning] = "关于#{employee.name}的考勤修改申请被拒绝!"
+          redirect_back(fallback_location: show_application_attendances_path)
+          return
+        end
         if @application.application_after.present?
-          employee = Employee.find_by(:id => @application.employee_id)
           attendance = Attendance.find_by(:employee_id => @application.employee_id,:year => @application.year, :month => @application.month)
           month_attendances = attendance.month_attendances
           month_attendances[(@application.day - 1)] = @application.application_after
@@ -504,13 +514,13 @@ class AttendancesController < ApplicationController
     if current_user.has_role? :attendance_admin
       @applications = Application.where(:status => ["车间发起申请","科室发起申请"]).order("created_at DESC")
       if @applications.blank?
-        @applications = Application.where(:status => "段通过申请").order("created_at DESC")
+        @applications = Application.where(:status => ["段通过申请","段拒绝申请"]).order("created_at DESC")
       end
     elsif current_user.has_role? :workshopadmin
       groups = Group.current.where(:workshop_id => current_user.workshop_id)
       @applications = Application.where(:group_id => groups.ids,:status => "班组发起申请").order("created_at DESC")
       if @applications.blank?
-        @applications = Application.where(:group_id => groups.ids,:status => "车间通过申请").order("created_at DESC")
+        @applications = Application.where(:group_id => groups.ids,:status => ["车间通过申请", "车间拒绝申请"]).order("created_at DESC")
       end
     elsif (current_user.has_role? :groupadmin) || (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
       @applications = Application.where(:group_id => current_user.group_id,:status => "班组发起申请").order("created_at DESC")

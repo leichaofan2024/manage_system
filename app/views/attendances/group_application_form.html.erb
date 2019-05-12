@@ -83,7 +83,7 @@
           </script>
           <p><%= label_tag :请输入修改原因 %></p>
           <p style = "width:500px;"><%= text_field_tag :cause, nil, :required => "true", class: "form-control" %></p>
-          <%= submit_tag :发送申请 %>
+          <%= submit_tag :发送申请, data: {disable_with: "提交中 ..."} %>
         <% end %>
 
 
