@@ -1391,7 +1391,8 @@ class EmployeesController < ApplicationController
       # 在已删除车间找，如果有且只有一个则恢复，否则新增一个车间
       workshops = Workshop.where(:status => false,:name => params[:name])
       if workshops.present? && (workshops.count == 1)
-        workshop = workshops.first.update(:status => true)
+        workshop = workshops.first
+        workshop.update(:status => true)
       else
         workshop = Workshop.create(:name => params[:name])
       end
@@ -1412,17 +1413,21 @@ class EmployeesController < ApplicationController
       else
         Group.create(name: params[:name], workshop_id: params[:workshop_id])
       end
-      workshop_name = Workshop.find_by(:id => params[:workshop_id]).name 
+      workshop_name = Workshop.find_by(:id => params[:workshop_id]).name
       group = Group.find_by(:name => params[:name])
       group_name = params[:name]
       if params[:workshop_id].to_i == 1
         User.create(:name => group_name,:workshop_id => 1 ,:group_id => group.id, :password => "123456", :password_confirmation => "123456").add_role :organsadmin
         flash[:notice] = "新增班组成功!账户名：#{group_name}，默认密码：123456"
-      else 
-        User.create(:name => (workshop_name+"-"+group_name),:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :groupadmin
-        flash[:notice] = "新增班组成功!账户名：#{workshop_name+"-"+group_name}，默认密码：123456"
-      end 
-      
+      else
+        group_names = ["车间", "车间车班", "汽车班"]
+        if group_names.include?(group_name.split("-").last)
+          user = User.create(:name => group_name,:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :wgadmin
+        else
+          user = User.create(:name => (workshop_name + "-" + group_name),:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :groupadmin
+        end
+        flash[:notice] = "新增班组成功!账户名：#{user.name}，默认密码：123456"
+      end
     end
 
     redirect_back(fallback_location: organization_structure_employees_path)
@@ -1437,11 +1442,19 @@ class EmployeesController < ApplicationController
         flash[:alert] = "请先选择车间再合并!"
       else
         params[:workshops].each do |workshop_id|
+          users = User.where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.current.pluck("id"))
+          users.each do |user|
+            group = Group.find(user.group_id)
+            old_group_name = group.name.split("-").last
+            group_names = ["车间", "车间车班", "汽车班"]
+            next if group_names.include?(old_group_name)
+            user.update(name: "#{workshop.name}-#{group.name}", workshop_id: workshop.id, password: "123456", password_confirmation: "123456")
+          end
           Employee.current.where(workshop: workshop_id).update(workshop: workshop.id)
           Group.current.where(workshop_id: workshop_id).update(workshop_id: workshop.id)
-          User.all_group.where(workshop_id: workshop_id, group_id: Workshop.find(workshop_id).groups.current.pluck("id")).update(workshop_id: workshop.id)
         end
-        User.workshopadmin.where(workshop_id: params[:workshops]).where.not(workshop_id: workshop.id).delete_all
+        Workshop.where(id: params[:workshops]).where.not(id: workshop.id).update(status: false)
+        User.where(workshop_id: params[:workshops], group_id: nil).where.not(workshop_id: workshop.id).delete_all
         flash[:notice] = "合并车间成功!"
       end
     end
@@ -1449,20 +1462,20 @@ class EmployeesController < ApplicationController
   end
 
   def merge_group
-    if !Workshop.current.find_by(:name => params[:workshop]).present?
+    workshop = Workshop.current.find_by(:name => params[:workshop])
+    if !workshop.present?
       flash[:alert] = "您填写的车间名称不存在，请先增加车间"
     else
       if !params[:groups].present?
         flash[:alert] = "请先选择班组再合并"
       else
-        if !Group.current.find_by(workshop_id: Workshop.current.find_by(name: params[:workshop]).id ,name: params[:merge_group]).present?
+        group = Group.current.find_by(workshop_id: workshop.id ,name: params[:merge_group])
+        if !group.present?
           flash[:notice] = "该班组名称不存在，请先新增哦~"
         else
-          group = Group.current.find_by(name: params[:merge_group])
-          params[:groups].each do |group_id|
-            Employee.current.where(group: group_id).update(group: group.id)
-          end
+          Employee.current.where(group: params[:groups]).update(group: group.id, workshop: workshop.id)
           User.all_group.where(group_id: params[:groups]).where.not(group_id: group.id).delete_all
+          Group.where(id: params[:groups]).where.not(id: group.id).update(status: "0")
           flash[:notice] = "合并班组成功!"
         end
       end
@@ -1510,6 +1523,18 @@ class EmployeesController < ApplicationController
         flash[:alert] = "更新失败！系统中已有名字为【#{params[:workshop_name]}】的车间"
       else
         Workshop.current.find(params[:workshop_id]).update(:name => params[:workshop_name])
+        User.find_by(workshop_id: params[:workshop_id], group_id: nil).update(name: params[:workshop_name])
+        users = User.where(workshop_id: params[:workshop_id]).where.not(group_id: nil)
+
+        unless params[:workshop_id].to_i == 1
+          users.each do |user|
+            group = Group.find(user.group_id)
+            old_group_name = group.name.split("-").last
+            group_names = ["车间", "车间车班", "汽车班"]
+            next if group_names.include?(old_group_name)
+            user.update(name: "#{params[:workshop_name]}-#{group.name}", password: "123456", password_confirmation: "123456")
+          end
+        end
         flash[:notice] = "更新成功!"
       end
 
@@ -1521,7 +1546,28 @@ class EmployeesController < ApplicationController
     if group.present?
       flash[:alert] = "更新失败！系统中已有名字为【#{params[:group_name]}】的班组"
     else
-      Group.current.find(params[:group_id]).update(:name => params[:group_name])
+      group = Group.current.find(params[:group_id])
+      group.update(:name => params[:group_name])
+      user = User.find_by(group_id: params[:group_id])
+      new_group_name = group.name.split("-").last
+      group_names = ["车间", "车间车班", "汽车班"]
+      if group.workshop_id == 1
+        user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
+        user.remove_role :groupadmin
+        user.remove_role :wgadmin
+        user.add_role :organsadmin
+      elsif group_names.include?(new_group_name)
+        user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
+        user.remove_role :groupadmin
+        user.remove_role :organsadmin
+        user.add_role :wgadmin
+      else
+        workshop_name = Workshop.find(group.workshop_id).name
+        user.update(name: "#{workshop_name}-#{group.name}", password: "123456", password_confirmation: "123456")
+        user.remove_role :wgadmin
+        user.remove_role :organsadmin
+        user.add_role :groupadmin
+      end
       flash[:notice] = "更新成功!"
     end
     redirect_back(fallback_location: organization_structure_employees_path)
