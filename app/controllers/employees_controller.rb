@@ -1422,9 +1422,11 @@ class EmployeesController < ApplicationController
       else
         group_names = ["车间", "车间车班", "汽车班"]
         if group_names.include?(group_name.split("-").last)
-          user = User.create(:name => group_name,:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :wgadmin
+          user = User.create(:name => group_name,:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456")
+          user.add_role :wgadmin
         else
-          user = User.create(:name => (workshop_name + "-" + group_name),:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456").add_role :groupadmin
+          user = User.create(:name => (workshop_name + "-" + group_name),:workshop_id => params[:workshop_id],:group_id => group.id , :password => "123456", :password_confirmation => "123456")
+          user.add_role :groupadmin
         end
         flash[:notice] = "新增班组成功!账户名：#{user.name}，默认密码：123456"
       end
@@ -1523,7 +1525,12 @@ class EmployeesController < ApplicationController
         flash[:alert] = "更新失败！系统中已有名字为【#{params[:workshop_name]}】的车间"
       else
         Workshop.current.find(params[:workshop_id]).update(:name => params[:workshop_name])
-        User.find_by(workshop_id: params[:workshop_id], group_id: nil).update(name: params[:workshop_name])
+        user = User.find_by(workshop_id: params[:workshop_id], group_id: nil)
+        if user.present?
+          user.update(name: params[:workshop_name])
+        else
+          User.create(name: params[:workshop_name],workshop_id: params[:workshop_id], password: "123456", password_confirmation: "123456").add_role :workshopadmin
+        end
         users = User.where(workshop_id: params[:workshop_id]).where.not(group_id: nil)
 
         unless params[:workshop_id].to_i == 1
@@ -1552,21 +1559,43 @@ class EmployeesController < ApplicationController
       new_group_name = group.name.split("-").last
       group_names = ["车间", "车间车班", "汽车班"]
       if group.workshop_id == 1
-        user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
-        user.remove_role :groupadmin
-        user.remove_role :wgadmin
-        user.add_role :organsadmin
+        if user.present?
+          user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
+          user.remove_role :groupadmin
+          user.remove_role :wgadmin
+          user.add_role :organsadmin
+        else
+          user = User.create(name: group.name, workshop_id: group.workshop_id, group_id: group.id, password: "123456", password_confirmation: "123456")
+          user.remove_role :groupadmin
+          user.remove_role :wgadmin
+          user.add_role :organsadmin
+        end
+
       elsif group_names.include?(new_group_name)
-        user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
-        user.remove_role :groupadmin
-        user.remove_role :organsadmin
-        user.add_role :wgadmin
+        if user.present?
+          user = user.update(name: group.name, password: "123456", password_confirmation: "123456")
+          user.remove_role :groupadmin
+          user.remove_role :organsadmin
+          user.add_role :wgadmin
+        else
+          user = User.create(name: group.name, workshop_id: group.workshop_id, group_id: group.id, password: "123456", password_confirmation: "123456")
+          user.remove_role :groupadmin
+          user.remove_role :organsadmin
+          user.add_role :wgadmin
+        end
       else
         workshop_name = Workshop.find(group.workshop_id).name
-        user.update(name: "#{workshop_name}-#{group.name}", password: "123456", password_confirmation: "123456")
-        user.remove_role :wgadmin
-        user.remove_role :organsadmin
-        user.add_role :groupadmin
+        if user.present?
+          user.update(name: "#{workshop_name}-#{group.name}", password: "123456", password_confirmation: "123456")
+          user.remove_role :wgadmin
+          user.remove_role :organsadmin
+          user.add_role :groupadmin
+        else
+          user = User.create(name: "#{workshop_name}-#{group.name}", workshop_id: group.workshop_id, group_id: group.id, password: "123456", password_confirmation: "123456")
+          user.remove_role :wgadmin
+          user.remove_role :organsadmin
+          user.add_role :groupadmin
+        end
       end
       flash[:notice] = "更新成功!"
     end
