@@ -21,4 +21,18 @@ module ApplicationHelper
     	age = Time.now.year - (employee.birth_date[0..3]).to_i
     	return age 
     end 
+
+    def render_year_month_of_lastmonth
+      result = {}
+      this_year = Time.now.year
+      this_month = Time.now.month
+      if this_month == 1
+        result[:year] = this_year - 1
+        result[:month] = 12
+      else
+        result[:year] = this_year
+        result[:month] = this_month - 1
+      end
+      return result
+    end
 end

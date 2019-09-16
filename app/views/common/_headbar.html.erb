@@ -41,6 +41,10 @@
                 <li><%= link_to '用户管理', users_path %></li>
                 <li><%= link_to "公告系统", announcements_path %></li>
               <% end %>
+              <% if current_user.has_role? :attendance_admin %>
+                <li><%= link_to '校准本月考勤' , attendance_count_compute_attendances_path(:year => Time.now.year, :month => Time.now.month),method: :post,data: {confirm: "校准过程大概需要十分钟，确定校准吗？"} %></li>
+                <li><%= link_to "校准上月考勤", attendance_count_compute_attendances_path(:year => render_year_month_of_lastmonth[:year], :month => render_year_month_of_lastmonth[:month]), method: :post, data: {confirm: "校准过程大概需要十分钟，确定校准吗？"} %></li>
+              <% end %>
               <li><%= link_to "模板下载",download_table_template_announcements_path%></li>
               <li><%= link_to "修改密码", edit_user_registration_path %></li>
               <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> 帮助 </a></li>

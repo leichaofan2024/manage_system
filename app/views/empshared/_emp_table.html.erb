@@ -21,7 +21,6 @@
           <th>工龄</th>
           <th>入路时间</th>
           <th>路龄</th>
-          <th>联系电话</th>
           <th>是否高铁</th>
           <th>健康状况</th>
         </tr>
@@ -60,7 +59,6 @@
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= working_years(employee) %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.railway_time.to_i %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= rali_years(employee) %></td>
-              <td class="row-click-able" data-url="/employees/<%= employee.id%>"><%= employee.phone_number %></td>
               <td class="row-click-able" data-url="/employees/<%= employee.id%>">
                 <% if employee.if_high_rails == true %>
                   是

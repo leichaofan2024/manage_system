@@ -10,7 +10,7 @@ class Employee < ActiveRecord::Base
   has_many :attendance_counts
   has_many :annual_holidays
   has_one :leaving_employee
-  
+
   scope :at_that_time, ->(year,month){where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).where("updated_at < ?","#{year}-#{month}-15".to_time.beginning_of_month).pluck("employee_id"))}
   #去掉调离和退休的所有人
   scope :current, -> { where.not(:id => LeavingEmployee.where(:leaving_type => ["调离", "退休"]).pluck("employee_id"))}
@@ -24,6 +24,9 @@ class Employee < ActiveRecord::Base
   scope :worker, -> { where(grade: nil)}
   #所有干部
   scope :cadre, -> {where.not(grade: nil)}
+
+  scope :search_records, -> (params){self.search(params).records }
+
   def self.head_transfer
      return {
               "sal_number" => "工资号",
@@ -125,286 +128,61 @@ class Employee < ActiveRecord::Base
     return b
   end
 
-
-
   def self.import_table(file)
-    spreadsheet = Roo::Spreadsheet.open(file.path)
-    head_transfer = {"工资号" => "sal_number",
-                     "工号" => "job_number",
-                     "档案号" => "record_number",
-                     "部门" => "workshop",
-                     "班组名称" => "group",
-                     "班组类别" => "group_category",
-                     "姓名" => "name",
-                     "性别" => "sex",
-                     "电话号" => "phone_number",
-                     "出生日期" => "birth_date",
-                     "出生年份" => "birth_year",
-                     "年龄" => "age",
-                     "民族" => "nation",
-                     "籍贯" => "native_place",
-                     "政治面目" => "political_role",
-                     "党团时间" => "political_party_date",
-                     "工作时间" => "working_time",
-                     "入路时间" => "railway_time",
-                     "本单位日期" => "entry_time",
-                     "职务" => "duty",
-                     "任职时间" => "employment_period",
-                     "兼职" => "part_time",
-                     "级别" => "grade",
-                     "转干时间" => "promotion_leader_time",
-                     "技术职务" => "technique_duty",
-                     "任技时间" => "hold_technique_time",
-                     "工种分类" => "work_type",
-                     "班组长类别" => "job_foreman_category",
-                     "班组长职务" => "job_foreman_duty",
-                     "任班组长" => "job_foreman",
-                     "合同岗位" => "contract_station",
-                     "三员一长" => "three_one",
-                     "人员来源" => "people_source",
-                     "人员分类" => "people_category",
-                     "文化程度" => "education_background",
-                     "毕业时间" => "graduation_time",
-                     "毕业学校" => "graduation_school",
-                     "学校类别" => "school_sort",
-                     "所学专业" => "major",
-                     "现在何处" => "where_place",
-                     "用工形式" => "employment_form",
-                     "合同期限" => "contract_period",
-                     "签订时间" => "conclude_contract_time",
-                     "档案工资" => "record_saler",
-                     "技能工资" => "skilledness_saler",
-                     "岗位工资" => "station_saler",
-                     "工龄工资" => "seniority_saler",
-                     "技能鉴定" => "skilledness_authenticate",
-                     "待遇"    => "treatment",
-                     "岗位档序" => "station_rank",
-                     "技能档序" => "skilledness_rank",
-                     "现岗位"   => "station_now",
-                     "现岗时间" => "station_now_time",
-                     "退休条件" => "retire_condition",
-                     "婚况"    => "marriage_status",
-                     "分居情况" => "separate_status",
-                     "享受探亲" => "visit_family",
-                     "户口所在" => "registered_residence",
-                     "家庭住址" => "family_address",
-                     "备注"    => "comment",
-                     "身份证号" => "identity_card_number",
-                     "工作证号" => "employee_card_number",
-                     "行业代码" => "trade_code",
-                     "生产组"  => "produce_group",
-                     "工资项目" => "saler_item",
-                     "其他工资" => "other_saler",
-                     "备用数据" => "comment_data",
-                     "TBZ"    => "TBZ",
-                     "PY"     => "PY",
-                     "单位名称" => "company_name",
-                     "CJBZPX" => "CJBZPX",
-                     "家属"   => "family",
-                     "J01BF" => "J01BF",
-                     "职务化" => "duting"
-                   }
-    header = spreadsheet.row(1).map{ |i| head_transfer[i]}
-    message = {}
-    job_number_empty = []
-    job_number_repeat = [] 
-    new_workshop = []
-    new_group = []
-    new_head = []
-    must_column_empty = []
-    spreadsheet.row(1).each do |form_column|
-      if !head_transfer.keys.include?(form_column)
-        new_head << form_column
-      end 
-    end 
+    message           = {}
+    spreadsheet       = Roo::Spreadsheet.open(file.path)
+    head_transfer     = self.head_transfer_for_upload_form
+    header            = spreadsheet.row(1).map{ |i| head_transfer[i]}
 
-    if new_head.blank? 
-        (2..spreadsheet.last_row).each do |j|
-          row = Hash[[header, spreadsheet.row(j)].transpose]
-          if row["job_number"].blank? 
-            job_number_empty << j
-          else 
-            job_number = ("1" + row["job_number"].to_s).to_i.to_s[1..50]
-            sal_number = '41' + job_number
-            already_sal_number = Employee.pluck(:sal_number) 
-            if already_sal_number.include?(sal_number)
-              job_number_repeat << j
-            else 
-              if row["name"].blank?
-                must_column_empty << j 
-              elsif row["sex"].blank?
-                must_column_empty << j
-              elsif row["workshop"].blank?
-                must_column_empty << j
-              elsif row["group"].blank?
-                must_column_empty << j
-              elsif row["duty"].blank?
-                must_column_empty << j
-              elsif row["birth_date"].blank?
-                must_column_empty << j
-              elsif row["working_time"].blank?
-                must_column_empty << j
-              elsif row["railway_time"].blank?
-                must_column_empty << j
-              elsif row["work_type"].blank?
-                must_column_empty << j
-              elsif row["education_background"].blank?
-                must_column_empty << j
-              end 
+    message = self.check_column_for_upload_form(header, spreadsheet)
+    return message if message.present?
+    (2..spreadsheet.last_row).each do |j|
+      row                             = Hash[[header, spreadsheet.row(j)].transpose]
+      employee                        = find_by(sal_number: row["sal_number"]) || new
+      employee.attributes             = row
+      employee.job_number             = ("1" + row["job_number"].to_s).to_i.to_s[1..50]
+      employee.sal_number             = '41' + employee.job_number.to_s
+      employee.birth_date             = ("1" + row["birth_date"].to_s).to_i.to_s[1..50]
+      employee.birth_year             = employee.birth_date[0..3]
+      employee.phone_number           = ("1" + row["phone_number"].to_s).to_i.to_s[1..50]
+      employee.age                    = Time.now.year - employee.birth_year.to_i
+      employee.working_time           = ("1" + row["working_time"].to_s).to_i.to_s[1..50]
+      employee.railway_time           = ("1" + row["railway_time"].to_s).to_i.to_s[1..50]
+      employee.entry_time             = ("1" + row["entry_time"].to_s).to_i.to_s[1..50]
+      employee.employment_period      = ("1" + row["employment_period"].to_s).to_i.to_s[1..50]
+      employee.promotion_leader_time  = ("1" + row["promotion_leader_time"].to_s).to_i.to_s[1..50]
+      employee.hold_technique_time    = ("1" + row["hold_technique_time"].to_s).to_i.to_s[1..50]
+      employee.graduation_time        = ("1" + row["graduation_time"].to_s).to_i.to_s[1..50]
+      employee.conclude_contract_time = ("1" + row["conclude_contract_time"].to_s).to_i.to_s[1..50]
+      employee.station_now_time       = ("1" + row["station_now_time"].to_s).to_i.to_s[1..50]
+      employee.record_number          = ("1" + row["record_number"].to_s).to_i.to_s[1..50]
+      employee.political_party_date   = ("1" + row["political_party_date"].to_s).to_i.to_s[1..50]
 
-              if must_column_empty.blank? 
-                workshop_all = Workshop.pluck(:name)
-                if !workshop_all.include?(row["workshop"])
-                  new_workshop << j
-                  
-                else
-                  wrokshop_id = Workshop.find_by(:name => row["workshop"]).id 
-                  group_all = Group.where(:workshop_id => wrokshop_id).pluck(:name)
-                  if !group_all.include?(row["group"])
-                    new_group << j 
-                    
-                  end 
-                end
-              else 
-                
-              end 
-            end 
-          end  
-        end 
-        
-        if job_number_empty.present? 
-          message[:job_number_empty] = "上传失败！表格中第#{job_number_empty}行中《工号》这一栏不能为空！"
-        elsif job_number_repeat.present? 
-          message[:job_number_repeat] = "上传失败！表格中第#{job_number_repeat}行中工号在系统中已存在！请核对后再上传！"
-        elsif must_column_empty.present? 
-          message[:must_column_empty] = "上传失败！表中第#{must_column_empty}行中《姓名、性别、职务、部门、班组名称、出生日期、工作时间、入路时间、工种分类、文化程度》等栏位不能为空！"
-        elsif new_workshop.present?
-          message[:new_workshop] = "上传失败！表中第#{new_workshop}行中车间名称与系统不符，请核对后再上传！"
-        elsif new_group.present? 
-          message[:new_group] = "上传失败！表中第#{new_group}行中班组名称与系统不符，请核对后再上传！"
-        end 
+      working_years_transfer          = (Time.now - employee.working_time.to_time)/60/60/24/365
+      rali_years_transfer             = (Time.now - employee.railway_time.to_time)/60/60/24/365
+      employee.working_years          = working_years_transfer.to_i
+      employee.rali_years             = rali_years_transfer.to_i
+      # 更新Workshop数据
+      workshop = Workshop.current.find_by(name: row["workshop"])
+      if !workshop.present?
+        workshop_new = Workshop.create!(:name => row["workshop"])
+        group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
+        employee.workshop = workshop_new.id
+        employee.group = group_new.id
 
-      if !message.present?
-        (2..spreadsheet.last_row).each do |j|
-          row = Hash[[header, spreadsheet.row(j)].transpose]
-          employee = find_by(sal_number: row["sal_number"]) || new
-          employee.attributes = row
-          employee.job_number = ("1" + row["job_number"].to_s).to_i.to_s[1..50]
-          employee.sal_number = '41' + employee.job_number.to_s
-          employee.birth_date = ("1" + row["birth_date"].to_s).to_i.to_s[1..50]
-          employee.birth_year = employee.birth_date[0..3]
-          employee.age = Time.now.year - employee.birth_year.to_i
-          employee.working_time = ("1" + row["working_time"].to_s).to_i.to_s[1..50]
-          employee.railway_time = ("1" + row["railway_time"].to_s).to_i.to_s[1..50]
-          employee.entry_time = ("1" + row["entry_time"].to_s).to_i.to_s[1..50]
-          
-          employee.employment_period = ("1" + row["employment_period"].to_s).to_i.to_s[1..50]
-          
-          employee.promotion_leader_time = ("1" + row["promotion_leader_time"].to_s).to_i.to_s[1..50]
-          
-          employee.hold_technique_time = ("1" + row["hold_technique_time"].to_s).to_i.to_s[1..50]
-          
-          employee.graduation_time = ("1" + row["graduation_time"].to_s).to_i.to_s[1..50]
-          
-          employee.conclude_contract_time = ("1" + row["conclude_contract_time"].to_s).to_i.to_s[1..50]
-          
-          employee.station_now_time = ("1" + row["station_now_time"].to_s).to_i.to_s[1..50]
-
-          employee.record_number = ("1" + row["record_number"].to_s).to_i.to_s[1..50]
-
-          working_years_transfer = (Time.now - employee.working_time.to_time)/60/60/24/365
-          rali_years_transfer = (Time.now - employee.railway_time.to_time)/60/60/24/365
-          employee.working_years = working_years_transfer.to_i
-          employee.rali_years = rali_years_transfer.to_i
-          # 更新Workshop数据
-          workshop = Workshop.current.find_by(name: row["workshop"])
-          if !workshop.present?
-            workshop_new = Workshop.create!(:name => row["workshop"])
-            group_new = Group.create!(:name => row["group"], :workshop_id => workshop_new.id)
-            employee.workshop = workshop_new.id
-            employee.group = group_new.id
-
-          else
-            group = Group.current.find_by(:workshop_id => workshop.id,:name => row["group"] )
-            if !group.present?
-              group_new = Group.create!(:name => row["group"], :workshop_id => workshop.id)
-              employee.group = group_new.id
-            else
-              employee.group = group.id
-            end
-            employee.workshop = workshop.id
-          end
-          employee.save!
+      else
+        group = Group.current.find_by(:workshop_id => workshop.id,:name => row["group"] )
+        if !group.present?
+          group_new = Group.create!(:name => row["group"], :workshop_id => workshop.id)
+          employee.group = group_new.id
+        else
+          employee.group = group.id
         end
-      end 
-    else 
-      message[:new_head] = "表头名为#{new_head}的栏位名与系统不一致，请核对后再上传！"
-    end 
-
+        employee.workshop = workshop.id
+      end
+      employee.save!
+    end
     return message
-
-   # 更新Group表数据
-    # Workshop.current.each do |i|
-    #   Employee.current.where(:workshop => i.name).pluck(:group).uniq.each do |j|
-    #     if !Group.current.find_by_name(j).present?
-    #       Group.create(:name => j, :workshop_id => i.id)
-    #     end
-    #   end
-    # end
-
-
-  #更新现员表的workshop_id
-    # Workshop.current.each do |i|
-    #   Employee.current.all.each do |j|
-    #     if i.name == j.workshop
-    #        j.update(:workshop => i.id)
-    #     end
-    #   end
-    # end
-
-    # 更新现员表数据
-    # Employee.current.all.each do |j|
-    #   j.sal_number = '41' + j.job_number
-    #     j.birth_year = j.birth_date[0..3]
-    #     j.age = Time.now.year - j.birth_year.to_i
-    #     working_years_transfer = (Time.now - j.working_time.to_datetime)/60/60/24/365
-    #     rali_years_transfer = (Time.now - j.railway_time.to_datetime)/60/60/24/365
-    #     j.working_years = working_years_transfer.to_i
-    #     j.rali_years = rali_years_transfer.to_i
-    #     j.save!
-    # end
-
-
-   #更新现员表的group_id
-    # Group.current.each do |i|
-    #   Employee.current.all.each do |j|
-    #     if i.name == j.group
-    #       j.update(:group => i.id)
-    #     end
-    #   end
-    # end
-
-    # 更新基本信息表数据
-    # Employee.current.all.each do |i|
-    #   EmpBasicInfo.create(:sal_number => i.sal_number,
-    #                       :workshop_id => i.workshop,
-    #                       :group_id => i.group,
-    #                       :name => i.name,
-    #                       :job_number => i.job_number,
-    #                       :sex => i.sex,
-    #                       :identity_card_number => i.identity_card_number,
-    #                       :age => i.age,
-    #                       :duty => i.duty,
-    #                       :employee_id => i.id
-    #                     )
-    # end
-
-
-    #更新考勤表信息
-    # Employee.current.all.each do |i|
-    #   Attendance.create(:employee_id => i.id, :group_id => i.group, :month => Time.now.month, :year => Time.now.year)
-    # end
-
   end
 
   def self.to_csv(options = {})
@@ -416,7 +194,169 @@ class Employee < ActiveRecord::Base
     end
   end
 
-  scope :search_records, -> (params){self.search(params).records }
+  def self.head_transfer_for_upload_form
+    head_transfer               = {}
+    head_transfer["工资号"]     = "sal_number"
+    head_transfer["工号"]       = "job_number"
+    head_transfer["档案号"]     = "record_number"
+    head_transfer["部门"]       = "workshop"
+    head_transfer["班组名称"]   = "group"
+    head_transfer["班组类别"]   = "group_category"
+    head_transfer["姓名"]       = "name"
+    head_transfer["性别"]       = "sex"
+    head_transfer["电话号"]     = "phone_number"
+    head_transfer["出生日期"]   = "birth_date"
+    head_transfer["出生年份"]   = "birth_year"
+    head_transfer["年龄"]       = "age"
+    head_transfer["民族"]       = "nation"
+    head_transfer["籍贯"]       = "native_place"
+    head_transfer["政治面目"]   = "political_role"
+    head_transfer["党团时间"]   = "political_party_date"
+    head_transfer["工作时间"]   = "working_time"
+    head_transfer["入路时间"]   = "railway_time"
+    head_transfer["本单位日期"] = "entry_time"
+    head_transfer["职务"]       = "duty"
+    head_transfer["任职时间"]   = "employment_period"
+    head_transfer["兼职"]       = "part_time"
+    head_transfer["级别"]       = "grade"
+    head_transfer["转干时间"]   = "promotion_leader_time"
+    head_transfer["技术职务"]   = "technique_duty"
+    head_transfer["任技时间"]   = "hold_technique_time"
+    head_transfer["工种分类"]   = "work_type"
+    head_transfer["班组长类别"] = "job_foreman_category"
+    head_transfer["班组长职务"] = "job_foreman_duty"
+    head_transfer["任班组长"]   = "job_foreman"
+    head_transfer["合同岗位"]   = "contract_station"
+    head_transfer["三员一长"]   = "three_one"
+    head_transfer["人员来源"]   = "people_source"
+    head_transfer["人员分类"]   = "people_category"
+    head_transfer["文化程度"]   = "education_background"
+    head_transfer["毕业时间"]   = "graduation_time"
+    head_transfer["毕业学校"]   = "graduation_school"
+    head_transfer["学校类别"]   = "school_sort"
+    head_transfer["所学专业"]   = "major"
+    head_transfer["现在何处"]   = "where_place"
+    head_transfer["用工形式"]   = "employment_form"
+    head_transfer["合同期限"]   = "contract_period"
+    head_transfer["签订时间"]   = "conclude_contract_time"
+    head_transfer["档案工资"]   = "record_saler"
+    head_transfer["技能工资"]   = "skilledness_saler"
+    head_transfer["岗位工资"]   = "station_saler"
+    head_transfer["工龄工资"]   = "seniority_saler"
+    head_transfer["技能鉴定"]   = "skilledness_authenticate"
+    head_transfer["待遇"]       = "treatment"
+    head_transfer["岗位档序"]   = "station_rank"
+    head_transfer["技能档序"]   = "skilledness_rank"
+    head_transfer["现岗位"]     = "station_now"
+    head_transfer["现岗时间"]   = "station_now_time"
+    head_transfer["退休条件"]   = "retire_condition"
+    head_transfer["婚况"]       = "marriage_status"
+    head_transfer["分居情况"]   = "separate_status"
+    head_transfer["享受探亲"]   = "visit_family"
+    head_transfer["户口所在"]   = "registered_residence"
+    head_transfer["家庭住址"]   = "family_address"
+    head_transfer["备注"]       = "comment"
+    head_transfer["身份证号"]   = "identity_card_number"
+    head_transfer["工作证号"]   = "employee_card_number"
+    head_transfer["行业代码"]   = "trade_code"
+    head_transfer["生产组"]     = "produce_group"
+    head_transfer["工资项目"]   = "saler_item"
+    head_transfer["其他工资"]   = "other_saler"
+    head_transfer["备用数据"]   = "comment_data"
+    head_transfer["TBZ"]        = "TBZ"
+    head_transfer["PY"]         = "PY"
+    head_transfer["单位名称"]   = "company_name"
+    head_transfer["CJBZPX"]     = "CJBZPX"
+    head_transfer["家属"]       = "family"
+    head_transfer["J01BF"]      = "J01BF"
+    head_transfer["职务化"]     = "duting"
+    return head_transfer
+  end
 
+  def self.check_column_for_upload_form(header, spreadsheet)
+    message           = {}
+    job_number_empty  = []
+    job_number_repeat = []
+    new_workshop      = []
+    new_group         = []
+    new_head          = []
+    must_column_empty = []
+
+    spreadsheet.row(1).each do |form_column|
+      if self.head_transfer_for_upload_form.keys.include?(form_column)
+        next
+      end
+      new_head << form_column
+    end
+
+    if new_head.present?
+      message[:new_head] = "表头名为#{new_head}的栏位名与系统不一致，请核对后再上传！"
+      return message
+    end
+
+    already_sal_number = Employee.pluck(:sal_number)
+    workshop_all       = Workshop.pluck(:name)
+    (2..spreadsheet.last_row).each do |row_number|
+      row_content = Hash[[header, spreadsheet.row(row_number)].transpose]
+      if row_content["job_number"].blank?
+        job_number_empty << row_number
+        next
+      end
+      job_number = ("1" + row_content["job_number"].to_s).to_i.to_s[1..50]
+      sal_number = '41' + job_number
+
+      if already_sal_number.include?(sal_number)
+        job_number_repeat << row_number
+        next
+      end
+      if row_content["name"].blank?
+        must_column_empty << row_number
+      elsif row_content["sex"].blank?
+        must_column_empty << row_number
+      elsif row_content["workshop"].blank?
+        must_column_empty << row_number
+      elsif row_content["group"].blank?
+        must_column_empty << row_number
+      elsif row_content["duty"].blank?
+        must_column_empty << row_number
+      elsif row_content["birth_date"].blank?
+        must_column_empty << row_number
+      elsif row_content["working_time"].blank?
+        must_column_empty << row_number
+      elsif row_content["railway_time"].blank?
+        must_column_empty << row_number
+      elsif row_content["work_type"].blank?
+        must_column_empty << row_number
+      elsif row_content["education_background"].blank?
+        must_column_empty << row_number
+      end
+      next if must_column_empty.present?
+
+      if !workshop_all.include?(row_content["workshop"])
+        new_workshop << row_number
+        next
+      end
+
+      wrokshop_id = Workshop.find_by(:name => row_content["workshop"]).id
+      group_all   = Group.where(:workshop_id => wrokshop_id).pluck(:name)
+      if !group_all.include?(row_content["group"])
+        new_group << row_number
+      end
+    end
+
+    if job_number_empty.present?
+      message[:job_number_empty] = "上传失败！表格中第#{job_number_empty}行中《工号》这一栏不能为空！"
+    elsif job_number_repeat.present?
+      message[:job_number_repeat] = "上传失败！表格中第#{job_number_repeat}行中工号在系统中已存在！请核对后再上传！"
+    elsif must_column_empty.present?
+      message[:must_column_empty] = "上传失败！表中第#{must_column_empty}行中《姓名、性别、职务、部门、班组名称、出生日期、工作时间、入路时间、工种分类、文化程度》等栏位不能为空！"
+    elsif new_workshop.present?
+      message[:new_workshop] = "上传失败！表中第#{new_workshop}行中车间名称与系统不符，请核对后再上传！"
+    elsif new_group.present?
+      message[:new_group] = "上传失败！表中第#{new_group}行中班组名称与系统不符，请核对后再上传！"
+    end
+
+    return message
+  end
 
 end

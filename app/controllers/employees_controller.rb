@@ -164,7 +164,7 @@ class EmployeesController < ApplicationController
 
   def filter
     if (current_user.has_role? :empadmin) or (current_user.has_role? :attendance_admin) or (current_user.has_role? :saleradmin) or (current_user.has_role? :awardadmin) or (current_user.has_role? :incomeadmin ) or (current_user.has_role? :limitadmin) or (current_user.has_role? :superadmin) or (current_user.has_role? :leaderadmin) or (current_user.has_role? :depudy_leaderadmin) or (current_user.has_role? :safe_productionadmin) or (current_user.has_role? :staradmin)
-      condition = ".current.where(company_name: '北京供电段'"
+      condition = ".current.where(workshop: #{1..10000}"
     elsif current_user.has_role? :workshopadmin
       condition = ".current.where(workshop: Workshop.current.find_by(name: current_user.name).id"
     elsif (current_user.has_role? :organsadmin) || (current_user.has_role? :wgadmin)
