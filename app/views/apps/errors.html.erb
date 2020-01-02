@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+  <div class="panel-heading">报错</div>
+  <div class="panel-body">
+    <%= @exception.message %>
+    <ul>
+      <% @exception.backtrace.each do |item| %>
+        <li> <%= item.to_s %> </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

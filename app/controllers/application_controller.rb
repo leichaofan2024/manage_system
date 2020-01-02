@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :set_current_user
-
+  rescue_from Exception, with: :show_errors
   def set_current_user
     RelativeSaler.current_user = current_user
   end
@@ -53,4 +53,12 @@ class ApplicationController < ActionController::Base
     gon.wages = wage_arry
   end
 
+  def show_errors(exception)
+    Rails.logger.error "遇到异常 #{exception.message}"
+    Rails.logger.error exception.backtrace.try(:join, "\n")
+
+    @exception = exception
+
+    render file: 'apps/errors', status: 500
+  end
 end
