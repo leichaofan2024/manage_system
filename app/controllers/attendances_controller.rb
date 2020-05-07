@@ -833,11 +833,7 @@ class AttendancesController < ApplicationController
       end
       redirect_to group_attendances_path(:year => @year,:month => @month)
 		elsif  params[:authority] == "workshop"
-      if (Time.now.month == 2) || (Time.now.month == 10)
-        @shenhe_day = 1..8
-      else
-        @shenhe_day = 1..6
-      end
+      @shenhe_day = 1..10
 			@workshop = Workshop.find(current_user.workshop_id)
       group = Group.find_by(:id => params[:group_id])
       application = Application.where(:group_id => params[:group_id]).pluck(:status)
@@ -898,11 +894,7 @@ class AttendancesController < ApplicationController
                     end
 
 		if params[:authority] == "workshop"
-      if (Time.now.month == 2) || (Time.now.month == 10)
-        @shenhe_day = 1..8
-      else
-        @shenhe_day = 1..6
-      end
+      @shenhe_day = 1..10
       if @shenhe_day === Time.now.day
   			@workshop = Workshop.find(current_user.workshop_id)
   			@groups = Group.current.where(:workshop_id => @workshop.id)
