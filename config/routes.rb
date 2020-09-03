@@ -476,5 +476,6 @@ Rails.application.routes.draw do
   end
 
   resources :analyses
-
+  get "welcome" => "welcome#edit"
+  put "update_password" => "welcome#update_password"
 end
